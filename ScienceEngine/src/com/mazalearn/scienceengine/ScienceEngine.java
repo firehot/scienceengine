@@ -4,63 +4,92 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mazalearn.scienceengine.molecule.LJMolecularModel;
+import com.mazalearn.scienceengine.molecule.MolecularModel;
 
 public class ScienceEngine implements ApplicationListener {
-	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	private Texture texture;
-	private Sprite sprite;
-	
-	@Override
-	public void create() {		
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-		
-		camera = new OrthographicCamera(1, h/w);
-		batch = new SpriteBatch();
-		
-		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		
-		sprite = new Sprite(region);
-		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
-	}
+   SpriteBatch batch;
+   OrthographicCamera camera;
+   MolecularModel molecularModel;
+   static final int N = 25; // Number of molecules
+   static final int pixelDiameter = 8;
+   Texture moleculeTexture;
+   long timeStart;
+   
+   @Override
+   public void create() {
+      // create the camera and the SpriteBatch
+      camera = new OrthographicCamera();
+      camera.setToOrtho(false, 800, 480);
+      batch = new SpriteBatch();
+            
+      Pixmap pixmap = new Pixmap( 8, 8, Format.RGBA8888 );
+      pixmap.setColor( 0, 0, 1, 0.75f );
+      pixmap.fillCircle(4, 4, 4);
+      moleculeTexture = new Texture( pixmap );
+      pixmap.dispose();
+      
+      // Initialize molecules
+      molecularModel = new LJMolecularModel(20, 20, N, 0.5);  
+      molecularModel.initialize();
+      timeStart = System.currentTimeMillis();
+   }
+   
+   @Override
+   public void render() {     
+      // clear the screen with a dark blue color. The
+      // arguments to glClearColor are the red, green
+      // blue and alpha component in the range [0,1]
+      // of the color to be used to clear the screen.
+      Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
+      Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+      
+      // tell the camera to update its matrices.
+      camera.update();
+      
+      // tell the SpriteBatch to render in the
+      // coordinate system specified by the camera.
+      batch.setProjectionMatrix(camera.combined);
+      
+      // begin a new batch and draw the molecules
+      BitmapFont font = new BitmapFont();
+      batch.begin();
+      for(int i = 0; i < N; i++) {
+         batch.draw(moleculeTexture, 
+             (float) molecularModel.getMolecule(i).x * pixelDiameter,  
+             (float) molecularModel.getMolecule(i).y * pixelDiameter);
+      }
+      font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+      font.draw(batch, String.valueOf(molecularModel.getTemperature()), 10, 20);
+      font.draw(batch, String.valueOf(molecularModel.getSimulatedTime()), 10, 300);
+      long timeNow = System.currentTimeMillis();
+      font.draw(batch, String.valueOf(timeNow - timeStart), 200, 300);
+      batch.end();
+      font.dispose();
+      molecularModel.simulateSteps(10);
+   }
+   
+   @Override
+   public void dispose() {
+      // dispose of all the native resources
+      batch.dispose();
+      moleculeTexture.dispose();
+   }
 
-	@Override
-	public void dispose() {
-		batch.dispose();
-		texture.dispose();
-	}
+   @Override
+   public void resize(int width, int height) {
+   }
 
-	@Override
-	public void render() {		
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		sprite.draw(batch);
-		batch.end();
-	}
+   @Override
+   public void pause() {
+   }
 
-	@Override
-	public void resize(int width, int height) {
-	}
-
-	@Override
-	public void pause() {
-	}
-
-	@Override
-	public void resume() {
-	}
+   @Override
+   public void resume() {
+   }
 }

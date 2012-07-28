@@ -3,6 +3,7 @@
 	<name>ScienceEngine-android</name>
 	<comment></comment>
 	<projects>
+		<project>ScienceEngine</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
