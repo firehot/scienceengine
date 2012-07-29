@@ -23,11 +23,13 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
   double computeAccelerations() {
     
     double potentialEnergy = 0.0;
-    // first check for bounces off walls, and include GRAVITY (if any):
-    for (Molecule m: molecules) {
-      potentialEnergy += computeLJWallForce(m);
-    }
-  
+    potentialEnergy += computeWallForces();
+    potentialEnergy += computeInterMolecularForces();
+    return potentialEnergy;
+  }
+
+  private double computeInterMolecularForces() {
+    double potentialEnergy = 0;
     Molecule m[] = molecules;
     // now compute interaction forces (Lennard-Jones potential):
     for (int i = 0; i < N; i++) {
@@ -57,6 +59,15 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
           potentialEnergy += pe;
         }
       }
+    }
+    return potentialEnergy;
+  }
+
+  private double computeWallForces() {
+    double potentialEnergy = 0;
+    // Check for bounces off walls, and include GRAVITY (if any):
+    for (Molecule m: molecules) {
+      potentialEnergy += computeLJWallForce(m);
     }
     return potentialEnergy;
   }
