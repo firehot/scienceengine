@@ -1,3 +1,4 @@
 d:
 d:data
+b:data/.gitignore
 i:data/libgdx.png

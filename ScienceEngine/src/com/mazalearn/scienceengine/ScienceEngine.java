@@ -1,7 +1,9 @@
 package com.mazalearn.scienceengine;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -11,85 +13,126 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mazalearn.scienceengine.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.molecule.MolecularModel;
+import com.mazalearn.scienceengine.screens.SplashScreen;
+import com.mazalearn.scienceengine.services.MusicManager;
+import com.mazalearn.scienceengine.services.PreferencesManager;
+import com.mazalearn.scienceengine.services.ProfileManager;
+import com.mazalearn.scienceengine.services.SoundManager;
 
-public class ScienceEngine implements ApplicationListener {
-   SpriteBatch batch;
-   OrthographicCamera camera;
-   MolecularModel molecularModel;
-   static final int N = 25; // Number of molecules
-   static final int pixelDiameter = 8;
-   Texture moleculeTexture;
-   long timeStart;
-   
-   @Override
-   public void create() {
-      // create the camera and the SpriteBatch
-      camera = new OrthographicCamera();
-      camera.setToOrtho(false, 800, 480);
-      batch = new SpriteBatch();
-            
-      Pixmap pixmap = new Pixmap( 8, 8, Format.RGBA8888 );
-      pixmap.setColor( 0, 0, 1, 0.75f );
-      pixmap.fillCircle(4, 4, 4);
-      moleculeTexture = new Texture( pixmap );
-      pixmap.dispose();
-      
-      // Initialize molecules
-      molecularModel = new LJMolecularModel(20, 20, N, 0.5);  
-      molecularModel.initialize();
-      timeStart = System.currentTimeMillis();
-   }
-   
-   @Override
-   public void render() {     
-      // clear the screen with a dark blue color. The
-      // arguments to glClearColor are the red, green
-      // blue and alpha component in the range [0,1]
-      // of the color to be used to clear the screen.
-      Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
-      Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-      
-      // tell the camera to update its matrices.
-      camera.update();
-      
-      // tell the SpriteBatch to render in the
-      // coordinate system specified by the camera.
-      batch.setProjectionMatrix(camera.combined);
-      
-      // begin a new batch and draw the molecules
-      BitmapFont font = new BitmapFont();
-      batch.begin();
-      for(int i = 0; i < N; i++) {
-         batch.draw(moleculeTexture, 
-             (float) molecularModel.getMolecule(i).x * pixelDiameter,  
-             (float) molecularModel.getMolecule(i).y * pixelDiameter);
-      }
-      font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-      font.draw(batch, String.valueOf(molecularModel.getTemperature()), 10, 20);
-      font.draw(batch, String.valueOf(molecularModel.getSimulatedTime()), 10, 300);
-      long timeNow = System.currentTimeMillis();
-      font.draw(batch, String.valueOf(timeNow - timeStart), 200, 300);
-      batch.end();
-      font.dispose();
-      molecularModel.simulateSteps(10);
-   }
-   
-   @Override
-   public void dispose() {
-      // dispose of all the native resources
-      batch.dispose();
-      moleculeTexture.dispose();
-   }
+public class ScienceEngine extends Game {
+  // constant useful for logging
+  public static final String LOG = ScienceEngine.class.getSimpleName();
 
-   @Override
-   public void resize(int width, int height) {
-   }
+  // whether we are in development mode
+  public static final boolean DEV_MODE = false;
 
-   @Override
-   public void pause() {
-   }
+  // a libgdx helper class that logs the current FPS each second
+  private FPSLogger fpsLogger;
 
-   @Override
-   public void resume() {
-   }
+  // services
+  private PreferencesManager preferencesManager;
+  private ProfileManager profileManager;
+  private MusicManager musicManager;
+  private SoundManager soundManager;
+
+  // Services' getters
+
+  public PreferencesManager getPreferencesManager() {
+    return preferencesManager;
+  }
+
+  public ProfileManager getProfileManager() {
+    return profileManager;
+  }
+
+  public MusicManager getMusicManager() {
+    return musicManager;
+  }
+
+  public SoundManager getSoundManager() {
+    return soundManager;
+  }
+
+  // Game-related methods
+
+  @Override
+  public void create() {
+    Gdx.app.log(ScienceEngine.LOG, "Creating game on " + Gdx.app.getType());
+
+    // create the preferences manager
+    preferencesManager = new PreferencesManager();
+
+    // create the music manager
+    musicManager = new MusicManager();
+    musicManager.setVolume(preferencesManager.getVolume());
+    musicManager.setEnabled(preferencesManager.isMusicEnabled());
+
+    // create the sound manager
+    soundManager = new SoundManager();
+    soundManager.setVolume(preferencesManager.getVolume());
+    soundManager.setEnabled(preferencesManager.isSoundEnabled());
+
+    // create the profile manager
+    profileManager = new ProfileManager();
+    profileManager.retrieveProfile();
+
+    // create the helper objects
+    fpsLogger = new FPSLogger();
+  }
+
+  @Override
+  public void resize(int width, int height) {
+    super.resize(width, height);
+    Gdx.app.log(ScienceEngine.LOG, "Resizing game to: " + width + " x "
+        + height);
+
+    // show the splash screen when the game is resized for the first time;
+    // this approach avoids calling the screen's resize method repeatedly
+    if (getScreen() == null) {
+      setScreen(new SplashScreen(this));
+    }
+  }
+
+  @Override
+  public void render() {
+    super.render();
+    // output the current FPS
+    if (DEV_MODE) {
+      fpsLogger.log();
+    }
+  }
+
+  @Override
+  public void dispose() {
+    super.dispose();
+    Gdx.app.log(ScienceEngine.LOG, "Disposing engine");
+
+    // dispose some services
+    musicManager.dispose();
+    soundManager.dispose();
+  }
+
+  @Override
+  public void pause() {
+    super.pause();
+    Gdx.app.log(ScienceEngine.LOG, "Pausing engine");
+
+    // persist the profile, because we don't know if the player will come
+    // back to the game
+    profileManager.persist();
+  }
+
+  @Override
+  public void resume() {
+    super.resume();
+    Gdx.app.log(ScienceEngine.LOG, "Resuming game");
+  }
+
+  @Override
+  public void setScreen(Screen screen) {
+    super.setScreen(screen);
+    Gdx.app.log(ScienceEngine.LOG, "Setting screen: "
+        + screen.getClass().getSimpleName());
+  }
+
 }
