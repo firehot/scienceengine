@@ -116,8 +116,8 @@ repeat: none
 splash-screen/splash-image
   rotate: false
   xy: 1, 1
-  size: 500, 253
-  orig: 500, 253
+  size: 512, 256
+  orig: 512, 256
   offset: 0, 0
   index: -1
 

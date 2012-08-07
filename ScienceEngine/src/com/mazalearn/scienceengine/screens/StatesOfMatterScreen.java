@@ -1,10 +1,6 @@
 package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.actions.Delay;
-import com.badlogic.gdx.scenes.scene2d.actions.FadeIn;
-import com.badlogic.gdx.scenes.scene2d.actions.FadeOut;
-import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
 
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,19 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.AnimationAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.molecule.MolecularModel;
-import com.mazalearn.scienceengine.services.MusicManager.ScienceEngineMusic;
 
 /**
- * Shows a splash image and moves on to the next screen.
+ * States of Matter experiment screen.
  */
 public class StatesOfMatterScreen extends AbstractScreen {
   SpriteBatch batch;

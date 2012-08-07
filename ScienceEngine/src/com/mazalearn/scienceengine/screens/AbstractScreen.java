@@ -101,8 +101,8 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void resize(int width, int height) {
-    Gdx.app.log(ScienceEngine.LOG, "Resizing screen: " + getName() + " to: " + width
-        + " x " + height);
+    Gdx.app.log(ScienceEngine.LOG, "Resizing screen: " + getName() + 
+        " to: " + width + " x " + height);
   }
 
   @Override

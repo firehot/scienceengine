@@ -45,7 +45,7 @@ public class SplashScreen extends AbstractScreen {
     // splashImage.getColor().a = 0f;
 
     // configure the fade-in/out effect on the splash image
-    splashImage.action(Sequence.$(FadeIn.$(0.75f), Delay.$(1.75f), FadeOut.$(0.75f),
+    splashImage.action(Sequence.$(FadeIn.$(0.75f), Delay.$(2.5f), FadeOut.$(0.75f),
         new AnimationAction() {
           @Override
           public void act(float delta) {
