@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.experiments;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 
@@ -15,14 +14,14 @@ public class StatesOfMatter extends Table {
     if (ScienceEngine.DEV_MODE) {
       debug();
     }
-    defaults().fill();
-    add(new TextButton("top", skin)).colspan(3);
+    
+    add(new StaticText()).fill().colspan(3).height(10);
     row();
-    add(new TextButton("left", skin));
+    add(new StaticText()).fill().width(10);
     add(new MoleculeBox()).expand().fill();
-    add(new TextButton("right", skin));
+    add(new StaticText()).fill().width(10);
     row();
-    add(new TextButton("bottom", skin)).colspan(3);
+    add(new StaticText()).fill().colspan(3).height(10);
     row();
   }
 }

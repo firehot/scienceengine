@@ -23,7 +23,7 @@ public class MoleculeBox extends Actor {
   private Texture moleculeTexture;
   private long timeStart;
   private BitmapFont font;
-  private Texture background;
+  private Texture backgroundTexture;
 
   public MoleculeBox() {
     super();
@@ -38,7 +38,7 @@ public class MoleculeBox extends Actor {
     pixmap = new Pixmap(1, 1, Format.RGBA8888);
     pixmap.setColor(Color.LIGHT_GRAY);
     pixmap.fillRectangle(0,  0, 1, 1);
-    background = new Texture(pixmap);
+    backgroundTexture = new Texture(pixmap);
     pixmap.dispose();
     
     // Initialize molecules
@@ -51,7 +51,7 @@ public class MoleculeBox extends Actor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     // Draw background
-    batch.draw(background, this.x, this.y, width, height);
+    batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
     // Draw the molecules
     float scaleX = this.width / BOX_WIDTH;
     float scaleY = this.height / BOX_HEIGHT;
@@ -63,6 +63,7 @@ public class MoleculeBox extends Actor {
     
     //Draw debug information
     drawDebug(batch);
+    molecularModel.simulateSteps(10);
   }
   
   public void drawDebug(SpriteBatch batch) {
@@ -75,7 +76,6 @@ public class MoleculeBox extends Actor {
     long timeNow = System.currentTimeMillis();
     font.draw(batch, String.valueOf(timeNow - timeStart), 
         this.x + 200, this.y + 300);
-    molecularModel.simulateSteps(10);
   }
   
   public void dispose() {

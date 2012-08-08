@@ -44,17 +44,5 @@ public class MenuScreen extends AbstractScreen {
     });
     table.add(optionsButton).uniform().fill().spaceBottom(10);
     table.row();
-/*
-    // register the button "high scores"
-    TextButton highScoresButton = new TextButton("High Scores", getSkin());
-    highScoresButton.setClickListener(new ClickListener() {
-      @Override
-      public void click(Actor actor, float x, float y) {
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
-        game.setScreen(new HighScoresScreen(game));
-      }
-    });
-    table.add(highScoresButton).uniform().fill();
-  */
   }
 }

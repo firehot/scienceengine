@@ -71,16 +71,10 @@ public class StartScreen extends AbstractScreen {
     });
     table.row();
     table.add(backButton).size(250, 60).colspan(5);
-
-    // set the select boxes' initial values
-    updateValues();
-  }
-
-  private void updateValues() {
   }
 
   /**
-   * Listener for all the level buttons.
+   * Listener for experiment click button.
    */
   private class ExperimentClickListener implements ClickListener {
     private Skin skin;
