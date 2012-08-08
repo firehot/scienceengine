@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mazalearn.scienceengine.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.molecule.MolecularModel;
 import com.mazalearn.scienceengine.screens.SplashScreen;
+import com.mazalearn.scienceengine.screens.StartScreen;
 import com.mazalearn.scienceengine.services.MusicManager;
 import com.mazalearn.scienceengine.services.PreferencesManager;
 import com.mazalearn.scienceengine.services.ProfileManager;
@@ -21,10 +22,10 @@ import com.mazalearn.scienceengine.services.SoundManager;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
-  public static final String LOG = ScienceEngine.class.getSimpleName();
+  public static final String LOG = ScienceEngine.class.getName();
 
   // whether we are in development mode
-  public static final boolean DEV_MODE = false;
+  public static final boolean DEV_MODE = true;
 
   // a libgdx helper class that logs the current FPS each second
   private FPSLogger fpsLogger;
@@ -89,7 +90,7 @@ public class ScienceEngine extends Game {
     // show the splash screen when the game is resized for the first time;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(new SplashScreen(this));
+      setScreen(DEV_MODE ? new StartScreen(this) : new SplashScreen(this));
     }
   }
 
