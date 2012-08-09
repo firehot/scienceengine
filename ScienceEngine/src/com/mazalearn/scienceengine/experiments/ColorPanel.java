@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
-public class StaticText extends Widget {
+public class ColorPanel extends Widget {
   
   Texture backgroundTexture;
   
-  StaticText(String text) {
+  public ColorPanel() {
     super();
     // Use light-gray background color
     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
@@ -21,10 +21,6 @@ public class StaticText extends Widget {
     pixmap.dispose();
   }
   
-  StaticText() {
-    this("");
-  }
-
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);

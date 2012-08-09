@@ -13,7 +13,8 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
   // Truncation correction for LJ_CUTOFF=3.5 * LJ_SIGMA is 0.00217478039165499;
 
   static final double MIN_LJ_FORCE_OVER_R = 48/Math.pow(MIN_DISTANCE, 14) - 24/Math.pow(MIN_DISTANCE, 8);
-  private static final double DAMPING_FORCE_OVER_R = 0.02 * MIN_LJ_FORCE_OVER_R;
+  private static final double[] DAMPING_FORCE_OVER_R = 
+      {0, 0.02 * MIN_LJ_FORCE_OVER_R, 0.005 * MIN_LJ_FORCE_OVER_R};
   static final double MIN_LJ_POTENTIAL_ENERGY = 4/Math.pow(MIN_DISTANCE, 12) - 1/Math.pow(MIN_DISTANCE, 6) + LJ_CUTOFF_CORRECTION;
   
   public LJMolecularModel(int boxWidth, int boxHeight, int N, double temperature) {
@@ -32,6 +33,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
     double potentialEnergy = 0;
     Molecule m[] = molecules;
     // now compute interaction forces (Lennard-Jones potential):
+    double dampingForceOverR = DAMPING_FORCE_OVER_R[temperatureLevel.level()];
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < i; j++) {
         double dx = m[i].x - m[j].x;
@@ -47,7 +49,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
             double r2inv = 1.0 / r2;
             double r6inv = r2inv * r2inv * r2inv;
             double ljForceOverR = 48.0 * (r6inv - 0.5) * r6inv * r2inv;
-            ljForceOverR -= DAMPING_FORCE_OVER_R * temperature / 4;
+            ljForceOverR -= dampingForceOverR * temperature / 4;
             fx = ljForceOverR * dx;
             fy = ljForceOverR * dy;
             pe = 4 * r6inv * (r6inv - 1) + LJ_CUTOFF_CORRECTION;
@@ -62,7 +64,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
     }
     return potentialEnergy;
   }
-
+  
   private double computeWallForces() {
     double potentialEnergy = 0;
     // Check for bounces off walls, and include GRAVITY (if any):

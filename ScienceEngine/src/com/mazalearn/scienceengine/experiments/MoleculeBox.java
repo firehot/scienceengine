@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.molecule.MolecularModel;
+import com.mazalearn.scienceengine.molecule.MolecularModel.TemperatureLevel;
 
 /**
  * States of Matter experiment screen.
@@ -20,7 +21,7 @@ public class MoleculeBox extends Actor {
   private static final int PIXEL_DIAMETER = 8;
   
   private MolecularModel molecularModel;
-  private Texture moleculeTexture;
+  private Texture moleculeTextureGray, moleculeTextureRed;
   private long timeStart;
   private BitmapFont font;
   private Texture backgroundTexture;
@@ -31,13 +32,16 @@ public class MoleculeBox extends Actor {
     Pixmap pixmap = new Pixmap(PIXEL_DIAMETER, PIXEL_DIAMETER, Format.RGBA8888);
     pixmap.setColor(Color.DARK_GRAY);
     pixmap.fillCircle(PIXEL_DIAMETER/2, PIXEL_DIAMETER/2, PIXEL_DIAMETER/2);
-    moleculeTexture = new Texture(pixmap);
+    moleculeTextureGray = new Texture(pixmap);
+    pixmap.setColor(Color.RED);
+    pixmap.fillCircle(PIXEL_DIAMETER/2, PIXEL_DIAMETER/2, PIXEL_DIAMETER/2);
+    moleculeTextureRed = new Texture(pixmap);
     pixmap.dispose();
     
     // Use light-gray background color
     pixmap = new Pixmap(1, 1, Format.RGBA8888);
     pixmap.setColor(Color.LIGHT_GRAY);
-    pixmap.fillRectangle(0,  0, 1, 1);
+    pixmap.fillRectangle(0, 0, 1, 1);
     backgroundTexture = new Texture(pixmap);
     pixmap.dispose();
     
@@ -56,7 +60,7 @@ public class MoleculeBox extends Actor {
     float scaleX = this.width / BOX_WIDTH;
     float scaleY = this.height / BOX_HEIGHT;
     for (int i = 0; i < N; i++) {
-      batch.draw(moleculeTexture,
+      batch.draw(i > 0 ? moleculeTextureGray : moleculeTextureRed,
           this.x + (float) molecularModel.getMolecule(i).x * scaleX, 
           this.y + (float) molecularModel.getMolecule(i).y * scaleY);
     }
@@ -79,12 +83,16 @@ public class MoleculeBox extends Actor {
   }
   
   public void dispose() {
-    moleculeTexture.dispose();
+    moleculeTextureGray.dispose();
     font.dispose();
   }
 
   @Override
   public Actor hit(float x, float y) {
     return null;
+  }
+
+  public void setTemperature(TemperatureLevel temperatureLevel) {
+    molecularModel.setTemperatureLevel(temperatureLevel);   
   }    
 }

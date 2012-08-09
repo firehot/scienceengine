@@ -1,8 +1,10 @@
 package com.mazalearn.scienceengine.molecule;
 
+import com.mazalearn.scienceengine.molecule.MolecularModel.TemperatureLevel;
+
 public abstract class AbstractMolecularModel {
 
-  private static final double DAMPING = 0.9985; // 0.9999;
+  private double[] DAMPING = {1.0, 0.9985, 1.0002};
   protected double dt = 0.020;
   protected double dtOver2 = 0.5 * dt;
   protected double dtSquaredOver2 = 0.5 * dt * dt;
@@ -15,15 +17,16 @@ public abstract class AbstractMolecularModel {
   protected int boxWidth = 50;
   protected int boxHeight = 50;
   protected double temperature = 0.5;
-  protected int N = 200;
+  protected int N = 200; // Number of molecules
   protected double ke;
   protected double pe;
   protected double energy;
   protected double timeElapsed;
+  protected TemperatureLevel temperatureLevel = TemperatureLevel.NEUTRAL;
 
   public AbstractMolecularModel(int boxWidth, int boxHeight, int N,
       double temperature) {
-    this.N = N; // Number of molecules
+    this.N = N;
     this.boxWidth = boxWidth;
     this.boxHeight = boxHeight;
     this.temperature = temperature;
@@ -106,6 +109,10 @@ public abstract class AbstractMolecularModel {
     reScaleDt();
   }
 
+  public void setTemperatureLevel(TemperatureLevel temperatureLevel) {
+    this.temperatureLevel = temperatureLevel;
+  }
+  
   public double getTemperature() {
     return temperature;
   }
@@ -119,9 +126,10 @@ public abstract class AbstractMolecularModel {
     // Scale velocities up or down
     // vi *= (2-0.999995); or vi *= 0.999995;
     // Update velocities half-way with old acceleration
+    double damping = DAMPING[temperatureLevel.level()];
     for (Molecule m: molecules) {
-      m.vx *= DAMPING;
-      m.vy *= DAMPING;
+      m.vx *= damping;
+      m.vy *= damping;
     }
   
     

@@ -14,4 +14,12 @@ public interface MolecularModel {
   
   public abstract double getTemperature();
 
+  public abstract void setTemperatureLevel(TemperatureLevel temperatureLevel);
+
+  public enum TemperatureLevel {
+    NEUTRAL(0), COLD(1), HOT(2);
+    private int level;
+    private TemperatureLevel(int level) { this.level = level; }
+    public int level() { return level; }
+  }
 }

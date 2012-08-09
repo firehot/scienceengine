@@ -1,10 +1,8 @@
 package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.MoleculeBox;
 
 /**
  * Experiment screen.
