@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.molecule.MolecularModel;
-import com.mazalearn.scienceengine.molecule.MolecularModel.TemperatureLevel;
+import com.mazalearn.scienceengine.molecule.MolecularModel.Heating;
 
 /**
  * States of Matter experiment screen.
@@ -92,7 +92,11 @@ public class MoleculeBox extends Actor {
     return null;
   }
 
-  public void setTemperature(TemperatureLevel temperatureLevel) {
-    molecularModel.setTemperatureLevel(temperatureLevel);   
+  public void setHeating(Heating heating) {
+    molecularModel.setHeatingLevel(heating);   
+  }    
+
+  public void setTemperature(double temperature) {
+    molecularModel.setTemperature(temperature);   
   }    
 }

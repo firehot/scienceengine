@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.StatesOfMatter;
 import com.mazalearn.scienceengine.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.services.Profile;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
@@ -23,7 +21,7 @@ public class StartScreen extends AbstractScreen {
   public StartScreen(ScienceEngine game) {
     super(game);
     // create the listeners
-    experimentClickListener = new ExperimentClickListener(getSkin());
+    experimentClickListener = new ExperimentClickListener();
   }
 
   @Override
@@ -74,17 +72,11 @@ public class StartScreen extends AbstractScreen {
    * Listener for experiment click button.
    */
   private class ExperimentClickListener implements ClickListener {
-    private Skin skin;
-    ExperimentClickListener(Skin skin) {
-      this.skin = skin;
-    }
     @Override
     public void click(Actor actor, float x, float y) {
       game.getSoundManager().play(ScienceEngineSound.CLICK);
       Gdx.app.log(ScienceEngine.LOG, "Starting StatesOfMatter");
-      Actor experiment = new StatesOfMatter(skin);
-      game.setScreen(new ExperimentScreen(game, experiment, 
-          "States of Matter"));
+      game.setScreen(new ExperimentScreen(game, "States of Matter"));
     }
   }
 

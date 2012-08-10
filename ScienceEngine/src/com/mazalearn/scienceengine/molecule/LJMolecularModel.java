@@ -33,7 +33,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
     double potentialEnergy = 0;
     Molecule m[] = molecules;
     // now compute interaction forces (Lennard-Jones potential):
-    double dampingForceOverR = DAMPING_FORCE_OVER_R[temperatureLevel.level()];
+    double dampingForceOverR = DAMPING_FORCE_OVER_R[heating.level()];
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < i; j++) {
         double dx = m[i].x - m[j].x;

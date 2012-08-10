@@ -2,24 +2,36 @@ package com.mazalearn.scienceengine.molecule;
 
 public interface MolecularModel {
 
+  // Initialize the molecules configuration (currently uniform random)
   public abstract void initialize();
 
+  // Simulate n steps
   public abstract void simulateSteps(int n);
 
+  // The physical time elapsed since beginning of simulation
   public abstract double getSimulatedTime();
 
+  // Energy of the system (PE + KE)
   public abstract double getEnergy();
 
+  // Get ith molecule
   public abstract Molecule getMolecule(int i);
   
+  // Get temperature of the system
   public abstract double getTemperature();
+  
+  // Set temperature of the system.
+  // Also sets damping to move the system to stable state at that temperature
+  public abstract void setTemperature(double temperature);
 
-  public abstract void setTemperatureLevel(TemperatureLevel temperatureLevel);
+  // Set heat level
+  public abstract void setHeatingLevel(Heating heating);
 
-  public enum TemperatureLevel {
+  // Enumeration for applying heat to the Molecular Model.
+  public enum Heating {
     NEUTRAL(0), COLD(1), HOT(2);
     private int level;
-    private TemperatureLevel(int level) { this.level = level; }
+    private Heating(int level) { this.level = level; }
     public int level() { return level; }
   }
 }

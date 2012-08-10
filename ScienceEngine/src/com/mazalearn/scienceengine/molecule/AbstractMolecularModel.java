@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.molecule;
 
-import com.mazalearn.scienceengine.molecule.MolecularModel.TemperatureLevel;
+import com.mazalearn.scienceengine.molecule.MolecularModel.Heating;
 
 public abstract class AbstractMolecularModel {
 
@@ -22,7 +22,7 @@ public abstract class AbstractMolecularModel {
   protected double pe;
   protected double energy;
   protected double timeElapsed;
-  protected TemperatureLevel temperatureLevel = TemperatureLevel.NEUTRAL;
+  protected Heating heating = Heating.NEUTRAL;
 
   public AbstractMolecularModel(int boxWidth, int boxHeight, int N,
       double temperature) {
@@ -109,12 +109,24 @@ public abstract class AbstractMolecularModel {
     reScaleDt();
   }
 
-  public void setTemperatureLevel(TemperatureLevel temperatureLevel) {
-    this.temperatureLevel = temperatureLevel;
+  public void setHeatingLevel(Heating heating) {
+    this.heating = heating;
   }
   
   public double getTemperature() {
     return temperature;
+  }
+  
+  public void setTemperature(double temperature) {
+    if (this.temperature < temperature) { // set damping upwards
+      setHeatingLevel(Heating.HOT);
+    } else if (this.temperature > temperature) { // set damping downwards
+      setHeatingLevel(Heating.COLD);
+    } else {
+      setHeatingLevel(Heating.NEUTRAL);
+    }
+    this.temperature = temperature;
+    normalizeVelocities();
   }
   
   protected double getGravity() {
@@ -126,10 +138,12 @@ public abstract class AbstractMolecularModel {
     // Scale velocities up or down
     // vi *= (2-0.999995); or vi *= 0.999995;
     // Update velocities half-way with old acceleration
-    double damping = DAMPING[temperatureLevel.level()];
-    for (Molecule m: molecules) {
-      m.vx *= damping;
-      m.vy *= damping;
+    double damping = DAMPING[heating.level()];
+    if (energy < 10.0 && damping > 1.0 || energy > 1.0 && damping < 1.0) {
+      for (Molecule m: molecules) {
+        m.vx *= damping;
+        m.vy *= damping;
+      }
     }
   
     
