@@ -27,19 +27,23 @@ public class ProfileManager {
    */
   public Profile retrieveProfile() {
     // create the handle for the profile data file
-    FileHandle profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
+    FileHandle profileDataFile = null;
+    try {
+    profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
     Gdx.app.log(ScienceEngine.LOG,
         "Retrieving profile from: " + profileDataFile.path());
 
     // if the profile is already loaded, just return it
     if (profile != null)
       return profile;
-
+    } catch (Exception e) {
+      // Ignore - GWT does not support profiles
+    }
     // create the JSON utility object
     Json json = new Json();
 
     // check if the profile data file exists
-    if (profileDataFile.exists()) {
+    if (profileDataFile != null && profileDataFile.exists()) {
 
       // load the profile from the data file
       try {
@@ -83,6 +87,7 @@ public class ProfileManager {
    * Persists the given profile.
    */
   protected void persist(Profile profile) {
+    try {
     // create the handle for the profile data file
     FileHandle profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
     Gdx.app.log(ScienceEngine.LOG, 
@@ -101,6 +106,9 @@ public class ProfileManager {
 
     // write the profile data file
     profileDataFile.writeString(profileAsText, false);
+    } catch (Exception e) {
+      // Ignored - GWT does not support 
+    }
   }
 
   /**

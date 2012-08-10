@@ -133,7 +133,7 @@ public class ScienceEngine extends Game {
   public void setScreen(Screen screen) {
     super.setScreen(screen);
     Gdx.app.log(ScienceEngine.LOG, "Setting screen: "
-        + screen.getClass().getSimpleName());
+        + screen.getClass().getName());
   }
 
 }

@@ -39,7 +39,7 @@ public abstract class AbstractScreen implements Screen {
   }
 
   protected String getName() {
-    return getClass().getSimpleName();
+    return getClass().getName();
   }
 
   protected boolean isGameScreen() {
