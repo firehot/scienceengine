@@ -1,11 +1,18 @@
 package com.mazalearn.scienceengine.experiments;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.molecule.MolecularModel.Heating;
 
@@ -40,7 +47,18 @@ public class StatesOfMatter extends Table {
     add(new ColorPanel()).fill().width(10);
     row();
     // Floor of box - also controls heating.
-    Button heatingControl = new TextButton("heating", skin);
+    Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+    pixmap.setColor(Color.LIGHT_GRAY);
+    pixmap.fillRectangle(0, 0, 1, 1);
+
+    final TextureRegion[] textureRegion = {
+        new TextureRegion(new Texture(pixmap)),
+        new TextureRegion(new Texture("images/iceberg.jpg")),
+        new TextureRegion(new Texture("images/fire-texture.jpg")),            
+    };
+    pixmap.dispose();
+    final Image heatingControl = new Image(textureRegion[0], Scaling.stretch);
+    //new TextButton("", skin);
     heatingControl.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
@@ -52,9 +70,10 @@ public class StatesOfMatter extends Table {
         case 2: tLevel = Heating.HOT; break;
         }
         moleculeBox.setHeating(tLevel);
+        heatingControl.setRegion(textureRegion[temperatureLevel]);
       }
     });
-    add(heatingControl).fill().colspan(3).height(10);
+    add(heatingControl).fill().colspan(3).height(30);
     row();
   }
 

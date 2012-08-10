@@ -21,8 +21,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements Molecula
     super(boxWidth, boxHeight, N, temperature);
   }
 
-  double computeAccelerations() {
-    
+  double computeAccelerations() {   
     double potentialEnergy = 0.0;
     potentialEnergy += computeWallForces();
     potentialEnergy += computeInterMolecularForces();

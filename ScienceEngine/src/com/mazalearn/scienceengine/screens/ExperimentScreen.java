@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.screens;
 
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.StatesOfMatter;
@@ -23,7 +22,7 @@ public class ExperimentScreen extends AbstractScreen {
     
     // retrieve the default table actor
     Table table = super.getTable();
-    table.add(new TextButton(experimentName, getSkin())).spaceBottom(10);
+    table.add(experimentName).spaceBottom(10);
     table.row();
     
     // Add experiment to table
