@@ -13,23 +13,20 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class Rope extends Group {
+  private static final float ORIGIN_Y = 5.5f;
+  private static final float ORIGIN_X = 1.5f;
   private static final int BALL_DIAMETER = 8;
-  Body body, mainBody, groundBody;
+  Body body, endBody, groundBody;
   public World box2DWorld;
-  public int m_iterations = 10;
-  public double  m_timeStep = 1.0/30.0;
-  MouseJointDef MouseJoint;
-  Vector2 mousePVec = new Vector2();
   DistanceJointDef distanceJoint = new DistanceJointDef();
-  PrismaticJointDef prismJoint = new PrismaticJointDef();
+  PrismaticJoint prismJoint;
   private TextureRegion ballTexture;
   
   public Rope(float width, float height) {
@@ -38,37 +35,40 @@ public class Rope extends Group {
     boolean doSleep = true;
     box2DWorld = new World(gravity, doSleep);
 
-    prismJoint.lowerTranslation = -2;
-    prismJoint.upperTranslation = 2;
-    prismJoint.enableLimit = true;
-    prismJoint.maxMotorForce = 100;
-    prismJoint.motorSpeed = 4.0f;
-    prismJoint.enableMotor = false;
-
     ballTexture = createBallTexture();
     // ceiling
-    groundBody = createRopeSegment(null, 8.5f, 8.5f, 0);
+    groundBody = createRopeSegment(null, ORIGIN_X, ORIGIN_Y, 0);
     groundBody.setType(BodyType.StaticBody);
-    mainBody = body = createRopeSegment(null, 8.5f, 8.5f, 2f);
+    endBody = body = createRopeSegment(null, ORIGIN_X, ORIGIN_Y, 2f);
     
-    prismJoint.initialize(groundBody, body, body.getPosition(), new Vector2(0, 10));
-    box2DWorld.createJoint(prismJoint);
+    // Anchor the end and provide a motor to oscillate it
+    prismJoint = createPrismaticJoint(groundBody, endBody); 
     
     distanceJoint.frequencyHz = 1.2f;
     distanceJoint.dampingRatio = 0.5f;
     // rope segments 
-    for (int i = 1; i <= 20; i++) {
-      body = createRopeSegment(body, 8.5f + i, 8.5f, 2f);
+    for (int i = 1; i <= 30; i++) {
+      body = createRopeSegment(body, ORIGIN_X + (float)(i*1.5), ORIGIN_Y, 2f);
     }
     // last segment
     body.setType(BodyType.StaticBody);
 
-    mainBody.applyForce(new Vector2(0f, 50f), mainBody.getPosition());
-
     Vector2 WORLD_SIZE = new Vector2(10, 10);
     float pixelsPerMetre = width / WORLD_SIZE.x;
-    Box2DAction action = new Box2DAction(box2DWorld, mainBody, pixelsPerMetre, false);
+    Box2DAction action = new Box2DAction(box2DWorld, endBody, pixelsPerMetre, false);
     this.action(action);
+  }
+
+  private PrismaticJoint createPrismaticJoint(Body body1, Body body2) {
+    PrismaticJointDef prismJointDef = new PrismaticJointDef();
+    prismJointDef.lowerTranslation = -3;
+    prismJointDef.upperTranslation = 3;
+    prismJointDef.enableLimit = true;
+    prismJointDef.maxMotorForce = 1000;
+    prismJointDef.motorSpeed = 1.0f;
+    prismJointDef.enableMotor = true;
+    prismJointDef.initialize(body1, body2, body2.getPosition(), new Vector2(0, 1));
+    return (PrismaticJoint) box2DWorld.createJoint(prismJointDef);
   }
 
   private TextureRegion createBallTexture() {
@@ -95,15 +95,17 @@ public class Rope extends Group {
     ballDef.friction = 0; // 0.5f;
     ballDef.restitution = 0.2f;
     ballDef.shape = ballShape;
-    Body body=box2DWorld.createBody(bodyDef);
+    Body body = box2DWorld.createBody(bodyDef);
     body.createFixture(ballDef);
     // joint
     if (previousBody != null) {
       distanceJoint.initialize(previousBody, body, previousBody.getPosition(), body.getPosition());
       box2DWorld.createJoint(distanceJoint);
     }
-    Box2DActor actor = new Box2DActor(body, ballTexture);
-    this.addActor(actor);
+    if (density != 0) {
+      Box2DActor actor = new Box2DActor(body, ballTexture);
+      this.addActor(actor);
+    }
     return body;
   }
     
@@ -115,58 +117,10 @@ public class Rope extends Group {
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);    
     box2DWorld.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+    if (prismJoint.getJointTranslation() >= prismJoint.getUpperLimit()) {
+      prismJoint.setMotorSpeed(-prismJoint.getMotorSpeed());
+    } else if (prismJoint.getJointTranslation() <= prismJoint.getLowerLimit()) {
+      prismJoint.setMotorSpeed(-prismJoint.getMotorSpeed());
+    }
   }
-  /*
-    public void createMouse(MouseEvent evt) {
-      Body body = GetBodyAtMouse();
-      if (body) {
-        MouseJointDef mouseJointDef = new MouseJointDef();
-        mouseJointDef.body1 = box2DWorld.GetGroundBody();
-        mouseJointDef.body2 = body;
-        mouseJointDef.target.Set(mouseX/30, mouseY/30);
-        mouseJointDef.maxForce = 30000;
-        mouseJointDef.timeStep = m_timeStep;
-        MouseJoint mouseJoint = box2DWorld.createJoint(mouseJointDef);
-      }
-    }
-    public void destroyMouse(MouseEvent evt) {
-      if (mouseJoint) {
-        box2DWorld.DestroyJoint(mouseJoint);
-        mouseJoint = null;
-      }
-    }
-    public Body getBodyAtMouse(boolean includeStatic) {
-      var mouseXWorldPhys = (mouseX)/30;
-      var mouseYWorldPhys = (mouseY)/30;
-      mousePVec.Set(mouseXWorldPhys, mouseYWorldPhys);
-      AABB aabb = new AABB();
-      aabb.lowerBound.Set(mouseXWorldPhys - 0.001, mouseYWorldPhys - 0.001);
-      aabb.upperBound.Set(mouseXWorldPhys + 0.001, mouseYWorldPhys + 0.001);
-      int k_maxCount = 10;
-      Array shapes = new Array();
-      int count = box2DWorld.Query(aabb,shapes,k_maxCount);
-      Body body = null;
-      for (int i = 0; i < count; ++i) {
-        if (shapes[i].GetBody().IsStatic()==false||includeStatic) {
-          Shape tShape = shapes[i];
-          Boolean inside = tShape.TestPoint(tShape.GetBody().GetXForm(), mousePVec);
-          if (inside) {
-            body=tShape.GetBody();
-            break;
-          }
-        }
-      }
-      return body;
-    }
-    public void Update(Event e) {
-      box2DWorld.Step(m_timeStep, m_iterations);
-      if (mouseJoint) {
-        var mouseXWorldPhys = mouseX/30;
-        var mouseYWorldPhys = mouseY/30;
-        Vector2 p2 = new Vector2(mouseXWorldPhys, mouseYWorldPhys);
-        mouseJoint.SetTarget(p2);
-      }
- 
-    }
-    */
-  }
+}
