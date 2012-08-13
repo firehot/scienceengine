@@ -50,6 +50,10 @@ public class StartScreen extends AbstractScreen {
     experimentButton.setClickListener(experimentClickListener);
     table.add(experimentButton).fillX().padRight(10);
 
+    experimentButton = new TextButton("Wave Motion", getSkin());
+    experimentButton.setClickListener(experimentClickListener);
+    table.add(experimentButton).fillX().padRight(10);
+
     // create the credits label
     table.row();
     creditsLabel = new Label(profile.getCreditsAsText(), getSkin());
@@ -75,8 +79,9 @@ public class StartScreen extends AbstractScreen {
     @Override
     public void click(Actor actor, float x, float y) {
       game.getSoundManager().play(ScienceEngineSound.CLICK);
-      Gdx.app.log(ScienceEngine.LOG, "Starting StatesOfMatter");
-      game.setScreen(new ExperimentScreen(game, "States of Matter"));
+      TextButton button = (TextButton) actor;
+      Gdx.app.log(ScienceEngine.LOG, "Starting " + button.getLabel().getText());
+      game.setScreen(new ExperimentScreen(game, (String) button.getLabel().getText()));
     }
   }
 
