@@ -18,10 +18,9 @@ public class WaveString extends Actor {
     float y;
     float nextY;
     float previousY;
-    Ball(float x, float y) {
+    Ball(float x) {
       this.x = x;
-      this.y = y;
-      this.nextY = this.previousY = 0;
+      this.y = this.nextY = this.previousY = 0;
     }
   }
   
@@ -29,29 +28,39 @@ public class WaveString extends Actor {
   private static final float ORIGIN_X = 1f;
   private static final int BALL_DIAMETER = 8;
 
-  private static final int AMPLITUDE = 3; // Amplitude of sinusoidal motion
-  private static final float PHI = 0; //phase of sinusoidal motion, units of radians
-  private static final float MASS = 1;    //mass per unit length
+  // Amplitude of sinusoidal motion
+  private static final int AMPLITUDE = 3;
+  // phase of sinusoidal motion, units of radians
+  private static final float PHI = 0;
+  // mass per unit length
+  private static final float MASS = 1;
   private static int NUM_BALLS = 40;
   private static final float WAVE_SPEED = (float) Math.sqrt(1.0 /*TENSION*/ / MASS);
-  private static final float ALPHA_SQUARE = 1;   //(WAVE_SPEED*delT/delX)*(WAVE_SPEED*delT/delX);
+  //(WAVE_SPEED*delT/delX)*(WAVE_SPEED*delT/delX);
+  private static final float ALPHA_SQUARE = 1;
 
-  private float frequency = 0.03f; //frequency of sinusoidal motion, units of cycles per frame
-  private float tension = 1;   //tension in the string
-  private float beta = 0.01f;  // damping coefficient = b*delT/2
+  // frequency of sinusoidal motion, units of cycles per frame
+  private float frequency = 0.03f;
+  //tension in the string
+  private float tension = 1;
+  // damping coefficient = b*delT/2
+  private float beta = 0.01f;
+  // Boundary condition of other end.
   private EndType endBC = EndType.LOOSE_END;
-  private float pulseWidth = 10;   // width of pulse
+  // width of pulse
+  private float pulseWidth = 10;
 
   private TextureRegion ballTexture;
   
   Ball balls[] = new Ball[NUM_BALLS];
   private Texture backgroundTexture;
   private int iter = 0;
+  private Ball endBall;
   
   public WaveString(float width, float height) {
     this.width = width;
     this.height = height;
-      // start ball
+    
     ballTexture = createBallTexture();
     // Use light-gray background color
     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
@@ -62,12 +71,9 @@ public class WaveString extends Actor {
     
     // balls on the string segment
     for (int i = 0; i < NUM_BALLS; i++) {
-      balls[i] = createBall(i + 1);
+      balls[i] = new Ball(i + 1);
     }
-  }
-
-  private Ball createBall(float x) {
-    return new Ball(x, 0);
+    endBall = balls[NUM_BALLS - 1];
   }
 
   private TextureRegion createBallTexture() {
@@ -81,42 +87,41 @@ public class WaveString extends Actor {
   }
   
   public void advance(double d) { 
-    // Assumes 60 frames per second and advances through 1/60 s
     iter++;
-    // A(x,t) = A0 * cos(kx - wt + phi)
     balls[0].y = (float) d;
     
     switch (this.endBC) {
       case FIXED_END:
-        balls[NUM_BALLS - 1].y = 0; break;
+        endBall.y = 0; break;
       case LOOSE_END:
-        balls[NUM_BALLS - 1].y = balls[NUM_BALLS - 2].y; break;
+        endBall.y = balls[NUM_BALLS - 2].y; break;
       case NO_END:
-        balls[NUM_BALLS - 1].y = balls[NUM_BALLS - 2].previousY; break;
+        endBall.y = balls[NUM_BALLS - 2].previousY; break;
     }
     
-    for(int i = 1; i < NUM_BALLS - 1; i++){  //evolve according to 1D classical wave equation
+    // Evolve according to 1D classical wave equation
+    for(int i = 1; i < NUM_BALLS - 1; i++){
       balls[i].nextY = (1 / (1 + beta)) * (ALPHA_SQUARE * (balls[i+1].y + balls[i-1].y) + (beta - 1) * balls[i].previousY);
     }
     
 
-    for(int j = 1; j < NUM_BALLS - 1; j++){
-      balls[j].previousY = balls[j].y;
-      balls[j].y = balls[j].nextY;
+    for(Ball ball: balls){
+      ball.previousY = ball.y;
+      ball.y = ball.nextY;
     }
     
     switch (this.endBC) {
       case FIXED_END:
-        balls[NUM_BALLS - 1].previousY = 0;
-        balls[NUM_BALLS - 1].y = 0;
+        endBall.previousY = 0;
+        endBall.y = 0;
         break;
       case LOOSE_END:
-        balls[NUM_BALLS - 1].previousY = balls[NUM_BALLS - 1].y;
-        balls[NUM_BALLS - 1].y = balls[NUM_BALLS - 2].y;
+        endBall.previousY = endBall.y;
+        endBall.y = balls[NUM_BALLS - 2].y;
         break;
       case NO_END:
-        balls[NUM_BALLS - 1].previousY = balls[NUM_BALLS - 1].y;
-        balls[NUM_BALLS - 1].y = balls[NUM_BALLS - 1].y;
+        endBall.previousY = endBall.y;
+        endBall.y = endBall.y;
         break;
     }
   }
@@ -129,7 +134,8 @@ public class WaveString extends Actor {
     advance(sinusoid(iter));
     // Draw the molecules
     for (Ball ball: balls) {
-      batch.draw(ballTexture, this.x + ORIGIN_X + (float) (ball.x * BALL_DIAMETER), 
+      batch.draw(ballTexture, 
+          this.x + ORIGIN_X + (float) (ball.x * BALL_DIAMETER), 
           this.y + ORIGIN_Y + (float) (ball.y * BALL_DIAMETER));
     }
   }
@@ -152,11 +158,10 @@ public class WaveString extends Actor {
     double halfPulse = pulseWidth / 2;
     if (t < halfPulse) {
       return AMPLITUDE * t / halfPulse;
-    } else if (t >= halfPulse && t <= pulseWidth) {
+    } else if (t <= pulseWidth) {
       return AMPLITUDE * (2 - t / halfPulse);
-    }else{
-      return 0;
     }
+    return 0;
   }
 
   public float getFrequency() {
