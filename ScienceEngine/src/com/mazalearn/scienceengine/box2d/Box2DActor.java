@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments;
+package com.mazalearn.scienceengine.box2d;
 
 /*
  * -----------------------------------------------------------------------

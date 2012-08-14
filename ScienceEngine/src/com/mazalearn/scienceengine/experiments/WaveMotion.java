@@ -14,7 +14,7 @@ public class WaveMotion extends Table {
     if (ScienceEngine.DEV_MODE) {
       debug();
     }
-    this.add(new Rope(100,150));
+    this.add(new WaveString(400, 200));
   }
 
 }
