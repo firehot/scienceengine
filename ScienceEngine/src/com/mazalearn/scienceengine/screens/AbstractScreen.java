@@ -17,8 +17,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
  */
 public abstract class AbstractScreen implements Screen {
   // the fixed viewport dimensions (ratio: 1.6)
-  public static final int GAME_VIEWPORT_WIDTH = 400,
-      GAME_VIEWPORT_HEIGHT = 240;
+  public static final int GAME_VIEWPORT_WIDTH = 800,
+      GAME_VIEWPORT_HEIGHT = 480;
   public static final int MENU_VIEWPORT_WIDTH = 800,
       MENU_VIEWPORT_HEIGHT = 480;
 
