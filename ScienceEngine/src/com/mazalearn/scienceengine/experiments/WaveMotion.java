@@ -4,6 +4,8 @@ package com.mazalearn.scienceengine.experiments;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.experiments.config.Condition;
+import com.mazalearn.scienceengine.experiments.config.Configurator;
 
 /**
  * Wave Motion experiment
@@ -24,9 +26,24 @@ public class WaveMotion extends Table {
     configurator.addSelect("GenMode", new String[] {"Oscillate", "Pulse", "Manual"});
     configurator.addSlider("Tension", 1, 10);
     configurator.addSlider("Damping", 0, 0.5f);
-    configurator.addSlider("PulseWidth", 5, 20);
-    configurator.addSlider("Frequency", 0, 1);
-    configurator.addSlider("Amplitude", 0, 100);
+    configurator.addSlider("PulseWidth", 5, 20).addCondition(new Condition() {
+      @Override
+      public boolean eval() {
+        return waveString.getGenMode() == "Pulse";
+      }
+    });
+    configurator.addSlider("Frequency", 0, 1).addCondition(new Condition() {
+      @Override
+      public boolean eval() {
+        return waveString.getGenMode() == "Oscillate";
+      }
+    });;
+    configurator.addSlider("Amplitude", 0, 100).addCondition(new Condition() {
+      @Override
+      public boolean eval() {
+        return waveString.getGenMode() != "Manual";
+      }
+    });;
   }
 
 }

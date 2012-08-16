@@ -160,14 +160,10 @@ public class WaveString extends Group implements Experiment {
       case Manual: break;
     }
     
-    float frameNumber = 1 + waveTime % frameCount;
-    float ratio = frameNumber / frameCount;
     balls[0].displayPos.y = ORIGIN_Y + balls[0].pos.y;
     for (int i = 1; i < NUM_BALLS; i++) {
       Ball ball = balls[i];
-      float y = (1 - ratio) * ball.previousY + ratio * ball.pos.y;
-      //ball.pos.y = y;
-      ball.displayPos.y = ORIGIN_Y + y;
+      ball.displayPos.y = ORIGIN_Y + ball.pos.y;
     }
   }
 
