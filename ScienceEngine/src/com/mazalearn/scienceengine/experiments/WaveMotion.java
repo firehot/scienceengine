@@ -20,13 +20,13 @@ public class WaveMotion extends Table {
     this.add(waveString).fill();
     Configurator configurator = new Configurator(skin, waveString);
     this.add(configurator).width(30).fill();
-    configurator.add("EndType", new String[] {"FixedEnd", "LooseEnd", "NoEnd"});
-    configurator.add("GenMode", new String[] {"Oscillate", "Pulse"});
-    configurator.add("Tension", 1, 10);
-    configurator.add("Damping", 0, 0.5f);
-    configurator.add("PulseWidth", 5, 20);
-    configurator.add("Frequency", 0, 1);
-    configurator.add("Amplitude", 0, 10);
+    configurator.addSelect("EndType", new String[] {"FixedEnd", "LooseEnd", "NoEnd"});
+    configurator.addSelect("GenMode", new String[] {"Oscillate", "Pulse" /*, "Manual" */});
+    configurator.addSlider("Tension", 1, 10);
+    configurator.addSlider("Damping", 0, 0.5f);
+    configurator.addSlider("PulseWidth", 5, 20);
+    configurator.addSlider("Frequency", 0, 1);
+    configurator.addSlider("Amplitude", 0, 100);
   }
 
 }

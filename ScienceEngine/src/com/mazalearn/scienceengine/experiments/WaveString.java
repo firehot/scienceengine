@@ -6,25 +6,29 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class WaveString extends Actor implements Experiment {
+public class WaveString extends Group implements Experiment {
   // Enum used for different Boundary Conditions on end of string
   public enum EndType { FixedEnd, LooseEnd, NoEnd };
   // Enum used for mode of wave generation
-  public enum GenMode { Oscillate, Pulse};
+  public enum GenMode { Oscillate, Pulse, Manual};
 
   // Ball is a segment of the String used to display waves.
   static class Ball {
-    float x;
-    float y;
+    Vector2 pos, displayPos;
     float nextY;
     float previousY;
-    Ball(float x) {
-      this.x = x;
-      this.y = this.nextY = this.previousY = 0;
+    Ball(int i) {
+      this.pos = new Vector2(i * BALL_DIAMETER, 0);
+      this.nextY = this.previousY = 0;
+      this.displayPos = new Vector2(this.pos.x + ORIGIN_X, ORIGIN_Y);
     }
   }
+  private Actor startBall, endBall;
   
   private static final float ORIGIN_Y = 80f;
   private static final float ORIGIN_X = 1f;
@@ -40,7 +44,7 @@ public class WaveString extends Actor implements Experiment {
   // phase of sinusoidal motion, units of radians
   private float phi = 0;
   // Amplitude of sinusoidal motion
-  private float amplitude = 3;
+  private float amplitude = 3 * BALL_DIAMETER;
   // frequency of sinusoidal motion, units of cycles per frame
   private float frequency = 0.03f;
   //tension in the string
@@ -48,7 +52,7 @@ public class WaveString extends Actor implements Experiment {
   // damping coefficient = b*delT/2
   private float beta = 0.01f;
   // Boundary condition of other end.
-  private EndType endType = EndType.LooseEnd;
+  private EndType endType = EndType.FixedEnd;
   // Generation mode
   private GenMode genMode = GenMode.Oscillate;
   // width of pulse
@@ -59,8 +63,7 @@ public class WaveString extends Actor implements Experiment {
   Ball balls[] = new Ball[NUM_BALLS];
   private Texture backgroundTexture;
   private int waveTime = 0;
-  private Ball endBall;
-  private boolean paused = false;
+  private boolean isPaused = false;
   private int pulseStartTime = 0;
   
   public WaveString(float width, float height) {
@@ -79,7 +82,21 @@ public class WaveString extends Actor implements Experiment {
     for (int i = 0; i < NUM_BALLS; i++) {
       balls[i] = new Ball(i + 1);
     }
-    endBall = balls[NUM_BALLS - 1];
+    startBall = new Image(ballTexture) {
+      public boolean touchDown(float x, float y, int pointer) {
+        return true;
+      }
+      public void touchUp(float x, float y, int pointer) {
+        balls[0].pos.y += y;
+        WaveString.this.resume();
+        return;
+      }
+    };
+    endBall = new Image(ballTexture);
+    startBall.x = balls[0].displayPos.x;
+    endBall.x = balls[NUM_BALLS - 1].displayPos.x;
+    addActor(startBall);
+    addActor(endBall);
   }
 
   private TextureRegion createBallTexture() {
@@ -93,68 +110,65 @@ public class WaveString extends Actor implements Experiment {
   }
   
   public void advance(double d) {
-    balls[0].y = (float) d;
+    balls[0].pos.y = (float) d;
     
     switch (this.endType) {
-      case FixedEnd:
-        endBall.y = 0; break;
-      case LooseEnd:
-        endBall.y = balls[NUM_BALLS - 2].y; break;
-      case NoEnd:
-        endBall.y = balls[NUM_BALLS - 2].previousY; break;
+      case FixedEnd: 
+        balls[NUM_BALLS - 1].pos.y = 0; break;
+      case LooseEnd: 
+        balls[NUM_BALLS - 1].pos.y = balls[NUM_BALLS - 2].pos.y; break;
+      case NoEnd:    
+        balls[NUM_BALLS - 1].pos.y = balls[NUM_BALLS - 2].previousY; break;
     }
     
     // Evolve according to 1D classical wave equation
     for(int i = 1; i < NUM_BALLS - 1; i++){
-      balls[i].nextY = (1 / (1 + beta)) * (ALPHA_SQUARE * (balls[i+1].y + balls[i-1].y) + (beta - 1) * balls[i].previousY);
+      balls[i].nextY = (1 / (1 + beta)) * (ALPHA_SQUARE * (balls[i+1].pos.y + balls[i-1].pos.y) + (beta - 1) * balls[i].previousY);
     }
     
     for(int i = 1; i < NUM_BALLS - 1; i++){
-      balls[i].previousY = balls[i].y;
-      balls[i].y = balls[i].nextY;
+      balls[i].previousY = balls[i].pos.y;
+      balls[i].pos.y = balls[i].nextY;
     }
     
     switch (this.endType) {
       case FixedEnd:
-        endBall.previousY = 0;
-        endBall.y = 0;
+        balls[NUM_BALLS - 1].previousY = 0;
+        balls[NUM_BALLS - 1].pos.y = 0;
         break;
       case LooseEnd:
-        endBall.previousY = endBall.y;
-        endBall.y = balls[NUM_BALLS - 2].y;
+        balls[NUM_BALLS - 1].previousY = balls[NUM_BALLS - 1].pos.y;
+        balls[NUM_BALLS - 1].pos.y = balls[NUM_BALLS - 2].pos.y;
         break;
       case NoEnd:
-        endBall.previousY = endBall.y;
-        endBall.y = endBall.y;
+        balls[NUM_BALLS - 1].previousY = balls[NUM_BALLS - 1].pos.y;
+        balls[NUM_BALLS - 1].pos.y = balls[NUM_BALLS - 1].pos.y;
         break;
     }
   }
   
-  @Override
-  public void draw(SpriteBatch batch, float parentAlpha) {
-    // Draw background
-    batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
-    // Advance n steps
-    if (!paused ) {
-      waveTime++;
-      int count = (int) (11 - tension);
-      if (waveTime % count != 0) return;
-      switch(genMode) {
-        case Oscillate: advance(sinusoid(waveTime)); break;
-        case Pulse: advance(pulse(waveTime)); break;
-      }
+  private void simulateStep() {
+    waveTime++;
+    int frameCount = (int) (11 - tension);
+    if (waveTime % frameCount == 0) {
+      advance(balls[0].pos.y);
     }
-    // Draw the molecules
-    for (Ball ball: balls) {
-      batch.draw(ballTexture, 
-          this.x + ORIGIN_X + (float) (ball.x * BALL_DIAMETER), 
-          this.y + ORIGIN_Y + (float) (ball.y * BALL_DIAMETER));
+    
+    switch(genMode) {
+      case Oscillate: balls[0].pos.y = (float) sinusoid(waveTime); break;
+      case Pulse: balls[0].pos.y = (float) pulse(waveTime); break;
+      case Manual: break;
     }
-  }
-
-  @Override
-  public Actor hit(float x, float y) {
-    return null;
+    
+    float frameNumber = 1 + waveTime % frameCount;
+    float ratio = frameNumber / frameCount;
+    balls[0].displayPos.y = ORIGIN_Y + balls[0].pos.y;
+    for (int i = 1; i < NUM_BALLS; i++) {
+      Ball ball = balls[i];
+      float y = (1 - ratio) * ball.previousY + ratio * ball.pos.y;
+      //ball.pos.y = y;
+      ball.displayPos.y = ORIGIN_Y + y;
+    }
   }
 
   private double sinusoid(int t) {
@@ -170,6 +184,44 @@ public class WaveString extends Actor implements Experiment {
       return amplitude * (2 - t / halfPulse);
     }
     return 0;
+  }
+
+  @Override
+  public void draw(SpriteBatch batch, float parentAlpha) {
+    // Draw background
+    batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
+    // Advance n steps
+    if (!isPaused ) {
+      simulateStep();
+    }
+    startBall.y = balls[0].displayPos.y;
+    endBall.y = balls[NUM_BALLS - 1].displayPos.y;
+    // Draw the molecules
+    for (Ball ball: balls) {
+      batch.draw(ballTexture, this.x + ball.displayPos.x, this.y + ball.displayPos.y);
+    }
+    super.draw(batch, parentAlpha);
+  }
+
+  @Override
+  public void reset() {
+    waveTime = pulseStartTime = 0;
+    for (Ball b: balls) {
+      b.pos.y = b.nextY = b.previousY = 0;
+      b.displayPos.y = ORIGIN_Y;
+    }
+    startBall.y = balls[0].displayPos.y;
+    endBall.y = balls[NUM_BALLS - 1].displayPos.y;    
+  }
+
+  @Override
+  public void pause() {
+    this.isPaused = true;
+  }
+
+  @Override
+  public void resume() {
+    this.isPaused = false;
   }
 
   public float getFrequency() {
@@ -222,25 +274,6 @@ public class WaveString extends Actor implements Experiment {
     this.amplitude = amplitude;
   }
 
-  @Override
-  public void reset() {
-    waveTime = pulseStartTime = 0;
-    for (Ball b: balls) {
-      b.y = b.nextY = b.previousY = 0;
-
-    }
-  }
-
-  @Override
-  public void pause() {
-    this.paused = true;
-  }
-
-  @Override
-  public void resume() {
-    this.paused = false;
-  }
-
   public String getEndType() {
     return endType.name();
   }
@@ -258,5 +291,10 @@ public class WaveString extends Actor implements Experiment {
     if (this.genMode == GenMode.Pulse) {
       pulseStartTime = waveTime;
     }
+  }
+
+  @Override
+  public boolean isPaused() {
+    return isPaused;
   }
 }

@@ -1,9 +1,11 @@
 package com.mazalearn.scienceengine.experiments;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -12,9 +14,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 public class Configurator extends Table {
+  public interface Condition {
+    public boolean eval();
+  };
+  
+  static class Config {
+    final Cell[] cells;
+    Condition condition = null;
+
+    public Config(Cell[] cells) {
+      this.cells = cells;
+    }
+
+    public void addCondition(Condition condition) {
+      this.condition = condition;
+    }
+    
+    void validate() {
+      boolean condValue = condition == null || condition.eval();
+      for (Cell cell: cells) {
+        if (condValue) cell.size(null); else cell.size(0);
+      }
+    }
+  }
   /**
    * Utility class for experiment floating point sliders using reflection.
    *
@@ -73,7 +99,7 @@ public class Configurator extends Table {
    * Utility class for experiment action buttons using reflection.
    *
    */
-  static class ConfigTextButton extends TextButton {    
+  static class ConfigTextButton extends TextButton {
     public ConfigTextButton(final Experiment experiment, final String action, 
         final Skin skin) {
       super(action, skin);
@@ -123,8 +149,8 @@ public class Configurator extends Table {
       setSelectionListener(new SelectionListener() {
         @Override
         public void selected(Actor actor, int index, String value) {
-          setVal(value);
           experiment.reset();
+          setVal(value);
         }      
       });
     }
@@ -151,27 +177,67 @@ public class Configurator extends Table {
   
   final Experiment experiment;
   final Skin skin;
+  List<Config> configs;
   
+  // use cell ignore to hide unwanted cells?
+  // pause and resume should be exclusive
+  // want condition on an added config such that it is visible only on condition true
+  // means it has to override draw and reevaluate conditions for each "added" config.
   public Configurator(Skin skin, final Experiment experiment) {
     super(skin);
     this.skin = skin;
     this.experiment = experiment;
-    add(new ConfigTextButton(experiment, "Pause", skin));
-    add(new ConfigTextButton(experiment, "Resume", skin));
-    row();
-    add(new ConfigTextButton(experiment, "Reset", skin));
-    row();
+    this.configs = new ArrayList<Config>();
+    addButton("Pause").addCondition(new Condition() {
+      public boolean eval() {
+        return !experiment.isPaused();
+      }
+    });
+    addButton("Resume").addCondition(new Condition() {
+      public boolean eval() {
+        return experiment.isPaused();
+      }
+    });
+    addButton("Reset");
   }
   
-  public void add(String property, float low, float high) {
-    add(property);
-    row();
-    add(new ConfigSlider(experiment, property, low, high, skin));
-    row();
+  public Config addButton(String caption) {
+    Cell[] cells = new Cell[] {
+      add(new ConfigTextButton(experiment, caption, skin)),
+      row()
+    };
+    Config config = new Config(cells);
+    this.configs.add(config);
+    return config;
+  }
+  
+  public Config addSlider(String property, float low, float high) {
+    Cell[] cells = new Cell[] {
+      add(property),
+      row(),
+      add(new ConfigSlider(experiment, property, low, high, skin)),
+      row()
+    };
+    Config config = new Config(cells);
+    this.configs.add(config);
+    return config;
   }
 
-  public void add(String property, String[] items) {
-    add(new ConfigSelectBox(experiment, property, items, skin));
-    row();
+  public Config addSelect(String property, String[] items) {
+    Cell[] cells = new Cell[] {
+      add(new ConfigSelectBox(experiment, property, items, skin)),
+      row()
+    };
+    Config config = new Config(cells);
+    this.configs.add(config);
+    return config;
+  }
+  
+  @Override
+  public void draw(SpriteBatch batch, float parentAlpha) {
+    for (Config config: configs) {
+      config.validate();
+    }
+    super.draw(batch, parentAlpha);
   }
 }

@@ -29,7 +29,7 @@ public class ExperimentScreen extends AbstractScreen {
     
     // Add States of Matter experiment to table
     Actor experiment = null;
-    if (experimentName == "States Of Matter") {
+    if (experimentName == "States of Matter") {
       experiment = new StatesOfMatter(getSkin());
     } else if (experimentName == "Wave Motion") {
       experiment = new WaveMotion(getSkin());
