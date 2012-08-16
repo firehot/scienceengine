@@ -50,7 +50,7 @@ public class WaveString extends Group implements Experiment {
   //tension in the string
   private float tension = 10;
   // damping coefficient = b*delT/2
-  private float beta = 0.01f;
+  private float beta = 0.05f;
   // Boundary condition of other end.
   private EndType endType = EndType.FixedEnd;
   // Generation mode
@@ -86,7 +86,7 @@ public class WaveString extends Group implements Experiment {
       public boolean touchDown(float x, float y, int pointer) {
         return true;
       }
-      public void touchUp(float x, float y, int pointer) {
+      public void touchDragged(float x, float y, int pointer) {
         balls[0].pos.y += y;
         WaveString.this.resume();
         return;
@@ -210,8 +210,6 @@ public class WaveString extends Group implements Experiment {
       b.pos.y = b.nextY = b.previousY = 0;
       b.displayPos.y = ORIGIN_Y;
     }
-    startBall.y = balls[0].displayPos.y;
-    endBall.y = balls[NUM_BALLS - 1].displayPos.y;    
   }
 
   @Override
@@ -280,6 +278,7 @@ public class WaveString extends Group implements Experiment {
 
   public void setEndType(String endType) {
     this.endType = EndType.valueOf(endType);
+    reset();
   }
 
   public String getGenMode() {
@@ -288,6 +287,7 @@ public class WaveString extends Group implements Experiment {
 
   public void setGenMode(String genMode) {
     this.genMode = GenMode.valueOf(genMode);
+    reset();
     if (this.genMode == GenMode.Pulse) {
       pulseStartTime = waveTime;
     }

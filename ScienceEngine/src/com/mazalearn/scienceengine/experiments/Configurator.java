@@ -37,7 +37,13 @@ public class Configurator extends Table {
     void validate() {
       boolean condValue = condition == null || condition.eval();
       for (Cell cell: cells) {
-        if (condValue) cell.size(null); else cell.size(0);
+        if (condValue) {
+          cell.maxHeight(null);
+          cell.maxWidth(null);
+        } else {
+          cell.maxHeight(0);
+          cell.maxWidth(0);
+        }
       }
     }
   }
@@ -149,7 +155,6 @@ public class Configurator extends Table {
       setSelectionListener(new SelectionListener() {
         @Override
         public void selected(Actor actor, int index, String value) {
-          experiment.reset();
           setVal(value);
         }      
       });

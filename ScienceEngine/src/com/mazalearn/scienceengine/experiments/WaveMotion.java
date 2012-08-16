@@ -21,7 +21,7 @@ public class WaveMotion extends Table {
     Configurator configurator = new Configurator(skin, waveString);
     this.add(configurator).width(30).fill();
     configurator.addSelect("EndType", new String[] {"FixedEnd", "LooseEnd", "NoEnd"});
-    configurator.addSelect("GenMode", new String[] {"Oscillate", "Pulse" /*, "Manual" */});
+    configurator.addSelect("GenMode", new String[] {"Oscillate", "Pulse", "Manual"});
     configurator.addSlider("Tension", 1, 10);
     configurator.addSlider("Damping", 0, 0.5f);
     configurator.addSlider("PulseWidth", 5, 20);
