@@ -1,14 +1,13 @@
 package com.mazalearn.scienceengine.experiments.config;
 
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.esotericsoftware.tablelayout.Cell;
 
 public class Config {
-  final Cell<Table> cell;
+  final Table table;
   Condition condition = null;
 
-  public Config(Cell<Table> cell) {
-    this.cell = cell;
+  public Config(Table table) {
+    this.table = table;
   }
 
   public void addCondition(Condition condition) {
@@ -16,8 +15,6 @@ public class Config {
   }
   
   void validate() {
-    boolean visible = condition == null || condition.eval();
-    cell.getWidget().visible = visible;
-    cell.ignore(!visible);
+    table.visible = condition == null || condition.eval();
   }
 }

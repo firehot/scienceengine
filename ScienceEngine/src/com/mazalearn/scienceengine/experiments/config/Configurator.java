@@ -6,7 +6,6 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.experiments.Experiment;
 
 public class Configurator extends Table {
@@ -35,9 +34,8 @@ public class Configurator extends Table {
   public Config addButton(String caption) {
     Table table = new Table(skin);
     table.add(new ConfigTextButton(experiment, caption, skin));
-    @SuppressWarnings("unchecked")
-    Cell<Table> cell = this.add(table); this.row();
-    Config config = new Config(cell);
+    this.add(table); this.row();
+    Config config = new Config(table);
     this.configs.add(config);
     return config;
   }
@@ -47,9 +45,8 @@ public class Configurator extends Table {
     table.add(property);
     table.row();
     table.add(new ConfigSlider(experiment, property, low, high, skin));
-    @SuppressWarnings("unchecked")
-    Cell<Table> cell = this.add(table); this.row();
-    Config config = new Config(cell);
+    this.add(table); this.row();
+    Config config = new Config(table);
     this.configs.add(config);
     return config;
   }
@@ -57,9 +54,8 @@ public class Configurator extends Table {
   public Config addSelect(String property, String[] items) {
     Table table = new Table(skin);
     table.add(new ConfigSelectBox(experiment, property, items, skin));
-    @SuppressWarnings("unchecked")
-    Cell<Table> cell = this.add(table); this.row();
-    Config config = new Config(cell);
+    this.add(table); this.row();
+    Config config = new Config(table);
     this.configs.add(config);
     return config;
   }
