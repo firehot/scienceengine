@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments;
+package com.mazalearn.scienceengine.experiments.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments.config;
+package com.mazalearn.scienceengine.experiments.controller;
 
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 

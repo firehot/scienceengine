@@ -3,11 +3,11 @@ package com.mazalearn.scienceengine.screens;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.StatesOfMatter;
-import com.mazalearn.scienceengine.experiments.WaveMotion;
+import com.mazalearn.scienceengine.experiments.StatesOfMatterExperiment;
+import com.mazalearn.scienceengine.experiments.WaveExperiment;
 
 /**
- * Experiment screen.
+ * ExperimentModel screen.
  */
 public class ExperimentScreen extends AbstractScreen {
 
@@ -27,12 +27,12 @@ public class ExperimentScreen extends AbstractScreen {
     table.add(experimentName).spaceBottom(10);
     table.row();
     
-    // Add States of Matter experiment to table
+    // Add States of Matter experimentModel to table
     Actor experiment = null;
     if (experimentName == "States of Matter") {
-      experiment = new StatesOfMatter(getSkin());
+      experiment = new StatesOfMatterExperiment(getSkin());
     } else if (experimentName == "Wave Motion") {
-      experiment = new WaveMotion(getSkin());
+      experiment = new WaveExperiment(getSkin());
     }
     table.add(experiment)
         .width(GAME_VIEWPORT_WIDTH)

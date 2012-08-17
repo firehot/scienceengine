@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.molecule;
+package com.mazalearn.scienceengine.experiments.model.molecule;
 
 import java.util.LinkedList;
 import java.util.List;

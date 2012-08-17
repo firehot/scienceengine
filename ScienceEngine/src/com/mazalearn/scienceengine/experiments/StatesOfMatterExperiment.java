@@ -13,17 +13,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.molecule.MolecularModel.Heating;
+import com.mazalearn.scienceengine.experiments.model.molecule.MolecularModel.Heating;
+import com.mazalearn.scienceengine.experiments.view.ColorPanel;
+import com.mazalearn.scienceengine.experiments.view.StatesOfMatterView;
 
 /**
- * States of Matter experiment
+ * States of Matter experimentModel
  */
-public class StatesOfMatter extends Table {
+public class StatesOfMatterExperiment extends Table {
   private int temperatureLevel = 0;
-  private MoleculeBox moleculeBox;
+  private StatesOfMatterView statesOfMatterView;
   Table buttonTable;
   
-  public StatesOfMatter(Skin skin) {
+  public StatesOfMatterExperiment(Skin skin) {
     super(skin);
     buttonTable = new Table(skin);
     if (ScienceEngine.DEV_MODE) {
@@ -41,8 +43,8 @@ public class StatesOfMatter extends Table {
     row();
     // Sides and box
     add(new ColorPanel()).fill().width(10);
-    moleculeBox = new MoleculeBox();
-    add(moleculeBox).expand().fill();
+    statesOfMatterView = new StatesOfMatterView();
+    add(statesOfMatterView).expand().fill();
     add(new ColorPanel()).fill().width(10);
     row();
     // Floor of box - also controls heating.
@@ -68,7 +70,7 @@ public class StatesOfMatter extends Table {
         case 1: tLevel = Heating.COLD; break;
         case 2: tLevel = Heating.HOT; break;
         }
-        moleculeBox.setHeating(tLevel);
+        statesOfMatterView.setHeating(tLevel);
         heatingControl.setRegion(textureRegion[temperatureLevel]);
       }
     });
@@ -82,7 +84,7 @@ public class StatesOfMatter extends Table {
     textButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        moleculeBox.setTemperature(temperature);
+        statesOfMatterView.setTemperature(temperature);
       }
     });
     return textButton;

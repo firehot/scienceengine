@@ -1,6 +1,6 @@
-package com.mazalearn.scienceengine.molecule;
+package com.mazalearn.scienceengine.experiments.model.molecule;
 
-import com.mazalearn.scienceengine.molecule.MolecularModel.Heating;
+import com.mazalearn.scienceengine.experiments.model.molecule.MolecularModel.Heating;
 
 public abstract class AbstractMolecularModel {
 

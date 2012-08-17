@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.molecule;
+package com.mazalearn.scienceengine.experiments.model.molecule;
 
 public class LJMolecularModel extends AbstractMolecularModel implements MolecularModel {
   // Assumptions

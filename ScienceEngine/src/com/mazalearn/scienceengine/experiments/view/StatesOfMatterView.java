@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments;
+package com.mazalearn.scienceengine.experiments.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mazalearn.scienceengine.molecule.LJMolecularModel;
-import com.mazalearn.scienceengine.molecule.MolecularModel;
-import com.mazalearn.scienceengine.molecule.MolecularModel.Heating;
+import com.mazalearn.scienceengine.experiments.model.molecule.LJMolecularModel;
+import com.mazalearn.scienceengine.experiments.model.molecule.MolecularModel;
+import com.mazalearn.scienceengine.experiments.model.molecule.MolecularModel.Heating;
 
 /**
- * States of Matter experiment screen.
+ * States of Matter experiment View.
  */
-public class MoleculeBox extends Actor {
+public class StatesOfMatterView extends Actor {
   private static final int BOX_HEIGHT = 20;
   private static final int BOX_WIDTH = 20;
   private static final int N = 25; // Number of molecules
@@ -26,7 +26,7 @@ public class MoleculeBox extends Actor {
   private BitmapFont font;
   private Texture backgroundTexture;
 
-  public MoleculeBox() {
+  public StatesOfMatterView() {
     super();
 
     Pixmap pixmap = new Pixmap(PIXEL_DIAMETER, PIXEL_DIAMETER, Format.RGBA8888);

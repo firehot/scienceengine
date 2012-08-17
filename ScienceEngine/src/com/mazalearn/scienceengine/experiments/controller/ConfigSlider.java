@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments.config;
+package com.mazalearn.scienceengine.experiments.controller;
 
 import java.lang.reflect.Method;
 
@@ -7,26 +7,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.Experiment;
+import com.mazalearn.scienceengine.experiments.model.ExperimentModel;
 
 /**
- * Utility class for experiment floating point sliders using reflection.
+ * Utility class for experimentModel floating point sliders using reflection.
  *
  */
 public class ConfigSlider extends Slider {
-  final Experiment experiment;
+  final ExperimentModel experimentModel;
   final String property;
   final Method getter, setter;
   
-  public ConfigSlider(Experiment experiment, String property, 
+  public ConfigSlider(ExperimentModel experimentModel, String property, 
       float low, float high, Skin skin) {
     super(low, high, (high - low)/10, skin);
-    this.experiment = experiment;
+    this.experimentModel = experimentModel;
     this.property = property;
     // Find getter and setter for property by reflection
     try {
-      getter = experiment.getClass().getMethod("get" + property);
-      setter = experiment.getClass().getMethod(
+      getter = experimentModel.getClass().getMethod("get" + property);
+      setter = experimentModel.getClass().getMethod(
           "set" + property, new Class[] {float.class});
     } catch (Exception e) {
       e.printStackTrace();
@@ -45,7 +45,7 @@ public class ConfigSlider extends Slider {
   
   float getVal() {
     try {
-      return (Float) getter.invoke(experiment);
+      return (Float) getter.invoke(experimentModel);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -54,7 +54,7 @@ public class ConfigSlider extends Slider {
   
   void setVal(float value) {
     try {
-      setter.invoke(experiment, value);
+      setter.invoke(experimentModel, value);
       Gdx.app.log(ScienceEngine.LOG, "Setting " + property + " to " + value);
     } catch (Exception e) {
       e.printStackTrace();

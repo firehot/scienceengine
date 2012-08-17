@@ -42,7 +42,7 @@ public class StartScreen extends AbstractScreen {
     // retrieve the table's layout
     profile = game.getProfileManager().retrieveProfile();
 
-    // create the experiment buttons
+    // create the experimentModel buttons
     table.row();
     table.add("Experiments");
 
@@ -73,7 +73,7 @@ public class StartScreen extends AbstractScreen {
   }
 
   /**
-   * Listener for experiment click button.
+   * Listener for experimentModel click button.
    */
   private class ExperimentClickListener implements ClickListener {
     @Override
