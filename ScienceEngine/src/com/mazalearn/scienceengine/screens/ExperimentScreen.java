@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.screens;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.experiments.ElectroMagnetismExperiment;
 import com.mazalearn.scienceengine.experiments.StatesOfMatterExperiment;
 import com.mazalearn.scienceengine.experiments.WaveExperiment;
 
@@ -33,6 +34,8 @@ public class ExperimentScreen extends AbstractScreen {
       experiment = new StatesOfMatterExperiment(getSkin());
     } else if (experimentName == "Wave Motion") {
       experiment = new WaveExperiment(getSkin());
+    } else if (experimentName == "Electromagnetism") {
+      experiment = new ElectroMagnetismExperiment(getSkin());
     }
     table.add(experiment)
         .width(GAME_VIEWPORT_WIDTH)

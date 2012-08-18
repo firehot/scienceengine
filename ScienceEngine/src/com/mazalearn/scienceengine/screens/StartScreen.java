@@ -46,13 +46,12 @@ public class StartScreen extends AbstractScreen {
     table.row();
     table.add("Experiments");
 
-    experimentButton = new TextButton("States of Matter", getSkin());
-    experimentButton.setClickListener(experimentClickListener);
-    table.add(experimentButton).fillX().padRight(10);
-
-    experimentButton = new TextButton("Wave Motion", getSkin());
-    experimentButton.setClickListener(experimentClickListener);
-    table.add(experimentButton).fillX().padRight(10);
+    String[] experiments = new String[] {"States of Matter", "Wave Motion", "Electromagnetism"};
+    for (String experiment: experiments) {
+      experimentButton = new TextButton(experiment, getSkin());
+      experimentButton.setClickListener(experimentClickListener);
+      table.add(experimentButton).fillX().padRight(10);
+    }
 
     // create the credits label
     table.row();
