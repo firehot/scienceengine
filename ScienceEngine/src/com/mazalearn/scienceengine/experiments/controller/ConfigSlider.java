@@ -7,26 +7,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.model.ExperimentModel;
+import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
 
 /**
- * Utility class for experimentModel floating point sliders using reflection.
+ * Utility class for iExperimentModel floating point sliders using reflection.
  *
  */
 public class ConfigSlider extends Slider {
-  final ExperimentModel experimentModel;
+  final IExperimentModel iExperimentModel;
   final String property;
   final Method getter, setter;
   
-  public ConfigSlider(ExperimentModel experimentModel, String property, 
+  public ConfigSlider(IExperimentModel iExperimentModel, String property, 
       float low, float high, Skin skin) {
     super(low, high, (high - low)/10, skin);
-    this.experimentModel = experimentModel;
+    this.iExperimentModel = iExperimentModel;
     this.property = property;
     // Find getter and setter for property by reflection
     try {
-      getter = experimentModel.getClass().getMethod("get" + property);
-      setter = experimentModel.getClass().getMethod(
+      getter = iExperimentModel.getClass().getMethod("get" + property);
+      setter = iExperimentModel.getClass().getMethod(
           "set" + property, new Class[] {float.class});
     } catch (Exception e) {
       e.printStackTrace();
@@ -45,7 +45,7 @@ public class ConfigSlider extends Slider {
   
   float getVal() {
     try {
-      return (Float) getter.invoke(experimentModel);
+      return (Float) getter.invoke(iExperimentModel);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -54,7 +54,7 @@ public class ConfigSlider extends Slider {
   
   void setVal(float value) {
     try {
-      setter.invoke(experimentModel, value);
+      setter.invoke(iExperimentModel, value);
       Gdx.app.log(ScienceEngine.LOG, "Setting " + property + " to " + value);
     } catch (Exception e) {
       e.printStackTrace();

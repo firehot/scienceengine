@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments.model.electromagnetism;
+package com.mazalearn.scienceengine.experiments.model.util;
 
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one or more

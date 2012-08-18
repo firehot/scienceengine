@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-public class LJMolecularModel extends AbstractMolecularModel implements MolecularModel {
+public class LJMolecularModel extends AbstractMolecularModel implements IMolecularModel {
   // Assumptions
   // LJ_EPSILON = 1.0 = Depth of potential well
   // LJ_SIGMA = 1.0 = Distance at which inter-particle potential is 0

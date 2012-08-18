@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.experiments.model.util.AffineTransform;
 
 /**
  * PickupCoil is the model of a pickup coil. Its behavior follows Faraday's Law
@@ -247,47 +248,36 @@ public class PickupCoil extends AbstractCoil {
    * 
    * @param dt - time delta
    */
-  public void stepInTime(double dt) {
-    if (enabled) {
-      updateEmf(dt);
-    }
-  }
-
-  /**
-   * Updates the induced emf (and other related instance data), using Faraday's
-   * Law.
-   */
-  private void updateEmf(double dt) {
-
+  public void singleStep(double dt) {
     // Sum the B-field sample points.
     double sumBx = getSumBx();
-
+    
     // Average the B-field sample points.
     this.averageBx = sumBx / this.samplePoints.length;
-
+    
     // Flux in one loop.
     double A = getEffectiveLoopArea();
     double loopFlux = A * this.averageBx;
-
+    
     // Flux in the coil.
     double flux = getNumberOfLoops() * loopFlux;
-
+    
     // Change in flux.
     this.deltaFlux = flux - this.flux;
     this.flux = flux;
-
+    
     // Induced emf.
     double emf = -(this.deltaFlux / dt);
-
+    
     // If the emf has changed, set the current in the coil and notify observers.
     if (emf != this.emf) {
       this.emf = emf;
-
+    
       // Current amplitude is proportional to emf amplitude.
-      double amplitude = Util.clamp(-1, emf / this.calibrationEmf, +1);
+      double amplitude = Clamp.clamp(-1, emf / this.calibrationEmf, +1);
       setCurrentAmplitude(amplitude);
     }
-
+    
     calibrateEmf();
   }
 

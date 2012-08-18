@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-import com.mazalearn.scienceengine.experiments.model.molecule.MolecularModel.Heating;
+import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.Heating;
 
 public abstract class AbstractMolecularModel {
 
@@ -21,7 +21,7 @@ public abstract class AbstractMolecularModel {
   protected double ke;
   protected double pe;
   protected double energy;
-  protected double timeElapsed;
+  protected double simulatedTime;
   protected Heating heating = Heating.NEUTRAL;
 
   public AbstractMolecularModel(int boxWidth, int boxHeight, int N,
@@ -34,7 +34,7 @@ public abstract class AbstractMolecularModel {
   
   public void initialize() {
     this.molecules = new Molecule[N];
-    this.timeElapsed = 0;
+    this.simulatedTime = 0;
     distributeMoleculesHomogeneously();
     normalizeVelocities();
   }
@@ -99,7 +99,7 @@ public abstract class AbstractMolecularModel {
   }
 
   public double getSimulatedTime() {
-    return timeElapsed;
+    return simulatedTime;
   }
 
   public void simulateSteps(int n) {
@@ -171,7 +171,7 @@ public abstract class AbstractMolecularModel {
   
     temperature = ke / N;
     energy = ke + pe;
-    timeElapsed += dt;
+    simulatedTime += dt;
   }
 
   protected double computeElasticWallForce(Molecule m) {

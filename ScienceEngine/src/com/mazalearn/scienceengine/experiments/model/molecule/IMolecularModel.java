@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-public interface MolecularModel {
+public interface IMolecularModel {
 
   // Initialize the molecules configuration (currently uniform random)
   public abstract void initialize();

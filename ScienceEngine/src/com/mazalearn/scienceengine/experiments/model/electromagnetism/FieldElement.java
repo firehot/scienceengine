@@ -21,7 +21,6 @@ public class FieldElement {
 
   protected Vector2 location;
   protected float direction;
-  protected boolean enabled;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -45,7 +44,6 @@ public class FieldElement {
   public FieldElement(Vector2 location, float direction) {
     super();
     assert (location != null);
-    this.enabled = true;
     this.location = new Vector2(location);
     this.direction = direction;
   }
@@ -53,20 +51,6 @@ public class FieldElement {
   // ----------------------------------------------------------------------------
   // Accessors
   // ----------------------------------------------------------------------------
-
-  /**
-   * Enabled/disables this object.
-   */
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  /**
-   * @return whether object is enabled
-   */
-  public boolean isEnabled() {
-    return this.enabled;
-  }
 
   /**
    * Sets the location in 2D space.

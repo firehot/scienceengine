@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.experiments.model.WaveModel;
 import com.mazalearn.scienceengine.experiments.model.WaveModel.Ball;
 
-public class WaveView extends Group implements ExperimentView {
+public class WaveView extends Group implements IExperimentView {
   private Actor startBall, endBall;
   
   private static final float ORIGIN_Y = 80f;
@@ -74,7 +74,7 @@ public class WaveView extends Group implements ExperimentView {
     batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
     // Advance n steps
     if (!isPaused ) {
-      waveModel.simulateStep();
+      waveModel.singleStep();
     }
     startBall.y = ORIGIN_Y + waveModel.balls[0].pos.y;
     endBall.y = ORIGIN_Y + waveModel.balls[numBalls - 1].pos.y;

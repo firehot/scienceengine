@@ -184,7 +184,7 @@ public class Electron extends FieldElement implements ModelElement {
      * The order of curves is determined by the order of elements in the 
      * ElectronPathDescriptor array.
      */
-    public void stepInTime( double dt ) {
+    public void singleStep( double dt ) {
         if ( isEnabled() && _speed != 0 && _path != null ) {
             
             // Move the electron along the path.

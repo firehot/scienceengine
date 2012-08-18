@@ -9,33 +9,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.mazalearn.scienceengine.experiments.model.ExperimentModel;
-import com.mazalearn.scienceengine.experiments.view.ExperimentView;
+import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
+import com.mazalearn.scienceengine.experiments.view.IExperimentView;
 
 public class Configurator extends Table {
-  final ExperimentModel experimentModel;
-  final ExperimentView experimentView;
+  final IExperimentModel iExperimentModel;
+  final IExperimentView iExperimentView;
   final Skin skin;
   List<Config> configs;
   
-  public Configurator(Skin skin, final ExperimentModel experimentModel, 
-      final ExperimentView experimentView) {
+  public Configurator(Skin skin, final IExperimentModel iExperimentModel, 
+      final IExperimentView iExperimentView) {
     super(skin);
     this.skin = skin;
-    this.experimentModel = experimentModel;
-    this.experimentView = experimentView;
+    this.iExperimentModel = iExperimentModel;
+    this.iExperimentView = iExperimentView;
     this.configs = new ArrayList<Config>();
     // Add pause/resume functionality for the experiment
     final TextButton pauseResumeButton = new TextButton("Pause", skin);
     pauseResumeButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        if (experimentView.isPaused()) {
+        if (iExperimentView.isPaused()) {
           pauseResumeButton.setText("Pause");
-          experimentView.resume();
+          iExperimentView.resume();
         } else {
           pauseResumeButton.setText("Resume");
-          experimentView.pause();
+          iExperimentView.pause();
         }
       }
     });
@@ -46,7 +46,7 @@ public class Configurator extends Table {
   
   public Config addButton(String caption) {
     Table table = new Table(skin);
-    table.add(new ConfigTextButton(experimentModel, caption, skin));
+    table.add(new ConfigTextButton(iExperimentModel, caption, skin));
     this.add(table); this.row();
     Config config = new Config(table);
     this.configs.add(config);
@@ -57,7 +57,7 @@ public class Configurator extends Table {
     Table table = new Table(skin);
     table.add(property);
     table.row();
-    table.add(new ConfigSlider(experimentModel, property, low, high, skin));
+    table.add(new ConfigSlider(iExperimentModel, property, low, high, skin));
     this.add(table); this.row();
     Config config = new Config(table);
     this.configs.add(config);
@@ -66,7 +66,7 @@ public class Configurator extends Table {
 
   public Config addSelect(String property, String[] items) {
     Table table = new Table(skin);
-    table.add(new ConfigSelectBox(experimentModel, property, items, skin));
+    table.add(new ConfigSelectBox(iExperimentModel, property, items, skin));
     this.add(table); this.row();
     Config config = new Config(table);
     this.configs.add(config);

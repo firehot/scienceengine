@@ -15,51 +15,51 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class EMField {
 
-  public interface Consumer {
+  public interface IConsumer {
     Vector2 getLocation(Vector2 location /* output */);
     void setBField(Vector2 bField);
   }
-  public interface Producer {
+  public interface IProducer {
     Vector2 getBField(Vector2 location, Vector2 bField /* output */);
   }
 
-  List<Producer> emProducers;
-  List<Consumer> emConsumers;
+  List<IProducer> emProducers;
+  List<IConsumer> emConsumers;
   
   public EMField() {
-    emProducers = new ArrayList<Producer>();
-    emConsumers = new ArrayList<Consumer>();
+    emProducers = new ArrayList<IProducer>();
+    emConsumers = new ArrayList<IConsumer>();
   }
   
-  public void registerProducer(Producer producer) {
-    emProducers.add(producer);
+  public void registerProducer(IProducer iProducer) {
+    emProducers.add(iProducer);
   }
   
-  public void registerConsumer(Consumer consumer) {
-    emConsumers.add(consumer);
+  public void registerConsumer(IConsumer iConsumer) {
+    emConsumers.add(iConsumer);
   }
   
   public void propagateField() {
     Vector2 bField = new Vector2(0, 0);
     Vector2 location = new Vector2(0, 0);
-    for (Consumer consumer: emConsumers) {
+    for (IConsumer iConsumer: emConsumers) {
       Vector2 totalBField = new Vector2(0, 0);
-      for (Producer producer: emProducers) {
-        if (producer != consumer) {
-          producer.getBField(consumer.getLocation(location), bField);
+      for (IProducer iProducer: emProducers) {
+        if (iProducer != iConsumer) {
+          iProducer.getBField(iConsumer.getLocation(location), bField);
           totalBField.x += bField.x;
           totalBField.y += bField.y;
         }
       }
-      consumer.setBField(totalBField);
+      iConsumer.setBField(totalBField);
     }
   }
 
   public void getBField(Vector2 location, Vector2 bField) {
     Vector2 totalBField = new Vector2(0, 0);
     bField.set(0, 0);
-    for (Producer producer: emProducers) {
-      producer.getBField(location, bField);
+    for (IProducer iProducer: emProducers) {
+      iProducer.getBField(location, bField);
       totalBField.x += bField.x;
       totalBField.y += bField.y;
     }

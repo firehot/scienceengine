@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-public class SimpleMolecularModel extends AbstractMolecularModel implements MolecularModel {
+public class SimpleMolecularModel extends AbstractMolecularModel implements IMolecularModel {
 
   // Cutoff distance beyond which particles do not interact
   private static final double DISTANCE_CUTOFF = 2.5;

@@ -4,7 +4,7 @@ package com.mazalearn.scienceengine.experiments;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.controller.Condition;
+import com.mazalearn.scienceengine.experiments.controller.ICondition;
 import com.mazalearn.scienceengine.experiments.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel;
 import com.mazalearn.scienceengine.experiments.view.ElectroMagnetismView;

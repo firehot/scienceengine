@@ -6,7 +6,7 @@ import com.mazalearn.scienceengine.experiments.model.electromagnetism.EMField;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.FieldMeter;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.PickupCoil;
 
-public class ElectroMagnetismModel implements ExperimentModel {
+public class ElectroMagnetismModel implements IExperimentModel {
   BarMagnet barMagnet;
   PickupCoil pickupCoil;
   FieldMeter fieldMeter;

@@ -8,7 +8,7 @@ import com.mazalearn.scienceengine.experiments.StatesOfMatterExperiment;
 import com.mazalearn.scienceengine.experiments.WaveExperiment;
 
 /**
- * ExperimentModel screen.
+ * IExperimentModel screen.
  */
 public class ExperimentScreen extends AbstractScreen {
 
@@ -28,7 +28,7 @@ public class ExperimentScreen extends AbstractScreen {
     table.add(experimentName).spaceBottom(10);
     table.row();
     
-    // Add States of Matter experimentModel to table
+    // Add States of Matter iExperimentModel to table
     Actor experiment = null;
     if (experimentName == "States of Matter") {
       experiment = new StatesOfMatterExperiment(getSkin());

@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
-public class Util {
+public class Clamp {
 
   /**
    * Clamps a value to a specified range.

@@ -161,7 +161,7 @@ public class Voltmeter extends FieldElement implements ModelElement, SimpleObser
      * 
      * @see edu.colorado.phet.common.model.ModelElement#stepInTime(double)
      */
-    public void stepInTime( double dt ) {
+    public void singleStep( double dt ) {
        if ( isEnabled() ) {
 
            // Determine the desired needle deflection angle.

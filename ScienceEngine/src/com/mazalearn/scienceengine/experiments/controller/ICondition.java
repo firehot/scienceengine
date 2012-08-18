@@ -1,5 +1,5 @@
 package com.mazalearn.scienceengine.experiments.controller;
 
-public interface Condition {
+public interface ICondition {
   public boolean eval();
 }

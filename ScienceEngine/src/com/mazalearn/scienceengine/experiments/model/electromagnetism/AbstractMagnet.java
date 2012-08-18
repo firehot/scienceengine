@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.experiments.model.util.AffineTransform;
 
 /**
  * AbstractMagnet is the abstract base class for all magnets.
@@ -10,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author sridhar
  */
 public abstract class AbstractMagnet extends FieldElement 
-       implements EMField.Producer {
+       implements EMField.IProducer {
 
   // ----------------------------------------------------------------------------
   // Instance data

@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
  * 
  * @author sridhar
  */
-public class FieldMeter extends FieldElement implements EMField.Consumer {
+public class FieldMeter extends FieldElement implements EMField.IConsumer {
 
   // ----------------------------------------------------------------------------
   // Instance data
@@ -49,8 +49,6 @@ public class FieldMeter extends FieldElement implements EMField.Consumer {
    * location.
    */
   public void setBField(Vector2 bField) {
-    if (enabled) {
-      this.fieldVector.set(bField);
-    }
+    this.fieldVector.set(bField);
   }
 }

@@ -6,20 +6,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.mazalearn.scienceengine.experiments.model.ExperimentModel;
+import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
 
 /**
- * Utility class for experimentModel action buttons using reflection.
+ * Utility class for iExperimentModel action buttons using reflection.
  *
  */
 public class ConfigTextButton extends TextButton {
-  public ConfigTextButton(final ExperimentModel experimentModel, final String action, 
+  public ConfigTextButton(final IExperimentModel iExperimentModel, final String action, 
       final Skin skin) {
     super(action, skin);
     // Find method for action by reflection and set onclick handler
     final Method actionMethod;
     try {
-      actionMethod = experimentModel.getClass().getMethod(action.toLowerCase());
+      actionMethod = iExperimentModel.getClass().getMethod(action.toLowerCase());
     } catch (Exception e) {
       e.printStackTrace();
       throw new RuntimeException("Could not find action method");
@@ -28,7 +28,7 @@ public class ConfigTextButton extends TextButton {
       @Override
       public void click(Actor actor, float x, float y) {
         try {
-          actionMethod.invoke(experimentModel);
+          actionMethod.invoke(iExperimentModel);
         } catch (Exception e) {
           throw new RuntimeException("Could not invoke action " + action);
         }

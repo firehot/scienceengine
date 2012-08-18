@@ -8,22 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.model.ExperimentModel;
+import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
 
 public class ConfigSelectBox extends SelectBox {
-  final ExperimentModel experimentModel;
+  final IExperimentModel iExperimentModel;
   final String property;
   final Method getter, setter;
 
-  public ConfigSelectBox(final ExperimentModel experimentModel, final String property, 
+  public ConfigSelectBox(final IExperimentModel iExperimentModel, final String property, 
       final String[] items, final Skin skin) {
     super(items, skin);
-    this.experimentModel = experimentModel;
+    this.iExperimentModel = iExperimentModel;
     this.property = property;
     // Find getter and setter for property by reflection
     try {
-      getter = experimentModel.getClass().getMethod("get" + property);
-      setter = experimentModel.getClass().getMethod(
+      getter = iExperimentModel.getClass().getMethod("get" + property);
+      setter = iExperimentModel.getClass().getMethod(
           "set" + property, new Class[] {String.class});
     } catch (Exception e) {
       e.printStackTrace();
@@ -42,7 +42,7 @@ public class ConfigSelectBox extends SelectBox {
   
   String getVal() {
     try {
-      return (String) getter.invoke(experimentModel);
+      return (String) getter.invoke(iExperimentModel);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -51,7 +51,7 @@ public class ConfigSelectBox extends SelectBox {
   
   void setVal(String value) {
     try {
-      setter.invoke(experimentModel, value);
+      setter.invoke(iExperimentModel, value);
       Gdx.app.log(ScienceEngine.LOG, "Setting " + property + " to " + value);
     } catch (Exception e) {
       e.printStackTrace();

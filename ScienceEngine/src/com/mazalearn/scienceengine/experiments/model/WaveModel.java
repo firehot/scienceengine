@@ -2,7 +2,7 @@ package com.mazalearn.scienceengine.experiments.model;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class WaveModel implements ExperimentModel {
+public class WaveModel implements IExperimentModel {
   // Enum used for different Boundary Conditions on end of string
   public enum EndType { FixedEnd, LooseEnd, NoEnd };
   // Enum used for mode of wave generation
@@ -41,7 +41,7 @@ public class WaveModel implements ExperimentModel {
   private float tension = 10;
   // damping coefficient = b*delT/2
   private float beta = 0.05f;
-  // Boundary condition of other end.
+  // Boundary iCondition of other end.
   private EndType endType = EndType.FixedEnd;
   // Generation mode
   private GenMode genMode = GenMode.Oscillate;
@@ -49,7 +49,7 @@ public class WaveModel implements ExperimentModel {
   private float pulseWidth = 10;
 
   // time of evolution of wave
-  private int waveTime = 0;
+  private int simulatedTime = 0;
   // time of evolution of a single pulse
   private int pulseStartTime = 0;
   
@@ -65,7 +65,7 @@ public class WaveModel implements ExperimentModel {
     }
   }
 
-  public void advance(double d) {
+  public void singleStep(double d) {
     balls[0].pos.y = (float) d;
     
     switch (this.endType) {
@@ -103,16 +103,16 @@ public class WaveModel implements ExperimentModel {
     }
   }
   
-  public void simulateStep() {
-    waveTime++;
+  public void singleStep() {
+    simulatedTime++;
     int frameCount = (int) (11 - tension);
-    if (waveTime % frameCount == 0) {
-      advance(balls[0].pos.y);
+    if (simulatedTime % frameCount == 0) {
+      singleStep(balls[0].pos.y);
     }
     
     switch(genMode) {
-      case Oscillate: balls[0].pos.y = (float) sinusoid(waveTime); break;
-      case Pulse: balls[0].pos.y = (float) pulse(waveTime); break;
+      case Oscillate: balls[0].pos.y = (float) sinusoid(simulatedTime); break;
+      case Pulse: balls[0].pos.y = (float) pulse(simulatedTime); break;
       case Manual: break;
     }
   }
@@ -134,7 +134,7 @@ public class WaveModel implements ExperimentModel {
 
   @Override
   public void reset() {
-    waveTime = pulseStartTime = 0;
+    simulatedTime = pulseStartTime = 0;
     for (Ball b: balls) {
       b.pos.y = b.nextY = b.previousY = 0;
     }
@@ -146,7 +146,7 @@ public class WaveModel implements ExperimentModel {
 
   public void setFrequency(float frequency) {
     //ensures that sinusoid is continuous
-    this.phi += 2 * Math.PI * waveTime * (this.frequency - frequency);
+    this.phi += 2 * Math.PI * simulatedTime * (this.frequency - frequency);
     this.frequency = frequency;
   }
 
@@ -207,7 +207,7 @@ public class WaveModel implements ExperimentModel {
     this.genMode = GenMode.valueOf(genMode);
     reset();
     if (this.genMode == GenMode.Pulse) {
-      pulseStartTime = waveTime;
+      pulseStartTime = simulatedTime;
     }
   }
 }

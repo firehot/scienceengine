@@ -158,9 +158,9 @@ public class Compass extends FieldElement implements ModelElement, SimpleObserve
      * in Ron LeMaster's "microwaves" simulation, with some minor changes.
      * The algorithm was verified by Mike Dubson.
      *
-     * @see edu.colorado.phet.common.phetcommon.model.ModelElement#stepInTime(double)
+     * @see edu.colorado.phet.common.phetcommon.model.ModelElement#singleStep(double)
      */
-    public void stepInTime( double dt ) {
+    public void singleStep( double dt ) {
         if ( isEnabled() ) {
             getLocation( _somePoint /* output */ );
             _magnetModel.getBField( _somePoint, _someVector /* output */ );

@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments.model.electromagnetism;
+package com.mazalearn.scienceengine.experiments.model.util;
 
 /*
  *  Copied from Apache

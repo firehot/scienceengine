@@ -4,17 +4,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 
 public class Config {
   final Table table;
-  Condition condition = null;
+  ICondition iCondition = null;
 
   public Config(Table table) {
     this.table = table;
   }
 
-  public void addCondition(Condition condition) {
-    this.condition = condition;
+  public void addCondition(ICondition iCondition) {
+    this.iCondition = iCondition;
   }
   
   void validate() {
-    table.visible = condition == null || condition.eval();
+    table.visible = iCondition == null || iCondition.eval();
   }
 }

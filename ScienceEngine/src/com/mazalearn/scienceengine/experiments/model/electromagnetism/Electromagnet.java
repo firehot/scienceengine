@@ -91,7 +91,7 @@ public class Electromagnet extends CoilMagnet {
     // Compute the electromagnet's emf amplitude.
     double amplitude = (this.sourceCoilModel.getNumberOfLoops() / (double) ELECTROMAGNET_LOOPS_MAX)
         * this.currentSource.getAmplitude();
-    amplitude = Util.clamp(-1, amplitude, 1);
+    amplitude = Clamp.clamp(-1, amplitude, 1);
 
     // Flip the polarity
     if (amplitude >= 0 && this.isFlipped) {

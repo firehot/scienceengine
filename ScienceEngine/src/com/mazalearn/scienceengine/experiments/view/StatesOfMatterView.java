@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.experiments.model.molecule.LJMolecularModel;
-import com.mazalearn.scienceengine.experiments.model.molecule.MolecularModel;
-import com.mazalearn.scienceengine.experiments.model.molecule.MolecularModel.Heating;
+import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel;
+import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.Heating;
 
 /**
  * States of Matter experiment View.
@@ -20,7 +20,7 @@ public class StatesOfMatterView extends Actor {
   private static final int N = 25; // Number of molecules
   private static final int PIXEL_DIAMETER = 8;
   
-  private MolecularModel molecularModel;
+  private IMolecularModel iMolecularModel;
   private Texture moleculeTextureGray, moleculeTextureRed;
   private long timeStart;
   private BitmapFont font;
@@ -46,8 +46,8 @@ public class StatesOfMatterView extends Actor {
     pixmap.dispose();
     
     // Initialize molecules
-    molecularModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
-    molecularModel.initialize();
+    iMolecularModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
+    iMolecularModel.initialize();
     font = new BitmapFont();
     timeStart = System.currentTimeMillis();
   }
@@ -61,21 +61,21 @@ public class StatesOfMatterView extends Actor {
     float scaleY = this.height / BOX_HEIGHT;
     for (int i = 0; i < N; i++) {
       batch.draw(i > 0 ? moleculeTextureGray : moleculeTextureRed,
-          this.x + (float) molecularModel.getMolecule(i).x * scaleX, 
-          this.y + (float) molecularModel.getMolecule(i).y * scaleY);
+          this.x + (float) iMolecularModel.getMolecule(i).x * scaleX, 
+          this.y + (float) iMolecularModel.getMolecule(i).y * scaleY);
     }
     
     //Draw debug information
     drawDebug(batch);
-    molecularModel.simulateSteps(10);
+    iMolecularModel.simulateSteps(10);
   }
   
   public void drawDebug(SpriteBatch batch) {
     // Draw debug information
     font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-    font.draw(batch, String.valueOf(molecularModel.getTemperature()), 
+    font.draw(batch, String.valueOf(iMolecularModel.getTemperature()), 
         this.x + 10, this.y + 20);
-    font.draw(batch, String.valueOf(molecularModel.getSimulatedTime()), 
+    font.draw(batch, String.valueOf(iMolecularModel.getSimulatedTime()), 
         this.x + 10, this.y + 300);
     long timeNow = System.currentTimeMillis();
     font.draw(batch, String.valueOf(timeNow - timeStart), 
@@ -93,10 +93,10 @@ public class StatesOfMatterView extends Actor {
   }
 
   public void setHeating(Heating heating) {
-    molecularModel.setHeatingLevel(heating);   
+    iMolecularModel.setHeatingLevel(heating);   
   }    
 
   public void setTemperature(double temperature) {
-    molecularModel.setTemperature(temperature);   
+    iMolecularModel.setTemperature(temperature);   
   }    
 }
