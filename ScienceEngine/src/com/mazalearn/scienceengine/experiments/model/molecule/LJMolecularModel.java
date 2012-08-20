@@ -83,7 +83,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements IMolecul
   protected double computeLJWallForce(Molecule m) {
     double pe = 0;
 
-    // Calculate the force in the X direction if close enough to either wall
+    // Calculate the force in the X angle if close enough to either wall
     // Limit the distance, and thus the force, if we are really close.
     if (m.x < WALL_DISTANCE_THRESHOLD) {
       double dx = Math.max(m.x, MIN_DISTANCE);
@@ -98,7 +98,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements IMolecul
       m.ax = 0;
     }
 
-    // Calculate the force in the Y direction.
+    // Calculate the force in the Y angle.
     if (m.y < WALL_DISTANCE_THRESHOLD) {
       // Close enough to the bottom wall to feel the force.
       double dy = Math.max(m.y, MIN_DISTANCE);

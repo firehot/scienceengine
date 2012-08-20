@@ -504,9 +504,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * <code>TYPE_TRANSLATION</code>.
    * 
    * @param mx
-   *          the distance to translate in the x direction.
+   *          the distance to translate in the x angle.
    * @param my
-   *          the distance to translate in the y direction.
+   *          the distance to translate in the y angle.
    */
   public void setToTranslation(double mx, double my) {
     m00 = m11 = 1.0;
@@ -527,9 +527,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * identity transformation, otherwise sets it to <code>TYPE_UNKNOWN</code>.
    * 
    * @param scx
-   *          the scaling factor in the x direction.
+   *          the scaling factor in the x angle.
    * @param scy
-   *          the scaling factor in the y direction.
+   *          the scaling factor in the y angle.
    */
   public void setToScale(double scx, double scy) {
     m00 = scx;
@@ -549,9 +549,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * identity transformation, otherwise sets it to <code>TYPE_UNKNOWN</code>.
    * 
    * @param shx
-   *          the shearing factor in the x direction.
+   *          the shearing factor in the x angle.
    * @param shy
-   *          the shearing factor in the y direction.
+   *          the shearing factor in the y angle.
    */
   public void setToShear(double shx, double shy) {
     m00 = m11 = 1.0;
@@ -598,9 +598,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * @param angle
    *          the angle of rotation in radians.
    * @param px
-   *          the distance to translate in the x direction.
+   *          the distance to translate in the x angle.
    * @param py
-   *          the distance to translate in the y direction.
+   *          the distance to translate in the y angle.
    */
   public void setToRotation(double angle, double px, double py) {
     setToRotation(angle);
@@ -617,9 +617,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * <code>TYPE_TRANSLATION</code>.
    * 
    * @param mx
-   *          the distance to translate in the x direction.
+   *          the distance to translate in the x angle.
    * @param my
-   *          the distance to translate in the y direction.
+   *          the distance to translate in the y angle.
    * @return the new AffineTransformation.
    */
   public static AffineTransform getTranslateInstance(double mx, double my) {
@@ -635,9 +635,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * <code>TYPE_UNKNOWN</code>.
    * 
    * @param scx
-   *          the scaling factor in the x direction.
+   *          the scaling factor in the x angle.
    * @param scY
-   *          the scaling factor in the y direction.
+   *          the scaling factor in the y angle.
    * @return the new AffineTransformation.
    */
   public static AffineTransform getScaleInstance(double scx, double scY) {
@@ -653,9 +653,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * <code>TYPE_UNKNOWN</code>.
    * 
    * @param shx
-   *          the shearing factor in the x direction.
+   *          the shearing factor in the x angle.
    * @param shy
-   *          the shearing factor in the y direction.
+   *          the shearing factor in the y angle.
    * @return the new AffineTransformation.
    */
   public static AffineTransform getShearInstance(double shx, double shy) {
@@ -687,9 +687,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * @param angle
    *          the angle of rotation in radians.
    * @param x
-   *          the distance to translate in the x direction.
+   *          the distance to translate in the x angle.
    * @param y
-   *          the distance to translate in the y direction.
+   *          the distance to translate in the y angle.
    * @return the new AffineTransformation.
    */
   public static AffineTransform getRotateInstance(double angle, double x,
@@ -703,9 +703,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * Applies a translation to this AffineTransformation.
    * 
    * @param mx
-   *          the distance to translate in the x direction.
+   *          the distance to translate in the x angle.
    * @param my
-   *          the distance to translate in the y direction.
+   *          the distance to translate in the y angle.
    */
   public void translate(double mx, double my) {
     concatenate(AffineTransform.getTranslateInstance(mx, my));
@@ -715,9 +715,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * Applies a scaling transformation to this AffineTransformation.
    * 
    * @param scx
-   *          the scaling factor in the x direction.
+   *          the scaling factor in the x angle.
    * @param scy
-   *          the scaling factor in the y direction.
+   *          the scaling factor in the y angle.
    */
   public void scale(double scx, double scy) {
     concatenate(AffineTransform.getScaleInstance(scx, scy));
@@ -727,9 +727,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * Applies a shearing transformation to this AffineTransformation.
    * 
    * @param shx
-   *          the shearing factor in the x direction.
+   *          the shearing factor in the x angle.
    * @param shy
-   *          the shearing factor in the y direction.
+   *          the shearing factor in the y angle.
    */
   public void shear(double shx, double shy) {
     concatenate(AffineTransform.getShearInstance(shx, shy));
@@ -752,9 +752,9 @@ public class AffineTransform implements Cloneable, Serializable {
    * @param angle
    *          the angle of rotation in radians.
    * @param px
-   *          the distance to translate in the x direction.
+   *          the distance to translate in the x angle.
    * @param py
-   *          the distance to translate in the y direction.
+   *          the distance to translate in the y angle.
    */
   public void rotate(double angle, double px, double py) {
     concatenate(AffineTransform.getRotateInstance(angle, px, py));

@@ -7,7 +7,7 @@ package com.mazalearn.scienceengine.experiments.model.electromagnetism;
  *
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public abstract class AbstractCoil extends FieldElement {
+public abstract class AbstractCoil extends Body {
     
     //----------------------------------------------------------------------------
     // Instance data
@@ -157,7 +157,7 @@ public abstract class AbstractCoil extends FieldElement {
      * Sets the current amplitude in the coil. This should only be called by the coil itself.
      * <p>
      * This is a quantity that we made up. It is a percentage that describes the amount of current 
-     * relative to some maximum current in the model, and direction of that current.
+     * relative to some maximum current in the model, and angle of that current.
      * View components can use this value to determine how they should behave (eg, how far to 
      * move a voltmeter needle, how bright to make a lightbulb, etc.)
      * 

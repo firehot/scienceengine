@@ -354,7 +354,7 @@ public class BarMagnet extends AbstractMagnet {
 
       // if we had problems, this sim can't function, so bail.
       if (errorString != null) {
-        String message = "ERROR_BAR_MAGNET_INITIALIZATION";
+        // "ERROR_BAR_MAGNET_INITIALIZATION";
         System.exit(1);
       }
 

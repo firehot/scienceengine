@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
  * Profile operations.
  */
 public class ProfileManager {
-  // the location of the profile data file
+  // the position of the profile data file
   private static final String PROFILE_DATA_FILE = "data/profile-v1.json";
 
   // the loaded profile (may be null)

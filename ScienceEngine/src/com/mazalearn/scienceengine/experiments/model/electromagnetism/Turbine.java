@@ -40,7 +40,7 @@ public class Turbine extends BarMagnet {
 
   /**
    * Sets the speed. Speed is a value between -1.0 and +1.0 inclusive. The sign
-   * of the value indicates direction. Zero is stopped, 1 is full speed.
+   * of the value indicates angle. Zero is stopped, 1 is full speed.
    * 
    * @param speed
    *          the speed
@@ -96,17 +96,17 @@ public class Turbine extends BarMagnet {
   // ----------------------------------------------------------------------------
 
   /*
-   * Update the turbine's direction, based on its speed.
+   * Update the turbine's angle, based on its speed.
    */
   public void stepInTime(double dt) {
 
     if (this.speed != 0) {
 
-      // Determine the new direction
+      // Determine the new angle
       double delta = dt * this.speed * this.maxDelta;
       double newDirection = direction + delta;
 
-      // Limit direction to -360...+360 degrees.
+      // Limit angle to -360...+360 degrees.
       int sign = (newDirection < 0) ? -1 : +1;
       newDirection = sign * (Math.abs(newDirection) % (2 * Math.PI));
 

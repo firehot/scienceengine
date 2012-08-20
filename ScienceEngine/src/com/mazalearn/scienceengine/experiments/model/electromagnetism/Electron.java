@@ -15,7 +15,7 @@ import edu.colorado.phet.faraday.util.QuadBezierSpline;
  *
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public class Electron extends FieldElement implements ModelElement {
+public class Electron extends Body implements ModelElement {
     
     //----------------------------------------------------------------------------
     // Class data
@@ -37,7 +37,7 @@ public class Electron extends FieldElement implements ModelElement {
     // Electron's position along the current curve (1=startPoint, 0=endPoint)
     private double _pathPosition;
     
-    // Electron's speed & direction (-1...+1)
+    // Electron's speed & angle (-1...+1)
     private double _speed;
     
     // A reusable point.
@@ -110,18 +110,18 @@ public class Electron extends FieldElement implements ModelElement {
         _pathIndex = pathIndex;
         _pathPosition = pathPosition;
         
-        // Evaluate the quadratic to determine XY location.
+        // Evaluate the quadratic to determine XY position.
         ElectronPathDescriptor descriptor = _path.get( _pathIndex );
         QuadBezierSpline curve = descriptor.getCurve();
         curve.evaluate( _pathPosition, _point /* output */ );
-        super.setLocation( _point );
+        super.setPosition( _point );
     }
     
     /**
-     * Sets the electron speed and direction.
+     * Sets the electron speed and angle.
      * <p>
-     * Speed/direction is a number between -1.0 and +1.0 inclusive.
-     * The magnitude determines the speed, while the sign determines the direction.
+     * Speed/angle is a number between -1.0 and +1.0 inclusive.
+     * The magnitude determines the speed, while the sign determines the angle.
      * A value of zero cause the electron to stop moving.
      * A value of 1 or +1 causes the electron to move the full length of a curve
      * segment in one clock tick.
@@ -175,7 +175,7 @@ public class Electron extends FieldElement implements ModelElement {
      * <p>
      * The electron's path is described by the ElectronPathDescriptor array.
      * <p>
-     * The electron's speed & direction determine its position along a curve.
+     * The electron's speed & angle determine its position along a curve.
      * Speed is scaled to account for possible differences in the lengths 
      * of the curves. Shorter curves will have a larger scaling factor.
      * <p>
@@ -197,11 +197,11 @@ public class Electron extends FieldElement implements ModelElement {
                 switchCurves();  // sets _pathIndex and _pathPosition !
             }
             
-            // Evaluate the quadratic to determine XY location.
+            // Evaluate the quadratic to determine XY position.
             ElectronPathDescriptor descriptor = _path.get( _pathIndex );
             QuadBezierSpline curve = descriptor.getCurve();
             curve.evaluate( _pathPosition, _point /* output */ );
-            super.setLocation( _point );
+            super.setPosition( _point );
         }
     }
     

@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.experiments.model.util.AffineTransform;
  * 
  * @author sridhar
  */
-public abstract class AbstractMagnet extends FieldElement 
+public abstract class AbstractMagnet extends Body 
        implements EMField.IProducer {
 
   // ----------------------------------------------------------------------------
@@ -24,8 +24,6 @@ public abstract class AbstractMagnet extends FieldElement
   private AffineTransform transform; // reusable transform
   //reusable point, in magnet's local coordinate frame
   private Vector2 relativePoint; 
-  // Electromagnetic field to which magnet is coupled
-  private EMField emField;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -33,10 +31,10 @@ public abstract class AbstractMagnet extends FieldElement
 
   /**
    * Sole constructor
+   * @param  emField - Electromagnetic field to which magnet is coupled
    */
   public AbstractMagnet(EMField emField) {
     super();
-    this.emField = emField;
     emField.registerProducer(this);
     this.width = 250;
     this.height = 50;
@@ -55,7 +53,7 @@ public abstract class AbstractMagnet extends FieldElement
    * Flips the magnet's polarity by rotating it 180 degrees.
    */
   public void flipPolarity() {
-    direction = (float) ((direction + Math.PI) % (2 * Math.PI));
+    angle = (float) ((angle + Math.PI) % (2 * Math.PI));
   }
 
   /**
@@ -156,15 +154,15 @@ public abstract class AbstractMagnet extends FieldElement
      * adjusting for position and orientation.
      */
     this.transform.setToIdentity();
-    this.transform.translate(-location.x, -location.y);
-    this.transform.rotate(-direction, location.x, location.y);
+    this.transform.translate(-position.x, -position.y);
+    this.transform.rotate(-angle, position.x, position.y);
     this.transform.transform(p, this.relativePoint /* output */);
 
     // get strength in magnet's local coordinate frame
     getBFieldRelative(this.relativePoint, outputVector);
 
-    // Adjust the field vector to match the magnet's direction.
-    outputVector.rotate(direction);
+    // Adjust the field vector to match the magnet's angle.
+    outputVector.rotate((float) angle);
 
     // Clamp magnitude to magnet strength.
     // TODO: why do we need to do this?

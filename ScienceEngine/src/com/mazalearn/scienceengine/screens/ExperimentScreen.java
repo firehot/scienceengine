@@ -33,7 +33,7 @@ public class ExperimentScreen extends AbstractScreen {
     if (experimentName == "States of Matter") {
       experiment = new StatesOfMatterExperiment(getSkin());
     } else if (experimentName == "Wave Motion") {
-      experiment = new WaveExperiment(getSkin());
+      experiment = new WaveExperiment(getAtlas(), getSkin());
     } else if (experimentName == "Electromagnetism") {
       experiment = new ElectroMagnetismExperiment(getSkin());
     }

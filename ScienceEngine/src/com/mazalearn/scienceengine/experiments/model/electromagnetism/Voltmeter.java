@@ -15,7 +15,7 @@ import edu.colorado.phet.faraday.FaradayConstants;
  *
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public class Voltmeter extends FieldElement implements ModelElement, SimpleObserver {
+public class Voltmeter extends Body implements ModelElement, SimpleObserver {
   
     //----------------------------------------------------------------------------
     // Class data

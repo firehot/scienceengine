@@ -9,13 +9,13 @@ import com.badlogic.gdx.math.Vector2;
  * 
  * @author sridhar
  */
-public class FieldMeter extends FieldElement implements EMField.IConsumer {
+public class FieldMeter extends Body implements EMField.IConsumer {
 
   // ----------------------------------------------------------------------------
   // Instance data
   // ----------------------------------------------------------------------------
 
-  // B-field vector at the field meter's location.
+  // B-field vector at the field meter's position.
   private Vector2 fieldVector;
 
   // ----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ public class FieldMeter extends FieldElement implements EMField.IConsumer {
   // ----------------------------------------------------------------------------
 
   /**
-   * Gets the strength at the field meter's location.
+   * Gets the strength at the field meter's position.
    * 
    * @param vector
    *          strength value is copied here
@@ -45,8 +45,8 @@ public class FieldMeter extends FieldElement implements EMField.IConsumer {
   }
 
   /*
-   * Updates the field meter's location and takes a B-field reading at that
-   * location.
+   * Updates the field meter's position and takes a B-field reading at that
+   * position.
    */
   public void setBField(Vector2 bField) {
     this.fieldVector.set(bField);

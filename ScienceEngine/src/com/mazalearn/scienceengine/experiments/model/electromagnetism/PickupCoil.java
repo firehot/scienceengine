@@ -40,7 +40,7 @@ public class PickupCoil extends AbstractCoil {
   // Reusable objects
   private AffineTransform affineTransform;
   private Vector2 samplePoint;
-  private Vector2 sampleVector;
+  private Vector2 sampleBField;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -73,7 +73,7 @@ public class PickupCoil extends AbstractCoil {
     // Reusable objects
     this.affineTransform = new AffineTransform();
     this.samplePoint = new Vector2();
-    this.sampleVector = new Vector2();
+    this.sampleBField = new Vector2();
 
     // loosely packed loops
     setLoopSpacing(1.5 * getWireWidth());
@@ -345,18 +345,18 @@ public class PickupCoil extends AbstractCoil {
     double sumBx = 0;
     for (int i = 0; i < this.samplePoints.length; i++) {
 
-      this.samplePoint.set(location.x + this.samplePoints[i].x,
-          location.y + this.samplePoints[i].y);
-      if (direction != 0) {
+      this.samplePoint.set(position.x + this.samplePoints[i].x,
+          position.y + this.samplePoints[i].y);
+      if (angle != 0) {
         // Adjust for rotation.
         this.affineTransform.setToIdentity();
-        this.affineTransform.rotate(direction, location.x, location.y);
+        this.affineTransform.rotate(angle, position.x, position.y);
         this.affineTransform
             .transform(this.samplePoint, this.samplePoint /* output */);
       }
 
       // Find the B-field vector at that point.
-      this.emField.getBField(this.samplePoint, this.sampleVector /* output */);
+      this.emField.getBField(this.samplePoint, this.sampleBField /* output */);
 
       /*
        * If the B-field x component is equal to the magnet strength, then our
@@ -364,7 +364,7 @@ public class PickupCoil extends AbstractCoil {
        * sample so that the transitions between inside and outside are not
        * abrupt. See Unfuddle #248.
        */
-      double Bx = this.sampleVector.x;
+      double Bx = this.sampleBField.x;
  /*     if (Math.abs(Bx) == magnetStrength) {
         Bx *= this.transitionSmoothingScale;
       }
