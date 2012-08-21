@@ -91,10 +91,6 @@ public class Turbine extends BarMagnet {
     return Math.abs(this.speed * this.maxRPM);
   }
 
-  // ----------------------------------------------------------------------------
-  // ModelElement implementation
-  // ----------------------------------------------------------------------------
-
   /*
    * Update the turbine's angle, based on its speed.
    */

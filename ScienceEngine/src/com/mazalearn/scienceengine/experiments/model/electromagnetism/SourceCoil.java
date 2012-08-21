@@ -5,27 +5,16 @@ package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 /**
  * SourceCoil is the model of the source coil used in an electromagnet.
  * 
- * @author Chris Malley (cmalley@pixelzoom.com)
+ * @author sridhar
  */
 public class SourceCoil extends AbstractCoil {
 
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
-
-  /**
-   * Sole constructor.
-   */
   public SourceCoil() {
     super();
 
     // pack the loops close together
     setLoopSpacing(getWireWidth());
   }
-
-  // ----------------------------------------------------------------------------
-  // AbstractCoil overrides
-  // ----------------------------------------------------------------------------
 
   /**
    * If the wire width is changed, also change the loop spacing so that the

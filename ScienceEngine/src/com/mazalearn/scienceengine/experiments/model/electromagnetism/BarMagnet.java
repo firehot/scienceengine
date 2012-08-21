@@ -293,8 +293,6 @@ public class BarMagnet extends AbstractMagnet {
      * @return InputStream
      */
     public InputStream getResourceAsStream(String resource) throws IOException {
-      // InputStream stream = Thread.currentThread().getContextClassLoader()
-      //    .getResourceAsStream(resource);
       InputStream stream = BarMagnet.class.getResourceAsStream(resource);
       if (stream == null) {
         throw new IOException("invalid resource: " + resource);

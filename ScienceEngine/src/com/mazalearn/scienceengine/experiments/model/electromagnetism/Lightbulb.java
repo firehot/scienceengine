@@ -18,9 +18,9 @@ public class Lightbulb extends ScienceBody {
   // Instance data
   // ----------------------------------------------------------------------------
 
-  private PickupCoil _pickupCoilModel;
-  private double _previousCurrentAmplitude;
-  private boolean _offWhenCurrentChangesDirection;
+  private PickupCoil pickupCoilModel;
+  private double previousCurrentAmplitude;
+  private boolean offWhenCurrentChangesDirection;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -35,10 +35,9 @@ public class Lightbulb extends ScienceBody {
   public Lightbulb(PickupCoil pickupCoilModel) {
     super();
 
-    _pickupCoilModel = pickupCoilModel;
-
-    _previousCurrentAmplitude = 0.0;
-    _offWhenCurrentChangesDirection = false;
+    this.pickupCoilModel = pickupCoilModel;
+    this.previousCurrentAmplitude = 0.0;
+    this.offWhenCurrentChangesDirection = false;
   }
 
   // ----------------------------------------------------------------------------
@@ -54,10 +53,11 @@ public class Lightbulb extends ScienceBody {
 
     double intensity = 0.0;
 
-    final double currentAmplitude = _pickupCoilModel.getCurrentAmplitude();
+    final double currentAmplitude = pickupCoilModel.getCurrentAmplitude();
 
-    if (_offWhenCurrentChangesDirection
-        && ((currentAmplitude > 0 && _previousCurrentAmplitude <= 0) || (currentAmplitude <= 0 && _previousCurrentAmplitude > 0))) {
+    if (offWhenCurrentChangesDirection
+        && ((currentAmplitude > 0 && previousCurrentAmplitude <= 0) || 
+            (currentAmplitude <= 0 && previousCurrentAmplitude > 0))) {
       // Current changed angle, so turn the light off.
       intensity = 0.0;
     } else {
@@ -70,7 +70,7 @@ public class Lightbulb extends ScienceBody {
       }
     }
 
-    _previousCurrentAmplitude = currentAmplitude;
+    previousCurrentAmplitude = currentAmplitude;
 
     assert (intensity >= 0 && intensity <= 1);
     return intensity;
@@ -87,7 +87,7 @@ public class Lightbulb extends ScienceBody {
    */
   public void setOffWhenCurrentChangesDirection(
       boolean offWhenCurrentChangesDirection) {
-    _offWhenCurrentChangesDirection = offWhenCurrentChangesDirection;
+    this.offWhenCurrentChangesDirection = offWhenCurrentChangesDirection;
   }
 
   /**
@@ -97,6 +97,6 @@ public class Lightbulb extends ScienceBody {
    * @return true or false
    */
   public boolean isOffWhenCurrentChangesDirection() {
-    return _offWhenCurrentChangesDirection;
+    return offWhenCurrentChangesDirection;
   }
 }

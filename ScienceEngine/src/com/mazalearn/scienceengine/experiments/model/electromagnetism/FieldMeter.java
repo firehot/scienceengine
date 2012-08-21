@@ -41,7 +41,6 @@ public class FieldMeter extends ScienceBody implements EMField.IConsumer {
    *          strength value is copied here
    */
   public void getStrength(Vector2 vector /* output */) {
-    assert (vector != null);
     vector.set(this.fieldVector);
   }
 

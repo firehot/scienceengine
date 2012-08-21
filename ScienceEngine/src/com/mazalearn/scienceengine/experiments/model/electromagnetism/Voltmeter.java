@@ -45,13 +45,13 @@ public class Voltmeter extends ScienceBody {
   // ----------------------------------------------------------------------------
 
   // Pickup coil that the voltmeter is connected to.
-  private PickupCoil _pickupCoilModel;
+  private PickupCoil pickupCoilModel;
 
   // Whether the needle jiggles around its zero point.
-  private boolean _jiggleEnabled;
+  private boolean jiggleEnabled;
 
   // Needle deflection angle
-  private double _needleAngle;
+  private double needleAngle;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -65,11 +65,8 @@ public class Voltmeter extends ScienceBody {
    */
   public Voltmeter(PickupCoil pickupCoilModel) {
     super();
-
-    assert (pickupCoilModel != null);
-
-    _jiggleEnabled = false; // expensive, so disabled by default
-    _needleAngle = ZERO_NEEDLE_ANGLE;
+    jiggleEnabled = false; // expensive, so disabled by default
+    needleAngle = ZERO_NEEDLE_ANGLE;
   }
 
   // ----------------------------------------------------------------------------
@@ -83,11 +80,8 @@ public class Voltmeter extends ScienceBody {
    * @param enabled
    *          true to enable, false to disable
    */
-  public void setJiggleEnabled(boolean enabled) {
-    if (enabled != _jiggleEnabled) {
-      _jiggleEnabled = enabled;
-      // No need to notify observers, handled by stepInTime.
-    }
+  public void setJiggleEnabled(boolean jiggleEnabled) {
+    this.jiggleEnabled = jiggleEnabled;
   }
 
   /**
@@ -96,7 +90,7 @@ public class Voltmeter extends ScienceBody {
    * @return true if enabled, false if disabled
    */
   public boolean isJiggleEnabled() {
-    return _jiggleEnabled;
+    return jiggleEnabled;
   }
 
   /**
@@ -108,9 +102,7 @@ public class Voltmeter extends ScienceBody {
   protected void setNeedleAngle(double needleAngle) {
     needleAngle = Clamp
         .clamp(-MAX_NEEDLE_ANGLE, needleAngle, +MAX_NEEDLE_ANGLE);
-    if (needleAngle != _needleAngle) {
-      _needleAngle = needleAngle;
-    }
+    this.needleAngle = needleAngle;
   }
 
   /**
@@ -119,7 +111,7 @@ public class Voltmeter extends ScienceBody {
    * @return the angle, in radians
    */
   public double getNeedleAngle() {
-    return _needleAngle;
+    return needleAngle;
   }
 
   /**
@@ -131,7 +123,7 @@ public class Voltmeter extends ScienceBody {
   private double getDesiredNeedleAngle() {
 
     // Use amplitude of the voltage source as our signal.
-    double amplitude = _pickupCoilModel.getCurrentAmplitude();
+    double amplitude = pickupCoilModel.getCurrentAmplitude();
 
     // Absolute amplitude below the threshold is effectively zero.
     if (Math.abs(amplitude) < CURRENT_AMPLITUDE_THRESHOLD) {
@@ -156,7 +148,7 @@ public class Voltmeter extends ScienceBody {
     // Determine the desired needle deflection angle.
     double needleAngle = getDesiredNeedleAngle();
 
-    if (!_jiggleEnabled) {
+    if (!jiggleEnabled) {
       // If jiggle is disabled, simply set the needle angle.
       setNeedleAngle(needleAngle);
     } else {
@@ -179,16 +171,5 @@ public class Voltmeter extends ScienceBody {
         }
       }
     }
-  } // stepInTime
-
-  // ----------------------------------------------------------------------------
-  // SimpleObserver implementation
-  // ----------------------------------------------------------------------------
-
-  /*
-   * @see edu.colorado.phet.common.util.SimpleObserver#update()
-   */
-  public void update() {
-    // Do nothing, handled by stepInTime.
   }
 }
