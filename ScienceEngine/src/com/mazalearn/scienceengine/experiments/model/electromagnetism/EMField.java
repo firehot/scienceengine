@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 public class EMField {
 
   public interface IConsumer {
-    Vector2 getPosition(Vector2 location /* output */);
+    Vector2 getPosition();
     void setBField(Vector2 bField);
   }
   public interface IProducer {
@@ -41,12 +41,11 @@ public class EMField {
   
   public void propagateField() {
     Vector2 bField = new Vector2(0, 0);
-    Vector2 location = new Vector2(0, 0);
     for (IConsumer iConsumer: emConsumers) {
       Vector2 totalBField = new Vector2(0, 0);
       for (IProducer iProducer: emProducers) {
         if (iProducer != iConsumer) {
-          iProducer.getBField(iConsumer.getPosition(location), bField);
+          iProducer.getBField(iConsumer.getPosition(), bField);
           totalBField.x += bField.x;
           totalBField.y += bField.y;
         }

@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.EMField.IConsumer;
 
 import edu.colorado.phet.common.phetcommon.model.clock.IClock;
@@ -17,7 +18,7 @@ import edu.colorado.phet.common.phetcommon.model.clock.IClock;
  * 
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public class Compass extends Body implements IConsumer {
+public class Compass extends ScienceBody implements IConsumer {
 
   // ----------------------------------------------------------------------------
   // Class data

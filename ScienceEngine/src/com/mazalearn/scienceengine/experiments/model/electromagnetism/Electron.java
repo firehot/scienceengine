@@ -5,6 +5,8 @@ package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import com.mazalearn.scienceengine.box2d.ScienceBody;
+
 import edu.colorado.phet.common.phetcommon.model.ModelElement;
 import edu.colorado.phet.faraday.util.QuadBezierSpline;
 
@@ -15,7 +17,7 @@ import edu.colorado.phet.faraday.util.QuadBezierSpline;
  *
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public class Electron extends Body implements ModelElement {
+public class Electron extends ScienceBody implements ModelElement {
     
     //----------------------------------------------------------------------------
     // Class data

@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Shape;
 
 /**
  * CoilMagnet is the model of a coil magnet. The shape of the model is a circle,
@@ -18,6 +19,7 @@ public abstract class CoilMagnet extends AbstractMagnet {
   // ----------------------------------------------------------------------------
 
   private double maxStrengthOutside; // for debugging
+  private Shape modelShape; // TODO ???
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -39,7 +41,7 @@ public abstract class CoilMagnet extends AbstractMagnet {
    * @return true or false
    */
   public boolean isInside(Vector2 p) {
-    return false; // TODO: ??? this.modelShape.contains(p);
+    return true; // TODO ??? this.modelShape.contains(p);
   }
 
   // ----------------------------------------------------------------------------

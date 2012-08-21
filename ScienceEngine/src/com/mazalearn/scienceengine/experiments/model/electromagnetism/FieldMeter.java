@@ -3,13 +3,14 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
  * FieldMeter is the model of a meter to measure B-field.
  * 
  * @author sridhar
  */
-public class FieldMeter extends Body implements EMField.IConsumer {
+public class FieldMeter extends ScienceBody implements EMField.IConsumer {
 
   // ----------------------------------------------------------------------------
   // Instance data

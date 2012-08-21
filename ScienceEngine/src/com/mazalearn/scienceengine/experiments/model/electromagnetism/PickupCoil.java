@@ -39,7 +39,7 @@ public class PickupCoil extends AbstractCoil {
 
   // Reusable objects
   private AffineTransform affineTransform;
-  private Vector2 samplePoint;
+  private Vector2 aPoint;
   private Vector2 sampleBField;
 
   // ----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ public class PickupCoil extends AbstractCoil {
 
     // Reusable objects
     this.affineTransform = new AffineTransform();
-    this.samplePoint = new Vector2();
+    this.aPoint = new Vector2();
     this.sampleBField = new Vector2();
 
     // loosely packed loops
@@ -339,24 +339,23 @@ public class PickupCoil extends AbstractCoil {
    */
   private double getSumBx() {
 
-    //final double magnetStrength = this.emField.getStrength();
+    //TODO ??? final double magnetStrength = this.emField.getStrength();
 
     // Sum the B-field sample points.
     double sumBx = 0;
     for (int i = 0; i < this.samplePoints.length; i++) {
-
-      this.samplePoint.set(position.x + this.samplePoints[i].x,
-          position.y + this.samplePoints[i].y);
-      if (angle != 0) {
+      //TODO ??? Vector2 bPoint = this.getWorldPoint(aPoint);
+      this.aPoint.set(getPosition().x + this.samplePoints[i].x,
+          getPosition().y + this.samplePoints[i].y);
+      if (getAngle() != 0) {
         // Adjust for rotation.
         this.affineTransform.setToIdentity();
-        this.affineTransform.rotate(angle, position.x, position.y);
-        this.affineTransform
-            .transform(this.samplePoint, this.samplePoint /* output */);
+        this.affineTransform.rotate(getAngle(), getPosition().x, getPosition().y);
+        this.affineTransform.transform(this.aPoint, this.aPoint /* output */);
       }
 
       // Find the B-field vector at that point.
-      this.emField.getBField(this.samplePoint, this.sampleBField /* output */);
+      this.emField.getBField(this.aPoint, this.sampleBField /* output */);
 
       /*
        * If the B-field x component is equal to the magnet strength, then our
@@ -365,7 +364,7 @@ public class PickupCoil extends AbstractCoil {
        * abrupt. See Unfuddle #248.
        */
       double Bx = this.sampleBField.x;
- /*     if (Math.abs(Bx) == magnetStrength) {
+ /*TODO ???     if (Math.abs(Bx) == magnetStrength) {
         Bx *= this.transitionSmoothingScale;
       }
 */

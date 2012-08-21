@@ -2,13 +2,15 @@
 
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
+import com.mazalearn.scienceengine.box2d.ScienceBody;
+
 /**
  * Lightbulb is the model of a lightbulb. Its intensity is a function of the
  * current in the pickup coil.
  * 
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public class Lightbulb extends Body {
+public class Lightbulb extends ScienceBody {
 
   /* Absolute current amplitude below this value is treated as zero. */
   public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.001;

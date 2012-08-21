@@ -2,12 +2,14 @@
 
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
+import com.mazalearn.scienceengine.box2d.ScienceBody;
+
 /**
  * AbstractCoil is the abstract base class for all coils.
  *
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public abstract class AbstractCoil extends Body {
+public abstract class AbstractCoil extends ScienceBody {
     
     //----------------------------------------------------------------------------
     // Instance data
@@ -44,7 +46,7 @@ public abstract class AbstractCoil extends Body {
      * @param wireWidth width of the wire
      * @param loopSpacing space between the loops
      */
-    public AbstractCoil( int numberOfLoops, double radius, double wireWidth, double loopSpacing ) {
+    public AbstractCoil(int numberOfLoops, double radius, double wireWidth, double loopSpacing) {
         this.numberOfLoops = numberOfLoops;
         this.radius = radius;
         this.wireWidth = wireWidth;

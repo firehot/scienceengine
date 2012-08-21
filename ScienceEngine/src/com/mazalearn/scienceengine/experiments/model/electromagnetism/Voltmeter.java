@@ -2,6 +2,8 @@
 
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
+import com.mazalearn.scienceengine.box2d.ScienceBody;
+
 import edu.colorado.phet.common.phetcommon.math.MathUtil;
 import edu.colorado.phet.common.phetcommon.model.ModelElement;
 import edu.colorado.phet.common.phetcommon.util.SimpleObserver;
@@ -15,7 +17,7 @@ import edu.colorado.phet.faraday.FaradayConstants;
  *
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
-public class Voltmeter extends Body implements ModelElement, SimpleObserver {
+public class Voltmeter extends ScienceBody implements ModelElement, SimpleObserver {
   
     //----------------------------------------------------------------------------
     // Class data

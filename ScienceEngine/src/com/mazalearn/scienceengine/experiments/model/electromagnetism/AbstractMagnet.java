@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.model.util.AffineTransform;
 
 /**
@@ -10,7 +11,7 @@ import com.mazalearn.scienceengine.experiments.model.util.AffineTransform;
  * 
  * @author sridhar
  */
-public abstract class AbstractMagnet extends Body 
+public abstract class AbstractMagnet extends ScienceBody 
        implements EMField.IProducer {
 
   // ----------------------------------------------------------------------------
@@ -53,7 +54,8 @@ public abstract class AbstractMagnet extends Body
    * Flips the magnet's polarity by rotating it 180 degrees.
    */
   public void flipPolarity() {
-    angle = (float) ((angle + Math.PI) % (2 * Math.PI));
+    setPositionAndAngle(getPosition().x, getPosition().y, 
+        (float) ((getAngle() + Math.PI) % (2 * Math.PI)));
   }
 
   /**
@@ -154,15 +156,15 @@ public abstract class AbstractMagnet extends Body
      * adjusting for position and orientation.
      */
     this.transform.setToIdentity();
-    this.transform.translate(-position.x, -position.y);
-    this.transform.rotate(-angle, position.x, position.y);
+    this.transform.translate(-getPosition().x, -getPosition().y);
+    this.transform.rotate(-getAngle(), getPosition().x, getPosition().y);
     this.transform.transform(p, this.relativePoint /* output */);
 
     // get strength in magnet's local coordinate frame
     getBFieldRelative(this.relativePoint, outputVector);
 
     // Adjust the field vector to match the magnet's angle.
-    outputVector.rotate((float) angle);
+    outputVector.rotate(getAngle());
 
     // Clamp magnitude to magnet strength.
     // TODO: why do we need to do this?
