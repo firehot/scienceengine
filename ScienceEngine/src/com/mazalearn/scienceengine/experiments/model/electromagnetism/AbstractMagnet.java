@@ -3,8 +3,8 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.experiments.model.util.AffineTransform;
 
 /**
  * AbstractMagnet is the abstract base class for all magnets.
@@ -18,13 +18,10 @@ public abstract class AbstractMagnet extends ScienceBody
   // Instance data
   // ----------------------------------------------------------------------------
 
-  private double width, height;
+  private float width, height;
   private double strength;
   private double maxStrength;
   private double minStrength;
-  private AffineTransform transform; // reusable transform
-  //reusable point, in magnet's local coordinate frame
-  private Vector2 relativePoint; 
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -37,13 +34,16 @@ public abstract class AbstractMagnet extends ScienceBody
   public AbstractMagnet(EMField emField) {
     super();
     emField.registerProducer(this);
+    
     this.width = 250;
     this.height = 50;
+    PolygonShape magnetShape = new PolygonShape();
+    magnetShape.setAsBox(this.width, this.height); // TODO ??? units ???
+    this.createFixture(magnetShape, 1f);
+
     this.strength = 1.0;
     this.minStrength = 0.0; // couldn't be any weaker
     this.maxStrength = Double.POSITIVE_INFINITY; // couldn't be any stronger
-    this.transform = new AffineTransform();
-    this.relativePoint = new Vector2();
   }
 
   // ----------------------------------------------------------------------------
@@ -139,29 +139,20 @@ public abstract class AbstractMagnet extends ScienceBody
   /**
    * Gets the B-field vector at a point in the global 2D space.
    * 
-   * @param p
-   *          the point
-   * @param outputVector
-   *          B-field is written here if provided, may be null
+   * @param p - the point
+   * @param outputVector - B-field is written here if provided, may be null
    * @return the B-field vector, outputVector if it was provided
    */
   public Vector2 getBField(final Vector2 p, Vector2 outputVector) {
-    assert (p != null);
-    assert (outputVector != null);
-
     /*
      * Our models are based a magnet located at the origin, with the north pole
      * pointing down the positive x-axis. The point we receive is in global 2D
      * space. So transform the point to the magnet's local coordinate system,
      * adjusting for position and orientation.
      */
-    this.transform.setToIdentity();
-    this.transform.translate(-getPosition().x, -getPosition().y);
-    this.transform.rotate(-getAngle(), getPosition().x, getPosition().y);
-    this.transform.transform(p, this.relativePoint /* output */);
-
+    Vector2 localPoint = this.getLocalPoint(p);
     // get strength in magnet's local coordinate frame
-    getBFieldRelative(this.relativePoint, outputVector);
+    getBFieldRelative(localPoint, outputVector);
 
     // Adjust the field vector to match the magnet's angle.
     outputVector.rotate(getAngle());
@@ -196,14 +187,11 @@ public abstract class AbstractMagnet extends ScienceBody
   /**
    * Sets the physical size of the magnet.
    * 
-   * @param width
-   *          the width
-   * @param height
-   *          the height
-   * @throws IllegalArgumentException
-   *           if width or height is <= 0
+   * @param width -  the width
+   * @param height - the height
+   * @throws IllegalArgumentException if width or height is <= 0
    */
-  public void setSize(double width, double height) {
+  public void setSize(float width, float height) {
     if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("dimensions must be > 0");
     }

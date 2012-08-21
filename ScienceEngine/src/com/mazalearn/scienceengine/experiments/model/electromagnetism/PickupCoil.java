@@ -3,7 +3,6 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mazalearn.scienceengine.experiments.model.util.AffineTransform;
 
 /**
  * PickupCoil is the model of a pickup coil. Its behavior follows Faraday's Law
@@ -28,7 +27,7 @@ public class PickupCoil extends AbstractCoil {
 
   private EMField emField;
 
-  private double averageBx; // in Gauss
+  private float averageBx; // in Gauss
   private double flux; // in webers
   private double deltaFlux; // in webers
   private double emf; // in volts
@@ -38,8 +37,6 @@ public class PickupCoil extends AbstractCoil {
   private double calibrationEmf;
 
   // Reusable objects
-  private AffineTransform affineTransform;
-  private Vector2 aPoint;
   private Vector2 sampleBField;
 
   // ----------------------------------------------------------------------------
@@ -63,7 +60,7 @@ public class PickupCoil extends AbstractCoil {
 
     createSamplePoints();
 
-    this.averageBx = 0.0;
+    this.averageBx = 0f;
     this.flux = 0.0;
     this.deltaFlux = 0.0;
     this.emf = 0.0;
@@ -71,8 +68,6 @@ public class PickupCoil extends AbstractCoil {
     this.transitionSmoothingScale = 1.0; // no smoothing
 
     // Reusable objects
-    this.affineTransform = new AffineTransform();
-    this.aPoint = new Vector2();
     this.sampleBField = new Vector2();
 
     // loosely packed loops
@@ -106,7 +101,7 @@ public class PickupCoil extends AbstractCoil {
    * 
    * @return
    */
-  public double getAverageBx() {
+  public float getAverageBx() {
     return this.averageBx;
   }
 
@@ -250,7 +245,7 @@ public class PickupCoil extends AbstractCoil {
    */
   public void singleStep(double dt) {
     // Sum the B-field sample points.
-    double sumBx = getSumBx();
+    float sumBx = getSumBx();
     
     // Average the B-field sample points.
     this.averageBx = sumBx / this.samplePoints.length;
@@ -337,25 +332,17 @@ public class PickupCoil extends AbstractCoil {
   /*
    * Gets the sum of Bx at the coil's sample points.
    */
-  private double getSumBx() {
+  private float getSumBx() {
 
     //TODO ??? final double magnetStrength = this.emField.getStrength();
 
     // Sum the B-field sample points.
     double sumBx = 0;
     for (int i = 0; i < this.samplePoints.length; i++) {
-      //TODO ??? Vector2 bPoint = this.getWorldPoint(aPoint);
-      this.aPoint.set(getPosition().x + this.samplePoints[i].x,
-          getPosition().y + this.samplePoints[i].y);
-      if (getAngle() != 0) {
-        // Adjust for rotation.
-        this.affineTransform.setToIdentity();
-        this.affineTransform.rotate(getAngle(), getPosition().x, getPosition().y);
-        this.affineTransform.transform(this.aPoint, this.aPoint /* output */);
-      }
-
+      // Translate to global coordinates from local
+      Vector2 globalPoint = this.getWorldPoint(this.samplePoints[i]);
       // Find the B-field vector at that point.
-      this.emField.getBField(this.aPoint, this.sampleBField /* output */);
+      this.emField.getBField(globalPoint, this.sampleBField /* output */);
 
       /*
        * If the B-field x component is equal to the magnet strength, then our
@@ -372,7 +359,7 @@ public class PickupCoil extends AbstractCoil {
       sumBx += Bx;
     }
 
-    return sumBx;
+    return (float) sumBx;
   }
 
   /*

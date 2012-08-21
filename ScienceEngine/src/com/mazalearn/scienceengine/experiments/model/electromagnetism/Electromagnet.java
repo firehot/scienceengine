@@ -83,7 +83,7 @@ public class Electromagnet extends CoilMagnet {
      */
     double diameter = (2 * this.sourceCoilModel.getRadius())
         + (this.sourceCoilModel.getWireWidth() / 2);
-    super.setSize(diameter, diameter);
+    super.setSize((float) diameter, (float) diameter);
 
     // Current amplitude is proportional to amplitude of the current source.
     this.sourceCoilModel.setCurrentAmplitude(this.currentSource.getAmplitude());

@@ -32,13 +32,14 @@ public class ElectroMagnetismModel implements IExperimentModel {
     barMagnet.setLinearVelocity(12, 0);
      
     pickupCoil = new PickupCoil(emField, 0.5);
-    pickupCoil.setPositionAndAngle(11, 11, 0);
+    pickupCoil.setPositionAndAngle(11, 11, 30);
     
     fieldMeter = new FieldMeter(emField);
     Vector2 bforce = new Vector2(0,0);
     fieldMeter.setPositionAndAngle(11, 11, 0);
     for (int i = 0; i < 5; i++) {
       fieldMeter.getStrength(bforce);
+      bforce.x = pickupCoil.getAverageBx();
       System.out.println(" position = " + barMagnet.getPosition());
       System.out.println(" velocity = " + barMagnet.getLinearVelocity());
       System.out.println(" bforce = " + bforce);
@@ -50,8 +51,10 @@ public class ElectroMagnetismModel implements IExperimentModel {
   }
   
   public void simulateStep() {
-    box2DWorld.step(0.1f, 3, 3);
+    float dt = 0.1f;
+    box2DWorld.step(dt, 3, 3);
     emField.propagateField();
+    pickupCoil.singleStep(dt);
   }
 
   @Override

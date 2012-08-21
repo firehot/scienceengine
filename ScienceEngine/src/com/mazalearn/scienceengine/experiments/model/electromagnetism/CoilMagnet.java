@@ -3,14 +3,15 @@
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 /**
  * CoilMagnet is the model of a coil magnet. The shape of the model is a circle,
  * and the calculation of the magnetic field at some point of interest varies
  * depending on whether the point is inside or outside the circle.
+ * For 2D checking of containment, the shape behaves like a square ???
  * 
- * @author Chris Malley (cmalley@pixelzoom.com)
+ * @author sridhar
  */
 public abstract class CoilMagnet extends AbstractMagnet {
 
@@ -19,8 +20,7 @@ public abstract class CoilMagnet extends AbstractMagnet {
   // ----------------------------------------------------------------------------
 
   private double maxStrengthOutside; // for debugging
-  private Shape modelShape; // TODO ???
-
+  
   // ----------------------------------------------------------------------------
   // Constructors
   // ----------------------------------------------------------------------------
@@ -38,10 +38,14 @@ public abstract class CoilMagnet extends AbstractMagnet {
    * Is the specified point inside the magnet?
    * 
    * @param p
-   * @return true or false
+   * @return true iff p is contained inside magnet's area
    */
   public boolean isInside(Vector2 p) {
-    return true; // TODO ??? this.modelShape.contains(p);
+    // Test all the fixtures of the magnet to check for containment of p.
+    for (Fixture f: this.getFixtureList()) {
+      if (f.testPoint(p)) return true;
+    }
+    return false;
   }
 
   // ----------------------------------------------------------------------------
@@ -57,11 +61,6 @@ public abstract class CoilMagnet extends AbstractMagnet {
    * @return outputVector
    */
   protected Vector2 getBFieldRelative(Vector2 p, Vector2 outputVector) {
-
-    assert (p != null);
-    assert (outputVector != null);
-    assert (getWidth() == getHeight());
-
     // Algorithm differs depending on whether we're inside or outside the shape
     // that defines the coil.
     if (isInside(p)) {
@@ -78,12 +77,9 @@ public abstract class CoilMagnet extends AbstractMagnet {
    * <= R) : <ul> <li>Bx = ( 2 * m ) / R^e = magnet strength <li>By = 0 </ul>
    * 
    * @param p
-   * 
    * @param outputVector
    */
   private void getBFieldInside(Vector2 p, Vector2 outputVector /* output */) {
-    assert (p != null);
-    assert (outputVector != null);
     outputVector.set((float) getStrength(), 0f);
   }
 
@@ -107,10 +103,6 @@ public abstract class CoilMagnet extends AbstractMagnet {
    * @param outputVector
    */
   private void getBFieldOutside(Vector2 p, Vector2 outputVector /* output */) {
-    assert (p != null);
-    assert (outputVector != null);
-    assert (getWidth() == getHeight());
-
     // Elemental terms
     double x = p.x;
     double y = p.y;
@@ -139,8 +131,6 @@ public abstract class CoilMagnet extends AbstractMagnet {
     // Use this to calibrate.
     if (outputVector.len() > this.maxStrengthOutside) {
       this.maxStrengthOutside = outputVector.len();
-      // System.out.println( "CoilMagnet: maxStrengthOutside=" +
-      // this.maxStrengthOutside ); // DEBUG
     }
   }
 }
