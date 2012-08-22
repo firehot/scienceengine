@@ -11,19 +11,12 @@ package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 public class Turbine extends BarMagnet {
 
   public static final int CLOCK_FRAME_RATE = 25; // frames per second
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
 
   private double speed; // -1...+1 (see setSpeed)
   private double maxRPM; // rotations per minute at full speed
   private double maxDelta; // change in angle at full speed, in radians
 
   private double direction;
-
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
 
   /**
    * Sole constructor.
@@ -34,9 +27,10 @@ public class Turbine extends BarMagnet {
     setMaxRPM(100.0);
   }
 
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
+  @Override
+  public String getName() {
+    return "Turbine";
+  }
 
   /**
    * Sets the speed. Speed is a value between -1.0 and +1.0 inclusive. The sign

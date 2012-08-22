@@ -21,10 +21,6 @@ public class PickupCoil extends AbstractCoil {
   public static final double MIN_PICKUP_LOOP_RADIUS = 68.0;
   private static final int NUM_SAMPLE_POINTS = 9;
 
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
-
   private EMField emField;
 
   private float averageBx; // in Gauss
@@ -38,10 +34,6 @@ public class PickupCoil extends AbstractCoil {
 
   // Reusable objects
   private Vector2 sampleBField;
-
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
 
   /**
    * Constructs a PickupCoil that uses a fixed number of sample points to
@@ -74,9 +66,10 @@ public class PickupCoil extends AbstractCoil {
     setLoopSpacing(1.5 * getWireWidth());
   }
 
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
+  @Override
+  public String getName() {
+    return "PickupCoil";
+  }
 
   /**
    * Gets the magnetic flux.

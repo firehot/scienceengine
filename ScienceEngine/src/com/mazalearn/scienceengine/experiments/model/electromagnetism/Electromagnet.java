@@ -44,9 +44,10 @@ public class Electromagnet extends CoilMagnet {
     update();
   }
 
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
+  @Override
+  public String getName() {
+    return "Electromagnet";
+  }
 
   /**
    * Sets the electromagnet's current source.
@@ -67,10 +68,6 @@ public class Electromagnet extends CoilMagnet {
   public AbstractCurrentSource getCurrentSource() {
     return this.currentSource;
   }
-
-  // ----------------------------------------------------------------------------
-  // SimpleObserver implementation
-  // ----------------------------------------------------------------------------
 
   /*
    * Updates current in the coil and strength of the magnet.

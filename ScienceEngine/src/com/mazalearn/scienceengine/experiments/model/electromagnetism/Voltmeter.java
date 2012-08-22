@@ -13,10 +13,6 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  */
 public class Voltmeter extends ScienceBody {
 
-  // ----------------------------------------------------------------------------
-  // Class data
-  // ----------------------------------------------------------------------------
-
   /* Absolute current amplitude below this value is treated as zero. */
   public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.001;
 
@@ -40,10 +36,6 @@ public class Voltmeter extends ScienceBody {
    */
   private static final double NEEDLE_LIVELINESS = 0.6;
 
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
-
   // Pickup coil that the voltmeter is connected to.
   private PickupCoil pickupCoilModel;
 
@@ -52,10 +44,6 @@ public class Voltmeter extends ScienceBody {
 
   // Needle deflection angle
   private double needleAngle;
-
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
 
   /**
    * Sole constructor.
@@ -69,9 +57,10 @@ public class Voltmeter extends ScienceBody {
     needleAngle = ZERO_NEEDLE_ANGLE;
   }
 
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
+  @Override
+  public String getName() {
+    return "VoltMeter";
+  }
 
   /**
    * Enables/disabled jiggle behavior. This turns on an ad hoc algorithm that

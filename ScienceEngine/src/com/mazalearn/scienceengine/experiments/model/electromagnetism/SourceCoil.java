@@ -16,6 +16,11 @@ public class SourceCoil extends AbstractCoil {
     setLoopSpacing(getWireWidth());
   }
 
+  @Override
+  public String getName() {
+    return "SourceCoil";
+  }
+
   /**
    * If the wire width is changed, also change the loop spacing so that the
    * loops remain packed close together.

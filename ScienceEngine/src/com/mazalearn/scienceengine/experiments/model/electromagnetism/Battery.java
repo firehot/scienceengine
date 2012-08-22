@@ -12,4 +12,10 @@ public class Battery extends AbstractCurrentSource {
     public Battery() {
         super();
     }
+    
+    @Override
+    public String getName() {
+      return "Battery";
+    }
+
 }

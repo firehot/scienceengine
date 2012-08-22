@@ -8,7 +8,7 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  * Lightbulb is the model of a lightbulb. Its intensity is a function of the
  * current in the pickup coil.
  * 
- * @author Chris Malley (cmalley@pixelzoom.com)
+ * @author sridhar
  */
 public class Lightbulb extends ScienceBody {
 
@@ -20,7 +20,6 @@ public class Lightbulb extends ScienceBody {
 
   private PickupCoil pickupCoilModel;
   private double previousCurrentAmplitude;
-  private boolean offWhenCurrentChangesDirection;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -29,35 +28,32 @@ public class Lightbulb extends ScienceBody {
   /**
    * Sole constructor.
    * 
-   * @param pickupCoilModel
-   *          the pickup coil that the lightbulb is across
+   * @param pickupCoilModel - the pickup coil that the lightbulb is across
    */
   public Lightbulb(PickupCoil pickupCoilModel) {
     super();
 
     this.pickupCoilModel = pickupCoilModel;
     this.previousCurrentAmplitude = 0.0;
-    this.offWhenCurrentChangesDirection = false;
   }
 
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
+  public String getName() {
+    return "Lightbulb";
+  }
 
   /**
    * Gets the intensity of the light. Fully off is 0.0, fully on is 1.0.
    * 
    * @return the intensity (0.0 - 1.0)
    */
-  public double getIntensity() {
+  public float getIntensity() {
 
     double intensity = 0.0;
 
     final double currentAmplitude = pickupCoilModel.getCurrentAmplitude();
 
-    if (offWhenCurrentChangesDirection
-        && ((currentAmplitude > 0 && previousCurrentAmplitude <= 0) || 
-            (currentAmplitude <= 0 && previousCurrentAmplitude > 0))) {
+    if ((currentAmplitude > 0 && previousCurrentAmplitude <= 0) || 
+        (currentAmplitude <= 0 && previousCurrentAmplitude > 0)) {
       // Current changed angle, so turn the light off.
       intensity = 0.0;
     } else {
@@ -73,30 +69,6 @@ public class Lightbulb extends ScienceBody {
     previousCurrentAmplitude = currentAmplitude;
 
     assert (intensity >= 0 && intensity <= 1);
-    return intensity;
-  }
-
-  /**
-   * Determines whether the lightbulb turns off when the current in the coil
-   * changes angle. In some cases (eg, the Generator or AC Electromagnet)
-   * this is the desired behavoir. In other cases (eg, polarity file of the Bar
-   * Magnet) this is not the desired behavior.
-   * 
-   * @param offWhenCurrentChangesDirection
-   *          true or false
-   */
-  public void setOffWhenCurrentChangesDirection(
-      boolean offWhenCurrentChangesDirection) {
-    this.offWhenCurrentChangesDirection = offWhenCurrentChangesDirection;
-  }
-
-  /**
-   * Determines whether the lightbulb turns off when the current in the coil
-   * changes angle.
-   * 
-   * @return true or false
-   */
-  public boolean isOffWhenCurrentChangesDirection() {
-    return offWhenCurrentChangesDirection;
+    return (float) intensity;
   }
 }

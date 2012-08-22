@@ -105,6 +105,11 @@ public class BarMagnet extends AbstractMagnet {
         EXTERNAL_FAR_GRID_SPACING);
   }
 
+  @Override
+  public String getName() {
+    return "BarMagnet";
+  }
+
   /**
    * Gets the B-field vector at a point in the magnet's local 2D coordinate
    * frame.

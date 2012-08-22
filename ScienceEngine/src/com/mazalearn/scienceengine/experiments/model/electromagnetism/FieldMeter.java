@@ -12,16 +12,8 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  */
 public class FieldMeter extends ScienceBody implements EMField.IConsumer {
 
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
-
   // B-field vector at the field meter's position.
   private Vector2 fieldVector;
-
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
 
   public FieldMeter(EMField emField) {
     super();
@@ -30,15 +22,15 @@ public class FieldMeter extends ScienceBody implements EMField.IConsumer {
     emField.registerConsumer(this);
   }
 
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
+  @Override
+  public String getName() {
+    return "FieldMeter";
+  }
 
   /**
    * Gets the strength at the field meter's position.
    * 
-   * @param vector
-   *          strength value is copied here
+   * @param vector - strength value is copied here
    */
   public void getStrength(Vector2 vector /* output */) {
     vector.set(this.fieldVector);

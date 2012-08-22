@@ -204,7 +204,7 @@ public abstract class AbstractMagnet extends ScienceBody
    * 
    * @return the width
    */
-  public double getWidth() {
+  public float getWidth() {
     return this.width;
   }
 
@@ -213,7 +213,7 @@ public abstract class AbstractMagnet extends ScienceBody
    * 
    * @return the height
    */
-  public double getHeight() {
+  public float getHeight() {
     return this.height;
   }
 }

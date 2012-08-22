@@ -2,30 +2,20 @@
 
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
+import com.mazalearn.scienceengine.box2d.ScienceBody;
+
 /**
  * AbstractCurrentSource is the abstract base class for all things that are
  * capable of acting as a current source.
  * 
  * @author sridhar
  */
-public abstract class AbstractCurrentSource {
-
-  // ----------------------------------------------------------------------------
-  // Class data
-  // ----------------------------------------------------------------------------
+public abstract class AbstractCurrentSource extends ScienceBody {
 
   private static final double DEFAULT_MAX_VOLTAGE = Double.POSITIVE_INFINITY;
 
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
-
   private double maxVoltage;
   private double amplitude;
-
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
 
   /**
    * Sole constructor.
@@ -34,10 +24,6 @@ public abstract class AbstractCurrentSource {
     this.maxVoltage = DEFAULT_MAX_VOLTAGE;
     this.amplitude = 1.0; // full strength
   }
-
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
 
   /**
    * Gets the voltage.

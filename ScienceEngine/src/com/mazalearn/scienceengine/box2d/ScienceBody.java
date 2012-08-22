@@ -61,7 +61,7 @@ public class ScienceBody implements IBody {
    */
   public void setPositionAndAngle(float x, float y, float angle) {
     aPosition.set(x, y);
-    setPositionAndAngle(aPosition, angle);
+    this.setPositionAndAngle(aPosition, angle);
   }
 
   public static World getBox2DWorld() {
@@ -71,7 +71,14 @@ public class ScienceBody implements IBody {
   public static void setBox2DWorld(World box2DWorld) {
     ScienceBody.box2DWorld = box2DWorld;
   }
+  
+  public String getName() {
+    return "ScienceBody";
+  }
 
+  //////////////////////////////////////////////////////////////////////////
+  ///  Static Proxy envelope for Box2D body
+  //////////////////////////////////////////////////////////////////////////
   @Override
   public Fixture createFixture(FixtureDef def) {
     return body.createFixture(def);
