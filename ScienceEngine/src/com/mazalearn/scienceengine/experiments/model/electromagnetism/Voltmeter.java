@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -9,32 +10,32 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  * function of the current in the pickup coil. It uses an ad hoc algorithm that
  * makes the needle wobble around the zero point.
  * 
- * @author Chris Malley (cmalley@pixelzoom.com)
+ * @author sridhar
  */
 public class Voltmeter extends ScienceBody {
 
   /* Absolute current amplitude below this value is treated as zero. */
-  public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.001;
+  public static final float CURRENT_AMPLITUDE_THRESHOLD = 0.001f;
 
   // Define the zero point of the needle.
-  private static final double ZERO_NEEDLE_ANGLE = Math.toRadians(0.0);
+  private static final float ZERO_NEEDLE_ANGLE = 0;
 
   // The needle deflection range is this much on either side of the zero point.
-  private static final double MAX_NEEDLE_ANGLE = Math.toRadians(90.0);
+  private static final float MAX_NEEDLE_ANGLE = MathUtils.degreesToRadians * 90;
 
   // If rotational kinematics is enabled, the needle will jiggle this much
   // around the zero reading.
-  private static final double NEEDLE_JIGGLE_ANGLE = Math.toRadians(3.0);
+  private static final float NEEDLE_JIGGLE_ANGLE = MathUtils.degreesToRadians * 3;
 
   // When the angle is this close to zero, the needle stops jiggling.
-  private static final double NEEDLE_JIGGLE_THRESHOLD = Math.toRadians(0.5);
+  private static final float NEEDLE_JIGGLE_THRESHOLD = MathUtils.degreesToRadians * 0.5f;
 
   /*
    * Determines how much the needle jiggles around the zero point. The value L
    * should be such that 0 < L < 1. If set to 0, the needle will not jiggle at
    * all. If set to 1, the needle will ocsillate forever.
    */
-  private static final double NEEDLE_LIVELINESS = 0.6;
+  private static final float NEEDLE_LIVELINESS = 0.6f;
 
   // Pickup coil that the voltmeter is connected to.
   private PickupCoil pickupCoilModel;
@@ -43,7 +44,7 @@ public class Voltmeter extends ScienceBody {
   private boolean jiggleEnabled;
 
   // Needle deflection angle
-  private double needleAngle;
+  private float needleAngle;
 
   /**
    * Sole constructor.
@@ -85,10 +86,9 @@ public class Voltmeter extends ScienceBody {
   /**
    * Sets the needle's deflection angle.
    * 
-   * @param needleAngle
-   *          the angle, in radians
+   * @param needleAngle - the angle, in radians
    */
-  protected void setNeedleAngle(double needleAngle) {
+  protected void setNeedleAngle(float needleAngle) {
     needleAngle = Clamp
         .clamp(-MAX_NEEDLE_ANGLE, needleAngle, +MAX_NEEDLE_ANGLE);
     this.needleAngle = needleAngle;
@@ -99,7 +99,7 @@ public class Voltmeter extends ScienceBody {
    * 
    * @return the angle, in radians
    */
-  public double getNeedleAngle() {
+  public float getNeedleAngle() {
     return needleAngle;
   }
 
@@ -109,10 +109,10 @@ public class Voltmeter extends ScienceBody {
    * 
    * @return the angle, in radians
    */
-  private double getDesiredNeedleAngle() {
+  private float getDesiredNeedleAngle() {
 
     // Use amplitude of the voltage source as our signal.
-    double amplitude = pickupCoilModel.getCurrentAmplitude();
+    float amplitude = pickupCoilModel.getCurrentAmplitude();
 
     // Absolute amplitude below the threshold is effectively zero.
     if (Math.abs(amplitude) < CURRENT_AMPLITUDE_THRESHOLD) {
@@ -133,9 +133,9 @@ public class Voltmeter extends ScienceBody {
    * 
    * @see edu.colorado.phet.common.model.ModelElement#stepInTime(double)
    */
-  public void singleStep(double dt) {
+  public void singleStep(float dt) {
     // Determine the desired needle deflection angle.
-    double needleAngle = getDesiredNeedleAngle();
+    float needleAngle = getDesiredNeedleAngle();
 
     if (!jiggleEnabled) {
       // If jiggle is disabled, simply set the needle angle.
@@ -145,7 +145,7 @@ public class Voltmeter extends ScienceBody {
       if (needleAngle != ZERO_NEEDLE_ANGLE) {
         setNeedleAngle(needleAngle);
       } else {
-        double delta = getNeedleAngle();
+        float delta = getNeedleAngle();
         if (delta == 0) {
           // Do nothing, the needle is "at rest".
         } else if (Math.abs(delta) < NEEDLE_JIGGLE_THRESHOLD) {
@@ -153,7 +153,7 @@ public class Voltmeter extends ScienceBody {
           setNeedleAngle(ZERO_NEEDLE_ANGLE);
         } else {
           // Jiggle the needle around the zero point.
-          double jiggleAngle = -delta * NEEDLE_LIVELINESS;
+          float jiggleAngle = -delta * NEEDLE_LIVELINESS;
           jiggleAngle = Clamp.clamp(-NEEDLE_JIGGLE_ANGLE, jiggleAngle,
               +NEEDLE_JIGGLE_ANGLE);
           setNeedleAngle(jiggleAngle);

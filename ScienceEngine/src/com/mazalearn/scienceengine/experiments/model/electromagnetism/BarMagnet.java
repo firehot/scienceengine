@@ -2,7 +2,6 @@
 
 package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
-import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.experiments.model.util.Dimension;
 
 /**
  * Model of a bar magnet that uses a grid of precomputed B-field values.

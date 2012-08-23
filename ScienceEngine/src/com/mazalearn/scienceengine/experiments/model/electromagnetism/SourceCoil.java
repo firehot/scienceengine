@@ -27,7 +27,7 @@ public class SourceCoil extends AbstractCoil {
    * 
    * @param wireWidth
    */
-  public void setWireWidth(double wireWidth) {
+  public void setWireWidth(float wireWidth) {
     super.setWireWidth(wireWidth);
     setLoopSpacing(getWireWidth());
   }

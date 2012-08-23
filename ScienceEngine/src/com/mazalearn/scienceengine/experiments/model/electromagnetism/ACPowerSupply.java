@@ -18,23 +18,23 @@ public class ACPowerSupply extends AbstractCurrentSource {
   // ----------------------------------------------------------------------------
 
   // The minimum number of steps used to approximate one sine wave cycle.
-  private static final double MIN_STEPS_PER_CYCLE = 10;
+  private static final float MIN_STEPS_PER_CYCLE = 10;
 
   // ----------------------------------------------------------------------------
   // Instance data
   // ----------------------------------------------------------------------------
 
   // Determines how high the amplitude can go. (0...1 inclusive)
-  private double maxAmplitude;
+  private float maxAmplitude;
   // Determines how fast the amplitude will vary. (0...1 inclusive)
-  private double frequency;
+  private float frequency;
   // The current angle of the sine wave that describes the AC. (radians)
-  private double acAngle;
+  private float acAngle;
   // The change in acAngle at the current freqency. (radians)
-  private double deltaAngle;
+  private float deltaAngle;
   // The change in acAngle that occurred the last time stepInTime was called.
   // (radians)
-  private double stepAngle;
+  private float stepAngle;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -45,11 +45,11 @@ public class ACPowerSupply extends AbstractCurrentSource {
    */
   public ACPowerSupply() {
     super();
-    this.maxAmplitude = 1.0; // biggest
-    this.frequency = 1.0; // fastest
-    this.acAngle = 0.0; // radians
-    this.deltaAngle = (2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE; // radians
-    this.stepAngle = 0.0; // radians
+    this.maxAmplitude = 1.0f; // biggest
+    this.frequency = 1.0f; // fastest
+    this.acAngle = 0.0f; // radians
+    this.deltaAngle = (float) ((2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE); // radians
+    this.stepAngle = 0.0f; // radians
   }
 
   // ----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class ACPowerSupply extends AbstractCurrentSource {
    * @param maxAmplitude
    *          the maximum amplitude, 0...1 inclusive
    */
-  public void setMaxAmplitude(double maxAmplitude) {
+  public void setMaxAmplitude(float maxAmplitude) {
     assert (maxAmplitude >= 0 && maxAmplitude <= 1);
     this.maxAmplitude = maxAmplitude;
   }
@@ -72,7 +72,7 @@ public class ACPowerSupply extends AbstractCurrentSource {
    * 
    * @return the maximum amplitude, 0...1 inclusive
    */
-  public double getMaxAmplitude() {
+  public float getMaxAmplitude() {
     return this.maxAmplitude;
   }
 
@@ -82,11 +82,11 @@ public class ACPowerSupply extends AbstractCurrentSource {
    * @param frequency
    *          the frequency, 0...1 inclusive
    */
-  public void setFrequency(double frequency) {
+  public void setFrequency(float frequency) {
     assert (frequency >= 0 && frequency <= 1);
     this.frequency = frequency;
-    this.acAngle = 0.0;
-    this.deltaAngle = (2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE;
+    this.acAngle = 0.0f;
+    this.deltaAngle = (float) ((2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE);
   }
 
   /**
@@ -104,7 +104,7 @@ public class ACPowerSupply extends AbstractCurrentSource {
    * 
    * @return the acAngle, in radians
    */
-  public double getStepAngle() {
+  public float getStepAngle() {
     return this.stepAngle;
   }
 
@@ -112,11 +112,11 @@ public class ACPowerSupply extends AbstractCurrentSource {
    * Varies the amplitude over time, based on maxAmplitude and frequency.
    * Guaranteed to hit all peaks and zero crossings.
    */
-  public void stepInTime(double dt) {
+  public void stepInTime(float dt) {
     if (this.maxAmplitude == 0) {
-      setAmplitude(0.0);
+      setAmplitude(0.0f);
     } else {
-      double previousAngle = this.acAngle;
+      float previousAngle = this.acAngle;
 
       // Compute the acAngle.
       this.acAngle += (dt * this.deltaAngle);
@@ -126,11 +126,11 @@ public class ACPowerSupply extends AbstractCurrentSource {
 
       // Limit the acAngle to 360 degrees.
       if (this.acAngle >= 2 * Math.PI) {
-        this.acAngle = this.acAngle % (2 * Math.PI);
+        this.acAngle = (float) (this.acAngle % (2 * Math.PI));
       }
 
       // Calculate and set the amplitude.
-      setAmplitude(this.maxAmplitude * Math.sin(this.acAngle));
+      setAmplitude(this.maxAmplitude * (float) Math.sin(this.acAngle));
     }
   }
 }

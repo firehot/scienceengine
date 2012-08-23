@@ -9,6 +9,7 @@ package com.mazalearn.scienceengine.box2d;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
@@ -46,17 +47,25 @@ public class Box2DActor extends Actor {
   public void draw(SpriteBatch batch, float parentAlpha) {
     this.x = body.getPosition().x * PIXELS_PER_M;
     this.y = body.getPosition().y * PIXELS_PER_M;
-    this.rotation = body.getAngle();
-    batch.draw(textureRegion, x, y, width/2, height/2, width, height, 1, 1, rotation);
+    if (body.getAngle() != 0) {
+      float angle = body.getAngle() * MathUtils.radiansToDegrees;
+      this.rotation = angle % 360;
+    }
+    batch.draw(textureRegion, x, y, 0, 0, width, height, 1, 1, rotation);
   }
 
   @Override
   public Actor hit(float x, float y) {
+    // x,y are in local coordinates
     return x > 0 && x < width && y > 0 && y < height ? this : null;
   }
   
   @Override
   public boolean touchDown(float x, float y, int pointer) {
     return false;    
+  }
+  
+  public TextureRegion getTextureRegion() {
+    return textureRegion;
   }
 }

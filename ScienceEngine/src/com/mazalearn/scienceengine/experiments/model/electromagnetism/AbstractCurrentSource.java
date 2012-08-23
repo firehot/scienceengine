@@ -12,17 +12,17 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  */
 public abstract class AbstractCurrentSource extends ScienceBody {
 
-  private static final double DEFAULT_MAX_VOLTAGE = Double.POSITIVE_INFINITY;
+  private static final float DEFAULT_MAX_VOLTAGE = Float.POSITIVE_INFINITY;
 
-  private double maxVoltage;
-  private double amplitude;
+  private float maxVoltage;
+  private float amplitude;
 
   /**
    * Sole constructor.
    */
   public AbstractCurrentSource() {
     this.maxVoltage = DEFAULT_MAX_VOLTAGE;
-    this.amplitude = 1.0; // full strength
+    this.amplitude = 1f; // full strength
   }
 
   /**
@@ -30,7 +30,7 @@ public abstract class AbstractCurrentSource extends ScienceBody {
    * 
    * @return the voltage, in volts
    */
-  public double getVoltage() {
+  public float getVoltage() {
     return this.amplitude * this.maxVoltage;
   }
 
@@ -42,10 +42,9 @@ public abstract class AbstractCurrentSource extends ScienceBody {
   /**
    * Sets the maximum voltage that this voltage source will produce.
    * 
-   * @param maxVoltage
-   *          the maximum voltage, in volts
+   * @param maxVoltage - the maximum voltage, in volts
    */
-  public void setMaxVoltage(double maxVoltage) {
+  public void setMaxVoltage(float maxVoltage) {
     this.maxVoltage = maxVoltage;
   }
 
@@ -54,7 +53,7 @@ public abstract class AbstractCurrentSource extends ScienceBody {
    * 
    * @return the maximum voltage, in volts
    */
-  public double getMaxVoltage() {
+  public float getMaxVoltage() {
     return this.maxVoltage;
   }
 
@@ -65,7 +64,7 @@ public abstract class AbstractCurrentSource extends ScienceBody {
    * @param amplitude
    *          -1...+1
    */
-  public void setAmplitude(double amplitude) {
+  public void setAmplitude(float amplitude) {
     assert (amplitude >= -1 && amplitude <= 1);
     this.amplitude = amplitude;
   }
@@ -76,7 +75,7 @@ public abstract class AbstractCurrentSource extends ScienceBody {
    * 
    * @return the amplitude, -1...+1
    */
-  public double getAmplitude() {
+  public float getAmplitude() {
     return this.amplitude;
   }
 }

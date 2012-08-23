@@ -13,13 +13,13 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
 public class Lightbulb extends ScienceBody {
 
   /* Absolute current amplitude below this value is treated as zero. */
-  public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.001;
+  public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.01;
   // ----------------------------------------------------------------------------
   // Instance data
   // ----------------------------------------------------------------------------
 
   private PickupCoil pickupCoilModel;
-  private double previousCurrentAmplitude;
+  private float previousCurrentAmplitude;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -34,7 +34,7 @@ public class Lightbulb extends ScienceBody {
     super();
 
     this.pickupCoilModel = pickupCoilModel;
-    this.previousCurrentAmplitude = 0.0;
+    this.previousCurrentAmplitude = 0f;
   }
 
   public String getName() {
@@ -48,27 +48,24 @@ public class Lightbulb extends ScienceBody {
    */
   public float getIntensity() {
 
-    double intensity = 0.0;
+    float intensity = 0f;
 
-    final double currentAmplitude = pickupCoilModel.getCurrentAmplitude();
+    final float currentAmplitude = pickupCoilModel.getCurrentAmplitude();
 
-    if ((currentAmplitude > 0 && previousCurrentAmplitude <= 0) || 
-        (currentAmplitude <= 0 && previousCurrentAmplitude > 0)) {
-      // Current changed angle, so turn the light off.
-      intensity = 0.0;
+    // If current changed angle, turn the light off.
+    if (Math.signum(currentAmplitude) != Math.signum(previousCurrentAmplitude)) {
+      intensity = 0f;
+    } else if (Math.abs(currentAmplitude)  < CURRENT_AMPLITUDE_THRESHOLD){
+      // Intensity below the threshold is effectively zero.
+      intensity = 0f;
     } else {
       // Light intensity is proportional to amplitude of current in the coil.
-      intensity = Math.abs(currentAmplitude);
-
-      // Intensity below the threshold is effectively zero.
-      if (intensity < CURRENT_AMPLITUDE_THRESHOLD) {
-        intensity = 0;
-      }
+      intensity = currentAmplitude;
     }
 
     previousCurrentAmplitude = currentAmplitude;
 
     assert (intensity >= 0 && intensity <= 1);
-    return (float) intensity;
+    return intensity;
   }
 }

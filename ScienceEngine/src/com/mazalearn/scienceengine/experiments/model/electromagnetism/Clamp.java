@@ -5,17 +5,14 @@ public class Clamp {
   /**
    * Clamps a value to a specified range.
    * 
-   * @param min
-   *          the minimum value
-   * @param value
-   *          the value to be clamped
-   * @param max
-   *          the maximum value
+   * @param min - the minimum value
+   * @param value - the value to be clamped
+   * @param max - the maximum value
    * @return the clamped value
    */
-  public static double clamp(double min, double value, double max) {
-    if (Double.isNaN(min) || Double.isNaN(value) || Double.isNaN(max)) {
-      return Double.NaN;
+  public static float clamp(float min, float value, float max) {
+    if (Float.isNaN(min) || Float.isNaN(value) || Float.isNaN(max)) {
+      return Float.NaN;
     } else if (value < min) {
       return min;
     } else if (value > max) {

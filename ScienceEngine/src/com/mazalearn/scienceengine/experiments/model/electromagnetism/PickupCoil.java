@@ -18,19 +18,19 @@ public class PickupCoil extends AbstractCoil {
   // ----------------------------------------------------------------------------
 
   private static final boolean DEBUG_CALIBRATION = false;
-  public static final double MIN_PICKUP_LOOP_RADIUS = 68.0;
+  public static final float MIN_PICKUP_LOOP_RADIUS = 68.0f;
   private static final int NUM_SAMPLE_POINTS = 9;
 
   private EMField emField;
 
   private float averageBx; // in Gauss
-  private double flux; // in webers
-  private double deltaFlux; // in webers
-  private double emf; // in volts
-  private double biggestAbsEmf; // in volts
+  private float flux; // in webers
+  private float deltaFlux; // in webers
+  private float emf; // in volts
+  private float biggestAbsEmf; // in volts
   private Vector2 samplePoints[]; // B-field sample points
-  private double transitionSmoothingScale;
-  private double calibrationEmf;
+  private float transitionSmoothingScale;
+  private float calibrationEmf;
 
   // Reusable objects
   private Vector2 sampleBField;
@@ -41,7 +41,7 @@ public class PickupCoil extends AbstractCoil {
    * 
    * @param emField
    */
-  public PickupCoil(EMField emField, double calibrationEmf) {
+  public PickupCoil(EMField emField, float calibrationEmf) {
     super();
 
     assert (emField != null);
@@ -53,17 +53,17 @@ public class PickupCoil extends AbstractCoil {
     createSamplePoints();
 
     this.averageBx = 0f;
-    this.flux = 0.0;
-    this.deltaFlux = 0.0;
-    this.emf = 0.0;
-    this.biggestAbsEmf = 0.0;
-    this.transitionSmoothingScale = 1.0; // no smoothing
+    this.flux = 0.0f;
+    this.deltaFlux = 0.0f;
+    this.emf = 0.0f;
+    this.biggestAbsEmf = 0.0f;
+    this.transitionSmoothingScale = 1.0f; // no smoothing
 
     // Reusable objects
     this.sampleBField = new Vector2();
 
     // loosely packed loops
-    setLoopSpacing(1.5 * getWireWidth());
+    setLoopSpacing(1.5f * getWireWidth());
   }
 
   @Override
@@ -128,7 +128,7 @@ public class PickupCoil extends AbstractCoil {
   /**
    * When the coil's radius changes, update the sample points.
    */
-  public void setRadius(double radius) {
+  public void setRadius(float radius) {
     super.setRadius(radius);
     createSamplePoints();
   }
@@ -157,7 +157,7 @@ public class PickupCoil extends AbstractCoil {
    * @param scale
    *          0 < scale <= 1
    */
-  public void setTransitionSmoothingScale(double scale) {
+  public void setTransitionSmoothingScale(float scale) {
     if (scale <= 0 || scale > 1) {
       throw new IllegalArgumentException("scale must be > 0 and <= 1: " + scale);
     }
@@ -184,7 +184,7 @@ public class PickupCoil extends AbstractCoil {
    * 
    * @param calibrationEmf
    */
-  public void setCalibrationEmf(double calibrationEmf) {
+  public void setCalibrationEmf(float calibrationEmf) {
     if (!(calibrationEmf >= 1)) {
       throw new IllegalArgumentException("calibrationEmf must be >= 1: "
           + calibrationEmf);
@@ -236,7 +236,7 @@ public class PickupCoil extends AbstractCoil {
    * 
    * @param dt - time delta
    */
-  public void singleStep(double dt) {
+  public void singleStep(float dt) {
     // Sum the B-field sample points.
     float sumBx = getSumBx();
     
@@ -244,25 +244,25 @@ public class PickupCoil extends AbstractCoil {
     this.averageBx = sumBx / this.samplePoints.length;
     
     // Flux in one loop.
-    double A = getEffectiveLoopArea();
-    double loopFlux = A * this.averageBx;
+    float A = getEffectiveLoopArea();
+    float loopFlux = A * this.averageBx;
     
     // Flux in the coil.
-    double flux = getNumberOfLoops() * loopFlux;
+    float flux = getNumberOfLoops() * loopFlux;
     
     // Change in flux.
     this.deltaFlux = flux - this.flux;
     this.flux = flux;
     
     // Induced emf.
-    double emf = -(this.deltaFlux / dt);
+    float emf = -(this.deltaFlux / dt);
     
     // If the emf has changed, set the current in the coil and notify observers.
     if (emf != this.emf) {
       this.emf = emf;
     
       // Current amplitude is proportional to emf amplitude.
-      double amplitude = Clamp.clamp(-1, emf / this.calibrationEmf, +1);
+      float amplitude = Clamp.clamp(-1, emf / this.calibrationEmf, +1);
       setCurrentAmplitude(amplitude);
     }
     
@@ -368,9 +368,9 @@ public class PickupCoil extends AbstractCoil {
    * NOTE: This fix required recalibration of all the scaling factors accessible
    * via developer controls.
    */
-  private double getEffectiveLoopArea() {
-    double width = MIN_PICKUP_LOOP_RADIUS;
-    double height = 2 * getRadius();
+  private float getEffectiveLoopArea() {
+    float width = MIN_PICKUP_LOOP_RADIUS;
+    float height = 2 * getRadius();
     return width * height;
   }
 }

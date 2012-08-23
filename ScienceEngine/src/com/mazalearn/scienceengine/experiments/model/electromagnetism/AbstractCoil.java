@@ -18,13 +18,13 @@ public abstract class AbstractCoil extends ScienceBody {
   // Number of loops in the coil.
   private int numberOfLoops;
   // Radius of all loops in the coil.
-  private double radius;
+  private float radius;
   // Width of the wire.
-  private double wireWidth;
+  private float wireWidth;
   // Spacing between the loops
-  private double loopSpacing;
+  private float loopSpacing;
   // Amplitude of the current in the coil (-1...+1)
-  private double currentAmplitude;
+  private float currentAmplitude;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -41,22 +41,18 @@ public abstract class AbstractCoil extends ScienceBody {
   /**
    * Fully-specified constructor.
    * 
-   * @param numberOfLoops
-   *          number of loops in the coil
-   * @param radius
-   *          radius used for all loops
-   * @param wireWidth
-   *          width of the wire
-   * @param loopSpacing
-   *          space between the loops
+   * @param numberOfLoops -  number of loops in the coil
+   * @param radius - radius used for all loops
+   * @param wireWidth - width of the wire
+   * @param loopSpacing - space between the loops
    */
-  public AbstractCoil(int numberOfLoops, double radius, double wireWidth,
-      double loopSpacing) {
+  public AbstractCoil(int numberOfLoops, float radius, float wireWidth,
+      float loopSpacing) {
     this.numberOfLoops = numberOfLoops;
     this.radius = radius;
     this.wireWidth = wireWidth;
     this.loopSpacing = loopSpacing;
-    this.currentAmplitude = 0.0;
+    this.currentAmplitude = 0f;
   }
 
   // ----------------------------------------------------------------------------
@@ -91,7 +87,7 @@ public abstract class AbstractCoil extends ScienceBody {
    * @param radius
    *          the radius
    */
-  public void setRadius(double radius) {
+  public void setRadius(float radius) {
     assert (radius > 0);
     this.radius = radius;
   }
@@ -101,7 +97,7 @@ public abstract class AbstractCoil extends ScienceBody {
    * 
    * @return the radius
    */
-  public double getRadius() {
+  public float getRadius() {
     return this.radius;
   }
 
@@ -111,8 +107,8 @@ public abstract class AbstractCoil extends ScienceBody {
    * @param area
    *          the area
    */
-  public void setLoopArea(double area) {
-    double radius = Math.sqrt(area / Math.PI);
+  public void setLoopArea(float area) {
+    float radius = (float) Math.sqrt(area / Math.PI);
     setRadius(radius);
   }
 
@@ -128,10 +124,9 @@ public abstract class AbstractCoil extends ScienceBody {
   /**
    * Sets the width of the wire used for the coil.
    * 
-   * @param wireWidth
-   *          the wire width, in pixels
+   * @param wireWidth - the wire width, in pixels
    */
-  public void setWireWidth(double wireWidth) {
+  public void setWireWidth(float wireWidth) {
     assert (wireWidth > 0);
     this.wireWidth = wireWidth;
   }
@@ -141,17 +136,16 @@ public abstract class AbstractCoil extends ScienceBody {
    * 
    * @return the wire width, in pixels
    */
-  public double getWireWidth() {
+  public float getWireWidth() {
     return this.wireWidth;
   }
 
   /**
    * Sets the spacing between loops in the coil.
    * 
-   * @param loopSpacing
-   *          the spacing, in pixels
+   * @param loopSpacing - the spacing, in pixels
    */
-  public void setLoopSpacing(double loopSpacing) {
+  public void setLoopSpacing(float loopSpacing) {
     assert (loopSpacing > 0);
     this.loopSpacing = loopSpacing;
   }
@@ -161,7 +155,7 @@ public abstract class AbstractCoil extends ScienceBody {
    * 
    * @return the spacing, in pixels
    */
-  public double getLoopSpacing() {
+  public float getLoopSpacing() {
     return this.loopSpacing;
   }
 
@@ -175,7 +169,7 @@ public abstract class AbstractCoil extends ScienceBody {
    * 
    * @param currentAmplitude the current amplitude (-1...+1)
    */
-  protected void setCurrentAmplitude(double currentAmplitude) {
+  protected void setCurrentAmplitude(float currentAmplitude) {
     if (currentAmplitude < -1 || currentAmplitude > 1) {
       throw new IllegalArgumentException("currentAmplitude is out of range: "
           + currentAmplitude);
@@ -188,7 +182,7 @@ public abstract class AbstractCoil extends ScienceBody {
    * 
    * @return the current amplitude
    */
-  public double getCurrentAmplitude() {
+  public float getCurrentAmplitude() {
     return this.currentAmplitude;
   }
 }
