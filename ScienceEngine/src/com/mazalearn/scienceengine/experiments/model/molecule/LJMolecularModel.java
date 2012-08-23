@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-public class LJMolecularModel extends AbstractMolecularModel implements IMolecularModel {
+public class LJMolecularModel extends AbstractMolecularModel {
   // Assumptions
   // LJ_EPSILON = 1.0 = Depth of potential well
   // LJ_SIGMA = 1.0 = Distance at which inter-particle potential is 0
@@ -32,7 +32,7 @@ public class LJMolecularModel extends AbstractMolecularModel implements IMolecul
     double potentialEnergy = 0;
     Molecule m[] = molecules;
     // now compute interaction forces (Lennard-Jones potential):
-    double dampingForceOverR = DAMPING_FORCE_OVER_R[heating.level()];
+    double dampingForceOverR = DAMPING_FORCE_OVER_R[heatingLevel.level()];
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < i; j++) {
         double dx = m[i].x - m[j].x;
@@ -114,5 +114,4 @@ public class LJMolecularModel extends AbstractMolecularModel implements IMolecul
     }
     return pe;
   }
-  
 }

@@ -59,8 +59,8 @@ public class CellularLJMolecularModel extends LJMolecularModel {
     super(boxWidth, boxHeight, N, temperature);
   }
   
-  public void initialize() {
-    super.initialize();
+  public void reset() {
+    super.reset();
     this.neighbourCells = createNeighbourCells();
   }
   // compute accelerations of all molecules from current positions, using

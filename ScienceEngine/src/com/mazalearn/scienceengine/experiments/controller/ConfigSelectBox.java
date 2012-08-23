@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
 
-public class ConfigSelectBox extends SelectBox {
+public class ConfigSelectBox extends SelectBox implements IConfigElement {
   final IExperimentModel iExperimentModel;
   final String property;
   final Method getter, setter;
@@ -29,8 +29,7 @@ public class ConfigSelectBox extends SelectBox {
       e.printStackTrace();
       throw new RuntimeException("Could not find getter or setter");
     }
-    // Initialize selected item
-    setSelection(getVal());
+    syncWithModel();
     // Set value when slider changes
     setSelectionListener(new SelectionListener() {
       @Override
@@ -57,5 +56,9 @@ public class ConfigSelectBox extends SelectBox {
       e.printStackTrace();
       Gdx.app.log(ScienceEngine.LOG, "Failed to set " + property + " to " + value);
     }     
+  }
+  
+  public void syncWithModel() {
+    setSelection(getVal());
   }
 }

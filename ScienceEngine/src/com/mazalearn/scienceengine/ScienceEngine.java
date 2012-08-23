@@ -17,6 +17,9 @@ public class ScienceEngine extends Game {
 
   // whether we are in development mode
   public static final boolean DEV_MODE = true;
+  
+  // Provide access to this singleton game from any class
+  public static ScienceEngine GAME;
 
   // a libgdx helper class that logs the current FPS each second
   private FPSLogger fpsLogger;
@@ -70,6 +73,8 @@ public class ScienceEngine extends Game {
 
     // create the helper objects
     fpsLogger = new FPSLogger();
+    
+    GAME = this;
   }
 
   @Override

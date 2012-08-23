@@ -1,18 +1,18 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.Heating;
+public abstract class AbstractMolecularModel implements IMolecularModel {
 
-public abstract class AbstractMolecularModel {
-
-  private double[] DAMPING = {1.0, 0.9985, 1.0002};
-  protected double dt = 0.020;
-  protected double dtOver2 = 0.5 * dt;
-  protected double dtSquaredOver2 = 0.5 * dt * dt;
   protected static final double WALL_STIFFNESS = 50.0;
   protected static final double GRAVITY = -0.005;
   protected static final double WALL_DISTANCE_THRESHOLD = 1.122462048309373017;
   protected static final double MIN_DISTANCE = WALL_DISTANCE_THRESHOLD * 0.8;
   protected static final double MIN_DISTANCE_SQUARED = MIN_DISTANCE * MIN_DISTANCE;
+
+  private State state = State.Gas;
+  private double[] DAMPING = {1.0, 0.9985, 1.0002};
+  protected double dt = 0.020;
+  protected double dtOver2 = 0.5 * dt;
+  protected double dtSquaredOver2 = 0.5 * dt * dt;
   protected Molecule[] molecules;
   protected int boxWidth = 50;
   protected int boxHeight = 50;
@@ -22,7 +22,7 @@ public abstract class AbstractMolecularModel {
   protected double pe;
   protected double energy;
   protected double simulatedTime;
-  protected Heating heating = Heating.NEUTRAL;
+  protected HeatingLevel heatingLevel = HeatingLevel.Neutral;
 
   public AbstractMolecularModel(int boxWidth, int boxHeight, int N,
       double temperature) {
@@ -30,13 +30,15 @@ public abstract class AbstractMolecularModel {
     this.boxWidth = boxWidth;
     this.boxHeight = boxHeight;
     this.temperature = temperature;
+    this.molecules = new Molecule[N];
   }
   
-  public void initialize() {
-    this.molecules = new Molecule[N];
+  @Override
+  public void reset() {
     this.simulatedTime = 0;
     distributeMoleculesHomogeneously();
     normalizeVelocities();
+    setState(state);
   }
   
   private void reScaleDt() {
@@ -52,11 +54,17 @@ public abstract class AbstractMolecularModel {
   }
 
   private void distributeMoleculesHomogeneously() {
-    double volumePerMolecule = (boxWidth * boxHeight) / N;
+    double width = boxWidth, height = boxHeight;
+    switch (state) {
+      case Solid:
+      case Liquid: width = height = Math.sqrt(N) * 3; break;
+      case Gas: width = boxWidth; height = boxHeight; break;
+    }
+    double volumePerMolecule = (width * height) / N;
     double averageSpacing = Math.sqrt(volumePerMolecule);
-    double rows = Math.ceil(boxHeight / averageSpacing);
-    double columns = Math.ceil(boxWidth / averageSpacing);
-    averageSpacing = Math.min(boxHeight / rows, boxWidth / columns);
+    double rows = Math.ceil(height / averageSpacing);
+    double columns = Math.ceil(width / averageSpacing);
+    averageSpacing = Math.min(height / rows, width / columns);
     if (averageSpacing < 1.0) {
       averageSpacing = 1.0; // not too close!
     }
@@ -65,12 +73,10 @@ public abstract class AbstractMolecularModel {
     for (int i = 0; i < N; i++) {
       molecules[i] = new Molecule(x, y);
       x = x + averageSpacing;
-      if (x > (boxWidth - WALL_DISTANCE_THRESHOLD)) {
+      if (x > (boxWidth - WALL_DISTANCE_THRESHOLD) || x > width) {
         // if end of row, move down to next row
         x = averageSpacing / 2.0;
         y = y + averageSpacing;
-        // ??? if (y > (boxHeight - WALL_DISTANCE_THRESHOLD)) N = i + 1; // if
-        // no more room, this one was the last
       }
     }
   }
@@ -109,8 +115,8 @@ public abstract class AbstractMolecularModel {
     reScaleDt();
   }
 
-  public void setHeatingLevel(Heating heating) {
-    this.heating = heating;
+  public void setHeatingLevel(HeatingLevel heatingLevel) {
+    this.heatingLevel = heatingLevel;
   }
   
   public double getTemperature() {
@@ -119,11 +125,11 @@ public abstract class AbstractMolecularModel {
   
   public void setTemperature(double temperature) {
     if (this.temperature < temperature) { // set damping upwards
-      setHeatingLevel(Heating.HOT);
+      setHeatingLevel(HeatingLevel.Hot);
     } else if (this.temperature > temperature) { // set damping downwards
-      setHeatingLevel(Heating.COLD);
+      setHeatingLevel(HeatingLevel.Cold);
     } else {
-      setHeatingLevel(Heating.NEUTRAL);
+      setHeatingLevel(HeatingLevel.Neutral);
     }
     this.temperature = temperature;
     normalizeVelocities();
@@ -138,7 +144,7 @@ public abstract class AbstractMolecularModel {
     // Scale velocities up or down
     // vi *= (2-0.999995); or vi *= 0.999995;
     // Update velocities half-way with old acceleration
-    double damping = DAMPING[heating.level()];
+    double damping = DAMPING[heatingLevel.level()];
     if (energy < 10.0 && damping > 1.0 || energy > 1.0 && damping < 1.0) {
       for (Molecule m: molecules) {
         m.vx *= damping;
@@ -194,4 +200,29 @@ public abstract class AbstractMolecularModel {
   }
 
   abstract double computeAccelerations();
+
+  public String getState() {
+    return state.name();
+  }
+
+  public void setState(String state) {
+    setState(State.valueOf(state));
+  }
+  
+  private void setState(State state) {
+    this.state = state;
+    switch(this.state){
+      case Solid: setTemperature(0.2); break;
+      case Liquid: setTemperature(0.95); break;
+      case Gas: setTemperature(5); break;
+    }
+  }
+
+  public String getHeatingLevel() {
+    return heatingLevel.name();
+  }
+
+  public void setHeatingLevel(String heating) {
+    this.heatingLevel = HeatingLevel.valueOf(heating);
+  }
 }

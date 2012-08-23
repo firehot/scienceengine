@@ -13,7 +13,7 @@ import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
  * Utility class for iExperimentModel floating point sliders using reflection.
  *
  */
-public class ConfigSlider extends Slider {
+public class ConfigSlider extends Slider implements IConfigElement {
   final IExperimentModel iExperimentModel;
   final String property;
   final Method getter, setter;
@@ -32,8 +32,7 @@ public class ConfigSlider extends Slider {
       e.printStackTrace();
       throw new RuntimeException("Could not find getter or setter");
     }
-    // Initialize slider value
-    setValue(getVal());
+    syncWithModel();
     // Set value when slider changes
     setValueChangedListener(new ValueChangedListener() {
       @Override
@@ -60,5 +59,10 @@ public class ConfigSlider extends Slider {
       e.printStackTrace();
       Gdx.app.log(ScienceEngine.LOG, "Failed to set " + property + " to " + value);
     }     
+  }
+
+  @Override
+  public void syncWithModel() {
+    setValue(getVal());
   }
 }

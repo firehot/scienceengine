@@ -22,7 +22,7 @@ public class ElectroMagnetismModel implements IExperimentModel {
   private List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
   public enum Mode {Free, Rotate};
   
-  private Mode mode = Mode.Free;
+  private Mode mode = Mode.Rotate;
     
   public ElectroMagnetismModel() {    
     Vector2 gravity = new Vector2(0.0f, 0.0f);
@@ -51,11 +51,14 @@ public class ElectroMagnetismModel implements IExperimentModel {
     reset();
   }
 
-  public void simulateStep() {
-    float dt = 0.1f;
-    box2DWorld.step(dt, 3, 3);
-    emField.propagateField();
-    pickupCoil.singleStep(dt);
+  @Override
+  public void simulateSteps(int n) {
+    for (int i =0; i < n; i++) {
+      float dt = 0.1f;
+      box2DWorld.step(dt, 3, 3);
+      emField.propagateField();
+      pickupCoil.singleStep(dt);
+    }
   }
 
   @Override

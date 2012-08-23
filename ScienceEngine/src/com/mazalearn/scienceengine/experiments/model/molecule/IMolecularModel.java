@@ -1,9 +1,11 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-public interface IMolecularModel {
+import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
+
+public interface IMolecularModel extends IExperimentModel {
 
   // Initialize the molecules configuration (currently uniform random)
-  public abstract void initialize();
+  public abstract void reset();
 
   // Simulate n steps
   public abstract void simulateSteps(int n);
@@ -25,13 +27,15 @@ public interface IMolecularModel {
   public abstract void setTemperature(double temperature);
 
   // Set heat level
-  public abstract void setHeatingLevel(Heating heating);
+  public abstract void setHeatingLevel(HeatingLevel heatingLevel);
 
   // Enumeration for applying heat to the Molecular Model.
-  public enum Heating {
-    NEUTRAL(0), COLD(1), HOT(2);
+  public static enum HeatingLevel {
+    Neutral(0), Cold(1), Hot(2);
     private int level;
-    private Heating(int level) { this.level = level; }
+    private HeatingLevel(int level) { this.level = level; }
     public int level() { return level; }
   }
+  // Enumeration for state of the matter
+  public static enum State {Solid, Liquid, Gas};
 }

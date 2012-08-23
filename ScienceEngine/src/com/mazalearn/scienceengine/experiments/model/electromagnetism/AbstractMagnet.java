@@ -38,7 +38,7 @@ public abstract class AbstractMagnet extends ScienceBody
     this.width = 64;
     this.height = 8;
     PolygonShape magnetShape = new PolygonShape();
-    magnetShape.setAsBox(this.width, this.height); // TODO ??? units ???
+    magnetShape.setAsBox(this.width, this.height);
     this.createFixture(magnetShape, 1f);
 
     this.strength = 1.0;

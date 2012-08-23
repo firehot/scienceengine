@@ -103,17 +103,20 @@ public class WaveModel implements IExperimentModel {
     }
   }
   
-  public void singleStep() {
-    simulatedTime++;
-    int frameCount = (int) (11 - tension);
-    if (simulatedTime % frameCount == 0) {
-      singleStep(balls[0].pos.y);
-    }
-    
-    switch(genMode) {
-      case Oscillate: balls[0].pos.y = (float) sinusoid(simulatedTime); break;
-      case Pulse: balls[0].pos.y = (float) pulse(simulatedTime); break;
-      case Manual: break;
+  @Override
+  public void simulateSteps(int n) {
+    for (int i = 0; i < n; i++) {
+      simulatedTime++;
+      int frameCount = (int) (11 - tension);
+      if (simulatedTime % frameCount == 0) {
+        singleStep(balls[0].pos.y);
+      }
+      
+      switch(genMode) {
+        case Oscillate: balls[0].pos.y = (float) sinusoid(simulatedTime); break;
+        case Pulse: balls[0].pos.y = (float) pulse(simulatedTime); break;
+        case Manual: break;
+      }
     }
   }
 

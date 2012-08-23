@@ -9,27 +9,25 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.experiments.model.WaveModel;
 import com.mazalearn.scienceengine.experiments.model.WaveModel.Ball;
 
-public class WaveView extends Group implements IExperimentView {
+public class WaveView extends AbstractExperimentView {
   private Actor startBall, endBall;
   
   private static final float ORIGIN_Y = 80f;
   private static final float ORIGIN_X = 1f;
   private TextureRegion ballTexture;
   private Texture backgroundTexture;
-  private boolean isPaused = false;
-  
   private final WaveModel waveModel;
   private final int numBalls;
   private final int ballDiameter;
   
   public WaveView(float width, float height, final WaveModel waveModel, 
       int numBalls, int ballDiameter, TextureAtlas atlas) {
+    super(waveModel);
     this.width = width;
     this.height = height;
     this.waveModel = waveModel;
@@ -82,7 +80,7 @@ public class WaveView extends Group implements IExperimentView {
     batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
     // Advance n steps
     if (!isPaused ) {
-      waveModel.singleStep();
+      waveModel.simulateSteps(1);
     }
     startBall.y = ORIGIN_Y + waveModel.balls[0].pos.y;
     endBall.y = ORIGIN_Y + waveModel.balls[numBalls - 1].pos.y;
@@ -92,20 +90,5 @@ public class WaveView extends Group implements IExperimentView {
       batch.draw(ballTexture, this.x + ORIGIN_X + ball.pos.x, this.y + ORIGIN_Y + ball.pos.y);
     }
     super.draw(batch, parentAlpha);
-  }
-
-  @Override
-  public void pause() {
-    this.isPaused = true;
-  }
-
-  @Override
-  public void resume() {
-    this.isPaused = false;
-  }
-
-  @Override
-  public boolean isPaused() {
-    return isPaused;
   }
 }

@@ -9,8 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
 import com.mazalearn.scienceengine.experiments.view.IExperimentView;
+import com.mazalearn.scienceengine.screens.StartScreen;
+import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 
 public class Configurator extends Table {
   final IExperimentModel iExperimentModel;
@@ -25,6 +28,16 @@ public class Configurator extends Table {
     this.iExperimentModel = iExperimentModel;
     this.iExperimentView = iExperimentView;
     this.configs = new ArrayList<Config>();
+    // register the back button
+    TextButton backButton = new TextButton("Back to Start", skin);
+    backButton.setClickListener(new ClickListener() {
+      public void click(Actor actor, float x, float y) {
+        ScienceEngine.GAME.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.GAME.setScreen(new StartScreen(ScienceEngine.GAME));
+      }
+    });
+    add(backButton).height(30).colspan(2);
+    row();
     // Add pause/resume functionality for the experiment
     final TextButton pauseResumeButton = new TextButton("Pause", skin);
     pauseResumeButton.setClickListener(new ClickListener() {
@@ -42,13 +55,16 @@ public class Configurator extends Table {
     this.add(pauseResumeButton);
     // Add reset functionality for the experiment
     addButton("Reset");
+    row();
   }
   
   public Config addButton(String caption) {
     Table table = new Table(skin);
-    table.add(new ConfigTextButton(iExperimentModel, caption, skin));
+    ConfigTextButton configTextButton = 
+        new ConfigTextButton(iExperimentModel, caption, skin);
+    table.add(configTextButton);
     this.add(table); this.row();
-    Config config = new Config(table);
+    Config config = new Config(table, configTextButton);
     this.configs.add(config);
     return config;
   }
@@ -57,18 +73,22 @@ public class Configurator extends Table {
     Table table = new Table(skin);
     table.add(property);
     table.row();
-    table.add(new ConfigSlider(iExperimentModel, property, low, high, skin));
+    ConfigSlider configSlider = 
+        new ConfigSlider(iExperimentModel, property, low, high, skin);
+    table.add(configSlider);
     this.add(table); this.row();
-    Config config = new Config(table);
+    Config config = new Config(table, configSlider);
     this.configs.add(config);
     return config;
   }
 
   public Config addSelect(String property, String[] items) {
     Table table = new Table(skin);
-    table.add(new ConfigSelectBox(iExperimentModel, property, items, skin));
+    ConfigSelectBox configSelectBox = 
+        new ConfigSelectBox(iExperimentModel, property, items, skin);
+    table.add(configSelectBox);
     this.add(table); this.row();
-    Config config = new Config(table);
+    Config config = new Config(table, configSelectBox);
     this.configs.add(config);
     return config;
   }

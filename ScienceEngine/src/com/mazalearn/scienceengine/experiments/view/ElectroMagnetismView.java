@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel;
 import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel.Mode;
+import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.Lightbulb;
 
-public class ElectroMagnetismView extends Group implements IExperimentView {
+public class ElectroMagnetismView extends AbstractExperimentView {
   private static final class BarMagnetView extends Box2DActor {
     private final ScienceBody body;
     private final ElectroMagnetismView emView;
@@ -26,6 +26,8 @@ public class ElectroMagnetismView extends Group implements IExperimentView {
       this.body = body;
       this.emView = experimentView;
       this.emModel = emModel;
+      //this.originX = width / 2;
+      //this.originY = height / 2;
     }
 
     public boolean touchDown(float x, float y, int pointer) {
@@ -44,10 +46,10 @@ public class ElectroMagnetismView extends Group implements IExperimentView {
       newPos.set(x / PIXELS_PER_M, y / PIXELS_PER_M);
       newPos.sub(body.getPosition());
       float angularVelocity = newPos.len();
-      body.setAngularVelocity(angularVelocity);
+      body.setAngularVelocity(-angularVelocity);
       emView.resume();
     }
-    
+   
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
       this.x = body.getPosition().x * PIXELS_PER_M;
@@ -79,13 +81,14 @@ public class ElectroMagnetismView extends Group implements IExperimentView {
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-      float intensity = Math.abs(lightbulb.getIntensity());
       super.draw(batch, parentAlpha);
+
+      float intensity = Math.abs(lightbulb.getIntensity());
       // Draw a circle of yellow light with radius and alpha proportional to intensity
       int diameter = Math.round(intensity * 256);
       Color c = batch.getColor();
       batch.setColor(1, 1, 1, 0.5f + intensity * 0.5f);
-      TextureRegion t = lightbulb.getInertia() > 0 ? lightTexturePositive : lightTextureNegative;
+      TextureRegion t = lightbulb.getIntensity() > 0 ? lightTexturePositive : lightTextureNegative;
       batch.draw(t, x + width/2 - diameter/2, y + height/2 - diameter/2, diameter, diameter);
       batch.setColor(c);
     }
@@ -100,16 +103,13 @@ public class ElectroMagnetismView extends Group implements IExperimentView {
     }
   }
 
-  private static final int PIXELS_PER_M = 8;
-
-  private boolean isPaused = false;
+  private IExperimentModel emModel;
   
-  private final ElectroMagnetismModel emModel;
-
   public ElectroMagnetismView(float width, float height, final ElectroMagnetismModel emModel) {
+    super(emModel);
+    this.emModel = emModel;
     this.width = width;
     this.height = height;
-    this.emModel = emModel;
     for (final ScienceBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body.getName());
       if (body.getName() == "BarMagnet") {       
@@ -135,28 +135,13 @@ public class ElectroMagnetismView extends Group implements IExperimentView {
     }
     return new TextureRegion(texture);
   }
-
+  
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     // Advance n steps
     if (!isPaused ) {
-      emModel.simulateStep();
+      emModel.simulateSteps(1);
     }
     super.draw(batch, parentAlpha);
-  }
-
-  @Override
-  public void pause() {
-    this.isPaused = true;
-  }
-
-  @Override
-  public void resume() {
-    this.isPaused = false;
-  }
-
-  @Override
-  public boolean isPaused() {
-    return isPaused;
   }
 }

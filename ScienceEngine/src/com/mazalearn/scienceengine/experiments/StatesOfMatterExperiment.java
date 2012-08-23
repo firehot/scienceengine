@@ -1,52 +1,50 @@
 package com.mazalearn.scienceengine.experiments;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.Heating;
-import com.mazalearn.scienceengine.experiments.view.ColorPanel;
+import com.mazalearn.scienceengine.experiments.controller.Configurator;
+import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel;
+import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.HeatingLevel;
+import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.State;
+import com.mazalearn.scienceengine.experiments.model.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.experiments.view.StatesOfMatterView;
 
 /**
  * States of Matter iExperimentModel
  */
 public class StatesOfMatterExperiment extends Table {
-  private int temperatureLevel = 0;
+  private static final int N = 25; // Number of molecules
+  private static final int BOX_HEIGHT = 20;
+  private static final int BOX_WIDTH = 20;
+
+  private IMolecularModel statesOfMatterModel;
   private StatesOfMatterView statesOfMatterView;
-  Table buttonTable;
+  Configurator configurator;
   
   public StatesOfMatterExperiment(Skin skin) {
     super(skin);
-    buttonTable = new Table(skin);
+    statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
+    statesOfMatterModel.reset();
+    statesOfMatterView = new StatesOfMatterView(statesOfMatterModel, BOX_WIDTH, BOX_HEIGHT, N);
+    configurator = new Configurator(skin, statesOfMatterModel, statesOfMatterView);
+    
     if (ScienceEngine.DEV_MODE) {
       debug();
-      buttonTable.debug();
+      configurator.debug();
     }
-    // Row of buttons for the states
-    buttonTable.add(createStateButton(skin, "Solid", 0.2)).expand().fill();
-    buttonTable.add(createStateButton(skin, "Liqid", 0.95)).expand().fill();
-    buttonTable.add(createStateButton(skin, "Gas", 5)).expand().fill();
-    add(buttonTable).fill().colspan(3);   
-    row();
-    // Ceiling of box
-    add(new ColorPanel()).fill().colspan(3).height(10);
-    row();
-    // Sides and box
-    add(new ColorPanel()).fill().width(10);
-    statesOfMatterView = new StatesOfMatterView();
+
+    configurator.addSelect("State", new String[] {State.Solid.name(), State.Liquid.name(), State.Gas.name()});
+    configurator.addSelect("HeatingLevel", new String[] {HeatingLevel.Neutral.name(), HeatingLevel.Cold.name(), HeatingLevel.Hot.name()});
+
     add(statesOfMatterView).expand().fill();
-    add(new ColorPanel()).fill().width(10);
+    add(configurator).fill();
     row();
+    
+    /*
     // Floor of box - also controls heating.
     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
     pixmap.setColor(Color.LIGHT_GRAY);
@@ -75,7 +73,7 @@ public class StatesOfMatterExperiment extends Table {
       }
     });
     add(heatingControl).fill().colspan(3).height(30);
-    row();
+    row(); 
   }
 
   private TextButton createStateButton(Skin skin, String caption, 
@@ -84,9 +82,9 @@ public class StatesOfMatterExperiment extends Table {
     textButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        statesOfMatterView.setTemperature(temperature);
+        statesOfMatterModel.setTemperature(temperature);
       }
     });
-    return textButton;
+    return textButton;*/
   }
 }
