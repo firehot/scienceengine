@@ -4,6 +4,8 @@ package com.mazalearn.scienceengine.experiments.model.electromagnetism;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -35,11 +37,11 @@ public abstract class AbstractMagnet extends ScienceBody
     super();
     emField.registerProducer(this);
     
-    this.width = 64;
+    this.width = 32;
     this.height = 8;
     PolygonShape magnetShape = new PolygonShape();
     magnetShape.setAsBox(this.width, this.height);
-    this.createFixture(magnetShape, 1f);
+    this.createFixture(magnetShape, 1f /* density */);
 
     this.strength = 1.0;
     this.minStrength = 0.0; // couldn't be any weaker

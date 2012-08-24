@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.BarMagnet;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.EMField;
@@ -19,10 +21,12 @@ public class ElectroMagnetismModel implements IExperimentModel {
   Lightbulb lightbulb;
   EMField emField;
   private World box2DWorld;
+  private RevoluteJointDef jointDef = new RevoluteJointDef();
   private List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
   public enum Mode {Free, Rotate};
   
   private Mode mode = Mode.Rotate;
+  private Joint joint;
     
   public ElectroMagnetismModel() {    
     Vector2 gravity = new Vector2(0.0f, 0.0f);
@@ -63,9 +67,21 @@ public class ElectroMagnetismModel implements IExperimentModel {
 
   @Override
   public void reset() {
-    barMagnet.setPositionAndAngle(0, 12, 0);
+    barMagnet.setPositionAndAngle(-6, 8, 0);
     pickupCoil.setPositionAndAngle(11, -4, 0);
     lightbulb.setPositionAndAngle(23, 25, 0);
+    barMagnet.setLinearVelocity(Vector2.Zero);
+    barMagnet.setAngularVelocity(0);
+    if (joint != null) {
+      ScienceBody.getBox2DWorld().destroyJoint(joint);
+      joint = null;
+    }
+    if (mode == Mode.Rotate) {
+      Vector2 magnetCenter = new Vector2(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
+      jointDef.initialize(barMagnet.getBody(), ScienceBody.getGround(), 
+          barMagnet.getWorldPoint(magnetCenter));
+      joint = ScienceBody.getBox2DWorld().createJoint(jointDef);
+    }
   }
   
   public List<ScienceBody> getBodies() {
@@ -82,6 +98,7 @@ public class ElectroMagnetismModel implements IExperimentModel {
 
   public void setMode(String mode) {
     this.mode = Mode.valueOf(mode);
+    reset();
   }
 
 }

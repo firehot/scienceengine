@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel;
@@ -20,51 +18,47 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     private final ScienceBody body;
     private final ElectroMagnetismView emView;
     private final ElectroMagnetismModel emModel;
+    private Vector2 touchDownPos = new Vector2();
+    private Vector2 newPos = new Vector2();
     private BarMagnetView(TextureRegion textureRegion, ScienceBody body, 
         ElectroMagnetismView experimentView, ElectroMagnetismModel emModel) {
       super(body, textureRegion);
       this.body = body;
       this.emView = experimentView;
       this.emModel = emModel;
-      //this.originX = width / 2;
-      //this.originY = height / 2;
     }
 
     public boolean touchDown(float x, float y, int pointer) {
+      touchDownPos.set(x, y);
       return true;
     }
 
     public void touchDragged(float x, float y, int pointer) {
       if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
-      body.setPositionAndAngle(x/PIXELS_PER_M, y/PIXELS_PER_M, body.getAngle());
+      // New touch position
+      newPos.set(x, y);
+      // Subtract old touch position to get displacement vector
+      newPos.sub(touchDownPos);
+      // Add displacement vector to the actor position
+      newPos.add(this.x, this.y);
+      // Scale down from actor coords to body coords
+      newPos.mul(1f/PIXELS_PER_M);
+      // Move body to new position
+      body.setPositionAndAngle(newPos, body.getAngle());
       emView.resume();
     } 
     
     public void touchUp(float x, float y, int pointer) {
-      if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return; 
-      Vector2 newPos = new Vector2();
-      newPos.set(x / PIXELS_PER_M, y / PIXELS_PER_M);
-      newPos.sub(body.getPosition());
-      float angularVelocity = newPos.len();
-      body.setAngularVelocity(-angularVelocity);
+      if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return;
+      // new touch position
+      newPos.set(x, y);
+      // Subtract old touch position to get displacement vector
+      newPos.sub(touchDownPos);
+      // Scale displacement vector suitably to get a proportional force
+      newPos.mul(2000);
+      // Apply the force at point touched in world coords
+      body.applyForce(newPos, body.getWorldPoint(touchDownPos));
       emView.resume();
-    }
-   
-    @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-      this.x = body.getPosition().x * PIXELS_PER_M;
-      this.y = body.getPosition().y * PIXELS_PER_M;
-      if (body.getAngle() != 0) {
-        double angle = body.getAngle() * MathUtils.radiansToDegrees;
-        this.rotation = (float) (angle % 360);
-      }
-      batch.draw(getTextureRegion(), x - width/2, y - height/2, width/2, height/2, width, height, 1, 1, rotation);
-    }
-
-    @Override
-    public Actor hit(float x, float y) {
-      // x,y are in in actor's coordinates
-      return x > -width/2 && x < width/2 && y > -height/2 && y < height/2 ? this : null;
     }
   }
 

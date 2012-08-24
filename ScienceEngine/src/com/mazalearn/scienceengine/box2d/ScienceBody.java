@@ -25,6 +25,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public class ScienceBody implements IBody {
   // Must be set before using this class
   private static World box2DWorld;
+  // Ground body
+  private static Body GROUND;
   // Body instance to which methods are proxied
   Body body;
   // Used for temporary work
@@ -70,10 +72,19 @@ public class ScienceBody implements IBody {
 
   public static void setBox2DWorld(World box2DWorld) {
     ScienceBody.box2DWorld = box2DWorld;
+    ScienceBody.GROUND = box2DWorld.createBody(new BodyDef());
+  }
+  
+  public static Body getGround() {
+    return ScienceBody.GROUND;
   }
   
   public String getName() {
     return "ScienceBody";
+  }
+  
+  public Body getBody() {
+    return body;
   }
 
   //////////////////////////////////////////////////////////////////////////

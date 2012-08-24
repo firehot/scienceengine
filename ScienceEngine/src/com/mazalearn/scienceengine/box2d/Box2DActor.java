@@ -47,10 +47,7 @@ public class Box2DActor extends Actor {
   public void draw(SpriteBatch batch, float parentAlpha) {
     this.x = body.getPosition().x * PIXELS_PER_M;
     this.y = body.getPosition().y * PIXELS_PER_M;
-    if (body.getAngle() != 0) {
-      float angle = body.getAngle() * MathUtils.radiansToDegrees;
-      this.rotation = angle % 360;
-    }
+    this.rotation = (body.getAngle() * MathUtils.radiansToDegrees) % 360;
     batch.draw(textureRegion, x, y, 0, 0, width, height, 1, 1, rotation);
   }
 
