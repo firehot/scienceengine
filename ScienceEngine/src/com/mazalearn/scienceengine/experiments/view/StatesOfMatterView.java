@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel;
 
 /**
@@ -101,6 +102,10 @@ public class StatesOfMatterView extends AbstractExperimentView {
     super(molecularModel);
 
     layoutTable = new Table();
+    layoutTable.setFillParent(true);
+    if (ScienceEngine.DEV_MODE) {
+      layoutTable.debug();
+    }
     // Ceiling of box
     layoutTable.add(new ColorPanel()).fill().colspan(3).height(10);
     layoutTable.row();
@@ -108,6 +113,10 @@ public class StatesOfMatterView extends AbstractExperimentView {
     layoutTable.add(new ColorPanel()).fill().width(10);
     layoutTable.add(new MoleculeBox(molecularModel, N, boxWidth, boxHeight)).expand().fill();
     layoutTable.add(new ColorPanel()).fill().width(10);
+    layoutTable.row();
+    // Bottom of box
+    layoutTable.add(new ColorPanel()).fill().colspan(3).height(30); // ??? TODO why is this 30???
+    layoutTable.row();
     this.addActor(layoutTable);    
   }
 }

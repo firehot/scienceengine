@@ -10,16 +10,18 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.experiments.controller.AbstractConfig;
+import com.mazalearn.scienceengine.experiments.controller.IConfig.ConfigType;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.BarMagnet;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.EMField;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.Lightbulb;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.PickupCoil;
 
-public class ElectroMagnetismModel implements IExperimentModel {
-  BarMagnet barMagnet;
-  PickupCoil pickupCoil;
-  Lightbulb lightbulb;
-  EMField emField;
+public class ElectroMagnetismModel extends AbstractExperimentModel {
+  private BarMagnet barMagnet;
+  private PickupCoil pickupCoil;
+  private Lightbulb lightbulb;
+  private EMField emField;
   private World box2DWorld;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
   private List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
@@ -28,7 +30,7 @@ public class ElectroMagnetismModel implements IExperimentModel {
   private Mode mode = Mode.Rotate;
   private Joint joint;
     
-  public ElectroMagnetismModel() {    
+  public ElectroMagnetismModel() {   
     Vector2 gravity = new Vector2(0.0f, 0.0f);
     boolean doSleep = true;
     box2DWorld = new World(gravity, doSleep);
@@ -52,22 +54,29 @@ public class ElectroMagnetismModel implements IExperimentModel {
     bodies.add(pickupCoil);
     bodies.add(lightbulb);
     bodies.add(barMagnet);
+    
     reset();
   }
 
   @Override
-  public void simulateSteps(int n) {
-    for (int i =0; i < n; i++) {
-      float dt = 0.1f;
-      box2DWorld.step(dt, 3, 3);
-      emField.propagateField();
-      pickupCoil.singleStep(dt);
-    }
+  protected void initializeConfigs() {
+    configs.add(new AbstractConfig<String>(ConfigType.String, "Mode", "Mode of operation of magnet") {
+      public String getValue() { return getMode(); }
+      public void setValue(String value) { setMode(value); }
+    });
   }
 
   @Override
+  protected void singleStep() {
+    float dt = 0.1f;
+    box2DWorld.step(dt, 3, 3);
+    emField.propagateField();
+    pickupCoil.singleStep(dt);
+  }
+  
+  @Override
   public void reset() {
-    barMagnet.setPositionAndAngle(-6, 8, 0);
+    barMagnet.setPositionAndAngle(10, 12, 0);
     pickupCoil.setPositionAndAngle(11, -4, 0);
     lightbulb.setPositionAndAngle(23, 25, 0);
     barMagnet.setLinearVelocity(Vector2.Zero);
@@ -77,13 +86,12 @@ public class ElectroMagnetismModel implements IExperimentModel {
       joint = null;
     }
     if (mode == Mode.Rotate) {
-      Vector2 magnetCenter = new Vector2(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
       jointDef.initialize(barMagnet.getBody(), ScienceBody.getGround(), 
-          barMagnet.getWorldPoint(magnetCenter));
+          barMagnet.getWorldPoint(Vector2.Zero));
       joint = ScienceBody.getBox2DWorld().createJoint(jointDef);
     }
   }
-  
+
   public List<ScienceBody> getBodies() {
     return bodies;
   }

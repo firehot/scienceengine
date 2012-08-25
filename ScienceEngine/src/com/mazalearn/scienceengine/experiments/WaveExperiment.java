@@ -20,6 +20,7 @@ public class WaveExperiment extends Table {
   private static final int NUM_BALLS = 40;
   private static final int BALL_DIAMETER = 8;
 
+  @SuppressWarnings("unchecked")
   public WaveExperiment(TextureAtlas atlas, Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE) {
@@ -31,27 +32,23 @@ public class WaveExperiment extends Table {
     this.add(waveView).fill();
     Configurator configurator = new Configurator(skin, waveModel, waveView);
     this.add(configurator).width(30).fill();
-    configurator.addSelect("EndType", 
-        new String[] {EndType.FixedEnd.name(), EndType.LooseEnd.name(),
-        EndType.NoEnd.name()});
-    configurator.addSelect("GenMode", 
-        new String[] {GenMode.Oscillate.name(), GenMode.Pulse.name(), 
-        GenMode.Manual.name()});
-    configurator.addSlider("Tension", 1, 10);
-    configurator.addSlider("Damping", 0, 0.5f);
-    configurator.addSlider("PulseWidth", 5, 20).addCondition(new ICondition() {
+    configurator.addSelect(waveModel.getConfig("EndType"), EndType.values());
+    configurator.addSelect(waveModel.getConfig("GenMode"), GenMode.values());
+    configurator.addSlider(waveModel.getConfig("Tension"), 1, 10);
+    configurator.addSlider(waveModel.getConfig("Damping"), 0, 0.5f);
+    configurator.addSlider(waveModel.getConfig("PulseWidth"), 5, 20).addCondition(new ICondition() {
       @Override
       public boolean eval() {
         return waveModel.getGenMode() == "Pulse";
       }
     });
-    configurator.addSlider("Frequency", 0, 1).addCondition(new ICondition() {
+    configurator.addSlider(waveModel.getConfig("Frequency"), 0, 1).addCondition(new ICondition() {
       @Override
       public boolean eval() {
         return waveModel.getGenMode() == "Oscillate";
       }
     });;
-    configurator.addSlider("Amplitude", 0, 100).addCondition(new ICondition() {
+    configurator.addSlider(waveModel.getConfig("Amplitude"), 0, 100).addCondition(new ICondition() {
       @Override
       public boolean eval() {
         return waveModel.getGenMode() != "Manual";

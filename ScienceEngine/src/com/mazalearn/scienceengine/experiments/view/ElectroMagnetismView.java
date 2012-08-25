@@ -3,29 +3,37 @@ package com.mazalearn.scienceengine.experiments.view;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel;
 import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel.Mode;
 import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
+import com.mazalearn.scienceengine.experiments.model.electromagnetism.BarMagnet;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.Lightbulb;
 
 public class ElectroMagnetismView extends AbstractExperimentView {
   private static final class BarMagnetView extends Box2DActor {
-    private final ScienceBody body;
+    private final BarMagnet barMagnet;
     private final ElectroMagnetismView emView;
     private final ElectroMagnetismModel emModel;
+    private BitmapFont font;
     private Vector2 touchDownPos = new Vector2();
     private Vector2 newPos = new Vector2();
+    private TextureRegion textureRegion;
+    
     private BarMagnetView(TextureRegion textureRegion, ScienceBody body, 
         ElectroMagnetismView experimentView, ElectroMagnetismModel emModel) {
       super(body, textureRegion);
-      this.body = body;
+      this.barMagnet = (BarMagnet) body;
+      this.textureRegion = textureRegion;
       this.emView = experimentView;
       this.emModel = emModel;
+      this.font = new BitmapFont();
     }
 
     public boolean touchDown(float x, float y, int pointer) {
@@ -39,14 +47,16 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       newPos.set(x, y);
       // Subtract old touch position to get displacement vector
       newPos.sub(touchDownPos);
-      // Add displacement vector to the actor position
+      // Add displacement vector to the actor position to find new position
       newPos.add(this.x, this.y);
-      // Scale down from actor coords to body coords
+      // Find center of bar Magnet in new position
+      newPos.add(width/2, height/2);
+      // Scale down from actor coords to barMagnet coords
       newPos.mul(1f/PIXELS_PER_M);
-      // Move body to new position
-      body.setPositionAndAngle(newPos, body.getAngle());
+      // Move barMagnet to new position
+      barMagnet.setPositionAndAngle(newPos, barMagnet.getAngle());
       emView.resume();
-    } 
+    }
     
     public void touchUp(float x, float y, int pointer) {
       if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return;
@@ -57,9 +67,32 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       // Scale displacement vector suitably to get a proportional force
       newPos.mul(2000);
       // Apply the force at point touched in world coords
-      body.applyForce(newPos, body.getWorldPoint(touchDownPos));
+      touchDownPos.sub(width/2, height/2);
+      touchDownPos.mul(1f/PIXELS_PER_M);
+      barMagnet.applyForce(newPos, barMagnet.getWorldPoint(touchDownPos));
       emView.resume();
     }
+    
+    @Override
+    public void draw(SpriteBatch batch, float parentAlpha) {
+      // Find view position of left bottom corner of bar Magnet
+      newPos.set(-barMagnet.getWidth()/2, -barMagnet.getHeight()/2);
+      newPos.set(barMagnet.getWorldPoint(newPos));
+      newPos.mul(PIXELS_PER_M);
+      this.x = newPos.x;
+      this.y = newPos.y;
+      this.rotation = (barMagnet.getAngle() * MathUtils.radiansToDegrees) % 360;
+      batch.draw(textureRegion, x, y, 0, 0, width, height, 1, 1, rotation);
+
+      if (Mode.valueOf(emModel.getMode()) == Mode.Rotate) { // Display RPM
+        font.setColor(1f, 1f, 1f, parentAlpha);
+        String rpm = String.valueOf(Math.floor(barMagnet.getAngularVelocity()));
+        newPos.set(barMagnet.getWorldCenter());
+        newPos.mul(PIXELS_PER_M);
+        newPos.add(-10, 5);
+        font.draw(batch, rpm, newPos.x, newPos.y);
+      }
+    }   
   }
 
   private static final class LightbulbView extends Box2DActor {

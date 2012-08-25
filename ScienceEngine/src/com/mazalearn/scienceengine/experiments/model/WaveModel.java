@@ -1,8 +1,10 @@
 package com.mazalearn.scienceengine.experiments.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.experiments.controller.AbstractConfig;
+import com.mazalearn.scienceengine.experiments.controller.IConfig.ConfigType;
 
-public class WaveModel implements IExperimentModel {
+public class WaveModel extends AbstractExperimentModel {
   // Enum used for different Boundary Conditions on end of string
   public enum EndType { FixedEnd, LooseEnd, NoEnd };
   // Enum used for mode of wave generation
@@ -104,19 +106,17 @@ public class WaveModel implements IExperimentModel {
   }
   
   @Override
-  public void simulateSteps(int n) {
-    for (int i = 0; i < n; i++) {
-      simulatedTime++;
-      int frameCount = (int) (11 - tension);
-      if (simulatedTime % frameCount == 0) {
-        singleStep(balls[0].pos.y);
-      }
-      
-      switch(genMode) {
-        case Oscillate: balls[0].pos.y = (float) sinusoid(simulatedTime); break;
-        case Pulse: balls[0].pos.y = (float) pulse(simulatedTime); break;
-        case Manual: break;
-      }
+  public void singleStep() {
+    simulatedTime++;
+    int frameCount = (int) (11 - tension);
+    if (simulatedTime % frameCount == 0) {
+      singleStep(balls[0].pos.y);
+    }
+    
+    switch(genMode) {
+      case Oscillate: balls[0].pos.y = (float) sinusoid(simulatedTime); break;
+      case Pulse: balls[0].pos.y = (float) pulse(simulatedTime); break;
+      case Manual: break;
     }
   }
 
@@ -169,14 +169,6 @@ public class WaveModel implements IExperimentModel {
     this.beta = beta;
   }
 
-  public EndType getBoundaryCondition() {
-    return endType;
-  }
-
-  public void setBoundaryCondition(EndType endBC) {
-    this.endType = endBC;
-  }
-
   public float getPulseWidth() {
     return pulseWidth;
   }
@@ -213,4 +205,43 @@ public class WaveModel implements IExperimentModel {
       pulseStartTime = simulatedTime;
     }
   }
+
+  @Override
+  protected void initializeConfigs() {
+    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Frequency", "Frequency of Wave") {
+      public Float getValue() { return getFrequency(); }
+      public void setValue(Float value) { setFrequency(value); }
+    });
+
+    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Tension", "Tension in String") {
+      public Float getValue() { return getTension(); }
+      public void setValue(Float value) { setTension(value); }
+    });
+
+    configs.add(new AbstractConfig<Float>(ConfigType.Float, "PulseWidth", "Width of Pulse") {
+      public Float getValue() { return getPulseWidth(); }
+      public void setValue(Float value) { setPulseWidth(value); }
+    });
+
+    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Amplitude", "Amplitude of Wave") {
+      public Float getValue() { return getAmplitude(); }
+      public void setValue(Float value) { setAmplitude(value); }
+    });
+
+    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Damping", "Damping") {
+      public Float getValue() { return getDamping(); }
+      public void setValue(Float value) { setDamping(value); }
+    });
+
+     configs.add(new AbstractConfig<String>(ConfigType.Float, "GenMode", "How wave is generated") {
+      public String getValue() { return getGenMode(); }
+      public void setValue(String value) { setGenMode(value); }
+    });
+
+    configs.add(new AbstractConfig<String>(ConfigType.String, "EndType", "Other end boundary") {
+      public String getValue() { return getEndType(); }
+      public void setValue(String value) { setEndType(value); }
+    });
+  }
+  
 }

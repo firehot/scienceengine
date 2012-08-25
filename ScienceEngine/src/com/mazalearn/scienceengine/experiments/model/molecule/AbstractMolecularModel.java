@@ -1,9 +1,14 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
-public abstract class AbstractMolecularModel implements IMolecularModel {
+import com.mazalearn.scienceengine.experiments.controller.AbstractConfig;
+import com.mazalearn.scienceengine.experiments.controller.IConfig.ConfigType;
+import com.mazalearn.scienceengine.experiments.model.AbstractExperimentModel;
+
+public abstract class AbstractMolecularModel extends AbstractExperimentModel 
+    implements IMolecularModel {
 
   protected static final double WALL_STIFFNESS = 50.0;
-  protected static final double GRAVITY = -0.005;
+  protected static final double GRAVITY = -0.050;
   protected static final double WALL_DISTANCE_THRESHOLD = 1.122462048309373017;
   protected static final double MIN_DISTANCE = WALL_DISTANCE_THRESHOLD * 0.8;
   protected static final double MIN_DISTANCE_SQUARED = MIN_DISTANCE * MIN_DISTANCE;
@@ -108,6 +113,7 @@ public abstract class AbstractMolecularModel implements IMolecularModel {
     return simulatedTime;
   }
 
+  @Override
   public void simulateSteps(int n) {
     for (int i = 0; i < n; i++) {
       singleStep();
@@ -139,8 +145,8 @@ public abstract class AbstractMolecularModel implements IMolecularModel {
     return GRAVITY;
   }
 
-  private void singleStep() {
-  
+  @Override
+  protected void singleStep() {  
     // Scale velocities up or down
     // vi *= (2-0.999995); or vi *= 0.999995;
     // Update velocities half-way with old acceleration
@@ -225,4 +231,18 @@ public abstract class AbstractMolecularModel implements IMolecularModel {
   public void setHeatingLevel(String heating) {
     this.heatingLevel = HeatingLevel.valueOf(heating);
   }
+
+  @Override
+  protected void initializeConfigs() {
+    configs.add(new AbstractConfig<String>(ConfigType.String, "State", "State of Matter") {
+      public String getValue() { return getState(); }
+      public void setValue(String value) { setState(value); }
+    });
+
+    configs.add(new AbstractConfig<String>(ConfigType.String, "HeatingLevel", "Heat applied") {
+      public String getValue() { return getHeatingLevel(); }
+      public void setValue(String value) { setHeatingLevel(value); }
+    });
+  }
+
 }

@@ -1,9 +1,6 @@
 package com.mazalearn.scienceengine.experiments;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.controller.Configurator;
@@ -25,8 +22,10 @@ public class StatesOfMatterExperiment extends Table {
   private StatesOfMatterView statesOfMatterView;
   Configurator configurator;
   
+  @SuppressWarnings("unchecked")
   public StatesOfMatterExperiment(Skin skin) {
     super(skin);
+    this.setFillParent(true);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
     statesOfMatterView = new StatesOfMatterView(statesOfMatterModel, BOX_WIDTH, BOX_HEIGHT, N);
@@ -37,10 +36,12 @@ public class StatesOfMatterExperiment extends Table {
       configurator.debug();
     }
 
-    configurator.addSelect("State", new String[] {State.Solid.name(), State.Liquid.name(), State.Gas.name()});
-    configurator.addSelect("HeatingLevel", new String[] {HeatingLevel.Neutral.name(), HeatingLevel.Cold.name(), HeatingLevel.Hot.name()});
+    configurator.addSelect(statesOfMatterModel.getConfig("State"),
+        State.values());
+    configurator.addSelect(statesOfMatterModel.getConfig("HeatingLevel"), 
+        HeatingLevel.values());
 
-    add(statesOfMatterView).expand().fill();
+    add(statesOfMatterView).expand().fill(); // .width(100).height(200);
     add(configurator).fill();
     row();
     
