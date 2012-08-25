@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.screens;
 
-import java.util.Locale;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
@@ -111,6 +109,6 @@ public class OptionsScreen extends AbstractScreen {
    */
   private void updateVolumeLabel() {
     float volume = (game.getPreferencesManager().getVolume() * 100);
-    volumeValue.setText(String.format(Locale.US, "%1.0f%%", volume));
+    volumeValue.setText(String.valueOf(volume));
   }
 }
