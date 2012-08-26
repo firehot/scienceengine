@@ -8,9 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class ConfigSelectBox extends SelectBox implements IConfigElement {
   private final IConfig<String> property;
 
-  @SuppressWarnings("rawtypes")
-  public ConfigSelectBox(final IConfig<String> property, Enum[] e, Skin skin) {
-    super(getItems(e), skin);
+  public ConfigSelectBox(final IConfig<String> property, Skin skin) {
+    super(getItems(property), skin);
     this.property = property;
     syncWithModel();
     // Set value when slider changes
@@ -23,7 +22,8 @@ public class ConfigSelectBox extends SelectBox implements IConfigElement {
   }
 
   @SuppressWarnings("rawtypes")
-  protected static String[] getItems(Object[] e) {
+  protected static String[] getItems(IConfig<String> property) {
+    Object[] e = property.getEnums();
     String[] items = new String[e.length];
     for (int i = 0; i < e.length; i++) {
       items[i] = ((Enum) e[i]).name();

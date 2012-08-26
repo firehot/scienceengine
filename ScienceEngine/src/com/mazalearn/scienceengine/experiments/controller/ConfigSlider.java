@@ -10,8 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 public class ConfigSlider extends Slider implements IConfigElement {
   private final IConfig<Float> property;
   
-  public ConfigSlider(final IConfig<Float> property, float low, float high, Skin skin) {
-    super(low, high, (high - low)/10, skin);
+  public ConfigSlider(final IConfig<Float> property, Skin skin) {
+    super(property.getLow(), property.getHigh(), 
+        (property.getHigh() - property.getLow())/10, skin);
     this.property = property;
     syncWithModel();
     // Set value when slider changes

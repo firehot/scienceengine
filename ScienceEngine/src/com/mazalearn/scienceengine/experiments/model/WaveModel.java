@@ -208,40 +208,40 @@ public class WaveModel extends AbstractExperimentModel {
 
   @Override
   protected void initializeConfigs() {
-    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Frequency", "Frequency of Wave") {
+    configs.add(new AbstractConfig<Float>("Frequency", "Frequency of Wave", 0, 1) {
       public Float getValue() { return getFrequency(); }
       public void setValue(Float value) { setFrequency(value); }
       public boolean isAvailable() { return getGenMode() == "Oscillate";}
     });
 
-    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Tension", "Tension in String") {
+    configs.add(new AbstractConfig<Float>("Tension", "Tension in String", 1, 10) {
       public Float getValue() { return getTension(); }
       public void setValue(Float value) { setTension(value); }
     });
 
-    configs.add(new AbstractConfig<Float>(ConfigType.Float, "PulseWidth", "Width of Pulse") {
+    configs.add(new AbstractConfig<Float>("PulseWidth", "Width of Pulse", 5, 20) {
       public Float getValue() { return getPulseWidth(); }
       public void setValue(Float value) { setPulseWidth(value); }
       public boolean isAvailable() { return getGenMode() == "Pulse";}
     });
 
-    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Amplitude", "Amplitude of Wave") {
+    configs.add(new AbstractConfig<Float>("Amplitude", "Amplitude of Wave", 0, 100) {
       public Float getValue() { return getAmplitude(); }
       public void setValue(Float value) { setAmplitude(value); }
       public boolean isAvailable() { return getGenMode() != "Manual"; }
     });
 
-    configs.add(new AbstractConfig<Float>(ConfigType.Float, "Damping", "Damping") {
+    configs.add(new AbstractConfig<Float>("Damping", "Damping", 0, 0.5f) {
       public Float getValue() { return getDamping(); }
       public void setValue(Float value) { setDamping(value); }
     });
 
-     configs.add(new AbstractConfig<String>(ConfigType.Float, "GenMode", "How wave is generated") {
+     configs.add(new AbstractConfig<String>("GenMode", "How wave is generated", GenMode.values()) {
       public String getValue() { return getGenMode(); }
       public void setValue(String value) { setGenMode(value); }
     });
 
-    configs.add(new AbstractConfig<String>(ConfigType.String, "EndType", "Other end boundary") {
+    configs.add(new AbstractConfig<String>("EndType", "Other end boundary", EndType.values()) {
       public String getValue() { return getEndType(); }
       public void setValue(String value) { setEndType(value); }
     });

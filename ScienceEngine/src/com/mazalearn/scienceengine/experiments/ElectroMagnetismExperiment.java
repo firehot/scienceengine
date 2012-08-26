@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel;
-import com.mazalearn.scienceengine.experiments.model.ElectroMagnetismModel.Mode;
 import com.mazalearn.scienceengine.experiments.view.ElectroMagnetismView;
 
 /**
@@ -26,6 +25,6 @@ public class ElectroMagnetismExperiment extends Table {
     this.add(emView).fill();
     Configurator configurator = new Configurator(skin, emModel, emView);
     this.add(configurator).width(30).fill();
-    configurator.addSelect(emModel.getConfig("Mode"), Mode.values());
+    configurator.addSelect(emModel.getConfig("Mode"));
   }
 }

@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.controller.IConfig.ConfigType;
 import com.mazalearn.scienceengine.experiments.model.IExperimentModel;
 import com.mazalearn.scienceengine.experiments.view.IExperimentView;
 import com.mazalearn.scienceengine.screens.StartScreen;
@@ -55,7 +54,7 @@ public class Configurator extends Table {
     });
     this.add(pauseResumeButton);
     // Add reset functionality for the experiment
-    addButton(new AbstractConfig<String>(ConfigType.Command, "Reset", "Reset to initial conditions") {
+    addButton(new AbstractConfig<String>("Reset", "Reset to initial conditions") {
       public void doCommand() { iExperimentModel.reset(); }
     });
     row();
@@ -71,11 +70,11 @@ public class Configurator extends Table {
     return config;
   }
   
-  public Config addSlider(IConfig<Float> property, float low, float high) {
+  public Config addSlider(IConfig<Float> property) {
     Table table = new Table(skin);
     table.add(property.getName());
     table.row();
-    ConfigSlider configSlider =  new ConfigSlider(property, low, high, skin);
+    ConfigSlider configSlider = new ConfigSlider(property, skin);
     table.add(configSlider);
     this.add(table); this.row();
     Config config = new Config(table, configSlider);
@@ -83,10 +82,9 @@ public class Configurator extends Table {
     return config;
   }
 
-  @SuppressWarnings("rawtypes")
-  public Config addSelect(IConfig<String> property, Enum[] items) {
+  public Config addSelect(IConfig<String> property) {
     Table table = new Table(skin);
-    ConfigSelectBox configSelectBox = new ConfigSelectBox(property, items, skin);
+    ConfigSelectBox configSelectBox = new ConfigSelectBox(property, skin);
     table.add(configSelectBox);
     this.add(table); this.row();
     Config config = new Config(table, configSelectBox);

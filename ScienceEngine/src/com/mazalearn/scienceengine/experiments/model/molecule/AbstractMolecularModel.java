@@ -234,12 +234,12 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
 
   @Override
   protected void initializeConfigs() {
-    configs.add(new AbstractConfig<String>(ConfigType.String, "State", "State of Matter") {
+    configs.add(new AbstractConfig<String>("State", "State of Matter", State.values()) {
       public String getValue() { return getState(); }
       public void setValue(String value) { setState(value); }
     });
 
-    configs.add(new AbstractConfig<String>(ConfigType.String, "HeatingLevel", "Heat applied") {
+    configs.add(new AbstractConfig<String>("HeatingLevel", "Heat applied", HeatingLevel.values()) {
       public String getValue() { return getHeatingLevel(); }
       public void setValue(String value) { setHeatingLevel(value); }
     });

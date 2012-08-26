@@ -5,8 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel;
-import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.HeatingLevel;
-import com.mazalearn.scienceengine.experiments.model.molecule.IMolecularModel.State;
 import com.mazalearn.scienceengine.experiments.model.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.experiments.view.StatesOfMatterView;
 
@@ -36,10 +34,8 @@ public class StatesOfMatterExperiment extends Table {
       configurator.debug();
     }
 
-    configurator.addSelect(statesOfMatterModel.getConfig("State"),
-        State.values());
-    configurator.addSelect(statesOfMatterModel.getConfig("HeatingLevel"), 
-        HeatingLevel.values());
+    configurator.addSelect(statesOfMatterModel.getConfig("State"));
+    configurator.addSelect(statesOfMatterModel.getConfig("HeatingLevel"));
 
     add(statesOfMatterView).expand().fill(); // .width(100).height(200);
     add(configurator).fill();

@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.model.WaveModel;
-import com.mazalearn.scienceengine.experiments.model.WaveModel.EndType;
-import com.mazalearn.scienceengine.experiments.model.WaveModel.GenMode;
 import com.mazalearn.scienceengine.experiments.view.WaveView;
 
 /**
@@ -31,13 +29,13 @@ public class WaveExperiment extends Table {
     this.add(waveView).fill();
     Configurator configurator = new Configurator(skin, waveModel, waveView);
     this.add(configurator).width(30).fill();
-    configurator.addSelect(waveModel.getConfig("EndType"), EndType.values());
-    configurator.addSelect(waveModel.getConfig("GenMode"), GenMode.values());
-    configurator.addSlider(waveModel.getConfig("Tension"), 1, 10);
-    configurator.addSlider(waveModel.getConfig("Damping"), 0, 0.5f);
-    configurator.addSlider(waveModel.getConfig("PulseWidth"), 5, 20);
-    configurator.addSlider(waveModel.getConfig("Frequency"), 0, 1);
-    configurator.addSlider(waveModel.getConfig("Amplitude"), 0, 100);
+    configurator.addSelect(waveModel.getConfig("EndType"));
+    configurator.addSelect(waveModel.getConfig("GenMode"));
+    configurator.addSlider(waveModel.getConfig("Tension"));
+    configurator.addSlider(waveModel.getConfig("Damping"));
+    configurator.addSlider(waveModel.getConfig("PulseWidth"));
+    configurator.addSlider(waveModel.getConfig("Frequency"));
+    configurator.addSlider(waveModel.getConfig("Amplitude"));
   }
 
 }
