@@ -6,10 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class ConfigSelectBox extends SelectBox implements IConfigElement {
-  final IConfig<String> property;
+  private final IConfig<String> property;
 
   @SuppressWarnings("rawtypes")
-  public ConfigSelectBox(IConfig<String> property, Enum[] e, Skin skin) {
+  public ConfigSelectBox(final IConfig<String> property, Enum[] e, Skin skin) {
     super(getItems(e), skin);
     this.property = property;
     syncWithModel();
@@ -17,7 +17,7 @@ public class ConfigSelectBox extends SelectBox implements IConfigElement {
     setSelectionListener(new SelectionListener() {
       @Override
       public void selected(Actor actor, int index, String value) {
-        setVal(value);
+        property.setValue(value);
       }      
     });
   }
@@ -31,11 +31,11 @@ public class ConfigSelectBox extends SelectBox implements IConfigElement {
     return items;
   }
   
-  String getVal() { return property.getValue(); }
-  
-  void setVal(String value) { property.setValue(value); }
-  
   public void syncWithModel() {
-    setSelection(getVal());
+    setSelection(property.getValue());
+  }
+  
+  public boolean isAvailable() {
+    return property.isAvailable();
   }
 }

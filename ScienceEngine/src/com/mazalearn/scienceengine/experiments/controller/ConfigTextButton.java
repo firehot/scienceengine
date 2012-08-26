@@ -11,8 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  */
 public class ConfigTextButton extends TextButton implements IConfigElement {
   @SuppressWarnings("rawtypes")
+  private final IConfig command;
+  @SuppressWarnings("rawtypes")
   public ConfigTextButton(final IConfig command, final Skin skin) {
     super(command.getName(), skin);
+    this.command = command;
     this.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
@@ -23,5 +26,9 @@ public class ConfigTextButton extends TextButton implements IConfigElement {
 
   @Override
   public void syncWithModel() {
+  }
+  
+  public boolean isAvailable() {
+    return command.isAvailable();
   }
 }

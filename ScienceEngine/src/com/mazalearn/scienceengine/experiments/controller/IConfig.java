@@ -9,4 +9,6 @@ public interface IConfig<T> {
   public T getValue();
   public void setValue(T value);
   public void doCommand(); // Only for Command type
+  // Is this configuration hook available with current configs?
+  public boolean isAvailable();
 }

@@ -17,4 +17,5 @@ public abstract class AbstractConfig<T> implements IConfig<T> {
   public T getValue() { return null; }
   public void setValue(T value) {}
   public void doCommand() {}
+  public boolean isAvailable() { return true;}
 }

@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
  *
  */
 public class ConfigSlider extends Slider implements IConfigElement {
-  final IConfig<Float> property;
+  private final IConfig<Float> property;
   
-  public ConfigSlider(IConfig<Float> property, float low, float high, Skin skin) {
+  public ConfigSlider(final IConfig<Float> property, float low, float high, Skin skin) {
     super(low, high, (high - low)/10, skin);
     this.property = property;
     syncWithModel();
@@ -18,17 +18,17 @@ public class ConfigSlider extends Slider implements IConfigElement {
     setValueChangedListener(new ValueChangedListener() {
       @Override
       public void changed(Slider slider, float value) {
-        setVal(value);
+        property.setValue(value);
       }      
     });
   }
   
-  float getVal() { return property.getValue(); }
-
-  void setVal(float value) { property.setValue(value); }
-
   @Override
   public void syncWithModel() {
-    this.setValue(getVal());
+    this.setValue(property.getValue());
+  }
+ 
+  public boolean isAvailable() {
+    return property.isAvailable();
   }
 }

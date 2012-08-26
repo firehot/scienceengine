@@ -211,6 +211,7 @@ public class WaveModel extends AbstractExperimentModel {
     configs.add(new AbstractConfig<Float>(ConfigType.Float, "Frequency", "Frequency of Wave") {
       public Float getValue() { return getFrequency(); }
       public void setValue(Float value) { setFrequency(value); }
+      public boolean isAvailable() { return getGenMode() == "Oscillate";}
     });
 
     configs.add(new AbstractConfig<Float>(ConfigType.Float, "Tension", "Tension in String") {
@@ -221,11 +222,13 @@ public class WaveModel extends AbstractExperimentModel {
     configs.add(new AbstractConfig<Float>(ConfigType.Float, "PulseWidth", "Width of Pulse") {
       public Float getValue() { return getPulseWidth(); }
       public void setValue(Float value) { setPulseWidth(value); }
+      public boolean isAvailable() { return getGenMode() == "Pulse";}
     });
 
     configs.add(new AbstractConfig<Float>(ConfigType.Float, "Amplitude", "Amplitude of Wave") {
       public Float getValue() { return getAmplitude(); }
       public void setValue(Float value) { setAmplitude(value); }
+      public boolean isAvailable() { return getGenMode() != "Manual"; }
     });
 
     configs.add(new AbstractConfig<Float>(ConfigType.Float, "Damping", "Damping") {

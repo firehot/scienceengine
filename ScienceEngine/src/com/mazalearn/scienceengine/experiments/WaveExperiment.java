@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.controller.ICondition;
 import com.mazalearn.scienceengine.experiments.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.model.WaveModel;
 import com.mazalearn.scienceengine.experiments.model.WaveModel.EndType;
@@ -36,24 +35,9 @@ public class WaveExperiment extends Table {
     configurator.addSelect(waveModel.getConfig("GenMode"), GenMode.values());
     configurator.addSlider(waveModel.getConfig("Tension"), 1, 10);
     configurator.addSlider(waveModel.getConfig("Damping"), 0, 0.5f);
-    configurator.addSlider(waveModel.getConfig("PulseWidth"), 5, 20).addCondition(new ICondition() {
-      @Override
-      public boolean eval() {
-        return waveModel.getGenMode() == "Pulse";
-      }
-    });
-    configurator.addSlider(waveModel.getConfig("Frequency"), 0, 1).addCondition(new ICondition() {
-      @Override
-      public boolean eval() {
-        return waveModel.getGenMode() == "Oscillate";
-      }
-    });;
-    configurator.addSlider(waveModel.getConfig("Amplitude"), 0, 100).addCondition(new ICondition() {
-      @Override
-      public boolean eval() {
-        return waveModel.getGenMode() != "Manual";
-      }
-    });;
+    configurator.addSlider(waveModel.getConfig("PulseWidth"), 5, 20);
+    configurator.addSlider(waveModel.getConfig("Frequency"), 0, 1);
+    configurator.addSlider(waveModel.getConfig("Amplitude"), 0, 100);
   }
 
 }
