@@ -62,10 +62,10 @@ public class Configurator extends Table {
   
   public Config addButton(IModelConfig<String> command) {
     Table table = new Table(skin);
-    ConfigTextButton configTextButton = new ConfigTextButton(command, skin);
-    table.add(configTextButton);
+    IViewConfig viewConfig = new ConfigTextButton(command, skin);
+    table.add(viewConfig.getActor());
     this.add(table); this.row();
-    Config config = new Config(table, configTextButton);
+    Config config = new Config(table, viewConfig);
     this.configs.add(config);
     return config;
   }
@@ -74,20 +74,20 @@ public class Configurator extends Table {
     Table table = new Table(skin);
     table.add(property.getName());
     table.row();
-    ConfigSlider configSlider = new ConfigSlider(property, skin);
-    table.add(configSlider);
+    IViewConfig viewConfig = new ConfigSlider(property, skin);
+    table.add(viewConfig.getActor());
     this.add(table); this.row();
-    Config config = new Config(table, configSlider);
+    Config config = new Config(table, viewConfig);
     this.configs.add(config);
     return config;
   }
 
   public Config addSelect(IModelConfig<String> property) {
     Table table = new Table(skin);
-    ConfigSelectBox configSelectBox = new ConfigSelectBox(property, skin);
-    table.add(configSelectBox);
+    IViewConfig viewConfig = new ConfigSelectBox(property, skin);
+    table.add(viewConfig.getActor());
     this.add(table); this.row();
-    Config config = new Config(table, configSelectBox);
+    Config config = new Config(table, viewConfig);
     this.configs.add(config);
     return config;
   }

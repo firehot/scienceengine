@@ -5,15 +5,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class ConfigSelectBox extends SelectBox implements IViewConfig {
+public class ConfigSelectBox implements IViewConfig {
   private final IModelConfig<String> property;
+  private final SelectBox selectBox;
 
   public ConfigSelectBox(final IModelConfig<String> property, Skin skin) {
-    super(getItems(property), skin);
+    this.selectBox = new SelectBox (getItems(property), skin);
     this.property = property;
     syncWithModel();
     // Set value when slider changes
-    setSelectionListener(new SelectionListener() {
+    selectBox.setSelectionListener(new SelectionListener() {
       @Override
       public void selected(Actor actor, int index, String value) {
         property.setValue(value);
@@ -32,10 +33,15 @@ public class ConfigSelectBox extends SelectBox implements IViewConfig {
   }
   
   public void syncWithModel() {
-    setSelection(property.getValue());
+    selectBox.setSelection(property.getValue());
   }
   
   public boolean isAvailable() {
     return property.isAvailable();
+  }
+
+  @Override
+  public Actor getActor() {
+    return selectBox;
   }
 }

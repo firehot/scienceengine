@@ -1,22 +1,25 @@
 package com.mazalearn.scienceengine.experiments.controller;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
 
 /**
  * Utility class for iExperimentModel floating point sliders using reflection.
  *
  */
-public class ConfigSlider extends Slider implements IViewConfig {
+public class ConfigSlider implements IViewConfig {
   private final IModelConfig<Float> property;
+  private final Slider slider;
   
   public ConfigSlider(final IModelConfig<Float> property, Skin skin) {
-    super(property.getLow(), property.getHigh(), 
+    this.slider = new Slider(property.getLow(), property.getHigh(), 
         (property.getHigh() - property.getLow())/10, skin);
     this.property = property;
     syncWithModel();
     // Set value when slider changes
-    setValueChangedListener(new ValueChangedListener() {
+    slider.setValueChangedListener(new ValueChangedListener() {
       @Override
       public void changed(Slider slider, float value) {
         property.setValue(value);
@@ -26,10 +29,15 @@ public class ConfigSlider extends Slider implements IViewConfig {
   
   @Override
   public void syncWithModel() {
-    this.setValue(property.getValue());
+    slider.setValue(property.getValue());
   }
  
   public boolean isAvailable() {
     return property.isAvailable();
+  }
+
+  @Override
+  public Actor getActor() {
+    return slider;
   }
 }
