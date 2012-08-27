@@ -1,7 +1,7 @@
 package com.mazalearn.scienceengine.experiments.controller;
 
 public interface IModelConfig<T> {
-  enum ConfigType { Float, String, Command };
+  enum ConfigType { RANGE, LIST, COMMAND };
   
   public ConfigType getType();
   public String getName();
@@ -9,15 +9,15 @@ public interface IModelConfig<T> {
   // Is this configuration hook available with current modelConfigs?
   public boolean isAvailable();
 
-  // Only for Command type
+  // Only for COMMAND type
   public void doCommand();
-  // get and set only for Float, String types
+  // get and set only for RANGE, LIST types
   public T getValue();
   public void setValue(T value);
-  // low, high only for Float type
+  // low, high only for RANGE type
   public float getLow();
   public float getHigh();
-  // enums only for String type
+  // enums only for LIST type
   @SuppressWarnings("rawtypes")
   public Enum[] getEnums();
 }

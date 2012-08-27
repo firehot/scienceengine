@@ -9,7 +9,7 @@ public class WaveModel extends AbstractExperimentModel {
   // Enum used for mode of wave generation
   public enum GenMode { Oscillate, Pulse, Manual};
 
-  // Ball is a segment of the String used to display waves.
+  // Ball is a segment of the LIST used to display waves.
   public static class Ball {
     public Vector2 pos;
     float nextY;
@@ -223,7 +223,7 @@ public class WaveModel extends AbstractExperimentModel {
       public boolean isAvailable() { return getGenMode() == "Oscillate";}
     });
 
-    modelConfigs.add(new AbstractModelConfig<Float>("Tension", "Tension in String", 1, 10) {
+    modelConfigs.add(new AbstractModelConfig<Float>("Tension", "Tension in LIST", 1, 10) {
       public Float getValue() { return getTension(); }
       public void setValue(Float value) { setTension(value); }
     });

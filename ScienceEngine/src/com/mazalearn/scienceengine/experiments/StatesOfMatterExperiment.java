@@ -68,7 +68,7 @@ public class StatesOfMatterExperiment extends Table {
     row(); 
   }
 
-  private TextButton createStateButton(Skin skin, String caption, 
+  private TextButton createStateButton(Skin skin, LIST caption, 
       final double temperature) {
     TextButton textButton = new TextButton(caption, skin);
     textButton.setClickListener(new ClickListener() {

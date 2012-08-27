@@ -10,16 +10,16 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   private Enum[] values;
   
   public AbstractModelConfig(String name, String description) {
-    this(ConfigType.Command, name, description, 0, 0, null);
+    this(ConfigType.COMMAND, name, description, 0, 0, null);
   }
   
   public AbstractModelConfig(String name, String description, float low, float high) {
-    this(ConfigType.Float, name, description, low, high, null);
+    this(ConfigType.RANGE, name, description, low, high, null);
   }
   
   @SuppressWarnings("rawtypes")
   public AbstractModelConfig(String name, String description, Enum[] values) {
-    this(ConfigType.String, name, description, 0, 0, values);
+    this(ConfigType.LIST, name, description, 0, 0, values);
   }
     
   @SuppressWarnings("rawtypes")

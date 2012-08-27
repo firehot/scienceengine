@@ -71,9 +71,11 @@ public class Configurator extends Table {
     this.add(pauseResumeButton);
     
     // Add reset functionality for the experiment
-    createViewConfig(new AbstractModelConfig<String>("Reset", "Reset to initial conditions") {
-      public void doCommand() { experimentModel.reset(); }
-    });
+    AbstractModelConfig<String> resetConfig = 
+        new AbstractModelConfig<String>("Reset", "Reset to initial state") {
+          public void doCommand() { experimentModel.reset(); }
+    };
+    this.configs.add(createViewConfig(resetConfig));
     row();
   }
   
@@ -82,23 +84,21 @@ public class Configurator extends Table {
     Table table = new Table(skin);
     IViewConfig viewConfig = null;
     switch(property.getType()) {
-      case Float: 
+      case RANGE: 
         table.add(property.getName());
         table.row();
         viewConfig = new ConfigSlider(property, skin);
         break;
-      case String:
+      case LIST:
         viewConfig = new ConfigSelectBox(property, skin);
         break;
-      case Command:
+      case COMMAND:
         viewConfig = new ConfigTextButton(property, skin);
         break;
     }
     table.add(viewConfig.getActor());
     this.add(table); this.row();
-    Config config = new Config(table, viewConfig);
-    this.configs.add(config);
-    return config;
+    return new Config(table, viewConfig);
   }
 
   @Override
