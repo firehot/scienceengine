@@ -1,8 +1,7 @@
 package com.mazalearn.scienceengine.experiments.model;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mazalearn.scienceengine.experiments.controller.AbstractConfig;
-import com.mazalearn.scienceengine.experiments.controller.IModelConfig.ConfigType;
+import com.mazalearn.scienceengine.experiments.controller.AbstractModelConfig;
 
 public class WaveModel extends AbstractExperimentModel {
   // Enum used for different Boundary Conditions on end of string
@@ -208,42 +207,42 @@ public class WaveModel extends AbstractExperimentModel {
 
   @Override
   protected void initializeConfigs() {
-    modelConfigs.add(new AbstractConfig<Float>("Frequency", "Frequency of Wave", 0, 1) {
+    modelConfigs.add(new AbstractModelConfig<String>("GenMode", "How wave is generated", GenMode.values()) {
+     public String getValue() { return getGenMode(); }
+     public void setValue(String value) { setGenMode(value); }
+   });
+
+   modelConfigs.add(new AbstractModelConfig<String>("EndType", "Other end boundary", EndType.values()) {
+     public String getValue() { return getEndType(); }
+     public void setValue(String value) { setEndType(value); }
+   });
+
+   modelConfigs.add(new AbstractModelConfig<Float>("Frequency", "Frequency of Wave", 0, 1) {
       public Float getValue() { return getFrequency(); }
       public void setValue(Float value) { setFrequency(value); }
       public boolean isAvailable() { return getGenMode() == "Oscillate";}
     });
 
-    modelConfigs.add(new AbstractConfig<Float>("Tension", "Tension in String", 1, 10) {
+    modelConfigs.add(new AbstractModelConfig<Float>("Tension", "Tension in String", 1, 10) {
       public Float getValue() { return getTension(); }
       public void setValue(Float value) { setTension(value); }
     });
 
-    modelConfigs.add(new AbstractConfig<Float>("PulseWidth", "Width of Pulse", 5, 20) {
+    modelConfigs.add(new AbstractModelConfig<Float>("PulseWidth", "Width of Pulse", 5, 20) {
       public Float getValue() { return getPulseWidth(); }
       public void setValue(Float value) { setPulseWidth(value); }
       public boolean isAvailable() { return getGenMode() == "Pulse";}
     });
 
-    modelConfigs.add(new AbstractConfig<Float>("Amplitude", "Amplitude of Wave", 0, 100) {
+    modelConfigs.add(new AbstractModelConfig<Float>("Amplitude", "Amplitude of Wave", 0, 100) {
       public Float getValue() { return getAmplitude(); }
       public void setValue(Float value) { setAmplitude(value); }
       public boolean isAvailable() { return getGenMode() != "Manual"; }
     });
 
-    modelConfigs.add(new AbstractConfig<Float>("Damping", "Damping", 0, 0.5f) {
+    modelConfigs.add(new AbstractModelConfig<Float>("Damping", "Damping", 0, 0.5f) {
       public Float getValue() { return getDamping(); }
       public void setValue(Float value) { setDamping(value); }
-    });
-
-     modelConfigs.add(new AbstractConfig<String>("GenMode", "How wave is generated", GenMode.values()) {
-      public String getValue() { return getGenMode(); }
-      public void setValue(String value) { setGenMode(value); }
-    });
-
-    modelConfigs.add(new AbstractConfig<String>("EndType", "Other end boundary", EndType.values()) {
-      public String getValue() { return getEndType(); }
-      public void setValue(String value) { setEndType(value); }
     });
   }
   

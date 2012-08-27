@@ -9,7 +9,7 @@ import com.mazalearn.scienceengine.experiments.model.molecule.LJMolecularModel;
 import com.mazalearn.scienceengine.experiments.view.StatesOfMatterView;
 
 /**
- * States of Matter iExperimentModel
+ * States of Matter experimentModel
  */
 public class StatesOfMatterExperiment extends Table {
   private static final int N = 25; // Number of molecules
@@ -20,7 +20,6 @@ public class StatesOfMatterExperiment extends Table {
   private StatesOfMatterView statesOfMatterView;
   Configurator configurator;
   
-  @SuppressWarnings("unchecked")
   public StatesOfMatterExperiment(Skin skin) {
     super(skin);
     this.setFillParent(true);
@@ -33,10 +32,6 @@ public class StatesOfMatterExperiment extends Table {
       debug();
       configurator.debug();
     }
-
-    configurator.addSelect(statesOfMatterModel.getConfig("State"));
-    configurator.addSelect(statesOfMatterModel.getConfig("HeatingLevel"));
-
     add(statesOfMatterView).expand().fill(); // .width(100).height(200);
     add(configurator).fill();
     row();

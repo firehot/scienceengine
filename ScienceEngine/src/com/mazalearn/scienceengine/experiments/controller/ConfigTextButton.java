@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /**
- * Utility class for iExperimentModel action buttons using reflection.
+ * Utility class for experimentModel action buttons using reflection.
  *
  */
 public class ConfigTextButton implements IViewConfig {

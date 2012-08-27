@@ -10,14 +10,13 @@ import com.mazalearn.scienceengine.experiments.model.WaveModel;
 import com.mazalearn.scienceengine.experiments.view.WaveView;
 
 /**
- * Wave Motion iExperimentModel
+ * Wave Motion experimentModel
  */
 public class WaveExperiment extends Table {
   
   private static final int NUM_BALLS = 40;
   private static final int BALL_DIAMETER = 8;
 
-  @SuppressWarnings("unchecked")
   public WaveExperiment(TextureAtlas atlas, Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE) {
@@ -29,13 +28,6 @@ public class WaveExperiment extends Table {
     this.add(waveView).fill();
     Configurator configurator = new Configurator(skin, waveModel, waveView);
     this.add(configurator).width(30).fill();
-    configurator.addSelect(waveModel.getConfig("EndType"));
-    configurator.addSelect(waveModel.getConfig("GenMode"));
-    configurator.addSlider(waveModel.getConfig("Tension"));
-    configurator.addSlider(waveModel.getConfig("Damping"));
-    configurator.addSlider(waveModel.getConfig("PulseWidth"));
-    configurator.addSlider(waveModel.getConfig("Frequency"));
-    configurator.addSlider(waveModel.getConfig("Amplitude"));
   }
 
 }

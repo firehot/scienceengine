@@ -28,7 +28,7 @@ public class ExperimentScreen extends AbstractScreen {
     table.add(experimentName).spaceBottom(10);
     table.row();
     
-    // Add States of Matter iExperimentModel to table
+    // Add States of Matter experimentModel to table
     Actor experiment = null;
     if (experimentName == "States of Matter") {
       experiment = new StatesOfMatterExperiment(getSkin());

@@ -1,26 +1,29 @@
 package com.mazalearn.scienceengine.experiments.controller;
 
-public abstract class AbstractConfig<T> implements IModelConfig<T> {
+public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   
   private final ConfigType type;
   private final String name;
   private final String description;
   private final float low, high;
+  @SuppressWarnings("rawtypes")
   private Enum[] values;
   
-  public AbstractConfig(String name, String description) {
+  public AbstractModelConfig(String name, String description) {
     this(ConfigType.Command, name, description, 0, 0, null);
   }
   
-  public AbstractConfig(String name, String description, float low, float high) {
+  public AbstractModelConfig(String name, String description, float low, float high) {
     this(ConfigType.Float, name, description, low, high, null);
   }
   
-  public AbstractConfig(String name, String description, Enum[] values) {
+  @SuppressWarnings("rawtypes")
+  public AbstractModelConfig(String name, String description, Enum[] values) {
     this(ConfigType.String, name, description, 0, 0, values);
   }
     
-  public AbstractConfig(ConfigType type, String name, String description, 
+  @SuppressWarnings("rawtypes")
+  public AbstractModelConfig(ConfigType type, String name, String description, 
       float low, float high, Enum[] values) {
     this.type = type;
     this.name = name;

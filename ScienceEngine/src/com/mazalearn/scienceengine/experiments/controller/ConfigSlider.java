@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
 
 /**
- * Utility class for iExperimentModel floating point sliders using reflection.
+ * Utility class for experimentModel floating point sliders using reflection.
  *
  */
 public class ConfigSlider implements IViewConfig {

@@ -13,6 +13,6 @@ public class Config {
 
   void validate() {
     viewConfig.syncWithModel();
-    table.visible = viewConfig.isAvailable();
+    table.visible = viewConfig.isAvailable();    
   }
 }

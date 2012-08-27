@@ -13,7 +13,6 @@ import com.mazalearn.scienceengine.experiments.view.ElectroMagnetismView;
  */
 public class ElectroMagnetismExperiment extends Table {
   
-  @SuppressWarnings("unchecked")
   public ElectroMagnetismExperiment(Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE) {
@@ -25,6 +24,5 @@ public class ElectroMagnetismExperiment extends Table {
     this.add(emView).fill();
     Configurator configurator = new Configurator(skin, emModel, emView);
     this.add(configurator).width(30).fill();
-    configurator.addSelect(emModel.getConfig("Mode"));
   }
 }

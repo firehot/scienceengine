@@ -16,18 +16,33 @@ import com.mazalearn.scienceengine.screens.StartScreen;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 
 public class Configurator extends Table {
-  final IExperimentModel iExperimentModel;
-  final IExperimentView iExperimentView;
+  final IExperimentModel experimentModel;
+  final IExperimentView experimentView;
   final Skin skin;
   List<Config> configs;
   
-  public Configurator(Skin skin, final IExperimentModel iExperimentModel, 
-      final IExperimentView iExperimentView) {
+  public Configurator(Skin skin, final IExperimentModel experimentModel, 
+      final IExperimentView experimentView) {
     super(skin);
     this.skin = skin;
-    this.iExperimentModel = iExperimentModel;
-    this.iExperimentView = iExperimentView;
+    this.experimentModel = experimentModel;
+    this.experimentView = experimentView;
     this.configs = new ArrayList<Config>();
+    registerStandardButtons(skin, experimentModel, experimentView);
+    registerModelConfigs(experimentModel);    
+  }
+
+  @SuppressWarnings("rawtypes")
+  protected void registerModelConfigs(final IExperimentModel experimentModel) {
+    // Register all model configs
+    for (IModelConfig modelConfig: experimentModel.getConfigs()) {
+      this.configs.add(createViewConfig(modelConfig));
+    }
+  }
+
+  protected void registerStandardButtons(Skin skin,
+      final IExperimentModel experimentModel,
+      final IExperimentView experimentView) {
     // register the back button
     TextButton backButton = new TextButton("Back to Start", skin);
     backButton.setClickListener(new ClickListener() {
@@ -38,43 +53,47 @@ public class Configurator extends Table {
     });
     add(backButton).height(30).colspan(2);
     row();
+    
     // Add pause/resume functionality for the experiment
     final TextButton pauseResumeButton = new TextButton("Pause", skin);
     pauseResumeButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        if (iExperimentView.isPaused()) {
+        if (experimentView.isPaused()) {
           pauseResumeButton.setText("Pause");
-          iExperimentView.resume();
+          experimentView.resume();
         } else {
           pauseResumeButton.setText("Resume");
-          iExperimentView.pause();
+          experimentView.pause();
         }
       }
     });
     this.add(pauseResumeButton);
+    
     // Add reset functionality for the experiment
-    addButton(new AbstractConfig<String>("Reset", "Reset to initial conditions") {
-      public void doCommand() { iExperimentModel.reset(); }
+    createViewConfig(new AbstractModelConfig<String>("Reset", "Reset to initial conditions") {
+      public void doCommand() { experimentModel.reset(); }
     });
     row();
   }
   
-  public Config addButton(IModelConfig<String> command) {
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  public Config createViewConfig(IModelConfig property) {
     Table table = new Table(skin);
-    IViewConfig viewConfig = new ConfigTextButton(command, skin);
-    table.add(viewConfig.getActor());
-    this.add(table); this.row();
-    Config config = new Config(table, viewConfig);
-    this.configs.add(config);
-    return config;
-  }
-  
-  public Config addSlider(IModelConfig<Float> property) {
-    Table table = new Table(skin);
-    table.add(property.getName());
-    table.row();
-    IViewConfig viewConfig = new ConfigSlider(property, skin);
+    IViewConfig viewConfig = null;
+    switch(property.getType()) {
+      case Float: 
+        table.add(property.getName());
+        table.row();
+        viewConfig = new ConfigSlider(property, skin);
+        break;
+      case String:
+        viewConfig = new ConfigSelectBox(property, skin);
+        break;
+      case Command:
+        viewConfig = new ConfigTextButton(property, skin);
+        break;
+    }
     table.add(viewConfig.getActor());
     this.add(table); this.row();
     Config config = new Config(table, viewConfig);
@@ -82,16 +101,6 @@ public class Configurator extends Table {
     return config;
   }
 
-  public Config addSelect(IModelConfig<String> property) {
-    Table table = new Table(skin);
-    IViewConfig viewConfig = new ConfigSelectBox(property, skin);
-    table.add(viewConfig.getActor());
-    this.add(table); this.row();
-    Config config = new Config(table, viewConfig);
-    this.configs.add(config);
-    return config;
-  }
-  
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     for (Config config: configs) {

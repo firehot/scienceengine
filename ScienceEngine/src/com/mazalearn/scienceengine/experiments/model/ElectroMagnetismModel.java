@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.experiments.controller.AbstractConfig;
+import com.mazalearn.scienceengine.experiments.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.BarMagnet;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.EMField;
 import com.mazalearn.scienceengine.experiments.model.electromagnetism.Lightbulb;
@@ -59,7 +59,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
 
   @Override
   protected void initializeConfigs() {
-    modelConfigs.add(new AbstractConfig<String>("Mode", "Mode of operation of magnet", Mode.values()) {
+    modelConfigs.add(new AbstractModelConfig<String>("Mode", "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
     });
