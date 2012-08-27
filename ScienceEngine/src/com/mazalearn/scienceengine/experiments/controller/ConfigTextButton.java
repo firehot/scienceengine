@@ -9,11 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  * Utility class for iExperimentModel action buttons using reflection.
  *
  */
-public class ConfigTextButton extends TextButton implements IConfigElement {
+public class ConfigTextButton extends TextButton implements IViewConfig {
   @SuppressWarnings("rawtypes")
-  private final IConfig command;
+  private final IModelConfig command;
   @SuppressWarnings("rawtypes")
-  public ConfigTextButton(final IConfig command, final Skin skin) {
+  public ConfigTextButton(final IModelConfig command, final Skin skin) {
     super(command.getName(), skin);
     this.command = command;
     this.setClickListener(new ClickListener() {

@@ -60,7 +60,7 @@ public class Configurator extends Table {
     row();
   }
   
-  public Config addButton(IConfig<String> command) {
+  public Config addButton(IModelConfig<String> command) {
     Table table = new Table(skin);
     ConfigTextButton configTextButton = new ConfigTextButton(command, skin);
     table.add(configTextButton);
@@ -70,7 +70,7 @@ public class Configurator extends Table {
     return config;
   }
   
-  public Config addSlider(IConfig<Float> property) {
+  public Config addSlider(IModelConfig<Float> property) {
     Table table = new Table(skin);
     table.add(property.getName());
     table.row();
@@ -82,7 +82,7 @@ public class Configurator extends Table {
     return config;
   }
 
-  public Config addSelect(IConfig<String> property) {
+  public Config addSelect(IModelConfig<String> property) {
     Table table = new Table(skin);
     ConfigSelectBox configSelectBox = new ConfigSelectBox(property, skin);
     table.add(configSelectBox);

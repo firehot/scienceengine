@@ -5,10 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class ConfigSelectBox extends SelectBox implements IConfigElement {
-  private final IConfig<String> property;
+public class ConfigSelectBox extends SelectBox implements IViewConfig {
+  private final IModelConfig<String> property;
 
-  public ConfigSelectBox(final IConfig<String> property, Skin skin) {
+  public ConfigSelectBox(final IModelConfig<String> property, Skin skin) {
     super(getItems(property), skin);
     this.property = property;
     syncWithModel();
@@ -22,7 +22,7 @@ public class ConfigSelectBox extends SelectBox implements IConfigElement {
   }
 
   @SuppressWarnings("rawtypes")
-  protected static String[] getItems(IConfig<String> property) {
+  protected static String[] getItems(IModelConfig<String> property) {
     Object[] e = property.getEnums();
     String[] items = new String[e.length];
     for (int i = 0; i < e.length; i++) {

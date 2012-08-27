@@ -1,7 +1,7 @@
 package com.mazalearn.scienceengine.experiments.model.molecule;
 
 import com.mazalearn.scienceengine.experiments.controller.AbstractConfig;
-import com.mazalearn.scienceengine.experiments.controller.IConfig.ConfigType;
+import com.mazalearn.scienceengine.experiments.controller.IModelConfig.ConfigType;
 import com.mazalearn.scienceengine.experiments.model.AbstractExperimentModel;
 
 public abstract class AbstractMolecularModel extends AbstractExperimentModel 
@@ -234,12 +234,12 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
 
   @Override
   protected void initializeConfigs() {
-    configs.add(new AbstractConfig<String>("State", "State of Matter", State.values()) {
+    modelConfigs.add(new AbstractConfig<String>("State", "State of Matter", State.values()) {
       public String getValue() { return getState(); }
       public void setValue(String value) { setState(value); }
     });
 
-    configs.add(new AbstractConfig<String>("HeatingLevel", "Heat applied", HeatingLevel.values()) {
+    modelConfigs.add(new AbstractConfig<String>("HeatingLevel", "Heat applied", HeatingLevel.values()) {
       public String getValue() { return getHeatingLevel(); }
       public void setValue(String value) { setHeatingLevel(value); }
     });

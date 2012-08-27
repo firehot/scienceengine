@@ -3,17 +3,17 @@ package com.mazalearn.scienceengine.experiments.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mazalearn.scienceengine.experiments.controller.IConfig;
+import com.mazalearn.scienceengine.experiments.controller.IModelConfig;
 
 public abstract class AbstractExperimentModel implements IExperimentModel {
 
   @SuppressWarnings("rawtypes")
-  protected List<IConfig> configs;
+  protected List<IModelConfig> modelConfigs;
 
   @SuppressWarnings("rawtypes")
   public AbstractExperimentModel() {
     super();
-    configs = new ArrayList<IConfig>();
+    modelConfigs = new ArrayList<IModelConfig>();
     initializeConfigs();
   }
 
@@ -27,14 +27,14 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   protected abstract void singleStep();
 
   @SuppressWarnings({ "rawtypes" })
-  public List<IConfig> getConfigs() {
-    return configs;
+  public List<IModelConfig> getConfigs() {
+    return modelConfigs;
   }
   
   @SuppressWarnings({ "rawtypes" })
-  public IConfig getConfig(String name) {
-    for (IConfig config: configs) {
-      if (config.getName() == name) return config;
+  public IModelConfig getConfig(String name) {
+    for (IModelConfig modelConfig: modelConfigs) {
+      if (modelConfig.getName() == name) return modelConfig;
     }
     return null;
   }

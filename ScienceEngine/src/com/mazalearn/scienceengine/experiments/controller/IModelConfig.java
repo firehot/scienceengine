@@ -1,12 +1,12 @@
 package com.mazalearn.scienceengine.experiments.controller;
 
-public interface IConfig<T> {
+public interface IModelConfig<T> {
   enum ConfigType { Float, String, Command };
   
   public ConfigType getType();
   public String getName();
   public String getDescription();
-  // Is this configuration hook available with current configs?
+  // Is this configuration hook available with current modelConfigs?
   public boolean isAvailable();
 
   // Only for Command type

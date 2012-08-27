@@ -4,15 +4,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 
 public class Config {
   final Table table;
-  final IConfigElement configElement;
+  final IViewConfig viewConfig;
 
-  public Config(Table table, IConfigElement configElement) {
+  public Config(Table table, IViewConfig viewConfig) {
     this.table = table;
-    this.configElement = configElement;
+    this.viewConfig = viewConfig;
   }
 
   void validate() {
-    configElement.syncWithModel();
-    table.visible = configElement.isAvailable();
+    viewConfig.syncWithModel();
+    table.visible = viewConfig.isAvailable();
   }
 }

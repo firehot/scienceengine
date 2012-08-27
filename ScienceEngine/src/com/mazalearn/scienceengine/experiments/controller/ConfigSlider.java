@@ -7,10 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
  * Utility class for iExperimentModel floating point sliders using reflection.
  *
  */
-public class ConfigSlider extends Slider implements IConfigElement {
-  private final IConfig<Float> property;
+public class ConfigSlider extends Slider implements IViewConfig {
+  private final IModelConfig<Float> property;
   
-  public ConfigSlider(final IConfig<Float> property, Skin skin) {
+  public ConfigSlider(final IModelConfig<Float> property, Skin skin) {
     super(property.getLow(), property.getHigh(), 
         (property.getHigh() - property.getLow())/10, skin);
     this.property = property;

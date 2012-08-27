@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.controller;
 
-public interface IConfigElement {
+public interface IViewConfig {
   public void syncWithModel();
   public boolean isAvailable();
 }

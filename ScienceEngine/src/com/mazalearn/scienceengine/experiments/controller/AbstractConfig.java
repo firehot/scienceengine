@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.controller;
 
-public abstract class AbstractConfig<T> implements IConfig<T> {
+public abstract class AbstractConfig<T> implements IModelConfig<T> {
   
   private final ConfigType type;
   private final String name;

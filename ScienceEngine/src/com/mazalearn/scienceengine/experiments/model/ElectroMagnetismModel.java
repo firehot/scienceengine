@@ -59,7 +59,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
 
   @Override
   protected void initializeConfigs() {
-    configs.add(new AbstractConfig<String>("Mode", "Mode of operation of magnet", Mode.values()) {
+    modelConfigs.add(new AbstractConfig<String>("Mode", "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
     });
