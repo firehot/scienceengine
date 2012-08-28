@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.experiments.molecules.model.LJMolecularModel;
 /**
  * States of Matter experimentModel
  */
-public class StatesOfMatterExperiment extends Table {
+public class StatesOfMatterController extends Table {
   private static final int N = 25; // Number of molecules
   private static final int BOX_HEIGHT = 20;
   private static final int BOX_WIDTH = 20;
@@ -19,7 +19,7 @@ public class StatesOfMatterExperiment extends Table {
   private StatesOfMatterView statesOfMatterView;
   Configurator configurator;
   
-  public StatesOfMatterExperiment(Skin skin) {
+  public StatesOfMatterController(Skin skin) {
     super(skin);
     this.setFillParent(true);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);

@@ -10,12 +10,12 @@ import com.mazalearn.scienceengine.controller.Configurator;
 /**
  * Wave Motion experimentModel
  */
-public class WaveExperiment extends Table {
+public class WaveController extends Table {
   
   private static final int NUM_BALLS = 40;
   private static final int BALL_DIAMETER = 8 * 4;
 
-  public WaveExperiment(TextureAtlas atlas, Skin skin) {
+  public WaveController(TextureAtlas atlas, Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE) {
       debug();

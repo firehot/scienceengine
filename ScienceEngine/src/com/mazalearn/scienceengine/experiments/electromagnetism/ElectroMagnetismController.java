@@ -9,9 +9,9 @@ import com.mazalearn.scienceengine.controller.Configurator;
 /**
  * Electromagnetism Experiment
  */
-public class ElectroMagnetismExperiment extends Table {
+public class ElectroMagnetismController extends Table {
   
-  public ElectroMagnetismExperiment(Skin skin) {
+  public ElectroMagnetismController(Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE) {
       debug();
