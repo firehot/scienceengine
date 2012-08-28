@@ -40,7 +40,7 @@ public class WaveModel extends AbstractExperimentModel {
   // frequency of sinusoidal motion, units of cycles per frame
   private float frequency = 0.03f;
   //tension in the string
-  private float tension = 10;
+  private float tension = 8;
   // damping coefficient = b*delT/2
   private float beta = 0.05f;
   // Boundary iCondition of other end.
@@ -114,19 +114,19 @@ public class WaveModel extends AbstractExperimentModel {
     }
     
     switch(genMode) {
-      case Oscillate: balls[0].pos.y = (float) sinusoid(simulatedTime); break;
-      case Pulse: balls[0].pos.y = (float) pulse(simulatedTime); break;
+      case Oscillate: balls[0].pos.y = sinusoid(simulatedTime); break;
+      case Pulse: balls[0].pos.y = pulse(simulatedTime); break;
       case Manual: break;
     }
   }
 
-  private double sinusoid(int t) {
-    return amplitude * Math.sin(2 * Math.PI * frequency * t + phi);
+  private float sinusoid(int t) {
+    return (float) (amplitude * Math.sin(2 * Math.PI * frequency * t + phi));
   }
 
-  private double pulse(int waveTime) {
+  private float pulse(int waveTime) {
     int t = waveTime - pulseStartTime;
-    double halfPulse = pulseWidth / 2;
+    float halfPulse = pulseWidth / 2;
     if (t < halfPulse) {
       return amplitude * t / halfPulse;
     } else if (t <= pulseWidth) {

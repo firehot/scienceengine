@@ -47,8 +47,8 @@ public class Configurator extends Table {
     TextButton backButton = new TextButton("Back to Start", skin);
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
-        ScienceEngine.GAME.getSoundManager().play(ScienceEngineSound.CLICK);
-        ScienceEngine.GAME.setScreen(new StartScreen(ScienceEngine.GAME));
+        ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.SCIENCE_ENGINE.setScreen(new StartScreen(ScienceEngine.SCIENCE_ENGINE));
       }
     });
     add(backButton).height(30).colspan(2);

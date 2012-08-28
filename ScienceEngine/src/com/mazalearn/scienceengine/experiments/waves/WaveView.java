@@ -19,11 +19,13 @@ public class WaveView extends AbstractExperimentView {
   
   private final float ORIGIN_Y;
   private final float ORIGIN_X;
-  private TextureRegion ballTexture;
+  private TextureRegion ballTextureRed;
   private Texture backgroundTexture;
   private final WaveModel waveModel;
   private final int numBalls;
   private final int ballDiameter;
+
+  private TextureRegion ballTextureBlue;
   
   public WaveView(float width, float height, final WaveModel waveModel, 
       int numBalls, int ballDiameter, TextureAtlas atlas) {
@@ -33,10 +35,11 @@ public class WaveView extends AbstractExperimentView {
     this.waveModel = waveModel;
     this.numBalls = numBalls;
     this.ballDiameter = ballDiameter;
-    this.ORIGIN_X = ballDiameter;
+    this.ORIGIN_X = 2 * ballDiameter;
     this.ORIGIN_Y = 10 * ballDiameter;
     
-    ballTexture = createBallTexture();
+    ballTextureRed = createBallTexture(Color.RED);
+    ballTextureBlue = createBallTexture(Color.BLUE);
     // Use light-gray background color
     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
     pixmap.setColor(Color.LIGHT_GRAY);
@@ -49,28 +52,30 @@ public class WaveView extends AbstractExperimentView {
         "wave-view/hand-pointer");
 
     startBall = new Image(handRegion, Scaling.stretch) {
-      float downY;
+      float prevY;
       public boolean touchDown(float x, float y, int pointer) {
-        downY = y;
+        prevY = y;
         return true;
       }
       public void touchDragged(float x, float y, int pointer) {
-        waveModel.balls[0].pos.y += y - downY;
+        waveModel.balls[0].pos.y += y - prevY;
+        prevY = y;
+        System.out.println("Y = " + y);
         resume();
       }
     };
     startBall.width *= 4; startBall.height *= 4;
-    endBall = new Image(ballTexture);
-    startBall.x = ORIGIN_X + waveModel.balls[0].pos.x - ballDiameter;
-    endBall.x = ORIGIN_X + waveModel.balls[numBalls - 1].pos.x;
+    endBall = new Image(ballTextureRed);
+    startBall.x = this.x + ORIGIN_X + waveModel.balls[0].pos.x - ballDiameter;
+    endBall.x = this.x + ORIGIN_X + waveModel.balls[numBalls - 1].pos.x + ballDiameter;
     addActor(startBall);
     addActor(endBall);
   }
 
-  private TextureRegion createBallTexture() {
+  private TextureRegion createBallTexture(Color color) {
     // Create texture region for ball
     Pixmap pixmap = new Pixmap(ballDiameter, ballDiameter, Format.RGBA8888);
-    pixmap.setColor(Color.RED);
+    pixmap.setColor(color);
     pixmap.fillCircle(ballDiameter/2, ballDiameter/2, ballDiameter/2);
     TextureRegion ballTexture = new TextureRegion(new Texture(pixmap));
     pixmap.dispose();
@@ -85,12 +90,15 @@ public class WaveView extends AbstractExperimentView {
     if (!isPaused ) {
       waveModel.simulateSteps(1);
     }
-    startBall.y = ORIGIN_Y + waveModel.balls[0].pos.y;
-    endBall.y = ORIGIN_Y + waveModel.balls[numBalls - 1].pos.y;
+    startBall.y = this.y + ORIGIN_Y + waveModel.balls[0].pos.y;
+    endBall.y = this.y + ORIGIN_Y + waveModel.balls[numBalls - 1].pos.y;
     startBall.visible = waveModel.getGenMode() == "Manual";
     // Draw the molecules
+    int i = 1;
     for (Ball ball: waveModel.balls) {
-      batch.draw(ballTexture, this.x + ORIGIN_X + ball.pos.x, this.y + ORIGIN_Y + ball.pos.y);
+      i = (i + 1) % 10;
+      batch.draw(i == 0 ? ballTextureBlue : ballTextureRed, 
+          this.x + ORIGIN_X + ball.pos.x, this.y + ORIGIN_Y + ball.pos.y);
     }
     super.draw(batch, parentAlpha);
   }

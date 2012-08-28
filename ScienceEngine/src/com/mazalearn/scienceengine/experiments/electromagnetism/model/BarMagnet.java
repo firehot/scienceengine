@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.utils.Dimension;
 
@@ -82,12 +83,12 @@ public class BarMagnet extends AbstractMagnet {
   private static final Dimension EXTERNAL_FAR_GRID_SIZE = new Dimension(126, 61);
 
   // grid file names
-  private static final String BX_INTERNAL_RESOURCE_NAME = "bfield/BX_internal.csv";
-  private static final String BY_INTERNAL_RESOURCE_NAME = "bfield/BY_internal.csv";
-  private static final String BX_EXTERNAL_NEAR_RESOURCE_NAME = "bfield/BX_external_near.csv";
-  private static final String BY_EXTERNAL_NEAR_RESOURCE_NAME = "bfield/BY_external_near.csv";
-  private static final String BX_EXTERNAL_FAR_RESOURCE_NAME = "bfield/BX_external_far.csv";
-  private static final String BY_EXTERNAL_FAR_RESOURCE_NAME = "bfield/BY_external_far.csv";
+  private static final String BX_INTERNAL_RESOURCE_NAME = "data/bfield/BX_internal.csv";
+  private static final String BY_INTERNAL_RESOURCE_NAME = "data/bfield/BY_internal.csv";
+  private static final String BX_EXTERNAL_NEAR_RESOURCE_NAME = "data/bfield/BX_external_near.csv";
+  private static final String BY_EXTERNAL_NEAR_RESOURCE_NAME = "data/bfield/BY_external_near.csv";
+  private static final String BX_EXTERNAL_FAR_RESOURCE_NAME = "data/bfield/BX_external_far.csv";
+  private static final String BY_EXTERNAL_FAR_RESOURCE_NAME = "data/bfield/BY_external_far.csv";
 
   private final Grid internalGrid; // internal to the magnet
   private final Grid externalNearGrid; // near the magnet
@@ -187,12 +188,8 @@ public class BarMagnet extends AbstractMagnet {
   private double interpolate(final double x, final double y, double maxX,
       double maxY, double[][] componentValues, double gridSpacing) {
     if (!(x >= 0 && y >= 0)) {
-      throw new IllegalArgumentException("x and y must be positive"); // ...because
-                                                                      // our
-                                                                      // grid is
-                                                                      // for
-                                                                      // that
-                                                                      // quadrant
+      // ...because our grid is only for that quadrant
+      throw new IllegalArgumentException("x and y must be positive"); 
     }
 
     double value = 0; // B-field outside the grid is zero
@@ -298,8 +295,8 @@ public class BarMagnet extends AbstractMagnet {
      * @return InputStream
      */
     public InputStream getResourceAsStream(String resource) throws IOException {
-      InputStream stream = null;
       //InputStream stream = BarMagnet.class.getResourceAsStream(resource);
+      InputStream stream = Gdx.files.internal(resource).read();
       if (stream == null) {
         throw new IOException("invalid resource: " + resource);
       }

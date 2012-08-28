@@ -19,7 +19,7 @@ public class ScienceEngine extends Game {
   public static final boolean DEV_MODE = true;
   
   // Provide access to this singleton game from any class
-  public static ScienceEngine GAME;
+  public static ScienceEngine SCIENCE_ENGINE;
 
   // a libgdx helper class that logs the current FPS each second
   private FPSLogger fpsLogger;
@@ -52,7 +52,7 @@ public class ScienceEngine extends Game {
 
   @Override
   public void create() {
-    Gdx.app.log(ScienceEngine.LOG, "Creating game on " + Gdx.app.getType());
+    Gdx.app.log(ScienceEngine.LOG, "Creating Engine on " + Gdx.app.getType());
     // Resize to full screen
     //Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode());
 
@@ -76,13 +76,13 @@ public class ScienceEngine extends Game {
     // create the helper objects
     fpsLogger = new FPSLogger();
     
-    GAME = this;
+    SCIENCE_ENGINE = this;
   }
 
   @Override
   public void resize(int width, int height) {
     super.resize(width, height);
-    Gdx.app.log(ScienceEngine.LOG, "Resizing game to: " + width + " x "
+    Gdx.app.log(ScienceEngine.LOG, "Resizing engine to: " + width + " x "
         + height);
 
     // show the splash screen when the game is resized for the first time;
@@ -124,7 +124,7 @@ public class ScienceEngine extends Game {
   @Override
   public void resume() {
     super.resume();
-    Gdx.app.log(ScienceEngine.LOG, "Resuming game");
+    Gdx.app.log(ScienceEngine.LOG, "Resuming engine");
   }
 
   @Override
