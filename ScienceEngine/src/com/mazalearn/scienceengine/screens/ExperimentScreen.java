@@ -3,9 +3,9 @@ package com.mazalearn.scienceengine.screens;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.experiments.ElectroMagnetismExperiment;
-import com.mazalearn.scienceengine.experiments.StatesOfMatterExperiment;
-import com.mazalearn.scienceengine.experiments.WaveExperiment;
+import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismExperiment;
+import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterExperiment;
+import com.mazalearn.scienceengine.experiments.waves.WaveExperiment;
 
 /**
  * IExperimentModel screen.
@@ -45,5 +45,10 @@ public class ExperimentScreen extends AbstractScreen {
   @Override
   public void dispose() {
     super.dispose();
-  }    
+  }
+  
+  @Override
+  public boolean isGameScreen() {
+    return true;
+  }
 }

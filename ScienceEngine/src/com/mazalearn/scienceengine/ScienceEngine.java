@@ -53,6 +53,8 @@ public class ScienceEngine extends Game {
   @Override
   public void create() {
     Gdx.app.log(ScienceEngine.LOG, "Creating game on " + Gdx.app.getType());
+    // Resize to full screen
+    //Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode());
 
     // create the preferences manager
     preferencesManager = new PreferencesManager();
