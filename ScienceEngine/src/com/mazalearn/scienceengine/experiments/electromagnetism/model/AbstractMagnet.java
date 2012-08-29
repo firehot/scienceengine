@@ -4,8 +4,6 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -21,9 +19,9 @@ public abstract class AbstractMagnet extends ScienceBody
   // ----------------------------------------------------------------------------
 
   private float width, height;
-  private double strength;
-  private double maxStrength;
-  private double minStrength;
+  private float strength;
+  private float maxStrength;
+  private float minStrength;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -33,8 +31,8 @@ public abstract class AbstractMagnet extends ScienceBody
    * Sole constructor
    * @param  emField - Electromagnetic field to which magnet is coupled
    */
-  public AbstractMagnet(EMField emField) {
-    super();
+  public AbstractMagnet(String name, EMField emField) {
+    super(name);
     emField.registerProducer(this);
     
     this.width = 32;
@@ -43,9 +41,9 @@ public abstract class AbstractMagnet extends ScienceBody
     magnetShape.setAsBox(this.width/2, this.height/2);
     this.createFixture(magnetShape, 1f /* density */);
 
-    this.strength = 1.0;
-    this.minStrength = 0.0; // couldn't be any weaker
-    this.maxStrength = Double.POSITIVE_INFINITY; // couldn't be any stronger
+    this.strength = 1.0f;
+    this.minStrength = 0.0f; // couldn't be any weaker
+    this.maxStrength = Float.POSITIVE_INFINITY; // couldn't be any stronger
   }
 
   // ----------------------------------------------------------------------------
@@ -64,10 +62,9 @@ public abstract class AbstractMagnet extends ScienceBody
    * Sets the maximum magnet strength. This value is used in rescaling of field
    * strength.
    * 
-   * @param maxStrength
-   *          the maximum strength, in Gauss
+   * @param maxStrength - the maximum strength, in Gauss
    */
-  public void setMaxStrength(double maxStrength) {
+  public void setMaxStrength(float maxStrength) {
     this.maxStrength = maxStrength;
     if (this.strength > this.maxStrength) {
       this.strength = this.maxStrength;
@@ -83,7 +80,7 @@ public abstract class AbstractMagnet extends ScienceBody
    * 
    * @return the maximumum strength, in Gauss
    */
-  public double getMaxStrength() {
+  public float getMaxStrength() {
     return this.maxStrength;
   }
 
@@ -91,10 +88,9 @@ public abstract class AbstractMagnet extends ScienceBody
    * Sets the minimum magnet strength. This value is used in rescaling of field
    * strength.
    * 
-   * @param minStrength
-   *          the minimum strength, in Gauss
+   * @param minStrength - the minimum strength, in Gauss
    */
-  public void setMinStrength(double minStrength) {
+  public void setMinStrength(float minStrength) {
     this.minStrength = minStrength;
     if (this.strength < this.minStrength) {
       this.strength = this.minStrength;
@@ -110,7 +106,7 @@ public abstract class AbstractMagnet extends ScienceBody
    * 
    * @return the minimum strength, in Gauss
    */
-  public double getMinStrength() {
+  public float getMinStrength() {
     return this.minStrength;
   }
 
@@ -122,7 +118,7 @@ public abstract class AbstractMagnet extends ScienceBody
    * @throws IllegalArgumentException
    *           if strength is outside of the min/max range
    */
-  public void setStrength(double strength) {
+  public void setStrength(float strength) {
     if (strength < this.minStrength || strength > this.maxStrength) {
       throw new IllegalArgumentException("strength out of range: " + strength);
     }
@@ -134,7 +130,7 @@ public abstract class AbstractMagnet extends ScienceBody
    * 
    * @return the strength
    */
-  public double getStrength() {
+  public float getStrength() {
     return this.strength;
   }
 
@@ -161,8 +157,8 @@ public abstract class AbstractMagnet extends ScienceBody
 
     // Clamp magnitude to magnet strength.
     // TODO: why do we need to do this?
-    double magnetStrength = getStrength();
-    double magnitude = outputVector.len();
+    float magnetStrength = getStrength();
+    float magnitude = outputVector.len();
     if (magnitude > magnetStrength) {
       outputVector.x = (float) (outputVector.x * magnetStrength / magnitude);
       outputVector.y = (float) (outputVector.y * magnetStrength / magnitude);

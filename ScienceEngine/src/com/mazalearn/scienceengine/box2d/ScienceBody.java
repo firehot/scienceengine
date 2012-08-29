@@ -31,12 +31,14 @@ public class ScienceBody implements IBody {
   Body body;
   // Used for temporary work
   private final Vector2 aPosition = new Vector2();
+  private final String name;
   
-  protected ScienceBody() {
-    this(new Vector2(0,0), 0);
+  protected ScienceBody(String name) {
+    this(name, new Vector2(0,0), 0);
   }
   
-  protected ScienceBody(Vector2 position, float angle) {
+  protected ScienceBody(String name, Vector2 position, float angle) {
+    this.name = name;
     BodyDef bodyDef = new BodyDef();
     bodyDef.position.set(position);
     bodyDef.angle = angle;
@@ -80,7 +82,7 @@ public class ScienceBody implements IBody {
   }
   
   public String getName() {
-    return "ScienceBody";
+    return name;
   }
   
   public Body getBody() {

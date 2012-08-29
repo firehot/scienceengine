@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.mazalearn.scienceengine.screens.SplashScreen;
 import com.mazalearn.scienceengine.screens.StartScreen;
 import com.mazalearn.scienceengine.services.MusicManager;
@@ -15,11 +17,14 @@ public class ScienceEngine extends Game {
   // constant useful for logging
   public static final String LOG = ScienceEngine.class.getName();
 
-  // whether we are in development mode
-  public static final boolean DEV_MODE = true;
+  // mode of development
+  public enum DevMode {PRODUCTION, DEBUG, BOX2D_DEBUG};
+  public static final DevMode DEV_MODE = DevMode.DEBUG;
   
   // Provide access to this singleton game from any class
   public static ScienceEngine SCIENCE_ENGINE;
+
+  public static Box2DDebugRenderer debugRenderer;
 
   // a libgdx helper class that logs the current FPS each second
   private FPSLogger fpsLogger;
@@ -29,6 +34,8 @@ public class ScienceEngine extends Game {
   private ProfileManager profileManager;
   private MusicManager musicManager;
   private SoundManager soundManager;
+
+  public static OrthographicCamera debugCamera;
 
   // Services' getters
 
@@ -73,8 +80,12 @@ public class ScienceEngine extends Game {
     profileManager = new ProfileManager();
     profileManager.retrieveProfile();
 
-    // create the helper objects
-    fpsLogger = new FPSLogger();
+    if (DEV_MODE != DevMode.PRODUCTION) {
+      // create the helper objects
+      fpsLogger = new FPSLogger();
+      debugRenderer = new Box2DDebugRenderer();
+      debugCamera = new OrthographicCamera(200, 200);
+    }
     
     SCIENCE_ENGINE = this;
   }
@@ -88,7 +99,7 @@ public class ScienceEngine extends Game {
     // show the splash screen when the game is resized for the first time;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(DEV_MODE ? new StartScreen(this) : new SplashScreen(this));
+      setScreen(DEV_MODE != DevMode.PRODUCTION ? new StartScreen(this) : new SplashScreen(this));
     }
   }
 
@@ -96,7 +107,7 @@ public class ScienceEngine extends Game {
   public void render() {
     super.render();
     // output the current FPS
-    if (DEV_MODE) {
+    if (DEV_MODE != DevMode.PRODUCTION) {
       fpsLogger.log();
     }
   }

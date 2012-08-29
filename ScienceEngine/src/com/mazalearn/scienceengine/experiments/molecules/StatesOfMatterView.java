@@ -105,7 +105,7 @@ public class StatesOfMatterView extends AbstractExperimentView {
 
     layoutTable = new Table();
     layoutTable.setFillParent(true);
-    if (ScienceEngine.DEV_MODE) {
+    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
       layoutTable.debug();
     }
     // Ceiling of box

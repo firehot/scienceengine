@@ -10,12 +10,6 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 public class Battery extends AbstractCurrentSource {
     
     public Battery() {
-        super();
+        super("Battery");
     }
-    
-    @Override
-    public String getName() {
-      return "Battery";
-    }
-
 }

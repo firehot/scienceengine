@@ -27,7 +27,7 @@ public class StatesOfMatterController extends Table {
     statesOfMatterView = new StatesOfMatterView(statesOfMatterModel, BOX_WIDTH, BOX_HEIGHT, N);
     configurator = new Configurator(skin, statesOfMatterModel, statesOfMatterView);
     
-    if (ScienceEngine.DEV_MODE) {
+    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
       debug();
       configurator.debug();
     }

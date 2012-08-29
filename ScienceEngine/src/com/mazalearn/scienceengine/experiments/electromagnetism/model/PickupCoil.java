@@ -42,7 +42,7 @@ public class PickupCoil extends AbstractCoil {
    * @param emField
    */
   public PickupCoil(EMField emField, float calibrationEmf) {
-    super();
+    super("PickupCoil");
 
     assert (emField != null);
     this.emField = emField;
@@ -64,11 +64,6 @@ public class PickupCoil extends AbstractCoil {
 
     // loosely packed loops
     setLoopSpacing(1.5f * getWireWidth());
-  }
-
-  @Override
-  public String getName() {
-    return "PickupCoil";
   }
 
   /**

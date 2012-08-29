@@ -81,7 +81,7 @@ public abstract class AbstractScreen implements Screen {
     if (table == null) {
       table = new Table(getSkin());
       table.setFillParent(true);
-      if (ScienceEngine.DEV_MODE) {
+      if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
         table.debug();
       }
       stage.addActor(table);

@@ -17,7 +17,7 @@ public class WaveController extends Table {
 
   public WaveController(TextureAtlas atlas, Skin skin) {
     super(skin);
-    if (ScienceEngine.DEV_MODE) {
+    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
       debug();
     }
     this.setFillParent(true);

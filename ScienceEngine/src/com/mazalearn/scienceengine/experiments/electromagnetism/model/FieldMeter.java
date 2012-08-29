@@ -16,15 +16,10 @@ public class FieldMeter extends ScienceBody implements EMField.IConsumer {
   private Vector2 fieldVector;
 
   public FieldMeter(EMField emField) {
-    super();
+    super("FieldMeter");
 
     this.fieldVector = new Vector2();
     emField.registerConsumer(this);
-  }
-
-  @Override
-  public String getName() {
-    return "FieldMeter";
   }
 
   /**

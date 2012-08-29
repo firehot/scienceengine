@@ -13,7 +13,7 @@ public class ElectroMagnetismController extends Table {
   
   public ElectroMagnetismController(Skin skin) {
     super(skin);
-    if (ScienceEngine.DEV_MODE) {
+    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
       debug();
     }
     this.setFillParent(true);

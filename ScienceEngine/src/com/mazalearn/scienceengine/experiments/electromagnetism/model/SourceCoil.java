@@ -10,7 +10,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 public class SourceCoil extends AbstractCoil {
 
   public SourceCoil() {
-    super();
+    super("SourceCoil");
 
     // pack the loops close together
     setLoopSpacing(getWireWidth());

@@ -100,7 +100,7 @@ public class ProfileManager {
     String profileAsText = json.toJson(profile);
 
     // encode the text
-    if (!ScienceEngine.DEV_MODE) {
+    if (ScienceEngine.DEV_MODE == ScienceEngine.DevMode.PRODUCTION) {
       profileAsText = Base64Coder.encodeString(profileAsText);
     }
 

@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -31,14 +32,13 @@ public class Lightbulb extends ScienceBody {
    * @param pickupCoilModel - the pickup coil that the lightbulb is across
    */
   public Lightbulb(PickupCoil pickupCoilModel) {
-    super();
+    super("Lightbulb");
 
     this.pickupCoilModel = pickupCoilModel;
     this.previousCurrentAmplitude = 0f;
-  }
-
-  public String getName() {
-    return "Lightbulb";
+    CircleShape circleShape = new CircleShape();
+    circleShape.setRadius(6);
+    this.createFixture(circleShape, 0.01f);
   }
 
   /**
