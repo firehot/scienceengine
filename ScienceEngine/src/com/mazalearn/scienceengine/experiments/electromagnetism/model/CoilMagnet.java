@@ -25,8 +25,8 @@ public abstract class CoilMagnet extends AbstractMagnet {
   // Constructors
   // ----------------------------------------------------------------------------
 
-  public CoilMagnet(String name, EMField emField) {
-    super(name, emField);
+  public CoilMagnet(String name, EMField emField, float x, float y, float angle) {
+    super(name, emField, y, angle, x);
     this.maxStrengthOutside = 0.0;
   }
 

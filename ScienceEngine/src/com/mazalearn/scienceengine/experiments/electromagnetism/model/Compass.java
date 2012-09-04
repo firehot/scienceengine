@@ -29,8 +29,8 @@ public class Compass extends ScienceBody {
   /**
    * @param emField
    */
-  public Compass(EMField emField) {
-    super("Compass");
+  public Compass(EMField emField, float x, float y, float angle) {
+    super("Compass", x, y, angle);
     getBody().setType(BodyType.StaticBody);
     this.emField = emField;
     PolygonShape rectangleShape = new PolygonShape();
@@ -43,20 +43,10 @@ public class Compass extends ScienceBody {
   
   @Override
   public void setPositionAndAngle(Vector2 position, float angle) {
-    reset();
     emField.getBField(position, fieldVector /* output */);
     super.setPositionAndAngle(position, fieldVector.angle());  
   }
    
-  public void reset() {
-    /*if (joint != null) {
-      ScienceBody.getBox2DWorld().destroyJoint(joint);
-    }
-    jointDef.initialize(getBody(), ScienceBody.getGround(), 
-        getWorldPoint(getPosition()));
-    joint = ScienceBody.getBox2DWorld().createJoint(jointDef); */
-  }
-
   public void singleStep(float dt) {
     setPositionAndAngle(getPosition(), getAngle());
   }

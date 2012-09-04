@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Joint;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
@@ -33,25 +33,19 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     super();
     emField = new EMField();
     
-    barMagnet = new BarMagnet(emField);
-     
-    pickupCoil = new PickupCoil(emField, 3000);
-    
-    lightbulb = new Lightbulb(pickupCoil);
-    
-    compass = new Compass(emField);
-    
-    bodies.add(pickupCoil);
-    bodies.add(lightbulb);
-    bodies.add(barMagnet);
-    bodies.add(compass);
+    bodies.add(barMagnet = new BarMagnet(emField, 10, 12, 0));
+    bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
+    bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
+    barMagnet.setType(BodyType.DynamicBody);
+    //bodies.add(compass = new Compass(emField, 10, 5, 0));
     
     reset();
   }
 
   @Override
   protected void initializeConfigs() {
-    modelConfigs.add(new AbstractModelConfig<String>("Mode", "Mode of operation of magnet", Mode.values()) {
+    modelConfigs.add(new AbstractModelConfig<String>("Mode", 
+        "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
     });
@@ -62,20 +56,16 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     float dt = 0.1f;
     box2DWorld.step(dt, 3, 3);
     emField.propagateField();
-    pickupCoil.singleStep(dt);
-    compass.singleStep(dt);
+    for (ScienceBody body: bodies) {
+      body.singleStep(dt);
+    }
   }
   
   @Override
   public void reset() {
-    barMagnet.setPositionAndAngle(10, 12, 0);
-    pickupCoil.setPositionAndAngle(23, -4, 0);
-    lightbulb.setPositionAndAngle(23, 25, 0);
-    barMagnet.setLinearVelocity(Vector2.Zero);
-    barMagnet.setAngularVelocity(0);
-    compass.setPositionAndAngle(10, 5, 0);
-    compass.setAngularVelocity(0);
-    compass.setLinearVelocity(Vector2.Zero);
+    for (ScienceBody body: bodies) {
+      body.reset();
+    }
     if (joint != null) {
       ScienceBody.getBox2DWorld().destroyJoint(joint);
       joint = null;
@@ -103,5 +93,4 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     this.mode = Mode.valueOf(mode);
     reset();
   }
-
 }

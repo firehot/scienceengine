@@ -32,8 +32,8 @@ public class Electromagnet extends CoilMagnet {
    *          the electromagnet's current source
    */
   public Electromagnet(EMField emField, SourceCoil sourceCoilModel,
-      AbstractCurrentSource currentSource) {
-    super("Electromagnet", emField);
+      AbstractCurrentSource currentSource, float x, float y, float angle) {
+    super("Electromagnet", emField, x, y, angle);
     assert (sourceCoilModel != null);
     assert (currentSource != null);
 

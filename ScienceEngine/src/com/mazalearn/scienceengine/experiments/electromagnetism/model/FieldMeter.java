@@ -15,8 +15,8 @@ public class FieldMeter extends ScienceBody implements EMField.IConsumer {
   // B-field vector at the field meter's position.
   private Vector2 fieldVector;
 
-  public FieldMeter(EMField emField) {
-    super("FieldMeter");
+  public FieldMeter(EMField emField, float x, float y, float angle) {
+    super("FieldMeter", x, y, angle);
 
     this.fieldVector = new Vector2();
     emField.registerConsumer(this);

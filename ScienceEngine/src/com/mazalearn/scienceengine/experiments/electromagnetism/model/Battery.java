@@ -9,7 +9,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
  */
 public class Battery extends AbstractCurrentSource {
     
-    public Battery() {
-        super("Battery");
+    public Battery(float x, float y, float angle) {
+        super("Battery", x, y, angle);
     }
 }

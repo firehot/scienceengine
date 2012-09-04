@@ -14,6 +14,8 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   @SuppressWarnings("rawtypes")
   protected List<IModelConfig> modelConfigs;
 
+  private boolean isEnabled = true;
+
   @SuppressWarnings("rawtypes")
   public AbstractExperimentModel() {
     super();
@@ -27,6 +29,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
 
   @Override
   public void simulateSteps(int n) {
+    if (!isEnabled) return;
     for (int i =0; i < n; i++) {
       singleStep();
     }
@@ -45,6 +48,11 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
       if (modelConfig.getName() == name) return modelConfig;
     }
     return null;
+  }
+
+  @Override
+  public void enable(boolean enable) {
+    isEnabled  = enable;
   }
 
   protected abstract void initializeConfigs();

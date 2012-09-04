@@ -21,8 +21,8 @@ public class Turbine extends BarMagnet {
   /**
    * Sole constructor.
    */
-  public Turbine(EMField emField) {
-    super(emField);
+  public Turbine(EMField emField, float x, float y, float angle) {
+    super(emField, x, y, angle);
     this.speed = 0.0;
     setMaxRPM(100.0);
   }

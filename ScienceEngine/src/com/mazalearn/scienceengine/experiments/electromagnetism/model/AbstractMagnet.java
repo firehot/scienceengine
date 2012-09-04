@@ -31,12 +31,12 @@ public abstract class AbstractMagnet extends ScienceBody
    * Sole constructor
    * @param  emField - Electromagnetic field to which magnet is coupled
    */
-  public AbstractMagnet(String name, EMField emField) {
-    super(name);
+  public AbstractMagnet(String name, EMField emField, float x, float y, float angle) {
+    super(name, x, y, angle);
     emField.registerProducer(this);
     
-    this.width = 32;
-    this.height = 8;
+    this.width = 16;
+    this.height = 4;
     PolygonShape magnetShape = new PolygonShape();
     magnetShape.setAsBox(this.width/2, this.height/2);
     this.createFixture(magnetShape, 1f /* density */);

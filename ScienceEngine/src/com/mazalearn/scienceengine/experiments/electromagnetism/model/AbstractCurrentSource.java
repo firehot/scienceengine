@@ -20,8 +20,8 @@ public abstract class AbstractCurrentSource extends ScienceBody {
   /**
    * Sole constructor.
    */
-  public AbstractCurrentSource(String name) {
-    super(name);
+  public AbstractCurrentSource(String name, float x, float y, float angle) {
+    super(name, x, y, angle);
     this.maxVoltage = DEFAULT_MAX_VOLTAGE;
     this.amplitude = 1f; // full strength
   }

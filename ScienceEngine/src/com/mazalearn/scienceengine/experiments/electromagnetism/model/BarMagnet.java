@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.utils.Dimension;
 
@@ -96,8 +95,8 @@ public class BarMagnet extends AbstractMagnet {
   private final Grid externalNearGrid; // near the magnet
   private final Grid externalFarGrid; // far from the magnet
 
-  public BarMagnet(EMField emField) {
-    super("BarMagnet", emField);
+  public BarMagnet(EMField emField, float x, float y, float angle) {
+    super("BarMagnet", emField, x, y, angle);
     PolygonShape rectangleShape = new PolygonShape();
     rectangleShape.setAsBox(getWidth(), getHeight());
     this.createFixture(rectangleShape, 0.01f);

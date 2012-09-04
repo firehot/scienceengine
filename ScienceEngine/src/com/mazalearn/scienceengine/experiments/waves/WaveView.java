@@ -7,33 +7,32 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
-import com.mazalearn.scienceengine.experiments.waves.WaveModel.Ball;
+import com.mazalearn.scienceengine.experiments.waves.view.Boundary;
+import com.mazalearn.scienceengine.experiments.waves.view.Hand;
+import com.mazalearn.scienceengine.experiments.waves.view.WaveBox;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
 public class WaveView extends AbstractExperimentView {
-  private Actor startBall, endBall;
+
+  private Actor hand, boundary, waveBox;
   
   private final float ORIGIN_Y;
   private final float ORIGIN_X;
   private TextureRegion ballTextureRed;
   private Texture backgroundTexture;
   private final WaveModel waveModel;
-  private final int numBalls;
   private final int ballDiameter;
 
   private TextureRegion ballTextureBlue;
   
   public WaveView(float width, float height, final WaveModel waveModel, 
-      int numBalls, int ballDiameter, TextureAtlas atlas) {
+      int ballDiameter, TextureAtlas atlas) {
     super(waveModel);
     this.width = width;
     this.height = height;
     this.waveModel = waveModel;
-    this.numBalls = numBalls;
     this.ballDiameter = ballDiameter;
     this.ORIGIN_X = 2 * ballDiameter;
     this.ORIGIN_Y = 10 * ballDiameter;
@@ -47,29 +46,17 @@ public class WaveView extends AbstractExperimentView {
     backgroundTexture = new Texture(pixmap);
     pixmap.dispose();
     
-    // retrieve the splash image's region from the atlas
-    AtlasRegion handRegion = atlas.findRegion(
-        "wave-view/hand-pointer");
-
-    startBall = new Image(handRegion, Scaling.stretch) {
-      float prevY;
-      public boolean touchDown(float x, float y, int pointer) {
-        prevY = y;
-        return true;
-      }
-      public void touchDragged(float x, float y, int pointer) {
-        waveModel.balls[0].pos.y += y - prevY;
-        prevY = y;
-        System.out.println("Y = " + y);
-        resume();
-      }
-    };
-    startBall.width *= 4; startBall.height *= 4;
-    endBall = new Image(ballTextureRed);
-    startBall.x = this.x + ORIGIN_X + waveModel.balls[0].pos.x - ballDiameter;
-    endBall.x = this.x + ORIGIN_X + waveModel.balls[numBalls - 1].pos.x + ballDiameter;
-    addActor(startBall);
-    addActor(endBall);
+    waveBox = new WaveBox(ballTextureRed, ballTextureBlue, backgroundTexture, 
+        waveModel.balls, this.x + ORIGIN_X, this.y + ORIGIN_Y);
+    hand = new Hand(atlas.findRegion("wave-view/hand-pointer"), 
+        Scaling.stretch, waveModel.balls[0], 
+        this.x + ORIGIN_X - ballDiameter, this.y + ORIGIN_Y);
+    boundary = new Boundary(ballTextureRed, 
+        waveModel.balls[waveModel.balls.length - 1], 
+        this.x + ORIGIN_X + ballDiameter, this.y + ORIGIN_Y);
+    addComponent("WaveBox", waveBox);
+    addComponent("Hand", hand);
+    addComponent("Boundary", boundary);
   }
 
   private TextureRegion createBallTexture(Color color) {
@@ -84,22 +71,11 @@ public class WaveView extends AbstractExperimentView {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    // Draw background
-    batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
     // Advance n steps
     if (!isPaused ) {
       waveModel.simulateSteps(1);
     }
-    startBall.y = this.y + ORIGIN_Y + waveModel.balls[0].pos.y;
-    endBall.y = this.y + ORIGIN_Y + waveModel.balls[numBalls - 1].pos.y;
-    startBall.visible = waveModel.getGenMode() == "Manual";
-    // Draw the molecules
-    int i = 1;
-    for (Ball ball: waveModel.balls) {
-      i = (i + 1) % 10;
-      batch.draw(i == 0 ? ballTextureBlue : ballTextureRed, 
-          this.x + ORIGIN_X + ball.pos.x, this.y + ORIGIN_Y + ball.pos.y);
-    }
+    hand.visible = waveModel.getGenMode() == "Manual";
     super.draw(batch, parentAlpha);
   }
 }

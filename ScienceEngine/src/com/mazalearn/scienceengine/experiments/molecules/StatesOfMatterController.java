@@ -3,14 +3,16 @@ package com.mazalearn.scienceengine.experiments.molecules;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.controller.AbstractExperimentController;
 import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 import com.mazalearn.scienceengine.experiments.molecules.model.LJMolecularModel;
+import com.mazalearn.scienceengine.experiments.molecules.view.StatesOfMatterView;
 
 /**
  * States of Matter experimentModel
  */
-public class StatesOfMatterController extends Table {
+public class StatesOfMatterController extends AbstractExperimentController {
   private static final int N = 25; // Number of molecules
   private static final int BOX_HEIGHT = 20;
   private static final int BOX_WIDTH = 20;
@@ -19,21 +21,12 @@ public class StatesOfMatterController extends Table {
   private StatesOfMatterView statesOfMatterView;
   Configurator configurator;
   
-  public StatesOfMatterController(Skin skin) {
+  public StatesOfMatterController(int width, int height, Skin skin) {
     super(skin);
-    this.setFillParent(true);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
     statesOfMatterView = new StatesOfMatterView(statesOfMatterModel, BOX_WIDTH, BOX_HEIGHT, N);
-    configurator = new Configurator(skin, statesOfMatterModel, statesOfMatterView);
-    
-    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
-      debug();
-      configurator.debug();
-    }
-    add(statesOfMatterView).expand().fill(); // .width(100).height(200);
-    add(configurator).fill();
-    row();
+    initialize(statesOfMatterModel, statesOfMatterView);    
     
     /*
     // Floor of box - also controls heating.

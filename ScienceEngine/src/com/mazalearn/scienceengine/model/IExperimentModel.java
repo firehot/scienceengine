@@ -13,4 +13,5 @@ public interface IExperimentModel {
   @SuppressWarnings("rawtypes")
   public IModelConfig getConfig(String name);
   public World getBox2DWorld();
+  public void enable(boolean enable);
 }

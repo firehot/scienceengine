@@ -46,7 +46,7 @@ public class WaveModel extends AbstractExperimentModel {
   // Boundary iCondition of other end.
   private EndType endType = EndType.FixedEnd;
   // Generation mode
-  private GenMode genMode = GenMode.Oscillate;
+  private GenMode genMode = GenMode.Manual;
   // width of pulse
   private float pulseWidth = 10;
 

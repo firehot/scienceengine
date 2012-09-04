@@ -18,7 +18,7 @@ public class ScienceEngine extends Game {
   public static final String LOG = ScienceEngine.class.getName();
 
   // mode of development
-  public enum DevMode {PRODUCTION, DEBUG, BOX2D_DEBUG};
+  public enum DevMode {PRODUCTION, DEBUG, EDIT};
   public static final DevMode DEV_MODE = DevMode.DEBUG;
   
   // Provide access to this singleton game from any class
@@ -36,8 +36,6 @@ public class ScienceEngine extends Game {
   private SoundManager soundManager;
 
   public static OrthographicCamera debugCamera;
-
-  // Services' getters
 
   public PreferencesManager getPreferencesManager() {
     return preferencesManager;
@@ -84,7 +82,7 @@ public class ScienceEngine extends Game {
       // create the helper objects
       fpsLogger = new FPSLogger();
       debugRenderer = new Box2DDebugRenderer();
-      debugCamera = new OrthographicCamera(200, 200);
+      debugCamera = new OrthographicCamera(300, 200);
     }
     
     SCIENCE_ENGINE = this;
@@ -108,7 +106,7 @@ public class ScienceEngine extends Game {
     super.render();
     // output the current FPS
     if (DEV_MODE != DevMode.PRODUCTION) {
-      fpsLogger.log();
+      //fpsLogger.log();
     }
   }
 

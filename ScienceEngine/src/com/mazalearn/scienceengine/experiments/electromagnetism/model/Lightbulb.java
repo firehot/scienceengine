@@ -31,8 +31,8 @@ public class Lightbulb extends ScienceBody {
    * 
    * @param pickupCoilModel - the pickup coil that the lightbulb is across
    */
-  public Lightbulb(PickupCoil pickupCoilModel) {
-    super("Lightbulb");
+  public Lightbulb(PickupCoil pickupCoilModel, float x, float y, float angle) {
+    super("Lightbulb", x, y, angle);
 
     this.pickupCoilModel = pickupCoilModel;
     this.previousCurrentAmplitude = 0f;

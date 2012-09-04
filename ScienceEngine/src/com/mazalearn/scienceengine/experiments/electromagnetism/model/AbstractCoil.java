@@ -3,7 +3,6 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -36,8 +35,8 @@ public abstract class AbstractCoil extends ScienceBody {
    * Zero-argument constructor. Creates a default coil with one loop, radius=10,
    * wireWidth=16, loopSpacing=25
    */
-  public AbstractCoil(String name) {
-    this(name, 1, 10, 16, 25);
+  public AbstractCoil(String name, float x, float y, float angle) {
+    this(name, x, y, angle, 1, 20, 16, 25);
   }
 
   /**
@@ -48,9 +47,9 @@ public abstract class AbstractCoil extends ScienceBody {
    * @param wireWidth - width of the wire
    * @param loopSpacing - space between the loops
    */
-  public AbstractCoil(String name, int numberOfLoops, float radius, 
-      float wireWidth, float loopSpacing) {
-    super(name);
+  public AbstractCoil(String name, float x, float y, float angle, 
+      int numberOfLoops, float radius, float wireWidth, float loopSpacing) {
+    super(name, x, y, angle);
     this.numberOfLoops = numberOfLoops;
     this.radius = radius;
     this.wireWidth = wireWidth;

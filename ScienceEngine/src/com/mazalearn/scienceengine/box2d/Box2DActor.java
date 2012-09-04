@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class Box2DActor extends Actor {
   private static final int PIXELS_PER_M = 8;
-  private IBody body;
+  private ScienceBody body;
   private TextureRegion textureRegion;
 
   /**
@@ -29,7 +29,7 @@ public class Box2DActor extends Actor {
    * @param body - Box2D body
    * @param textureRegion - texture to use to represent body in view
    */
-  public Box2DActor(IBody body, TextureRegion textureRegion) {
+  public Box2DActor(ScienceBody body, TextureRegion textureRegion) {
     super();
 
     this.body = body;
@@ -39,7 +39,7 @@ public class Box2DActor extends Actor {
     this.height = textureRegion.getRegionHeight();
   }
   
-  public IBody getBody() {
+  public ScienceBody getBody() {
     return body;
   }
 
@@ -64,5 +64,9 @@ public class Box2DActor extends Actor {
   
   public TextureRegion getTextureRegion() {
     return textureRegion;
+  }
+  
+  public void setPositionFromScreen() {
+    body.setPositionAndAngle(x / PIXELS_PER_M, y / PIXELS_PER_M, body.getAngle());
   }
 }

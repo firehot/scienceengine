@@ -29,21 +29,31 @@ public class ScienceBody implements IBody {
   private static Body GROUND;
   // Body instance to which methods are proxied
   Body body;
+  // Initial positions and angle
+  float initialX, initialY, initialAngle;
   // Used for temporary work
   private final Vector2 aPosition = new Vector2();
   private final String name;
   
-  protected ScienceBody(String name) {
-    this(name, new Vector2(0,0), 0);
+  protected ScienceBody(String name, float x, float y, float angle) {
+    this.name = name;
+    this.initialX = x;
+    this.initialY = y;
+    this.initialAngle = angle;
+    BodyDef bodyDef = new BodyDef();
+    bodyDef.position.set(x, y);
+    bodyDef.angle = angle;
+    bodyDef.type = BodyDef.BodyType.StaticBody;
+    this.body = box2DWorld.createBody(bodyDef);
   }
   
-  protected ScienceBody(String name, Vector2 position, float angle) {
-    this.name = name;
-    BodyDef bodyDef = new BodyDef();
-    bodyDef.position.set(position);
-    bodyDef.angle = angle;
-    bodyDef.type = BodyDef.BodyType.DynamicBody;
-    this.body = box2DWorld.createBody(bodyDef);
+  public void singleStep(float dt) {
+  }
+  
+  public void reset() {
+    this.setPositionAndAngle(initialX, initialY, initialAngle);
+    this.setAngularVelocity(0);
+    this.setLinearVelocity(Vector2.Zero);
   }
   
   /**

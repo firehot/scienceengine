@@ -52,8 +52,8 @@ public class Voltmeter extends ScienceBody {
    * @param pickupCoilModel
    *          voltmeter is connected to this pickup coil
    */
-  public Voltmeter(PickupCoil pickupCoilModel) {
-    super("Voltmeter");
+  public Voltmeter(PickupCoil pickupCoilModel, float x, float y, float angle) {
+    super("Voltmeter", x, y, angle);
     jiggleEnabled = false; // expensive, so disabled by default
     needleAngle = ZERO_NEEDLE_ANGLE;
   }

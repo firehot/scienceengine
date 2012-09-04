@@ -43,8 +43,8 @@ public class ACPowerSupply extends AbstractCurrentSource {
   /**
    * Sole constructor.
    */
-  public ACPowerSupply() {
-    super("ACPowerSupply");
+  public ACPowerSupply(float x, float y, float angle) {
+    super("ACPowerSupply", x, y, angle);
     this.maxAmplitude = 1.0f; // biggest
     this.frequency = 1.0f; // fastest
     this.acAngle = 0.0f; // radians

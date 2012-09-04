@@ -1,12 +1,13 @@
 package com.mazalearn.scienceengine.view;
 
-import com.badlogic.gdx.Gdx;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 
 public class AbstractExperimentView extends Group implements IExperimentView {
@@ -14,10 +15,12 @@ public class AbstractExperimentView extends Group implements IExperimentView {
   public static final int PIXELS_PER_M = 8;
   protected boolean isPaused = false;
   protected final IExperimentModel experimentModel;
+  protected Map<String, Actor> components;
 
   public AbstractExperimentView(IExperimentModel experimentModel) {
     super();
     this.experimentModel = experimentModel;
+    this.components = new HashMap<String, Actor>();
   }
 
   @Override
@@ -35,13 +38,22 @@ public class AbstractExperimentView extends Group implements IExperimentView {
     return isPaused;
   }
   
+/*
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.BOX2D_DEBUG) {
       super.draw(batch, parentAlpha);
-    } else {
       ScienceEngine.debugCamera.unproject(getStage().getCamera().position);
       ScienceEngine.debugRenderer.render(experimentModel.getBox2DWorld(), ScienceEngine.debugCamera.combined);
-    }
+  }
+*/
+  
+  protected void addComponent(String name, Actor actor) {
+    super.addActor(actor);
+    components.put(name, actor);
+  }
+
+  @Override
+  public Map<String, Actor> getComponents() {
+    return Collections.unmodifiableMap(components);
   }
 }
