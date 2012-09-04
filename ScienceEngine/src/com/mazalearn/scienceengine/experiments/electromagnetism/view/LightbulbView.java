@@ -21,8 +21,6 @@ public class LightbulbView extends Box2DActor {
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    super.draw(batch, parentAlpha);
-
     float intensity = Math.abs(lightbulb.getIntensity());
     // Draw a circle of yellow light with radius and alpha proportional to intensity
     int diameter = Math.round(intensity * 256);
@@ -31,6 +29,7 @@ public class LightbulbView extends Box2DActor {
     TextureRegion t = lightbulb.getIntensity() > 0 ? lightTexturePositive : lightTextureNegative;
     batch.draw(t, x + width/2 - diameter/2, y + height/2 - diameter/2, diameter, diameter);
     batch.setColor(c);
+    super.draw(batch, parentAlpha);
   }
 
   private TextureRegion createLightTexture(Color color) {

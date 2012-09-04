@@ -4,10 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 
 public class AbstractExperimentView extends Group implements IExperimentView {

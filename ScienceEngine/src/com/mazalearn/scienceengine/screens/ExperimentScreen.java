@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -61,8 +60,8 @@ public class ExperimentScreen extends AbstractScreen {
   
   @Override
   public void render(float delta) {
+    experimentController.enable(!screenEditor.isEnabled());
     super.render(delta);
-    experimentController.enable(screenEditor.isEnabled());
     screenEditor.render();
   }
   

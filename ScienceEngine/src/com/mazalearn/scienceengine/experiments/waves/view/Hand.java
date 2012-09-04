@@ -14,7 +14,8 @@ public class Hand extends Image {
     super(region, scaling);
     this.originY = originY;
     this.ball = ball;
-    width *= 4; height *= 4;
+    this.width *= 4; 
+    this.height *= 4;
     this.x = originX + ball.pos.x;
   }
   

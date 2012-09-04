@@ -1,8 +1,6 @@
 package com.mazalearn.scienceengine.experiments.molecules;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.controller.AbstractExperimentController;
 import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;

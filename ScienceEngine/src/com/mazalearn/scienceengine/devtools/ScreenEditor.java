@@ -1,5 +1,11 @@
 package com.mazalearn.scienceengine.devtools;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -14,7 +20,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -22,13 +27,6 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * A ScreenEditor lets you edit your objects directly in the game. No more

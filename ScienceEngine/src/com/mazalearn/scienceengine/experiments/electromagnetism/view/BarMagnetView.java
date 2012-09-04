@@ -17,7 +17,7 @@ public class BarMagnetView extends Box2DActor {
   private final AbstractExperimentView emView;
   private final ElectroMagnetismModel emModel;
   private BitmapFont font;
-  private Vector2 touchDownPos = new Vector2();
+  private Vector2 lastTouch = new Vector2();
   private Vector2 newPos = new Vector2();
   private TextureRegion textureRegion;
   
@@ -32,7 +32,7 @@ public class BarMagnetView extends Box2DActor {
   }
 
   public boolean touchDown(float x, float y, int pointer) {
-    touchDownPos.set(x, y);
+    lastTouch.set(x, y);
     return true;
   }
 
@@ -40,8 +40,8 @@ public class BarMagnetView extends Box2DActor {
     if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
     // New touch position
     newPos.set(x, y);
-    // Subtract old touch position to get displacement vector
-    newPos.sub(touchDownPos);
+    // Subtract last touch position to get displacement vector
+    newPos.sub(lastTouch);
     // Add displacement vector to the actor position to find new position
     newPos.add(this.x, this.y);
     // Find center of bar Magnet in new position
@@ -50,8 +50,8 @@ public class BarMagnetView extends Box2DActor {
     newPos.mul(1f/AbstractExperimentView.PIXELS_PER_M);
     // Move barMagnet to new position
     barMagnet.setPositionAndAngle(newPos, barMagnet.getAngle());
-    // Recalibrate touchDownPos to new coordinates
-    touchDownPos.set(x, y);
+    // Recalibrate lastTouch to new coordinates
+    lastTouch.set(x, y);
     emView.resume();
   }
   
@@ -60,13 +60,13 @@ public class BarMagnetView extends Box2DActor {
     // new touch position
     newPos.set(x, y);
     // Subtract old touch position to get displacement vector
-    newPos.sub(touchDownPos);
+    newPos.sub(lastTouch);
     // Scale displacement vector suitably to get a proportional force
     newPos.mul(2000);
     // Apply the force at point touched in world coords
-    touchDownPos.sub(width/2, height/2);
-    touchDownPos.mul(1f/AbstractExperimentView.PIXELS_PER_M);
-    barMagnet.applyForce(newPos, barMagnet.getWorldPoint(touchDownPos));
+    lastTouch.sub(width/2, height/2);
+    lastTouch.mul(1f/AbstractExperimentView.PIXELS_PER_M);
+    barMagnet.applyForce(newPos, barMagnet.getWorldPoint(lastTouch));
     emView.resume();
   }
   

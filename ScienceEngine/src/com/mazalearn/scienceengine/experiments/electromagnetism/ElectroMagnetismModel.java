@@ -26,7 +26,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   private List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
   public enum Mode {Free, Rotate};
   
-  private Mode mode = Mode.Rotate;
+  private Mode mode = Mode.Free;
   private Joint joint;
     
   public ElectroMagnetismModel() {   

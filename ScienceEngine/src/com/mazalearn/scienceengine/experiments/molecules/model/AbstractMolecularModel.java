@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.experiments.molecules.model;
 
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.controller.IModelConfig.ConfigType;
 import com.mazalearn.scienceengine.model.AbstractExperimentModel;
 
 public abstract class AbstractMolecularModel extends AbstractExperimentModel 
