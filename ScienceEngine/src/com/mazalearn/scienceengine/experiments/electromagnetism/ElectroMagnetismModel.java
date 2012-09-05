@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Joint;
@@ -53,7 +54,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
 
   @Override
   protected void singleStep() {
-    float dt = 0.1f;
+    float dt = Gdx.app.getGraphics().getDeltaTime();
     box2DWorld.step(dt, 3, 3);
     emField.propagateField();
     for (ScienceBody body: bodies) {

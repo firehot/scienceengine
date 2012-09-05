@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
@@ -59,7 +60,7 @@ public class ScreenEditor {
   
   private final FileHandle file;
   private final OrthographicCamera camera;
-  private final Group group;
+  private final Stage stage;
 
   private boolean isEnabled = false;
   enum OverlayMode { NO_OVERLAY, OVERLAY_NO_HELP, OVERLAY_WITH_HELP};
@@ -81,10 +82,10 @@ public class ScreenEditor {
    * @param actors A map from names to actors.
    */
   public ScreenEditor(String path, OrthographicCamera camera, 
-      Group stage, SpriteBatch sb, BitmapFont font) {
+      Stage stage, SpriteBatch sb, BitmapFont font) {
     this.file = Gdx.files.internal(path);
     this.camera = camera;
-    this.group = stage;
+    this.stage = stage;
     this.sb = sb;
     this.font = font;
   }
@@ -125,7 +126,7 @@ public class ScreenEditor {
    */
   public void render(float originX, float originY) {
     if (isEnabled && overlayMode != OverlayMode.NO_OVERLAY) {
-      for (Actor actor : group.getActors()) {
+      for (Actor actor : stage.getActors()) {
         drawBoundingBox(actor, originX, originY);
       }
 
@@ -169,14 +170,13 @@ public class ScreenEditor {
 
       switch (button) {
         case Buttons.LEFT:
-          // Assumption, stage coords = group coords
-          // Assumption, group does not have groups within
+          // Assumption, stage coords = stage coords
+          // Assumption, stage does not have groups within
           Vector2 stagePoint = new Vector2();
-          group.getStage().toStageCoordinates(x, y, stagePoint);
-          Group.toChildCoordinates(group, stagePoint.x, stagePoint.y, stagePoint);
+          stage.toStageCoordinates(x, y, stagePoint);
           Vector2 point = new Vector2();
           Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
-          for (Actor actor : group.getActors()) {
+          for (Actor actor : stage.getActors()) {
             Group.toChildCoordinates(actor, stagePoint.x, stagePoint.y, point);
             if (actor.hit(point.x, point.y) != null) {
               Vector2 handlePos = 
@@ -317,7 +317,7 @@ public class ScreenEditor {
     FileWriter writer = new FileWriter(file.file());
     JsonWriter jsonWriter = new JsonWriter(writer);
     jsonWriter = jsonWriter.object().array("components");
-    for (Actor a : group.getActors()) {
+    for (Actor a : stage.getActors()) {
       jsonWriter.object()
           .object(a.name)
           .set("x", a.x)
@@ -349,7 +349,7 @@ public class ScreenEditor {
 
   private void readComponent(OrderedMap<String,?> component) {
     String name = (String) component.get("name");
-    Actor actor = group.findActor(name);
+    Actor actor = stage.findActor(name);
     if (actor == null) return;
     
     actor.x = (Float) component.get("x");;

@@ -12,9 +12,11 @@ public class WaveBox extends Actor {
   private final TextureRegion ballTextureRed, ballTextureBlue;
   private final Ball[] balls;
   private final float originX, originY;
+  private float ballDiameter;
   
   public WaveBox(TextureRegion ballTextureRed, TextureRegion ballTextureBlue,
-      Texture backgroundTexture, Ball[] balls, float originX, float originY) {
+      Texture backgroundTexture, Ball[] balls, float originX, float originY,
+      float ballDiameter) {
     super("WaveBox");
     this.ballTextureRed = ballTextureRed;
     this.ballTextureBlue = ballTextureBlue;
@@ -22,6 +24,11 @@ public class WaveBox extends Actor {
     this.balls = balls;
     this.originX = originX;
     this.originY = originY;
+    this.ballDiameter = ballDiameter;
+    this.width = this.ballDiameter * (balls.length + 10);
+    this.height = this.ballDiameter * 20;
+    this.x = 0;
+    this.y = 0;
   }
 
   @Override
@@ -33,13 +40,19 @@ public class WaveBox extends Actor {
     for (Ball ball: balls) {
       i = (i + 1) % 10;
       batch.draw(i == 0 ? ballTextureBlue : ballTextureRed, 
-          originX + ball.pos.x, originY + ball.pos.y);
+          x + (originX + ball.pos.x) * ballDiameter,
+          y + (originY + ball.pos.y) * ballDiameter);
     }
   }
 
   @Override
   public Actor hit(float x, float y) {
-    return null;
+    return x >= this.x && x < this.x + width && 
+        y >= this.y && y < this.y + height ? this : null;
+  }
+  
+  public float getBallDiameter() {
+    return ballDiameter;
   }
   
 }

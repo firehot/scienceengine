@@ -15,8 +15,8 @@ public class StatesOfMatterView extends AbstractExperimentView {
   private final Table layoutTable;
   private final IMolecularModel molecularModel;
   
-  public StatesOfMatterView(IMolecularModel molecularModel, int boxWidth, int boxHeight, int N) {
-    super(molecularModel);
+  public StatesOfMatterView(IMolecularModel molecularModel, int width, int height, int N) {
+    super(molecularModel, width, height);
     this.molecularModel = molecularModel;
 
     layoutTable = new Table("Molecule Box");
@@ -29,6 +29,8 @@ public class StatesOfMatterView extends AbstractExperimentView {
     layoutTable.row();
     // Sides and box
     layoutTable.add(new ColorPanel()).fill().width(10);
+    int boxWidth = 20;
+    int boxHeight = 20;
     layoutTable.add(new MoleculeBox(molecularModel, N, boxWidth, boxHeight, PIXELS_PER_M)).expand().fill();
     layoutTable.add(new ColorPanel()).fill().width(10);
     layoutTable.row();
@@ -39,8 +41,8 @@ public class StatesOfMatterView extends AbstractExperimentView {
   }
   
   @Override
-  public void draw(SpriteBatch batch, float parentAlpha) {
-    super.draw(batch, parentAlpha);
+  public void draw() {
+    super.draw();
     if (!isPaused) {
       molecularModel.simulateSteps(10);
     }

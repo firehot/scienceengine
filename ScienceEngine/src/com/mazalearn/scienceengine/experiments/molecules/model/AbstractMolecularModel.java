@@ -114,9 +114,7 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
 
   @Override
   public void simulateSteps(int n) {
-    for (int i = 0; i < n; i++) {
-      singleStep();
-    }
+    super.simulateSteps(n);
     reScaleDt();
   }
 

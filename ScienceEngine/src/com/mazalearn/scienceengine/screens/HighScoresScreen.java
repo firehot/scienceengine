@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.services.Profile;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 
 /**
@@ -19,7 +20,7 @@ public class HighScoresScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    com.mazalearn.scienceengine.services.Profile profile = game.getProfileManager().retrieveProfile();
+    Profile profile = game.getProfileManager().retrieveProfile();
 
     // retrieve the default table actor
     Table table = super.getTable();

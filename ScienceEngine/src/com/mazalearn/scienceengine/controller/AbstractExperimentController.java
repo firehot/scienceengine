@@ -1,7 +1,9 @@
 package com.mazalearn.scienceengine.controller;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.model.AbstractExperimentModel;
 import com.mazalearn.scienceengine.model.IExperimentModel;
+import com.mazalearn.scienceengine.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.view.IExperimentView;
 
 public abstract class AbstractExperimentController implements
@@ -9,17 +11,19 @@ public abstract class AbstractExperimentController implements
 
   private Configurator configurator;
   private IExperimentModel experimentModel;
-  private IExperimentView experimentView;
+  private AbstractExperimentView experimentView;
   private Skin skin;
 
   protected AbstractExperimentController(Skin skin) {
     this.skin = skin;
   }
   
-  protected void initialize(IExperimentModel experimentModel, IExperimentView experimentView) {
+  protected void initialize(IExperimentModel experimentModel, 
+      AbstractExperimentView experimentView, String name) {
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
-    this.configurator = new Configurator(skin, experimentModel, experimentView);    
+    this.configurator = new Configurator(skin, experimentModel, experimentView, name);
+    experimentView.addActor(this.configurator);
   }
   
   @Override

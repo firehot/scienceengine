@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.view.IExperimentView;
 
 /**
  * The base class for all game screens.
@@ -23,7 +24,7 @@ public abstract class AbstractScreen implements Screen {
       MENU_VIEWPORT_HEIGHT = 480;
 
   protected final ScienceEngine game;
-  protected final Stage stage;
+  protected Stage stage;
 
   private BitmapFont font;
   private SpriteBatch batch;
@@ -31,11 +32,19 @@ public abstract class AbstractScreen implements Screen {
   private TextureAtlas atlas;
   private Table table;
 
+  public AbstractScreen(ScienceEngine game, Stage stage) {
+    this.game = game;
+  }
+  
   public AbstractScreen(ScienceEngine game) {
     this.game = game;
     int width = (isGameScreen() ? GAME_VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
     int height = (isGameScreen() ? GAME_VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
-    this.stage = new Stage(width, height, true);
+    this.stage = new Stage(width, height, false);
+  }
+
+  protected void setStage(Stage stage) {
+    this.stage = stage;
   }
 
   protected String getName() {

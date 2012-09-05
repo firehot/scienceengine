@@ -28,14 +28,14 @@ public class WaveView extends AbstractExperimentView {
   private TextureRegion ballTextureBlue;
   
   public WaveView(float width, float height, final WaveModel waveModel, 
-      int ballDiameter, TextureAtlas atlas) {
-    super(waveModel);
+      TextureAtlas atlas) {
+    super(waveModel, width, height);
     this.width = width;
     this.height = height;
     this.waveModel = waveModel;
-    this.ballDiameter = ballDiameter;
-    this.ORIGIN_X = 2 * ballDiameter;
-    this.ORIGIN_Y = 10 * ballDiameter;
+    this.ballDiameter = (int) (width / (waveModel.balls.length + 5));
+    this.ORIGIN_X = 2;
+    this.ORIGIN_Y = 10;
     
     ballTextureRed = createBallTexture(Color.RED);
     ballTextureBlue = createBallTexture(Color.BLUE);
@@ -47,18 +47,18 @@ public class WaveView extends AbstractExperimentView {
     pixmap.dispose();
     
     waveBox = new WaveBox(ballTextureRed, ballTextureBlue, backgroundTexture, 
-        waveModel.balls, this.x + ORIGIN_X, this.y + ORIGIN_Y);
+        waveModel.balls, ORIGIN_X, ORIGIN_Y, ballDiameter);
     hand = new Hand(atlas.findRegion("wave-view/hand-pointer"), 
         Scaling.stretch, waveModel.balls[0], 
-        this.x + ORIGIN_X - ballDiameter, this.y + ORIGIN_Y);
+        ORIGIN_X - 1, ORIGIN_Y, ballDiameter);
     boundary = new Boundary(ballTextureRed, 
         waveModel.balls[waveModel.balls.length - 1], 
-        this.x + ORIGIN_X + ballDiameter, this.y + ORIGIN_Y);
+        ORIGIN_X + 1, ORIGIN_Y, ballDiameter);
     addActor(waveBox);
     addActor(hand);
     addActor(boundary);
   }
-
+  
   private TextureRegion createBallTexture(Color color) {
     // Create texture region for ball
     Pixmap pixmap = new Pixmap(ballDiameter, ballDiameter, Format.RGBA8888);
@@ -70,12 +70,12 @@ public class WaveView extends AbstractExperimentView {
   }
   
   @Override
-  public void draw(SpriteBatch batch, float parentAlpha) {
+  public void draw() {
     // Advance n steps
     if (!isPaused ) {
       waveModel.simulateSteps(1);
     }
     hand.visible = waveModel.getGenMode() == "Manual";
-    super.draw(batch, parentAlpha);
+    super.draw();
   }
 }

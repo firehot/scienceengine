@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.controller.IModelConfig;
 
 public abstract class AbstractExperimentModel implements IExperimentModel {
 
-  protected final World box2DWorld;
+  protected World box2DWorld;
   @SuppressWarnings("rawtypes")
   protected List<IModelConfig> modelConfigs;
 
@@ -19,6 +19,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   @SuppressWarnings("rawtypes")
   public AbstractExperimentModel() {
     super();
+    // Initialize the world for Box2D if not already available
     Vector2 gravity = new Vector2(0.0f, 0.0f);
     boolean doSleep = true;
     box2DWorld = new World(gravity, doSleep);
@@ -54,11 +55,10 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   public void enable(boolean enable) {
     isEnabled  = enable;
   }
-
-  protected abstract void initializeConfigs();
   
   public World getBox2DWorld() {
     return box2DWorld;
   }
 
+  protected abstract void initializeConfigs();
 }

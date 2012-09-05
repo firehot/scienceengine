@@ -19,7 +19,7 @@ import com.mazalearn.scienceengine.view.AbstractExperimentView;
 public class ElectroMagnetismView extends AbstractExperimentView {
   private IExperimentModel emModel;
   public ElectroMagnetismView(float width, float height, final ElectroMagnetismModel emModel) {
-    super(emModel);
+    super(emModel, width, height);
     this.emModel = emModel;
     this.width = width;
     this.height = height;
@@ -60,11 +60,11 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   }
   
   @Override
-  public void draw(SpriteBatch batch, float parentAlpha) {
+  public void draw() {
     // Advance n steps
     if (!isPaused ) {
       emModel.simulateSteps(1);
     }
-    super.draw(batch, parentAlpha);
+    super.draw();
   }
 }

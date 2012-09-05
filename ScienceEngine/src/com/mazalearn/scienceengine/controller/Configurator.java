@@ -20,14 +20,16 @@ public class Configurator extends Table {
   final IExperimentView experimentView;
   final Skin skin;
   List<Config> configs;
+  private String experimentName;
   
   public Configurator(Skin skin, final IExperimentModel experimentModel, 
-      final IExperimentView experimentView) {
-    super(skin);
+      final IExperimentView experimentView, final String experimentName) {
+    super(skin, null, experimentName);
     this.skin = skin;
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
     this.configs = new ArrayList<Config>();
+    this.experimentName = experimentName;
     registerStandardButtons(skin, experimentModel, experimentView);
     registerModelConfigs(experimentModel);    
   }
@@ -43,6 +45,9 @@ public class Configurator extends Table {
   protected void registerStandardButtons(Skin skin,
       final IExperimentModel experimentModel,
       final IExperimentView experimentView) {
+    // Register name
+    add(experimentName);
+    row();
     // register the back button
     TextButton backButton = new TextButton("Back to Start", skin);
     backButton.setClickListener(new ClickListener() {

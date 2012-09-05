@@ -30,7 +30,7 @@ public class WaveModel extends AbstractExperimentModel {
   // Number of balls in the simulation
   private final int numBalls;
   // Diameter of each ball (in order to space them apart)
-  private final float ballDiameter;
+  private final float BALL_DIAMETER = 1;
   // Array of balls to simulate wave on string
   public Ball balls[];
   // phase of sinusoidal motion, units of radians
@@ -55,15 +55,14 @@ public class WaveModel extends AbstractExperimentModel {
   // time of evolution of a single pulse
   private int pulseStartTime = 0;
   
-  public WaveModel(int numBalls, float ballDiameter) {
+  public WaveModel(int numBalls) {
     this.numBalls = numBalls;
-    this.ballDiameter = ballDiameter;
     
-    amplitude = 3 * ballDiameter;   
+    amplitude = 3 * BALL_DIAMETER;   
     // balls on the string segment
     balls = new Ball[numBalls];
     for (int i = 0; i < numBalls; i++) {
-      balls[i] = new Ball(i + 1, ballDiameter);
+      balls[i] = new Ball(i + 1, BALL_DIAMETER);
     }
   }
 

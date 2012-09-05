@@ -23,8 +23,8 @@ public class StatesOfMatterController extends AbstractExperimentController {
     super(skin);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
-    statesOfMatterView = new StatesOfMatterView(statesOfMatterModel, BOX_WIDTH, BOX_HEIGHT, N);
-    initialize(statesOfMatterModel, statesOfMatterView);    
+    statesOfMatterView = new StatesOfMatterView(statesOfMatterModel, width, height, N);
+    initialize(statesOfMatterModel, statesOfMatterView, "States of Matter");    
     
     /*
     // Floor of box - also controls heating.

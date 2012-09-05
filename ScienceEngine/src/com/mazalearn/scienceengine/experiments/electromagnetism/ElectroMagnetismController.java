@@ -14,6 +14,6 @@ public class ElectroMagnetismController extends AbstractExperimentController {
     super(skin);
     ElectroMagnetismModel emModel = new ElectroMagnetismModel();
     AbstractExperimentView emView = new ElectroMagnetismView(width, height, emModel);
-    this.initialize(emModel,  emView);
+    this.initialize(emModel,  emView, "ElectroMagnetism");
   }
 }

@@ -2,14 +2,15 @@ package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.controller.IExperimentController;
 import com.mazalearn.scienceengine.designer.ScreenEditor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
+import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
 /**
  * IExperimentModel screen.
@@ -19,11 +20,13 @@ public class ExperimentScreen extends AbstractScreen {
   final String experimentName;
   private ScreenEditor screenEditor;
   IExperimentController experimentController;
-  private Group view;
 
   public ExperimentScreen(ScienceEngine game, String experimentName) {
-    super(game);
+    super(game, null);
     this.experimentName = experimentName;
+    experimentController = createExperimentController(experimentName, 
+        GAME_VIEWPORT_WIDTH, GAME_VIEWPORT_HEIGHT);
+    this.setStage((AbstractExperimentView) experimentController.getView());
   }
 
   @Override
@@ -31,29 +34,30 @@ public class ExperimentScreen extends AbstractScreen {
     super.show();
     
     // retrieve the default table actor
-    Table table = super.getTable();
-    table.add(experimentName).spaceBottom(10);
-    table.row();
+    //Table table = super.getTable();
+    //table.add(experimentName).spaceBottom(10);
+    //table.row();
 
-    // Add States of Matter experimentModel to table
-    int width = (int) stage.width() - 100;
-    int height = (int) stage.height();
-    if (experimentName == "States of Matter") {
-      experimentController = new StatesOfMatterController(width, height, getSkin());
-    } else if (experimentName == "Wave Motion") {
-      experimentController = new WaveController(width, height, getAtlas(), getSkin());
-    } else if (experimentName == "Electromagnetism") {
-      experimentController = new ElectroMagnetismController(width, height, getSkin());
-    }
-    view = (Group) experimentController.getView();
-    table.add(view);
+    //table.add(experimentController.getView());
 //        .width(GAME_VIEWPORT_WIDTH)
 //        .height(GAME_VIEWPORT_HEIGHT);
-    table.add(experimentController.getConfigurator()).width(100); // .height(960).fill();
+    //table.add(experimentController.getConfigurator()).width(100); // .height(960).fill();
     screenEditor = new ScreenEditor("data/" + experimentName + ".json", 
         (OrthographicCamera) stage.getCamera(), 
-        (Group) experimentController.getView(), getBatch(), getFont());
+        (Stage) experimentController.getView(), getBatch(), getFont());
     screenEditor.enable();
+  }
+
+  private IExperimentController createExperimentController(
+      String experimentName, int width, int height) {
+    if (experimentName == "States of Matter") {
+      return new StatesOfMatterController(width, height, getSkin());
+    } else if (experimentName == "Wave Motion") {
+      return  new WaveController(width, height, getAtlas(), getSkin());
+    } else if (experimentName == "Electromagnetism") {
+      return new ElectroMagnetismController(width, height, getSkin());
+    }
+    return null;
   }
   
   @Override
@@ -65,7 +69,7 @@ public class ExperimentScreen extends AbstractScreen {
   public void render(float delta) {
     experimentController.enable(!screenEditor.isEnabled());
     super.render(delta);
-    screenEditor.render(view.x, view.y);
+    screenEditor.render(0, 0);
   }
   
   @Override
