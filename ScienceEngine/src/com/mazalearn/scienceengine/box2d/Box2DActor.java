@@ -30,7 +30,7 @@ public class Box2DActor extends Actor {
    * @param textureRegion - texture to use to represent body in view
    */
   public Box2DActor(ScienceBody body, TextureRegion textureRegion) {
-    super();
+    super(body.getName());
 
     this.body = body;
     this.textureRegion = textureRegion;
@@ -48,7 +48,7 @@ public class Box2DActor extends Actor {
     this.x = body.getPosition().x * PIXELS_PER_M;
     this.y = body.getPosition().y * PIXELS_PER_M;
     this.rotation = (body.getAngle() * MathUtils.radiansToDegrees) % 360;
-    batch.draw(textureRegion, x, y, 0, 0, width, height, 1, 1, rotation);
+    batch.draw(textureRegion, x, y, originX, originY, width, height, 1, 1, rotation);
   }
 
   @Override
@@ -59,7 +59,7 @@ public class Box2DActor extends Actor {
   
   @Override
   public boolean touchDown(float x, float y, int pointer) {
-    return false;    
+    return true;    
   }
   
   public TextureRegion getTextureRegion() {

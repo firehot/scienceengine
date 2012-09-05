@@ -35,8 +35,8 @@ public abstract class AbstractMagnet extends ScienceBody
     super(name, x, y, angle);
     emField.registerProducer(this);
     
-    this.width = 16;
-    this.height = 4;
+    this.width = 32;
+    this.height = 8;
     PolygonShape magnetShape = new PolygonShape();
     magnetShape.setAsBox(this.width/2, this.height/2);
     this.createFixture(magnetShape, 1f /* density */);

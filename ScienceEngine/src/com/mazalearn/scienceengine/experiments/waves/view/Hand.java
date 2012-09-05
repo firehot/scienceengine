@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.experiments.waves.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.experiments.waves.WaveModel.Ball;
@@ -11,7 +12,7 @@ public class Hand extends Image {
   float prevY, originY;
 
   public Hand(TextureRegion region, Scaling scaling, Ball ball, float originX, float originY) {
-    super(region, scaling);
+    super(region, scaling, Align.CENTER, "Hand");
     this.originY = originY;
     this.ball = ball;
     this.width *= 4; 

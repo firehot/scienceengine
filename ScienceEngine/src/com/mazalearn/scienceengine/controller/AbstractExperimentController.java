@@ -1,8 +1,5 @@
 package com.mazalearn.scienceengine.controller;
 
-import java.util.Map;
-
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.view.IExperimentView;
@@ -25,11 +22,6 @@ public abstract class AbstractExperimentController implements
     this.configurator = new Configurator(skin, experimentModel, experimentView);    
   }
   
-  @Override
-  public Map<String, Actor> getComponents() {
-    return experimentView.getComponents();
-  }
-
   @Override
   public IExperimentView getView() {
     return experimentView;

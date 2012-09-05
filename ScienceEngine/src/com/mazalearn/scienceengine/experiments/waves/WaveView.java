@@ -54,9 +54,9 @@ public class WaveView extends AbstractExperimentView {
     boundary = new Boundary(ballTextureRed, 
         waveModel.balls[waveModel.balls.length - 1], 
         this.x + ORIGIN_X + ballDiameter, this.y + ORIGIN_Y);
-    addComponent("WaveBox", waveBox);
-    addComponent("Hand", hand);
-    addComponent("Boundary", boundary);
+    addActor(waveBox);
+    addActor(hand);
+    addActor(boundary);
   }
 
   private TextureRegion createBallTexture(Color color) {

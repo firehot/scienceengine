@@ -3,9 +3,10 @@ package com.mazalearn.scienceengine.screens;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.controller.IExperimentController;
-import com.mazalearn.scienceengine.devtools.ScreenEditor;
+import com.mazalearn.scienceengine.designer.ScreenEditor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
@@ -18,6 +19,7 @@ public class ExperimentScreen extends AbstractScreen {
   final String experimentName;
   private ScreenEditor screenEditor;
   IExperimentController experimentController;
+  private Group view;
 
   public ExperimentScreen(ScienceEngine game, String experimentName) {
     super(game);
@@ -43,13 +45,14 @@ public class ExperimentScreen extends AbstractScreen {
     } else if (experimentName == "Electromagnetism") {
       experimentController = new ElectroMagnetismController(width, height, getSkin());
     }
-    table.add((Group) experimentController.getView());
+    view = (Group) experimentController.getView();
+    table.add(view);
 //        .width(GAME_VIEWPORT_WIDTH)
 //        .height(GAME_VIEWPORT_HEIGHT);
     table.add(experimentController.getConfigurator()).width(100); // .height(960).fill();
     screenEditor = new ScreenEditor("data/" + experimentName + ".json", 
         (OrthographicCamera) stage.getCamera(), 
-        experimentController.getComponents(), getBatch(), getFont());
+        (Group) experimentController.getView(), getBatch(), getFont());
     screenEditor.enable();
   }
   
@@ -62,7 +65,7 @@ public class ExperimentScreen extends AbstractScreen {
   public void render(float delta) {
     experimentController.enable(!screenEditor.isEnabled());
     super.render(delta);
-    screenEditor.render();
+    screenEditor.render(view.x, view.y);
   }
   
   @Override

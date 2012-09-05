@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.devtools;
+package com.mazalearn.scienceengine.designer;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
@@ -58,7 +59,7 @@ public class ScreenEditor {
   
   private final FileHandle file;
   private final OrthographicCamera camera;
-  private final Map<String, Actor> actors;
+  private final Group group;
 
   private boolean isEnabled = false;
   enum OverlayMode { NO_OVERLAY, OVERLAY_NO_HELP, OVERLAY_WITH_HELP};
@@ -79,10 +80,11 @@ public class ScreenEditor {
    * @param camera The camera used to set up the screen.
    * @param actors A map from names to actors.
    */
-  public ScreenEditor(String path, OrthographicCamera camera, Map<String, Actor> actors, SpriteBatch sb, BitmapFont font) {
+  public ScreenEditor(String path, OrthographicCamera camera, 
+      Group stage, SpriteBatch sb, BitmapFont font) {
     this.file = Gdx.files.internal(path);
     this.camera = camera;
-    this.actors = actors;
+    this.group = stage;
     this.sb = sb;
     this.font = font;
   }
@@ -121,10 +123,10 @@ public class ScreenEditor {
   /**
    * Renders the editor overlay.
    */
-  public void render() {
+  public void render(float originX, float originY) {
     if (isEnabled && overlayMode != OverlayMode.NO_OVERLAY) {
-      for (Actor actor : actors.values()) {
-        drawBoundingBox(actor);
+      for (Actor actor : group.getActors()) {
+        drawBoundingBox(actor, originX, originY);
       }
 
       int top = Gdx.graphics.getHeight() + 5;
@@ -164,21 +166,24 @@ public class ScreenEditor {
     private Actor resizedActor = null;
 
     @Override public boolean touchDown(int x, int y, int pointer, int button) {
-      Vector2 p = screenToWorld(x, y);
 
       switch (button) {
         case Buttons.LEFT:
-          for (Actor actor : actors.values()) {
-            if (actor.x <= p.x && p.x <= actor.x + actor.width &&
-              actor.y <= p.y && p.y <= actor.y + actor.height) {
-
-              Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
+          // Assumption, stage coords = group coords
+          // Assumption, group does not have groups within
+          Vector2 stagePoint = new Vector2();
+          group.getStage().toStageCoordinates(x, y, stagePoint);
+          Group.toChildCoordinates(group, stagePoint.x, stagePoint.y, stagePoint);
+          Vector2 point = new Vector2();
+          Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
+          for (Actor actor : group.getActors()) {
+            Group.toChildCoordinates(actor, stagePoint.x, stagePoint.y, point);
+            if (actor.hit(point.x, point.y) != null) {
               Vector2 handlePos = 
-                  new Vector2(actor.x + actor.width - handleSize.x, 
-                      actor.y + actor.height - handleSize.y);
+                  new Vector2(actor.width - handleSize.x, actor.height - handleSize.y);
 
-              if (handlePos.x <= p.x && p.x <= handlePos.x + handleSize.x &&
-                handlePos.y <= p.y && p.y <= handlePos.y + handleSize.y) {
+              if (handlePos.x  <= point.x && point.x <= handlePos.x + handleSize.x &&
+                handlePos.y <= point.y && point.y <= handlePos.y + handleSize.y) {
                 resizedActor = actor;
                 draggedActor = null;
                 selectedActor = actor;
@@ -290,7 +295,7 @@ public class ScreenEditor {
 
   private String getInfo(Actor actor) {
     return String.format(Locale.US, "> %s > xy:[%.3f,%.3f] wh:[%.3f,%.3f]",
-      getName(actors, actor), actor.x, actor.y, actor.width, actor.height);
+      actor.name, actor.x, actor.y, actor.width, actor.height);
   }
 
   private String getName(Map<String, Actor> actors, Actor actor) {
@@ -312,10 +317,9 @@ public class ScreenEditor {
     FileWriter writer = new FileWriter(file.file());
     JsonWriter jsonWriter = new JsonWriter(writer);
     jsonWriter = jsonWriter.object().array("components");
-    for (Entry<String, Actor> entry : actors.entrySet()) {
-      Actor a = entry.getValue();
+    for (Actor a : group.getActors()) {
       jsonWriter.object()
-          .object(entry.getKey())
+          .object(a.name)
           .set("x", a.x)
           .set("y", a.y)
           .set("originX", a.originX)
@@ -345,7 +349,7 @@ public class ScreenEditor {
 
   private void readComponent(OrderedMap<String,?> component) {
     String name = (String) component.get("name");
-    Actor actor = this.actors.get(name);
+    Actor actor = group.findActor(name);
     if (actor == null) return;
     
     actor.x = (Float) component.get("x");;
@@ -365,13 +369,23 @@ public class ScreenEditor {
     return new Vector2(v3.x, v3.y);
   }
 
-  private void drawBoundingBox(Actor actor) {
-    Vector2 objPos = new Vector2(actor.x + actor.width/2, actor.y + actor.height/2);
-    drawRect(objPos, actor.width, actor.height, Color.BLUE, 2);
+  private Vector2 worldToScreen(float originX, float originY, float x, float y) {
+    Vector3 v3 = new Vector3(originX + x, originY + y, 0);
+    camera.project(v3);
+    return new Vector2(v3.x, v3.y);
+  }
+
+  private void drawBoundingBox(Actor actor, float originX, float originY) {
+    Vector2 objPos = worldToScreen(originX, originY, actor.x + actor.width/2, 
+        actor.y + actor.height/2);
+    Vector2 objPos2;
+    
+    drawRect(objPos, actor.width / camera.zoom, actor.height / camera.zoom, Color.BLUE, 2);
 
     Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
-    Vector2 handlePos = new Vector2(actor.x + actor.width - handleSize.x/2, actor.y + actor.height - handleSize.y/2);
-    drawRect(handlePos, handleSize.x, handleSize.y, Color.BLUE, 2);
+    Vector2 handlePos = worldToScreen(originX, originY, actor.x + actor.width - handleSize.x/2, 
+        actor.y + actor.height - handleSize.y/2);
+    drawRect(handlePos, handleSize.x / camera.zoom, handleSize.y / camera.zoom, Color.GREEN, 2);
   }
 
   private void drawRect(Vector2 p, float w, float h, Color c, float lineWidth) {

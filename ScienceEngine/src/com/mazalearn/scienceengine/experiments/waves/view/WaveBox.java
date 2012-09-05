@@ -15,6 +15,7 @@ public class WaveBox extends Actor {
   
   public WaveBox(TextureRegion ballTextureRed, TextureRegion ballTextureBlue,
       Texture backgroundTexture, Ball[] balls, float originX, float originY) {
+    super("WaveBox");
     this.ballTextureRed = ballTextureRed;
     this.ballTextureBlue = ballTextureBlue;
     this.backgroundTexture = backgroundTexture;

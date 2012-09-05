@@ -1,7 +1,7 @@
 package com.mazalearn.scienceengine.view;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -45,13 +45,8 @@ public class AbstractExperimentView extends Group implements IExperimentView {
   }
 */
   
-  protected void addComponent(String name, Actor actor) {
-    super.addActor(actor);
-    components.put(name, actor);
-  }
-
   @Override
-  public Map<String, Actor> getComponents() {
-    return Collections.unmodifiableMap(components);
+  public List<Actor> getActors() {
+    return super.getActors();
   }
 }

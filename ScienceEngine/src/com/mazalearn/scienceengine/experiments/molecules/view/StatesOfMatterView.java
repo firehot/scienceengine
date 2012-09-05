@@ -19,7 +19,7 @@ public class StatesOfMatterView extends AbstractExperimentView {
     super(molecularModel);
     this.molecularModel = molecularModel;
 
-    layoutTable = new Table();
+    layoutTable = new Table("Molecule Box");
     layoutTable.setFillParent(true);
     if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
       layoutTable.debug();
@@ -35,7 +35,7 @@ public class StatesOfMatterView extends AbstractExperimentView {
     // Bottom of box
     layoutTable.add(new ColorPanel()).fill().colspan(3).height(30); // ??? TODO why is this 30???
     layoutTable.row();
-    this.addComponent("Molecule Box", layoutTable);    
+    this.addActor(layoutTable);    
   }
   
   @Override
