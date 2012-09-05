@@ -9,7 +9,7 @@ import com.mazalearn.scienceengine.experiments.waves.WaveModel.Ball;
 
 public class Hand extends Image {
   private final Ball ball;
-  float prevY, originY;
+  float lastTouchedY, originY;
   private float ballDiameter;
 
   public Hand(TextureRegion region, Scaling scaling, Ball ball, float originX, 
@@ -24,13 +24,12 @@ public class Hand extends Image {
   }
   
   public boolean touchDown(float x, float y, int pointer) {
-    prevY = y;
+    lastTouchedY = y;
     return true;
   }
 
   public void touchDragged(float x, float y, int pointer) {
-    ball.pos.y += (y - prevY) / ballDiameter;
-    prevY = y;
+    ball.pos.y += (y - lastTouchedY) / ballDiameter;
   }
   
   @Override

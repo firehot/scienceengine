@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
@@ -37,9 +38,14 @@ public abstract class AbstractMagnet extends ScienceBody
     
     this.width = 32;
     this.height = 8;
+    FixtureDef fixtureDef = new FixtureDef();
     PolygonShape magnetShape = new PolygonShape();
     magnetShape.setAsBox(this.width/2, this.height/2);
-    this.createFixture(magnetShape, 1f /* density */);
+    fixtureDef.density = 1;
+    fixtureDef.shape = magnetShape;
+    fixtureDef.filter.categoryBits = 0x0000;
+    fixtureDef.filter.maskBits = 0x0000;
+    this.createFixture(fixtureDef);
 
     this.strength = 1.0f;
     this.minStrength = 0.0f; // couldn't be any weaker

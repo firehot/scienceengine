@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.screens.StartScreen;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
@@ -31,7 +32,10 @@ public class Configurator extends Table {
     this.configs = new ArrayList<Config>();
     this.experimentName = experimentName;
     registerStandardButtons(skin, experimentModel, experimentView);
-    registerModelConfigs(experimentModel);    
+    registerModelConfigs(experimentModel);
+    if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+      debug();
+    }
   }
 
   @SuppressWarnings("rawtypes")
@@ -46,7 +50,7 @@ public class Configurator extends Table {
       final IExperimentModel experimentModel,
       final IExperimentView experimentView) {
     // Register name
-    add(experimentName);
+    add(experimentName).colspan(2).center();
     row();
     // register the back button
     TextButton backButton = new TextButton("Back to Start", skin);

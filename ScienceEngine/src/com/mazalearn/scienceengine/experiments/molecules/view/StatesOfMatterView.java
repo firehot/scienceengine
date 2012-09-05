@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.experiments.molecules.view;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
@@ -44,7 +43,7 @@ public class StatesOfMatterView extends AbstractExperimentView {
   public void draw() {
     super.draw();
     if (!isPaused) {
-      molecularModel.simulateSteps(10);
+      molecularModel.simulateSteps(9);
     }
   }
 }

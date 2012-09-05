@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
@@ -32,9 +33,14 @@ public class Compass extends ScienceBody {
     super("Compass", x, y, angle);
     getBody().setType(BodyType.StaticBody);
     this.emField = emField;
+    FixtureDef fixtureDef = new FixtureDef();
     PolygonShape rectangleShape = new PolygonShape();
-    rectangleShape.setAsBox(width, height);
-    this.createFixture(rectangleShape, 0.01f);
+    rectangleShape.setAsBox(width/2, height/2);
+    fixtureDef.density = 1;
+    fixtureDef.shape = rectangleShape;
+    fixtureDef.filter.categoryBits = 0x0000;
+    fixtureDef.filter.maskBits = 0x0000;
+    this.createFixture(fixtureDef);
     this.setAngularDamping(0.1f);
 
     fieldVector = new Vector2();

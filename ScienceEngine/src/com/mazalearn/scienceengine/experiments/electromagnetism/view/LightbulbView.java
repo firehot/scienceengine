@@ -10,13 +10,12 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 
 public class LightbulbView extends Box2DActor {
   private final Lightbulb lightbulb;
-  private TextureRegion lightTexturePositive, lightTextureNegative;
+  private TextureRegion lightTexture;
 
   public LightbulbView(TextureRegion textureRegion, Lightbulb lightbulb) {
     super(lightbulb, textureRegion);
     this.lightbulb = lightbulb;
-    lightTexturePositive = createLightTexture(Color.YELLOW);
-    lightTextureNegative = createLightTexture(Color.BLUE);
+    lightTexture = createLightTexture(Color.YELLOW);
   }
 
   @Override
@@ -26,8 +25,7 @@ public class LightbulbView extends Box2DActor {
     int diameter = Math.round(intensity * 256);
     Color c = batch.getColor();
     batch.setColor(1, 1, 1, 0.5f + intensity * 0.5f);
-    TextureRegion t = lightbulb.getIntensity() > 0 ? lightTexturePositive : lightTextureNegative;
-    batch.draw(t, x + width/2 - diameter/2, y + height/2 - diameter/2, diameter, diameter);
+    batch.draw(lightTexture, x + width/2 - diameter/2, y + height/2 - diameter/2, diameter, diameter);
     batch.setColor(c);
     super.draw(batch, parentAlpha);
   }

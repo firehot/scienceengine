@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 

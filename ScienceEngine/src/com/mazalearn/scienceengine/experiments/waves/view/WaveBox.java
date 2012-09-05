@@ -54,5 +54,4 @@ public class WaveBox extends Actor {
   public float getBallDiameter() {
     return ballDiameter;
   }
-  
 }

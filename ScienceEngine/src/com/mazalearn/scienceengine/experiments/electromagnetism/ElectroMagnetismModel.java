@@ -38,7 +38,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
     bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
     barMagnet.setType(BodyType.DynamicBody);
-    //bodies.add(compass = new Compass(emField, 10, 5, 0));
+    bodies.add(compass = new Compass(emField, 10, 5, 0));
     
     reset();
   }
@@ -50,6 +50,19 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
     });
+    modelConfigs.add(new AbstractModelConfig<Float>("MagnetStrength", 
+        "Strength of magnet", 0, 10000) {
+      public Float getValue() { return getMagnetStrength(); }
+      public void setValue(Float value) { setMagnetStrength(value); }
+    });
+  }
+
+  public Float getMagnetStrength() {
+    return barMagnet.getStrength();
+  }
+  
+  public void setMagnetStrength(Float strength) {
+    barMagnet.setStrength(strength);
   }
 
   @Override
@@ -68,13 +81,13 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
       body.reset();
     }
     if (joint != null) {
-      ScienceBody.getBox2DWorld().destroyJoint(joint);
+      box2DWorld.destroyJoint(joint);
       joint = null;
     }
     if (mode == Mode.Rotate) {
       jointDef.initialize(barMagnet.getBody(), ScienceBody.getGround(), 
           barMagnet.getWorldPoint(Vector2.Zero));
-      joint = ScienceBody.getBox2DWorld().createJoint(jointDef);
+      joint = box2DWorld.createJoint(jointDef);
     }
   }
 

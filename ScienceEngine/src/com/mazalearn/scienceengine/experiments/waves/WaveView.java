@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -71,10 +70,6 @@ public class WaveView extends AbstractExperimentView {
   
   @Override
   public void draw() {
-    // Advance n steps
-    if (!isPaused ) {
-      waveModel.simulateSteps(1);
-    }
     hand.visible = waveModel.getGenMode() == "Manual";
     super.draw();
   }

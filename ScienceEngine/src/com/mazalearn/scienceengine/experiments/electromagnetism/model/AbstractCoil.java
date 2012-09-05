@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -55,9 +56,14 @@ public abstract class AbstractCoil extends ScienceBody {
     this.wireWidth = wireWidth;
     this.loopSpacing = loopSpacing;
     this.currentAmplitude = 0f;
+    FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(radius);
-    this.createFixture(circleShape, 0.01f);
+    fixtureDef.density = 1;
+    fixtureDef.shape = circleShape;
+    fixtureDef.filter.categoryBits = 0x0002;
+    fixtureDef.filter.maskBits = 0x0000;
+    this.createFixture(fixtureDef);
   }
 
   // ----------------------------------------------------------------------------

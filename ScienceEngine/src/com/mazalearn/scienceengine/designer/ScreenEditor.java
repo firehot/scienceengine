@@ -3,8 +3,6 @@ package com.mazalearn.scienceengine.designer;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -298,15 +296,6 @@ public class ScreenEditor {
       actor.name, actor.x, actor.y, actor.width, actor.height);
   }
 
-  private String getName(Map<String, Actor> actors, Actor actor) {
-    for (Entry<String, Actor> entry: actors.entrySet()) {
-      if (entry.getValue() == actor) {
-        return entry.getKey();
-      }
-    }
-    return null;
-  }
-
   private void resetCamera() {
     camera.zoom = origCameraZoom;
     camera.position.set(origCameraPos);
@@ -378,8 +367,6 @@ public class ScreenEditor {
   private void drawBoundingBox(Actor actor, float originX, float originY) {
     Vector2 objPos = worldToScreen(originX, originY, actor.x + actor.width/2, 
         actor.y + actor.height/2);
-    Vector2 objPos2;
-    
     drawRect(objPos, actor.width / camera.zoom, actor.height / camera.zoom, Color.BLUE, 2);
 
     Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
