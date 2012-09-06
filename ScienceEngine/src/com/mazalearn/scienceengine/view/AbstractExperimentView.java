@@ -6,7 +6,6 @@ import com.mazalearn.scienceengine.model.IExperimentModel;
 public class AbstractExperimentView extends Stage implements IExperimentView {
 
   public static final int PIXELS_PER_M = 8;
-  protected boolean isPaused = false;
   protected final IExperimentModel experimentModel;
 
   public AbstractExperimentView(IExperimentModel experimentModel, float width, float height) {
@@ -16,17 +15,17 @@ public class AbstractExperimentView extends Stage implements IExperimentView {
 
   @Override
   public void pause() {
-    this.isPaused = true;
+    experimentModel.enable(false);
   }
 
   @Override
   public void resume() {
-    this.isPaused = false;
+    experimentModel.enable(true);
   }
 
   @Override
   public boolean isPaused() {
-    return isPaused;
+    return !experimentModel.isEnabled();
   }
   
 /*
@@ -45,8 +44,6 @@ public class AbstractExperimentView extends Stage implements IExperimentView {
   @Override
   public void draw() {
     super.draw();
-    if (!isPaused) {
-      experimentModel.simulateSteps(1);
-    }
+    experimentModel.simulateSteps();
   }
 }

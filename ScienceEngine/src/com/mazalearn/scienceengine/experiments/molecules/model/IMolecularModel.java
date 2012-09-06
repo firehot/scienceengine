@@ -7,9 +7,6 @@ public interface IMolecularModel extends IExperimentModel {
   // Initialize the molecules configuration (currently uniform random)
   public abstract void reset();
 
-  // Simulate n steps
-  public abstract void simulateSteps(int n);
-
   // The physical time elapsed since beginning of simulation
   public abstract double getSimulatedTime();
 

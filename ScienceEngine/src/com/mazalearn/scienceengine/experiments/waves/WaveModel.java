@@ -206,7 +206,7 @@ public class WaveModel extends AbstractExperimentModel {
   }
 
   @Override
-  protected void initializeConfigs() {
+  public void initializeConfigs() {
     modelConfigs.add(new AbstractModelConfig<String>("GenMode", "How wave is generated", GenMode.values()) {
      public String getValue() { return getGenMode(); }
      public void setValue(String value) { setGenMode(value); }

@@ -15,23 +15,23 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   protected List<IModelConfig> modelConfigs;
 
   private boolean isEnabled = true;
+  protected int numStepsPerView = 1;
 
   @SuppressWarnings("rawtypes")
   public AbstractExperimentModel() {
     super();
-    // Initialize the world for Box2D if not already available
+    // Initialize the world for Box2D
     Vector2 gravity = new Vector2(0.0f, 0.0f);
     boolean doSleep = true;
     box2DWorld = new World(gravity, doSleep);
     ScienceBody.setBox2DWorld(box2DWorld);    
     modelConfigs = new ArrayList<IModelConfig>();
-    initializeConfigs();
   }
 
   @Override
-  public void simulateSteps(int n) {
+  public void simulateSteps() {
     if (!isEnabled) return;
-    for (int i =0; i < n; i++) {
+    for (int i = 0; i < numStepsPerView; i++) {
       singleStep();
     }
   }
@@ -52,6 +52,11 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   }
 
   @Override
+  public boolean isEnabled() {
+    return isEnabled;
+  }
+  
+  @Override
   public void enable(boolean enable) {
     isEnabled  = enable;
   }
@@ -60,5 +65,5 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     return box2DWorld;
   }
 
-  protected abstract void initializeConfigs();
+  public abstract void initializeConfigs();
 }

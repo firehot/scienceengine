@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -39,17 +40,17 @@ public abstract class AbstractMagnet extends ScienceBody
     this.width = 32;
     this.height = 8;
     FixtureDef fixtureDef = new FixtureDef();
-    PolygonShape magnetShape = new PolygonShape();
-    magnetShape.setAsBox(this.width/2, this.height/2);
+    PolygonShape rectangleShape = new PolygonShape();
+    rectangleShape.setAsBox(this.width/2, this.height/2);
     fixtureDef.density = 1;
-    fixtureDef.shape = magnetShape;
+    fixtureDef.shape = rectangleShape;
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
 
     this.strength = 1.0f;
     this.minStrength = 0.0f; // couldn't be any weaker
-    this.maxStrength = Float.POSITIVE_INFINITY; // couldn't be any stronger
+    this.maxStrength = 10000.0f; // couldn't be any stronger
   }
 
   // ----------------------------------------------------------------------------
@@ -155,11 +156,13 @@ public abstract class AbstractMagnet extends ScienceBody
      * adjusting for position and orientation.
      */
     Vector2 localPoint = this.getLocalPoint(p);
+    localPoint.sub(width/2, height/2);
+    localPoint.mul(8.0f); // fudge factor to keep at 250,50 scale
     // get strength in magnet's local coordinate frame
     getBFieldRelative(localPoint, outputVector);
 
     // Adjust the field vector to match the magnet's angle.
-    outputVector.rotate(getAngle());
+    outputVector.rotate(getAngle() * MathUtils.radiansToDegrees);
 
     // Clamp magnitude to magnet strength.
     // TODO: why do we need to do this?
@@ -179,10 +182,8 @@ public abstract class AbstractMagnet extends ScienceBody
    * magnet's local 2D coordinate frame, it is located at (0,0), and its north
    * pole is pointing down the positive x-axis.
    * 
-   * @param p
-   *          the point
-   * @param outputVector
-   *          B-field is written here if provided, may NOT be null
+   * @param p - the point
+   * @param outputVector - B-field is written here if provided, may NOT be null
    * @return outputVector
    */
   protected abstract Vector2 getBFieldRelative(final Vector2 p,

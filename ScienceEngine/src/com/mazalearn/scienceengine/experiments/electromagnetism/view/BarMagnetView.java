@@ -41,13 +41,10 @@ public class BarMagnetView extends Box2DActor {
     newPos.set(x, y);
     // Subtract last touch position to get displacement vector
     newPos.sub(lastTouch);
-    System.out.println(newPos);
     // Add displacement vector to the actor position to find new position
-    newPos.add(this.x, this.y);
-    // Scale down from actor coords to barMagnet coords
-    newPos.mul(1f/AbstractExperimentView.PIXELS_PER_M);
-    // Move barMagnet to new position
-    barMagnet.setPositionAndAngle(newPos, barMagnet.getAngle());
+    this.x += newPos.x;
+    this.y += newPos.y;
+    setPositionFromScreen();
     // Recalibrate lastTouch to new coordinates
     lastTouch.set(x, y);
     emView.resume();
@@ -71,15 +68,18 @@ public class BarMagnetView extends Box2DActor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
-
     if (Mode.valueOf(emModel.getMode()) == Mode.Rotate) { // Display RPM
-      font.setColor(1f, 1f, 1f, parentAlpha);
-      int angularVelocity = Math.round(barMagnet.getAngularVelocity());
-      String rpm = String.valueOf(angularVelocity);
-      newPos.set(barMagnet.getWorldCenter());
-      newPos.mul(AbstractExperimentView.PIXELS_PER_M);
-      newPos.add(-10, 5);
-      font.draw(batch, rpm, newPos.x + originX, newPos.y + originY);
+      drawRpm(batch, parentAlpha);
     }
+  }
+
+  private void drawRpm(SpriteBatch batch, float parentAlpha) {
+    font.setColor(1f, 1f, 1f, parentAlpha);
+    int angularVelocity = Math.round(barMagnet.getAngularVelocity());
+    String rpm = String.valueOf(angularVelocity);
+    newPos.set(barMagnet.getWorldCenter());
+    newPos.mul(AbstractExperimentView.PIXELS_PER_M);
+    newPos.add(-10, 5);
+    font.draw(batch, rpm, newPos.x + originX, newPos.y + originY);
   }
 }

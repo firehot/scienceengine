@@ -1,11 +1,10 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -17,14 +16,13 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  */
 public class Compass extends ScienceBody {
 
-  public final float width = 01f;
-  public final float height = 10f;
+  public final float width = 8f;
+  public final float height = 2f;
   // Field that the compass is observing.
   private EMField emField;
   // A reusable vector
-  private Vector2 fieldVector;
-  private RevoluteJointDef jointDef = new RevoluteJointDef();
-  private Joint joint;
+  private Vector2 fieldVector = new Vector2();
+  private Vector2 pos = new Vector2();
 
   /**
    * @param emField
@@ -41,19 +39,18 @@ public class Compass extends ScienceBody {
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
-    this.setAngularDamping(0.1f);
-
-    fieldVector = new Vector2();
   }
   
   @Override
-  public void setPositionAndAngle(Vector2 position, float angle) {
-    emField.getBField(position, fieldVector /* output */);
-    super.setPositionAndAngle(position, fieldVector.angle());  
-  }
-   
   public void singleStep(float dt) {
-    setPositionAndAngle(getPosition(), getAngle());
+    pos.set(width/2, height/2);
+    pos = getWorldPoint(pos);
+    emField.getBField(pos, fieldVector /* output */);
+    float angle = fieldVector.angle() * MathUtils.degreesToRadians;
+    setPositionAndAngle(getPosition(), angle);
   }
-
+  
+  public float getBField() {
+    return fieldVector.len();
+  }
 }

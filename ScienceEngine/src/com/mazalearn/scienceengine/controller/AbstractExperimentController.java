@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.controller;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.model.AbstractExperimentModel;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.view.IExperimentView;
@@ -21,6 +20,7 @@ public abstract class AbstractExperimentController implements
   protected void initialize(IExperimentModel experimentModel, 
       AbstractExperimentView experimentView, String name) {
     this.experimentModel = experimentModel;
+    experimentModel.initializeConfigs();
     this.experimentView = experimentView;
     this.configurator = new Configurator(skin, experimentModel, experimentView, name);
     experimentView.addActor(this.configurator);

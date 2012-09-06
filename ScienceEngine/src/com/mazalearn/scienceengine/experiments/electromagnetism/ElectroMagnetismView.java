@@ -10,6 +10,7 @@ import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
@@ -20,9 +21,9 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     this.height = height;
     
     // TODO: use blending function to draw coilsback?
-    Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
-        Scaling.stretch, Align.CENTER, "CoilsBack");
-    this.addActor(coilsBack);
+    //Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
+    //    Scaling.stretch, Align.CENTER, "CoilsBack");
+    //this.addActor(coilsBack);
     for (final ScienceBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body.getName());
       if (body.getName() == "BarMagnet") {       
@@ -30,9 +31,11 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       } else if (body.getName() == "Lightbulb") {
         this.addActor(new LightbulbView(textureRegion, (Lightbulb) body));
       } else if (body.getName() == "PickupCoil") {
-        coilsBack.x = body.getPosition().x * PIXELS_PER_M;
-        coilsBack.y = body.getPosition().y * PIXELS_PER_M;
+        //coilsBack.x = body.getPosition().x * PIXELS_PER_M;
+        //coilsBack.y = body.getPosition().y * PIXELS_PER_M;
         this.addActor(new Box2DActor(body, textureRegion));
+      } else if (body.getName() == "Compass") {
+        this.addActor(new CompassView(textureRegion, body));
       } else {
         this.addActor(new Box2DActor(body, textureRegion));
       }
@@ -53,10 +56,5 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       return null;
     }
     return new TextureRegion(texture);
-  }
-  
-  @Override
-  public void draw() {
-    super.draw();
   }
 }

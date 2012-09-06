@@ -35,6 +35,7 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
     this.boxHeight = boxHeight;
     this.temperature = temperature;
     this.molecules = new Molecule[N];
+    this.numStepsPerView = 10;
   }
   
   @Override
@@ -113,8 +114,8 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
   }
 
   @Override
-  public void simulateSteps(int n) {
-    super.simulateSteps(n);
+  public void simulateSteps() {
+    super.simulateSteps();
     reScaleDt();
   }
 
@@ -230,7 +231,7 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
   }
 
   @Override
-  protected void initializeConfigs() {
+  public void initializeConfigs() {
     modelConfigs.add(new AbstractModelConfig<String>("State", "State of Matter", State.values()) {
       public String getValue() { return getState(); }
       public void setValue(String value) { setState(value); }

@@ -35,23 +35,25 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     emField = new EMField();
     
     bodies.add(barMagnet = new BarMagnet(emField, 10, 12, 0));
-    bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
-    bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
+//    bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
+//    bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
     barMagnet.setType(BodyType.DynamicBody);
-    bodies.add(compass = new Compass(emField, 10, 5, 0));
+    bodies.add(compass = new Compass(emField, 0, 5, 0));
+    compass.setType(BodyType.KinematicBody);
     
     reset();
   }
 
   @Override
-  protected void initializeConfigs() {
+  public void initializeConfigs() {
     modelConfigs.add(new AbstractModelConfig<String>("Mode", 
         "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
     });
     modelConfigs.add(new AbstractModelConfig<Float>("MagnetStrength", 
-        "Strength of magnet", 0, 10000) {
+        "Strength of magnet", barMagnet.getMinStrength(), 
+        barMagnet.getMaxStrength()) {
       public Float getValue() { return getMagnetStrength(); }
       public void setValue(Float value) { setMagnetStrength(value); }
     });

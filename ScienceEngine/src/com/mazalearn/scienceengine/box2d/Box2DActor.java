@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * 
  */
 public class Box2DActor extends Actor {
-  private static final int PIXELS_PER_M = 8;
+  protected static final int PIXELS_PER_M = 8;
   private ScienceBody body;
   private TextureRegion textureRegion;
 
@@ -57,16 +57,11 @@ public class Box2DActor extends Actor {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
   }
   
-  @Override
-  public boolean touchDown(float x, float y, int pointer) {
-    return true;    
-  }
-  
   public TextureRegion getTextureRegion() {
     return textureRegion;
   }
   
   public void setPositionFromScreen() {
-    body.setPositionAndAngle(x / PIXELS_PER_M, y / PIXELS_PER_M, body.getAngle());
+    body.setPositionAndAngle(x / PIXELS_PER_M, y / PIXELS_PER_M, rotation * MathUtils.degreesToRadians);
   }
 }

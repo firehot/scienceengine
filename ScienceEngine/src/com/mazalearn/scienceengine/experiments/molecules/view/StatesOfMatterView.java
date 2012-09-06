@@ -37,13 +37,5 @@ public class StatesOfMatterView extends AbstractExperimentView {
     layoutTable.add(new ColorPanel()).fill().colspan(3).height(30); // ??? TODO why is this 30???
     layoutTable.row();
     this.addActor(layoutTable);    
-  }
-  
-  @Override
-  public void draw() {
-    super.draw();
-    if (!isPaused) {
-      molecularModel.simulateSteps(9);
-    }
-  }
+  }  
 }

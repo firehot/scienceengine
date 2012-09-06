@@ -65,7 +65,8 @@ public class ExperimentScreen extends AbstractScreen {
   
   @Override
   public void render(float delta) {
-    experimentController.enable(!screenEditor.isEnabled());
+    experimentController.enable(!screenEditor.isEnabled() && 
+        experimentController.getModel().isEnabled());
     super.render(delta);
     screenEditor.render(0, 0);
   }
