@@ -20,4 +20,6 @@ public interface IModelConfig<T> {
   // enums only for LIST type
   @SuppressWarnings("rawtypes")
   public Enum[] getList();
+  public void setPermitted(boolean isPermitted);
+  public boolean isPermitted();
 }

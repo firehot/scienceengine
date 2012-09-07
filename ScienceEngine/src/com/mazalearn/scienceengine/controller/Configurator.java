@@ -82,6 +82,7 @@ public class Configurator extends Table {
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>("Reset", "Reset to initial state") {
           public void doCommand() { experimentModel.reset(); }
+          public boolean isPossible() { return true; }
     };
     IViewConfig resetConfig = new ConfigTextButton(resetModelConfig, skin);
     

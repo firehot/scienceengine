@@ -235,11 +235,13 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
     modelConfigs.add(new AbstractModelConfig<String>("State", "State of Matter", State.values()) {
       public String getValue() { return getState(); }
       public void setValue(String value) { setState(value); }
+      public boolean isPossible() { return true; }
     });
 
     modelConfigs.add(new AbstractModelConfig<String>("HeatingLevel", "Heat applied", HeatingLevel.values()) {
       public String getValue() { return getHeatingLevel(); }
       public void setValue(String value) { setHeatingLevel(value); }
+      public boolean isPossible() { return true; }
     });
   }
 

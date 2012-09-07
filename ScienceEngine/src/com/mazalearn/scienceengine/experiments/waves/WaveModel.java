@@ -210,39 +210,43 @@ public class WaveModel extends AbstractExperimentModel {
     modelConfigs.add(new AbstractModelConfig<String>("GenMode", "How wave is generated", GenMode.values()) {
      public String getValue() { return getGenMode(); }
      public void setValue(String value) { setGenMode(value); }
+     public boolean isPossible() { return true; }
    });
 
    modelConfigs.add(new AbstractModelConfig<String>("EndType", "Other end boundary", EndType.values()) {
      public String getValue() { return getEndType(); }
      public void setValue(String value) { setEndType(value); }
+     public boolean isPossible() { return true; }
    });
 
    modelConfigs.add(new AbstractModelConfig<Float>("Frequency", "Frequency of Wave", 0, 1) {
       public Float getValue() { return getFrequency(); }
       public void setValue(Float value) { setFrequency(value); }
-      public boolean isAvailable() { return getGenMode() == "Oscillate";}
+      public boolean isPossible() { return getGenMode() == "Oscillate";}
     });
 
     modelConfigs.add(new AbstractModelConfig<Float>("Tension", "Tension in LIST", 1, 10) {
       public Float getValue() { return getTension(); }
       public void setValue(Float value) { setTension(value); }
+      public boolean isPossible() { return true; }
     });
 
     modelConfigs.add(new AbstractModelConfig<Float>("PulseWidth", "Width of Pulse", 5, 20) {
       public Float getValue() { return getPulseWidth(); }
       public void setValue(Float value) { setPulseWidth(value); }
-      public boolean isAvailable() { return getGenMode() == "Pulse";}
+      public boolean isPossible() { return getGenMode() == "Pulse";}
     });
 
     modelConfigs.add(new AbstractModelConfig<Float>("Amplitude", "Amplitude of Wave", 0, 100) {
       public Float getValue() { return getAmplitude(); }
       public void setValue(Float value) { setAmplitude(value); }
-      public boolean isAvailable() { return getGenMode() != "Manual"; }
+      public boolean isPossible() { return getGenMode() != "Manual"; }
     });
 
     modelConfigs.add(new AbstractModelConfig<Float>("Damping", "Damping", 0, 0.5f) {
       public Float getValue() { return getDamping(); }
       public void setValue(Float value) { setDamping(value); }
+      public boolean isPossible() { return true; }
     });
   }
   

@@ -6,6 +6,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   private final String name;
   private final String description;
   private final float low, high;
+  private boolean isPermitted;
   @SuppressWarnings("rawtypes")
   private Enum[] values;
   
@@ -31,8 +32,15 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     this.low = low;
     this.high = high;
     this.values = values;
+    this.isPermitted = true;
   }
   
+  @Override
+  public void setPermitted(boolean isPermitted) {
+    this.isPermitted = isPermitted;
+  }
+  
+  public boolean isPermitted() { return isPermitted; }  
   public ConfigType getType() { return type; }
   public String getName() { return name; }
   public String getDescription() { return description; }
@@ -41,7 +49,8 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   public float getLow() { return low;}
   public float getHigh() { return high;}
   public void doCommand() {}
-  public boolean isAvailable() { return true;}
+  public boolean isAvailable() { return isPermitted && isPossible();}
+  public abstract boolean isPossible();
   @SuppressWarnings("rawtypes")
   public Enum[] getList() { return values; }
 }

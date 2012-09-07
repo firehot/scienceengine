@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -77,11 +78,11 @@ public class LevelEditor extends Stage {
    * @param stage - stage used by the experiment view
    */
   public LevelEditor(String experimentName, int level, Stage stage, 
-      IExperimentModel model, AbstractScreen screen) {
+      IExperimentModel experimentModel, AbstractScreen screen) {
     super(stage.width(), stage.height(), stage.isStretched(), 
         stage.getSpriteBatch());
     this.screen = screen;
-    this.experimentModel = model;
+    this.experimentModel = experimentModel;
     this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
@@ -90,7 +91,7 @@ public class LevelEditor extends Stage {
     levelConfig.debug();
     levelConfig.setFillParent(true);
     levelConfig.add(createComponentList(stage, screen.getSkin())).pad(10);
-    levelConfig.add(createConfigTable(model, screen.getSkin())).pad(10);
+    levelConfig.add(createConfigTable(experimentModel, screen.getSkin())).pad(10);
     this.addActor(levelConfig);
     loadLevel();
   }
@@ -114,11 +115,19 @@ public class LevelEditor extends Stage {
     return componentList;
   }
 
-  private Table createConfigTable(IExperimentModel model, Skin skin) {
+  private Table createConfigTable(IExperimentModel experimentModel, Skin skin) {
     Table configTable = new Table(skin);
-    for (IModelConfig<?> config: model.getConfigs()) {
+    for (final IModelConfig<?> config: experimentModel.getConfigs()) {
       if (config.isAvailable()) {
-        configTable.add(new CheckBox(config.getName(), skin)).left();
+        final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
+        configTable.add(configCheckbox).left();
+        configCheckbox.setChecked(true);
+        configCheckbox.setClickListener(new ClickListener() {
+          @Override
+          public void click(Actor actor, float x, float y) {
+            config.setPermitted(configCheckbox.isChecked());
+          }
+        });
         configTable.row();
       }
     }
@@ -389,6 +398,14 @@ public class LevelEditor extends Stage {
           .pop();
     }
     jsonWriter.flush();
+    jsonWriter = jsonWriter.object().array("configs");
+    for (final IModelConfig<?> config: experimentModel.getConfigs()) {
+      jsonWriter.object()
+          .set("name", config.getName())
+          .set("permitted", config.isPermitted())
+          .pop();
+    }
+    jsonWriter.flush();
     jsonWriter.close();
   }
 
@@ -399,12 +416,21 @@ public class LevelEditor extends Stage {
         .parse(str);
 
     Array<?> components = (Array<?>) rootElem.get("components");
-    for (int i = 0; i < components.size; i++) {
-      OrderedMap<String, ?> component = (OrderedMap<String, ?>) components
-          .get(i);
-      readComponent(component);
+    if (components != null) {
+      for (int i = 0; i < components.size; i++) {
+        OrderedMap<String, ?> component = 
+            (OrderedMap<String, ?>) components.get(i);
+        readComponent(component);
+      }
     }
 
+    Array<?> configs = (Array<?>) rootElem.get("configs");
+    if (configs != null) {
+      for (int i = 0; i < configs.size; i++) {
+        OrderedMap<String, ?> config = (OrderedMap<String, ?>) configs.get(i);
+        readConfig(config);
+      }
+    }
   }
 
   private void readComponent(OrderedMap<String, ?> component) {
@@ -424,6 +450,15 @@ public class LevelEditor extends Stage {
       Box2DActor box2dActor = (Box2DActor) actor;
       box2dActor.setPositionFromScreen();
       box2dActor.getBody().setActive(actor.visible);
+    }
+  }
+
+  private void readConfig(OrderedMap<String, ?> configObj) {
+    String name = (String) configObj.get("name");
+    for (IModelConfig<?> config: experimentModel.getConfigs()) {
+      if (config.getName() == name) {
+        config.setPermitted((Boolean) configObj.get("permitted"));
+      }
     }
   }
 

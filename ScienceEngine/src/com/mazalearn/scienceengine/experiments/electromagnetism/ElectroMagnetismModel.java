@@ -50,12 +50,14 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
         "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
+      public boolean isPossible() { return barMagnet.isActive(); }
     });
     modelConfigs.add(new AbstractModelConfig<Float>("MagnetStrength", 
         "Strength of magnet", barMagnet.getMinStrength(), 
         barMagnet.getMaxStrength()) {
       public Float getValue() { return getMagnetStrength(); }
       public void setValue(Float value) { setMagnetStrength(value); }
+      public boolean isPossible() { return barMagnet.isActive(); }
     });
   }
 
