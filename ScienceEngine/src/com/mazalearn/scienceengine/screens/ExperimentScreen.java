@@ -41,7 +41,7 @@ public class ExperimentScreen extends AbstractScreen {
     //table.add(experimentController.getConfigurator()).width(100); // .height(960).fill();
     screenEditor = new ScreenEditor(experimentName, 
         (Stage) experimentController.getView(), 
-        getFont());
+        getFont(), getSkin());
     screenEditor.enable();
   }
 

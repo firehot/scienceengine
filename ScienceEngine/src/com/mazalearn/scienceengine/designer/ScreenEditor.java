@@ -19,6 +19,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
@@ -38,9 +41,7 @@ import com.mazalearn.scienceengine.box2d.Box2DActor;
  * <br/>
  * 
  * Usage is as follows:<br/>
- * 1. Create an actors map and add your actors to it.<br/>
- * 2. Create the ScreenEditor with the list, the screen camera, and a path to
- * the file where things will get saved.<br/>
+ * 1. Create the ScreenEditor with the stage, its name and level.<br/>
  * 3. Call load() method to import previously saved stuff, if any.<br/>
  * 4. Call enable() method if you want to enable the editor to make changes to
  * your scene.<br/>
@@ -66,7 +67,7 @@ public class ScreenEditor extends Stage {
   private ImmediateModeRenderer20 imr;
   private BitmapFont font;
   private Color fontColor = Color.WHITE;
-  private Actor selectedActor;
+  private Actor selectedActor, listSelectedActor;
   private Actor draggedActor = null;
   private Actor resizedActor = null;
   private final Vector2 lastTouch = new Vector2();
@@ -76,6 +77,8 @@ public class ScreenEditor extends Stage {
   private float originalCameraZoom;
   private InputProcessor originalInputProcessor;
 
+  private List componentList;
+
   /**
    * Build and initialize the editor.
    * 
@@ -84,7 +87,7 @@ public class ScreenEditor extends Stage {
    * @param stage
    *          The stage used by the screen - must use Orthographic camera
    */
-  public ScreenEditor(String experimentName, Stage stage, BitmapFont font) {
+  public ScreenEditor(String experimentName, Stage stage, BitmapFont font, Skin skin) {
     super(stage.width(), stage.height(), stage.isStretched(), stage
         .getSpriteBatch());
     this.file = Gdx.files.internal("data/" + experimentName + ".json");
@@ -92,6 +95,21 @@ public class ScreenEditor extends Stage {
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
     this.font = font;
+    String[] names = new String[stage.getActors().size() + 1];
+    int i = 0;
+    for (Actor actor: stage.getActors()) {
+      if (actor.name != null)
+        names[i++] = actor.name;
+    }
+    names[i] = "None";
+    componentList = new List(names, skin);
+    componentList.setSelectionListener(new SelectionListener() {
+      @Override
+      public void selected(Actor actor, int index, String name) {
+        listSelectedActor = originalStage.findActor(name);
+      }
+    });
+    this.addActor(componentList);
   }
 
   /**
@@ -106,7 +124,6 @@ public class ScreenEditor extends Stage {
       System.err.println("[ScreenEditor] Error happened while loading "
           + file.path());
     }
-
   }
 
   /**
@@ -141,7 +158,10 @@ public class ScreenEditor extends Stage {
     batch.end();
     if (isEnabled && overlayMode != OverlayMode.NO_OVERLAY) {
       for (Actor actor : originalStage.getActors()) {
-        drawBoundingBox(actor);
+        drawBoundingBox(actor, Color.BLUE);
+      }
+      if (selectedActor != null) {
+        drawBoundingBox(selectedActor, Color.YELLOW);
       }
 
       int top = Gdx.graphics.getHeight() + 5;
@@ -185,6 +205,7 @@ public class ScreenEditor extends Stage {
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
 
+    super.touchDown(x, y, pointer, button);
     switch (button) {
     case Buttons.LEFT:
       // Assumption, stage does not have groups within
@@ -222,12 +243,13 @@ public class ScreenEditor extends Stage {
 
   @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
+    super.touchUp(x, y, pointer, button);
     switch (button) {
     case Buttons.LEFT:
       draggedActor = resizedActor = selectedActor = null;
       break;
     }
-
+    selectedActor = listSelectedActor;
     lastTouch.set(x, y);
     return true;
   }
@@ -297,7 +319,7 @@ public class ScreenEditor extends Stage {
       load();
       break;
     case Keys.R:
-      restoreStage();
+      restoreCamera();
       break;
     case Keys.ENTER:
       disable();
@@ -319,7 +341,8 @@ public class ScreenEditor extends Stage {
   private void disable() {
     if (isEnabled) {
       imr = null;
-      restoreStage();
+      restoreCamera();
+      Gdx.input.setInputProcessor(originalInputProcessor);
       isEnabled = false;
     }
   }
@@ -329,11 +352,10 @@ public class ScreenEditor extends Stage {
         actor.name, actor.x, actor.y, actor.width, actor.height);
   }
 
-  private void restoreStage() {
+  private void restoreCamera() {
     orthographicCamera.zoom = originalCameraZoom;
     camera.position.set(originalCameraPos);
     camera.update();
-    Gdx.input.setInputProcessor(originalInputProcessor);
   }
 
   private void writeFile() throws IOException {
@@ -341,9 +363,16 @@ public class ScreenEditor extends Stage {
     JsonWriter jsonWriter = new JsonWriter(writer);
     jsonWriter = jsonWriter.object().array("components");
     for (Actor a : originalStage.getActors()) {
-      jsonWriter.object().object(a.name).set("x", a.x).set("y", a.y)
-          .set("originX", a.originX).set("originY", a.originY)
-          .set("width", a.width).set("height", a.height).pop().pop();
+      jsonWriter.object()
+          .object(a.name)
+          .set("x", a.x)
+          .set("y", a.y)
+          .set("originX", a.originX)
+          .set("originY", a.originY)
+          .set("width", a.width)
+          .set("height", a.height)
+          .pop()
+          .pop();
     }
     jsonWriter.flush();
     jsonWriter.close();
@@ -388,23 +417,15 @@ public class ScreenEditor extends Stage {
     return new Vector2(v3.x, v3.y);
   }
 
-  private Vector2 worldToScreen(float x, float y) {
-    Vector3 v3 = new Vector3(x, y, 0);
-    camera.project(v3);
-    return new Vector2(v3.x, v3.y);
-  }
-
-  private void drawBoundingBox(Actor actor) {
-    Vector2 objPos = worldToScreen(actor.x + actor.width / 2, actor.y
+  private void drawBoundingBox(Actor actor, Color color) {
+    Vector2 objPos = new Vector2(actor.x + actor.width / 2, actor.y
         + actor.height / 2);
-    drawRect(objPos, actor.width / orthographicCamera.zoom, actor.height
-        / orthographicCamera.zoom, Color.BLUE, 2);
+    drawRect(objPos, actor.width, actor.height, color, 2);
 
     Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
-    Vector2 handlePos = worldToScreen(actor.x + actor.width - handleSize.x / 2,
+    Vector2 handlePos = new Vector2(actor.x + actor.width - handleSize.x / 2,
         actor.y + actor.height - handleSize.y / 2);
-    drawRect(handlePos, handleSize.x / orthographicCamera.zoom, handleSize.y
-        / orthographicCamera.zoom, Color.GREEN, 2);
+    drawRect(handlePos, handleSize.x, handleSize.y, Color.GREEN, 2);
   }
 
   private void drawRect(Vector2 p, float w, float h, Color c, float lineWidth) {
