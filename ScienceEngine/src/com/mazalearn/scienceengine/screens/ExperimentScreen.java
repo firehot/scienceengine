@@ -32,7 +32,7 @@ public class ExperimentScreen extends AbstractScreen {
     super.show();
     Profile profile = scienceEngine.getProfileManager().retrieveProfile();
     screenEditor = new ScreenEditor(experimentName, profile.getCurrentLevelId(), 
-        (Stage) experimentController.getView(), 
+        (Stage) experimentController.getView(), experimentController.getModel(),
         getFont(), getSkin());
     screenEditor.enable();
   }

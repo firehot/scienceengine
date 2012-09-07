@@ -19,9 +19,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
@@ -30,6 +32,9 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.controller.IExperimentController;
+import com.mazalearn.scienceengine.controller.IModelConfig;
+import com.mazalearn.scienceengine.model.IExperimentModel;
 
 /**
  * A supplemental stage that enables editing the screen layout and storing
@@ -79,13 +84,16 @@ public class ScreenEditor extends Stage {
 
   private List componentList;
 
+  private Table levelConfig;
+
   /**
    * Build and initialize the editor.
    * @param experimentName - name of experiment.
    * @param level - level of experiment.
    * @param stage - stage used by the experiment view
    */
-  public ScreenEditor(String experimentName, int level, Stage stage, BitmapFont font, Skin skin) {
+  public ScreenEditor(String experimentName, int level, Stage stage, 
+      IExperimentModel model, BitmapFont font, Skin skin) {
     super(stage.width(), stage.height(), stage.isStretched(), 
         stage.getSpriteBatch());
     this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
@@ -93,26 +101,43 @@ public class ScreenEditor extends Stage {
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
     this.font = font;
-    setupComponentList(stage, skin);
+    levelConfig = new Table(skin);
+    levelConfig.add(createComponentList(stage, skin));
+    levelConfig.row();
+    levelConfig.add(createConfigTable(model, skin));
+    levelConfig.row();
+    this.addActor(levelConfig);
     loadLevel();
   }
 
-  private void setupComponentList(Stage stage, Skin skin) {
-    String[] names = new String[stage.getActors().size() + 1];
+  private List createComponentList(Stage stage, Skin skin) {
+    String[] componentNames = new String[stage.getActors().size() + 1];
     int i = 0;
     for (Actor actor: stage.getActors()) {
-      if (actor.name != null)
-        names[i++] = actor.name;
+      if (actor.name != null) {
+        componentNames[i++] = actor.name;
+      }
     }
-    names[i] = "None";
-    componentList = new List(names, skin);
+    componentNames[i] = "None";
+    componentList = new List(componentNames, skin);
     componentList.setSelectionListener(new SelectionListener() {
       @Override
       public void selected(Actor actor, int index, String name) {
         listSelectedActor = originalStage.findActor(name);
       }
     });
-    this.addActor(componentList);
+    return componentList;
+  }
+
+  private Table createConfigTable(IExperimentModel model, Skin skin) {
+    Table configTable = new Table(skin);
+    for (IModelConfig<?> config: model.getConfigs()) {
+      if (config.isAvailable()) {
+        configTable.add(new CheckBox(config.getName(), skin)).left();
+        configTable.row();
+      }
+    }
+    return configTable;
   }
 
   /**
@@ -153,6 +178,8 @@ public class ScreenEditor extends Stage {
    */
   @Override
   public void draw() {
+    levelConfig.x = 100; 
+    levelConfig.y = Gdx.graphics.getHeight() - 100 - levelConfig.height;
     camera.update();
     if (!root.visible)
       return;
