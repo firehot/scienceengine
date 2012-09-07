@@ -13,16 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 /**
- * The base class for all game screens.
+ * The base class for all scienceEngine screens.
  */
 public abstract class AbstractScreen implements Screen {
   // the fixed viewport dimensions (ratio: 1.6)
-  public static final int GAME_VIEWPORT_WIDTH = 800,
-      GAME_VIEWPORT_HEIGHT = 480;
+  public static final int VIEWPORT_WIDTH = 800,
+      VIEWPORT_HEIGHT = 480;
   public static final int MENU_VIEWPORT_WIDTH = 800,
       MENU_VIEWPORT_HEIGHT = 480;
 
-  protected final ScienceEngine game;
+  protected final ScienceEngine scienceEngine;
   protected Stage stage;
 
   private BitmapFont font;
@@ -32,13 +32,13 @@ public abstract class AbstractScreen implements Screen {
   private Table table;
 
   public AbstractScreen(ScienceEngine game, Stage stage) {
-    this.game = game;
+    this.scienceEngine = game;
   }
   
   public AbstractScreen(ScienceEngine game) {
-    this.game = game;
-    int width = (isGameScreen() ? GAME_VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
-    int height = (isGameScreen() ? GAME_VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
+    this.scienceEngine = game;
+    int width = (isGameScreen() ? VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
+    int height = (isGameScreen() ? VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
     this.stage = new Stage(width, height, false);
   }
 
@@ -115,7 +115,7 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void render(float delta) {
-    // (1) process the game logic
+    // (1) process the scienceEngine logic
 
     // update the actors
     stage.act(delta);
@@ -158,7 +158,7 @@ public abstract class AbstractScreen implements Screen {
     Gdx.app.log(ScienceEngine.LOG, "Disposing screen: " + getName());
 
     // the following call disposes the screen's stage, but on my computer it
-    // crashes the game so I commented it out; more info can be found at:
+    // crashes the scienceEngine so I commented it out; more info can be found at:
     // http://www.badlogicgames.com/forum/viewtopic.php?f=11&t=3624
     // stage.dispose();
 

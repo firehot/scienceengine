@@ -23,13 +23,13 @@ public class MenuScreen extends AbstractScreen {
     table.add("Welcome to Science Engine!").spaceBottom(50);
     table.row();
 
-    registerButton(table, "Start", new StartScreen(game));
-    registerButton(table, "Options", new OptionsScreen(game));
+    registerButton(table, "Start", new StartScreen(scienceEngine));
+    registerButton(table, "Options", new OptionsScreen(scienceEngine));
     TextButton startGameButton = new TextButton("Exit", getSkin());
     startGameButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         Gdx.app.exit();
       }
     });
@@ -42,8 +42,8 @@ public class MenuScreen extends AbstractScreen {
     startGameButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
-        game.setScreen(screen);
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.setScreen(screen);
       }
     });
     table.add(startGameButton).size(300, 60).uniform().spaceBottom(10);

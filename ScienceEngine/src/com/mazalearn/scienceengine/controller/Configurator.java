@@ -60,7 +60,7 @@ public class Configurator extends Table {
         ScienceEngine.SCIENCE_ENGINE.setScreen(new StartScreen(ScienceEngine.SCIENCE_ENGINE));
       }
     });
-    add(backButton).height(30).colspan(2);
+    this.add(backButton).height(30).colspan(2);
     row();
     
     // Add pause/resume functionality for the experiment

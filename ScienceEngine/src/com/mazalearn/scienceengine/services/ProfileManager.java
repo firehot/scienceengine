@@ -67,7 +67,7 @@ public class ProfileManager {
             e);
 
         // recover by creating a fresh new profile data file;
-        // note that the player will lose all game progress
+        // note that the player will lose all scienceEngine progress
         profile = new Profile();
         persist(profile);
 

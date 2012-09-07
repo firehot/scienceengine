@@ -30,7 +30,7 @@ public class StartScreen extends AbstractScreen {
 
     // start playing the menu music (the player might be returning from the
     // level screen)
-    game.getMusicManager().play(ScienceEngineMusic.MENU);
+    scienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
 
     // retrieve the default table table
     Table table = super.getTable();
@@ -40,7 +40,7 @@ public class StartScreen extends AbstractScreen {
     table.add("Start Game").colspan(5);
 
     // retrieve the table's layout
-    profile = game.getProfileManager().retrieveProfile();
+    profile = scienceEngine.getProfileManager().retrieveProfile();
 
     // create the experimentModel buttons
     table.row();
@@ -63,8 +63,8 @@ public class StartScreen extends AbstractScreen {
     TextButton backButton = new TextButton("Back to main menu", getSkin());
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
-        game.setScreen(new MenuScreen(game));
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.setScreen(new MenuScreen(scienceEngine));
       }
     });
     table.row();
@@ -77,10 +77,10 @@ public class StartScreen extends AbstractScreen {
   private class ExperimentClickListener implements ClickListener {
     @Override
     public void click(Actor actor, float x, float y) {
-      game.getSoundManager().play(ScienceEngineSound.CLICK);
+      scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       TextButton button = (TextButton) actor;
       Gdx.app.log(ScienceEngine.LOG, "Starting " + button.getLabel().getText());
-      game.setScreen(new ExperimentScreen(game, (String) button.getLabel().getText()));
+      scienceEngine.setScreen(new ExperimentScreen(scienceEngine, (String) button.getLabel().getText()));
     }
   }
 

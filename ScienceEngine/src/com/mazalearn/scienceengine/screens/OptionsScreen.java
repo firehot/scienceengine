@@ -34,15 +34,15 @@ public class OptionsScreen extends AbstractScreen {
 
     // create the labels widgets
     final CheckBox soundEffectsCheckbox = new CheckBox("", getSkin());
-    soundEffectsCheckbox.setChecked(game.getPreferencesManager()
+    soundEffectsCheckbox.setChecked(scienceEngine.getPreferencesManager()
         .isSoundEnabled());
     soundEffectsCheckbox.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
         boolean enabled = soundEffectsCheckbox.isChecked();
-        game.getPreferencesManager().setSoundEnabled(enabled);
-        game.getSoundManager().setEnabled(enabled);
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.getPreferencesManager().setSoundEnabled(enabled);
+        scienceEngine.getSoundManager().setEnabled(enabled);
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       }
     });
     table.row();
@@ -50,18 +50,18 @@ public class OptionsScreen extends AbstractScreen {
     table.add(soundEffectsCheckbox).colspan(2).left();
 
     final CheckBox musicCheckbox = new CheckBox("", getSkin());
-    musicCheckbox.setChecked(game.getPreferencesManager().isMusicEnabled());
+    musicCheckbox.setChecked(scienceEngine.getPreferencesManager().isMusicEnabled());
     musicCheckbox.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
         boolean enabled = musicCheckbox.isChecked();
-        game.getPreferencesManager().setMusicEnabled(enabled);
-        game.getMusicManager().setEnabled(enabled);
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.getPreferencesManager().setMusicEnabled(enabled);
+        scienceEngine.getMusicManager().setEnabled(enabled);
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
 
         // if the music is now enabled, start playing the menu music
         if (enabled)
-          game.getMusicManager().play(ScienceEngineMusic.MENU);
+          scienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
       }
     });
     table.row();
@@ -70,13 +70,13 @@ public class OptionsScreen extends AbstractScreen {
 
     // range is [0.0,1.0]; step is 0.1f
     Slider volumeSlider = new Slider(0f, 1f, 0.1f, getSkin());
-    volumeSlider.setValue(game.getPreferencesManager().getVolume());
+    volumeSlider.setValue(scienceEngine.getPreferencesManager().getVolume());
     volumeSlider.setValueChangedListener(new ValueChangedListener() {
       @Override
       public void changed(Slider slider, float value) {
-        game.getPreferencesManager().setVolume(value);
-        game.getMusicManager().setVolume(value);
-        game.getSoundManager().setVolume(value);
+        scienceEngine.getPreferencesManager().setVolume(value);
+        scienceEngine.getMusicManager().setVolume(value);
+        scienceEngine.getSoundManager().setVolume(value);
         updateVolumeLabel();
       }
     });
@@ -96,8 +96,8 @@ public class OptionsScreen extends AbstractScreen {
     backButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
-        game.setScreen(new MenuScreen(game));
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.setScreen(new MenuScreen(scienceEngine));
       }
     });
     table.row();
@@ -108,7 +108,7 @@ public class OptionsScreen extends AbstractScreen {
    * Updates the volume label next to the slider.
    */
   private void updateVolumeLabel() {
-    float volume = (game.getPreferencesManager().getVolume() * 100);
+    float volume = (scienceEngine.getPreferencesManager().getVolume() * 100);
     volumeValue.setText(String.valueOf(volume));
   }
 }

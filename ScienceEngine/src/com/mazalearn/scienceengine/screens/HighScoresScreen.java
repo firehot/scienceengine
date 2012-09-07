@@ -20,7 +20,7 @@ public class HighScoresScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    Profile profile = game.getProfileManager().retrieveProfile();
+    Profile profile = scienceEngine.getProfileManager().retrieveProfile();
 
     // retrieve the default table actor
     Table table = super.getTable();
@@ -51,8 +51,8 @@ public class HighScoresScreen extends AbstractScreen {
     backButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        game.getSoundManager().play(ScienceEngineSound.CLICK);
-        game.setScreen(new MenuScreen(game));
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.setScreen(new MenuScreen(scienceEngine));
       }
     });
     table.row();

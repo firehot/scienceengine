@@ -81,20 +81,23 @@ public class ScreenEditor extends Stage {
 
   /**
    * Build and initialize the editor.
-   * 
-   * @param path
-   *          The path of the file that will be loaded/written.
-   * @param stage
-   *          The stage used by the screen - must use Orthographic camera
+   * @param experimentName - name of experiment.
+   * @param level - level of experiment.
+   * @param stage - stage used by the experiment view
    */
-  public ScreenEditor(String experimentName, Stage stage, BitmapFont font, Skin skin) {
-    super(stage.width(), stage.height(), stage.isStretched(), stage
-        .getSpriteBatch());
-    this.file = Gdx.files.internal("data/" + experimentName + ".json");
+  public ScreenEditor(String experimentName, int level, Stage stage, BitmapFont font, Skin skin) {
+    super(stage.width(), stage.height(), stage.isStretched(), 
+        stage.getSpriteBatch());
+    this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
     this.font = font;
+    setupComponentList(stage, skin);
+    loadLevel();
+  }
+
+  private void setupComponentList(Stage stage, Skin skin) {
     String[] names = new String[stage.getActors().size() + 1];
     int i = 0;
     for (Actor actor: stage.getActors()) {
@@ -116,7 +119,7 @@ public class ScreenEditor extends Stage {
    * Loads the content of the provided file and automatically position and size
    * the objects.
    */
-  public void load() {
+  public void loadLevel() {
     try {
       loadFile();
       System.out.println("[ScreenEditor] File successfully loaded!");
@@ -141,6 +144,7 @@ public class ScreenEditor extends Stage {
     originalCameraPos = camera.position.cpy();
     originalInputProcessor = Gdx.input.getInputProcessor();
     Gdx.input.setInputProcessor(this);
+    this.root.visible = true;
     isEnabled = true;
   }
 
@@ -316,7 +320,12 @@ public class ScreenEditor extends Stage {
       save();
       break;
     case Keys.L:
-      load();
+      loadLevel();
+      break;
+    case Keys.V:
+      if (selectedActor != null) {
+        selectedActor.visible = !selectedActor.visible;
+      }
       break;
     case Keys.R:
       restoreCamera();
@@ -344,6 +353,7 @@ public class ScreenEditor extends Stage {
       restoreCamera();
       Gdx.input.setInputProcessor(originalInputProcessor);
       isEnabled = false;
+      this.root.visible = false;
     }
   }
 
@@ -364,14 +374,14 @@ public class ScreenEditor extends Stage {
     jsonWriter = jsonWriter.object().array("components");
     for (Actor a : originalStage.getActors()) {
       jsonWriter.object()
-          .object(a.name)
+          .set("name", a.name)
           .set("x", a.x)
           .set("y", a.y)
           .set("originX", a.originX)
           .set("originY", a.originY)
           .set("width", a.width)
           .set("height", a.height)
-          .pop()
+          .set("visible", a.visible)
           .pop();
     }
     jsonWriter.flush();
@@ -400,14 +410,16 @@ public class ScreenEditor extends Stage {
       return;
 
     actor.x = (Float) component.get("x");
-    ;
     actor.y = (Float) component.get("y");
     actor.originX = (Float) component.get("originX");
     actor.originY = (Float) component.get("originY");
     actor.width = (Float) component.get("width");
     actor.height = (Float) component.get("height");
+    actor.visible = (Boolean) component.get("visible");
     if (actor instanceof Box2DActor) {
-      ((Box2DActor) actor).setPositionFromScreen();
+      Box2DActor box2dActor = (Box2DActor) actor;
+      box2dActor.setPositionFromScreen();
+      box2dActor.getBody().setActive(actor.visible);
     }
   }
 

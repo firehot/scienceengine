@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
 /**
- * Handles the game preferences.
+ * Handles the scienceEngine preferences.
  */
 public class PreferencesManager
 {

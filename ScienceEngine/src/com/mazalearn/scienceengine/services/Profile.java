@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.OrderedMap;
 /**
  * The player's profile.
  * <p>
- * This class is used to store the game progress, and is persisted to the file
- * system when the game exists.
+ * This class is used to store the scienceEngine progress, and is persisted to the file
+ * system when the scienceEngine exists.
  * 
  * @see ProfileManager
  */

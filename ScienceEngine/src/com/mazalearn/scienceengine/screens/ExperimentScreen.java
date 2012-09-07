@@ -7,6 +7,7 @@ import com.mazalearn.scienceengine.designer.ScreenEditor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
+import com.mazalearn.scienceengine.services.Profile;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
 /**
@@ -18,28 +19,19 @@ public class ExperimentScreen extends AbstractScreen {
   private ScreenEditor screenEditor;
   IExperimentController experimentController;
 
-  public ExperimentScreen(ScienceEngine game, String experimentName) {
-    super(game, null);
+  public ExperimentScreen(ScienceEngine scienceEngine, String experimentName) {
+    super(scienceEngine, null);
     this.experimentName = experimentName;
     experimentController = createExperimentController(experimentName, 
-        GAME_VIEWPORT_WIDTH, GAME_VIEWPORT_HEIGHT);
+        VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     this.setStage((AbstractExperimentView) experimentController.getView());
   }
 
   @Override
   public void show() {
     super.show();
-    
-    // retrieve the default table actor
-    //Table table = super.getTable();
-    //table.add(experimentName).spaceBottom(10);
-    //table.row();
-
-    //table.add(experimentController.getView());
-//        .width(GAME_VIEWPORT_WIDTH)
-//        .height(GAME_VIEWPORT_HEIGHT);
-    //table.add(experimentController.getConfigurator()).width(100); // .height(960).fill();
-    screenEditor = new ScreenEditor(experimentName, 
+    Profile profile = scienceEngine.getProfileManager().retrieveProfile();
+    screenEditor = new ScreenEditor(experimentName, profile.getCurrentLevelId(), 
         (Stage) experimentController.getView(), 
         getFont(), getSkin());
     screenEditor.enable();

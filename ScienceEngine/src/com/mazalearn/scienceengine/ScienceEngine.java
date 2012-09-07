@@ -21,7 +21,7 @@ public class ScienceEngine extends Game {
   public enum DevMode {PRODUCTION, DEBUG, EDIT};
   public static final DevMode DEV_MODE = DevMode.DEBUG;
   
-  // Provide access to this singleton game from any class
+  // Provide access to this singleton scienceEngine from any class
   public static ScienceEngine SCIENCE_ENGINE;
 
   public static Box2DDebugRenderer debugRenderer;
@@ -94,7 +94,7 @@ public class ScienceEngine extends Game {
     Gdx.app.log(ScienceEngine.LOG, "Resizing engine to: " + width + " x "
         + height);
 
-    // show the splash screen when the game is resized for the first time;
+    // show the splash screen when the scienceEngine is resized for the first time;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
       setScreen(DEV_MODE != DevMode.PRODUCTION ? new StartScreen(this) : new SplashScreen(this));
@@ -126,7 +126,7 @@ public class ScienceEngine extends Game {
     Gdx.app.log(ScienceEngine.LOG, "Pausing engine");
 
     // persist the profile, because we don't know if the player will come
-    // back to the game
+    // back to the scienceEngine
     profileManager.persist();
   }
 

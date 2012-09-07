@@ -28,7 +28,7 @@ public class SplashScreen extends AbstractScreen {
     super.show();
 
     // start playing the menu music
-    game.getMusicManager().play(ScienceEngineMusic.MENU);
+    scienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
 
     // retrieve the splash image's region from the atlas
     AtlasRegion splashRegion = getAtlas().findRegion(
@@ -49,7 +49,7 @@ public class SplashScreen extends AbstractScreen {
           @Override
           public void act(float delta) {
             // the last action will move to the next screen
-            game.setScreen(new MenuScreen(game));
+            scienceEngine.setScreen(new MenuScreen(scienceEngine));
           }
 
           @Override
