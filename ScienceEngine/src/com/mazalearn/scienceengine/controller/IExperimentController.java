@@ -7,5 +7,4 @@ public interface IExperimentController {
   public IExperimentView getView();
   public IExperimentModel getModel();
   public Configurator getConfigurator();
-  void enable(boolean enable);
 }

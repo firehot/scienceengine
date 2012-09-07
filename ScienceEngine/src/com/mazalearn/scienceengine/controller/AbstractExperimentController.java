@@ -40,10 +40,4 @@ public abstract class AbstractExperimentController implements
   public Configurator getConfigurator() {
     return configurator;
   }
-  
-  @Override
-  public void enable(boolean enable) {
-    experimentModel.enable(enable);
-  }
-
 }

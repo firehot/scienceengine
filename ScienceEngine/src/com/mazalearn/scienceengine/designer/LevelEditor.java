@@ -7,7 +7,6 @@ import java.util.Locale;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -29,48 +28,33 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
-import com.mazalearn.scienceengine.controller.IExperimentController;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.IExperimentModel;
+import com.mazalearn.scienceengine.screens.AbstractScreen;
 
 /**
  * A supplemental stage that enables editing the screen layout and storing
  * layout in json files. <br/>
  * <br/>
  * 
- * When enabled, it takes over all inputs and also allows zoom and pan of the
+ * It takes over all inputs and also allows zoom and pan of the
  * scene to easily adjust the components. <br/>
  * <br/>
- * 
- * Usage is as follows:<br/>
- * 1. Create the ScreenEditor with the stage, its name and level.<br/>
- * 3. Call load() method to import previously saved stuff, if any.<br/>
- * 4. Call enable() method if you want to enable the editor to make changes to
- * your scene.<br/>
- * 5. Call draw() in your rendering loop to show the overlay.<br/>
- * <br/>
- * 
- * <b>Note that the everything you need to remove once you don't want to make
- * anymore changes is the call to enable(). </b>
- * 
+ *  
  * @author sridhar
  */
-public class ScreenEditor extends Stage {
+public class LevelEditor extends Stage {
   private final FileHandle file;
+  private final AbstractScreen screen;
 
   private final OrthographicCamera orthographicCamera;
-  private boolean isEnabled = false;
-
-  enum OverlayMode {
-    NO_OVERLAY, OVERLAY_NO_HELP, OVERLAY_WITH_HELP
+  enum Mode {
+    CONFIGURE, OVERLAY, NOEDIT
   };
 
-  private OverlayMode overlayMode = OverlayMode.OVERLAY_WITH_HELP;
+  private Mode mode = Mode.OVERLAY;
   private ImmediateModeRenderer20 imr;
-  private BitmapFont font;
   private Color fontColor = Color.WHITE;
   private Actor selectedActor, listSelectedActor;
   private Actor draggedActor = null;
@@ -80,11 +64,11 @@ public class ScreenEditor extends Stage {
   private final Stage originalStage;
   private Vector3 originalCameraPos;
   private float originalCameraZoom;
-  private InputProcessor originalInputProcessor;
-
+  
   private List componentList;
 
   private Table levelConfig;
+  private IExperimentModel experimentModel;
 
   /**
    * Build and initialize the editor.
@@ -92,20 +76,21 @@ public class ScreenEditor extends Stage {
    * @param level - level of experiment.
    * @param stage - stage used by the experiment view
    */
-  public ScreenEditor(String experimentName, int level, Stage stage, 
-      IExperimentModel model, BitmapFont font, Skin skin) {
+  public LevelEditor(String experimentName, int level, Stage stage, 
+      IExperimentModel model, AbstractScreen screen) {
     super(stage.width(), stage.height(), stage.isStretched(), 
         stage.getSpriteBatch());
+    this.screen = screen;
+    this.experimentModel = model;
     this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
-    this.font = font;
-    levelConfig = new Table(skin);
-    levelConfig.add(createComponentList(stage, skin));
-    levelConfig.row();
-    levelConfig.add(createConfigTable(model, skin));
-    levelConfig.row();
+    levelConfig = new Table(screen.getSkin());
+    levelConfig.debug();
+    levelConfig.setFillParent(true);
+    levelConfig.add(createComponentList(stage, screen.getSkin())).pad(10);
+    levelConfig.add(createConfigTable(model, screen.getSkin())).pad(10);
     this.addActor(levelConfig);
     loadLevel();
   }
@@ -147,9 +132,9 @@ public class ScreenEditor extends Stage {
   public void loadLevel() {
     try {
       loadFile();
-      System.out.println("[ScreenEditor] File successfully loaded!");
+      System.out.println("[LevelEditor] File successfully loaded!");
     } catch (GdxRuntimeException ex) {
-      System.err.println("[ScreenEditor] Error happened while loading "
+      System.err.println("[LevelEditor] Error happened while loading "
           + file.path());
     }
   }
@@ -159,18 +144,24 @@ public class ScreenEditor extends Stage {
    * InputProcessor by its own. Just remove this call from your code once you're
    * happy with the result. Any other call can stay without any side-effect.
    */
-  public void enable() {
-    if (ScienceEngine.DEV_MODE == DevMode.PRODUCTION)
-      return;
+  public void enableEditor() {
     if (imr == null) {
       imr = new ImmediateModeRenderer20(64, false, true, 0);
     }
     originalCameraZoom = orthographicCamera.zoom;
     originalCameraPos = camera.position.cpy();
-    originalInputProcessor = Gdx.input.getInputProcessor();
-    Gdx.input.setInputProcessor(this);
-    this.root.visible = true;
-    isEnabled = true;
+    mode = Mode.OVERLAY;
+    experimentModel.enable(false);
+  }
+
+  private void disableEditor() {
+    if (mode != Mode.NOEDIT) {
+      imr = null;
+      restoreCamera();
+      screen.setStage(originalStage);
+      mode = Mode.NOEDIT;
+      experimentModel.enable(true);
+    }
   }
 
   /**
@@ -178,59 +169,58 @@ public class ScreenEditor extends Stage {
    */
   @Override
   public void draw() {
-    levelConfig.x = 100; 
-    levelConfig.y = Gdx.graphics.getHeight() - 100 - levelConfig.height;
+    switch (mode) {
+    case NOEDIT:
+      originalStage.draw();
+      Table.drawDebug(originalStage);
+      break;
+    case OVERLAY:
+      originalStage.draw();
+      Table.drawDebug(originalStage);
+      drawOverlay();
+      break;
+    case CONFIGURE:
+      drawConfigure();
+      break;
+    }
+  }
+
+  private void drawOverlay() {
+    for (Actor actor : originalStage.getActors()) {
+      drawBoundingBox(actor, Color.BLUE);
+    }
+    if (selectedActor != null) {
+      drawBoundingBox(selectedActor, Color.YELLOW);
+    }
+
+    int top = Gdx.graphics.getHeight() + 5;
+    batch.begin();
+    BitmapFont font = screen.getFont();
+    font.setColor(fontColor);
+    font.draw(batch, "Screen Editor", 5, top - 15 * 0);
+    font.draw(batch,
+        "---------------------------------------------------------------",
+        5, top - 15 * 1);
+    font.draw(batch, "'s' to save, 'l' to reload", 5, top - 15 * 2);
+    font.draw(batch, "'space' to toggle overlay, 'enter' to exit", 5,
+        top - 15 * 3);
+    font.draw(batch,
+        "scroll to zoom, hold right clic to pan, 'r' to reset camera", 5,
+        top - 15 * 4);
+    font.draw(batch,
+        "---------------------------------------------------------------",
+        5, top - 15 * 5);
+    font.draw(batch, selectedActor != null ? getInfo(selectedActor)
+        : "> No object selected", 5, top - 15 * 6);
+    batch.end();
+  }
+
+  private void drawConfigure() {
     camera.update();
-    if (!root.visible)
-      return;
     batch.setProjectionMatrix(camera.combined);
     batch.begin();
     root.draw(batch, 1);
     batch.end();
-    if (isEnabled && overlayMode != OverlayMode.NO_OVERLAY) {
-      for (Actor actor : originalStage.getActors()) {
-        drawBoundingBox(actor, Color.BLUE);
-      }
-      if (selectedActor != null) {
-        drawBoundingBox(selectedActor, Color.YELLOW);
-      }
-
-      int top = Gdx.graphics.getHeight() + 5;
-      switch (overlayMode) {
-      case OVERLAY_WITH_HELP:
-        batch.begin();
-        font.setColor(fontColor);
-        font.draw(batch, "Screen Editor", 5, top - 15 * 0);
-        font.draw(batch,
-            "---------------------------------------------------------------",
-            5, top - 15 * 1);
-        font.draw(batch, "'s' to save, 'l' to reload", 5, top - 15 * 2);
-        font.draw(batch, "'space' to toggle overlay, 'enter' to exit", 5,
-            top - 15 * 3);
-        font.draw(batch,
-            "scroll to zoom, hold right clic to pan, 'r' to reset camera", 5,
-            top - 15 * 4);
-        font.draw(batch,
-            "---------------------------------------------------------------",
-            5, top - 15 * 5);
-        font.draw(batch, selectedActor != null ? getInfo(selectedActor)
-            : "> No object selected", 5, top - 15 * 6);
-        batch.end();
-        break;
-
-      case OVERLAY_NO_HELP:
-        batch.begin();
-        font.setColor(fontColor);
-        font.draw(batch, "Screen Editor", 5, top - 15 * 0);
-        font.draw(batch,
-            "---------------------------------------------------------------",
-            5, top - 15 * 1);
-        font.draw(batch, selectedActor != null ? getInfo(selectedActor)
-            : "> No object selected", 5, top - 15 * 2);
-        batch.end();
-        break;
-      }
-    }
   }
 
   @Override
@@ -331,15 +321,12 @@ public class ScreenEditor extends Stage {
   public boolean keyDown(int keycode) {
     switch (keycode) {
     case Keys.SPACE:
-      switch (overlayMode) {
-      case NO_OVERLAY:
-        overlayMode = OverlayMode.OVERLAY_NO_HELP;
+      switch (mode) {
+      case CONFIGURE:
+        mode = Mode.OVERLAY;
         break;
-      case OVERLAY_NO_HELP:
-        overlayMode = OverlayMode.OVERLAY_WITH_HELP;
-        break;
-      case OVERLAY_WITH_HELP:
-        overlayMode = OverlayMode.NO_OVERLAY;
+      case OVERLAY:
+        mode = Mode.CONFIGURE;
         break;
       }
       break;
@@ -358,7 +345,7 @@ public class ScreenEditor extends Stage {
       restoreCamera();
       break;
     case Keys.ENTER:
-      disable();
+      disableEditor();
       break;
     }
     return true;
@@ -367,20 +354,10 @@ public class ScreenEditor extends Stage {
   private void saveLevel() {
     try {
       writeFile();
-      System.out.println("[ScreenEditor] File successfully saved!");
+      System.out.println("[LevelEditor] File successfully saved!");
     } catch (IOException ex) {
-      System.err.println("[ScreenEditor] Error happened while writing "
+      System.err.println("[LevelEditor] Error happened while writing "
           + file.path());
-    }
-  }
-
-  private void disable() {
-    if (isEnabled) {
-      imr = null;
-      restoreCamera();
-      Gdx.input.setInputProcessor(originalInputProcessor);
-      isEnabled = false;
-      this.root.visible = false;
     }
   }
 
@@ -479,9 +456,5 @@ public class ScreenEditor extends Stage {
     imr.color(c.r, c.g, c.b, c.a);
     imr.vertex(p.x + w / 2, p.y - h / 2, 0);
     imr.end();
-  }
-
-  public boolean isEnabled() {
-    return isEnabled;
   }
 }

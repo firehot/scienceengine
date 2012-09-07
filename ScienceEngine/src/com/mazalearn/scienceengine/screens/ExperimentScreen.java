@@ -2,21 +2,21 @@ package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.controller.IExperimentController;
-import com.mazalearn.scienceengine.designer.ScreenEditor;
+import com.mazalearn.scienceengine.designer.LevelEditor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
 import com.mazalearn.scienceengine.services.Profile;
-import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
 /**
  * IExperimentModel screen.
  */
 public class ExperimentScreen extends AbstractScreen {
 
-  final String experimentName;
-  private ScreenEditor screenEditor;
+  final private String experimentName;
+  private LevelEditor levelEditor;
   IExperimentController experimentController;
 
   public ExperimentScreen(ScienceEngine scienceEngine, String experimentName) {
@@ -24,17 +24,21 @@ public class ExperimentScreen extends AbstractScreen {
     this.experimentName = experimentName;
     experimentController = createExperimentController(experimentName, 
         VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-    this.setStage((AbstractExperimentView) experimentController.getView());
   }
 
   @Override
   public void show() {
     super.show();
     Profile profile = scienceEngine.getProfileManager().retrieveProfile();
-    screenEditor = new ScreenEditor(experimentName, profile.getCurrentLevelId(), 
-        (Stage) experimentController.getView(), experimentController.getModel(),
-        getFont(), getSkin());
-    screenEditor.enable();
+    if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+      levelEditor = new LevelEditor(experimentName, profile.getCurrentLevelId(), 
+          (Stage) experimentController.getView(), experimentController.getModel(),
+          this);
+      levelEditor.enableEditor();
+      this.setStage(levelEditor);
+    } else {
+      this.setStage((Stage) experimentController.getView());      
+    }
   }
 
   private IExperimentController createExperimentController(
@@ -47,19 +51,6 @@ public class ExperimentScreen extends AbstractScreen {
       return new ElectroMagnetismController(width, height, getSkin());
     }
     return null;
-  }
-  
-  @Override
-  public void dispose() {
-    super.dispose();
-  }
-  
-  @Override
-  public void render(float delta) {
-    experimentController.enable(!screenEditor.isEnabled() && 
-        experimentController.getModel().isEnabled());
-    super.render(delta);
-    screenEditor.draw();
   }
   
   @Override
