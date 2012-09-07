@@ -110,8 +110,9 @@ public class Configurator extends Table {
         break;
     }
     table.add(viewConfig.getActor());
-    this.add(table); this.row();
-    return new Config(table, viewConfig);
+    Config c = new Config(this.add(table), viewConfig);
+    this.row();
+    return c;
   }
 
   @Override
