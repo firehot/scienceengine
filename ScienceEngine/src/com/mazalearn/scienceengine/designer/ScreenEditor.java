@@ -45,7 +45,7 @@ import com.mazalearn.scienceengine.box2d.Box2DActor;
  * 3. Call load() method to import previously saved stuff, if any.<br/>
  * 4. Call enable() method if you want to enable the editor to make changes to
  * your scene.<br/>
- * 5. Call render() in your rendering loop to show the overlay.<br/>
+ * 5. Call draw() in your rendering loop to show the overlay.<br/>
  * <br/>
  * 
  * <b>Note that the everything you need to remove once you don't want to make
@@ -317,7 +317,7 @@ public class ScreenEditor extends Stage {
       }
       break;
     case Keys.S:
-      save();
+      saveLevel();
       break;
     case Keys.L:
       loadLevel();
@@ -337,7 +337,7 @@ public class ScreenEditor extends Stage {
     return true;
   }
 
-  private void save() {
+  private void saveLevel() {
     try {
       writeFile();
       System.out.println("[ScreenEditor] File successfully saved!");

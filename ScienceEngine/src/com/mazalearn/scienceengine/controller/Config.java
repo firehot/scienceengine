@@ -8,6 +8,7 @@ public class Config {
 
   public Config(Table table, IViewConfig viewConfig) {
     this.table = table;
+    table.getTableLayout();
     this.viewConfig = viewConfig;
   }
 

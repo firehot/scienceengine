@@ -77,14 +77,18 @@ public class Configurator extends Table {
         }
       }
     });
-    this.add(pauseResumeButton);
     
     // Add reset functionality for the experiment
-    AbstractModelConfig<String> resetConfig = 
+    AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>("Reset", "Reset to initial state") {
           public void doCommand() { experimentModel.reset(); }
     };
-    this.configs.add(createViewConfig(resetConfig));
+    IViewConfig resetConfig = new ConfigTextButton(resetModelConfig, skin);
+    
+    Table table = new Table(skin);
+    table.add(pauseResumeButton).pad(0,5,0, 5);
+    table.add(resetConfig.getActor());
+    this.add(table);
     row();
   }
   
