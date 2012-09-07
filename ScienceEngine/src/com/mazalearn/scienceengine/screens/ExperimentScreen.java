@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.screens;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.controller.IExperimentController;
@@ -40,9 +39,9 @@ public class ExperimentScreen extends AbstractScreen {
 //        .width(GAME_VIEWPORT_WIDTH)
 //        .height(GAME_VIEWPORT_HEIGHT);
     //table.add(experimentController.getConfigurator()).width(100); // .height(960).fill();
-    screenEditor = new ScreenEditor("data/" + experimentName + ".json", 
-        (OrthographicCamera) stage.getCamera(), 
-        (Stage) experimentController.getView(), getBatch(), getFont());
+    screenEditor = new ScreenEditor(experimentName, 
+        (Stage) experimentController.getView(), 
+        getFont());
     screenEditor.enable();
   }
 
@@ -68,7 +67,7 @@ public class ExperimentScreen extends AbstractScreen {
     experimentController.enable(!screenEditor.isEnabled() && 
         experimentController.getModel().isEnabled());
     super.render(delta);
-    screenEditor.render(0, 0);
+    screenEditor.draw();
   }
   
   @Override

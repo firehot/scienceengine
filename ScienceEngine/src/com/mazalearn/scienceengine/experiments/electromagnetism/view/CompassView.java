@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,6 +20,11 @@ public class CompassView extends Box2DActor {
   private float[][] fieldSamples = new float[NUM_POINTS][4];
   private int count = 0;
   private TextureRegion arrow;
+  
+  private final static int FS_X = 0;
+  private final static int FS_Y = 1;
+  private final static int FS_ANGLE = 2;
+  private final static int FS_MAGNITUDE = 3;
   
   public CompassView(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
@@ -53,10 +59,10 @@ public class CompassView extends Box2DActor {
   @Override
   public void touchUp(float localX, float localY, int pointer) {
     // Record field at this position
-    fieldSamples[count][0] = lastTouch.x;
-    fieldSamples[count][1] = lastTouch.y;
-    fieldSamples[count][2] = (compass.getAngle() * MathUtils.radiansToDegrees) % 360;
-    fieldSamples[count][3] = compass.getBField();
+    fieldSamples[count][FS_X] = lastTouch.x;
+    fieldSamples[count][FS_Y] = lastTouch.y;
+    fieldSamples[count][FS_ANGLE] = (compass.getAngle() * MathUtils.radiansToDegrees) % 360;
+    fieldSamples[count][FS_MAGNITUDE] = compass.getBField();
     
     count = (count + 1) % NUM_POINTS;
   }
@@ -64,9 +70,14 @@ public class CompassView extends Box2DActor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
+    Color c = batch.getColor();
     for (int i = 0; i < fieldSamples.length; i++) {
       if (fieldSamples[i][0] == 0) break;
-      batch.draw(arrow, fieldSamples[i][0], fieldSamples[i][1], 0, 0, 30, 30, 1, 1, fieldSamples[i][2]);
+      float intensity = 0.25f + fieldSamples[i][FS_MAGNITUDE] * 200;
+      batch.setColor(1, 1, 1, intensity);
+      batch.draw(arrow, fieldSamples[i][FS_X], fieldSamples[i][FS_Y], 
+          0, 0, 30, 30, 1, 1, fieldSamples[i][FS_ANGLE]);
     }
+    batch.setColor(c);
   }
 }
