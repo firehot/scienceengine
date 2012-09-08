@@ -1,5 +1,8 @@
 package com.mazalearn.scienceengine;
 
+import java.util.List;
+
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -15,7 +18,12 @@ public class MainActivity extends AndroidApplication {
         cfg.useGL20 = true;
         cfg.useAccelerometer = false;
         cfg.useCompass = false;
-        
-        initialize(new ScienceEngine(), cfg);
+        Uri data = getIntent().getData();
+        if (data != null) {
+          List<String> params = data.getPathSegments();
+          initialize(new ScienceEngine(params), cfg);
+        } else {
+          initialize(new ScienceEngine(), cfg);
+        }
     }
 }

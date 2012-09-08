@@ -35,8 +35,8 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     emField = new EMField();
     
     bodies.add(barMagnet = new BarMagnet(emField, 10, 12, 0));
-//    bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
-//    bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
+    bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
+    bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
     barMagnet.setType(BodyType.DynamicBody);
     bodies.add(compass = new Compass(emField, 0, 5, 0));
     compass.setType(BodyType.KinematicBody);
