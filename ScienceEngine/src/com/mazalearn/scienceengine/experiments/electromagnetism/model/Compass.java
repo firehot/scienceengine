@@ -1,5 +1,8 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -23,6 +26,18 @@ public class Compass extends ScienceBody {
   // A reusable vector
   private Vector2 fieldVector = new Vector2();
   private Vector2 pos = new Vector2();
+  
+  public static class FieldSample {
+    public float x, y, angle, magnitude;
+    public FieldSample(Vector2 point, float angle, float magnitude) {
+      this.x = point.x;
+      this.y = point.y;
+      this.angle = angle;
+      this.magnitude = magnitude;
+    }
+  }
+  
+  private List<FieldSample> fieldSamples = new ArrayList<FieldSample>();
 
   /**
    * @param emField
@@ -50,7 +65,21 @@ public class Compass extends ScienceBody {
     setPositionAndAngle(getPosition(), angle);
   }
   
+  @Override
+  public void reset() {
+    super.reset();
+    fieldSamples.clear();
+  }
+  
   public float getBField() {
     return fieldVector.len();
+  }
+
+  public void addFieldSample(Vector2 point) {
+    fieldSamples.add(new FieldSample(point, getAngle(), getBField()));
+  }
+
+  public List<FieldSample> getFieldSamples() {
+    return fieldSamples;
   }
 }

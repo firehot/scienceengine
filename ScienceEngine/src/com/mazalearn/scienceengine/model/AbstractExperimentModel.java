@@ -11,13 +11,11 @@ import com.mazalearn.scienceengine.controller.IModelConfig;
 public abstract class AbstractExperimentModel implements IExperimentModel {
 
   protected World box2DWorld;
-  @SuppressWarnings("rawtypes")
-  protected List<IModelConfig> modelConfigs;
+  protected List<IModelConfig<?>> modelConfigs;
 
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
 
-  @SuppressWarnings("rawtypes")
   public AbstractExperimentModel() {
     super();
     // Initialize the world for Box2D
@@ -25,7 +23,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     boolean doSleep = true;
     box2DWorld = new World(gravity, doSleep);
     ScienceBody.setBox2DWorld(box2DWorld);    
-    modelConfigs = new ArrayList<IModelConfig>();
+    modelConfigs = new ArrayList<IModelConfig<?>>();
   }
 
   @Override
@@ -38,14 +36,12 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
 
   protected abstract void singleStep();
 
-  @SuppressWarnings({ "rawtypes" })
-  public List<IModelConfig> getConfigs() {
+ public List<IModelConfig<?>> getConfigs() {
     return modelConfigs;
   }
   
-  @SuppressWarnings({ "rawtypes" })
-  public IModelConfig getConfig(String name) {
-    for (IModelConfig modelConfig: modelConfigs) {
+  public IModelConfig<?> getConfig(String name) {
+    for (IModelConfig<?> modelConfig: modelConfigs) {
       if (modelConfig.getName() == name) return modelConfig;
     }
     return null;

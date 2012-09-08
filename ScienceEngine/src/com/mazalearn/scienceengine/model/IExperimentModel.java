@@ -8,10 +8,8 @@ import com.mazalearn.scienceengine.controller.IModelConfig;
 public interface IExperimentModel {
   public void reset();
   public void simulateSteps();
-  @SuppressWarnings("rawtypes")
-  public List<IModelConfig> getConfigs();
-  @SuppressWarnings("rawtypes")
-  public IModelConfig getConfig(String name);
+  public List<IModelConfig<?>> getConfigs();
+  public IModelConfig<?> getConfig(String name);
   public World getBox2DWorld();
   public void enable(boolean enable);
   public boolean isEnabled();

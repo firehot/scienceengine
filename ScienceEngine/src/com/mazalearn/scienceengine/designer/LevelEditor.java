@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.designer;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
@@ -24,11 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonWriter;
-import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.IExperimentModel;
@@ -51,7 +44,7 @@ public class LevelEditor extends Stage {
 
   private final OrthographicCamera orthographicCamera;
   enum Mode {
-    CONFIGURE, OVERLAY, NOEDIT
+    CONFIGURE, OVERLAY
   };
 
   private Mode mode = Mode.OVERLAY;
@@ -70,6 +63,8 @@ public class LevelEditor extends Stage {
 
   private Table levelConfig;
   private IExperimentModel experimentModel;
+  private LevelManager levelManager;
+  
 
   /**
    * Build and initialize the editor.
@@ -87,13 +82,14 @@ public class LevelEditor extends Stage {
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
+    levelManager = new LevelManager(originalStage, experimentModel.getConfigs(), file);
     levelConfig = new Table(screen.getSkin());
     levelConfig.debug();
     levelConfig.setFillParent(true);
     levelConfig.add(createComponentList(stage, screen.getSkin())).pad(10);
     levelConfig.add(createConfigTable(experimentModel, screen.getSkin())).pad(10);
     this.addActor(levelConfig);
-    loadLevel();
+    levelManager.loadLevel();
   }
 
   private List createComponentList(Stage stage, Skin skin) {
@@ -135,20 +131,6 @@ public class LevelEditor extends Stage {
   }
 
   /**
-   * Loads the content of the provided file and automatically position and size
-   * the objects.
-   */
-  public void loadLevel() {
-    try {
-      loadFile();
-      System.out.println("[LevelEditor] File successfully loaded!");
-    } catch (GdxRuntimeException ex) {
-      System.err.println("[LevelEditor] Error happened while loading "
-          + file.path());
-    }
-  }
-
-  /**
    * Enables the editor. Creates all required resources and replace the current
    * InputProcessor by its own. Just remove this call from your code once you're
    * happy with the result. Any other call can stay without any side-effect.
@@ -164,13 +146,10 @@ public class LevelEditor extends Stage {
   }
 
   private void disableEditor() {
-    if (mode != Mode.NOEDIT) {
-      imr = null;
-      restoreCamera();
-      screen.setStage(originalStage);
-      mode = Mode.NOEDIT;
-      experimentModel.enable(true);
-    }
+    imr = null;
+    restoreCamera();
+    screen.setStage(originalStage);
+    experimentModel.enable(true);
   }
 
   /**
@@ -179,10 +158,6 @@ public class LevelEditor extends Stage {
   @Override
   public void draw() {
     switch (mode) {
-    case NOEDIT:
-      originalStage.draw();
-      Table.drawDebug(originalStage);
-      break;
     case OVERLAY:
       originalStage.draw();
       Table.drawDebug(originalStage);
@@ -340,10 +315,10 @@ public class LevelEditor extends Stage {
       }
       break;
     case Keys.S:
-      saveLevel();
+      levelManager.saveLevel();
       break;
     case Keys.L:
-      loadLevel();
+      levelManager.loadLevel();
       break;
     case Keys.V:
       if (selectedActor != null) {
@@ -360,16 +335,6 @@ public class LevelEditor extends Stage {
     return true;
   }
 
-  private void saveLevel() {
-    try {
-      writeFile();
-      System.out.println("[LevelEditor] File successfully saved!");
-    } catch (IOException ex) {
-      System.err.println("[LevelEditor] Error happened while writing "
-          + file.path());
-    }
-  }
-
   private String getInfo(Actor actor) {
     return String.format(Locale.US, "> %s > xy:[%.3f,%.3f] wh:[%.3f,%.3f]",
         actor.name, actor.x, actor.y, actor.width, actor.height);
@@ -379,87 +344,6 @@ public class LevelEditor extends Stage {
     orthographicCamera.zoom = originalCameraZoom;
     camera.position.set(originalCameraPos);
     camera.update();
-  }
-
-  private void writeFile() throws IOException {
-    FileWriter writer = new FileWriter(file.file());
-    JsonWriter jsonWriter = new JsonWriter(writer);
-    jsonWriter = jsonWriter.object().array("components");
-    for (Actor a : originalStage.getActors()) {
-      jsonWriter.object()
-          .set("name", a.name)
-          .set("x", a.x)
-          .set("y", a.y)
-          .set("originX", a.originX)
-          .set("originY", a.originY)
-          .set("width", a.width)
-          .set("height", a.height)
-          .set("visible", a.visible)
-          .pop();
-    }
-    jsonWriter.flush();
-    jsonWriter = jsonWriter.object().array("configs");
-    for (final IModelConfig<?> config: experimentModel.getConfigs()) {
-      jsonWriter.object()
-          .set("name", config.getName())
-          .set("permitted", config.isPermitted())
-          .pop();
-    }
-    jsonWriter.flush();
-    jsonWriter.close();
-  }
-
-  @SuppressWarnings("unchecked")
-  private void loadFile() {
-    String str = file.readString();
-    OrderedMap<String, ?> rootElem = (OrderedMap<String, ?>) new JsonReader()
-        .parse(str);
-
-    Array<?> components = (Array<?>) rootElem.get("components");
-    if (components != null) {
-      for (int i = 0; i < components.size; i++) {
-        OrderedMap<String, ?> component = 
-            (OrderedMap<String, ?>) components.get(i);
-        readComponent(component);
-      }
-    }
-
-    Array<?> configs = (Array<?>) rootElem.get("configs");
-    if (configs != null) {
-      for (int i = 0; i < configs.size; i++) {
-        OrderedMap<String, ?> config = (OrderedMap<String, ?>) configs.get(i);
-        readConfig(config);
-      }
-    }
-  }
-
-  private void readComponent(OrderedMap<String, ?> component) {
-    String name = (String) component.get("name");
-    Actor actor = originalStage.findActor(name);
-    if (actor == null)
-      return;
-
-    actor.x = (Float) component.get("x");
-    actor.y = (Float) component.get("y");
-    actor.originX = (Float) component.get("originX");
-    actor.originY = (Float) component.get("originY");
-    actor.width = (Float) component.get("width");
-    actor.height = (Float) component.get("height");
-    actor.visible = (Boolean) component.get("visible");
-    if (actor instanceof Box2DActor) {
-      Box2DActor box2dActor = (Box2DActor) actor;
-      box2dActor.setPositionFromScreen();
-      box2dActor.getBody().setActive(actor.visible);
-    }
-  }
-
-  private void readConfig(OrderedMap<String, ?> configObj) {
-    String name = (String) configObj.get("name");
-    for (IModelConfig<?> config: experimentModel.getConfigs()) {
-      if (config.getName() == name) {
-        config.setPermitted((Boolean) configObj.get("permitted"));
-      }
-    }
   }
 
   private Vector2 screenToWorld(int x, int y) {
