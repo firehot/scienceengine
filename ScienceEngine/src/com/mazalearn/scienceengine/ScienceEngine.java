@@ -1,8 +1,12 @@
 package com.mazalearn.scienceengine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -35,7 +39,18 @@ public class ScienceEngine extends Game {
   private MusicManager musicManager;
   private SoundManager soundManager;
 
+  private List<String> params;
+
   public static OrthographicCamera debugCamera;
+
+  public ScienceEngine() {
+    this(new ArrayList<String>());
+  }
+  
+  public ScienceEngine(List<String> intentParams) {
+    // Ignored for now - later should support auto launch from browser link
+    this.params = intentParams;
+  }
 
   public PreferencesManager getPreferencesManager() {
     return preferencesManager;
@@ -58,6 +73,7 @@ public class ScienceEngine extends Game {
   @Override
   public void create() {
     Gdx.app.log(ScienceEngine.LOG, "Creating Engine on " + Gdx.app.getType());
+    Gdx.app.log(ScienceEngine.LOG, "With params " + params);
     // Resize to full screen
     //Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode());
 
@@ -141,6 +157,10 @@ public class ScienceEngine extends Game {
     super.setScreen(screen);
     Gdx.app.log(ScienceEngine.LOG, "Setting screen: "
         + screen.getClass().getName());
+  }
+
+  public List<String> getParams() {
+    return params;
   }
 
 }

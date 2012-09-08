@@ -62,6 +62,9 @@ public class Box2DActor extends Actor {
   }
   
   public void setPositionFromScreen() {
-    body.setPositionAndAngle(x / PIXELS_PER_M, y / PIXELS_PER_M, rotation * MathUtils.degreesToRadians);
+    body.setPositionAndAngle(x / PIXELS_PER_M, y / PIXELS_PER_M, 
+        rotation * MathUtils.degreesToRadians);
+    body.setActive(visible);
+    body.setInitial();
   }
 }

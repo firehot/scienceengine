@@ -1,9 +1,10 @@
-package com.mazalearn.scienceengine.designer;
+package com.mazalearn.scienceengine.services;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,16 +16,16 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 
-class LevelManager {
+public class LevelManager {
   List<IModelConfig<?>> modelConfigs;
   Stage stage;
   FileHandle file;
 
-  public LevelManager(Stage stage, List<IModelConfig<?>> modelConfigs,
-      FileHandle file) {
+  public LevelManager(String experimentName, int level, Stage stage, 
+      List<IModelConfig<?>> modelConfigs) {
     this.modelConfigs = modelConfigs;
     this.stage = stage;
-    this.file = file;
+    this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
   }
 
   /**
@@ -137,9 +138,7 @@ class LevelManager {
     actor.visible = (Boolean) nvl(component.get("visible"), true);
     actor.rotation = (Float) nvl(component.get("rotation"), 0f);
     if (actor instanceof Box2DActor) {
-      Box2DActor box2dActor = (Box2DActor) actor;
-      box2dActor.setPositionFromScreen();
-      box2dActor.getBody().setActive(actor.visible);
+      ((Box2DActor) actor).setPositionFromScreen();
     }
   }
 

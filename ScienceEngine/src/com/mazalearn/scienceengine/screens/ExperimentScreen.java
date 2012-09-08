@@ -8,6 +8,7 @@ import com.mazalearn.scienceengine.designer.LevelEditor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
+import com.mazalearn.scienceengine.services.LevelManager;
 import com.mazalearn.scienceengine.services.Profile;
 
 /**
@@ -30,14 +31,19 @@ public class ExperimentScreen extends AbstractScreen {
   public void show() {
     super.show();
     Profile profile = scienceEngine.getProfileManager().retrieveProfile();
+    Stage stage = (Stage) experimentController.getView();
+    int level = profile.getCurrentLevelId();
+    if (level == 0) level = 1;
+    LevelManager levelManager = new LevelManager(experimentName, level, stage, 
+        experimentController.getModel().getConfigs());
+    levelManager.loadLevel();
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
-      levelEditor = new LevelEditor(experimentName, profile.getCurrentLevelId(), 
-          (Stage) experimentController.getView(), experimentController.getModel(),
-          this);
+      levelEditor = new LevelEditor(levelManager, 
+          stage, experimentController.getModel(), this);
       levelEditor.enableEditor();
       this.setStage(levelEditor);
     } else {
-      this.setStage((Stage) experimentController.getView());      
+      this.setStage(stage);      
     }
   }
 

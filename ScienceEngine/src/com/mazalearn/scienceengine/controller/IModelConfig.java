@@ -22,4 +22,5 @@ public interface IModelConfig<T> {
   public Enum[] getList();
   public void setPermitted(boolean isPermitted);
   public boolean isPermitted();
+  public boolean isPossible();
 }

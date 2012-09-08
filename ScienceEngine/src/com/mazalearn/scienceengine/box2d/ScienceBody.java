@@ -35,6 +35,7 @@ public class ScienceBody implements IBody {
   // Used for temporary work
   private final Vector2 aPosition = new Vector2();
   private final String name;
+  private boolean initialIsActive;
   
   protected ScienceBody(String name, float x, float y, float angle) {
     this.name = name;
@@ -51,10 +52,18 @@ public class ScienceBody implements IBody {
   public void singleStep(float dt) {
   }
   
-  public void reset() {
+  public void setInitial() {
+    this.initialX = getPosition().x;
+    this.initialY = getPosition().y;
+    this.initialAngle = getAngle();
+    this.initialIsActive = isActive();
+  }
+  
+  public void resetInitial() {
     this.setPositionAndAngle(initialX, initialY, initialAngle);
     this.setAngularVelocity(0);
     this.setLinearVelocity(Vector2.Zero);
+    this.setActive(initialIsActive);
   }
   
   /**

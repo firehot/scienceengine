@@ -5,7 +5,6 @@ import java.util.Locale;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -26,6 +25,7 @@ import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.screens.AbstractScreen;
+import com.mazalearn.scienceengine.services.LevelManager;
 
 /**
  * A supplemental stage that enables editing the screen layout and storing
@@ -39,7 +39,6 @@ import com.mazalearn.scienceengine.screens.AbstractScreen;
  * @author sridhar
  */
 public class LevelEditor extends Stage {
-  private final FileHandle file;
   private final AbstractScreen screen;
 
   private final OrthographicCamera orthographicCamera;
@@ -72,24 +71,22 @@ public class LevelEditor extends Stage {
    * @param level - level of experiment.
    * @param stage - stage used by the experiment view
    */
-  public LevelEditor(String experimentName, int level, Stage stage, 
+  public LevelEditor(LevelManager levelManager, Stage stage, 
       IExperimentModel experimentModel, AbstractScreen screen) {
     super(stage.width(), stage.height(), stage.isStretched(), 
         stage.getSpriteBatch());
     this.screen = screen;
     this.experimentModel = experimentModel;
-    this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
-    levelManager = new LevelManager(originalStage, experimentModel.getConfigs(), file);
+    this.levelManager = levelManager;
     levelConfig = new Table(screen.getSkin());
     levelConfig.debug();
     levelConfig.setFillParent(true);
     levelConfig.add(createComponentList(stage, screen.getSkin())).pad(10);
     levelConfig.add(createConfigTable(experimentModel, screen.getSkin())).pad(10);
     this.addActor(levelConfig);
-    levelManager.loadLevel();
   }
 
   private List createComponentList(Stage stage, Skin skin) {
@@ -114,10 +111,10 @@ public class LevelEditor extends Stage {
   private Table createConfigTable(IExperimentModel experimentModel, Skin skin) {
     Table configTable = new Table(skin);
     for (final IModelConfig<?> config: experimentModel.getConfigs()) {
-      if (config.isAvailable()) {
+      if (config.isPossible()) {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
         configTable.add(configCheckbox).left();
-        configCheckbox.setChecked(true);
+        configCheckbox.setChecked(config.isPermitted());
         configCheckbox.setClickListener(new ClickListener() {
           @Override
           public void click(Actor actor, float x, float y) {
@@ -305,14 +302,7 @@ public class LevelEditor extends Stage {
   public boolean keyDown(int keycode) {
     switch (keycode) {
     case Keys.SPACE:
-      switch (mode) {
-      case CONFIGURE:
-        mode = Mode.OVERLAY;
-        break;
-      case OVERLAY:
-        mode = Mode.CONFIGURE;
-        break;
-      }
+      mode = (mode == Mode.CONFIGURE) ? Mode.OVERLAY : Mode.CONFIGURE;
       break;
     case Keys.S:
       levelManager.saveLevel();

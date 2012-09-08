@@ -82,7 +82,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   @Override
   public void reset() {
     for (ScienceBody body: bodies) {
-      body.reset();
+      body.resetInitial();
     }
     if (joint != null) {
       box2DWorld.destroyJoint(joint);

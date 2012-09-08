@@ -66,8 +66,8 @@ public class Compass extends ScienceBody {
   }
   
   @Override
-  public void reset() {
-    super.reset();
+  public void resetInitial() {
+    super.resetInitial();
     fieldSamples.clear();
   }
   

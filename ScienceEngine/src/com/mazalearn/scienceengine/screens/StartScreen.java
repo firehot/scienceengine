@@ -18,8 +18,8 @@ public class StartScreen extends AbstractScreen {
   private Label creditsLabel;
   private ExperimentClickListener experimentClickListener;
 
-  public StartScreen(ScienceEngine game) {
-    super(game);
+  public StartScreen(ScienceEngine scienceEngine) {
+    super(scienceEngine);
     // create the listeners
     experimentClickListener = new ExperimentClickListener();
   }
@@ -70,7 +70,7 @@ public class StartScreen extends AbstractScreen {
     table.row();
     table.add(backButton).size(250, 60).colspan(5);
   }
-
+  
   /**
    * Listener for experimentModel click button.
    */
