@@ -15,14 +15,16 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass.Fi
 
 public class CompassView extends Box2DActor {
   private final Compass compass;
-  private Vector2 lastTouch = new Vector2();
-  private Vector3 vector3 = new Vector3();
+  private Vector2 lastTouch = new Vector2();    // view coordinates
+  private Vector3 currentTouch = new Vector3(); // view coordinates
   private TextureRegion arrow;
+  private float radius;
     
   public CompassView(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
     this.width /= 2;
     this.height /= 2;
+    this.radius = (float) Math.sqrt(width * width + height * height)/2;
     this.compass = (Compass) body;
     this.originX = width/2;
     this.originY = height/2;
@@ -31,41 +33,40 @@ public class CompassView extends Box2DActor {
 
   @Override
   public boolean touchDown(float localX, float localY, int pointer) {
-    vector3.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    getStage().getCamera().unproject(vector3);
-    lastTouch.set(vector3.x, vector3.y);
+    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    getStage().getCamera().unproject(currentTouch);
+    lastTouch.set(currentTouch.x, currentTouch.y);
     return true;
   }
 
   @Override
   public void touchDragged(float localX, float localY, int pointer) {
-    vector3.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    getStage().getCamera().unproject(vector3);
-    lastTouch.sub(vector3.x, vector3.y);
+    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    getStage().getCamera().unproject(currentTouch);
+    lastTouch.sub(currentTouch.x, currentTouch.y);
     this.x -= lastTouch.x;
     this.y -= lastTouch.y;
-    setPositionFromScreen();
+    setPositionFromViewCoords();
     compass.singleStep(0);
-    lastTouch.set(vector3.x, vector3.y);
+    lastTouch.set(currentTouch.x, currentTouch.y);
   }
   
   @Override
   public void touchUp(float localX, float localY, int pointer) {
     // Record field at this position
-    compass.addFieldSample(lastTouch);     
+    compass.addFieldSample(this.x + radius * MathUtils.cos(rotation), 
+        this.y + radius * MathUtils.sin(rotation));     
   }
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
-    Color c = batch.getColor();
     for (FieldSample fieldSample: compass.getFieldSamples()) {
-      float intensity = 0.25f + fieldSample.magnitude * 200;
+      // Magnitude is scaled visually to show field strength.
+      float scale = fieldSample.magnitude * 5; // fieldSample.magnitude > 0.02f ? 1 : fieldSample.magnitude * 50;
       float rotation =  (fieldSample.angle * MathUtils.radiansToDegrees) % 360;
-      batch.setColor(1, 1, 1, intensity);
       batch.draw(arrow, fieldSample.x, fieldSample.y, 
-          0, 0, 30, 30, 1, 1, rotation);
+          0, 0, width, height, scale, scale, rotation);
     }
-    batch.setColor(c);
   }
 }

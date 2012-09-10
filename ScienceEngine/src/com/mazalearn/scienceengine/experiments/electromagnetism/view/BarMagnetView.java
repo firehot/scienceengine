@@ -1,9 +1,11 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel;
@@ -18,6 +20,7 @@ public class BarMagnetView extends Box2DActor {
   private BitmapFont font;
   private Vector2 lastTouch = new Vector2();
   private Vector2 newPos = new Vector2();
+  private Vector3 currentTouch = new Vector3();
   
   public BarMagnetView(TextureRegion textureRegion, ScienceBody body, 
       AbstractExperimentView experimentView, ElectroMagnetismModel emModel) {
@@ -31,37 +34,45 @@ public class BarMagnetView extends Box2DActor {
   }
 
   public boolean touchDown(float x, float y, int pointer) {
-    lastTouch.set(x, y);
+    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    getStage().getCamera().unproject(currentTouch);
+    lastTouch.set(currentTouch.x, currentTouch.y);
     return true;
   }
 
   public void touchDragged(float x, float y, int pointer) {
     if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
-    // New touch position
-    newPos.set(x, y);
-    // Subtract last touch position to get displacement vector
-    newPos.sub(lastTouch);
-    // Add displacement vector to the actor position to find new position
-    this.x += newPos.x;
-    this.y += newPos.y;
-    setPositionFromScreen();
+    // Screen coords of current touch
+    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    // Goto view coords
+    getStage().getCamera().unproject(currentTouch);
+    // Get negative of movement vector
+    lastTouch.sub(currentTouch.x, currentTouch.y);
+    this.x -= lastTouch.x;
+    this.y -= lastTouch.y;
+    setPositionFromViewCoords();
     // Recalibrate lastTouch to new coordinates
-    lastTouch.set(x, y);
+    lastTouch.set(currentTouch.x, currentTouch.y);
     emView.resume();
   }
   
   public void touchUp(float x, float y, int pointer) {
     if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return;
-    // new touch position
-    newPos.set(x, y);
-    // Subtract old touch position to get displacement vector
-    newPos.sub(lastTouch);
+    // Screen coords of current touch
+    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    // Goto view coords of current touch
+    getStage().getCamera().unproject(currentTouch);
+    // Get negative of movement vector
+    lastTouch.sub(currentTouch.x, currentTouch.y);
     // Scale displacement vector suitably to get a proportional force
-    newPos.mul(20000);
-    // Apply the force at point touched in world coords
-    lastTouch.sub(width/2, height/2);
-    lastTouch.mul(1f/AbstractExperimentView.PIXELS_PER_M);
-    barMagnet.applyForce(newPos, barMagnet.getWorldPoint(lastTouch));
+    lastTouch.mul(-10000);
+    // view coords of current touch
+    newPos.set(currentTouch.x, currentTouch.y);
+    // world point of current touch
+    getWorldPointFromView(newPos, rotation);
+    // Use center as origin - dont understand why this step
+    newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
+    barMagnet.applyForce(lastTouch, newPos);
     emView.resume();
   }
   

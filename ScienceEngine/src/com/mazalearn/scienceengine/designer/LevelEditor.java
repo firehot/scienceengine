@@ -258,18 +258,18 @@ public class LevelEditor extends Stage {
 
   @Override
   public boolean touchDragged(int x, int y, int pointer) {
-    Vector2 delta = new Vector2(x, y).sub(lastTouch).mul(
-        orthographicCamera.zoom);
-    delta.x *= camera.viewportWidth / Gdx.graphics.getWidth();
-    delta.y *= camera.viewportHeight / Gdx.graphics.getHeight();
-    delta.y = -delta.y;
+    Vector3 delta = new Vector3(x, y, 0);
+    camera.unproject(delta);
+    Vector3 d3 = new Vector3(lastTouch.x, lastTouch.y, 0);
+    camera.unproject(d3);
+    delta.sub(d3);
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
       if (draggedActor != null) {
         draggedActor.x += delta.x;
         draggedActor.y += delta.y;
         if (draggedActor instanceof Box2DActor) {
-          ((Box2DActor) draggedActor).setPositionFromScreen();
+          ((Box2DActor) draggedActor).setPositionFromViewCoords();
         }
       } else if (resizedActor != null) {
         float sizeRatio = resizedActor.width / resizedActor.height;

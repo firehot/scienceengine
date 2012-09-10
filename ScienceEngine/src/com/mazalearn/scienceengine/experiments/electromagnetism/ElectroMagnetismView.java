@@ -57,4 +57,17 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     }
     return new TextureRegion(texture);
   }
+  
+  public void beginGame() {
+    // your time begins now
+    // doubts on magnitude
+    // Generate A, B at two "random" points around magnet
+    // Is the field stronger at A or B?
+    // +10 or -5? or 10 consecutive right?
+    // doubts on direction
+    // Generate A at "random" point around magnet
+    // What is direction of field at A?
+    // + 10 or -5
+    // doubts on shielding - not yet addressed
+  }
 }

@@ -6,32 +6,30 @@ import java.util.List;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
- * Compass is the model of a compass.
- * However, it shows direction as well as strength of the field.
+ * Compass is the model of a compass - it is a point body without width and height.
+ * It shows direction as well as strength of the field at the point
  * <p/>
  * 
  * @author sridhar
  */
 public class Compass extends ScienceBody {
 
-  public final float width = 8f;
-  public final float height = 2f;
   // Field that the compass is observing.
   private EMField emField;
   // A reusable vector
   private Vector2 fieldVector = new Vector2();
-  private Vector2 pos = new Vector2();
   
   public static class FieldSample {
     public float x, y, angle, magnitude;
-    public FieldSample(Vector2 point, float angle, float magnitude) {
-      this.x = point.x;
-      this.y = point.y;
+    public FieldSample(float x, float y, float angle, float magnitude) {
+      this.x = x;
+      this.y = y;
       this.angle = angle;
       this.magnitude = magnitude;
     }
@@ -47,10 +45,10 @@ public class Compass extends ScienceBody {
     getBody().setType(BodyType.StaticBody);
     this.emField = emField;
     FixtureDef fixtureDef = new FixtureDef();
-    PolygonShape rectangleShape = new PolygonShape();
-    rectangleShape.setAsBox(width/2, height/2);
+    CircleShape circleShape = new CircleShape();
+    circleShape.setRadius(0);
     fixtureDef.density = 1;
-    fixtureDef.shape = rectangleShape;
+    fixtureDef.shape = circleShape;
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
@@ -58,9 +56,7 @@ public class Compass extends ScienceBody {
   
   @Override
   public void singleStep(float dt) {
-    pos.set(width/2, height/2);
-    pos = getWorldPoint(pos);
-    emField.getBField(pos, fieldVector /* output */);
+    emField.getBField(getPosition(), fieldVector /* output */);
     float angle = fieldVector.angle() * MathUtils.degreesToRadians;
     setPositionAndAngle(getPosition(), angle);
   }
@@ -75,8 +71,8 @@ public class Compass extends ScienceBody {
     return fieldVector.len();
   }
 
-  public void addFieldSample(Vector2 point) {
-    fieldSamples.add(new FieldSample(point, getAngle(), getBField()));
+  public void addFieldSample(float x, float y) {
+    fieldSamples.add(new FieldSample(x, y, getAngle(), getBField()));
   }
 
   public List<FieldSample> getFieldSamples() {
