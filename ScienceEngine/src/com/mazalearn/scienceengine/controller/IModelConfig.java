@@ -6,7 +6,7 @@ public interface IModelConfig<T> {
   public ConfigType getType();
   public String getName();
   public String getDescription();
-  // Is this configuration hook available with current modelConfigs?
+  // Is this configuration hook available with current configs?
   public boolean isAvailable();
 
   // Only for COMMAND type

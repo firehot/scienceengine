@@ -2,6 +2,8 @@
 package com.mazalearn.scienceengine.box2d;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mazalearn.scienceengine.controller.IModelConfig;
 
 /**
  * ScienceBody has basic attributes for an element in an EM Field.
@@ -29,6 +32,9 @@ public class ScienceBody implements IBody {
   private static Body GROUND;
   // Body instance to which methods are proxied
   Body body;
+  // Configs exposed by this body
+  protected List<IModelConfig<?>> configs;
+
   // Initial positions and angle
   float initialX, initialY, initialAngle;
   // Used for temporary work
@@ -46,6 +52,11 @@ public class ScienceBody implements IBody {
     bodyDef.angle = angle;
     bodyDef.type = BodyDef.BodyType.StaticBody;
     this.body = box2DWorld.createBody(bodyDef);
+    this.configs = new ArrayList<IModelConfig<?>>();
+  }
+  
+  public List<IModelConfig<?>> getConfigs() {
+    return Collections.unmodifiableList(configs);
   }
   
   public void singleStep(float dt) {

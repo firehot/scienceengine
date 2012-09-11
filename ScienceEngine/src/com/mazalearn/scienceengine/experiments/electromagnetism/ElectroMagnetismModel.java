@@ -25,9 +25,9 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   private EMField emField;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
   private List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
-  public enum Mode {Free, Rotate};
+  public enum Mode {Fixed, Free, Rotate};
   
-  private Mode mode = Mode.Free;
+  private Mode mode = Mode.Fixed;
   private Joint joint;
     
   public ElectroMagnetismModel() {   
@@ -52,21 +52,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
       public void setValue(String value) { setMode(value); }
       public boolean isPossible() { return barMagnet.isActive(); }
     });
-    modelConfigs.add(new AbstractModelConfig<Float>("MagnetStrength", 
-        "Strength of magnet", barMagnet.getMinStrength(), 
-        barMagnet.getMaxStrength()) {
-      public Float getValue() { return getMagnetStrength(); }
-      public void setValue(Float value) { setMagnetStrength(value); }
-      public boolean isPossible() { return barMagnet.isActive(); }
-    });
-  }
-
-  public Float getMagnetStrength() {
-    return barMagnet.getStrength();
-  }
-  
-  public void setMagnetStrength(Float strength) {
-    barMagnet.setStrength(strength);
+    modelConfigs.addAll(barMagnet.getConfigs());
   }
 
   @Override

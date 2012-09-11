@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 
 /**
  * AbstractMagnet is the abstract base class for all magnets.
@@ -51,6 +52,16 @@ public abstract class AbstractMagnet extends ScienceBody
     this.strength = 1.0f;
     this.minStrength = 0.0f; // couldn't be any weaker
     this.maxStrength = 10000.0f; // couldn't be any stronger
+    initializeConfigs();
+  }
+  
+  public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<Float>("MagnetStrength", 
+        "Strength of magnet", getMinStrength(), getMaxStrength()) {
+      public Float getValue() { return getStrength(); }
+      public void setValue(Float value) { setStrength(value); }
+      public boolean isPossible() { return isActive(); }
+    });
   }
 
   // ----------------------------------------------------------------------------
@@ -157,7 +168,7 @@ public abstract class AbstractMagnet extends ScienceBody
      */
     Vector2 localPoint = this.getLocalPoint(p);
     localPoint.sub(width/2, height/2);
-    localPoint.mul(8.0f); // fudge factor to keep at 250,50 scale
+    localPoint.mul(5.0f); // fudge factor to keep at 250,50 scale
     // get strength in magnet's local coordinate frame
     getBFieldRelative(localPoint, outputVector);
 
@@ -221,4 +232,5 @@ public abstract class AbstractMagnet extends ScienceBody
   public float getHeight() {
     return this.height;
   }
+  
 }
