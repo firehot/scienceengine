@@ -56,7 +56,8 @@ public class CompassView extends Box2DActor {
     // Record field at this position as a world point
     Vector2 pos = new Vector2(), pos2;
     pos.set(-width/2, -height/2);
-    pos.mul(1f/PIXELS_PER_M);
+    // Barmagnet model is slightly imperfect around edges, hence 0.9
+    pos.mul(1.1f/PIXELS_PER_M);
     pos2 = compass.getWorldPoint(pos);
     compass.addFieldSample(pos2.x * PIXELS_PER_M,  pos2.y * PIXELS_PER_M);
   }
@@ -64,13 +65,12 @@ public class CompassView extends Box2DActor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     Color c = batch.getColor();
-    batch.setColor(1, 1, 1, 0.75f * parentAlpha);
     for (FieldSample fieldSample: compass.getFieldSamples()) {
-      // Magnitude is scaled visually as thickness of arrow to show field strength.
-      float scale = fieldSample.magnitude * 10; // fieldSample.magnitude > 0.02f ? 1 : fieldSample.magnitude * 50;
+      // Magnitude is scaled visually as color intensity
+      batch.setColor(1, 1, 1, 0.25f + fieldSample.magnitude * 200);
       float rotation =  (fieldSample.angle * MathUtils.radiansToDegrees) % 360;
       batch.draw(arrow, fieldSample.x, fieldSample.y, 
-          0, 0, width, height, 1, scale, rotation);
+          0, 0, width, height, 1, 1, rotation);
     }
     batch.setColor(c);
     super.draw(batch, parentAlpha);
