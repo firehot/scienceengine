@@ -13,5 +13,4 @@ public interface IExperimentModel {
   public World getBox2DWorld();
   public void enable(boolean enable);
   public boolean isEnabled();
-  public void initializeConfigs();
 }

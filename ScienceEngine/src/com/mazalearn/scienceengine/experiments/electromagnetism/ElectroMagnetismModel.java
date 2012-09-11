@@ -24,7 +24,6 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   private Compass compass;
   private EMField emField;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
-  private List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
   public enum Mode {Fixed, Free, Rotate};
   
   private Mode mode = Mode.Fixed;
@@ -52,7 +51,6 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
       public void setValue(String value) { setMode(value); }
       public boolean isPossible() { return barMagnet.isActive(); }
     });
-    modelConfigs.addAll(barMagnet.getConfigs());
   }
 
   @Override
