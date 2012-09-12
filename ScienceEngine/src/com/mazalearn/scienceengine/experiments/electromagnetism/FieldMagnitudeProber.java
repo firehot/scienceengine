@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.view.ProbeManager;
+import com.mazalearn.scienceengine.view.IDoneCallback;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
@@ -16,7 +16,7 @@ class FieldMagnitudeProber extends AbstractProber {
   final Image imageCorrect, imageWrong;
   private final Actor barMagnet;
   
-  public FieldMagnitudeProber(Skin skin, Actor barMagnet, final ProbeManager manager) {
+  public FieldMagnitudeProber(Skin skin, Actor barMagnet, final IDoneCallback doneCallback) {
     super();
     this.barMagnet = barMagnet;
     TextureRegion questionMark = new TextureRegion(new Texture("images/questionmark.png"));
@@ -24,14 +24,14 @@ class FieldMagnitudeProber extends AbstractProber {
     imageCorrect.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        manager.probeDone(true);
+        doneCallback.done(true);
       }
     });
     imageWrong = new Image(questionMark);
     imageWrong.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        manager.probeDone(false);
+        doneCallback.done(false);
       }
     });
     this.addActor(imageCorrect);

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.view.ProbeManager;
+import com.mazalearn.scienceengine.view.IDoneCallback;
 
 // doubts on direction
 // Generate A at "random" point around magnet
@@ -17,7 +17,7 @@ class FieldDirectionProber extends AbstractProber {
   private final Image image;
   private final Actor barMagnet;
   
-  public FieldDirectionProber(Skin skin, Actor barMagnet, final ProbeManager manager) {
+  public FieldDirectionProber(Skin skin, Actor barMagnet, final IDoneCallback doneCallback) {
     super();
     this.barMagnet = barMagnet;
     TextureRegion questionMark = 
@@ -33,7 +33,7 @@ class FieldDirectionProber extends AbstractProber {
       @Override
       public void touchUp(float x, float y, int pointer) {
         lastTouch.sub(x, y);
-        manager.probeDone(true);
+        doneCallback.done(true);
       }
     };
     this.addActor(image);

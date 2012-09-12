@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public interface IExperimentView {
+public interface IExperimentView extends IDoneCallback {
   // Pause model actions in the experiment. Measurement will still work.
   public void pause();
   // Resume model actions

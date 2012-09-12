@@ -33,4 +33,8 @@ class Dashboard extends Table {
   public void setTitle(String text) {
     title.setText(text);
   }
+
+  public int getScore() {
+    return score;
+  }
 }

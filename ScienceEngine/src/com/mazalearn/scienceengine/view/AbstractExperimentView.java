@@ -29,6 +29,7 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
     return !experimentModel.isEnabled();
   }
   
+  public void done(boolean success) {}
 /*
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {

@@ -17,9 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.IModelConfig;
@@ -58,9 +57,7 @@ public class LevelEditor extends Stage {
   private Vector3 originalCameraPos;
   private float originalCameraZoom;
   
-  private List componentList;
-
-  private Table levelConfig;
+  private Table layout;
   private IExperimentModel experimentModel;
   private LevelManager levelManager;
   
@@ -81,35 +78,90 @@ public class LevelEditor extends Stage {
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
     this.levelManager = levelManager;
-    levelConfig = new Table(screen.getSkin());
-    levelConfig.debug();
-    levelConfig.setFillParent(true);
-    levelConfig.add(createComponentList(stage, screen.getSkin())).pad(10);
-    levelConfig.add(createConfigTable(experimentModel, screen.getSkin())).pad(10);
-    this.addActor(levelConfig);
+    this.layout = createLayout(levelManager, stage, experimentModel, screen);
+    this.addActor(layout);
   }
 
-  private List createComponentList(Stage stage, Skin skin) {
-    String[] componentNames = new String[stage.getActors().size() + 1];
-    int i = 0;
-    for (Actor actor: stage.getActors()) {
-      if (actor.name != null) {
-        componentNames[i++] = actor.name;
-      }
-    }
-    componentNames[i] = "None";
-    componentList = new List(componentNames, skin);
-    componentList.setSelectionListener(new SelectionListener() {
+  private Table createLayout(LevelManager levelManager, Stage stage,
+      IExperimentModel experimentModel, AbstractScreen screen) {
+    Table layout = new Table(screen.getSkin());
+    layout.debug();
+    layout.setFillParent(true);
+    Table title = new Table(screen.getSkin());
+    title.add(levelManager.getExperimentName()).pad(10);
+    title.add("Level " + String.valueOf(levelManager.getLevel())).pad(10);
+    layout.add(title).colspan(2);
+    layout.row();
+    layout.add(createComponentTable(stage, screen.getSkin())).pad(10);
+    layout.add(createConfigTable(experimentModel, screen.getSkin())).pad(10);
+    layout.row();
+    layout.add(createMenu(levelManager, screen.getSkin())).colspan(2);
+    layout.row();
+    return layout;
+  }
+
+  private Table createMenu(final LevelManager levelManager, Skin skin) {
+    Table menu = new Table(skin);
+    TextButton button = new TextButton("Save", skin);
+    button.setClickListener(new ClickListener() {
       @Override
-      public void selected(Actor actor, int index, String name) {
-        listSelectedActor = originalStage.findActor(name);
+      public void click(Actor actor, float x, float y) {
+        levelManager.saveLevel();
       }
     });
-    return componentList;
+    menu.add(button).pad(10);
+    button = new TextButton("Load", skin);
+    button.setClickListener(new ClickListener() {
+      @Override
+      public void click(Actor actor, float x, float y) {
+        levelManager.loadLevel();
+      }
+    });
+    menu.add(button).pad(10);
+    button = new TextButton("Restore Camera", skin);
+    button.setClickListener(new ClickListener() {
+      @Override
+      public void click(Actor actor, float x, float y) {
+        restoreCamera();
+      }
+    });
+    menu.add(button).pad(10);
+    button = new TextButton("Exit Editor", skin);
+    button.setClickListener(new ClickListener() {
+      @Override
+      public void click(Actor actor, float x, float y) {
+        disableEditor();
+      }
+    });
+    menu.add(button).pad(10);
+    
+    return menu;
+  }
+
+  private Table createComponentTable(final Stage stage, Skin skin) {
+    Table componentTable = new Table(skin);
+    componentTable.add("Components"); 
+    componentTable.row();
+    for (final Actor actor: stage.getActors()) {
+      if (actor.name == null) continue;
+      final CheckBox componentCheckbox = new CheckBox(actor.name, skin);
+      componentTable.add(componentCheckbox).left();
+      componentCheckbox.setChecked(actor.visible);
+      componentCheckbox.setClickListener(new ClickListener() {
+        @Override
+        public void click(Actor a, float x, float y) {
+          listSelectedActor = stage.findActor(actor.name);
+          actor.visible = !actor.visible; 
+        }});
+      componentTable.row();
+    }
+    return componentTable;
   }
 
   private Table createConfigTable(IExperimentModel experimentModel, Skin skin) {
     Table configTable = new Table(skin);
+    configTable.add("Configs");
+    configTable.row();
     for (final IModelConfig<?> config: experimentModel.getConfigs()) {
       if (config.isPossible()) {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
@@ -182,15 +234,11 @@ public class LevelEditor extends Stage {
     font.draw(batch,
         "---------------------------------------------------------------",
         5, top - 15 * 1);
-    font.draw(batch, "'s' to save, 'l' to reload", 5, top - 15 * 2);
-    font.draw(batch, "'space' to toggle overlay, 'enter' to exit", 5,
-        top - 15 * 3);
-    font.draw(batch,
-        "scroll to zoom, hold right clic to pan, 'r' to reset camera", 5,
-        top - 15 * 4);
+    font.draw(batch, "'space' to toggle overlay", 5,
+        top - 15 * 2);
     font.draw(batch,
         "---------------------------------------------------------------",
-        5, top - 15 * 5);
+        5, top - 15 * 3);
     font.draw(batch, selectedActor != null ? getInfo(selectedActor)
         : "> No object selected", 5, top - 15 * 6);
     batch.end();
@@ -303,23 +351,6 @@ public class LevelEditor extends Stage {
     switch (keycode) {
     case Keys.SPACE:
       mode = (mode == Mode.CONFIGURE) ? Mode.OVERLAY : Mode.CONFIGURE;
-      break;
-    case Keys.S:
-      levelManager.saveLevel();
-      break;
-    case Keys.L:
-      levelManager.loadLevel();
-      break;
-    case Keys.V:
-      if (selectedActor != null) {
-        selectedActor.visible = !selectedActor.visible;
-      }
-      break;
-    case Keys.R:
-      restoreCamera();
-      break;
-    case Keys.ENTER:
-      disableEditor();
       break;
     }
     return true;

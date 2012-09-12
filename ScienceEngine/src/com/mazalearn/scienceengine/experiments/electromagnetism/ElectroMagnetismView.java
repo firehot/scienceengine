@@ -67,7 +67,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     super.challenge(challenge);
     if (challenge) {
       if (probeManager == null) {
-        probeManager = new ProbeManager(skin, this); 
+        probeManager = new ProbeManager(skin, width, height, this); 
+        this.addActor(probeManager);
         probeManager.add(new FieldDirectionProber(skin, barMagnetView, probeManager));
         probeManager.add(new FieldMagnitudeProber(skin, barMagnetView, probeManager));
       }
@@ -75,4 +76,10 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     }
     probeManager.visible = challenge;
   };
+  
+  public void done(boolean success) {
+    if (success) {
+      probeManager.setTitle("Congratulations! You are promoted to the next level");
+    }
+  }
 }

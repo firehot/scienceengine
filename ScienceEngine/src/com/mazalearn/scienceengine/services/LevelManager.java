@@ -17,12 +17,16 @@ import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 
 public class LevelManager {
-  List<IModelConfig<?>> modelConfigs;
-  Stage stage;
-  FileHandle file;
+  private List<IModelConfig<?>> modelConfigs;
+  private Stage stage;
+  private FileHandle file;
+  private String experimentName;
+  private int level;
 
   public LevelManager(String experimentName, int level, Stage stage, 
       List<IModelConfig<?>> modelConfigs) {
+    this.experimentName = experimentName;
+    this.level = level;
     this.modelConfigs = modelConfigs;
     this.stage = stage;
     this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
@@ -171,4 +175,11 @@ public class LevelManager {
     }
   }
 
+  public String getExperimentName() {
+    return experimentName;
+  }
+
+  public int getLevel() {
+    return level;
+  }
 }
