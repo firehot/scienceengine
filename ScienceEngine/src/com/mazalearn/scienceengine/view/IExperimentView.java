@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.view;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mazalearn.scienceengine.services.LevelManager;
 
 public interface IExperimentView extends IDoneCallback {
   // Pause model actions in the experiment. Measurement will still work.
@@ -18,4 +19,5 @@ public interface IExperimentView extends IDoneCallback {
   public void challenge(boolean challenge);
   // Whether probe mode is on
   public boolean isChallengeInProgress();
+  public LevelManager getLevelManager();
 }

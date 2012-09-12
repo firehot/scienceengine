@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
+import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
+import com.mazalearn.scienceengine.experiments.waves.WaveController;
 import com.mazalearn.scienceengine.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.services.Profile;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
@@ -46,7 +49,10 @@ public class StartScreen extends AbstractScreen {
     table.row();
     table.add("Experiments");
 
-    String[] experiments = new String[] {"States of Matter", "Wave Motion", "Electromagnetism"};
+    String[] experiments = 
+        new String[] {StatesOfMatterController.NAME, 
+                      WaveController.NAME, 
+                      ElectroMagnetismController.NAME};
     for (String experiment: experiments) {
       experimentButton = new TextButton(experiment, getSkin());
       experimentButton.setClickListener(experimentClickListener);

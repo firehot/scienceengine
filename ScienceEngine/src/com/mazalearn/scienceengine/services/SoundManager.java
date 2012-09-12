@@ -18,7 +18,9 @@ public class SoundManager implements
    * The available sound files.
    */
   public enum ScienceEngineSound {
-    CLICK("sound/click.wav");
+    CLICK("sound/click.wav"), 
+    SUCCESS("sound/success.mp3"), 
+    FAILURE("sound/failure.mp3");
 
     private final String fileName;
 

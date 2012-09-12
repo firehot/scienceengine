@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.experiments.waves.view.Boundary;
 import com.mazalearn.scienceengine.experiments.waves.view.Hand;
 import com.mazalearn.scienceengine.experiments.waves.view.WaveBox;
+import com.mazalearn.scienceengine.services.SoundManager;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
 public class WaveView extends AbstractExperimentView {
@@ -26,9 +28,9 @@ public class WaveView extends AbstractExperimentView {
 
   private TextureRegion ballTextureBlue;
   
-  public WaveView(float width, float height, final WaveModel waveModel, 
-      TextureAtlas atlas) {
-    super(waveModel, width, height);
+  public WaveView(String experimentName, float width, float height, 
+      final WaveModel waveModel, Skin skin, SoundManager soundManager, TextureAtlas atlas) {
+    super(experimentName, waveModel, width, height, skin, soundManager);
     this.width = width;
     this.height = height;
     this.waveModel = waveModel;

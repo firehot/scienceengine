@@ -1,17 +1,29 @@
 package com.mazalearn.scienceengine.view;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.model.IExperimentModel;
+import com.mazalearn.scienceengine.services.LevelManager;
+import com.mazalearn.scienceengine.services.SoundManager;
 
 public abstract class AbstractExperimentView extends Stage implements IExperimentView {
 
   public static final int PIXELS_PER_M = 8;
   protected final IExperimentModel experimentModel;
+  protected final Skin skin;
+  protected final SoundManager soundManager;
   private boolean isChallengeInProgress = false;
+  private LevelManager levelManager;
 
-  public AbstractExperimentView(IExperimentModel experimentModel, float width, float height) {
+  public AbstractExperimentView(String experimentName, 
+      IExperimentModel experimentModel, float width, float height, Skin skin, 
+      SoundManager soundManager) {
     super(width, height, true);
+    this.skin = skin;
+    this.soundManager = soundManager;
     this.experimentModel = experimentModel;
+    levelManager = new LevelManager(experimentName, this, 
+        experimentModel.getConfigs());
   }
 
   @Override
@@ -63,5 +75,9 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   public void act(float delta) {
     experimentModel.simulateSteps(delta);
     super.act(delta);
+  }
+  
+  public LevelManager getLevelManager() {
+    return levelManager;
   }
 }

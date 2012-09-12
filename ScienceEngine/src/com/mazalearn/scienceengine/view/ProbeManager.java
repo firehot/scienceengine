@@ -6,6 +6,8 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.experiments.electromagnetism.AbstractProber;
+import com.mazalearn.scienceengine.services.SoundManager;
+import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 
 /**
  * Cycles through the probers - probing the user with each one.
@@ -18,13 +20,15 @@ public class ProbeManager extends Group implements IDoneCallback {
   protected Dashboard dashboard;
   private List<AbstractProber> probers = new ArrayList<AbstractProber>();
   private final IDoneCallback doneCallback;
+  private final SoundManager soundManager;
 
   public ProbeManager(Skin skin, float width, float height,
-      IDoneCallback doneCallback) {
+      IDoneCallback doneCallback, SoundManager soundManager) {
     super();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
     this.doneCallback = doneCallback;
+    this.soundManager = soundManager;
     this.x = 0;
     this.y = 0;
     this.width = width;
@@ -46,6 +50,8 @@ public class ProbeManager extends Group implements IDoneCallback {
    * IDoneCallback interface implementation
    */
   public void done(boolean success) {
+    soundManager.play(
+        success ? ScienceEngineSound.SUCCESS : ScienceEngineSound.FAILURE);
     dashboard.addScore(success ? 10 : -5);
     probers.get(current).activate(false);
     if (dashboard.getScore() > 100) {

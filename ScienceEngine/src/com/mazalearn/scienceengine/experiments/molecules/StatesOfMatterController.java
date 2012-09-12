@@ -6,11 +6,13 @@ import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 import com.mazalearn.scienceengine.experiments.molecules.model.LJMolecularModel;
 import com.mazalearn.scienceengine.experiments.molecules.view.StatesOfMatterView;
+import com.mazalearn.scienceengine.services.SoundManager;
 
 /**
  * States of Matter experimentModel
  */
 public class StatesOfMatterController extends AbstractExperimentController {
+  public static final String NAME = "States of Matter";
   private static final int N = 25; // Number of molecules
   private static final int BOX_HEIGHT = 20;
   private static final int BOX_WIDTH = 20;
@@ -19,12 +21,13 @@ public class StatesOfMatterController extends AbstractExperimentController {
   private StatesOfMatterView statesOfMatterView;
   Configurator configurator;
   
-  public StatesOfMatterController(int width, int height, Skin skin) {
+  public StatesOfMatterController(int width, int height, Skin skin, SoundManager soundManager) {
     super(skin);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
-    statesOfMatterView = new StatesOfMatterView(statesOfMatterModel, width, height, N);
-    initialize(statesOfMatterModel, statesOfMatterView, "States of Matter");    
+    statesOfMatterView = 
+        new StatesOfMatterView(NAME, statesOfMatterModel, width, height, N, skin, soundManager);
+    initialize(statesOfMatterModel, statesOfMatterView, NAME);    
     
     /*
     // Floor of box - also controls heating.

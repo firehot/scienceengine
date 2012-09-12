@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
@@ -59,7 +61,6 @@ public class LevelEditor extends Stage {
   
   private Table layout;
   private IExperimentModel experimentModel;
-  private LevelManager levelManager;
   
 
   /**
@@ -77,23 +78,32 @@ public class LevelEditor extends Stage {
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
-    this.levelManager = levelManager;
     this.layout = createLayout(levelManager, stage, experimentModel, screen);
     this.addActor(layout);
   }
 
-  private Table createLayout(LevelManager levelManager, Stage stage,
+  private Table createLayout(final LevelManager levelManager, Stage stage,
       IExperimentModel experimentModel, AbstractScreen screen) {
     Table layout = new Table(screen.getSkin());
-    layout.debug();
     layout.setFillParent(true);
     Table title = new Table(screen.getSkin());
     title.add(levelManager.getExperimentName()).pad(10);
-    title.add("Level " + String.valueOf(levelManager.getLevel())).pad(10);
+    SelectBox level = new SelectBox(screen.getSkin());
+    level.setItems(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+    level.setSelection(levelManager.getLevel());
+    level.setSelectionListener(new SelectionListener() {
+      @Override
+      public void selected(Actor actor, int index, String value) {
+        levelManager.setLevel(index);
+        levelManager.load();
+      }
+    });
+    title.add("Level").pad(5);
+    title.add(level);
     layout.add(title).colspan(2);
     layout.row();
-    layout.add(createComponentTable(stage, screen.getSkin())).pad(10);
-    layout.add(createConfigTable(experimentModel, screen.getSkin())).pad(10);
+    layout.add(createComponentTable(stage, screen.getSkin())).top().pad(10);
+    layout.add(createConfigTable(experimentModel, screen.getSkin())).top().pad(10);
     layout.row();
     layout.add(createMenu(levelManager, screen.getSkin())).colspan(2);
     layout.row();
@@ -114,7 +124,7 @@ public class LevelEditor extends Stage {
     button.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        levelManager.loadLevel();
+        levelManager.load();
       }
     });
     menu.add(button).pad(10);

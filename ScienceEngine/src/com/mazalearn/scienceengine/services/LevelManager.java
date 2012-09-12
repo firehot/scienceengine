@@ -21,22 +21,21 @@ public class LevelManager {
   private Stage stage;
   private FileHandle file;
   private String experimentName;
-  private int level;
+  private int level = 1;
 
-  public LevelManager(String experimentName, int level, Stage stage, 
+  public LevelManager(String experimentName, Stage stage, 
       List<IModelConfig<?>> modelConfigs) {
     this.experimentName = experimentName;
-    this.level = level;
     this.modelConfigs = modelConfigs;
     this.stage = stage;
-    this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
   }
 
   /**
    * Loads the content of the provided file and automatically position and size
    * the objects.
+   * @param index 
    */
-  public void loadLevel() {
+  public void load() {
     try {
       loadFile();
       System.out.println("[LevelEditor] File successfully loaded!");
@@ -181,5 +180,10 @@ public class LevelManager {
 
   public int getLevel() {
     return level;
+  }
+  
+  public void setLevel(int level) {
+    this.level = level;
+    this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
   }
 }

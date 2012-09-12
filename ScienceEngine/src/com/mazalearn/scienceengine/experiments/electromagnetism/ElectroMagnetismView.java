@@ -2,31 +2,33 @@ package com.mazalearn.scienceengine.experiments.electromagnetism;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
+import com.mazalearn.scienceengine.services.SoundManager;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.view.ProbeManager;
 
 public class ElectroMagnetismView extends AbstractExperimentView {
-  private Skin skin;
   private BarMagnetView barMagnetView;
   private ProbeManager probeManager;
 
-  public ElectroMagnetismView(float width, float height, final ElectroMagnetismModel emModel, Skin skin) {
-    super(emModel, width, height);
-    this.width = width;
-    this.height = height;
-    this.skin = skin;
+  public ElectroMagnetismView(String experimentName, float width, float height,
+      final ElectroMagnetismModel emModel, Skin skin, SoundManager soundManager) {
+    super(experimentName, emModel, width, height, skin, soundManager);
     
     // TODO: use blending function to draw coilsback?
-    //Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
-    //    Scaling.stretch, Align.CENTER, "CoilsBack");
-    //this.addActor(coilsBack);
+    Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
+        Scaling.stretch, Align.CENTER, "CoilsBack");
+    this.addActor(coilsBack);
     for (final ScienceBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body.getName());
       if (body.getName() == "BarMagnet") {       
@@ -35,8 +37,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       } else if (body.getName() == "Lightbulb") {
         this.addActor(new LightbulbView(textureRegion, (Lightbulb) body));
       } else if (body.getName() == "PickupCoil") {
-        //coilsBack.x = body.getPosition().x * PIXELS_PER_M;
-        //coilsBack.y = body.getPosition().y * PIXELS_PER_M;
+        coilsBack.x = body.getPosition().x * PIXELS_PER_M;
+        coilsBack.y = body.getPosition().y * PIXELS_PER_M;
         this.addActor(new Box2DActor(body, textureRegion));
       } else if (body.getName() == "Compass") {
         this.addActor(new CompassView(textureRegion, body));
@@ -67,7 +69,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     super.challenge(challenge);
     if (challenge) {
       if (probeManager == null) {
-        probeManager = new ProbeManager(skin, width, height, this); 
+        probeManager = new ProbeManager(skin, width, height, this, soundManager); 
         this.addActor(probeManager);
         probeManager.add(new FieldDirectionProber(skin, barMagnetView, probeManager));
         probeManager.add(new FieldMagnitudeProber(skin, barMagnetView, probeManager));
@@ -79,7 +81,11 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   
   public void done(boolean success) {
     if (success) {
-      probeManager.setTitle("Congratulations! You are promoted to the next level");
+      int level = getLevelManager().getLevel() + 1;
+      probeManager.setTitle("Congratulations! You move to Level " + 
+          String.valueOf(level));
+      getLevelManager().setLevel(level);
+      getLevelManager().load();
     }
   }
 }
