@@ -22,7 +22,7 @@ public class ScienceEngine extends Game {
 
   // mode of development
   public enum DevMode {PRODUCTION, DEBUG, EDIT};
-  public static final DevMode DEV_MODE = DevMode.DEBUG;
+  public static DevMode DEV_MODE = DevMode.DEBUG;
   
   // Provide access to this singleton scienceEngine from any class
   public static ScienceEngine SCIENCE_ENGINE;

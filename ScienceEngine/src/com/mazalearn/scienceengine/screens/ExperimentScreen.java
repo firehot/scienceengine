@@ -40,7 +40,7 @@ public class ExperimentScreen extends AbstractScreen {
       levelEditor.enableEditor();
       this.setStage(levelEditor);
     } else {
-      this.setStage(stage);      
+      this.setStage((Stage) experimentView);      
     }
   }
 

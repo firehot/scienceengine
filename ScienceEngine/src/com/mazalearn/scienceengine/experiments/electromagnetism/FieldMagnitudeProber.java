@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
-import com.mazalearn.scienceengine.screens.AbstractScreen;
-import com.mazalearn.scienceengine.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.view.IDoneCallback;
 
 // doubts on magnitude

@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 
@@ -38,7 +39,7 @@ public class LevelManager {
   public void load() {
     try {
       loadFile();
-      System.out.println("[LevelEditor] File successfully loaded!");
+      Gdx.app.log(ScienceEngine.LOG, "[LevelEditor] File successfully loaded!");
     } catch (GdxRuntimeException ex) {
       System.err.println("[LevelEditor] Error happened while loading "
           + file.path());
@@ -184,6 +185,8 @@ public class LevelManager {
   
   public void setLevel(int level) {
     this.level = level;
+    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + "data/" + experimentName + "." + level + ".json");
     this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
+    Gdx.app.log(ScienceEngine.LOG, "File opened");
   }
 }

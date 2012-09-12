@@ -39,7 +39,7 @@ class FieldDirectionProber extends AbstractProber {
         lastTouch.sub(x, y);
         float val = lastTouch.nor().dot(bField); // Should be -1
         boolean success = Math.abs(val + 1) < TOLERANCE;
-        doneCallback.done(true);
+        doneCallback.done(success);
       }
     };
     this.addActor(image);
