@@ -63,11 +63,29 @@ public class Configurator extends Table {
     this.add(backButton).height(30).colspan(2);
     row();
     
+    // Register the game button
+    final TextButton challengeButton = new TextButton("Challenge Me!", skin);
+    challengeButton.setClickListener(new ClickListener() {
+      public void click(Actor actor, float x, float y) {
+        ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
+        if (experimentView.isChallengeInProgress()) {
+          experimentView.challenge(false);
+          challengeButton.setText("Challenge Me!");
+        } else {
+          experimentView.challenge(true);
+          challengeButton.setText("Learn");
+        }
+      }
+    });
+    this.add(challengeButton).height(30).colspan(2);
+    row();
+    
     // Add pause/resume functionality for the experiment
     final TextButton pauseResumeButton = new TextButton("Pause", skin);
     pauseResumeButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
+        ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
         if (experimentView.isPaused()) {
           pauseResumeButton.setText("Pause");
           experimentView.resume();

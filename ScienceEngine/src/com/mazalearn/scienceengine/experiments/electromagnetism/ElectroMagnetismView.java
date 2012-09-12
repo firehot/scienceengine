@@ -2,10 +2,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
@@ -13,12 +10,18 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetVi
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
+import com.mazalearn.scienceengine.view.ProbeManager;
 
 public class ElectroMagnetismView extends AbstractExperimentView {
-  public ElectroMagnetismView(float width, float height, final ElectroMagnetismModel emModel) {
+  private Skin skin;
+  private BarMagnetView barMagnetView;
+  private ProbeManager probeManager;
+
+  public ElectroMagnetismView(float width, float height, final ElectroMagnetismModel emModel, Skin skin) {
     super(emModel, width, height);
     this.width = width;
     this.height = height;
+    this.skin = skin;
     
     // TODO: use blending function to draw coilsback?
     //Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
@@ -27,7 +30,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     for (final ScienceBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body.getName());
       if (body.getName() == "BarMagnet") {       
-        this.addActor(new BarMagnetView(textureRegion, body, this, emModel));
+        barMagnetView = new BarMagnetView(textureRegion, body, this, emModel);
+        this.addActor(barMagnetView);
       } else if (body.getName() == "Lightbulb") {
         this.addActor(new LightbulbView(textureRegion, (Lightbulb) body));
       } else if (body.getName() == "PickupCoil") {
@@ -58,16 +62,17 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     return new TextureRegion(texture);
   }
   
-  public void beginGame() {
-    // your time begins now
-    // doubts on magnitude
-    // Generate A, B at two "random" points around magnet
-    // Is the field stronger at A or B?
-    // +10 or -5? or 10 consecutive right?
-    // doubts on direction
-    // Generate A at "random" point around magnet
-    // What is direction of field at A?
-    // + 10 or -5
-    // doubts on shielding - not yet addressed
-  }
+  @Override
+  public void challenge(boolean challenge) {
+    super.challenge(challenge);
+    if (challenge) {
+      if (probeManager == null) {
+        probeManager = new ProbeManager(skin, this); 
+        probeManager.add(new FieldDirectionProber(skin, barMagnetView, probeManager));
+        probeManager.add(new FieldMagnitudeProber(skin, barMagnetView, probeManager));
+      }
+      probeManager.startChallenge();
+    }
+    probeManager.visible = challenge;
+  };
 }

@@ -27,7 +27,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   }
 
   @Override
-  public void simulateSteps() {
+  public void simulateSteps(float delta) {
     if (!isEnabled) return;
     for (int i = 0; i < numStepsPerView; i++) {
       singleStep();
