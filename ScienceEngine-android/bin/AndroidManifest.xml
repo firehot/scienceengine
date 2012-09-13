@@ -21,7 +21,9 @@
 						<intent-filter>
 						    <data android:scheme="http" android:host="www.mazalearn.com"/>
 						    <action android:name="android.intent.action.VIEW" />
-						</intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
         </activity>
     </application>
 
