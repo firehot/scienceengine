@@ -185,8 +185,10 @@ public class LevelManager {
   
   public void setLevel(int level) {
     this.level = level;
-    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + "data/" + experimentName + "." + level + ".json");
-    this.file = Gdx.files.internal("data/" + experimentName + "." + level + ".json");
-    Gdx.app.log(ScienceEngine.LOG, "File opened");
+    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + "data/" + experimentName + "_" + level + ".json");
+    this.file = Gdx.files.internal("data/" + experimentName + "_" + level + ".json");
+    if (this.file == null) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not open file");
+    }
   }
 }

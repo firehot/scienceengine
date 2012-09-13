@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.view.AbstractExperimentView;
  */
 public class ElectroMagnetismController extends AbstractExperimentController {
   
-  public static final String NAME = "ElectroMagnetism";
+  public static final String NAME = "Electromagnetism";
 
   public ElectroMagnetismController(int width, int height, Skin skin, 
       SoundManager soundManager) {

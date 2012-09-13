@@ -13,7 +13,7 @@ public class ConfigTextButton implements IViewConfig {
   @SuppressWarnings("rawtypes")
   private final IModelConfig command;
   
-  private final TextButton textButton;
+  protected final TextButton textButton;
   
   @SuppressWarnings("rawtypes")
   public ConfigTextButton(final IModelConfig command, final Skin skin) {

@@ -21,7 +21,7 @@ public class ScienceEngine extends Game {
   public static final String LOG = ScienceEngine.class.getName();
 
   // mode of development
-  public enum DevMode {PRODUCTION, DEBUG, EDIT};
+  public enum DevMode {PRODUCTION, DEBUG, DESIGN};
   public static DevMode DEV_MODE = DevMode.DEBUG;
   
   // Provide access to this singleton scienceEngine from any class

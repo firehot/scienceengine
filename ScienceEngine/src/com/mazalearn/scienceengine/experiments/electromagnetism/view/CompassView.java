@@ -49,6 +49,7 @@ public class CompassView extends Box2DActor {
     setPositionFromViewCoords();
     compass.singleStep(0);
     lastTouch.set(currentTouch.x, currentTouch.y);
+    touchUp(localX, localY, pointer);
   }
   
   @Override

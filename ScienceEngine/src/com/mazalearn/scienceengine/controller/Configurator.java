@@ -22,6 +22,8 @@ public class Configurator extends Table {
   final Skin skin;
   List<Config> configs;
   private String experimentName;
+  private IViewConfig pauseResumeConfig;
+  private IViewConfig challengeConfig;
   
   public Configurator(Skin skin, final IExperimentModel experimentModel, 
       final IExperimentView experimentView, final String experimentName) {
@@ -63,39 +65,42 @@ public class Configurator extends Table {
     this.add(backButton).height(30).colspan(2);
     row();
     
-    // Register the game button
-    final TextButton challengeButton = new TextButton("Challenge Me!", skin);
-    challengeButton.setClickListener(new ClickListener() {
-      public void click(Actor actor, float x, float y) {
-        ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
-        if (experimentView.isChallengeInProgress()) {
-          experimentView.challenge(false);
-          challengeButton.setText("Challenge Me!");
-        } else {
-          experimentView.challenge(true);
-          challengeButton.setText("Learn");
-        }
+    // Add challenge/learn functionality
+    AbstractModelConfig<String> challengeModelConfig = 
+        new AbstractModelConfig<String>("Challenge/Learn", "Challenge or Learn") {
+          public void doCommand() { 
+            experimentView.challenge(!experimentView.isChallengeInProgress());
+          }
+          public boolean isPossible() { return true; }
+    };
+    
+    challengeConfig = new ConfigTextButton(challengeModelConfig, skin) {
+      public void syncWithModel() {
+        textButton.setText(
+            experimentView.isChallengeInProgress() ? "Learn" : "Challenge");
       }
-    });
-    this.add(challengeButton).height(30).colspan(2);
+    };
+    this.add(challengeConfig.getActor()).height(30).colspan(2);
     row();
     
     // Add pause/resume functionality for the experiment
-    final TextButton pauseResumeButton = new TextButton("Pause", skin);
-    pauseResumeButton.setClickListener(new ClickListener() {
-      @Override
-      public void click(Actor actor, float x, float y) {
-        ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
-        if (experimentView.isPaused()) {
-          pauseResumeButton.setText("Pause");
-          experimentView.resume();
-        } else {
-          pauseResumeButton.setText("Resume");
-          experimentView.pause();
-        }
+    AbstractModelConfig<String> pauseResumeModelConfig = 
+        new AbstractModelConfig<String>("Pause/Resume", "Pause or Resume") {
+          public void doCommand() { 
+            if (experimentView.isPaused()) {
+              experimentView.resume();
+            } else {
+              experimentView.pause();
+            }
+          }
+          public boolean isPossible() { return true; }
+    };
+    pauseResumeConfig = new ConfigTextButton(pauseResumeModelConfig, skin) {
+      public void syncWithModel() {
+        textButton.setText(experimentView.isPaused() ? "Resume" : "Pause");
       }
-    });
-    
+    };
+
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>("Reset", "Reset to initial state") {
@@ -105,7 +110,7 @@ public class Configurator extends Table {
     IViewConfig resetConfig = new ConfigTextButton(resetModelConfig, skin);
     
     Table table = new Table(skin);
-    table.add(pauseResumeButton).pad(0,5,0, 5);
+    table.add(pauseResumeConfig.getActor()).pad(0,5,0, 5);
     table.add(resetConfig.getActor());
     this.add(table);
     row();
@@ -136,6 +141,8 @@ public class Configurator extends Table {
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
+    challengeConfig.syncWithModel();
+    pauseResumeConfig.syncWithModel();
     for (Config config: configs) {
       config.validate();
     }

@@ -84,6 +84,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       int level = getLevelManager().getLevel() + 1;
       probeManager.setTitle("Congratulations! You move to Level " + 
           String.valueOf(level));
+      challenge(false);
       getLevelManager().setLevel(level);
       getLevelManager().load();
     }
