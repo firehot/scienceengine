@@ -37,8 +37,8 @@ public abstract class AbstractScreen implements Screen {
   
   public AbstractScreen(ScienceEngine game) {
     this.scienceEngine = game;
-    int width = (isGameScreen() ? VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
-    int height = (isGameScreen() ? VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
+    int width = (isExperimentScreen() ? VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
+    int height = (isExperimentScreen() ? VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
     this.stage = new Stage(width, height, false);
   }
 
@@ -51,7 +51,7 @@ public abstract class AbstractScreen implements Screen {
     return getClass().getName();
   }
 
-  protected boolean isGameScreen() {
+  protected boolean isExperimentScreen() {
     return false;
   }
 

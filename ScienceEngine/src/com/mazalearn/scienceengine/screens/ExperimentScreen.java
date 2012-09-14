@@ -1,6 +1,10 @@
 package com.mazalearn.scienceengine.screens;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.controller.IExperimentController;
@@ -18,20 +22,45 @@ public class ExperimentScreen extends AbstractScreen {
 
   private LevelEditor levelEditor;
   IExperimentController experimentController;
+  private String experimentName;
 
   public ExperimentScreen(ScienceEngine scienceEngine, String experimentName) {
-    super(scienceEngine, null);
+    super(scienceEngine);
     experimentController = createExperimentController(experimentName, 
         VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+    this.experimentName = experimentName;
   }
 
   @Override
   public void show() {
     super.show();
+    Table table = super.getTable();
+    table.add(experimentName).colspan(2);
+    table.row();
     Profile profile = scienceEngine.getProfileManager().retrieveProfile();
-    IExperimentView experimentView = experimentController.getView();
-    int level = profile.getCurrentLevelId();
-    if (level == 0) level = 1;
+    final IExperimentView experimentView = experimentController.getView();
+    final int level = Math.max(profile.getCurrentLevelId(), 1);
+    table.add("Current Level = " + level).colspan(2);
+    table.row();
+    
+    for (int i = 0; i < 10; i++) {
+      table.add("Level " + i).pad(10);
+      table.add("description").pad(10);
+      table.row();
+    }
+    
+    TextButton experimentLevelButton = new TextButton("Go", getSkin());
+    table.add(experimentLevelButton).fill().colspan(2);
+    experimentLevelButton.setClickListener(new ClickListener() {
+      @Override
+      public void click(Actor actor, float x, float y) {
+        setExperimentLevelScreen(experimentView, level);
+      }
+    });
+  }
+
+  private void setExperimentLevelScreen(IExperimentView experimentView,
+      int level) {
     experimentView.getLevelManager().setLevel(level);
     experimentView.getLevelManager().load();
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
@@ -55,10 +84,5 @@ public class ExperimentScreen extends AbstractScreen {
       return new ElectroMagnetismController(width, height, getSkin(), scienceEngine.getSoundManager());
     }
     return null;
-  }
-  
-  @Override
-  public boolean isGameScreen() {
-    return true;
   }
 }

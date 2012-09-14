@@ -10,8 +10,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 
 public class MenuScreen extends AbstractScreen {
-  public MenuScreen(ScienceEngine game) {
-    super(game);
+  public MenuScreen(ScienceEngine scienceEngine) {
+    super(scienceEngine);
   }
 
   @Override

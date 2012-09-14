@@ -2,11 +2,15 @@ package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
@@ -17,14 +21,12 @@ import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 public class StartScreen extends AbstractScreen {
   private Profile profile;
 
-  private TextButton experimentButton;
-  private Label creditsLabel;
-  private ExperimentClickListener experimentClickListener;
+  private SelectionListener experimentSelectListener;
 
   public StartScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
     // create the listeners
-    experimentClickListener = new ExperimentClickListener();
+    experimentSelectListener = new ExperimentSelectListener();
   }
 
   @Override
@@ -40,12 +42,29 @@ public class StartScreen extends AbstractScreen {
     table.defaults().spaceBottom(20);
     table.columnDefaults(0).padRight(20);
     table.columnDefaults(4).padLeft(10);
-    table.add("Start Game").colspan(5);
+    table.add("Science Engine").colspan(2);
+    table.row();
 
     // retrieve the table's layout
     profile = scienceEngine.getProfileManager().retrieveProfile();
 
-    // create the experimentModel buttons
+    // Add checkbox if designer mode is to be enabled
+    CheckBox designerMode = new CheckBox("Designer Mode", getSkin());
+    designerMode.setChecked(ScienceEngine.DEV_MODE != DevMode.PRODUCTION);
+    designerMode.setClickListener(new ClickListener() {
+      @Override
+      public void click(Actor actor, float x, float y) {
+        if (ScienceEngine.DEV_MODE == DevMode.PRODUCTION) {
+          ScienceEngine.DEV_MODE = DevMode.DEBUG;
+        } else {
+          ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
+        }
+      }   
+    });
+    table.add(designerMode).colspan(2);
+    table.row();
+    
+    // create the experiment select box
     table.row();
     table.add("Experiments");
 
@@ -53,17 +72,10 @@ public class StartScreen extends AbstractScreen {
         new String[] {StatesOfMatterController.NAME, 
                       WaveController.NAME, 
                       ElectroMagnetismController.NAME};
-    for (String experiment: experiments) {
-      experimentButton = new TextButton(experiment, getSkin());
-      experimentButton.setClickListener(experimentClickListener);
-      table.add(experimentButton).fillX().padRight(10);
-    }
-
-    // create the credits label
+    SelectBox experimentSelectBox = new SelectBox(experiments, getSkin());
+    table.add(experimentSelectBox);
+    experimentSelectBox.setSelectionListener(experimentSelectListener);
     table.row();
-    creditsLabel = new Label(profile.getCreditsAsText(), getSkin());
-    table.add("Credits");
-    table.add(creditsLabel).left().colspan(4);
 
     // register the back button
     TextButton backButton = new TextButton("Back to main menu", getSkin());
@@ -74,19 +86,18 @@ public class StartScreen extends AbstractScreen {
       }
     });
     table.row();
-    table.add(backButton).size(250, 60).colspan(5);
+    table.add(backButton).size(250, 60).colspan(2);
   }
   
   /**
    * Listener for experimentModel click button.
    */
-  private class ExperimentClickListener implements ClickListener {
+  private class ExperimentSelectListener implements SelectionListener {
     @Override
-    public void click(Actor actor, float x, float y) {
+    public void selected(Actor actor, int index, String value) {
       scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-      TextButton button = (TextButton) actor;
-      Gdx.app.log(ScienceEngine.LOG, "Starting " + button.getLabel().getText());
-      scienceEngine.setScreen(new ExperimentScreen(scienceEngine, (String) button.getLabel().getText()));
+      Gdx.app.log(ScienceEngine.LOG, "Starting " + value);
+      scienceEngine.setScreen(new ExperimentScreen(scienceEngine, value));
     }
   }
 

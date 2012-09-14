@@ -19,6 +19,8 @@ public class CurrentWire extends ScienceBody implements IProducer {
   private float radius;
   // Amplitude of the current in the wire (-1...+1)
   private float current;
+  // Direction of current: up is true and down is false
+  private boolean direction = true;
 
   public CurrentWire(EMField emField, float x, float y, float angle) {
     super("CurrentWire", x, y, angle);
@@ -57,15 +59,28 @@ public class CurrentWire extends ScienceBody implements IProducer {
    * Sets the current in the wire. 
    * @param current the current (-1...+1)
    */
-  public void setCurrent(float current) {
+  public void setCurrentMagnitude(float current) {
     this.current = current;
+  }
+  
+  public void flipCurrentDirection() {
+    this.direction = !this.direction;
+  }
+  
+  public boolean isDirectionUp() {
+    return direction;
   }
 
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>("Current", 
-        "Current in Wire", -10, 10) {
-      public Float getValue() { return getCurrent(); }
-      public void setValue(Float value) { setCurrent(value); }
+        "Current in Wire", 0, 10) {
+      public Float getValue() { return getCurrentMagnitude(); }
+      public void setValue(Float value) { setCurrentMagnitude(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+    configs.add(new AbstractModelConfig<String>("Flip Current Direction", 
+        "Current Direction in Wire") {
+      public void doCommand() { flipCurrentDirection(); }
       public boolean isPossible() { return isActive(); }
     });
   }
@@ -74,14 +89,14 @@ public class CurrentWire extends ScienceBody implements IProducer {
    * Gets the current amplitude in the coil.
    * @return the current amplitude
    */
-  public float getCurrent() {
+  public float getCurrentMagnitude() {
     return this.current;
   }
 
   @Override
   public Vector2 getBField(Vector2 location, Vector2 bField) {
     Vector2 localPoint = getLocalPoint(location);
-    float magnitude = 10 * current / localPoint.len();
+    float magnitude = 10 * current * (direction ? 1 : -1) / localPoint.len();
     localPoint.nor();
     // Current towards me is +
     bField.set(-localPoint.y, localPoint.x).mul(magnitude);

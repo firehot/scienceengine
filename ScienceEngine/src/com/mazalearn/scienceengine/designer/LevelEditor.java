@@ -30,8 +30,8 @@ import com.mazalearn.scienceengine.screens.AbstractScreen;
 import com.mazalearn.scienceengine.services.LevelManager;
 
 /**
- * A supplemental stage that enables editing the screen layout and storing
- * layout in json files. <br/>
+ * A designer that enables editing the screen layout, configurations available
+ *  and storing layout and configurations in a json file for that level. <br/>
  * <br/>
  * 
  * It takes over all inputs and also allows zoom and pan of the
@@ -105,9 +105,9 @@ public class LevelEditor extends Stage {
     title.add("Level").pad(5);
     title.add(level);
     
-    Table componentTable = createComponentTable(stage, screen.getSkin());
     Table configTable = createConfigTable(experimentModel, screen.getSkin());
-    Table menu = createMenu(levelManager, screen.getSkin(), configTable);
+    Table componentTable = createComponentTable(stage, screen.getSkin(), configTable);
+    Table menu = createMenu(levelManager, screen.getSkin());
 
     layout.add(title).colspan(2);
     layout.row();
@@ -119,20 +119,9 @@ public class LevelEditor extends Stage {
     return layout;
   }
 
-  private Table createMenu(final LevelManager levelManager, final Skin skin, 
-      final Table configTable) {
+  private Table createMenu(final LevelManager levelManager, final Skin skin) {
     Table menu = new Table(skin);
-    TextButton button = new TextButton("Refresh", skin);
-    button.setClickListener(new ClickListener() {
-      @Override
-      public void click(Actor actor, float x, float y) {
-        refreshConfigsTable(experimentModel, skin, configTable);
-        configurator.refresh();
-      }
-    });
-    menu.add(button).pad(10);
-
-    button = new TextButton("Save", skin);
+    TextButton button = new TextButton("Save", skin);
     button.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
@@ -168,7 +157,8 @@ public class LevelEditor extends Stage {
     return menu;
   }
 
-  private Table createComponentTable(final Stage stage, Skin skin) {
+  private Table createComponentTable(final Stage stage, final Skin skin, 
+      final Table configTable) {
     Table componentTable = new Table(skin);
     componentTable.add("Components"); 
     componentTable.row();
@@ -185,7 +175,9 @@ public class LevelEditor extends Stage {
           if (actor instanceof Box2DActor) {
             Box2DActor box2DActor = (Box2DActor) actor;
             box2DActor.getBody().setActive(actor.visible);
-          }
+            refreshConfigsTable(experimentModel, skin, configTable);
+            configurator.refresh();
+         }
         }});
       componentTable.row();
     }
@@ -270,7 +262,7 @@ public class LevelEditor extends Stage {
     batch.begin();
     BitmapFont font = screen.getFont();
     font.setColor(fontColor);
-    font.draw(batch, "Screen Editor", 5, top - 15 * 0);
+    font.draw(batch, "LEVEL Editor", 5, top - 15 * 0);
     font.draw(batch,
         "---------------------------------------------------------------",
         5, top - 15 * 1);

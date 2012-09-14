@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
@@ -24,7 +25,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   private ProbeManager probeManager;
 
   public ElectroMagnetismView(String experimentName, float width, float height,
-      final ElectroMagnetismModel emModel, Skin skin, SoundManager soundManager) {
+      final ElectroMagnetismModel emModel,
+      Skin skin, SoundManager soundManager) {
     super(experimentName, emModel, width, height, skin, soundManager);
     
     // TODO: use blending function to draw coilsback?
@@ -47,7 +49,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       } else if (body.getName() == "FreeNorthPole") {
         this.addActor(new FreeNorthPoleView(textureRegion, body));
       } else if (body.getName() == "CurrentWire") {
-        this.addActor(new CurrentWireView(textureRegion, body));
+        this.addActor(new CurrentWireView(body));
       } else {
         this.addActor(new Box2DActor(body, textureRegion));
       }
@@ -66,8 +68,6 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       texture = new Texture("images/compass.png");
     } else if (name == "FreeNorthPole") {
       texture = new Texture("images/freenorthpole.png");
-    } else if (name == "CurrentWire") {
-      texture = new Texture("images/wireUp.png");
     } else {
       return null;
     }
@@ -92,8 +92,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   public void done(boolean success) {
     if (success) {
       int level = getLevelManager().getLevel() + 1;
-      probeManager.setTitle("Congratulations! You move to Level " + 
-          String.valueOf(level));
+      probeManager.setTitle("Congratulations! You move to Level " + level);
       challenge(false);
       getLevelManager().setLevel(level);
       getLevelManager().load();

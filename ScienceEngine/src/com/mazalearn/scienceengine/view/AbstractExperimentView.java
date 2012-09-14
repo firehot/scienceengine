@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.view;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.services.LevelManager;
 import com.mazalearn.scienceengine.services.SoundManager;
@@ -14,16 +15,17 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   protected final SoundManager soundManager;
   private boolean isChallengeInProgress = false;
   private LevelManager levelManager;
+  private Configurator configurator;
+  private String experimentName;
 
   public AbstractExperimentView(String experimentName, 
       IExperimentModel experimentModel, float width, float height, Skin skin, 
       SoundManager soundManager) {
     super(width, height, true);
+    this.experimentName = experimentName;
     this.skin = skin;
     this.soundManager = soundManager;
     this.experimentModel = experimentModel;
-    levelManager = new LevelManager(experimentName, this, 
-        experimentModel.getConfigs());
   }
 
   @Override
@@ -79,5 +81,12 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   
   public LevelManager getLevelManager() {
     return levelManager;
+  }
+
+  public void setConfigurator(Configurator configurator) {
+    this.configurator = configurator;
+    this.addActor(configurator);
+    this.levelManager = new LevelManager(experimentName, this, 
+        experimentModel.getConfigs(), configurator);
   }
 }

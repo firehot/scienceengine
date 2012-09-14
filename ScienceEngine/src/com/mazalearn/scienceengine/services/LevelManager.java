@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 
 public class LevelManager {
@@ -23,12 +24,14 @@ public class LevelManager {
   private FileHandle file;
   private String experimentName;
   private int level = 1;
+  private Configurator configurator;
 
   public LevelManager(String experimentName, Stage stage, 
-      List<IModelConfig<?>> modelConfigs) {
+      List<IModelConfig<?>> modelConfigs, Configurator configurator) {
     this.experimentName = experimentName;
     this.modelConfigs = modelConfigs;
     this.stage = stage;
+    this.configurator = configurator;
   }
 
   /**
@@ -44,6 +47,7 @@ public class LevelManager {
       System.err.println("[LevelEditor] Error happened while loading "
           + file.path());
     }
+    configurator.refresh();
   }
 
   public void saveLevel() {

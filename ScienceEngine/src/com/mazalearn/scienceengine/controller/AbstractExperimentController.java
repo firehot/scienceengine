@@ -22,7 +22,7 @@ public abstract class AbstractExperimentController implements
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
     this.configurator = new Configurator(skin, experimentModel, experimentView, name);
-    experimentView.addActor(this.configurator);
+    experimentView.setConfigurator(this.configurator);
   }
   
   @Override
