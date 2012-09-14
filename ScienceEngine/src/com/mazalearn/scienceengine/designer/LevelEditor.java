@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.screens.AbstractScreen;
@@ -61,20 +62,23 @@ public class LevelEditor extends Stage {
   
   private Table layout;
   private IExperimentModel experimentModel;
+  private Configurator configurator;
   
 
   /**
    * Build and initialize the editor.
+   * @param configurator 
    * @param experimentName - name of experiment.
    * @param level - level of experiment.
    * @param stage - stage used by the experiment view
    */
-  public LevelEditor(LevelManager levelManager, Stage stage, 
+  public LevelEditor(LevelManager levelManager, Configurator configurator, Stage stage, 
       IExperimentModel experimentModel, AbstractScreen screen) {
     super(stage.width(), stage.height(), stage.isStretched(), 
         stage.getSpriteBatch());
     this.screen = screen;
     this.experimentModel = experimentModel;
+    this.configurator = configurator;
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
@@ -90,29 +94,45 @@ public class LevelEditor extends Stage {
     title.add(levelManager.getExperimentName()).pad(10);
     SelectBox level = new SelectBox(screen.getSkin());
     level.setItems(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-    level.setSelection(levelManager.getLevel());
+    level.setSelection(levelManager.getLevel() - 1);
     level.setSelectionListener(new SelectionListener() {
       @Override
       public void selected(Actor actor, int index, String value) {
-        levelManager.setLevel(index);
+        levelManager.setLevel(index + 1);
         levelManager.load();
       }
     });
     title.add("Level").pad(5);
     title.add(level);
+    
+    Table componentTable = createComponentTable(stage, screen.getSkin());
+    Table configTable = createConfigTable(experimentModel, screen.getSkin());
+    Table menu = createMenu(levelManager, screen.getSkin(), configTable);
+
     layout.add(title).colspan(2);
     layout.row();
-    layout.add(createComponentTable(stage, screen.getSkin())).top().pad(10);
-    layout.add(createConfigTable(experimentModel, screen.getSkin())).top().pad(10);
+    layout.add(componentTable).top().pad(10);
+    layout.add(configTable).top().pad(10);
     layout.row();
-    layout.add(createMenu(levelManager, screen.getSkin())).colspan(2);
+    layout.add(menu).colspan(2);
     layout.row();
     return layout;
   }
 
-  private Table createMenu(final LevelManager levelManager, Skin skin) {
+  private Table createMenu(final LevelManager levelManager, final Skin skin, 
+      final Table configTable) {
     Table menu = new Table(skin);
-    TextButton button = new TextButton("Save", skin);
+    TextButton button = new TextButton("Refresh", skin);
+    button.setClickListener(new ClickListener() {
+      @Override
+      public void click(Actor actor, float x, float y) {
+        refreshConfigsTable(experimentModel, skin, configTable);
+        configurator.refresh();
+      }
+    });
+    menu.add(button).pad(10);
+
+    button = new TextButton("Save", skin);
     button.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
@@ -161,7 +181,11 @@ public class LevelEditor extends Stage {
         @Override
         public void click(Actor a, float x, float y) {
           listSelectedActor = stage.findActor(actor.name);
-          actor.visible = !actor.visible; 
+          actor.visible = !actor.visible;
+          if (actor instanceof Box2DActor) {
+            Box2DActor box2DActor = (Box2DActor) actor;
+            box2DActor.getBody().setActive(actor.visible);
+          }
         }});
       componentTable.row();
     }
@@ -170,6 +194,13 @@ public class LevelEditor extends Stage {
 
   private Table createConfigTable(IExperimentModel experimentModel, Skin skin) {
     Table configTable = new Table(skin);
+    refreshConfigsTable(experimentModel, skin, configTable);
+    return configTable;
+  }
+
+  private void refreshConfigsTable(IExperimentModel experimentModel, Skin skin,
+      Table configTable) {
+    configTable.clear();
     configTable.add("Configs");
     configTable.row();
     for (final IModelConfig<?> config: experimentModel.getConfigs()) {
@@ -186,7 +217,6 @@ public class LevelEditor extends Stage {
         configTable.row();
       }
     }
-    return configTable;
   }
 
   /**

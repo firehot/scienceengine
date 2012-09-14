@@ -12,7 +12,9 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.FreeNorthPole;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.model.AbstractExperimentModel;
@@ -36,6 +38,8 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     bodies.add(barMagnet = new BarMagnet(emField, 10, 12, 0));
     bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
     bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
+    //bodies.add(new FreeNorthPole(emField, 10, 5, 0));
+    bodies.add(new CurrentWire(emField, 10, 12, 0));
     barMagnet.setType(BodyType.DynamicBody);
     bodies.add(compass = new Compass(emField, 0, 5, 0));
     compass.setType(BodyType.KinematicBody);

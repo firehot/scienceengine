@@ -24,6 +24,7 @@ public class Configurator extends Table {
   private String experimentName;
   private IViewConfig pauseResumeConfig;
   private IViewConfig challengeConfig;
+  private Table modelConfigTable;
   
   public Configurator(Skin skin, final IExperimentModel experimentModel, 
       final IExperimentView experimentView, final String experimentName) {
@@ -31,20 +32,27 @@ public class Configurator extends Table {
     this.skin = skin;
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
-    this.configs = new ArrayList<Config>();
     this.experimentName = experimentName;
     registerStandardButtons(skin, experimentModel, experimentView);
-    registerModelConfigs(experimentModel);
+    this.modelConfigTable = new Table(skin);
+    this.add(modelConfigTable);
+    registerModelConfigs();
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       debug();
     }
   }
+  
+  public void refresh() {
+    registerModelConfigs();
+  }
 
   @SuppressWarnings("rawtypes")
-  protected void registerModelConfigs(final IExperimentModel experimentModel) {
+  protected void registerModelConfigs() {
+    this.configs = new ArrayList<Config>();
+    modelConfigTable.clear();
     // Register all model configs
     for (IModelConfig modelConfig: experimentModel.getConfigs()) {
-      this.configs.add(createViewConfig(modelConfig));
+      this.configs.add(createViewConfig(modelConfig, modelConfigTable));
     }
   }
 
@@ -117,7 +125,7 @@ public class Configurator extends Table {
   }
   
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public Config createViewConfig(IModelConfig property) {
+  public Config createViewConfig(IModelConfig property, Table modelConfigTable) {
     Table table = new Table(skin);
     IViewConfig viewConfig = null;
     switch(property.getType()) {
@@ -134,8 +142,8 @@ public class Configurator extends Table {
         break;
     }
     table.add(viewConfig.getActor());
-    Config c = new Config(this.add(table), viewConfig);
-    this.row();
+    Config c = new Config(modelConfigTable.add(table), viewConfig);
+    modelConfigTable.row();
     return c;
   }
 

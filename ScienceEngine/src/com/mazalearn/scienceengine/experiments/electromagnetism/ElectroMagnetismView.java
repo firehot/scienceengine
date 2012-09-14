@@ -12,6 +12,8 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.FreeNorthPoleView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
 import com.mazalearn.scienceengine.services.SoundManager;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
@@ -42,6 +44,10 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new Box2DActor(body, textureRegion));
       } else if (body.getName() == "Compass") {
         this.addActor(new CompassView(textureRegion, body));
+      } else if (body.getName() == "FreeNorthPole") {
+        this.addActor(new FreeNorthPoleView(textureRegion, body));
+      } else if (body.getName() == "CurrentWire") {
+        this.addActor(new CurrentWireView(textureRegion, body));
       } else {
         this.addActor(new Box2DActor(body, textureRegion));
       }
@@ -58,6 +64,10 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       texture = new Texture("images/lightbulb.png");
     } else if (name == "Compass") {
       texture = new Texture("images/compass.png");
+    } else if (name == "FreeNorthPole") {
+      texture = new Texture("images/freenorthpole.png");
+    } else if (name == "CurrentWire") {
+      texture = new Texture("images/wireUp.png");
     } else {
       return null;
     }

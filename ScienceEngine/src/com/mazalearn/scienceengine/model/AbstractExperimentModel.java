@@ -36,16 +36,14 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
 
   protected abstract void singleStep();
 
- public List<IModelConfig<?>> getConfigs() {
-   if (modelConfigs == null) {
-     modelConfigs = new ArrayList<IModelConfig<?>>();
-     initializeConfigs();
-     for (ScienceBody body: bodies) {
-       if (body.isActive()) {
-         modelConfigs.addAll(body.getConfigs());
-       }
-     }
-   }
+  public List<IModelConfig<?>> getConfigs() {
+    modelConfigs = new ArrayList<IModelConfig<?>>();
+    initializeConfigs();
+    for (ScienceBody body: bodies) {
+      if (body.isActive()) {
+        modelConfigs.addAll(body.getConfigs());
+      }
+    }
     return modelConfigs;
   }
   
