@@ -43,7 +43,7 @@ public abstract class AbstractMagnet extends ScienceBody
     FixtureDef fixtureDef = new FixtureDef();
     PolygonShape rectangleShape = new PolygonShape();
     rectangleShape.setAsBox(this.width/2, this.height/2);
-    fixtureDef.density = 10;
+    fixtureDef.density = 1;
     fixtureDef.shape = rectangleShape;
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;

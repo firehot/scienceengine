@@ -21,6 +21,7 @@ public class EMField {
   }
   public interface IProducer {
     Vector2 getBField(Vector2 location, Vector2 bField /* output */);
+    boolean isActive();
   }
 
   List<IProducer> emProducers;
@@ -58,6 +59,7 @@ public class EMField {
     Vector2 totalBField = new Vector2(0, 0);
     bField.set(0, 0);
     for (IProducer iProducer: emProducers) {
+      if (!iProducer.isActive()) continue;
       iProducer.getBField(location, bField);
       totalBField.x += bField.x;
       totalBField.y += bField.y;
