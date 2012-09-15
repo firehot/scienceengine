@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -116,22 +117,15 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void render(float delta) {
-    // (1) process the scienceEngine logic
-
-    // update the actors
     stage.act(delta);
-
-    // (2) draw the result
-
-    // clear the screen with the given RGB color (black)
-    Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-    // draw the actors
+    clearScreen(Color.BLACK);
     stage.draw();
-
-    // draw the table debug lines
     Table.drawDebug(stage);
+  }
+
+  public void clearScreen(Color color) {
+    Gdx.gl.glClearColor(color.r, color.g, color.b, color.a);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
   }
 
   @Override

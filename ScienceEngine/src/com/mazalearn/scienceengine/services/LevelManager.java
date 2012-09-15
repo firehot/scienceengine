@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -17,6 +19,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.controller.IModelConfig;
+import com.mazalearn.scienceengine.utils.ScreenUtils;
 
 public class LevelManager {
   private List<IModelConfig<?>> modelConfigs;
@@ -189,10 +192,25 @@ public class LevelManager {
   
   public void setLevel(int level) {
     this.level = level;
-    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + "data/" + experimentName + "_" + level + ".json");
-    this.file = Gdx.files.internal("data/" + experimentName + "_" + level + ".json");
+    String fileName = getFileName(".json");
+    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
+    this.file = Gdx.files.internal(fileName);
     if (this.file == null) {
       Gdx.app.log(ScienceEngine.LOG, "Could not open file");
     }
+  }
+
+  public String getFileName(String extension) {
+    return "data/" + experimentName + "/" + level + extension;
+  }
+
+  public void saveScreenToFile() {
+    FileHandle image = Gdx.files.external(getFileName(".png"));
+    Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
+        Gdx.graphics.getHeight(), true);
+    Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, 5);
+    PixmapIO.writePNG(image, thumbnail);
+    screenShot.dispose();
+    thumbnail.dispose();
   }
 }

@@ -1,5 +1,8 @@
 package com.mazalearn.scienceengine.designer;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
@@ -126,7 +130,11 @@ public class LevelEditor extends Stage {
       @Override
       public void click(Actor actor, float x, float y) {
         levelManager.saveLevel();
-      }
+        // Render screen and save pixels
+        screen.clearScreen(Color.BLACK);
+        originalStage.draw();
+        levelManager.saveScreenToFile();
+      }      
     });
     menu.add(button).pad(10);
     button = new TextButton("Load", skin);
