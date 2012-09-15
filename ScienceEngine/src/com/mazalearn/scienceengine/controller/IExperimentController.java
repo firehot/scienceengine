@@ -7,4 +7,5 @@ public interface IExperimentController {
   public IExperimentView getView();
   public IExperimentModel getModel();
   public Configurator getConfigurator();
+  public String getName();
 }

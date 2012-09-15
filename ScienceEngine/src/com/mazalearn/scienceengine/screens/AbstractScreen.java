@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -79,17 +78,9 @@ public abstract class AbstractScreen implements Screen {
     return atlas;
   }
 
-  public Skin getSkin() {
-    if (skin == null) {
-      FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
-      skin = new Skin(skinFile);
-    }
-    return skin;
-  }
-
   protected Table getTable() {
     if (table == null) {
-      table = new Table(getSkin());
+      table = new Table(scienceEngine.getSkin());
       table.setFillParent(true);
       if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
         table.debug();
@@ -166,5 +157,9 @@ public abstract class AbstractScreen implements Screen {
       skin.dispose();
     if (atlas != null)
       atlas.dispose();
+  }
+
+  public Skin getSkin() {
+    return scienceEngine.getSkin();
   }
 }

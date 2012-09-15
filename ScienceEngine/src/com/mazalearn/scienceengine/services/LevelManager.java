@@ -7,7 +7,9 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -44,7 +46,7 @@ public class LevelManager {
    */
   public void load() {
     try {
-      loadFile();
+      loadLevelConfiguration();
       Gdx.app.log(ScienceEngine.LOG, "[LevelEditor] File successfully loaded!");
     } catch (GdxRuntimeException ex) {
       System.err.println("[LevelEditor] Error happened while loading "
@@ -53,9 +55,10 @@ public class LevelManager {
     configurator.refresh();
   }
 
-  public void saveLevel() {
+  public void save() {
     try {
-      writeFile();
+      saveLevelConfiguration();
+      saveLevelThumbnail();
       System.out.println("[LevelEditor] File successfully saved!");
     } catch (IOException ex) {
       System.err.println("[LevelEditor] Error happened while writing "
@@ -63,7 +66,7 @@ public class LevelManager {
     }
   }
 
-  private void writeFile() throws IOException {
+  private void saveLevelConfiguration() throws IOException {
     FileWriter writer = new FileWriter(file.file());
     JsonWriter jsonWriter = new JsonWriter(writer);
 
@@ -98,7 +101,7 @@ public class LevelManager {
   }
 
   @SuppressWarnings("unchecked")
-  private void loadFile() {
+  private void loadLevelConfiguration() {
     String str = file.readString();
     OrderedMap<String, ?> rootElem = (OrderedMap<String, ?>) new JsonReader()
         .parse(str);
@@ -192,7 +195,7 @@ public class LevelManager {
   
   public void setLevel(int level) {
     this.level = level;
-    String fileName = getFileName(".json");
+    String fileName = getFileName(".json", level);
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
     this.file = Gdx.files.internal(fileName);
     if (this.file == null) {
@@ -200,17 +203,35 @@ public class LevelManager {
     }
   }
 
-  public String getFileName(String extension) {
+  private String getFileName(String extension, int level) {
     return "data/" + experimentName + "/" + level + extension;
   }
 
-  public void saveScreenToFile() {
-    FileHandle image = Gdx.files.external(getFileName(".png"));
+  /**
+   * Take screenshot, convert to a thumbnail and save to the level file as png.
+   */
+  private void saveLevelThumbnail() {
+    FileHandle screenFile = Gdx.files.external(getFileName(".png", level));
     Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
         Gdx.graphics.getHeight(), true);
     Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, 5);
-    PixmapIO.writePNG(image, thumbnail);
+    PixmapIO.writePNG(screenFile, thumbnail);
     screenShot.dispose();
     thumbnail.dispose();
+  }
+  
+  public Texture getLevelThumbnail(int level) {
+    // TODO: internal external confusion for files - different paths on desktop
+    FileHandle screenFile = Gdx.files.external(getFileName(".png", level));
+    Pixmap pixmap;
+    try {
+      pixmap = new Pixmap(screenFile);
+    } catch (GdxRuntimeException e) {
+      pixmap = new Pixmap(Gdx.graphics.getWidth()/5, Gdx.graphics.getHeight()/5, 
+          Format.RGBA8888);
+    }
+    Texture texture = new Texture(pixmap);
+    pixmap.dispose();
+    return texture;
   }
 }

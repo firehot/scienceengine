@@ -1,8 +1,5 @@
 package com.mazalearn.scienceengine.designer;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
@@ -10,7 +7,6 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
@@ -21,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -111,14 +108,17 @@ public class LevelEditor extends Stage {
     
     Table configTable = createConfigTable(experimentModel, screen.getSkin());
     Table componentTable = createComponentTable(stage, screen.getSkin(), configTable);
+    Image levelScreen = 
+        new Image(levelManager.getLevelThumbnail(levelManager.getLevel()));
     Table menu = createMenu(levelManager, screen.getSkin());
 
-    layout.add(title).colspan(2);
+    layout.add(title).colspan(3);
     layout.row();
     layout.add(componentTable).top().pad(10);
     layout.add(configTable).top().pad(10);
+    layout.add(levelScreen).center().pad(10);
     layout.row();
-    layout.add(menu).colspan(2);
+    layout.add(menu).colspan(3);
     layout.row();
     return layout;
   }
@@ -129,11 +129,10 @@ public class LevelEditor extends Stage {
     button.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        levelManager.saveLevel();
-        // Render screen and save pixels
+        // Render screen - then we will save level and its screen together
         screen.clearScreen(Color.BLACK);
         originalStage.draw();
-        levelManager.saveScreenToFile();
+        levelManager.save();
       }      
     });
     menu.add(button).pad(10);
@@ -424,6 +423,7 @@ public class LevelEditor extends Stage {
     drawRect(handlePos, handleSize.x, handleSize.y, Color.GREEN, 2);
   }
 
+  // TODO: use shaperenderer instead.
   private void drawRect(Vector2 p, float w, float h, Color c, float lineWidth) {
     Gdx.gl20.glLineWidth(lineWidth);
     imr.begin(batch.getProjectionMatrix(), GL10.GL_LINE_LOOP);

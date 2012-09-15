@@ -6,9 +6,11 @@ import java.util.List;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.screens.SplashScreen;
 import com.mazalearn.scienceengine.screens.StartScreen;
 import com.mazalearn.scienceengine.services.MusicManager;
@@ -40,6 +42,8 @@ public class ScienceEngine extends Game {
 
   private List<String> params;
 
+  private Skin skin;
+
   public static OrthographicCamera debugCamera;
 
   public ScienceEngine() {
@@ -65,6 +69,14 @@ public class ScienceEngine extends Game {
 
   public SoundManager getSoundManager() {
     return soundManager;
+  }
+
+  public Skin getSkin() {
+    if (skin == null) {
+      FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
+      skin = new Skin(skinFile);
+    }
+    return skin;
   }
 
   // Game-related methods

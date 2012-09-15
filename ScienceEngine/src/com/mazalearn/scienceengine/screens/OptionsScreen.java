@@ -33,7 +33,7 @@ public class OptionsScreen extends AbstractScreen {
     table.add("Options").colspan(3);
 
     // create the labels widgets
-    final CheckBox soundEffectsCheckbox = new CheckBox("", getSkin());
+    final CheckBox soundEffectsCheckbox = new CheckBox("", scienceEngine.getSkin());
     soundEffectsCheckbox.setChecked(scienceEngine.getPreferencesManager()
         .isSoundEnabled());
     soundEffectsCheckbox.setClickListener(new ClickListener() {
@@ -49,7 +49,7 @@ public class OptionsScreen extends AbstractScreen {
     table.add("Sound Effects");
     table.add(soundEffectsCheckbox).colspan(2).left();
 
-    final CheckBox musicCheckbox = new CheckBox("", getSkin());
+    final CheckBox musicCheckbox = new CheckBox("", scienceEngine.getSkin());
     musicCheckbox.setChecked(scienceEngine.getPreferencesManager().isMusicEnabled());
     musicCheckbox.setClickListener(new ClickListener() {
       @Override
@@ -69,7 +69,7 @@ public class OptionsScreen extends AbstractScreen {
     table.add(musicCheckbox).colspan(2).left();
 
     // range is [0.0,1.0]; step is 0.1f
-    Slider volumeSlider = new Slider(0f, 1f, 0.1f, getSkin());
+    Slider volumeSlider = new Slider(0f, 1f, 0.1f, scienceEngine.getSkin());
     volumeSlider.setValue(scienceEngine.getPreferencesManager().getVolume());
     volumeSlider.setValueChangedListener(new ValueChangedListener() {
       @Override
@@ -82,7 +82,7 @@ public class OptionsScreen extends AbstractScreen {
     });
 
     // create the volume label
-    volumeValue = new Label("", getSkin());
+    volumeValue = new Label("", scienceEngine.getSkin());
     updateVolumeLabel();
 
     // add the volume row
@@ -92,7 +92,7 @@ public class OptionsScreen extends AbstractScreen {
     table.add(volumeValue).width(40);
 
     // register the back button
-    TextButton backButton = new TextButton("Back to main menu", getSkin());
+    TextButton backButton = new TextButton("Back to main menu", scienceEngine.getSkin());
     backButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {

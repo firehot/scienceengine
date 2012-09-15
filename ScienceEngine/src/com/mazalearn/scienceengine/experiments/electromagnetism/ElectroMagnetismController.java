@@ -15,10 +15,10 @@ public class ElectroMagnetismController extends AbstractExperimentController {
 
   public ElectroMagnetismController(int width, int height, Skin skin, 
       SoundManager soundManager) {
-    super(skin);
+    super(NAME, skin);
     ElectroMagnetismModel emModel = new ElectroMagnetismModel();
     AbstractExperimentView emView = 
         new ElectroMagnetismView(NAME, width, height, emModel, skin, soundManager);
-    this.initialize(emModel,  emView, NAME);
+    this.initialize(emModel,  emView);
   }
 }

@@ -29,25 +29,25 @@ public class HighScoresScreen extends AbstractScreen {
 
     // episode 1 high-score
     String level1Highscore = String.valueOf(profile.getHighScore(0));
-    Label episode1HighScore = new Label(level1Highscore, getSkin());
+    Label episode1HighScore = new Label(level1Highscore, scienceEngine.getSkin());
     table.row();
     table.add("Episode 1");
     table.add(episode1HighScore);
 
     String level2Highscore = String.valueOf(profile.getHighScore(1));
-    Label episode2HighScore = new Label(level2Highscore, getSkin());
+    Label episode2HighScore = new Label(level2Highscore, scienceEngine.getSkin());
     table.row();
     table.add("Episode 2").center();
     table.add(episode2HighScore);
 
     String level3Highscore = String.valueOf(profile.getHighScore(2));
-    Label episode3HighScore = new Label(level3Highscore, getSkin());
+    Label episode3HighScore = new Label(level3Highscore, scienceEngine.getSkin());
     table.row();
     table.add("Episode 3");
     table.add(episode3HighScore);
 
     // register the back button
-    TextButton backButton = new TextButton("Back to main menu", getSkin());
+    TextButton backButton = new TextButton("Back to main menu", scienceEngine.getSkin());
     backButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {

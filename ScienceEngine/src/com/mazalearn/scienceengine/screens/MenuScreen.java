@@ -25,7 +25,7 @@ public class MenuScreen extends AbstractScreen {
 
     registerButton(table, "Start", new StartScreen(scienceEngine));
     registerButton(table, "Options", new OptionsScreen(scienceEngine));
-    TextButton startGameButton = new TextButton("Exit", getSkin());
+    TextButton startGameButton = new TextButton("Exit", scienceEngine.getSkin());
     startGameButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
@@ -38,7 +38,7 @@ public class MenuScreen extends AbstractScreen {
   }
 
   protected void registerButton(Table table, String name, final Screen screen) {
-    TextButton startGameButton = new TextButton(name, getSkin());
+    TextButton startGameButton = new TextButton(name, scienceEngine.getSkin());
     startGameButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {

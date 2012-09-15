@@ -12,17 +12,24 @@ public abstract class AbstractExperimentController implements
   private IExperimentModel experimentModel;
   private AbstractExperimentView experimentView;
   private Skin skin;
+  private String name;
 
-  protected AbstractExperimentController(Skin skin) {
+  protected AbstractExperimentController(String name, Skin skin) {
+    this.name = name;
     this.skin = skin;
   }
   
   protected void initialize(IExperimentModel experimentModel, 
-      AbstractExperimentView experimentView, String name) {
+      AbstractExperimentView experimentView) {
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
     this.configurator = new Configurator(skin, experimentModel, experimentView, name);
     experimentView.setConfigurator(this.configurator);
+  }
+  
+  @Override
+  public String getName() {
+    return name;
   }
   
   @Override

@@ -16,11 +16,11 @@ public class WaveController extends AbstractExperimentController {
 
   public WaveController(int width, int height, TextureAtlas atlas, Skin skin, 
       SoundManager soundManager) {
-    super(skin);
+    super(NAME, skin);
     final WaveModel waveModel = new WaveModel(NUM_BALLS);
     final WaveView waveView = 
         new WaveView(NAME, width, height, waveModel, skin, soundManager, atlas);
-    initialize(waveModel, waveView, NAME);
+    initialize(waveModel, waveView);
   }
 
 }
