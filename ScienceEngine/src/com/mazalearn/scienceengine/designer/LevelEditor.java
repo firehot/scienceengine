@@ -6,10 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -50,7 +50,6 @@ public class LevelEditor extends Stage {
   };
 
   private Mode mode = Mode.OVERLAY;
-  private ImmediateModeRenderer20 imr;
   private Color fontColor = Color.WHITE;
   private Actor selectedActor, listSelectedActor;
   private Actor draggedActor = null;
@@ -64,6 +63,7 @@ public class LevelEditor extends Stage {
   private Table layout;
   private IExperimentModel experimentModel;
   private Configurator configurator;
+  private ShapeRenderer shapeRenderer;
   
 
   /**
@@ -85,6 +85,7 @@ public class LevelEditor extends Stage {
     this.orthographicCamera = (OrthographicCamera) this.camera;
     this.layout = createLayout(levelManager, stage, experimentModel, screen);
     this.addActor(layout);
+    this.shapeRenderer = new ShapeRenderer();
   }
 
   private Table createLayout(final LevelManager levelManager, Stage stage,
@@ -224,9 +225,6 @@ public class LevelEditor extends Stage {
    * happy with the result. Any other call can stay without any side-effect.
    */
   public void enableEditor() {
-    if (imr == null) {
-      imr = new ImmediateModeRenderer20(64, false, true, 0);
-    }
     originalCameraZoom = orthographicCamera.zoom;
     originalCameraPos = camera.position.cpy();
     mode = Mode.OVERLAY;
@@ -234,7 +232,6 @@ public class LevelEditor extends Stage {
   }
 
   private void disableEditor() {
-    imr = null;
     restoreCamera();
     screen.setStage(originalStage);
     experimentModel.enable(true);
@@ -258,13 +255,12 @@ public class LevelEditor extends Stage {
   }
 
   private void drawOverlay() {
-    for (Actor actor : originalStage.getActors()) {
-      drawBoundingBox(actor, Color.BLUE);
-    }
-    if (selectedActor != null) {
-      drawBoundingBox(selectedActor, Color.YELLOW);
-    }
+    shapeRenderer.setProjectionMatrix(originalStage.getCamera().combined);
 
+    for (Actor actor : originalStage.getActors()) {
+      drawBoundingBox(actor, actor == selectedActor);
+    }
+ 
     int top = Gdx.graphics.getHeight() + 5;
     batch.begin();
     BitmapFont font = screen.getFont();
@@ -412,29 +408,15 @@ public class LevelEditor extends Stage {
     return new Vector2(v3.x, v3.y);
   }
 
-  private void drawBoundingBox(Actor actor, Color color) {
-    Vector2 objPos = new Vector2(actor.x + actor.width / 2, actor.y
-        + actor.height / 2);
-    drawRect(objPos, actor.width, actor.height, color, 2);
+  private void drawBoundingBox(Actor actor, boolean selected) {
+    shapeRenderer.begin(ShapeType.Rectangle);
+    shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
+    shapeRenderer.rect(actor.x, actor.y, actor.width, actor.height);
 
     Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
-    Vector2 handlePos = new Vector2(actor.x + actor.width - handleSize.x / 2,
-        actor.y + actor.height - handleSize.y / 2);
-    drawRect(handlePos, handleSize.x, handleSize.y, Color.GREEN, 2);
-  }
-
-  // TODO: use shaperenderer instead.
-  private void drawRect(Vector2 p, float w, float h, Color c, float lineWidth) {
-    Gdx.gl20.glLineWidth(lineWidth);
-    imr.begin(batch.getProjectionMatrix(), GL10.GL_LINE_LOOP);
-    imr.color(c.r, c.g, c.b, c.a);
-    imr.vertex(p.x - w / 2, p.y - h / 2, 0);
-    imr.color(c.r, c.g, c.b, c.a);
-    imr.vertex(p.x - w / 2, p.y + h / 2, 0);
-    imr.color(c.r, c.g, c.b, c.a);
-    imr.vertex(p.x + w / 2, p.y + h / 2, 0);
-    imr.color(c.r, c.g, c.b, c.a);
-    imr.vertex(p.x + w / 2, p.y - h / 2, 0);
-    imr.end();
+    shapeRenderer.setColor(Color.GREEN);
+    shapeRenderer.rect(actor.x + actor.width - handleSize.x, 
+        actor.y + actor.height - handleSize.y, handleSize.x, handleSize.y);
+    shapeRenderer.end();
   }
 }
