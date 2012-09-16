@@ -18,6 +18,7 @@ public class EMField {
   public interface IConsumer {
     Vector2 getPosition();
     void setBField(Vector2 bField);
+    boolean isActive();
   }
   public interface IProducer {
     Vector2 getBField(Vector2 location, Vector2 bField /* output */);
@@ -42,16 +43,17 @@ public class EMField {
   
   public void propagateField() {
     Vector2 bField = new Vector2(0, 0);
-    for (IConsumer iConsumer: emConsumers) {
+    for (IConsumer consumer: emConsumers) {
+      if (!consumer.isActive()) continue;
       Vector2 totalBField = new Vector2(0, 0);
-      for (IProducer iProducer: emProducers) {
-        if (iProducer != iConsumer) {
-          iProducer.getBField(iConsumer.getPosition(), bField);
+      for (IProducer producer: emProducers) {
+        if (producer != consumer && producer.isActive()) {
+          producer.getBField(consumer.getPosition(), bField);
           totalBField.x += bField.x;
           totalBField.y += bField.y;
         }
       }
-      iConsumer.setBField(totalBField);
+      consumer.setBField(totalBField);
     }
   }
 
