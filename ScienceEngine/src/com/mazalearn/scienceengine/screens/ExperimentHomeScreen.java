@@ -33,6 +33,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     super(scienceEngine);
     this.experimentController = experimentController;
     shapeRenderer = new ShapeRenderer();
+    setBackgroundColor(Color.DARK_GRAY);
   }
 
   @Override
@@ -54,29 +55,23 @@ public class ExperimentHomeScreen extends AbstractScreen {
       levelThumb.setClickListener(new ClickListener() {
         @Override
         public void click(Actor actor, float x, float y) {
-          levelManager.setLevel(iLevel);
+          Screen experimentLevelScreen = 
+              new ExperimentLevelScreen(scienceEngine, levelManager, 
+                  iLevel, experimentController);
+          scienceEngine.setScreen(experimentLevelScreen);
         }
       });
       levelThumbs[i - 1] = levelThumb;
-      table.add(levelThumb).pad(5);
+      Table levelTable = table.newTable();
+      levelTable.add(levelManager.getDescription());
+      levelTable.row();
+      levelTable.add(levelThumb);
+      table.add(levelTable).pad(5);
       if (i % 3 == 0) {
         table.row();
       }
     }    
     table.row();
-    
-    TextButton experimentLevelButton = 
-        new TextButton("Start", scienceEngine.getSkin());
-    table.add(experimentLevelButton).fill().colspan(3);
-    experimentLevelButton.setClickListener(new ClickListener() {
-      @Override
-      public void click(Actor actor, float x, float y) {
-        Screen experimentLevelScreen = 
-            new ExperimentLevelScreen(scienceEngine, levelManager, 
-                experimentController);
-        scienceEngine.setScreen(experimentLevelScreen);
-      }
-    });
   }
 
   public void render(float delta) {
@@ -88,7 +83,8 @@ public class ExperimentHomeScreen extends AbstractScreen {
     stage.getSpriteBatch().begin();
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(Color.YELLOW);
-    shapeRenderer.rect(thumbNail.x, thumbNail.y, thumbNail.width, thumbNail.height);
+    shapeRenderer.rect(thumbNail.parent.x + thumbNail.x, 
+        thumbNail.parent.y + thumbNail.y, thumbNail.width, thumbNail.height);
     shapeRenderer.end();
     stage.getSpriteBatch().end();
   }

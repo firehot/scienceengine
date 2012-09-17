@@ -14,9 +14,10 @@ import com.mazalearn.scienceengine.view.IExperimentView;
 public class ExperimentLevelScreen extends AbstractScreen {
 
   public ExperimentLevelScreen(ScienceEngine scienceEngine, 
-      LevelManager levelManager, IExperimentController experimentController) {
+      LevelManager levelManager, int level, IExperimentController experimentController) {
     super(scienceEngine, null);
     IExperimentView experimentView = experimentController.getView();
+    levelManager.setLevel(level);
     levelManager.load();
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       LevelEditor levelEditor = new LevelEditor(levelManager,

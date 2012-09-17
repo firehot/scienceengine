@@ -30,6 +30,7 @@ public class LevelManager {
   private String experimentName;
   private int level = 1;
   private Configurator configurator;
+  private String description;
 
   public LevelManager(String experimentName, Stage stage, 
       List<IModelConfig<?>> modelConfigs, Configurator configurator) {
@@ -39,6 +40,32 @@ public class LevelManager {
     this.configurator = configurator;
   }
 
+  public String getName() {
+    return experimentName;
+  }
+
+  public int getLevel() {
+    return level;
+  }
+  
+  public void setLevel(int level) {
+    this.level = level;
+    String fileName = getFileName(".json", level);
+    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
+    this.file = Gdx.files.internal(fileName);
+    if (this.file == null) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not open file");
+    }
+  }
+
+  public String getDescription() {
+    return description;
+  }
+  
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  
   /**
    * Loads the content of the provided file and automatically position and size
    * the objects.
@@ -71,12 +98,18 @@ public class LevelManager {
     JsonWriter jsonWriter = new JsonWriter(writer);
 
     jsonWriter = jsonWriter.object();
-
+    writeLevelInfo(jsonWriter);
     writeComponents(jsonWriter);
     writeConfigs(jsonWriter);
 
     jsonWriter.flush();
     jsonWriter.close();
+  }
+
+  private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
+    jsonWriter.set("name", experimentName);
+    jsonWriter.set("level", level);
+    jsonWriter.set("description", description);
   }
 
   private void writeConfigs(JsonWriter jsonWriter) throws IOException {
@@ -106,30 +139,36 @@ public class LevelManager {
     OrderedMap<String, ?> rootElem = (OrderedMap<String, ?>) new JsonReader()
         .parse(str);
 
-    readComponents(rootElem);
-    readConfigs(rootElem);
+    readLevelInfo(rootElem);
+    readComponents((Array<?>) rootElem.get("components"));
+    readConfigs((Array<?>) rootElem.get("configs"));
   }
 
-  private void readConfigs(OrderedMap<String, ?> rootElem) {
-    Array<?> configs = (Array<?>) rootElem.get("configs");
-    if (configs != null) {
-      for (int i = 0; i < configs.size; i++) {
-        @SuppressWarnings("unchecked")
-        OrderedMap<String, ?> config = (OrderedMap<String, ?>) configs.get(i);
-        readConfig(config);
-      }
+  private void readLevelInfo(OrderedMap<String, ?> info) {
+    experimentName = (String) nvl(info.get("name"), experimentName);
+    level = Math.round((Float) nvl(info.get("level"), level + 0f));
+    description = (String) nvl(info.get("description"), 
+        experimentName + " : Level " + level);
+  }
+
+  private void readConfigs(Array<?> configs) {
+    if (configs == null) return;
+    
+    for (int i = 0; i < configs.size; i++) {
+      @SuppressWarnings("unchecked")
+      OrderedMap<String, ?> config = (OrderedMap<String, ?>) configs.get(i);
+      readConfig(config);
     }
   }
 
-  private void readComponents(OrderedMap<String, ?> rootElem) {
-    Array<?> components = (Array<?>) rootElem.get("components");
-    if (components != null) {
-      for (int i = 0; i < components.size; i++) {
-        @SuppressWarnings("unchecked")
-        OrderedMap<String, ?> component = (OrderedMap<String, ?>) components
-            .get(i);
-        readComponent(component);
-      }
+  private void readComponents(Array<?> components) {
+    if (components == null) return;
+    
+    for (int i = 0; i < components.size; i++) {
+      @SuppressWarnings("unchecked")
+      OrderedMap<String, ?> component = (OrderedMap<String, ?>) components
+          .get(i);
+      readComponent(component);
     }
   }
 
@@ -182,24 +221,6 @@ public class LevelManager {
             .get("value"));
         break;
       }
-    }
-  }
-
-  public String getExperimentName() {
-    return experimentName;
-  }
-
-  public int getLevel() {
-    return level;
-  }
-  
-  public void setLevel(int level) {
-    this.level = level;
-    String fileName = getFileName(".json", level);
-    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
-    this.file = Gdx.files.internal(fileName);
-    if (this.file == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not open file");
     }
   }
 

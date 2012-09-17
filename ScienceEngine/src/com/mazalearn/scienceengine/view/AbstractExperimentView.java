@@ -1,8 +1,12 @@
 package com.mazalearn.scienceengine.view;
 
+import java.util.List;
+
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.controller.Configurator;
+import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.services.LevelManager;
 import com.mazalearn.scienceengine.services.SoundManager;
@@ -44,14 +48,6 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   }
   
   public void done(boolean success) {}
-/*
-  @Override
-  public void draw(SpriteBatch batch, float parentAlpha) {
-      super.draw(batch, parentAlpha);
-      ScienceEngine.debugCamera.unproject(getStage().getCamera().position);
-      ScienceEngine.debugRenderer.render(experimentModel.getBox2DWorld(), ScienceEngine.debugCamera.combined);
-  }
-*/
   
   /**
    * Draw and advance Box2D World

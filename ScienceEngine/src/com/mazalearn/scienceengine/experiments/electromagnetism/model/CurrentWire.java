@@ -56,8 +56,8 @@ public class CurrentWire extends ScienceBody implements IProducer {
   }
 
   /**
-   * Sets the current in the wire. 
-   * @param current the current (-1...+1)
+   * Sets the magnitude of current in the wire. 
+   * @param current the current - always >= 0
    */
   public void setCurrentMagnitude(float current) {
     this.current = current;
@@ -86,8 +86,8 @@ public class CurrentWire extends ScienceBody implements IProducer {
   }
 
   /**
-   * Gets the current amplitude in the coil.
-   * @return the current amplitude
+   * Gets the magnitude of current in the wire
+   * @return the current
    */
   public float getCurrentMagnitude() {
     return this.current;
@@ -96,6 +96,7 @@ public class CurrentWire extends ScienceBody implements IProducer {
   @Override
   public Vector2 getBField(Vector2 location, Vector2 bField) {
     Vector2 localPoint = getLocalPoint(location);
+    // field = constant * current / distance
     float magnitude = 10 * current * (direction ? 1 : -1) / localPoint.len();
     localPoint.nor();
     // Current towards me is +

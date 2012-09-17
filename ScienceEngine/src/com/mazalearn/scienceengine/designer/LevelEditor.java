@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -22,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.Configurator;
@@ -64,6 +67,8 @@ public class LevelEditor extends Stage {
   private IExperimentModel experimentModel;
   private Configurator configurator;
   private ShapeRenderer shapeRenderer;
+
+  private Actor rotatedActor;
   
 
   /**
@@ -83,17 +88,18 @@ public class LevelEditor extends Stage {
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
+    this.shapeRenderer = new ShapeRenderer();
     this.layout = createLayout(levelManager, stage, experimentModel, screen);
     this.addActor(layout);
-    this.shapeRenderer = new ShapeRenderer();
   }
-
+  
   private Table createLayout(final LevelManager levelManager, Stage stage,
       IExperimentModel experimentModel, AbstractScreen screen) {
     Table layout = new Table(screen.getSkin());
     layout.setFillParent(true);
+    layout.defaults().fill();
     Table title = new Table(screen.getSkin());
-    title.add(levelManager.getExperimentName()).pad(10);
+    title.add(levelManager.getName()).pad(10);
     SelectBox level = new SelectBox(screen.getSkin());
     level.setItems(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
     level.setSelection(levelManager.getLevel() - 1);
@@ -106,11 +112,20 @@ public class LevelEditor extends Stage {
     });
     title.add("Level").pad(5);
     title.add(level);
+    title.row();
+    final TextField description = new TextField(levelManager.getDescription(), screen.getSkin());
+    title.add(description).colspan(3).fill();
+    description.setTextFieldListener(new TextFieldListener() {
+      public void keyTyped(TextField textField, char key) {
+        levelManager.setDescription(description.getText());
+      }
+    });
     
     Table configTable = createConfigTable(experimentModel, screen.getSkin());
     Table componentTable = createComponentTable(stage, screen.getSkin(), configTable);
     Image levelScreen = 
         new Image(levelManager.getLevelThumbnail(levelManager.getLevel()));
+    
     Table menu = createMenu(levelManager, screen.getSkin());
 
     layout.add(title).colspan(3);
@@ -269,7 +284,7 @@ public class LevelEditor extends Stage {
     font.draw(batch,
         "---------------------------------------------------------------",
         5, top - 15 * 1);
-    font.draw(batch, "'space' to toggle overlay", 5,
+    font.draw(batch, "'Alt' to toggle overlay", 5,
         top - 15 * 2);
     font.draw(batch,
         "---------------------------------------------------------------",
@@ -310,7 +325,10 @@ public class LevelEditor extends Stage {
             resizedActor = actor;
             draggedActor = null;
             selectedActor = actor;
-          } else if (resizedActor == null) {
+          } else if (point.x <= handleSize.x && point.y <= handleSize.y) {
+            rotatedActor = actor;
+            selectedActor = actor;
+          } else if (resizedActor == null && rotatedActor == null) {
             draggedActor = actor;
             selectedActor = actor;
           }
@@ -331,7 +349,7 @@ public class LevelEditor extends Stage {
     super.touchUp(x, y, pointer, button);
     switch (button) {
     case Buttons.LEFT:
-      draggedActor = resizedActor = selectedActor = null;
+      draggedActor = resizedActor = selectedActor = rotatedActor = null;
       break;
     }
     selectedActor = listSelectedActor;
@@ -341,32 +359,39 @@ public class LevelEditor extends Stage {
 
   @Override
   public boolean touchDragged(int x, int y, int pointer) {
-    Vector3 delta = new Vector3(x, y, 0);
-    camera.unproject(delta);
+    Vector3 delta3 = new Vector3(x, y, 0);
+    camera.unproject(delta3);
     Vector3 d3 = new Vector3(lastTouch.x, lastTouch.y, 0);
     camera.unproject(d3);
-    delta.sub(d3);
+    delta3.sub(d3);
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
       if (draggedActor != null) {
-        draggedActor.x += delta.x;
-        draggedActor.y += delta.y;
+        draggedActor.x += delta3.x;
+        draggedActor.y += delta3.y;
         if (draggedActor instanceof Box2DActor) {
           ((Box2DActor) draggedActor).setPositionFromViewCoords();
+        }
+      } else if (rotatedActor != null) {
+        Vector2 delta2 = new Vector2(delta3.x, delta3.y);
+        // TODO: UI issues and dont know how to draw rotated rectangles
+        // rotatedActor.rotation = delta2.angle();
+        if (rotatedActor instanceof Box2DActor) {
+          ((Box2DActor) rotatedActor).setPositionFromViewCoords();
         }
       } else if (resizedActor != null) {
         float sizeRatio = resizedActor.width / resizedActor.height;
         float originXRatio = resizedActor.originX / resizedActor.width;
         float originYRatio = resizedActor.originY / resizedActor.height;
-        resizedActor.width += delta.x;
-        resizedActor.height += delta.x / sizeRatio;
+        resizedActor.width += delta3.x;
+        resizedActor.height += delta3.x / sizeRatio;
         resizedActor.originX = originXRatio * resizedActor.width;
         resizedActor.originY = originYRatio * resizedActor.height;
       }
     }
 
     if (Gdx.input.isButtonPressed(Buttons.RIGHT)) {
-      camera.translate(-delta.x, -delta.y, 0);
+      camera.translate(-delta3.x, -delta3.y, 0);
       camera.update();
     }
 
@@ -384,7 +409,7 @@ public class LevelEditor extends Stage {
   @Override
   public boolean keyDown(int keycode) {
     switch (keycode) {
-    case Keys.SPACE:
+    case Keys.ALT_LEFT:
       mode = (mode == Mode.CONFIGURE) ? Mode.OVERLAY : Mode.CONFIGURE;
       break;
     }
@@ -392,8 +417,10 @@ public class LevelEditor extends Stage {
   }
 
   private String getInfo(Actor actor) {
-    return String.format(Locale.US, "> %s > xy:[%.3f,%.3f] wh:[%.3f,%.3f]",
-        actor.name, actor.x, actor.y, actor.width, actor.height);
+    return String.format(Locale.US, "> %s %s > xy:[%.3f,%.3f] wh:[%.3f,%.3f] rot:%.3f",
+        actor.name, 
+        rotatedActor != null ? "Rotating" : resizedActor != null ? "Resizing" : "Selected",
+        actor.x, actor.y, actor.width, actor.height, actor.rotation);
   }
 
   private void restoreCamera() {
@@ -409,14 +436,22 @@ public class LevelEditor extends Stage {
   }
 
   private void drawBoundingBox(Actor actor, boolean selected) {
+    // Draw outline for actor
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
     shapeRenderer.rect(actor.x, actor.y, actor.width, actor.height);
 
+    // Draw handle for changing the size of the actor
     Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
     shapeRenderer.setColor(Color.GREEN);
     shapeRenderer.rect(actor.x + actor.width - handleSize.x, 
         actor.y + actor.height - handleSize.y, handleSize.x, handleSize.y);
+    shapeRenderer.end();
+    
+    // Draw handle for rotation
+    shapeRenderer.begin(ShapeType.FilledRectangle);
+    shapeRenderer.setColor(Color.GREEN);
+    shapeRenderer.filledRect(actor.x, actor.y, handleSize.x, handleSize.y);
     shapeRenderer.end();
   }
 }

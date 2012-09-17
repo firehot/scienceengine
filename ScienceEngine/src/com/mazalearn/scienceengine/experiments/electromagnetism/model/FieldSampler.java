@@ -18,13 +18,13 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  * 
  * @author sridhar
  */
-public class FreeNorthPole extends ScienceBody {
+public class FieldSampler extends ScienceBody {
 
   private static final float TOLERANCE = 0.3f;
   // Field that the free north pole is interacting with.
   private EMField emField;
   // A reusable vector
-  private Vector2 fieldVector = new Vector2();
+  private Vector2 fieldVector = new Vector2(), deltaPoint = new Vector2();
   
   public static class FieldSample {
     public float x, y, angle, magnitude;
@@ -41,8 +41,8 @@ public class FreeNorthPole extends ScienceBody {
   /**
    * @param emField
    */
-  public FreeNorthPole(EMField emField, float x, float y, float angle) {
-    super("FreeNorthPole", x, y, angle);
+  public FieldSampler(EMField emField, float x, float y, float angle) {
+    super("FieldSampler", x, y, angle);
     getBody().setType(BodyType.DynamicBody);
     this.emField = emField;
     FixtureDef fixtureDef = new FixtureDef();
@@ -57,18 +57,16 @@ public class FreeNorthPole extends ScienceBody {
   
   @Override
   public void singleStep(float dt) {
-    emField.getBField(getPosition(), fieldVector /* output */);
-    // v = k * a * t, we take u as 0, k is a fudge constant
-    fieldVector.mul(10000 * dt);
-    getBody().setLinearVelocity(fieldVector);
-    float delta = 10;
+    float delta = 1;
     if (fieldSamples.size() > 0) {
-      FieldSample lastSample = fieldSamples.get(fieldSamples.size()-1);
-      fieldVector.set(lastSample.x - getPosition().x, lastSample.y - getPosition().y);
-      delta = fieldVector.len();
+      FieldSample lastSample = fieldSamples.get(fieldSamples.size() - 1);
+      deltaPoint.set(lastSample.x - getPosition().x, lastSample.y - getPosition().y);
+      delta = deltaPoint.len();
     }
     if (delta > TOLERANCE) {
-      addFieldSample(getPosition().x, getPosition().y, getLinearVelocity().x, getLinearVelocity().y);
+      emField.getBField(getPosition(), fieldVector /* output */);
+      addFieldSample(getPosition().x, getPosition().y, 
+          fieldVector.angle() * MathUtils.degreesToRadians, fieldVector.len());
     }
   }
   

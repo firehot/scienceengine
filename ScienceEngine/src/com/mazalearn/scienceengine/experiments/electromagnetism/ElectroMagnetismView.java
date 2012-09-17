@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -10,11 +11,13 @@ import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.Configurator;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldSampler;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.FreeNorthPoleView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldSamplerView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
 import com.mazalearn.scienceengine.services.SoundManager;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
@@ -23,6 +26,9 @@ import com.mazalearn.scienceengine.view.ProbeManager;
 public class ElectroMagnetismView extends AbstractExperimentView {
   private BarMagnetView barMagnetView;
   private ProbeManager probeManager;
+  private boolean isInFieldMode = true, isFieldPointTouched = false;
+  private FieldSampler fieldSampler;
+  private Vector2 pos = new Vector2();
 
   public ElectroMagnetismView(String experimentName, float width, float height,
       final ElectroMagnetismModel emModel,
@@ -46,8 +52,9 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new Box2DActor(body, textureRegion));
       } else if (body.getName() == "Compass") {
         this.addActor(new CompassView(textureRegion, body));
-      } else if (body.getName() == "FreeNorthPole") {
-        this.addActor(new FreeNorthPoleView(textureRegion, body));
+      } else if (body.getName() == "FieldSampler") {
+        this.addActor(new FieldSamplerView(textureRegion, body));
+        fieldSampler = (FieldSampler) body;
       } else if (body.getName() == "CurrentWire") {
         this.addActor(new CurrentWireView(body));
       } else {
@@ -66,12 +73,38 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       texture = new Texture("images/lightbulb.png");
     } else if (name == "Compass") {
       texture = new Texture("images/compass.png");
-    } else if (name == "FreeNorthPole") {
-      texture = new Texture("images/freenorthpole.png");
+    } else if (name == "FieldSampler") {
+      texture = new Texture("images/arrow.png");
     } else {
       return null;
     }
     return new TextureRegion(texture);
+  }
+  
+  @Override
+  public boolean touchDown(int x, int y, int pointer, int button) {
+    super.touchDown(x, y,  pointer, button);
+    if (super.getTouchFocus(pointer) != null) return true;
+    // Touch at stage level - not on any actor - Assume field touch
+    if (isInFieldMode) isFieldPointTouched = true;
+    return true;
+  }
+
+  @Override
+  public boolean touchUp(int x, int y, int pointer, int button) {
+    super.touchUp(x, y, pointer, button);
+    if (isInFieldMode && isFieldPointTouched) {
+      isFieldPointTouched = false;
+      // Move field sampler here.
+      // view coords
+      toStageCoordinates(x, y, pos);
+      // model coords
+      pos.mul(1f / PIXELS_PER_M);
+      fieldSampler.setPositionAndAngle(pos, 0);
+      // Set a field arrow here.
+      fieldSampler.singleStep(0);
+    }
+    return true;
   }
   
   @Override

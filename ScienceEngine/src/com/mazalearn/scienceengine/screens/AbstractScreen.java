@@ -30,6 +30,7 @@ public abstract class AbstractScreen implements Screen {
   private Skin skin;
   private TextureAtlas atlas;
   private Table table;
+  private Color backgroundColor = Color.BLACK;
 
   public AbstractScreen(ScienceEngine game, Stage stage) {
     this.scienceEngine = game;
@@ -109,7 +110,7 @@ public abstract class AbstractScreen implements Screen {
   @Override
   public void render(float delta) {
     stage.act(delta);
-    clearScreen(Color.BLACK);
+    clearScreen(backgroundColor);
     stage.draw();
     Table.drawDebug(stage);
   }
@@ -161,5 +162,13 @@ public abstract class AbstractScreen implements Screen {
 
   public Skin getSkin() {
     return scienceEngine.getSkin();
+  }
+
+  public Color getBackgroundColor() {
+    return backgroundColor;
+  }
+
+  public void setBackgroundColor(Color backgroundColor) {
+    this.backgroundColor = backgroundColor;
   }
 }

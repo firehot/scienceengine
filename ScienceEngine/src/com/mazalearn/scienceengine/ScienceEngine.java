@@ -8,8 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.screens.SplashScreen;
 import com.mazalearn.scienceengine.screens.StartScreen;
@@ -29,8 +27,6 @@ public class ScienceEngine extends Game {
   // Provide access to this singleton scienceEngine from any class
   public static ScienceEngine SCIENCE_ENGINE;
 
-  public static Box2DDebugRenderer debugRenderer;
-
   // a libgdx helper class that logs the current FPS each second
   private FPSLogger fpsLogger;
 
@@ -43,8 +39,6 @@ public class ScienceEngine extends Game {
   private List<String> params;
 
   private Skin skin;
-
-  public static OrthographicCamera debugCamera;
 
   public ScienceEngine() {
     this(new ArrayList<String>());
@@ -108,8 +102,6 @@ public class ScienceEngine extends Game {
     if (DEV_MODE != DevMode.PRODUCTION) {
       // create the helper objects
       fpsLogger = new FPSLogger();
-      debugRenderer = new Box2DDebugRenderer();
-      debugCamera = new OrthographicCamera(300, 200);
     }
     
     SCIENCE_ENGINE = this;

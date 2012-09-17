@@ -19,14 +19,13 @@ public class CurrentWireView extends Box2DActor {
     super(body, new TextureRegion(currentWireUp));
     this.radius = (float) Math.sqrt(width * width + height * height)/2;
     this.currentWire = (CurrentWire) body;
-    this.originX = width/2;
-    this.originY = height/2;
   }
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     this.getTextureRegion().setTexture(
         currentWire.isDirectionUp() ? currentWireUp : currentWireDown);
-    super.draw(batch, parentAlpha);
+    batch.draw(getTextureRegion(), x - width/2, y - height/2, 0, 0, width, 
+        height, 1, 1, rotation);
   }
 }
