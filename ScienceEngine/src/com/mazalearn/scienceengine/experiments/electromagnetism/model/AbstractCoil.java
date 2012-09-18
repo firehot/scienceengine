@@ -2,8 +2,9 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
-import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -57,18 +58,21 @@ public abstract class AbstractCoil extends ScienceBody {
     this.loopSpacing = loopSpacing;
     this.currentAmplitude = 0f;
     FixtureDef fixtureDef = new FixtureDef();
-    CircleShape circleShape = new CircleShape();
-    circleShape.setRadius(radius);
+    // This is 2D - so we model the coil as being perpendicular to the plane
+    // and only the intersections at top and bottom with plane are fixtures
+    Vector2 pos = new Vector2();
+    PolygonShape rectangleShape = new PolygonShape();
+    pos.set(0, radius);
+    rectangleShape.setAsBox(this.wireWidth/2, this.wireWidth/2, pos, 0);
     fixtureDef.density = 1;
-    fixtureDef.shape = circleShape;
-    fixtureDef.filter.categoryBits = 0x0002;
+    fixtureDef.shape = rectangleShape;
+    fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
+    pos.set(0, -radius);
+    rectangleShape.setAsBox(this.wireWidth/2, this.wireWidth/2, pos, 0);
+    this.createFixture(fixtureDef);
   }
-
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
 
   /**
    * Sets the number of loops in the coil. This method destroys any existing

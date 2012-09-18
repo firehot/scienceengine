@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.designer;
 
+import java.util.List;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
@@ -67,7 +68,7 @@ public class LevelEditor extends Stage {
   private IExperimentModel experimentModel;
   private Configurator configurator;
   private ShapeRenderer shapeRenderer;
-
+  Vector2 point = new Vector2();
   private Actor rotatedActor;
   
 
@@ -218,7 +219,7 @@ public class LevelEditor extends Stage {
     configTable.clear();
     configTable.add("Configs");
     configTable.row();
-    for (final IModelConfig<?> config: experimentModel.getConfigs()) {
+    for (final IModelConfig<?> config: experimentModel.getAllConfigs()) {
       if (config.isPossible()) {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
         configTable.add(configCheckbox).left();
@@ -284,7 +285,7 @@ public class LevelEditor extends Stage {
     font.draw(batch,
         "---------------------------------------------------------------",
         5, top - 15 * 1);
-    font.draw(batch, "'Alt' to toggle overlay", 5,
+    font.draw(batch, "'Alt' to toggle overlay, 'Tab' to select", 5,
         top - 15 * 2);
     font.draw(batch,
         "---------------------------------------------------------------",
@@ -311,26 +312,31 @@ public class LevelEditor extends Stage {
       // Assumption, stage does not have groups within
       Vector2 stagePoint = new Vector2();
       toStageCoordinates(x, y, stagePoint);
-      Vector2 point = new Vector2();
       Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
       for (Actor actor : originalStage.getActors()) {
         Group.toChildCoordinates(actor, stagePoint.x, stagePoint.y, point);
-        if (actor.hit(point.x, point.y) != null) {
-          Vector2 handlePos = new Vector2(actor.width - handleSize.x,
-              actor.height - handleSize.y);
-
-          if (handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x
-              && handlePos.y <= point.y
-              && point.y <= handlePos.y + handleSize.y) {
-            resizedActor = actor;
-            draggedActor = null;
-            selectedActor = actor;
-          } else if (point.x <= handleSize.x && point.y <= handleSize.y) {
-            rotatedActor = actor;
-            selectedActor = actor;
-          } else if (resizedActor == null && rotatedActor == null) {
-            draggedActor = actor;
-            selectedActor = actor;
+        Actor child = actor.hit(point.x, point.y);
+        if (child != null) {
+          if (isAncestor(configurator, actor) && child != configurator.getTitle()) {
+            originalStage.touchDown(x, y, pointer, button);
+            return true;
+          } else {
+            Vector2 handlePos = new Vector2(actor.width - handleSize.x,
+                actor.height - handleSize.y);
+  
+            if (handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x
+                && handlePos.y <= point.y
+                && point.y <= handlePos.y + handleSize.y) {
+              resizedActor = actor;
+              draggedActor = null;
+              selectedActor = actor;
+            } else if (point.x <= handleSize.x && point.y <= handleSize.y) {
+              rotatedActor = actor;
+              selectedActor = actor;
+            } else if (resizedActor == null && rotatedActor == null) {
+              draggedActor = actor;
+              selectedActor = actor;
+            }
           }
         }
       }
@@ -344,9 +350,25 @@ public class LevelEditor extends Stage {
     return true;
   }
 
+  private boolean isAncestor(Actor actor1, Actor actor2) {
+    if (actor1 == actor2) return true;
+    if (actor2 == null) return false;
+    return isAncestor(actor1, actor2.parent);
+  }
+
   @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     super.touchUp(x, y, pointer, button);
+    
+    toStageCoordinates(x, y, point);
+    Group.toChildCoordinates(configurator, point.x, point.y, point);
+    Actor child = configurator.hit(point.x, point.y);
+    if (child != null && child != configurator.getTitle()) {
+      originalStage.touchUp(x, y, pointer, button);
+      lastTouch.set(x, y);
+      return true;
+    }
+    
     switch (button) {
     case Buttons.LEFT:
       draggedActor = resizedActor = selectedActor = rotatedActor = null;
@@ -366,6 +388,14 @@ public class LevelEditor extends Stage {
     delta3.sub(d3);
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+      toStageCoordinates(x, y, point);
+      Group.toChildCoordinates(configurator, point.x, point.y, point);
+      Actor child = configurator.hit(point.x, point.y);
+      if (child != null && child != configurator.getTitle()) {
+        originalStage.touchDragged(x, y, pointer);
+        lastTouch.set(x, y);
+        return true;
+      }
       if (draggedActor != null) {
         draggedActor.x += delta3.x;
         draggedActor.y += delta3.y;
@@ -412,6 +442,17 @@ public class LevelEditor extends Stage {
     case Keys.ALT_LEFT:
       mode = (mode == Mode.CONFIGURE) ? Mode.OVERLAY : Mode.CONFIGURE;
       break;
+    case Keys.TAB: // Cycle to next actor if selected Actor not null
+      List<Actor> actors = originalStage.getActors();
+      for (int i = 0; i < actors.size(); i++) {
+        Actor actor = actors.get(i);
+        if (selectedActor == actor) {
+          selectedActor = actors.get((i + 1) % actors.size());
+          break;
+        }
+      }
+      if (selectedActor == null) selectedActor = actors.get(0);
+      break;
     }
     return true;
   }
@@ -439,6 +480,10 @@ public class LevelEditor extends Stage {
     // Draw outline for actor
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
+    if (actor == configurator) {
+      // Bounding box only for title cell
+      actor = configurator.getTitle();
+    }
     shapeRenderer.rect(actor.x, actor.y, actor.width, actor.height);
 
     // Draw handle for changing the size of the actor

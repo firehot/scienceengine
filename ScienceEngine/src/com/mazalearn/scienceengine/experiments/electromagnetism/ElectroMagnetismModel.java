@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
@@ -26,6 +27,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   private EMField emField;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
   public enum Mode {Fixed, Free, Rotate};
+  private boolean inFieldMode = true;
   
   private Mode mode = Mode.Fixed;
   private Joint joint;
@@ -47,12 +49,19 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   }
 
   @Override
-  public void initializeConfigs() {
+  public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
     modelConfigs.add(new AbstractModelConfig<String>("Mode", 
         "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
       public boolean isPossible() { return barMagnet.isActive(); }
+    });
+    
+    modelConfigs.add(new AbstractModelConfig<Boolean>("FieldMode",
+        "Whether in field mode", false) {
+      public Boolean getValue() { return isInFieldMode(); }
+      public void setValue(Boolean value) { setInFieldMode(value); }
+      public boolean isPossible() { return true; }
     });
   }
 
@@ -99,5 +108,13 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   public void setMode(String mode) {
     this.mode = Mode.valueOf(mode);
     reset();
+  }
+ 
+  public void setInFieldMode(boolean inFieldMode) {
+    this.inFieldMode = inFieldMode;
+  }
+  
+  public boolean isInFieldMode() {
+    return this.inFieldMode;
   }
 }

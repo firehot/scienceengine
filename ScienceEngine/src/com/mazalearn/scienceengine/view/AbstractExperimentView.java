@@ -83,6 +83,6 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
     this.configurator = configurator;
     this.addActor(configurator);
     this.levelManager = new LevelManager(experimentName, this, 
-        experimentModel.getConfigs(), configurator);
+        experimentModel.getAllConfigs(), configurator);
   }
 }

@@ -1,7 +1,10 @@
 package com.mazalearn.scienceengine.experiments.waves;
 
+import java.util.List;
+
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.AbstractExperimentModel;
 
 public class WaveModel extends AbstractExperimentModel {
@@ -206,7 +209,7 @@ public class WaveModel extends AbstractExperimentModel {
   }
 
   @Override
-  public void initializeConfigs() {
+  public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
     modelConfigs.add(new AbstractModelConfig<String>("GenMode", "How wave is generated", GenMode.values()) {
      public String getValue() { return getGenMode(); }
      public void setValue(String value) { setGenMode(value); }

@@ -11,11 +11,9 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldSampl
 
 public class FieldSamplerView extends Box2DActor {
   private final FieldSampler fieldSampler;
-  private float radius;
     
   public FieldSamplerView(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
-    this.radius = (float) Math.sqrt(width * width + height * height)/2;
     this.fieldSampler = (FieldSampler) body;
     this.originX = width/2;
     this.originY = height/2;

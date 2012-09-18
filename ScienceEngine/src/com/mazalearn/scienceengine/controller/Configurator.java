@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
@@ -25,6 +26,7 @@ public class Configurator extends Table {
   private IViewConfig pauseResumeConfig;
   private IViewConfig challengeConfig;
   private Table modelConfigTable;
+  private Label title;
   
   public Configurator(Skin skin, final IExperimentModel experimentModel, 
       final IExperimentView experimentView, final String experimentName) {
@@ -33,8 +35,10 @@ public class Configurator extends Table {
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
     this.experimentName = experimentName;
+    this.defaults().fill();
     registerStandardButtons(skin, experimentModel, experimentView);
     this.modelConfigTable = new Table(skin);
+    modelConfigTable.defaults().fill();
     this.add(modelConfigTable);
     registerModelConfigs();
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
@@ -51,7 +55,7 @@ public class Configurator extends Table {
     this.configs = new ArrayList<Config>();
     modelConfigTable.clear();
     // Register all model configs
-    for (IModelConfig modelConfig: experimentModel.getConfigs()) {
+    for (IModelConfig modelConfig: experimentModel.getAllConfigs()) {
       this.configs.add(createViewConfig(modelConfig, modelConfigTable));
     }
   }
@@ -60,7 +64,8 @@ public class Configurator extends Table {
       final IExperimentModel experimentModel,
       final IExperimentView experimentView) {
     // Register name
-    add(experimentName).colspan(2).center();
+    this.title = new Label(experimentName, skin);
+    add(title).colspan(2).center();
     row();
     // register the back button
     TextButton backButton = new TextButton("Back to Start", skin);
@@ -118,30 +123,43 @@ public class Configurator extends Table {
     IViewConfig resetConfig = new ConfigTextButton(resetModelConfig, skin);
     
     Table table = new Table(skin);
+    table.defaults().fill().expand();
     table.add(pauseResumeConfig.getActor()).pad(0,5,0, 5);
     table.add(resetConfig.getActor());
-    this.add(table);
+    this.add(table).pad(0, 0, 10, 0);
     row();
   }
   
+  public Label getTitle() {
+    return this.title;
+  }
+  
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public Config createViewConfig(IModelConfig property, Table modelConfigTable) {
+  private Config createViewConfig(IModelConfig property, Table modelConfigTable) {
     Table table = new Table(skin);
+    table.defaults().fill().expand();
     IViewConfig viewConfig = null;
     switch(property.getType()) {
+      case ONOFF: 
+        viewConfig = new ConfigCheckBox(property, skin);
+        table.add(viewConfig.getActor());
+        table.add(property.getName()).pad(0, 5, 0, 5);
+        break;
       case RANGE: 
         table.add(property.getName());
         table.row();
         viewConfig = new ConfigSlider(property, skin);
+        table.add(viewConfig.getActor());
         break;
       case LIST:
         viewConfig = new ConfigSelectBox(property, skin);
+        table.add(viewConfig.getActor());
         break;
       case COMMAND:
         viewConfig = new ConfigTextButton(property, skin);
+        table.add(viewConfig.getActor());
         break;
     }
-    table.add(viewConfig.getActor());
     Config c = new Config(modelConfigTable.add(table), viewConfig);
     modelConfigTable.row();
     return c;

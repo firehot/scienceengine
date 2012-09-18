@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +13,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
 
   protected World box2DWorld;
   protected List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
-  protected List<IModelConfig<?>> modelConfigs;
+  private List<IModelConfig<?>> modelConfigs;
 
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
@@ -36,20 +37,24 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
 
   protected abstract void singleStep();
 
-  public List<IModelConfig<?>> getConfigs() {
-    modelConfigs = new ArrayList<IModelConfig<?>>();
-    initializeConfigs();
+  public List<IModelConfig<?>> getAllConfigs() {
+    List<IModelConfig<?>> allConfigs = new ArrayList<IModelConfig<?>>();
+    if (modelConfigs == null) {
+      modelConfigs = new ArrayList<IModelConfig<?>>();
+      initializeConfigs(modelConfigs);
+    }
+    allConfigs.addAll(modelConfigs);
     for (ScienceBody body: bodies) {
       if (body.isActive()) {
-        modelConfigs.addAll(body.getConfigs());
+        allConfigs.addAll(body.getConfigs());
       }
     }
-    return modelConfigs;
+    return Collections.unmodifiableList(allConfigs);
   }
   
   public IModelConfig<?> getConfig(String name) {
     for (IModelConfig<?> modelConfig: modelConfigs) {
-      if (modelConfig.getName() == name) return modelConfig;
+      if (modelConfig.getName().equals(name)) return modelConfig;
     }
     return null;
   }
@@ -68,5 +73,5 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     return box2DWorld;
   }
 
-  public abstract void initializeConfigs();
+  public abstract void initializeConfigs(List<IModelConfig<?>> modelConfigs);
 }

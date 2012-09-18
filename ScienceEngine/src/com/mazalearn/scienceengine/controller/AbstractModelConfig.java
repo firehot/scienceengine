@@ -14,6 +14,10 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     this(ConfigType.COMMAND, name, description, 0, 0, null);
   }
   
+  public AbstractModelConfig(String name, String description, boolean initial) {
+    this(ConfigType.ONOFF, name, description, 0, 0, null);
+  }
+  
   public AbstractModelConfig(String name, String description, float low, float high) {
     this(ConfigType.RANGE, name, description, low, high, null);
   }

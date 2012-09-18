@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.controller.Configurator;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldSampler;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
@@ -26,16 +24,17 @@ import com.mazalearn.scienceengine.view.ProbeManager;
 public class ElectroMagnetismView extends AbstractExperimentView {
   private BarMagnetView barMagnetView;
   private ProbeManager probeManager;
-  private boolean isInFieldMode = true, isFieldPointTouched = false;
+  private boolean isFieldPointTouched = false;
   private FieldSampler fieldSampler;
   private Vector2 pos = new Vector2();
+  private ElectroMagnetismModel emModel;
 
   public ElectroMagnetismView(String experimentName, float width, float height,
       final ElectroMagnetismModel emModel,
       Skin skin, SoundManager soundManager) {
     super(experimentName, emModel, width, height, skin, soundManager);
+    this.emModel = emModel;
     
-    // TODO: use blending function to draw coilsback?
     Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
         Scaling.stretch, Align.CENTER, "CoilsBack");
     this.addActor(coilsBack);
@@ -86,14 +85,14 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     super.touchDown(x, y,  pointer, button);
     if (super.getTouchFocus(pointer) != null) return true;
     // Touch at stage level - not on any actor - Assume field touch
-    if (isInFieldMode) isFieldPointTouched = true;
+    if (emModel.isInFieldMode()) isFieldPointTouched = true;
     return true;
   }
 
   @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     super.touchUp(x, y, pointer, button);
-    if (isInFieldMode && isFieldPointTouched) {
+    if (emModel.isInFieldMode() && isFieldPointTouched) {
       isFieldPointTouched = false;
       // Move field sampler here.
       // view coords

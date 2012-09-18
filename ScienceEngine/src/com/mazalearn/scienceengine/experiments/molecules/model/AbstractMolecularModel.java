@@ -1,6 +1,9 @@
 package com.mazalearn.scienceengine.experiments.molecules.model;
 
+import java.util.List;
+
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.AbstractExperimentModel;
 
 public abstract class AbstractMolecularModel extends AbstractExperimentModel 
@@ -231,7 +234,7 @@ public abstract class AbstractMolecularModel extends AbstractExperimentModel
   }
 
   @Override
-  public void initializeConfigs() {
+  public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
     modelConfigs.add(new AbstractModelConfig<String>("State", "State of Matter", State.values()) {
       public String getValue() { return getState(); }
       public void setValue(String value) { setState(value); }

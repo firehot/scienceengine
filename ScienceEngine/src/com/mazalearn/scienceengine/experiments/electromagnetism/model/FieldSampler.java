@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 
 /**
@@ -80,7 +79,7 @@ public class FieldSampler extends ScienceBody {
     return fieldVector.len();
   }
 
-  public void addFieldSample(float x, float y, float angle, float bfield) {
+  private void addFieldSample(float x, float y, float angle, float bfield) {
     fieldSamples.add(new FieldSample(x, y, angle, bfield));
   }
 

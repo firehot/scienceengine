@@ -1,7 +1,7 @@
 package com.mazalearn.scienceengine.controller;
 
 public interface IModelConfig<T> {
-  enum ConfigType { RANGE, LIST, COMMAND };
+  enum ConfigType { RANGE, LIST, COMMAND, ONOFF };
   
   public ConfigType getType();
   public String getName();
@@ -11,12 +11,15 @@ public interface IModelConfig<T> {
 
   // Only for COMMAND type
   public void doCommand();
-  // get and set only for RANGE, LIST types
+  
+  // get and set only for RANGE, LIST, ONOFF types
   public T getValue();
   public void setValue(T value);
+  
   // low, high only for RANGE type
   public float getLow();
   public float getHigh();
+  
   // enums only for LIST type
   @SuppressWarnings("rawtypes")
   public Enum[] getList();

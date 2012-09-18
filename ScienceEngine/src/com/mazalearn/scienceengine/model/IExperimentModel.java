@@ -11,7 +11,7 @@ public interface IExperimentModel {
   // Simulate steps of the model. delta is time since last invocation.
   public void simulateSteps(float delta);
   // Get all configs of the model
-  public List<IModelConfig<?>> getConfigs();
+  public List<IModelConfig<?>> getAllConfigs();
   // Get a specific named config of the model
   public IModelConfig<?> getConfig(String name);
   public World getBox2DWorld();
