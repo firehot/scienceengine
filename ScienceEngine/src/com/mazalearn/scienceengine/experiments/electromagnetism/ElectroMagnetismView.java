@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldSampler;
+import com.mazalearn.scienceengine.box2d.ScienceBody.ComponentType;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
@@ -25,7 +26,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   private BarMagnetView barMagnetView;
   private ProbeManager probeManager;
   private boolean isFieldPointTouched = false;
-  private FieldSampler fieldSampler;
+  private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
   private ElectroMagnetismModel emModel;
 
@@ -39,42 +40,56 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         Scaling.stretch, Align.CENTER, "CoilsBack");
     this.addActor(coilsBack);
     for (final ScienceBody body: emModel.getBodies()) {
-      TextureRegion textureRegion = getTextureRegionForBody(body.getName());
-      if (body.getName() == "BarMagnet") {       
+      TextureRegion textureRegion = getTextureRegionForBody(body.getComponentType());
+      switch (body.getComponentType()) {
+      case BarMagnet:       
         barMagnetView = new BarMagnetView(textureRegion, body, this, emModel);
         this.addActor(barMagnetView);
-      } else if (body.getName() == "Lightbulb") {
+        break;
+      case Lightbulb:
         this.addActor(new LightbulbView(textureRegion, (Lightbulb) body));
-      } else if (body.getName() == "PickupCoil") {
+        break;
+      case PickupCoil:
         coilsBack.x = body.getPosition().x * PIXELS_PER_M;
         coilsBack.y = body.getPosition().y * PIXELS_PER_M;
         this.addActor(new Box2DActor(body, textureRegion));
-      } else if (body.getName() == "Compass") {
+        break;
+      case Compass:
         this.addActor(new CompassView(textureRegion, body));
-      } else if (body.getName() == "FieldSampler") {
+        break;
+      case FieldMeter:
         this.addActor(new FieldSamplerView(textureRegion, body));
-        fieldSampler = (FieldSampler) body;
-      } else if (body.getName() == "CurrentWire") {
+        fieldMeter = (FieldMeter) body;
+        break;
+      case CurrentWire:
         this.addActor(new CurrentWireView(body));
-      } else {
+        break;
+      default:
         this.addActor(new Box2DActor(body, textureRegion));
+        break;
       }
     }
   }
   
-  private TextureRegion getTextureRegionForBody(String name) {
+  private TextureRegion getTextureRegionForBody(ComponentType componentType) {
     Texture texture;
-    if (name == "BarMagnet") {
+    switch(componentType) {
+    case BarMagnet:
       texture = new Texture("images/barmagnet-pivoted.png");
-    } else if (name == "PickupCoil") {
+      break;
+    case PickupCoil:
       texture = new Texture("images/coppercoils-front.png");
-    } else if (name == "Lightbulb") {
+      break;
+    case Lightbulb:
       texture = new Texture("images/lightbulb.png");
-    } else if (name == "Compass") {
+      break;
+    case Compass:
       texture = new Texture("images/compass.png");
-    } else if (name == "FieldSampler") {
+      break;
+    case FieldMeter:
       texture = new Texture("images/arrow.png");
-    } else {
+      break;
+    default:
       return null;
     }
     return new TextureRegion(texture);
@@ -99,9 +114,9 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       toStageCoordinates(x, y, pos);
       // model coords
       pos.mul(1f / PIXELS_PER_M);
-      fieldSampler.setPositionAndAngle(pos, 0);
+      fieldMeter.setPositionAndAngle(pos, 0);
       // Set a field arrow here.
-      fieldSampler.singleStep(0);
+      fieldMeter.singleStep(0);
     }
     return true;
   }

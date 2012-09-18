@@ -41,8 +41,8 @@ public class PickupCoil extends AbstractCoil {
    * 
    * @param emField
    */
-  public PickupCoil(EMField emField, float x, float y, float angle, float calibrationEmf) {
-    super("PickupCoil", x, y, angle);
+  public PickupCoil(String name, EMField emField, float x, float y, float angle, float calibrationEmf) {
+    super(ComponentType.PickupCoil, name, x, y, angle);
 
     assert (emField != null);
     this.emField = emField;

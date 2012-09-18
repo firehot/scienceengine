@@ -40,8 +40,8 @@ public class Compass extends ScienceBody {
   /**
    * @param emField
    */
-  public Compass(EMField emField, float x, float y, float angle) {
-    super("Compass", x, y, angle);
+  public Compass(String name, EMField emField, float x, float y, float angle) {
+    super(ComponentType.Compass, name, x, y, angle);
     getBody().setType(BodyType.StaticBody);
     this.emField = emField;
     FixtureDef fixtureDef = new FixtureDef();

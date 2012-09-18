@@ -17,25 +17,15 @@ import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 public abstract class AbstractMagnet extends ScienceBody 
        implements EMField.IProducer {
 
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
-
   private float width, height;
   private float strength;
-  private float maxStrength;
-  private float minStrength;
-
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
 
   /**
    * Sole constructor
    * @param  emField - Electromagnetic field to which magnet is coupled
    */
-  public AbstractMagnet(String name, EMField emField, float x, float y, float angle) {
-    super(name, x, y, angle);
+  public AbstractMagnet(ComponentType componentType, String name, EMField emField, float x, float y, float angle) {
+    super(componentType, name, x, y, angle);
     emField.registerProducer(this);
     
     this.width = 32;
@@ -50,14 +40,12 @@ public abstract class AbstractMagnet extends ScienceBody
     this.createFixture(fixtureDef);
 
     this.strength = 1.0f;
-    this.minStrength = 0.0f; // couldn't be any weaker
-    this.maxStrength = 10000.0f; // couldn't be any stronger
     initializeConfigs();
   }
   
   public void initializeConfigs() {
-    configs.add(new AbstractModelConfig<Float>("MagnetStrength", 
-        "Strength of magnet", getMinStrength(), getMaxStrength()) {
+    configs.add(new AbstractModelConfig<Float>(getName() + "Strength", 
+        "Strength of magnet", 0f, 10000f) {
       public Float getValue() { return getStrength(); }
       public void setValue(Float value) { setStrength(value); }
       public boolean isPossible() { return isActive(); }
@@ -73,58 +61,6 @@ public abstract class AbstractMagnet extends ScienceBody
   }
 
   /**
-   * Sets the maximum magnet strength. This value is used in rescaling of field
-   * strength.
-   * 
-   * @param maxStrength - the maximum strength, in Gauss
-   */
-  public void setMaxStrength(float maxStrength) {
-    this.maxStrength = maxStrength;
-    if (this.strength > this.maxStrength) {
-      this.strength = this.maxStrength;
-    }
-    if (this.maxStrength < this.minStrength) {
-      this.minStrength = this.maxStrength;
-    }
-  }
-
-  /**
-   * Gets the maximum magnet strength. This value is used in rescaling of field
-   * strength.
-   * 
-   * @return the maximumum strength, in Gauss
-   */
-  public float getMaxStrength() {
-    return this.maxStrength;
-  }
-
-  /**
-   * Sets the minimum magnet strength. This value is used in rescaling of field
-   * strength.
-   * 
-   * @param minStrength - the minimum strength, in Gauss
-   */
-  public void setMinStrength(float minStrength) {
-    this.minStrength = minStrength;
-    if (this.strength < this.minStrength) {
-      this.strength = this.minStrength;
-    }
-    if (this.minStrength > this.maxStrength) {
-      this.maxStrength = this.minStrength;
-    }
-  }
-
-  /**
-   * Gets the minimum magnet strength. This value is used in rescaling of field
-   * strength.
-   * 
-   * @return the minimum strength, in Gauss
-   */
-  public float getMinStrength() {
-    return this.minStrength;
-  }
-
-  /**
    * Sets the magnitude of the magnet's strength, in Gauss.
    * 
    * @param strength
@@ -133,9 +69,6 @@ public abstract class AbstractMagnet extends ScienceBody
    *           if strength is outside of the min/max range
    */
   public void setStrength(float strength) {
-    if (strength < this.minStrength || strength > this.maxStrength) {
-      throw new IllegalArgumentException("strength out of range: " + strength);
-    }
     this.strength = strength;
   }
 

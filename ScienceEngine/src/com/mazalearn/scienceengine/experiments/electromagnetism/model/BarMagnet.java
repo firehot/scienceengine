@@ -95,8 +95,8 @@ public class BarMagnet extends AbstractMagnet {
   private final Grid externalNearGrid; // near the magnet
   private final Grid externalFarGrid; // far from the magnet
 
-  public BarMagnet(EMField emField, float x, float y, float angle) {
-    super("BarMagnet", emField, x, y, angle);
+  public BarMagnet(String name, EMField emField, float x, float y, float angle) {
+    super(ComponentType.BarMagnet, name, emField, x, y, angle);
     PolygonShape rectangleShape = new PolygonShape();
     rectangleShape.setAsBox(getWidth(), getHeight());
     this.createFixture(rectangleShape, 0.01f);

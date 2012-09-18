@@ -41,8 +41,24 @@ public class ScienceBody implements IBody {
   private final Vector2 aPosition = new Vector2();
   private final String name;
   private boolean initialIsActive;
+  private ComponentType componentType;
   
-  protected ScienceBody(String name, float x, float y, float angle) {
+  public enum ComponentType {
+    BarMagnet,
+    ACPowerSupply,
+    Battery,
+    Compass,
+    ElectroMagnet,
+    Lightbulb,
+    FieldMeter,
+    PickupCoil,
+    CurrentWire,
+    SourceCoil,
+    Voltmeter,
+  }
+  
+  protected ScienceBody(ComponentType componentType, String name, float x, float y, float angle) {
+    this.componentType = componentType;
     this.name = name;
     this.initialX = x;
     this.initialY = y;
@@ -113,6 +129,10 @@ public class ScienceBody implements IBody {
   
   public String getName() {
     return name;
+  }
+  
+  public ComponentType getComponentType() {
+    return componentType;
   }
   
   public Body getBody() {

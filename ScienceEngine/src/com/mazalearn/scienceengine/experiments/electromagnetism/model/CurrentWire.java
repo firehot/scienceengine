@@ -22,8 +22,8 @@ public class CurrentWire extends ScienceBody implements IProducer {
   // Direction of current: up is true and down is false
   private boolean direction = true;
 
-  public CurrentWire(EMField emField, float x, float y, float angle) {
-    super("CurrentWire", x, y, angle);
+  public CurrentWire(String name, EMField emField, float x, float y, float angle) {
+    super(ComponentType.CurrentWire, name, x, y, angle);
     emField.registerProducer(this);
     this.radius = 1;
     this.current = 1f;

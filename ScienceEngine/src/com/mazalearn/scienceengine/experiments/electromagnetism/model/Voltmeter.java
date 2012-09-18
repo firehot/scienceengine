@@ -32,8 +32,8 @@ public class Voltmeter extends ScienceBody {
    * 
    * @param pickupCoilModel - voltmeter is connected to this pickup coil
    */
-  public Voltmeter(PickupCoil pickupCoilModel, float x, float y, float angle) {
-    super("Voltmeter", x, y, angle);
+  public Voltmeter(String name, PickupCoil pickupCoilModel, float x, float y, float angle) {
+    super(ComponentType.Voltmeter, name, x, y, angle);
     needleAngle = ZERO_NEEDLE_ANGLE;
   }
 

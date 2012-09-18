@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldSampler;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.model.AbstractExperimentModel;
@@ -36,13 +36,13 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     super();
     emField = new EMField();
     
-    bodies.add(barMagnet = new BarMagnet(emField, 10, 12, 0));
-    bodies.add(pickupCoil = new PickupCoil(emField, 23, -4, 0, 3000));
-    bodies.add(lightbulb = new Lightbulb(pickupCoil, 23, 25, 0));
-    bodies.add(new FieldSampler(emField, 10, 5, 0));
-    bodies.add(new CurrentWire(emField, 10, 12, 0));
+    bodies.add(barMagnet = new BarMagnet("BarMagnet", emField, 10, 12, 0));
+    bodies.add(pickupCoil = new PickupCoil("PickupCoil", emField, 23, -4, 0, 3000));
+    bodies.add(lightbulb = new Lightbulb("Lightbulb", pickupCoil, 23, 25, 0));
+    bodies.add(new FieldMeter("FieldMeter", emField, 10, 5, 0));
+    bodies.add(new CurrentWire("CurrentWire", emField, 10, 12, 0));
     barMagnet.setType(BodyType.DynamicBody);
-    bodies.add(compass = new Compass(emField, 0, 5, 0));
+    bodies.add(compass = new Compass("Compass", emField, 0, 5, 0));
     compass.setType(BodyType.KinematicBody);
     
     reset();
@@ -50,14 +50,14 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
 
   @Override
   public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
-    modelConfigs.add(new AbstractModelConfig<String>("Mode", 
+    modelConfigs.add(new AbstractModelConfig<String>("Magnet Mode", 
         "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
       public boolean isPossible() { return barMagnet.isActive(); }
     });
     
-    modelConfigs.add(new AbstractModelConfig<Boolean>("FieldMode",
+    modelConfigs.add(new AbstractModelConfig<Boolean>("Field Meter",
         "Whether in field mode", false) {
       public Boolean getValue() { return isInFieldMode(); }
       public void setValue(Boolean value) { setInFieldMode(value); }

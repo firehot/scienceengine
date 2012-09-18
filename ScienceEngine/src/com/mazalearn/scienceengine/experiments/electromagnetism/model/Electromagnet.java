@@ -31,9 +31,9 @@ public class Electromagnet extends CoilMagnet {
    * @param currentSource
    *          the electromagnet's current source
    */
-  public Electromagnet(EMField emField, SourceCoil sourceCoilModel,
+  public Electromagnet(String name, EMField emField, SourceCoil sourceCoilModel,
       AbstractCurrentSource currentSource, float x, float y, float angle) {
-    super("Electromagnet", emField, x, y, angle);
+    super(ComponentType.ElectroMagnet, name, emField, x, y, angle);
     assert (sourceCoilModel != null);
     assert (currentSource != null);
 
@@ -103,7 +103,7 @@ public class Electromagnet extends CoilMagnet {
      * Set the strength. This is a bit of a "fudge". We set the strength of the
      * magnet to be proportional to its emf.
      */
-    float strength = Math.abs(amplitude) * getMaxStrength();
+    float strength = Math.abs(amplitude) * 10000f;
     setStrength(strength);
   }
 }

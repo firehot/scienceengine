@@ -86,7 +86,7 @@ public class Manifold {
 	/** The points of contact. */
 	public final ManifoldPoint[] points;
 	
-	/** not use for Type::e_points */
+	/** not use for ComponentType::e_points */
 	public final Vec2 localNormal;
 	
 	/** usage depends on manifold type */
