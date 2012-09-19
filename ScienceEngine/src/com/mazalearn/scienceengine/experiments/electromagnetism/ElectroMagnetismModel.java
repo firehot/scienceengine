@@ -10,19 +10,21 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.controller.IModelConfig;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.ACPowerSupply;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.SourceCoil;
 import com.mazalearn.scienceengine.model.AbstractExperimentModel;
 
 public class ElectroMagnetismModel extends AbstractExperimentModel {
   private BarMagnet barMagnet;
   private PickupCoil pickupCoil;
-  private Lightbulb lightbulb;
   private Compass compass;
   private EMField emField;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
@@ -36,10 +38,14 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     emField = new EMField();
     
     bodies.add(barMagnet = new BarMagnet("BarMagnet", emField, 10, 12, 0));
+    SourceCoil sourceCoil = new SourceCoil("SourceCoil", 10, 12, 0);
+    ACPowerSupply acPower = new ACPowerSupply("ACPower", 10, 12, 0);
+    bodies.add(new Electromagnet("Electromagnet", emField, sourceCoil, acPower, 10, 12, 0));
     bodies.add(pickupCoil = new PickupCoil("PickupCoil", emField, 23, -4, 0, 3000));
-    bodies.add(lightbulb = new Lightbulb("Lightbulb", pickupCoil, 23, 25, 0));
+    bodies.add(new Lightbulb("Lightbulb", pickupCoil, 23, 25, 0));
     bodies.add(new FieldMeter("FieldMeter", emField, 10, 5, 0));
-    bodies.add(new CurrentWire("CurrentWire", emField, 10, 12, 0));
+    bodies.add(new CurrentWire("Wire A", emField, 10, 12, 0));
+    bodies.add(new CurrentWire("Wire B", emField, 14, 12, 0));
     barMagnet.setType(BodyType.DynamicBody);
     bodies.add(compass = new Compass("Compass", emField, 0, 5, 0));
     compass.setType(BodyType.KinematicBody);

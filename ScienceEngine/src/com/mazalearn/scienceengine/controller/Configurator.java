@@ -14,7 +14,6 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.model.IExperimentModel;
 import com.mazalearn.scienceengine.screens.ExperimentHomeScreen;
-import com.mazalearn.scienceengine.screens.ExperimentMenuScreen;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.view.IExperimentView;
 
@@ -51,6 +50,10 @@ public class Configurator extends Table {
   public void refresh() {
     registerModelConfigs();
   }
+  
+  public List<IModelConfig<?>> getModelConfigs() {
+    return experimentModel.getAllConfigs();
+  }
 
   @SuppressWarnings("rawtypes")
   protected void registerModelConfigs() {
@@ -70,7 +73,7 @@ public class Configurator extends Table {
     add(title).colspan(2).center();
     row();
     // register the back button
-    TextButton backButton = new TextButton("Back to Levels", skin);
+    TextButton backButton = new TextButton("Back", skin);
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
         ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -178,5 +181,9 @@ public class Configurator extends Table {
     this.invalidate();
     this.validate();
     super.draw(batch, parentAlpha);
+  }
+
+  public String getExperimentName() {
+    return experimentName;
   }
 }

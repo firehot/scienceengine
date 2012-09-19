@@ -98,8 +98,9 @@ public class LevelEditor extends Stage {
     Table layout = new Table(screen.getSkin());
     layout.setFillParent(true);
     layout.defaults().fill();
-    Table title = new Table(screen.getSkin());
-    title.add(levelManager.getName()).pad(10);
+    Table titleTable = new Table(screen.getSkin());
+    titleTable.defaults().fill();
+    titleTable.add(levelManager.getName()).pad(10);
     SelectBox level = new SelectBox(screen.getSkin());
     level.setItems(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
     level.setSelection(levelManager.getLevel() - 1);
@@ -110,11 +111,11 @@ public class LevelEditor extends Stage {
         levelManager.load();
       }
     });
-    title.add("Level").pad(5);
-    title.add(level);
-    title.row();
+    titleTable.add("Level").pad(5);
+    titleTable.add(level);
+    titleTable.row();
     final TextField description = new TextField(levelManager.getDescription(), screen.getSkin());
-    title.add(description).colspan(3).fill();
+    titleTable.add(description).colspan(3).fill();
     description.setTextFieldListener(new TextFieldListener() {
       public void keyTyped(TextField textField, char key) {
         levelManager.setDescription(description.getText());
@@ -128,7 +129,7 @@ public class LevelEditor extends Stage {
     
     Table menu = createMenu(levelManager, screen.getSkin());
 
-    layout.add(title).colspan(3);
+    layout.add(titleTable).colspan(3);
     layout.row();
     layout.add(componentTable).top().pad(10);
     layout.add(configTable).top().pad(10);
@@ -186,7 +187,7 @@ public class LevelEditor extends Stage {
     componentTable.add("Components"); 
     componentTable.row();
     for (final Actor actor: stage.getActors()) {
-      if (actor.name == null) continue;
+      if (actor.name == null || actor == configurator) continue;
       final CheckBox componentCheckbox = new CheckBox(actor.name, skin);
       componentTable.add(componentCheckbox).left();
       componentCheckbox.setChecked(actor.visible);

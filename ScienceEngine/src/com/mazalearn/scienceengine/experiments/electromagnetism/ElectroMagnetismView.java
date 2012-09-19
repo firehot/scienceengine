@@ -16,6 +16,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectroMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
 import com.mazalearn.scienceengine.services.SoundManager;
@@ -41,6 +42,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     this.addActor(coilsBack);
     for (final ScienceBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body.getComponentType());
+      if (textureRegion == null) continue;
       switch (body.getComponentType()) {
       case BarMagnet:       
         barMagnetView = new BarMagnetView(textureRegion, body, this, emModel);
@@ -64,6 +66,9 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       case CurrentWire:
         this.addActor(new CurrentWireView(body));
         break;
+      case ElectroMagnet:
+        this.addActor(new ElectroMagnetView(textureRegion, body, this, emModel));
+        break;
       default:
         this.addActor(new Box2DActor(body, textureRegion));
         break;
@@ -75,6 +80,9 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   private TextureRegion getTextureRegionForBody(ComponentType componentType) {
     Texture texture;
     switch(componentType) {
+    case ElectroMagnet:
+      texture = new Texture("images/electromagnet.png");
+      break;
     case BarMagnet:
       texture = new Texture("images/barmagnet-pivoted.png");
       break;
@@ -89,6 +97,9 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       break;
     case FieldMeter:
       texture = new Texture("images/arrow.png");
+      break;
+    case CurrentWire:
+      texture = new Texture("images/currentwire-up.png");
       break;
     default:
       return null;

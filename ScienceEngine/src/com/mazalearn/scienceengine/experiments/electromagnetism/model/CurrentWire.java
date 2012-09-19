@@ -72,13 +72,13 @@ public class CurrentWire extends ScienceBody implements IProducer {
   }
 
   public void initializeConfigs() {
-    configs.add(new AbstractModelConfig<Float>("Current", 
+    configs.add(new AbstractModelConfig<Float>(getName() + " Current", 
         "Current in Wire", 0, 10) {
       public Float getValue() { return getCurrentMagnitude(); }
       public void setValue(Float value) { setCurrentMagnitude(value); }
       public boolean isPossible() { return isActive(); }
     });
-    configs.add(new AbstractModelConfig<String>("Flip Current Direction", 
+    configs.add(new AbstractModelConfig<String>(getName() + " Flip Direction", 
         "Current Direction in Wire") {
       public void doCommand() { flipCurrentDirection(); }
       public boolean isPossible() { return isActive(); }

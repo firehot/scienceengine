@@ -10,7 +10,9 @@ import java.util.StringTokenizer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.utils.Dimension;
 
 /**
@@ -97,10 +99,18 @@ public class BarMagnet extends AbstractMagnet {
 
   public BarMagnet(String name, EMField emField, float x, float y, float angle) {
     super(ComponentType.BarMagnet, name, emField, x, y, angle);
+    
+    this.setSize(32, 8);
+    FixtureDef fixtureDef = new FixtureDef();
     PolygonShape rectangleShape = new PolygonShape();
-    rectangleShape.setAsBox(getWidth(), getHeight());
-    this.createFixture(rectangleShape, 0.01f);
+    rectangleShape.setAsBox(getWidth()/2, getHeight()/2);
+    fixtureDef.density = 1;
+    fixtureDef.shape = rectangleShape;
+    fixtureDef.filter.categoryBits = 0x0001;
+    fixtureDef.filter.maskBits = 0x0000;
+    this.createFixture(fixtureDef);
     this.setAngularDamping(0.1f);
+    initializeConfigs();
 
     internalGrid = new Grid(BX_INTERNAL_RESOURCE_NAME,
         BY_INTERNAL_RESOURCE_NAME, INTERNAL_GRID_SIZE, INTERNAL_GRID_SPACING);
@@ -110,6 +120,29 @@ public class BarMagnet extends AbstractMagnet {
     externalFarGrid = new Grid(BX_EXTERNAL_FAR_RESOURCE_NAME,
         BY_EXTERNAL_FAR_RESOURCE_NAME, EXTERNAL_FAR_GRID_SIZE,
         EXTERNAL_FAR_GRID_SPACING);
+  }
+
+  public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<Float>(getName() + " Strength", 
+        "Strength of magnet", 0f, 10000f) {
+      public Float getValue() { return getStrength(); }
+      public void setValue(Float value) { setStrength(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+    configs.add(new AbstractModelConfig<String>(getName() + " Flip Polarity", 
+        "Direction of North Pole") {
+      public void doCommand() { flipPolarity(); }
+      public boolean isPossible() { return isActive(); }
+    });
+  }
+
+  /**
+   * Flips the magnet's polarity by rotating it 180 degrees.
+   */
+  public void flipPolarity() {
+    setPositionAndAngle(getPosition().x, getPosition().y, 
+        (float) ((getAngle() + Math.PI) % (2 * Math.PI)));
+    getEMField().notifyFieldChange();
   }
 
   /**

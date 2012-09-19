@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField.IConsumer;
 
 /**
  * Models a free north pole which records a trace as it follows the field.
@@ -17,7 +18,7 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  * 
  * @author sridhar
  */
-public class FieldMeter extends ScienceBody {
+public class FieldMeter extends ScienceBody implements IConsumer {
 
   private static final float TOLERANCE = 0.3f;
   // Field that the free north pole is interacting with.
@@ -44,6 +45,7 @@ public class FieldMeter extends ScienceBody {
     super(ComponentType.FieldMeter, name, x, y, angle);
     getBody().setType(BodyType.DynamicBody);
     this.emField = emField;
+    emField.registerConsumer(this);
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(0.1f);
@@ -85,5 +87,15 @@ public class FieldMeter extends ScienceBody {
 
   public List<FieldSample> getFieldSamples() {
     return fieldSamples;
+  }
+
+  @Override
+  public void setBField(Vector2 bField) {
+    fieldVector.set(bField);
+  }
+
+  @Override
+  public void notifyFieldChange() {
+    fieldSamples.clear();
   }
 }

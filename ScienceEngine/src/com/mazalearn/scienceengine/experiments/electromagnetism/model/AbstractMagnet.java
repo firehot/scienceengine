@@ -4,10 +4,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 
 /**
  * AbstractMagnet is the abstract base class for all magnets.
@@ -19,6 +16,7 @@ public abstract class AbstractMagnet extends ScienceBody
 
   private float width, height;
   private float strength;
+  private EMField emField;
 
   /**
    * Sole constructor
@@ -27,37 +25,12 @@ public abstract class AbstractMagnet extends ScienceBody
   public AbstractMagnet(ComponentType componentType, String name, EMField emField, float x, float y, float angle) {
     super(componentType, name, x, y, angle);
     emField.registerProducer(this);
-    
-    this.width = 32;
-    this.height = 8;
-    FixtureDef fixtureDef = new FixtureDef();
-    PolygonShape rectangleShape = new PolygonShape();
-    rectangleShape.setAsBox(this.width/2, this.height/2);
-    fixtureDef.density = 1;
-    fixtureDef.shape = rectangleShape;
-    fixtureDef.filter.categoryBits = 0x0001;
-    fixtureDef.filter.maskBits = 0x0001;
-    this.createFixture(fixtureDef);
-
     this.strength = 1.0f;
-    initializeConfigs();
+    this.emField = emField;
   }
   
-  public void initializeConfigs() {
-    configs.add(new AbstractModelConfig<Float>(getName() + "Strength", 
-        "Strength of magnet", 0f, 10000f) {
-      public Float getValue() { return getStrength(); }
-      public void setValue(Float value) { setStrength(value); }
-      public boolean isPossible() { return isActive(); }
-    });
-  }
-
-  /**
-   * Flips the magnet's polarity by rotating it 180 degrees.
-   */
-  public void flipPolarity() {
-    setPositionAndAngle(getPosition().x, getPosition().y, 
-        (float) ((getAngle() + Math.PI) % (2 * Math.PI)));
+  protected EMField getEMField() {
+    return emField;
   }
 
   /**
@@ -70,6 +43,7 @@ public abstract class AbstractMagnet extends ScienceBody
    */
   public void setStrength(float strength) {
     this.strength = strength;
+    getEMField().notifyFieldChange();
   }
 
   /**
@@ -96,7 +70,11 @@ public abstract class AbstractMagnet extends ScienceBody
      * adjusting for position and orientation.
      */
     Vector2 localPoint = this.getLocalPoint(p);
-    localPoint.sub(width/2, height/2);
+    if (getAngle() == 0) {
+      localPoint.sub(width/2, height/2);
+    } else {
+      localPoint.add(width/2, height/2);
+    }
     localPoint.mul(5.0f); // fudge factor to keep at 250,50 scale
     // get strength in magnet's local coordinate frame
     getBFieldRelative(localPoint, outputVector);

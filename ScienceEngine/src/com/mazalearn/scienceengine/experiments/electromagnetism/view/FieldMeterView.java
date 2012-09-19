@@ -31,7 +31,7 @@ public class FieldMeterView extends Box2DActor {
     for (int i = fieldSamples.size() - 1; i >= 0; i--) {
       FieldSample fieldSample = fieldSamples.get(i);
       // Magnitude is scaled visually as color intensity
-      float magnitude = fieldSample.magnitude > 2f ? 2 * radius : fieldSample.magnitude * 2;
+      float magnitude = 2 * (fieldSample.magnitude > 2f ? 1f : fieldSample.magnitude);
       // location of field meter center is the sample point
       pos.set(fieldSample.x, fieldSample.y);
       pos.mul(PIXELS_PER_M);

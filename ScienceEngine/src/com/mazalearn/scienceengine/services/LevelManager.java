@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.services;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -24,24 +23,19 @@ import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.utils.ScreenUtils;
 
 public class LevelManager {
-  private List<IModelConfig<?>> modelConfigs;
   private Stage stage;
   private FileHandle file;
-  private String experimentName;
   private int level = 1;
   private Configurator configurator;
   private String description;
 
-  public LevelManager(String experimentName, Stage stage, 
-      List<IModelConfig<?>> modelConfigs, Configurator configurator) {
-    this.experimentName = experimentName;
-    this.modelConfigs = modelConfigs;
+  public LevelManager(Stage stage, Configurator configurator) {
     this.stage = stage;
     this.configurator = configurator;
   }
 
   public String getName() {
-    return experimentName;
+    return configurator.getExperimentName();
   }
 
   public int getLevel() {
@@ -50,7 +44,7 @@ public class LevelManager {
   
   public void setLevel(int level) {
     this.level = level;
-    String fileName = getFileName(experimentName, ".json", level);
+    String fileName = getFileName(configurator.getExperimentName(), ".json", level);
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
     this.file = Gdx.files.internal(fileName);
     if (this.file == null) {
@@ -107,17 +101,19 @@ public class LevelManager {
   }
 
   private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
-    jsonWriter.set("name", experimentName);
+    jsonWriter.set("name", configurator.getExperimentName());
     jsonWriter.set("level", level);
     jsonWriter.set("description", description);
   }
 
   private void writeConfigs(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("configs");
-    for (final IModelConfig<?> config : modelConfigs) {
-      jsonWriter.object().set("name", config.getName())
+    for (final IModelConfig<?> config : configurator.getModelConfigs()) {
+      jsonWriter.object()
+          .set("name", config.getName())
           .set("permitted", config.isPermitted())
-          .set("value", config.getValue()).pop();
+          .set("value", config.getValue())
+          .pop();
     }
     jsonWriter.pop();
   }
@@ -125,10 +121,17 @@ public class LevelManager {
   private void writeComponents(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("components");
     for (Actor a : stage.getActors()) {
-      jsonWriter.object().set("name", a.name).set("x", a.x).set("y", a.y)
-          .set("originX", a.originX).set("originY", a.originY)
-          .set("width", a.width).set("height", a.height)
-          .set("visible", a.visible).set("rotation", a.rotation).pop();
+      jsonWriter.object()
+          .set("name", a.name)
+          .set("x", a.x)
+          .set("y", a.y)
+          .set("originX", a.originX)
+          .set("originY", a.originY)
+          .set("width", a.width)
+          .set("height", a.height)
+          .set("visible", a.visible)
+          .set("rotation", a.rotation)
+          .pop();
     }
     jsonWriter.pop();
   }
@@ -145,10 +148,8 @@ public class LevelManager {
   }
 
   private void readLevelInfo(OrderedMap<String, ?> info) {
-    experimentName = (String) nvl(info.get("name"), experimentName);
-    level = Math.round((Float) nvl(info.get("level"), level + 0f));
     description = (String) nvl(info.get("description"), 
-        experimentName + " : Level " + level);
+        configurator.getExperimentName() + " : Level " + level);
   }
 
   private void readConfigs(Array<?> configs) {
@@ -197,7 +198,7 @@ public class LevelManager {
 
   private IModelConfig<?> findConfig(String name) {
     if (name == null) return null;
-    for (IModelConfig<?> config : modelConfigs) {
+    for (IModelConfig<?> config : configurator.getModelConfigs()) {
       if (config.getName().equals(name)) return config;
     }
     return null;
@@ -236,7 +237,8 @@ public class LevelManager {
    * Take screenshot, convert to a thumbnail and save to the level file as png.
    */
   private void saveLevelThumbnail() {
-    FileHandle screenFile = Gdx.files.external(getFileName(experimentName, ".png", level));
+    String fileName = getFileName(configurator.getExperimentName(), ".png", level);
+    FileHandle screenFile = Gdx.files.external(fileName);
     Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
         Gdx.graphics.getHeight(), true);
     Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, 5);

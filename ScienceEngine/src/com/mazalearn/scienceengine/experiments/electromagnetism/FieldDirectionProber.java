@@ -14,6 +14,8 @@ import com.mazalearn.scienceengine.view.IDoneCallback;
 // Generate A at "random" point around magnet
 // What is direction of field at A?
 // doubts on shielding - not yet addressed
+// TODO: Generate probe point within a rectangle and get field value from emField.
+// Then prober becomes generalized.
 class FieldDirectionProber extends AbstractProber {
   protected static final float TOLERANCE = 0.3f;
   private final Image image;

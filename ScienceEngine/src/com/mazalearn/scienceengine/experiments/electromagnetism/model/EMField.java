@@ -19,6 +19,7 @@ public class EMField {
     Vector2 getPosition();
     void setBField(Vector2 bField);
     boolean isActive();
+    void notifyFieldChange();
   }
   public interface IProducer {
     Vector2 getBField(Vector2 location, Vector2 bField /* output */);
@@ -57,14 +58,23 @@ public class EMField {
     }
   }
 
-  public void getBField(Vector2 location, Vector2 bField) {
-    Vector2 totalBField = new Vector2(0, 0);
-    bField.set(0, 0);
+  public void getBField(Vector2 location, Vector2 totalBField) {
+    Vector2 bField = new Vector2(0, 0);
+    totalBField.set(0, 0);
     for (IProducer iProducer: emProducers) {
       if (!iProducer.isActive()) continue;
       iProducer.getBField(location, bField);
       totalBField.x += bField.x;
       totalBField.y += bField.y;
+    }
+  }
+
+  /**
+   * Notify all IConsumer's of field change.
+   */
+  public void notifyFieldChange() {
+    for (IConsumer iConsumer: emConsumers) {
+      iConsumer.notifyFieldChange();
     }
   }
 }

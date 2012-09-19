@@ -37,11 +37,6 @@ public class Voltmeter extends ScienceBody {
     needleAngle = ZERO_NEEDLE_ANGLE;
   }
 
-  @Override
-  public String getName() {
-    return "VoltMeter";
-  }
-
   /**
    * Sets the needle's deflection angle.
    * 
