@@ -71,6 +71,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     }
   }
   
+  // TODO: Use texture Atlas for this
   private TextureRegion getTextureRegionForBody(ComponentType componentType) {
     Texture texture;
     switch(componentType) {

@@ -52,7 +52,7 @@ public class HighScoresScreen extends AbstractScreen {
       @Override
       public void click(Actor actor, float x, float y) {
         scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        scienceEngine.setScreen(new MenuScreen(scienceEngine));
+        scienceEngine.setScreen(new StartScreen(scienceEngine));
       }
     });
     table.row();

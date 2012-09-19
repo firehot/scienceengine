@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
 /**
  * The base class for all scienceEngine screens.
@@ -32,15 +34,27 @@ public abstract class AbstractScreen implements Screen {
   private Table table;
   private Color backgroundColor = Color.BLACK;
 
-  public AbstractScreen(ScienceEngine game, Stage stage) {
-    this.scienceEngine = game;
+  public AbstractScreen(ScienceEngine scienceEngine, Stage stage) {
+    this.scienceEngine = scienceEngine;
   }
   
   public AbstractScreen(ScienceEngine game) {
     this.scienceEngine = game;
     int width = (isExperimentScreen() ? VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
     int height = (isExperimentScreen() ? VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
-    this.stage = new Stage(width, height, false);
+    this.stage = new Stage(width, height, false) {
+      @Override
+      public boolean keyDown(int keycode) {
+        if (keycode == Keys.ALT_LEFT) {
+          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+            ScienceEngine.DEV_MODE = DevMode.DESIGN;
+          } else if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
+            ScienceEngine.DEV_MODE = DevMode.DEBUG;
+          }
+        }
+        return super.keyDown(keycode);
+      }      
+    };
   }
 
   public void setStage(Stage stage) {

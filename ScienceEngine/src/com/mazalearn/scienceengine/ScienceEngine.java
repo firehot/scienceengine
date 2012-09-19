@@ -10,7 +10,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.screens.SplashScreen;
-import com.mazalearn.scienceengine.screens.StartScreen;
+import com.mazalearn.scienceengine.screens.ExperimentMenuScreen;
 import com.mazalearn.scienceengine.services.MusicManager;
 import com.mazalearn.scienceengine.services.PreferencesManager;
 import com.mazalearn.scienceengine.services.ProfileManager;
@@ -116,7 +116,7 @@ public class ScienceEngine extends Game {
     // show the splash screen when the scienceEngine is resized for the first time;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(DEV_MODE != DevMode.PRODUCTION ? new StartScreen(this) : new SplashScreen(this));
+      setScreen(DEV_MODE != DevMode.PRODUCTION ? new ExperimentMenuScreen(this) : new SplashScreen(this));
     }
   }
 

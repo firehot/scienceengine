@@ -16,6 +16,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.controller.IExperimentController;
 import com.mazalearn.scienceengine.services.LevelManager;
 import com.mazalearn.scienceengine.services.Profile;
+import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.view.IExperimentView;
 
 /**
@@ -23,6 +24,7 @@ import com.mazalearn.scienceengine.view.IExperimentView;
  */
 public class ExperimentHomeScreen extends AbstractScreen {
 
+  private static final int NUM_COLUMNS = 3;
   IExperimentController experimentController;
   private Image[] levelThumbs;
   private LevelManager levelManager;
@@ -41,7 +43,9 @@ public class ExperimentHomeScreen extends AbstractScreen {
     super.show();
     
     Table table = super.getTable();
-    table.add(experimentController.getName()).colspan(3);
+    
+    table.defaults().fill().center();
+    table.add(experimentController.getName()).colspan(NUM_COLUMNS);
     table.row();
     final IExperimentView experimentView = experimentController.getView();
     Profile profile = scienceEngine.getProfileManager().retrieveProfile();
@@ -51,7 +55,8 @@ public class ExperimentHomeScreen extends AbstractScreen {
     levelThumbs = new Image[10];
     for (int i = 1; i <= 10; i++) {
       final int iLevel = i;
-      Image levelThumb = new Image(levelManager.getLevelThumbnail(i));
+      Image levelThumb = 
+          new Image(LevelManager.getThumbnail(experimentController.getName(), i));
       levelThumb.setClickListener(new ClickListener() {
         @Override
         public void click(Actor actor, float x, float y) {
@@ -63,15 +68,27 @@ public class ExperimentHomeScreen extends AbstractScreen {
       });
       levelThumbs[i - 1] = levelThumb;
       Table levelTable = table.newTable();
-      levelTable.add(levelManager.getDescription());
+      // TODO: add description of each level
+      levelTable.add("");
       levelTable.row();
       levelTable.add(levelThumb);
       table.add(levelTable).pad(5);
-      if (i % 3 == 0) {
+      if (i % NUM_COLUMNS == 0) {
         table.row();
       }
     }    
     table.row();
+    
+    // register the back button
+    TextButton backButton = new TextButton("Back to Experiments", scienceEngine.getSkin());
+    backButton.setClickListener(new ClickListener() {
+      public void click(Actor actor, float x, float y) {
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
+      }
+    });
+    table.row();
+    table.add(backButton).fill().colspan(NUM_COLUMNS);
   }
 
   public void render(float delta) {

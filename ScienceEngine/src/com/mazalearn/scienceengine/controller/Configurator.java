@@ -13,28 +13,30 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.model.IExperimentModel;
-import com.mazalearn.scienceengine.screens.StartScreen;
+import com.mazalearn.scienceengine.screens.ExperimentHomeScreen;
+import com.mazalearn.scienceengine.screens.ExperimentMenuScreen;
 import com.mazalearn.scienceengine.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.view.IExperimentView;
 
 public class Configurator extends Table {
-  final IExperimentModel experimentModel;
-  final IExperimentView experimentView;
-  final Skin skin;
-  List<Config> configs;
+  private final IExperimentController experimentController;
+  private final IExperimentModel experimentModel;
+  private final IExperimentView experimentView;
+  private final Skin skin;
+  private List<Config> configs;
   private String experimentName;
   private IViewConfig pauseResumeConfig;
   private IViewConfig challengeConfig;
   private Table modelConfigTable;
   private Label title;
   
-  public Configurator(Skin skin, final IExperimentModel experimentModel, 
-      final IExperimentView experimentView, final String experimentName) {
-    super(skin, null, experimentName);
+  public Configurator(Skin skin, IExperimentController experimentController) {
+    super(skin, null, experimentController.getName());
     this.skin = skin;
-    this.experimentModel = experimentModel;
-    this.experimentView = experimentView;
-    this.experimentName = experimentName;
+    this.experimentController = experimentController;
+    this.experimentModel = experimentController.getModel();
+    this.experimentView = experimentController.getView();
+    this.experimentName = experimentController.getName();
     this.defaults().fill();
     registerStandardButtons(skin, experimentModel, experimentView);
     this.modelConfigTable = new Table(skin);
@@ -68,11 +70,12 @@ public class Configurator extends Table {
     add(title).colspan(2).center();
     row();
     // register the back button
-    TextButton backButton = new TextButton("Back to Start", skin);
+    TextButton backButton = new TextButton("Back to Levels", skin);
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
         ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
-        ScienceEngine.SCIENCE_ENGINE.setScreen(new StartScreen(ScienceEngine.SCIENCE_ENGINE));
+        ScienceEngine.SCIENCE_ENGINE.setScreen(
+            new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentController));
       }
     });
     this.add(backButton).height(30).colspan(2);

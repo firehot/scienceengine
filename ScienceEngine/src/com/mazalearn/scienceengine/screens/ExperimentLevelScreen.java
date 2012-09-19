@@ -19,7 +19,7 @@ public class ExperimentLevelScreen extends AbstractScreen {
     IExperimentView experimentView = experimentController.getView();
     levelManager.setLevel(level);
     levelManager.load();
-    if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+    if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       LevelEditor levelEditor = new LevelEditor(levelManager,
           experimentController.getConfigurator(),
           (Stage) experimentView, experimentController.getModel(), this);

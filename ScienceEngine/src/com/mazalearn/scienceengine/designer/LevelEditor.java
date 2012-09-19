@@ -9,7 +9,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -125,7 +124,7 @@ public class LevelEditor extends Stage {
     Table configTable = createConfigTable(experimentModel, screen.getSkin());
     Table componentTable = createComponentTable(stage, screen.getSkin(), configTable);
     Image levelScreen = 
-        new Image(levelManager.getLevelThumbnail(levelManager.getLevel()));
+        new Image(LevelManager.getThumbnail(levelManager.getName(), levelManager.getLevel()));
     
     Table menu = createMenu(levelManager, screen.getSkin());
 

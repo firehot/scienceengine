@@ -49,7 +49,7 @@ public class SplashScreen extends AbstractScreen {
           @Override
           public void act(float delta) {
             // the last action will move to the next screen
-            scienceEngine.setScreen(new MenuScreen(scienceEngine));
+            scienceEngine.setScreen(new StartScreen(scienceEngine));
           }
 
           @Override

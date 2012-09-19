@@ -50,7 +50,7 @@ public class LevelManager {
   
   public void setLevel(int level) {
     this.level = level;
-    String fileName = getFileName(".json", level);
+    String fileName = getFileName(experimentName, ".json", level);
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
     this.file = Gdx.files.internal(fileName);
     if (this.file == null) {
@@ -228,7 +228,7 @@ public class LevelManager {
     }
   }
 
-  private String getFileName(String extension, int level) {
+  private static String getFileName(String experimentName, String extension, int level) {
     return "data/" + experimentName + "/" + level + extension;
   }
 
@@ -236,7 +236,7 @@ public class LevelManager {
    * Take screenshot, convert to a thumbnail and save to the level file as png.
    */
   private void saveLevelThumbnail() {
-    FileHandle screenFile = Gdx.files.external(getFileName(".png", level));
+    FileHandle screenFile = Gdx.files.external(getFileName(experimentName, ".png", level));
     Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
         Gdx.graphics.getHeight(), true);
     Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, 5);
@@ -245,9 +245,9 @@ public class LevelManager {
     thumbnail.dispose();
   }
   
-  public Texture getLevelThumbnail(int level) {
+  public static Texture getThumbnail(String experimentName, int level) {
     // TODO: internal external confusion for files - different paths on desktop
-    FileHandle screenFile = Gdx.files.external(getFileName(".png", level));
+    FileHandle screenFile = Gdx.files.external(getFileName(experimentName, ".png", level));
     Pixmap pixmap;
     try {
       pixmap = new Pixmap(screenFile);
