@@ -23,8 +23,8 @@ public class Box2DActor extends Actor {
   protected static final int PIXELS_PER_M = 8;
   private ScienceBody body;
   private TextureRegion textureRegion;
-  private float radius;
-  private float theta;
+  protected float radius;
+  protected float theta;
   private Vector2 newPos = new Vector2();
 
   /**

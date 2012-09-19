@@ -16,7 +16,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldSamplerView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
 import com.mazalearn.scienceengine.services.SoundManager;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
@@ -58,7 +58,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new CompassView(textureRegion, body));
         break;
       case FieldMeter:
-        this.addActor(new FieldSamplerView(textureRegion, body));
+        this.addActor(new FieldMeterView(textureRegion, body));
         fieldMeter = (FieldMeter) body;
         break;
       case CurrentWire:
@@ -101,14 +101,14 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     super.touchDown(x, y,  pointer, button);
     if (super.getTouchFocus(pointer) != null) return true;
     // Touch at stage level - not on any actor - Assume field touch
-    if (emModel.isInFieldMode()) isFieldPointTouched = true;
+    if (fieldMeter.isActive()) isFieldPointTouched = true;
     return true;
   }
 
   @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     super.touchUp(x, y, pointer, button);
-    if (emModel.isInFieldMode() && isFieldPointTouched) {
+    if (fieldMeter.isActive() && isFieldPointTouched) {
       isFieldPointTouched = false;
       // Move field sampler here.
       // view coords

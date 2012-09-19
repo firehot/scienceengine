@@ -27,7 +27,6 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   private EMField emField;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
   public enum Mode {Fixed, Free, Rotate};
-  private boolean inFieldMode = true;
   
   private Mode mode = Mode.Fixed;
   private Joint joint;
@@ -55,13 +54,6 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
       public boolean isPossible() { return barMagnet.isActive(); }
-    });
-    
-    modelConfigs.add(new AbstractModelConfig<Boolean>("Field Meter",
-        "Whether in field mode", false) {
-      public Boolean getValue() { return isInFieldMode(); }
-      public void setValue(Boolean value) { setInFieldMode(value); }
-      public boolean isPossible() { return true; }
     });
   }
 
@@ -108,13 +100,5 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   public void setMode(String mode) {
     this.mode = Mode.valueOf(mode);
     reset();
-  }
- 
-  public void setInFieldMode(boolean inFieldMode) {
-    this.inFieldMode = inFieldMode;
-  }
-  
-  public boolean isInFieldMode() {
-    return this.inFieldMode;
   }
 }
