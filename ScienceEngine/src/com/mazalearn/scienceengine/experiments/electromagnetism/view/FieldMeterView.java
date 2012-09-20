@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,9 +18,7 @@ public class FieldMeterView extends Box2DActor {
   public FieldMeterView(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
-    this.originX = width/2;
-    this.originY = height/2;
-    this.radius = (float) Math.sqrt(originX * originX + originY * originY);
+    this.setOrigin(width/2, height/2);
   }
 
   @Override

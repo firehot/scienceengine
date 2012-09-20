@@ -60,9 +60,8 @@ class FieldDirectionProber extends AbstractProber {
         barMagnetView.y + barMagnetView.height/2);
   }
 
-  private void getBFieldDirection(Vector2 pos) {
-    pos1.set(pos); 
-    barMagnetView.getWorldPointFromView(pos1, 0);
+  private void getBFieldDirection(Vector2 viewPos) {
+    barMagnetView.getBox2DPositionFromViewPosition(pos1, viewPos, 0);
     BarMagnet b = (BarMagnet) barMagnetView.getBody();
     b.getBField(pos1, bField /* output */);
     bField.nor();

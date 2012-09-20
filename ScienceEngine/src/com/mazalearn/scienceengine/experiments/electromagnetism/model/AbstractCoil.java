@@ -38,7 +38,7 @@ public abstract class AbstractCoil extends ScienceBody {
    * wireWidth=16, loopSpacing=25
    */
   public AbstractCoil(ComponentType componentType, String name, float x, float y, float angle) {
-    this(componentType, name, x, y, angle, 1, 20, 16, 25);
+    this(componentType, name, x, y, angle, 1, 8, 16, 25);
   }
 
   /**

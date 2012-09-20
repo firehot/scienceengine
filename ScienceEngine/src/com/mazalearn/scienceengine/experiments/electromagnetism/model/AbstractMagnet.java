@@ -70,11 +70,6 @@ public abstract class AbstractMagnet extends ScienceBody
      * adjusting for position and orientation.
      */
     Vector2 localPoint = this.getLocalPoint(p);
-    if (getAngle() == 0) {
-      localPoint.sub(width/2, height/2);
-    } else {
-      localPoint.add(width/2, height/2);
-    }
     localPoint.mul(5.0f); // fudge factor to keep at 250,50 scale
     // get strength in magnet's local coordinate frame
     getBFieldRelative(localPoint, outputVector);
@@ -85,10 +80,8 @@ public abstract class AbstractMagnet extends ScienceBody
     // Clamp magnitude to magnet strength.
     // TODO: why do we need to do this?
     float magnetStrength = getStrength();
-    float magnitude = outputVector.len();
-    if (magnitude > magnetStrength) {
-      outputVector.x = (float) (outputVector.x * magnetStrength / magnitude);
-      outputVector.y = (float) (outputVector.y * magnetStrength / magnitude);
+    if (outputVector.len() > magnetStrength) {
+      outputVector.nor().mul(magnetStrength);
     }
 
     return outputVector;

@@ -74,7 +74,9 @@ public class EMField {
    */
   public void notifyFieldChange() {
     for (IConsumer iConsumer: emConsumers) {
-      iConsumer.notifyFieldChange();
+      if (iConsumer.isActive()) {
+        iConsumer.notifyFieldChange();
+      }
     }
   }
 }

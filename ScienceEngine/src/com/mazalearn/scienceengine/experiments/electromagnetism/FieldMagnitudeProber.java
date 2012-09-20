@@ -94,9 +94,8 @@ class FieldMagnitudeProber extends AbstractProber {
     return Math.abs(len1 - len2) < TOLERANCE;
   }
 
-  private float getBFieldMagnitude(Vector2 pos1) {
-    pos.set(pos1); 
-    barMagnetView.getWorldPointFromView(pos, 0);
+  private float getBFieldMagnitude(Vector2 viewPos) {
+    barMagnetView.getBox2DPositionFromViewPosition(pos, viewPos, 0);
     BarMagnet b = (BarMagnet) barMagnetView.getBody();
     b.getBField(pos, bField /* output */);
     return bField.len();

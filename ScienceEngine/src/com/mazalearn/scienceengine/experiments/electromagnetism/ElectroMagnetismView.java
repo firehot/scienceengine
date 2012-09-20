@@ -110,7 +110,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
     super.touchDown(x, y,  pointer, button);
-    if (super.getTouchFocus(pointer) != null) return true;
+    //if (super.getTouchFocus(pointer) != null) return true;
     // Touch at stage level - not on any actor - Assume field touch
     if (fieldMeter.isActive()) isFieldPointTouched = true;
     return true;

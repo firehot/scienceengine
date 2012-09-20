@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
@@ -29,8 +30,7 @@ public class BarMagnetView extends Box2DActor {
     this.emView = experimentView;
     this.emModel = emModel;
     this.font = new BitmapFont();
-    this.originX = width/2;
-    this.originY = height/2;
+    this.setOrigin(width/2, height/2);
   }
 
   public boolean touchDown(float x, float y, int pointer) {
@@ -68,8 +68,8 @@ public class BarMagnetView extends Box2DActor {
     lastTouch.mul(-10000);
     // view coords of current touch
     newPos.set(currentTouch.x, currentTouch.y);
-    // world point of current touch
-    getWorldPointFromView(newPos, rotation);
+    // box2d point of current touch
+    getBox2DPositionFromViewPosition(newPos, newPos, rotation);
     // Use center as origin - dont understand why this step
     newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
     barMagnet.applyForce(lastTouch, newPos);
@@ -88,9 +88,9 @@ public class BarMagnetView extends Box2DActor {
     font.setColor(1f, 1f, 1f, parentAlpha);
     int angularVelocity = Math.round(barMagnet.getAngularVelocity());
     String rpm = String.valueOf(angularVelocity);
-    newPos.set(barMagnet.getWorldCenter());
-    newPos.mul(AbstractExperimentView.PIXELS_PER_M);
+    newPos.set(barMagnet.getWorldCenter()).mul(PIXELS_PER_M);
+    // Create space for text - in screen coords and always left to right
     newPos.add(-10, 5);
-    font.draw(batch, rpm, newPos.x + originX, newPos.y + originY);
+    font.draw(batch, rpm, newPos.x, newPos.y);
   }
 }

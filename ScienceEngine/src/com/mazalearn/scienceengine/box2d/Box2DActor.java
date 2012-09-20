@@ -23,9 +23,9 @@ public class Box2DActor extends Actor {
   protected static final int PIXELS_PER_M = 8;
   private ScienceBody body;
   private TextureRegion textureRegion;
-  protected float radius;
-  protected float theta;
-  private Vector2 newPos = new Vector2();
+  private float radius = 0;
+  private float theta = 0;
+  private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
 
   /**
    * Constructor.
@@ -42,6 +42,16 @@ public class Box2DActor extends Actor {
     this.width = textureRegion.getRegionWidth();
     this.height = textureRegion.getRegionHeight();
     this.originX = this.originY = 0;
+  }
+  
+  /**
+   * Set the origin to be used for rotation
+   * @param originX
+   * @param originY
+   */
+  public void setOrigin(float originX, float originY) {
+    this.originX = originX;
+    this.originY = originY;
     this.theta = (float) Math.atan2(originY, originX) * MathUtils.radiansToDegrees;
     this.radius = (float) Math.sqrt(originX * originX + originY * originY);
   }
@@ -52,10 +62,11 @@ public class Box2DActor extends Actor {
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    newPos.set(body.getPosition().x, body.getPosition().y);
-    getViewPointFromWorld(newPos, body.getAngle());
+    getViewPositionFromBox2DPosition(viewPos);
+    this.x = viewPos.x;
+    this.y = viewPos.y;
     this.rotation = (body.getAngle() * MathUtils.radiansToDegrees) % 360;
-    batch.draw(textureRegion, newPos.x, newPos.y, originX, originY, width, height, 1, 1, rotation);
+    batch.draw(textureRegion, viewPos.x, viewPos.y, 0, 0, width, height, 1, 1, rotation);
   }
 
   @Override
@@ -68,26 +79,34 @@ public class Box2DActor extends Actor {
     return textureRegion;
   }
   
-  public Vector2 getViewPointFromWorld(Vector2 pos, float angle) {
-    float radius = this.radius / PIXELS_PER_M;
-    float theta = this.theta * MathUtils.degreesToRadians;
-    pos.x = (float) (pos.x - radius * Math.cos(angle + theta));
-    pos.y = (float) (pos.y - radius * Math.sin(angle + theta));
-    pos.mul(PIXELS_PER_M);
-    return pos;
+  /**
+   * @param viewPos (output) - position of view origin of body
+   * position of body in scene2d view is output
+   */
+  public void getViewPositionFromBox2DPosition(Vector2 viewPos) {
+    // screen position is at bottom left: (-originX, -originY) in local coords
+    box2DPos.set(-originX, -originY).mul(1f / PIXELS_PER_M);
+    viewPos.set(body.getWorldPoint(box2DPos));
+    viewPos.mul(PIXELS_PER_M);
   }
   
-  public Vector2 getWorldPointFromView(Vector2 pos, float rotation) {
-    pos.x = (float) (pos.x + radius * MathUtils.cos(rotation + theta));
-    pos.y = (float) (pos.y + radius * MathUtils.sin(rotation + theta));
-    pos.mul(1f / PIXELS_PER_M);
-    return pos;
+  /**
+   * Output box2d position of body if scene2d view position and rotation are as given
+   * @param box2DPos (output)
+   * @param viewPos - scene2d position of body
+   * @param rotation - rotation of body
+   */
+  public void getBox2DPositionFromViewPosition(Vector2 box2DPos, Vector2 viewPos, float rotation) {
+    box2DPos.x = (float) (viewPos.x + radius * MathUtils.cosDeg(rotation + theta));
+    box2DPos.y = (float) (viewPos.y + radius * MathUtils.sinDeg(rotation + theta));
+    box2DPos.mul(1f / PIXELS_PER_M);
   }
   
   public void setPositionFromViewCoords() {
     float angle = rotation * MathUtils.degreesToRadians;
-    newPos.set(x, y);
-    body.setPositionAndAngle(getWorldPointFromView(newPos, rotation), angle);
+    viewPos.set(x, y);
+    getBox2DPositionFromViewPosition(box2DPos, viewPos, rotation);
+    body.setPositionAndAngle(box2DPos, angle);
     body.setActive(visible);
     body.setInitial();
   }

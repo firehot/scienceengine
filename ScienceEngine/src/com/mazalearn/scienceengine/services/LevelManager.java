@@ -192,7 +192,9 @@ public class LevelManager {
     actor.visible = (Boolean) nvl(component.get("visible"), true);
     actor.rotation = (Float) nvl(component.get("rotation"), 0f);
     if (actor instanceof Box2DActor) {
-      ((Box2DActor) actor).setPositionFromViewCoords();
+      Box2DActor box2DActor = (Box2DActor) actor;
+      box2DActor.setPositionFromViewCoords();
+      box2DActor.setOrigin(actor.originX, actor.originY);
     }
   }
 

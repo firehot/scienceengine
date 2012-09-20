@@ -4,6 +4,9 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 
 /**
  * Electromagnet is the model of an electromagnet.
@@ -34,9 +37,32 @@ public class Electromagnet extends AbstractMagnet {
       AbstractCurrentSource currentSource, float x, float y, float angle) {
     super(ComponentType.ElectroMagnet, name, emField, x, y, angle);
     this.sourceCoil = sourceCoil;
-    this.setSize(16, 8);
+    this.setSize(16, 16);
     this.maxStrengthOutside = 0.0f;
     this.setCurrentSource(currentSource);
+    FixtureDef fixtureDef = new FixtureDef();
+    PolygonShape rectangleShape = new PolygonShape();
+    rectangleShape.setAsBox(getWidth()/2, getHeight()/2);
+    fixtureDef.density = 1;
+    fixtureDef.shape = rectangleShape;
+    fixtureDef.filter.categoryBits = 0x0000;
+    fixtureDef.filter.maskBits = 0x0000;
+    this.createFixture(fixtureDef);
+    initializeConfigs();
+  }
+
+  public void initializeConfigs() {
+ /*   configs.add(new AbstractModelConfig<Float>(getName() + " Strength", 
+        "Strength of magnet", 0f, 10000f) {
+      public Float getValue() { return getStrength(); }
+      public void setValue(Float value) { setStrength(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+    configs.add(new AbstractModelConfig<String>(getName() + " Flip Polarity", 
+        "Direction of North Pole") {
+      public void doCommand() { flipPolarity(); }
+      public boolean isPossible() { return isActive(); }
+    }); */
   }
 
   /**
@@ -50,8 +76,8 @@ public class Electromagnet extends AbstractMagnet {
      * The magnet size is a circle that has the same radius as the coil. Adding
      * half the wire width makes it look a little better.
      */
-    double diameter = (2 * this.sourceCoil.getRadius())
-        + (this.sourceCoil.getWireWidth() / 2);
+    double diameter = 2 * this.sourceCoil.getRadius();
+        //+ (this.sourceCoil.getWireWidth() / 2);
     super.setSize((float) diameter, (float) diameter);
     
     // Current amplitude is proportional to amplitude of the current source.
@@ -66,7 +92,7 @@ public class Electromagnet extends AbstractMagnet {
      * Set the strength. This is a bit of a "fudge". We set the strength of the
      * magnet to be proportional to its emf.
      */
-    float strength = Math.abs(amplitude) * 100f;
+    float strength = Math.abs(amplitude) * 10000f;
     setStrength(strength);
   }
 
@@ -86,11 +112,10 @@ public class Electromagnet extends AbstractMagnet {
    * @return true iff p is contained inside magnet's area
    */
   public boolean isInside(Vector2 p) {
-    // Test all the fixtures of the magnet to check for containment of p.
-    for (Fixture f: this.getFixtureList()) {
-      if (f.testPoint(p)) return true;
-    }
-    return false;
+    float x = p.x / 5;
+    float y = p.y / 5;
+    return x >= -getWidth()/2 && x <= getWidth()/2 &&
+        y >= -getHeight()/2 && y <= getHeight()/2;
   }
 
   // ----------------------------------------------------------------------------
