@@ -19,8 +19,6 @@ public class FieldMeterView extends Box2DActor {
   public FieldMeterView(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
-    this.originX = width/2;
-    this.originY = height/2;
   }
 
   @Override
@@ -29,17 +27,19 @@ public class FieldMeterView extends Box2DActor {
     // Reverse traversal - want to show the latest point first
     for (int i = fieldSamples.size() - 1; i >= 0; i--) {
       FieldSample fieldSample = fieldSamples.get(i);
-      // Magnitude is scaled visually as color intensity
+      // Magnitude is scaled visually as width and height of arrow
       float magnitude = 2 * (fieldSample.magnitude > 2f ? 1f : fieldSample.magnitude);
       // location of field meter center is the sample point
       pos.set(fieldSample.x, fieldSample.y);
       pos.mul(ScienceEngine.PIXELS_PER_M);
-      // find location of left bottom of arrow
-      pos.sub(magnitude * MathUtils.cos(fieldSample.angle), 
-          magnitude * MathUtils.sin(fieldSample.angle));
+      // find location of origin
+      float originX = magnitude * width / 2;
+      float originY = magnitude * height / 2;
+      // Bottom of arrow position
+      pos.sub(originX, originY);
       float rotation =  (fieldSample.angle * MathUtils.radiansToDegrees) % 360;
       batch.draw(getTextureRegion(), pos.x, pos.y, 
-          0, 0, width * magnitude, height * magnitude, 1, 1, rotation);
+          originX, originY, width * magnitude, height * magnitude, 1, 1, rotation);
     }
   }
 }

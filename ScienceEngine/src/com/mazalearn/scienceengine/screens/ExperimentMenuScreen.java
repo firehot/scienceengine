@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.controller.IExperimentController;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;

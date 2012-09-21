@@ -42,16 +42,21 @@ public class ScreenUtils {
   
     return screenShot;
   }
+  
+  public static int powerOf2Ceiling(float value) {
+    return 1 << (int) Math.ceil(Math.log(value) / Math.log(2));
+  }
 
   /**
-   * Scale down pixmap to create a thumbnail.
+   * Scale down pixmap to create a thumbnail with width and height powers of 2.
    * @param pixmap - pixmap to be scaled down
    * @param scale - amount to be scaled
    * @return scaled down thumbnail as a pixmap
    */
-  public static Pixmap createThumbnail(Pixmap pixmap, int scale) {
-    Pixmap thumbnail = new Pixmap(pixmap.getWidth() / scale, 
-        pixmap.getHeight() / scale, Format.RGBA8888);
+  public static Pixmap createThumbnail(Pixmap pixmap, float scale) {
+    // Thumbnail should create a power of 2 texture for android
+    Pixmap thumbnail = new Pixmap(powerOf2Ceiling(pixmap.getWidth() / scale), 
+        powerOf2Ceiling(pixmap.getHeight() / scale), Format.RGBA8888);
     thumbnail.drawPixmap(pixmap, 0, 0, pixmap.getWidth(), pixmap.getHeight(), 
         0, 0, thumbnail.getWidth(), thumbnail.getHeight());
     return thumbnail;

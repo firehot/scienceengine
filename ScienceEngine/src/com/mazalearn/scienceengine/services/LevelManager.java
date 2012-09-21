@@ -17,12 +17,14 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.utils.ScreenUtils;
 
 public class LevelManager {
+  private static final float THUMBNAIL_SCALE = 7.5f;
   private Stage stage;
   private FileHandle file;
   private int level = 1;
@@ -192,10 +194,7 @@ public class LevelManager {
     actor.visible = (Boolean) nvl(component.get("visible"), true);
     actor.rotation = (Float) nvl(component.get("rotation"), 0f);
     if (actor instanceof Box2DActor) {
-      Box2DActor box2DActor = (Box2DActor) actor;
-      box2DActor.setPositionFromViewCoords();
-      box2DActor.originX = actor.originX;
-      box2DActor.originY = actor.originY;
+      ((Box2DActor) actor).setPositionFromViewCoords();
     }
   }
 
@@ -244,7 +243,7 @@ public class LevelManager {
     FileHandle screenFile = Gdx.files.external(fileName);
     Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
         Gdx.graphics.getHeight(), true);
-    Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, 5);
+    Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, THUMBNAIL_SCALE);
     PixmapIO.writePNG(screenFile, thumbnail);
     screenShot.dispose();
     thumbnail.dispose();
@@ -252,12 +251,18 @@ public class LevelManager {
   
   public static Texture getThumbnail(String experimentName, int level) {
     // TODO: internal external confusion for files - different paths on desktop
-    FileHandle screenFile = Gdx.files.external(getFileName(experimentName, ".png", level));
+    FileHandle screenFile;
+    if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+      screenFile = Gdx.files.external(getFileName(experimentName, ".png", level));
+    } else {
+      screenFile = Gdx.files.internal(getFileName(experimentName, ".png", level));      
+    }
     Pixmap pixmap;
     try {
       pixmap = new Pixmap(screenFile);
     } catch (GdxRuntimeException e) {
-      pixmap = new Pixmap(Gdx.graphics.getWidth()/5, Gdx.graphics.getHeight()/5, 
+      pixmap = new Pixmap(ScreenUtils.powerOf2Ceiling(Gdx.graphics.getWidth()/7.5f), 
+          ScreenUtils.powerOf2Ceiling(Gdx.graphics.getHeight()/7.5f), 
           Format.RGBA8888);
     }
     Texture texture = new Texture(pixmap);

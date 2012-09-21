@@ -115,9 +115,6 @@ public abstract class AbstractMagnet extends ScienceBody
    * @throws IllegalArgumentException if width or height is <= 0
    */
   public void setSize(float width, float height) {
-    if (width <= 0 || height <= 0) {
-      throw new IllegalArgumentException("dimensions must be > 0");
-    }
     this.width = width;
     this.height = height;
   }
