@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel.Mode;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
-public class BarMagnetView extends Box2DActor {
+public class BarMagnetView extends ScienceActor {
   private final BarMagnet barMagnet;
   private final AbstractExperimentView emView;
   private final ElectroMagnetismModel emModel;

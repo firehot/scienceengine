@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.view.IDoneCallback;
 
@@ -19,10 +19,10 @@ import com.mazalearn.scienceengine.view.IDoneCallback;
 class FieldDirectionProber extends AbstractProber {
   protected static final float TOLERANCE = 0.3f;
   private final Image image;
-  private final Box2DActor barMagnetView;
+  private final ScienceActor barMagnetView;
   private Vector2 pos = new Vector2(), pos1 = new Vector2(), bField = new Vector2();
   
-  public FieldDirectionProber(Skin skin, Box2DActor barMagnetView, 
+  public FieldDirectionProber(Skin skin, ScienceActor barMagnetView, 
       final IDoneCallback doneCallback) {
     super();
     this.barMagnetView = barMagnetView;

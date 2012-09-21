@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.view.IDoneCallback;
 
@@ -18,12 +18,12 @@ import com.mazalearn.scienceengine.view.IDoneCallback;
 class FieldMagnitudeProber extends AbstractProber {
   private static final float TOLERANCE = 0.3f;
   final Image imageCorrect, imageWrong;
-  private final Box2DActor barMagnetView;
+  private final ScienceActor barMagnetView;
   // Temporary vectors
   Vector2 pos1 = new Vector2(), pos2 = new Vector2(), pos = new Vector2();
   Vector2 bField = new Vector2();
   
-  public FieldMagnitudeProber(Skin skin, Box2DActor barMagnetView, 
+  public FieldMagnitudeProber(Skin skin, ScienceActor barMagnetView, 
       final IDoneCallback doneCallback) {
     super();
     this.barMagnetView = barMagnetView;

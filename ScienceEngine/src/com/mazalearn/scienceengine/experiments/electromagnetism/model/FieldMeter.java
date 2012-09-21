@@ -12,7 +12,10 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField.IConsumer;
 
 /**
- * Models a free north pole which records a trace as it follows the field.
+ * Models a field meter which can store multiple samples at 
+ * different points in space. 
+ * It recalculates the field values when notified of a field change
+ * through its consumer interface.
  * It is a point body without width and height.
  * <p/>
  * 
@@ -20,11 +23,10 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField.IC
  */
 public class FieldMeter extends ScienceBody implements IConsumer {
 
-  private static final float TOLERANCE = 0.3f;
   // Field that the free north pole is interacting with.
   private EMField emField;
   // A reusable vector
-  private Vector2 fieldVector = new Vector2(), deltaPoint = new Vector2();
+  private Vector2 fieldVector = new Vector2(), samplePoint = new Vector2();
   
   public static class FieldSample {
     public float x, y, angle, magnitude;
@@ -57,18 +59,11 @@ public class FieldMeter extends ScienceBody implements IConsumer {
   }
   
   @Override
-  public void singleStep(float dt) {
-    float delta = 1;
-    if (fieldSamples.size() > 0) {
-      FieldSample lastSample = fieldSamples.get(fieldSamples.size() - 1);
-      deltaPoint.set(lastSample.x - getPosition().x, lastSample.y - getPosition().y);
-      delta = deltaPoint.len();
-    }
-    if (delta > TOLERANCE) {
-      emField.getBField(getPosition(), fieldVector /* output */);
-      addFieldSample(getPosition().x, getPosition().y, 
-          fieldVector.angle() * MathUtils.degreesToRadians, fieldVector.len());
-    }
+  public void setPositionAndAngle(Vector2 position, float angle) {
+    super.setPositionAndAngle(position, angle);
+    emField.getBField(getPosition(), fieldVector /* output */);
+    addFieldSample(getPosition().x, getPosition().y, 
+        fieldVector.angle() * MathUtils.degreesToRadians, fieldVector.len());
   }
   
   @Override
@@ -97,8 +92,8 @@ public class FieldMeter extends ScienceBody implements IConsumer {
   @Override
   public void notifyFieldChange() {
     for (FieldSample fieldSample: fieldSamples) {
-      deltaPoint.set(fieldSample.x, fieldSample.y);
-      emField.getBField(deltaPoint, fieldVector /* output */);
+      samplePoint.set(fieldSample.x, fieldSample.y);
+      emField.getBField(samplePoint, fieldVector /* output */);
       fieldSample.angle = fieldVector.angle() * MathUtils.degreesToRadians;
       fieldSample.magnitude = fieldVector.len();
     }

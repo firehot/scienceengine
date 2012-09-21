@@ -16,14 +16,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
 /**
- * Box2DActor - Box2D Actor
+ * ScienceActor - Takes as model a ScienceBody which is a Box2D body
+ *                and creates an actor view for it.
  * 
- * Map IBody to actor.
  * 
  */
-public class Box2DActor extends Actor {
+public class ScienceActor extends Actor {
   private ScienceBody body;
   private TextureRegion textureRegion;
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
@@ -37,7 +38,7 @@ public class Box2DActor extends Actor {
    * @param body - Box2D body
    * @param textureRegion - texture to use to represent body in view
    */
-  public Box2DActor(ScienceBody body, TextureRegion textureRegion) {
+  public ScienceActor(ScienceBody body, TextureRegion textureRegion) {
     super(body.getName());
 
     this.body = body;
@@ -116,10 +117,13 @@ public class Box2DActor extends Actor {
     box2DPos.mul(1f / ScienceEngine.PIXELS_PER_M);
   }
   
-  public void setPositionFromViewCoords() {
-    float angle = rotation * MathUtils.degreesToRadians;
+  public void setPositionFromViewCoords(boolean isUserChange) {
     viewPos.set(x, y);
     getBox2DPositionFromViewPosition(box2DPos, viewPos, rotation);
+    if (isUserChange) { // Change initiated by user, hence propagate
+      ((AbstractExperimentView) getStage()).notifyLocationChangedByUser(this, box2DPos);
+    }
+    float angle = rotation * MathUtils.degreesToRadians;
     body.setPositionAndAngle(box2DPos, angle);
     body.setActive(visible);
     body.setInitial();
@@ -144,7 +148,7 @@ public class Box2DActor extends Actor {
    lastTouch.sub(currentTouch.x, currentTouch.y);
     this.x -= lastTouch.x;
     this.y -= lastTouch.y;
-    setPositionFromViewCoords();
+    setPositionFromViewCoords(true);
     // Recalibrate lastTouch to new coordinates
     lastTouch.set(currentTouch.x, currentTouch.y);
   }

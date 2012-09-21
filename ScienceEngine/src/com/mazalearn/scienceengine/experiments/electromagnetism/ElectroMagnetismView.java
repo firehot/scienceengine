@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.box2d.ScienceBody.ComponentType;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
@@ -39,6 +39,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     super(experimentName, emModel, width, height, skin, soundManager);
     this.emModel = emModel;
     
+    Actor lightbulb = null, pickupCoil = null;
     Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
         Scaling.stretch, Align.CENTER, "CoilsBack");
     this.addActor(coilsBack);
@@ -51,10 +52,10 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(barMagnetView);
         break;
       case Lightbulb:
-        this.addActor(new LightbulbView(textureRegion, (Lightbulb) body));
+        this.addActor(lightbulb = new LightbulbView(textureRegion, (Lightbulb) body));
         break;
       case PickupCoil:
-        this.addActor(new PickupCoilView(body, textureRegion, coilsBack));
+        this.addActor(pickupCoil = new PickupCoilView(body, textureRegion));
         break;
       case Compass:
         this.addActor(new CompassView(textureRegion, body));
@@ -70,10 +71,11 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new ElectroMagnetView(textureRegion, body, this, emModel));
         break;
       default:
-        this.addActor(new Box2DActor(body, textureRegion));
+        this.addActor(new ScienceActor(body, textureRegion));
         break;
       }
     }
+    addLocationGroup(coilsBack, pickupCoil, lightbulb);
   }
   
   // TODO: Use texture Atlas for this
@@ -127,8 +129,6 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       // model coords
       pos.mul(1f / ScienceEngine.PIXELS_PER_M);
       fieldMeter.setPositionAndAngle(pos, 0);
-      // Set a field arrow here.
-      fieldMeter.singleStep(0);
     }
     return true;
   }

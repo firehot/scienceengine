@@ -3,11 +3,11 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
 
-public class CurrentWireView extends Box2DActor {
+public class CurrentWireView extends ScienceActor {
   private final CurrentWire currentWire;
   private static Texture currentWireDown = 
       new Texture("images/currentwire-down.png");

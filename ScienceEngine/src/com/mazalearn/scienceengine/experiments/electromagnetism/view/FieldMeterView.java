@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter.FieldSample;
 
-public class FieldMeterView extends Box2DActor {
+public class FieldMeterView extends ScienceActor {
   private final FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
     

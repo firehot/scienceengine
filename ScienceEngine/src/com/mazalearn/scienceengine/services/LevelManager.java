@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.utils.ScreenUtils;
@@ -193,8 +193,8 @@ public class LevelManager {
     actor.height = (Float) nvl(component.get("height"), 20f);
     actor.visible = (Boolean) nvl(component.get("visible"), true);
     actor.rotation = (Float) nvl(component.get("rotation"), 0f);
-    if (actor instanceof Box2DActor) {
-      ((Box2DActor) actor).setPositionFromViewCoords();
+    if (actor instanceof ScienceActor) {
+      ((ScienceActor) actor).setPositionFromViewCoords(false);
     }
   }
 

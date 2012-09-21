@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.mazalearn.scienceengine.box2d.Box2DActor;
+import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.controller.Configurator;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.IExperimentModel;
@@ -197,9 +197,9 @@ public class LevelEditor extends Stage {
         public void click(Actor a, float x, float y) {
           listSelectedActor = stage.findActor(actor.name);
           actor.visible = !actor.visible;
-          if (actor instanceof Box2DActor) {
-            Box2DActor box2DActor = (Box2DActor) actor;
-            box2DActor.getBody().setActive(actor.visible);
+          if (actor instanceof ScienceActor) {
+            ScienceActor scienceActor = (ScienceActor) actor;
+            scienceActor.getBody().setActive(actor.visible);
             refreshConfigsTable(experimentModel, skin, configTable);
             configurator.refresh();
          }
@@ -401,8 +401,10 @@ public class LevelEditor extends Stage {
       if (draggedActor != null) {
         draggedActor.x += delta3.x;
         draggedActor.y += delta3.y;
-        if (draggedActor instanceof Box2DActor) {
-          ((Box2DActor) draggedActor).setPositionFromViewCoords();
+        if (draggedActor instanceof ScienceActor) {
+          // This is a user initiated move but for editing we want the 
+          // actors in the location group to be individually moved.
+          ((ScienceActor) draggedActor).setPositionFromViewCoords(false);
         }
       } else if (rotatedActor != null) {
         toStageCoordinates(x, y, point);
@@ -410,8 +412,8 @@ public class LevelEditor extends Stage {
         rotatedVector.sub(rotatedActor.width, 0);
         // TODO: UI issues and dont know how to draw rotated rectangles
         // rotatedActor.rotation = rotatedVector.angle();
-        if (rotatedActor instanceof Box2DActor) {
-          ((Box2DActor) rotatedActor).setPositionFromViewCoords();
+        if (rotatedActor instanceof ScienceActor) {
+          ((ScienceActor) rotatedActor).setPositionFromViewCoords(false);
         }
       } else if (resizedActor != null) {
         float sizeRatio = resizedActor.width / resizedActor.height;
