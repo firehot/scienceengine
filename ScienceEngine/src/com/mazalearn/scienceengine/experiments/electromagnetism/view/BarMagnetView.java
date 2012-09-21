@@ -69,7 +69,7 @@ public class BarMagnetView extends Box2DActor {
     font.setColor(1f, 1f, 1f, parentAlpha);
     int angularVelocity = Math.round(barMagnet.getAngularVelocity());
     String rpm = String.valueOf(angularVelocity);
-    newPos.set(barMagnet.getWorldCenter()).mul(ScienceEngine.PIXELS_PER_M).add(width/2, height/2);
+    newPos.set(barMagnet.getWorldCenter()).mul(ScienceEngine.PIXELS_PER_M);
     // Create space for text - in screen coords and always left to right
     newPos.add(-10, 5);
     font.draw(batch, rpm, newPos.x, newPos.y);

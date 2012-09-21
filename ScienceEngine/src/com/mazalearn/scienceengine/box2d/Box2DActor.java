@@ -8,6 +8,7 @@ package com.mazalearn.scienceengine.box2d;
  */
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -76,10 +77,22 @@ public class Box2DActor extends Actor {
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    float originX = radius * MathUtils.cosDeg(theta + rotation);
-    float originY = radius * MathUtils.sinDeg(theta + rotation);
     batch.draw(textureRegion, x, y, this.originX, this.originY, width, height, 1, 1, rotation);
-    batch.draw(textureRegion, x, y, -originX, -originY, width, height, 1, 1, rotation);
+    // debugDraw(batch);
+  }
+
+  float px, py, pbx, pby, pa;
+  public void debugDraw(SpriteBatch batch) {
+    Color c = batch.getColor();
+    batch.setColor(Color.RED);
+    batch.draw(textureRegion, x, y, 0, 0, width, height, 1, 1, rotation);
+    batch.setColor(c);
+    if (x != px || y != py || body.getPosition().x != pbx || body.getPosition().y != pby || body.getAngle() != pa) {
+      System.out.println(body.getName() + " x = " + x + " y = " + y + 
+          " origin x = " + this.originX + " origin y = " + this.originY + 
+          " body = " + body.getPosition() + " angle = " + body.getAngle());
+      px = x; py = y; pbx = body.getPosition().x; pby = body.getPosition().y; pa = body.getAngle();
+    }
   }
 
   @Override
@@ -95,13 +108,13 @@ public class Box2DActor extends Actor {
   /**
    * @param viewPos (output) - position of view origin of body
    * position of body in scene2d view is output
+   * ASSUMPTION: ORIGIN is BOX2D position for rotating body and does not 
+   * change under rotation.
    */
   public void getViewPositionFromBox2DPosition(Vector2 viewPos) {
-    // screen position is at bottom left: (-originX, -originY) in local coords
-    box2DPos.set(-originX, -originY).mul(1f / ScienceEngine.PIXELS_PER_M);
-    viewPos.set(body.getWorldPoint(box2DPos));
-    //viewPos.set(body.getWorldCenter());
+    viewPos.set(body.getWorldCenter());
     viewPos.mul(ScienceEngine.PIXELS_PER_M);
+    viewPos.sub(originX, originY);
   }
   
   /**
@@ -111,15 +124,8 @@ public class Box2DActor extends Actor {
    * @param rotation - rotation of body
    */
   public void getBox2DPositionFromViewPosition(Vector2 box2DPos, Vector2 viewPos, float rotation) {
-    box2DPos.x = (float) (viewPos.x + radius * MathUtils.cosDeg(rotation + theta));
-    box2DPos.y = (float) (viewPos.y + radius * MathUtils.sinDeg(rotation + theta));
-    box2DPos.mul(1f / ScienceEngine.PIXELS_PER_M);
-  }
-  
-  public void getBox2DPositionFromRenderPosition(Vector2 box2DPos, Vector2 viewPos, float rotation) {
-    //box2DPos.x = (float) (viewPos.x + radius * MathUtils.cosDeg(rotation + theta));
-    //box2DPos.y = (float) (viewPos.y + radius * MathUtils.sinDeg(rotation + theta));
     box2DPos.set(viewPos.x, viewPos.y);
+    box2DPos.add(originX, originY);
     box2DPos.mul(1f / ScienceEngine.PIXELS_PER_M);
   }
   
