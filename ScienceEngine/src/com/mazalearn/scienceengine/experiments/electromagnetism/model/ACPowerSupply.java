@@ -2,6 +2,8 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.mazalearn.scienceengine.controller.AbstractModelConfig;
+
 /**
  * ACPowerSupply is the model of an AC Power Supply.
  * <p>
@@ -50,11 +52,29 @@ public class ACPowerSupply extends AbstractCurrentSource {
     this.acAngle = 0.0f; // radians
     this.deltaAngle = (float) ((2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE); // radians
     this.stepAngle = 0.0f; // radians
+    this.initializeConfigs();
   }
 
-  // ----------------------------------------------------------------------------
-  // Accessors
-  // ----------------------------------------------------------------------------
+  public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<Float>(getName() + " Frequency", 
+        "Frequency of AC", 0f, 1f) {
+      public Float getValue() { return getFrequency(); }
+      public void setValue(Float value) { setFrequency(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+    configs.add(new AbstractModelConfig<Float>(getName() + " Amplitude", 
+        "Amplitude of AC", 0f, 1f) {
+      public Float getValue() { return getMaxAmplitude(); }
+      public void setValue(Float value) { setMaxAmplitude(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+    /*
+    configs.add(new AbstractModelConfig<String>(getName() + " Flip Direction", 
+        "Direction of DC Current") {
+      public void doCommand() { flipDirection(); }
+      public boolean isPossible() { return isActive(); }
+    }); */
+  }
 
   /**
    * Sets the maximum amplitude.
@@ -94,7 +114,7 @@ public class ACPowerSupply extends AbstractCurrentSource {
    * 
    * @return the frequency, 0...1 inclusive
    */
-  public double getFrequency() {
+  public float getFrequency() {
     return this.frequency;
   }
 
@@ -112,7 +132,8 @@ public class ACPowerSupply extends AbstractCurrentSource {
    * Varies the amplitude over time, based on maxAmplitude and frequency.
    * Guaranteed to hit all peaks and zero crossings.
    */
-  public void stepInTime(float dt) {
+  @Override
+  public void singleStep(float dt) {
     if (this.maxAmplitude == 0) {
       setAmplitude(0.0f);
     } else {

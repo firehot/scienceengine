@@ -40,6 +40,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     this.emModel = emModel;
     
     Actor lightbulb = null, pickupCoil = null;
+    ScienceActor electroMagnet = null, currentSource = null;
     Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
         Scaling.stretch, Align.CENTER, "CoilsBack");
     this.addActor(coilsBack);
@@ -64,11 +65,14 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new FieldMeterView(textureRegion, body));
         fieldMeter = (FieldMeter) body;
         break;
+      case ACPowerSupply:
+        this.addActor(currentSource = new ScienceActor(body, textureRegion));
+        break;        
       case CurrentWire:
         this.addActor(new CurrentWireView(body));
         break;
       case ElectroMagnet:
-        this.addActor(new ElectroMagnetView(textureRegion, body, this, emModel));
+        this.addActor(electroMagnet = new ElectroMagnetView(textureRegion, body, this, emModel));
         break;
       default:
         this.addActor(new ScienceActor(body, textureRegion));
@@ -76,6 +80,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       }
     }
     addLocationGroup(coilsBack, pickupCoil, lightbulb);
+    addLocationGroup(currentSource, electroMagnet);
   }
   
   // TODO: Use texture Atlas for this
@@ -102,6 +107,9 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       break;
     case CurrentWire:
       texture = new Texture("images/currentwire-up.png");
+      break;
+    case ACPowerSupply:
+      texture = new Texture("images/currentsource.png");
       break;
     default:
       return null;

@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.controller.IModelConfig;
+import com.mazalearn.scienceengine.model.IExperimentModel;
 
 /**
  * ScienceBody has basic attributes for an element in an EM Field.
@@ -30,6 +31,8 @@ public class ScienceBody implements IBody {
   private static World box2DWorld;
   // Ground body
   private static Body GROUND;
+  // Model in which this body lives
+  private IExperimentModel model;
   // Body instance to which methods are proxied
   Body body;
   // Configs exposed by this body
@@ -137,6 +140,14 @@ public class ScienceBody implements IBody {
   
   public Body getBody() {
     return body;
+  }
+  
+  public IExperimentModel getModel() {
+    return this.model;
+  }
+  
+  public void setModel(IExperimentModel model) {
+    this.model = model;
   }
 
   //////////////////////////////////////////////////////////////////////////

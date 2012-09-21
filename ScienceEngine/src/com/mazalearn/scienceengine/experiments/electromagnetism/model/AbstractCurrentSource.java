@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.model.ICurrentSource;
 
 /**
  * AbstractCurrentSource is the abstract base class for all things that are
@@ -10,7 +11,7 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  * 
  * @author sridhar
  */
-public abstract class AbstractCurrentSource extends ScienceBody {
+public abstract class AbstractCurrentSource extends ScienceBody implements ICurrentSource {
 
   private static final float DEFAULT_MAX_VOLTAGE = Float.POSITIVE_INFINITY;
 
@@ -68,6 +69,7 @@ public abstract class AbstractCurrentSource extends ScienceBody {
   public void setAmplitude(float amplitude) {
     assert (amplitude >= -1 && amplitude <= 1);
     this.amplitude = amplitude;
+    getModel().notifyCurrentChange(this);
   }
 
   /**

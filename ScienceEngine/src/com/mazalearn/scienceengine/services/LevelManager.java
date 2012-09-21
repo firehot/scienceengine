@@ -145,6 +145,7 @@ public class LevelManager {
         .parse(str);
 
     readLevelInfo(rootElem);
+    initializeComponents();
     readComponents((Array<?>) rootElem.get("components"));
     readConfigs((Array<?>) rootElem.get("configs"));
   }
@@ -164,6 +165,16 @@ public class LevelManager {
     }
   }
 
+  private void initializeComponents() {
+    // Make all actors inactive and invisible.
+    for (Actor actor: stage.getActors()) {
+      actor.visible = false;
+      if (actor instanceof ScienceActor) {
+        ((ScienceActor) actor).setPositionFromViewCoords(false);
+      }
+    }
+  }
+  
   private void readComponents(Array<?> components) {
     if (components == null) return;
     

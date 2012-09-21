@@ -26,7 +26,6 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   private String experimentName;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
-  private List<List<ScienceActor>> circuits;
 
   public AbstractExperimentView(String experimentName, 
       IExperimentModel experimentModel, float width, float height, Skin skin, 
@@ -37,7 +36,6 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
     this.soundManager = soundManager;
     this.experimentModel = experimentModel;
     this.locationGroups = new ArrayList<List<Actor>>();
-    this.circuits = new ArrayList<List<ScienceActor>>();
   }
 
   @Override
@@ -94,21 +92,6 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
         groupActor.y += deltaPosition.y;
         if (groupActor instanceof ScienceActor) {
           ((ScienceActor) groupActor).setPositionFromViewCoords(false);
-        }
-      }
-    }
-  }
-
-  public void addCircuit(ScienceActor... actors) {
-    circuits.add(Arrays.asList(actors));
-  }
-  
-  public void notifyCurrentChange(ScienceActor actor) {
-    for (List<ScienceActor> circuit: circuits) {
-      if (!circuit.contains(actor)) continue;
-      for (Actor groupActor: circuit) {
-        if (groupActor == actor || groupActor == null) continue;
-        if (groupActor instanceof ScienceActor) {
         }
       }
     }

@@ -5,6 +5,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.model.ICurrentSink;
 
 /**
  * Electromagnet is the model of an electromagnet.
@@ -15,29 +16,24 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
  * 
  * @author sridhar
  */
-public class Electromagnet extends AbstractMagnet {
+public class Electromagnet extends AbstractMagnet implements ICurrentSink {
 
   private float maxStrengthOutside; // for debugging
 
   private SourceCoil sourceCoil;
-  private AbstractCurrentSource currentSource;
   public static final int ELECTROMAGNET_LOOPS_MAX = 4;
 
   /**
    * Sole constructor.
-   * 
    * @param sourceCoil
    *          the electromagnet's coil
-   * @param currentSource
-   *          the electromagnet's current source
    */
   public Electromagnet(String name, EMField emField, SourceCoil sourceCoil,
-      AbstractCurrentSource currentSource, float x, float y, float angle) {
+      float x, float y, float angle) {
     super(ComponentType.ElectroMagnet, name, emField, x, y, angle);
     this.sourceCoil = sourceCoil;
     this.setSize(16, 16);
     this.maxStrengthOutside = 0.0f;
-    this.setCurrentSource(currentSource);
     FixtureDef fixtureDef = new FixtureDef();
     PolygonShape rectangleShape = new PolygonShape();
     rectangleShape.setAsBox(getWidth()/2, getHeight()/2);
@@ -46,30 +42,9 @@ public class Electromagnet extends AbstractMagnet {
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
-    initializeConfigs();
   }
 
-  public void initializeConfigs() {
- /*   configs.add(new AbstractModelConfig<Float>(getName() + " Strength", 
-        "Strength of magnet", 0f, 10000f) {
-      public Float getValue() { return getStrength(); }
-      public void setValue(Float value) { setStrength(value); }
-      public boolean isPossible() { return isActive(); }
-    });
-    configs.add(new AbstractModelConfig<String>(getName() + " Flip Polarity", 
-        "Direction of North Pole") {
-      public void doCommand() { flipPolarity(); }
-      public boolean isPossible() { return isActive(); }
-    }); */
-  }
-
-  /**
-   * Sets the electromagnet's current source.
-   * 
-   * @param currentSource
-   */
-  public void setCurrentSource(AbstractCurrentSource currentSource) {
-    this.currentSource = currentSource;
+  public void updateCurrent(float amplitude) {
     /*
      * The magnet size is a circle that has the same radius as the coil. Adding
      * half the wire width makes it look a little better.
@@ -78,29 +53,20 @@ public class Electromagnet extends AbstractMagnet {
         //+ (this.sourceCoil.getWireWidth() / 2);
     super.setSize((float) diameter, (float) diameter);
     
-    // Current amplitude is proportional to amplitude of the current source.
-    this.sourceCoil.setCurrentAmplitude(this.currentSource.getAmplitude());
+    // Current amplitude is proportional to voltage amplitude of the current source.
+    this.sourceCoil.setCurrentAmplitude(amplitude);
     
     // Compute the electromagnet's emf amplitude.
-    float amplitude = (this.sourceCoil.getNumberOfLoops() / (float) ELECTROMAGNET_LOOPS_MAX)
-        * this.currentSource.getAmplitude();
-    amplitude = Clamp.clamp(-1f, amplitude, 1f);
+    float emfAmplitude = (this.sourceCoil.getNumberOfLoops() / (float) ELECTROMAGNET_LOOPS_MAX)
+        * amplitude;
+    emfAmplitude = Clamp.clamp(-1f, emfAmplitude, 1f);
     
     /*
      * Set the strength. This is a bit of a "fudge". We set the strength of the
      * magnet to be proportional to its emf.
      */
-    float strength = Math.abs(amplitude) * 10000f;
+    float strength = Math.abs(emfAmplitude) * 10000f;
     setStrength(strength);
-  }
-
-  /**
-   * Gets the eletromagnet's current source.
-   * 
-   * @return the current source
-   */
-  public AbstractCurrentSource getCurrentSource() {
-    return this.currentSource;
   }
 
   /**

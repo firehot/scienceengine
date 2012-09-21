@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.model;
 import java.util.List;
 
 import com.badlogic.gdx.physics.box2d.World;
+import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 
 public interface IExperimentModel {
@@ -19,4 +20,5 @@ public interface IExperimentModel {
   public void enable(boolean enable);
   // whether model is enabled
   public boolean isEnabled();
+  public void notifyCurrentChange(ICurrentSource currentSource);
 }
