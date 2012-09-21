@@ -68,6 +68,7 @@ public class LevelEditor extends Stage {
   private Configurator configurator;
   private ShapeRenderer shapeRenderer;
   Vector2 point = new Vector2();
+  Vector2 rotatedVector = new Vector2();
   private Actor rotatedActor;
   
 
@@ -330,7 +331,8 @@ public class LevelEditor extends Stage {
               resizedActor = actor;
               draggedActor = null;
               selectedActor = actor;
-            } else if (point.x <= handleSize.x && point.y <= handleSize.y) {
+            } else if (0 <= point.y && point.y <= handlePos.y && 
+                handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x) {
               rotatedActor = actor;
               selectedActor = actor;
             } else if (resizedActor == null && rotatedActor == null) {
@@ -403,9 +405,11 @@ public class LevelEditor extends Stage {
           ((Box2DActor) draggedActor).setPositionFromViewCoords();
         }
       } else if (rotatedActor != null) {
-        Vector2 delta2 = new Vector2(delta3.x, delta3.y);
+        toStageCoordinates(x, y, point);
+        Group.toChildCoordinates(rotatedActor, point.x, point.y, rotatedVector);
+        rotatedVector.sub(rotatedActor.width, 0);
         // TODO: UI issues and dont know how to draw rotated rectangles
-        // rotatedActor.rotation = delta2.angle();
+        // rotatedActor.rotation = rotatedVector.angle();
         if (rotatedActor instanceof Box2DActor) {
           ((Box2DActor) rotatedActor).setPositionFromViewCoords();
         }
@@ -496,7 +500,15 @@ public class LevelEditor extends Stage {
     // Draw handle for rotation
     shapeRenderer.begin(ShapeType.FilledRectangle);
     shapeRenderer.setColor(Color.GREEN);
-    shapeRenderer.filledRect(actor.x, actor.y, handleSize.x, handleSize.y);
+    shapeRenderer.filledRect(actor.x + actor.width - handleSize.x, actor.y, 
+        handleSize.x, handleSize.y);
+    shapeRenderer.end();
+    
+    // Draw origin
+    shapeRenderer.begin(ShapeType.FilledCircle);
+    shapeRenderer.setColor(Color.GREEN);
+    shapeRenderer.filledCircle(actor.x + actor.originX, 
+        actor.y + actor.originY, handleSize.x / 2);
     shapeRenderer.end();
   }
 }

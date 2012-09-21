@@ -9,7 +9,6 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWir
 
 public class CurrentWireView extends Box2DActor {
   private final CurrentWire currentWire;
-  private float radius;
   private static Texture currentWireDown = 
       new Texture("images/currentwire-down.png");
   private static Texture currentWireUp = 
@@ -17,8 +16,10 @@ public class CurrentWireView extends Box2DActor {
     
   public CurrentWireView(ScienceBody body) {
     super(body, new TextureRegion(currentWireUp));
-    this.radius = (float) Math.sqrt(width * width + height * height)/2;
+
+    this.width = this.height = 10;
     this.currentWire = (CurrentWire) body;
+    this.setAllowDrag(true);
   }
   
   @Override

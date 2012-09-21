@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.box2d.ScienceBody.ComponentType;
@@ -19,6 +20,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWire
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectroMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilView;
 import com.mazalearn.scienceengine.services.SoundManager;
 import com.mazalearn.scienceengine.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.view.ProbeManager;
@@ -52,9 +54,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new LightbulbView(textureRegion, (Lightbulb) body));
         break;
       case PickupCoil:
-        coilsBack.x = body.getPosition().x * PIXELS_PER_M;
-        coilsBack.y = body.getPosition().y * PIXELS_PER_M;
-        this.addActor(new Box2DActor(body, textureRegion));
+        this.addActor(new PickupCoilView(body, textureRegion, coilsBack));
         break;
       case Compass:
         this.addActor(new CompassView(textureRegion, body));
@@ -125,7 +125,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       // view coords
       toStageCoordinates(x, y, pos);
       // model coords
-      pos.mul(1f / PIXELS_PER_M);
+      pos.mul(1f / ScienceEngine.PIXELS_PER_M);
       fieldMeter.setPositionAndAngle(pos, 0);
       // Set a field arrow here.
       fieldMeter.singleStep(0);

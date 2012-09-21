@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.view;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -13,7 +14,6 @@ import com.mazalearn.scienceengine.services.SoundManager;
 
 public abstract class AbstractExperimentView extends Stage implements IExperimentView {
 
-  public static final int PIXELS_PER_M = 8;
   protected final IExperimentModel experimentModel;
   protected final Skin skin;
   protected final SoundManager soundManager;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
@@ -31,7 +32,7 @@ public class FieldMeterView extends Box2DActor {
       float magnitude = 2 * (fieldSample.magnitude > 2f ? 1f : fieldSample.magnitude);
       // location of field meter center is the sample point
       pos.set(fieldSample.x, fieldSample.y);
-      pos.mul(PIXELS_PER_M);
+      pos.mul(ScienceEngine.PIXELS_PER_M);
       // find location of left bottom of arrow
       pos.sub(magnitude * MathUtils.cos(fieldSample.angle), 
           magnitude * MathUtils.sin(fieldSample.angle));

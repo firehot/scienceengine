@@ -40,6 +40,8 @@ public class ScienceEngine extends Game {
 
   private Skin skin;
 
+  public static final int PIXELS_PER_M = 8;
+
   public ScienceEngine() {
     this(new ArrayList<String>());
   }

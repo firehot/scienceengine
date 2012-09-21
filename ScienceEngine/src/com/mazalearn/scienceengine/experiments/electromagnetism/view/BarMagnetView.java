@@ -4,9 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.box2d.Box2DActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel;
@@ -19,9 +18,7 @@ public class BarMagnetView extends Box2DActor {
   private final AbstractExperimentView emView;
   private final ElectroMagnetismModel emModel;
   private BitmapFont font;
-  private Vector2 lastTouch = new Vector2();
   private Vector2 newPos = new Vector2();
-  private Vector3 currentTouch = new Vector3();
   
   public BarMagnetView(TextureRegion textureRegion, ScienceBody body, 
       AbstractExperimentView experimentView, ElectroMagnetismModel emModel) {
@@ -31,28 +28,12 @@ public class BarMagnetView extends Box2DActor {
     this.emModel = emModel;
     this.font = new BitmapFont();
     this.setOrigin(width/2, height/2);
-  }
-
-  public boolean touchDown(float x, float y, int pointer) {
-    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    getStage().getCamera().unproject(currentTouch);
-    lastTouch.set(currentTouch.x, currentTouch.y);
-    return true;
+    this.setAllowDrag(true);
   }
 
   public void touchDragged(float x, float y, int pointer) {
     if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
-    // Screen coords of current touch
-    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    // Goto view coords
-    getStage().getCamera().unproject(currentTouch);
-    // Get negative of movement vector
-    lastTouch.sub(currentTouch.x, currentTouch.y);
-    this.x -= lastTouch.x;
-    this.y -= lastTouch.y;
-    setPositionFromViewCoords();
-    // Recalibrate lastTouch to new coordinates
-    lastTouch.set(currentTouch.x, currentTouch.y);
+    super.touchDragged(x, y, pointer);
     emView.resume();
   }
   
@@ -88,7 +69,7 @@ public class BarMagnetView extends Box2DActor {
     font.setColor(1f, 1f, 1f, parentAlpha);
     int angularVelocity = Math.round(barMagnet.getAngularVelocity());
     String rpm = String.valueOf(angularVelocity);
-    newPos.set(barMagnet.getWorldCenter()).mul(PIXELS_PER_M);
+    newPos.set(barMagnet.getWorldCenter()).mul(ScienceEngine.PIXELS_PER_M).add(width/2, height/2);
     // Create space for text - in screen coords and always left to right
     newPos.add(-10, 5);
     font.draw(batch, rpm, newPos.x, newPos.y);

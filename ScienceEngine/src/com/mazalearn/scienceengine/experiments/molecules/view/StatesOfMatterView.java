@@ -36,7 +36,7 @@ public class StatesOfMatterView extends AbstractExperimentView {
     layoutTable.add(new ColorPanel()).fill().width(10);
     int boxWidth = 20;
     int boxHeight = 20;
-    layoutTable.add(new MoleculeBox(molecularModel, N, boxWidth, boxHeight, PIXELS_PER_M)).expand().fill();
+    layoutTable.add(new MoleculeBox(molecularModel, N, boxWidth, boxHeight, ScienceEngine.PIXELS_PER_M)).expand().fill();
     layoutTable.add(new ColorPanel()).fill().width(10);
     layoutTable.row();
     // Bottom of box

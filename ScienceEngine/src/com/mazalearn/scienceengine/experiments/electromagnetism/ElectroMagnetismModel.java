@@ -28,9 +28,9 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   private Compass compass;
   private EMField emField;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
-  public enum Mode {Fixed, Free, Rotate};
+  public enum Mode {Free, Rotate};
   
-  private Mode mode = Mode.Fixed;
+  private Mode mode = Mode.Free;
   private Joint joint;
     
   public ElectroMagnetismModel() {   

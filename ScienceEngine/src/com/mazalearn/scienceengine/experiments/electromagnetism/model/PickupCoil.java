@@ -65,7 +65,7 @@ public class PickupCoil extends AbstractCoil {
     // loosely packed loops
     setLoopSpacing(1.5f * getWireWidth());
   }
-
+  
   /**
    * Gets the magnetic flux.
    * 

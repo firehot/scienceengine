@@ -70,6 +70,7 @@ public abstract class AbstractMagnet extends ScienceBody
      * adjusting for position and orientation.
      */
     Vector2 localPoint = this.getLocalPoint(p);
+    localPoint.sub(getWidth()/2, getHeight()/2);
     localPoint.mul(5.0f); // fudge factor to keep at 250,50 scale
     // get strength in magnet's local coordinate frame
     getBFieldRelative(localPoint, outputVector);
