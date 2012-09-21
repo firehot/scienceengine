@@ -194,7 +194,8 @@ public class LevelManager {
     if (actor instanceof Box2DActor) {
       Box2DActor box2DActor = (Box2DActor) actor;
       box2DActor.setPositionFromViewCoords();
-      box2DActor.setOrigin(actor.originX, actor.originY);
+      box2DActor.originX = actor.originX;
+      box2DActor.originY = actor.originY;
     }
   }
 

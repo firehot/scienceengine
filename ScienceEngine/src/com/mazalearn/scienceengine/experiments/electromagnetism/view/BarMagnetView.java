@@ -27,7 +27,6 @@ public class BarMagnetView extends Box2DActor {
     this.emView = experimentView;
     this.emModel = emModel;
     this.font = new BitmapFont();
-    this.setOrigin(width/2, height/2);
     this.setAllowDrag(true);
   }
 

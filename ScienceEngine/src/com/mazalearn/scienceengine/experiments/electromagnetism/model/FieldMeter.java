@@ -96,6 +96,11 @@ public class FieldMeter extends ScienceBody implements IConsumer {
 
   @Override
   public void notifyFieldChange() {
-    fieldSamples.clear();
+    for (FieldSample fieldSample: fieldSamples) {
+      deltaPoint.set(fieldSample.x, fieldSample.y);
+      emField.getBField(deltaPoint, fieldVector /* output */);
+      fieldSample.angle = fieldVector.angle() * MathUtils.degreesToRadians;
+      fieldSample.magnitude = fieldVector.len();
+    }
   }
 }

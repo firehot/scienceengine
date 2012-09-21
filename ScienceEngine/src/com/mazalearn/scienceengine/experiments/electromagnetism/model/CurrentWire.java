@@ -21,12 +21,14 @@ public class CurrentWire extends ScienceBody implements IProducer {
   private float current;
   // Direction of current: up is true and down is false
   private boolean direction = true;
+  private EMField emField;
 
   public CurrentWire(String name, EMField emField, float x, float y, float angle) {
     super(ComponentType.CurrentWire, name, x, y, angle);
     emField.registerProducer(this);
     this.radius = 1;
     this.current = 1f;
+    this.emField = emField;
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(radius);
@@ -37,6 +39,12 @@ public class CurrentWire extends ScienceBody implements IProducer {
     this.createFixture(fixtureDef);
     circleShape.dispose();  // TODO: dispose other created shapes
     initializeConfigs();
+  }
+  
+  @Override
+  public void setPositionAndAngle(Vector2 position, float angle) {
+    super.setPositionAndAngle(position, angle);
+    emField.notifyFieldChange();
   }
 
   /**
@@ -61,10 +69,12 @@ public class CurrentWire extends ScienceBody implements IProducer {
    */
   public void setCurrentMagnitude(float current) {
     this.current = current;
+    emField.notifyFieldChange();
   }
   
   public void flipCurrentDirection() {
     this.direction = !this.direction;
+    emField.notifyFieldChange();
   }
   
   public boolean isDirectionUp() {

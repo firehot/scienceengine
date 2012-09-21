@@ -26,8 +26,6 @@ import com.mazalearn.scienceengine.ScienceEngine;
 public class Box2DActor extends Actor {
   private ScienceBody body;
   private TextureRegion textureRegion;
-  private float radius = 0;
-  private float theta = 0;
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
   protected Vector2 lastTouch = new Vector2();    // view coordinates
   protected Vector3 currentTouch = new Vector3(); // view coordinates
@@ -47,19 +45,8 @@ public class Box2DActor extends Actor {
     // Set the sprite width and height.
     this.width = textureRegion.getRegionWidth();
     this.height = textureRegion.getRegionHeight();
-    this.originX = this.originY = 0;
-  }
-  
-  /**
-   * Set the origin to be used for rotation
-   * @param originX
-   * @param originY
-   */
-  public void setOrigin(float originX, float originY) {
-    this.originX = originX;
-    this.originY = originY;
-    this.theta = (float) Math.atan2(originY, originX) * MathUtils.radiansToDegrees;
-    this.radius = (float) Math.sqrt(originX * originX + originY * originY);
+    this.originX = width / 2;
+    this.originY = height / 2;
   }
   
   public ScienceBody getBody() {

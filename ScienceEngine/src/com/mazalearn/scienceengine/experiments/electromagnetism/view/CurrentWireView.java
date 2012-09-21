@@ -16,8 +16,6 @@ public class CurrentWireView extends Box2DActor {
     
   public CurrentWireView(ScienceBody body) {
     super(body, new TextureRegion(currentWireUp));
-
-    this.width = this.height = 10;
     this.currentWire = (CurrentWire) body;
     this.setAllowDrag(true);
   }
@@ -26,7 +24,6 @@ public class CurrentWireView extends Box2DActor {
   public void draw(SpriteBatch batch, float parentAlpha) {
     this.getTextureRegion().setTexture(
         currentWire.isDirectionUp() ? currentWireUp : currentWireDown);
-    batch.draw(getTextureRegion(), x - width/2, y - height/2, 0, 0, width, 
-        height, 1, 1, rotation);
+    super.draw(batch, parentAlpha);
   }
 }

@@ -19,7 +19,8 @@ public class FieldMeterView extends Box2DActor {
   public FieldMeterView(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
-    this.setOrigin(width/2, height/2);
+    this.originX = width/2;
+    this.originY = height/2;
   }
 
   @Override

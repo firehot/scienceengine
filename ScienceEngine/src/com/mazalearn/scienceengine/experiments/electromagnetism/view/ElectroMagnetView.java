@@ -16,7 +16,6 @@ public class ElectroMagnetView extends Box2DActor {
     super(body, textureRegion);
     this.emView = experimentView;
     this.emModel = emModel;
-    this.setOrigin(width/2, height/2);
     this.setAllowDrag(true);
   }
 
