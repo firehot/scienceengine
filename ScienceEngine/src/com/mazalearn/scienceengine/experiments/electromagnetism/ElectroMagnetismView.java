@@ -150,8 +150,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       if (probeManager == null) {
         probeManager = new ProbeManager(skin, width, height, this, soundManager); 
         this.addActor(probeManager);
-        probeManager.add(new FieldDirectionProber(skin, barMagnetView, probeManager));
-        probeManager.add(new FieldMagnitudeProber(skin, barMagnetView, probeManager));
+        probeManager.add(new FieldDirectionProber(skin, barMagnetView.x, barMagnetView.y, barMagnetView.width, barMagnetView.height, emModel, probeManager));
+        probeManager.add(new FieldMagnitudeProber(skin, barMagnetView.x, barMagnetView.y, barMagnetView.width, barMagnetView.height, emModel, probeManager));
       }
       probeManager.startChallenge();
     }

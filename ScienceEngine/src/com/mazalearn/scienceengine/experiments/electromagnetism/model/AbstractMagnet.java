@@ -18,7 +18,6 @@ public abstract class AbstractMagnet extends ScienceBody
   private static final float TOLERANCE = 0.1f;
   private float width, height;
   private float strength;
-  private float lastNotifiedStrength = 0f;
 
   /**
    * Sole constructor
@@ -38,12 +37,10 @@ public abstract class AbstractMagnet extends ScienceBody
    *           if strength is outside of the min/max range
    */
   public void setStrength(float strength) {
-    if (Math.abs(lastNotifiedStrength - strength) > TOLERANCE) {
+    if (Math.abs(this.strength - strength) > TOLERANCE) {
       this.strength = strength;
-      lastNotifiedStrength = strength;
       getModel().notifyFieldChange();
     }
-    this.strength = strength;
   }
 
   /**

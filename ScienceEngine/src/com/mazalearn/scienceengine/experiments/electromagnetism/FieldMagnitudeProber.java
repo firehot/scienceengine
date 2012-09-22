@@ -8,25 +8,30 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IDoneCallback;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
 // Is the field stronger at A or B?
 class FieldMagnitudeProber extends AbstractProber {
   private static final float TOLERANCE = 0.3f;
+  private static final float ZERO_TOLERANCE = 1e-4f;
   final Image imageCorrect, imageWrong;
-  private final ScienceActor barMagnetView;
+  private final float x, y, width, height;
   // Temporary vectors
   Vector2 pos1 = new Vector2(), pos2 = new Vector2(), pos = new Vector2();
   Vector2 bField = new Vector2();
+  private IExperimentModel model;
   
-  public FieldMagnitudeProber(Skin skin, ScienceActor barMagnetView, 
-      final IDoneCallback doneCallback) {
+  public FieldMagnitudeProber(Skin skin, float x, float y, float width, float height, 
+      IExperimentModel model, final IDoneCallback doneCallback) {
     super();
-    this.barMagnetView = barMagnetView;
+    this.model = model;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
     TextureRegion questionMark = new TextureRegion(new Texture("images/questionmark.png"));
     imageCorrect = new Image(questionMark);
     imageCorrect.setClickListener(new ClickListener() {
@@ -58,15 +63,15 @@ class FieldMagnitudeProber extends AbstractProber {
       // If P1.r ~ P2.r AND (P1.x ~ P2.x) OR (P1.y ~ P2.y) try again
       // Scale P1.x, P2.x by magnet width*2 and P1.y, P2.y by magnet height*2
       boolean areTooClose = true;
-      while (areTooClose) {
+      float magnitude1, magnitude2;
+      do {
         generateProbePoint(pos1);
         generateProbePoint(pos2);
-        areTooClose = approxEquals(pos1.len(), pos2.len()) && 
-            (approxEquals(pos1.x, pos2.x) || approxEquals(pos1.y, pos2.y));
-      }
-      float magnitude1 = getBFieldMagnitude(pos1);
-      float magnitude2 = getBFieldMagnitude(pos2);
-      System.out.println("correct " + magnitude1 + " wrong " + magnitude2);
+        magnitude1 = getBFieldMagnitude(pos1);
+        magnitude2 = getBFieldMagnitude(pos2);
+        areTooClose = arePhysicallyClose() || haveSimilarMagnitudes(magnitude1, magnitude2);
+      } while (areTooClose);
+      
       if (magnitude1 > magnitude2) {
         imageCorrect.x = pos1.x - imageCorrect.width/2;
         imageCorrect.y = pos1.y - imageCorrect.height/2;
@@ -82,12 +87,22 @@ class FieldMagnitudeProber extends AbstractProber {
     this.visible = activate;
   }
 
+  private boolean arePhysicallyClose() {
+    return approxEquals(pos1.len(), pos2.len()) && 
+        (approxEquals(pos1.x, pos2.x) || approxEquals(pos1.y, pos2.y));
+  }
+  
+  private boolean haveSimilarMagnitudes(float v1, float v2) {
+    if (Math.abs(v1 - v2) < 1e-4f) return true;
+    if (Math.abs(v1 - v2) / v2 < TOLERANCE) return true;
+    return false;
+  }
+
   private void generateProbePoint(Vector2 pos) {
     pos.set(MathUtils.random(2f) - 1, MathUtils.random(2f) - 1);
-    pos.x *= barMagnetView.width;
-    pos.y *= barMagnetView.height;
-    pos.add(barMagnetView.x + barMagnetView.width/2, 
-        barMagnetView.y + barMagnetView.height/2);
+    pos.x *= width;
+    pos.y *= height;
+    pos.add(x + width/2, y + height/2);
   }
 
   private boolean approxEquals(float len1, float len2) {
@@ -95,9 +110,7 @@ class FieldMagnitudeProber extends AbstractProber {
   }
 
   private float getBFieldMagnitude(Vector2 viewPos) {
-    barMagnetView.getBox2DPositionFromViewPosition(pos, viewPos, 0);
-    BarMagnet b = (BarMagnet) barMagnetView.getBody();
-    b.getBField(pos, bField /* output */);
+    model.getBField(viewPos, bField /* output */);
     return bField.len();
   }
 }

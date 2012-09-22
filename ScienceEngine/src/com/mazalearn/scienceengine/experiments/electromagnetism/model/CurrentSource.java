@@ -41,8 +41,6 @@ public class CurrentSource extends ScienceBody implements ICurrent.Source {
   // direction of current - applies only to DC.
   private boolean isDCPositive = true;
 
-  private float lastCurrentNotified = 0f;
-
   /**
    * Sole constructor.
    */
@@ -72,7 +70,7 @@ public class CurrentSource extends ScienceBody implements ICurrent.Source {
     });
     
     configs.add(new AbstractModelConfig<Float>(getName() + " Max", 
-        "Max Current of AC", 0f, 5f) {
+        "Max Current of AC", 0f, DEFAULT_MAX_CURRENT) {
       public Float getValue() { return getMaxCurrent(); }
       public void setValue(Float value) { setMaxCurrent(value); }
       public boolean isPossible() { return isActive(); }
@@ -155,12 +153,10 @@ public class CurrentSource extends ScienceBody implements ICurrent.Source {
    * Sets the current, in amperes - can only be set from within this class
    */
   private void setCurrent(float current) {
-    if (Math.abs(this.lastCurrentNotified - current) > TOLERANCE) {
+    if (Math.abs(this.current - current) > TOLERANCE) {
       this.current = current;
-      this.lastCurrentNotified = current;
       getModel().notifyCurrentChange(this);
     }
-    this.current = current;
   }
 
   /**

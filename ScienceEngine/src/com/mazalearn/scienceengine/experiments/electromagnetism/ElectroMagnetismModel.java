@@ -20,7 +20,6 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromag
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.SourceCoil;
 
 public class ElectroMagnetismModel extends AbstractExperimentModel {
   private BarMagnet barMagnet;
@@ -39,10 +38,9 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     
     ScienceBody electroMagnet = null;
     addBody(barMagnet = new BarMagnet("BarMagnet", 10, 12, 0));
-    SourceCoil sourceCoil = new SourceCoil("SourceCoil", 10, 12, 0);
     CurrentSource currentSource = new CurrentSource("Current", 10, 12, 0);
     addBody(currentSource);
-    addBody(electroMagnet = new Electromagnet("Electromagnet", sourceCoil, 10, 12, 0));
+    addBody(electroMagnet = new Electromagnet("Electromagnet", 10, 12, 0));
     addBody(pickupCoil = new PickupCoil("PickupCoil", 23, -4, 0, 2E7f));
     addBody(new Lightbulb("Lightbulb", pickupCoil, 23, 25, 0));
     addBody(new FieldMeter("FieldMeter", 10, 5, 0));

@@ -18,23 +18,23 @@ import com.mazalearn.scienceengine.core.model.ICurrent;
  */
 public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
 
+  private static final int ELECTROMAGNET_LOOPS_MAX = 4;
+
   private float maxStrengthOutside; // for debugging
 
-  private SourceCoil sourceCoil;
-  public static final int ELECTROMAGNET_LOOPS_MAX = 4;
+  // Number of loops in the coil.
+  private int numberOfLoops;
 
-  private static final float MAX_EMF = 10;
+  private static final float MAX_EMF = 25;
 
   /**
    * Sole constructor.
-   * @param sourceCoil
-   *          the electromagnet's coil
    */
-  public Electromagnet(String name, SourceCoil sourceCoil,
-      float x, float y, float angle) {
+  public Electromagnet(String name, float x, float y, float angle) {
     super(ComponentType.ElectroMagnet, name, x, y, angle);
-    this.sourceCoil = sourceCoil;
-    this.setSize(16, 16);
+    this.numberOfLoops = 1;
+    // Modeled as a square with diameter equal to side of square
+    this.setSize(16, 16); 
     this.maxStrengthOutside = 0.0f;
     FixtureDef fixtureDef = new FixtureDef();
     PolygonShape rectangleShape = new PolygonShape();
@@ -47,26 +47,15 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   }
 
   public void updateCurrent(float current) {
-    /*
-     * The magnet size is a circle that has the same radius as the coil. Adding
-     * half the wire width makes it look a little better.
-     */
-    double diameter = 2 * this.sourceCoil.getRadius();
-        //+ (this.sourceCoil.getWireWidth() / 2);
-    super.setSize((float) diameter, (float) diameter);
-    
-    this.sourceCoil.setCurrent(current);
-    
     // Compute the electromagnet's emf amplitude.
-    float emf = (this.sourceCoil.getNumberOfLoops() / (float) ELECTROMAGNET_LOOPS_MAX)
-        * current;
+    float emf = (numberOfLoops / (float) ELECTROMAGNET_LOOPS_MAX) * current;
     emf = Clamp.clamp(-MAX_EMF, emf, MAX_EMF);
     
     /*
      * Set the strength. This is a bit of a "fudge". We set the strength of the
      * magnet to be proportional to its emf.
      */
-    float strength = emf * 1000f;
+    float strength = emf * 200f;
     setStrength(strength);
   }
 
@@ -169,7 +158,8 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
     double m = getStrength() * Math.pow(R, distanceExponent) / 2;
 
     // Recurring terms
-    double C1 = m / Math.pow(r, distanceExponent);
+    // Fudge factor of 100 below as multiple
+    double C1 = 100 * m / Math.pow(r, distanceExponent);
     double cosTheta = x / r;
     double sinTheta = y / r;
 

@@ -6,9 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IDoneCallback;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 
 // doubts on direction
 // Generate A at "random" point around magnet
@@ -19,13 +18,18 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 class FieldDirectionProber extends AbstractProber {
   protected static final float TOLERANCE = 0.3f;
   private final Image image;
-  private final ScienceActor barMagnetView;
-  private Vector2 pos = new Vector2(), pos1 = new Vector2(), bField = new Vector2();
+  private final float x, y, width, height;  
+  private Vector2 pos = new Vector2(), bField = new Vector2();
+  private IExperimentModel model;
   
-  public FieldDirectionProber(Skin skin, ScienceActor barMagnetView, 
+  public FieldDirectionProber(Skin skin, float x, float y, float width, float height, IExperimentModel model,
       final IDoneCallback doneCallback) {
     super();
-    this.barMagnetView = barMagnetView;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+   this.model = model;
     TextureRegion questionMark = 
         new TextureRegion(new Texture("images/questionmark.png"));
     image = new Image(questionMark) {
@@ -54,16 +58,13 @@ class FieldDirectionProber extends AbstractProber {
   
   private void generateProbePoint(Vector2 pos) {
     pos.set(MathUtils.random(2f) - 1, MathUtils.random(2f) - 1);
-    pos.x *= barMagnetView.width;
-    pos.y *= barMagnetView.height;
-    pos.add(barMagnetView.x + barMagnetView.width/2, 
-        barMagnetView.y + barMagnetView.height/2);
+    pos.x *= width;
+    pos.y *= height;
+    pos.add(x + width/2, y + height/2);
   }
 
   private void getBFieldDirection(Vector2 viewPos) {
-    barMagnetView.getBox2DPositionFromViewPosition(pos1, viewPos, 0);
-    BarMagnet b = (BarMagnet) barMagnetView.getBody();
-    b.getBField(pos1, bField /* output */);
+    model.getBField(viewPos, bField /* output */);
     bField.nor();
   }
   

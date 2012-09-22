@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -9,14 +10,11 @@ import com.mazalearn.scienceengine.core.model.ScienceBody;
 
 /**
  * AbstractCoil is the abstract base class for all coils.
+ * TODO: does not seem to be required.
  * 
  * @author sridhar
  */
 public abstract class AbstractCoil extends ScienceBody {
-
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
 
   // Number of loops in the coil.
   private int numberOfLoops;
@@ -132,8 +130,8 @@ public abstract class AbstractCoil extends ScienceBody {
    * 
    * @return the area
    */
-  public double getLoopArea() {
-    return (Math.PI * this.radius * this.radius);
+  public float getLoopArea() {
+    return (MathUtils.PI * this.radius * this.radius);
   }
 
   /**
