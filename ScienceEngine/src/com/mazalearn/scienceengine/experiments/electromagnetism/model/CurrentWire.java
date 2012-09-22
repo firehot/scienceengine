@@ -7,28 +7,25 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField.IProducer;
+import com.mazalearn.scienceengine.model.IMagneticField;
 
 /**
  * Current wire is an infinite wire carrying current
  * 
  * @author sridhar
  */
-public class CurrentWire extends ScienceBody implements IProducer {
+public class CurrentWire extends ScienceBody implements IMagneticField.Producer {
   // Radius of the wire.
   private float radius;
   // Amplitude of the current in the wire (-1...+1)
   private float current;
   // Direction of current: up is true and down is false
   private boolean direction = true;
-  private EMField emField;
 
-  public CurrentWire(String name, EMField emField, float x, float y, float angle) {
+  public CurrentWire(String name, float x, float y, float angle) {
     super(ComponentType.CurrentWire, name, x, y, angle);
-    emField.registerProducer(this);
     this.radius = 1;
     this.current = 1f;
-    this.emField = emField;
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(radius);
@@ -41,12 +38,6 @@ public class CurrentWire extends ScienceBody implements IProducer {
     initializeConfigs();
   }
   
-  @Override
-  public void setPositionAndAngle(Vector2 position, float angle) {
-    super.setPositionAndAngle(position, angle);
-    emField.notifyFieldChange();
-  }
-
   /**
    * Sets the radius of the wire.
    * @param radius - the radius
@@ -69,12 +60,12 @@ public class CurrentWire extends ScienceBody implements IProducer {
    */
   public void setCurrentMagnitude(float current) {
     this.current = current;
-    emField.notifyFieldChange();
+    getModel().notifyFieldChange();
   }
   
   public void flipCurrentDirection() {
     this.direction = !this.direction;
-    emField.notifyFieldChange();
+    getModel().notifyFieldChange();
   }
   
   public boolean isDirectionUp() {

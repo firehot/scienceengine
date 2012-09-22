@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.model.IMagneticField;
 
 /**
  * ElectroMagnetic field - There are producers of EMfield and consumers
@@ -15,68 +16,4 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class EMField {
 
-  public interface IConsumer {
-    Vector2 getPosition();
-    void setBField(Vector2 bField);
-    boolean isActive();
-    void notifyFieldChange();
-  }
-  public interface IProducer {
-    Vector2 getBField(Vector2 location, Vector2 bField /* output */);
-    boolean isActive();
-  }
-
-  List<IProducer> emProducers;
-  List<IConsumer> emConsumers;
-  
-  public EMField() {
-    emProducers = new ArrayList<IProducer>();
-    emConsumers = new ArrayList<IConsumer>();
-  }
-  
-  public void registerProducer(IProducer iProducer) {
-    emProducers.add(iProducer);
-  }
-  
-  public void registerConsumer(IConsumer iConsumer) {
-    emConsumers.add(iConsumer);
-  }
-  
-  public void propagateField() {
-    Vector2 bField = new Vector2(0, 0);
-    for (IConsumer consumer: emConsumers) {
-      if (!consumer.isActive()) continue;
-      Vector2 totalBField = new Vector2(0, 0);
-      for (IProducer producer: emProducers) {
-        if (producer != consumer && producer.isActive()) {
-          producer.getBField(consumer.getPosition(), bField);
-          totalBField.x += bField.x;
-          totalBField.y += bField.y;
-        }
-      }
-      consumer.setBField(totalBField);
-    }
-  }
-
-  public void getBField(Vector2 location, Vector2 totalBField) {
-    Vector2 bField = new Vector2(0, 0);
-    totalBField.set(0, 0);
-    for (IProducer iProducer: emProducers) {
-      if (!iProducer.isActive()) continue;
-      iProducer.getBField(location, bField);
-      totalBField.x += bField.x;
-      totalBField.y += bField.y;
-    }
-  }
-
-  /**
-   * Notify all IConsumer's of field change.
-   */
-  public void notifyFieldChange() {
-    for (IConsumer iConsumer: emConsumers) {
-      if (iConsumer.isActive()) {
-        iConsumer.notifyFieldChange();
-      }
-    }
-  }
 }

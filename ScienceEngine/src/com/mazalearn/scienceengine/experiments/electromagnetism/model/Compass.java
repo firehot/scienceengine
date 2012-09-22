@@ -16,18 +16,15 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  */
 public class Compass extends ScienceBody {
 
-  // Field that the compass is observing.
-  private EMField emField;
   // A reusable vector
   private Vector2 fieldVector = new Vector2();
   
   /**
    * @param emField
    */
-  public Compass(String name, EMField emField, float x, float y, float angle) {
+  public Compass(String name, float x, float y, float angle) {
     super(ComponentType.Compass, name, x, y, angle);
     getBody().setType(BodyType.StaticBody);
-    this.emField = emField;
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(0);
@@ -40,7 +37,7 @@ public class Compass extends ScienceBody {
   
   @Override
   public void singleStep(float dt) {
-    emField.getBField(getPosition(), fieldVector /* output */);
+    getModel().getBField(getPosition(), fieldVector /* output */);
     float angle = fieldVector.angle() * MathUtils.degreesToRadians;
     setPositionAndAngle(getPosition(), angle);
   }

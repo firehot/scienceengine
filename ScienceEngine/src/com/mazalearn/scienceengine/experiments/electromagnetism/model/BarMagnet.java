@@ -97,8 +97,8 @@ public class BarMagnet extends AbstractMagnet {
   private final Grid externalNearGrid; // near the magnet
   private final Grid externalFarGrid; // far from the magnet
 
-  public BarMagnet(String name, EMField emField, float x, float y, float angle) {
-    super(ComponentType.BarMagnet, name, emField, x, y, angle);
+  public BarMagnet(String name, float x, float y, float angle) {
+    super(ComponentType.BarMagnet, name, x, y, angle);
     
     this.setSize(32, 8);
     FixtureDef fixtureDef = new FixtureDef();
@@ -142,7 +142,7 @@ public class BarMagnet extends AbstractMagnet {
   public void flipPolarity() {
     setPositionAndAngle(getPosition().x, getPosition().y, 
         (float) ((getAngle() + Math.PI) % (2 * Math.PI)));
-    getEMField().notifyFieldChange();
+    getModel().notifyFieldChange();
   }
 
   /**

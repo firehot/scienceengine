@@ -7,10 +7,10 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.IModelConfig;
+import com.mazalearn.scienceengine.model.IMagneticField.Consumer;
+import com.mazalearn.scienceengine.model.IMagneticField.Producer;
 
 public abstract class AbstractExperimentModel implements IExperimentModel {
 
@@ -21,6 +21,8 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
   private List<List<ScienceBody>> circuits;
+  List<IMagneticField.Producer> emProducers;
+  List<IMagneticField.Consumer> emConsumers;
 
   public AbstractExperimentModel() {
     super();
@@ -30,6 +32,8 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     box2DWorld = new World(gravity, doSleep);
     ScienceBody.setBox2DWorld(box2DWorld);    
     this.circuits = new ArrayList<List<ScienceBody>>();
+    this.emProducers = new ArrayList<IMagneticField.Producer>();
+    this.emConsumers = new ArrayList<IMagneticField.Consumer>();
   }
 
   @Override
@@ -45,6 +49,50 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   public void addBody(ScienceBody scienceBody) {
     bodies.add(scienceBody);
     scienceBody.setModel(this);
+    if (scienceBody instanceof IMagneticField.Producer) {
+      emProducers.add((Producer) scienceBody);
+    }
+    if (scienceBody instanceof IMagneticField.Consumer) {
+      emConsumers.add((Consumer) scienceBody);
+    }
+  }
+  
+  public void propagateField() {
+    Vector2 bField = new Vector2(0, 0);
+    for (IMagneticField.Consumer consumer: emConsumers) {
+      if (!consumer.isActive()) continue;
+      Vector2 totalBField = new Vector2(0, 0);
+      for (IMagneticField.Producer producer: emProducers) {
+        if (producer != consumer && producer.isActive()) {
+          producer.getBField(consumer.getPosition(), bField);
+          totalBField.x += bField.x;
+          totalBField.y += bField.y;
+        }
+      }
+      consumer.setBField(totalBField);
+    }
+  }
+
+  public void getBField(Vector2 location, Vector2 totalBField) {
+    Vector2 bField = new Vector2(0, 0);
+    totalBField.set(0, 0);
+    for (IMagneticField.Producer producer: emProducers) {
+      if (!producer.isActive()) continue;
+      producer.getBField(location, bField);
+      totalBField.x += bField.x;
+      totalBField.y += bField.y;
+    }
+  }
+
+  /**
+   * Notify all Consumer's of field change.
+   */
+  public void notifyFieldChange() {
+    for (IMagneticField.Consumer consumer: emConsumers) {
+      if (consumer.isActive()) {
+        consumer.notifyFieldChange();
+      }
+    }
   }
   
   public void addCircuit(ScienceBody... bodies) {
@@ -53,13 +101,13 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   
   // There should be only one current source in a circuit.
   // It will push current through all other current sinks in the circuit.
-  public void notifyCurrentChange(ICurrentSource currentSource) {
+  public void notifyCurrentChange(ICurrent.Source currentSource) {
     float current = currentSource.getCurrent();
     for (List<ScienceBody> circuit: circuits) {
       if (!circuit.contains(currentSource)) continue;
       for (ScienceBody component: circuit) {
-        if (component instanceof ICurrentSink) {
-          ((ICurrentSink) component).updateCurrent(current);
+        if (component instanceof ICurrent.Sink) {
+          ((ICurrent.Sink) component).updateCurrent(current);
         }
       }
     }

@@ -21,8 +21,6 @@ public class PickupCoil extends AbstractCoil {
   public static final float MIN_PICKUP_LOOP_RADIUS = 68.0f;
   private static final int NUM_SAMPLE_POINTS = 9;
 
-  private EMField emField;
-
   private float averageBx; // in Gauss
   private float flux; // in webers
   private float deltaFlux; // in webers
@@ -41,11 +39,8 @@ public class PickupCoil extends AbstractCoil {
    * 
    * @param emField
    */
-  public PickupCoil(String name, EMField emField, float x, float y, float angle, float calibrationEmf) {
+  public PickupCoil(String name, float x, float y, float angle, float calibrationEmf) {
     super(ComponentType.PickupCoil, name, x, y, angle);
-
-    assert (emField != null);
-    this.emField = emField;
 
     assert (calibrationEmf >= 1);
     this.calibrationEmf = calibrationEmf;
@@ -330,7 +325,7 @@ public class PickupCoil extends AbstractCoil {
       // Translate to global coordinates from local
       Vector2 globalPoint = this.getWorldPoint(this.samplePoints[i]);
       // Find the B-field vector at that point.
-      this.emField.getBField(globalPoint, this.sampleBField /* output */);
+      getModel().getBField(globalPoint, this.sampleBField /* output */);
 
       /*
        * If the B-field x component is equal to the magnet strength, then our

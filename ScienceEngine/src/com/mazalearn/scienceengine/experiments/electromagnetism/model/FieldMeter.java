@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField.IConsumer;
+import com.mazalearn.scienceengine.model.IMagneticField;
 
 /**
  * Models a field meter which can store multiple samples at 
@@ -21,10 +21,8 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField.IC
  * 
  * @author sridhar
  */
-public class FieldMeter extends ScienceBody implements IConsumer {
+public class FieldMeter extends ScienceBody implements IMagneticField.Consumer {
 
-  // Field that the free north pole is interacting with.
-  private EMField emField;
   // A reusable vector
   private Vector2 fieldVector = new Vector2(), samplePoint = new Vector2();
   
@@ -43,11 +41,9 @@ public class FieldMeter extends ScienceBody implements IConsumer {
   /**
    * @param emField
    */
-  public FieldMeter(String name, EMField emField, float x, float y, float angle) {
+  public FieldMeter(String name, float x, float y, float angle) {
     super(ComponentType.FieldMeter, name, x, y, angle);
     getBody().setType(BodyType.DynamicBody);
-    this.emField = emField;
-    emField.registerConsumer(this);
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(0.1f);
@@ -61,7 +57,7 @@ public class FieldMeter extends ScienceBody implements IConsumer {
   @Override
   public void setPositionAndAngle(Vector2 position, float angle) {
     super.setPositionAndAngle(position, angle);
-    emField.getBField(getPosition(), fieldVector /* output */);
+    getModel().getBField(getPosition(), fieldVector /* output */);
     addFieldSample(getPosition().x, getPosition().y, 
         fieldVector.angle() * MathUtils.degreesToRadians, fieldVector.len());
   }
@@ -93,7 +89,7 @@ public class FieldMeter extends ScienceBody implements IConsumer {
   public void notifyFieldChange() {
     for (FieldSample fieldSample: fieldSamples) {
       samplePoint.set(fieldSample.x, fieldSample.y);
-      emField.getBField(samplePoint, fieldVector /* output */);
+      getModel().getBField(samplePoint, fieldVector /* output */);
       fieldSample.angle = fieldVector.angle() * MathUtils.degreesToRadians;
       fieldSample.magnitude = fieldVector.len();
     }

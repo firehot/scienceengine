@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.controller.IModelConfig;
 import com.mazalearn.scienceengine.model.IExperimentModel;
+import com.mazalearn.scienceengine.model.IMagneticField;
 
 /**
  * ScienceBody has basic attributes for an element in an EM Field.
@@ -102,6 +103,9 @@ public class ScienceBody implements IBody {
    */
   public void setPositionAndAngle(Vector2 position, float angle) {
     body.setTransform(position, angle);
+    if (this instanceof IMagneticField.Producer && isActive()) {
+      getModel().notifyFieldChange();
+    }
   }
 
   /**

@@ -5,7 +5,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.mazalearn.scienceengine.model.ICurrentSink;
+import com.mazalearn.scienceengine.model.ICurrent;
 
 /**
  * Electromagnet is the model of an electromagnet.
@@ -16,7 +16,7 @@ import com.mazalearn.scienceengine.model.ICurrentSink;
  * 
  * @author sridhar
  */
-public class Electromagnet extends AbstractMagnet implements ICurrentSink {
+public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
 
   private float maxStrengthOutside; // for debugging
 
@@ -30,9 +30,9 @@ public class Electromagnet extends AbstractMagnet implements ICurrentSink {
    * @param sourceCoil
    *          the electromagnet's coil
    */
-  public Electromagnet(String name, EMField emField, SourceCoil sourceCoil,
+  public Electromagnet(String name, SourceCoil sourceCoil,
       float x, float y, float angle) {
-    super(ComponentType.ElectroMagnet, name, emField, x, y, angle);
+    super(ComponentType.ElectroMagnet, name, x, y, angle);
     this.sourceCoil = sourceCoil;
     this.setSize(16, 16);
     this.maxStrengthOutside = 0.0f;

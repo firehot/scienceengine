@@ -5,6 +5,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.model.IMagneticField;
 
 /**
  * AbstractMagnet is the abstract base class for all magnets.
@@ -12,33 +13,20 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
  * @author sridhar
  */
 public abstract class AbstractMagnet extends ScienceBody 
-       implements EMField.IProducer {
+       implements IMagneticField.Producer {
 
   private static final float TOLERANCE = 0.1f;
   private float width, height;
   private float strength;
-  private EMField emField;
   private float lastNotifiedStrength = 0f;
 
   /**
    * Sole constructor
    * @param  emField - Electromagnetic field to which magnet is coupled
    */
-  public AbstractMagnet(ComponentType componentType, String name, EMField emField, float x, float y, float angle) {
+  public AbstractMagnet(ComponentType componentType, String name, float x, float y, float angle) {
     super(componentType, name, x, y, angle);
-    emField.registerProducer(this);
     this.strength = 1.0f;
-    this.emField = emField;
-  }
-  
-  protected EMField getEMField() {
-    return emField;
-  }
-
-  @Override
-  public void setPositionAndAngle(Vector2 position, float angle) {
-    super.setPositionAndAngle(position, angle);
-    getEMField().notifyFieldChange();
   }
   
   /**
@@ -53,7 +41,7 @@ public abstract class AbstractMagnet extends ScienceBody
     if (Math.abs(lastNotifiedStrength - strength) > TOLERANCE) {
       this.strength = strength;
       lastNotifiedStrength = strength;
-      getEMField().notifyFieldChange();
+      getModel().notifyFieldChange();
     }
     this.strength = strength;
   }
