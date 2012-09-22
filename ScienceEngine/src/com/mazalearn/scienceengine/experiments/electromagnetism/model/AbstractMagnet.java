@@ -4,8 +4,8 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.model.IMagneticField;
+import com.mazalearn.scienceengine.core.model.IMagneticField;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
 
 /**
  * AbstractMagnet is the abstract base class for all magnets.

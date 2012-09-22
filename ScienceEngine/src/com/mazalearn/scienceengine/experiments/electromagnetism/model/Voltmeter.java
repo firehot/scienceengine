@@ -3,7 +3,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
 
 /**
  * Voltmeter is the model of an analog voltmeter. It's needle deflection is a

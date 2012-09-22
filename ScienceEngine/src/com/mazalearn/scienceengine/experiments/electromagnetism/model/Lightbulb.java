@@ -4,7 +4,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
 
 /**
  * Lightbulb is the model of a lightbulb. Its intensity is a function of the

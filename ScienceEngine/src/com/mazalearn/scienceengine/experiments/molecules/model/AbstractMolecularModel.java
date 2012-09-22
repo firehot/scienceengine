@@ -2,9 +2,9 @@ package com.mazalearn.scienceengine.experiments.molecules.model;
 
 import java.util.List;
 
-import com.mazalearn.scienceengine.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.controller.IModelConfig;
-import com.mazalearn.scienceengine.model.AbstractExperimentModel;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.AbstractExperimentModel;
 
 public abstract class AbstractMolecularModel extends AbstractExperimentModel 
     implements IMolecularModel {

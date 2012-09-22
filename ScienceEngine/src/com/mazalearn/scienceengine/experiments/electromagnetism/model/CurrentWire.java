@@ -5,9 +5,9 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.model.IMagneticField;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.model.IMagneticField;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
 
 /**
  * Current wire is an infinite wire carrying current

@@ -3,8 +3,8 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mazalearn.scienceengine.box2d.ScienceActor;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
 
 public class CurrentWireView extends ScienceActor {

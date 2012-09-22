@@ -1,11 +1,11 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mazalearn.scienceengine.box2d.ScienceActor;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
+import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel.Mode;
-import com.mazalearn.scienceengine.view.AbstractExperimentView;
 
 public class ElectroMagnetView extends ScienceActor {
   private final AbstractExperimentView emView;

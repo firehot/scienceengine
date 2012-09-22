@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.experiments.molecules.model;
 
-import com.mazalearn.scienceengine.model.IExperimentModel;
+import com.mazalearn.scienceengine.core.model.IExperimentModel;
 
 public interface IMolecularModel extends IExperimentModel {
 

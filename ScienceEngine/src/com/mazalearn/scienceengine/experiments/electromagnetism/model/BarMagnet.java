@@ -12,8 +12,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.mazalearn.scienceengine.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.utils.Dimension;
+import com.mazalearn.scienceengine.app.utils.Dimension;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 
 /**
  * Model of a bar magnet that uses a grid of precomputed B-field values.

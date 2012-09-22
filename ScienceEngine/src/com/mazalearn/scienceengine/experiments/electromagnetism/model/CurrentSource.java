@@ -2,9 +2,9 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
-import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.model.ICurrent;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.model.ICurrent;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
 
 /**
  * CurrentSource is the model of an AC or DC Current source.

@@ -3,9 +3,9 @@ package com.mazalearn.scienceengine.experiments.waves;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mazalearn.scienceengine.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.controller.IModelConfig;
-import com.mazalearn.scienceengine.model.AbstractExperimentModel;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.AbstractExperimentModel;
 
 public class WaveModel extends AbstractExperimentModel {
   // Enum used for different Boundary Conditions on end of string

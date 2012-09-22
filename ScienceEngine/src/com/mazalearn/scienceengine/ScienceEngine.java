@@ -9,12 +9,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.screens.SplashScreen;
-import com.mazalearn.scienceengine.screens.ExperimentMenuScreen;
-import com.mazalearn.scienceengine.services.MusicManager;
-import com.mazalearn.scienceengine.services.PreferencesManager;
-import com.mazalearn.scienceengine.services.ProfileManager;
-import com.mazalearn.scienceengine.services.SoundManager;
+import com.mazalearn.scienceengine.app.screens.ExperimentMenuScreen;
+import com.mazalearn.scienceengine.app.screens.SplashScreen;
+import com.mazalearn.scienceengine.app.services.MusicManager;
+import com.mazalearn.scienceengine.app.services.PreferencesManager;
+import com.mazalearn.scienceengine.app.services.ProfileManager;
+import com.mazalearn.scienceengine.app.services.SoundManager;
 
 public class ScienceEngine extends Game {
   // constant useful for logging

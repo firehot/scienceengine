@@ -26,12 +26,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.mazalearn.scienceengine.box2d.ScienceActor;
-import com.mazalearn.scienceengine.controller.Configurator;
-import com.mazalearn.scienceengine.controller.IModelConfig;
-import com.mazalearn.scienceengine.model.IExperimentModel;
-import com.mazalearn.scienceengine.screens.AbstractScreen;
-import com.mazalearn.scienceengine.services.LevelManager;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.IExperimentModel;
+import com.mazalearn.scienceengine.core.view.ScienceActor;
+import com.mazalearn.scienceengine.experiments.Configurator;
 
 /**
  * A designer that enables editing the screen layout, configurations available

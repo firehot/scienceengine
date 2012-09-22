@@ -9,9 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.box2d.ScienceActor;
-import com.mazalearn.scienceengine.box2d.ScienceBody;
-import com.mazalearn.scienceengine.box2d.ScienceBody.ComponentType;
+import com.mazalearn.scienceengine.app.services.SoundManager;
+import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.ScienceBody.ComponentType;
+import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
+import com.mazalearn.scienceengine.core.view.ProbeManager;
+import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
@@ -22,9 +25,6 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectroMagn
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilView;
-import com.mazalearn.scienceengine.services.SoundManager;
-import com.mazalearn.scienceengine.view.AbstractExperimentView;
-import com.mazalearn.scienceengine.view.ProbeManager;
 
 public class ElectroMagnetismView extends AbstractExperimentView {
   private BarMagnetView barMagnetView;

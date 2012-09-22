@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mazalearn.scienceengine.model.IMagneticField;
+import com.mazalearn.scienceengine.core.model.IMagneticField;
 
 /**
  * ElectroMagnetic field - There are producers of EMfield and consumers

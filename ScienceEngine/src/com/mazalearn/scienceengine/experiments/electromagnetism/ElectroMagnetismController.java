@@ -2,9 +2,9 @@ package com.mazalearn.scienceengine.experiments.electromagnetism;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.controller.AbstractExperimentController;
-import com.mazalearn.scienceengine.services.SoundManager;
-import com.mazalearn.scienceengine.view.AbstractExperimentView;
+import com.mazalearn.scienceengine.app.services.SoundManager;
+import com.mazalearn.scienceengine.core.controller.AbstractExperimentController;
+import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
 
 /**
  * Electromagnetism Experiment

@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.box2d.ScienceActor;
+import com.mazalearn.scienceengine.core.view.IDoneCallback;
+import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
-import com.mazalearn.scienceengine.view.IDoneCallback;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
