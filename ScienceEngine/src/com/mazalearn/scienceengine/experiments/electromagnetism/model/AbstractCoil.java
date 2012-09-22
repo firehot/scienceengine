@@ -27,7 +27,7 @@ public abstract class AbstractCoil extends ScienceBody {
   // Spacing between the loops
   private float loopSpacing;
   // Amplitude of the current in the coil (-1...+1)
-  private float currentAmplitude;
+  private float current;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -56,7 +56,7 @@ public abstract class AbstractCoil extends ScienceBody {
     this.radius = radius;
     this.wireWidth = wireWidth;
     this.loopSpacing = loopSpacing;
-    this.currentAmplitude = 0f;
+    this.current = 0f;
     FixtureDef fixtureDef = new FixtureDef();
     // This is 2D - so we model the coil as being perpendicular to the plane
     // and only the intersections at top and bottom with plane are fixtures
@@ -175,29 +175,19 @@ public abstract class AbstractCoil extends ScienceBody {
   }
 
   /*
-   * Sets the current amplitude in the coil. This should only be called by the
-   * coil itself. <p> This is a quantity that we made up. It is a percentage
-   * that describes the amount of current relative to some maximum current in
-   * the model, and angle of that current. View components can use this value to
-   * determine how they should behave (eg, how far to move a voltmeter needle,
-   * how bright to make a lightbulb, etc.)
+   * Sets the current in the coil. This should only be called by the
+   * coil itself. 
    * 
-   * @param currentAmplitude the current amplitude (-1...+1)
+   * @param current - the current in the coil
    */
-  protected void setCurrentAmplitude(float currentAmplitude) {
-    if (currentAmplitude < -1 || currentAmplitude > 1) {
-      throw new IllegalArgumentException("currentAmplitude is out of range: "
-          + currentAmplitude);
-    }
-    this.currentAmplitude = currentAmplitude;
+  protected void setCurrent(float current) {
+    this.current = current;
   }
 
   /**
-   * Gets the current amplitude in the coil.
-   * 
-   * @return the current amplitude
+   * Gets the current in the coil, in amperes
    */
-  public float getCurrentAmplitude() {
-    return this.currentAmplitude;
+  public float getCurrent() {
+    return this.current;
   }
 }

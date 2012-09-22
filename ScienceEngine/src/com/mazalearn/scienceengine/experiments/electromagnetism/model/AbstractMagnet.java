@@ -14,9 +14,11 @@ import com.mazalearn.scienceengine.box2d.ScienceBody;
 public abstract class AbstractMagnet extends ScienceBody 
        implements EMField.IProducer {
 
+  private static final float TOLERANCE = 0.1f;
   private float width, height;
   private float strength;
   private EMField emField;
+  private float lastNotifiedStrength = 0f;
 
   /**
    * Sole constructor
@@ -48,8 +50,12 @@ public abstract class AbstractMagnet extends ScienceBody
    *           if strength is outside of the min/max range
    */
   public void setStrength(float strength) {
+    if (Math.abs(lastNotifiedStrength - strength) > TOLERANCE) {
+      this.strength = strength;
+      lastNotifiedStrength = strength;
+      getEMField().notifyFieldChange();
+    }
     this.strength = strength;
-    getEMField().notifyFieldChange();
   }
 
   /**
@@ -87,8 +93,8 @@ public abstract class AbstractMagnet extends ScienceBody
     // Clamp magnitude to magnet strength.
     // TODO: why do we need to do this?
     float magnetStrength = getStrength();
-    if (outputVector.len() > magnetStrength) {
-      outputVector.nor().mul(magnetStrength);
+    if (outputVector.len() > Math.abs(magnetStrength)) {
+      outputVector.nor().mul(Math.abs(magnetStrength));
     }
 
     return outputVector;

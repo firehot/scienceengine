@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.box2d.ScienceActor;
 import com.mazalearn.scienceengine.box2d.ScienceBody;
 import com.mazalearn.scienceengine.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.controller.IModelConfig;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.ACPowerSupply;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
@@ -41,10 +41,10 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     ScienceBody electroMagnet = null;
     addBody(barMagnet = new BarMagnet("BarMagnet", emField, 10, 12, 0));
     SourceCoil sourceCoil = new SourceCoil("SourceCoil", 10, 12, 0);
-    ACPowerSupply acPower = new ACPowerSupply("ACPower", 10, 12, 0);
-    addBody(acPower);
+    CurrentSource currentSource = new CurrentSource("Current", 10, 12, 0);
+    addBody(currentSource);
     addBody(electroMagnet = new Electromagnet("Electromagnet", emField, sourceCoil, 10, 12, 0));
-    addBody(pickupCoil = new PickupCoil("PickupCoil", emField, 23, -4, 0, 3000));
+    addBody(pickupCoil = new PickupCoil("PickupCoil", emField, 23, -4, 0, 2E7f));
     addBody(new Lightbulb("Lightbulb", pickupCoil, 23, 25, 0));
     addBody(new FieldMeter("FieldMeter", emField, 10, 5, 0));
     addBody(new CurrentWire("Wire A", emField, 10, 12, 0));
@@ -52,7 +52,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     barMagnet.setType(BodyType.DynamicBody);
     addBody(compass = new Compass("Compass", emField, 0, 5, 0));
     compass.setType(BodyType.KinematicBody);
-    addCircuit(acPower, electroMagnet);
+    addCircuit(currentSource, electroMagnet);
     
     reset();
   }

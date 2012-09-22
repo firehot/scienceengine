@@ -48,8 +48,7 @@ public class ScienceBody implements IBody {
   
   public enum ComponentType {
     BarMagnet,
-    ACPowerSupply,
-    Battery,
+    CurrentSource,
     Compass,
     ElectroMagnet,
     Lightbulb,

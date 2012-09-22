@@ -16,6 +16,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentSourceView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectroMagnetView;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterView;
@@ -65,8 +66,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new FieldMeterView(textureRegion, body));
         fieldMeter = (FieldMeter) body;
         break;
-      case ACPowerSupply:
-        this.addActor(currentSource = new ScienceActor(body, textureRegion));
+      case CurrentSource:
+        this.addActor(currentSource = new CurrentSourceView(body, textureRegion));
         break;        
       case CurrentWire:
         this.addActor(new CurrentWireView(body));
@@ -108,7 +109,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     case CurrentWire:
       texture = new Texture("images/currentwire-up.png");
       break;
-    case ACPowerSupply:
+    case CurrentSource:
       texture = new Texture("images/currentsource.png");
       break;
     default:
@@ -120,7 +121,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
     super.touchDown(x, y,  pointer, button);
-    //if (super.getTouchFocus(pointer) != null) return true;
+    Actor touchedActor = super.getTouchFocus(pointer);
+    if (!(touchedActor instanceof ScienceActor) && touchedActor != null) return true;
     // Touch at stage level - not on any actor - Assume field touch
     if (fieldMeter.isActive()) isFieldPointTouched = true;
     return true;

@@ -54,12 +54,12 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   // There should be only one current source in a circuit.
   // It will push current through all other current sinks in the circuit.
   public void notifyCurrentChange(ICurrentSource currentSource) {
-    float amplitude = currentSource.getAmplitude();
+    float current = currentSource.getCurrent();
     for (List<ScienceBody> circuit: circuits) {
       if (!circuit.contains(currentSource)) continue;
       for (ScienceBody component: circuit) {
         if (component instanceof ICurrentSink) {
-          ((ICurrentSink) component).updateCurrent(amplitude);
+          ((ICurrentSink) component).updateCurrent(current);
         }
       }
     }

@@ -107,7 +107,7 @@ public class CurrentWire extends ScienceBody implements IProducer {
   public Vector2 getBField(Vector2 location, Vector2 bField) {
     Vector2 localPoint = getLocalPoint(location);
     // field = constant * current / distance
-    float magnitude = 10 * current * (direction ? 1 : -1) / localPoint.len();
+    float magnitude = 50 * current * (direction ? 1 : -1) / localPoint.len();
     localPoint.nor();
     // Current towards me is +
     bField.set(-localPoint.y, localPoint.x).mul(magnitude);

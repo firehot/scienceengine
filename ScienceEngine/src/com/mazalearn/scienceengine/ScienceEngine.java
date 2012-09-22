@@ -127,7 +127,7 @@ public class ScienceEngine extends Game {
     super.render();
     // output the current FPS
     if (DEV_MODE != DevMode.PRODUCTION) {
-      //fpsLogger.log();
+      // fpsLogger.log();
     }
   }
 

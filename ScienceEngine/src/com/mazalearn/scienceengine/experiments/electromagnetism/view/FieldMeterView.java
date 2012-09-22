@@ -23,12 +23,14 @@ public class FieldMeterView extends ScienceActor {
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
+    batch.end();
+    batch.begin();
     List<FieldSample> fieldSamples = fieldMeter.getFieldSamples();
     // Reverse traversal - want to show the latest point first
     for (int i = fieldSamples.size() - 1; i >= 0; i--) {
       FieldSample fieldSample = fieldSamples.get(i);
-      // Magnitude is scaled visually as width and height of arrow
-      float magnitude = 2 * (fieldSample.magnitude > 2f ? 1f : fieldSample.magnitude);
+      // Magnitude is scaled logarmthmically as width and height of arrow
+      float magnitude = (float) Math.min(Math.log(1 + fieldSample.magnitude), 5);
       // location of field meter center is the sample point
       pos.set(fieldSample.x, fieldSample.y);
       pos.mul(ScienceEngine.PIXELS_PER_M);
@@ -41,5 +43,7 @@ public class FieldMeterView extends ScienceActor {
       batch.draw(getTextureRegion(), pos.x, pos.y, 
           originX, originY, width * magnitude, height * magnitude, 1, 1, rotation);
     }
+    batch.end();
+    batch.begin();
   }
 }

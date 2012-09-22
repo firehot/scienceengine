@@ -65,7 +65,7 @@ public class Voltmeter extends ScienceBody {
   private float computeNeedleAngle() {
 
     // Use amplitude of the voltage source as our signal.
-    float amplitude = pickupCoilModel.getCurrentAmplitude();
+    float amplitude = pickupCoilModel.getCurrent();
 
     // Absolute amplitude below the threshold is effectively zero.
     if (Math.abs(amplitude) < CURRENT_AMPLITUDE_THRESHOLD) {

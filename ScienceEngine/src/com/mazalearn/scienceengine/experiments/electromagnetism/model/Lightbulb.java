@@ -56,7 +56,7 @@ public class Lightbulb extends ScienceBody {
 
     float intensity = 0f;
 
-    final float currentAmplitude = pickupCoilModel.getCurrentAmplitude();
+    final float currentAmplitude = pickupCoilModel.getCurrent();
 
     // If current changed angle, turn the light off.
     if (Math.signum(currentAmplitude) != Math.signum(previousCurrentAmplitude)) {

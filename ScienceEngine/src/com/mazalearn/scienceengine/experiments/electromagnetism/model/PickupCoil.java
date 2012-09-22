@@ -258,7 +258,7 @@ public class PickupCoil extends AbstractCoil {
     
       // Current amplitude is proportional to emf amplitude.
       float amplitude = Clamp.clamp(-1, emf / this.calibrationEmf, +1);
-      setCurrentAmplitude(amplitude);
+      setCurrent(amplitude);
     }
     
     calibrateEmf();

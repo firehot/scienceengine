@@ -23,6 +23,8 @@ public class Electromagnet extends AbstractMagnet implements ICurrentSink {
   private SourceCoil sourceCoil;
   public static final int ELECTROMAGNET_LOOPS_MAX = 4;
 
+  private static final float MAX_EMF = 10;
+
   /**
    * Sole constructor.
    * @param sourceCoil
@@ -44,7 +46,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrentSink {
     this.createFixture(fixtureDef);
   }
 
-  public void updateCurrent(float amplitude) {
+  public void updateCurrent(float current) {
     /*
      * The magnet size is a circle that has the same radius as the coil. Adding
      * half the wire width makes it look a little better.
@@ -53,19 +55,18 @@ public class Electromagnet extends AbstractMagnet implements ICurrentSink {
         //+ (this.sourceCoil.getWireWidth() / 2);
     super.setSize((float) diameter, (float) diameter);
     
-    // Current amplitude is proportional to voltage amplitude of the current source.
-    this.sourceCoil.setCurrentAmplitude(amplitude);
+    this.sourceCoil.setCurrent(current);
     
     // Compute the electromagnet's emf amplitude.
-    float emfAmplitude = (this.sourceCoil.getNumberOfLoops() / (float) ELECTROMAGNET_LOOPS_MAX)
-        * amplitude;
-    emfAmplitude = Clamp.clamp(-1f, emfAmplitude, 1f);
+    float emf = (this.sourceCoil.getNumberOfLoops() / (float) ELECTROMAGNET_LOOPS_MAX)
+        * current;
+    emf = Clamp.clamp(-MAX_EMF, emf, MAX_EMF);
     
     /*
      * Set the strength. This is a bit of a "fudge". We set the strength of the
      * magnet to be proportional to its emf.
      */
-    float strength = Math.abs(emfAmplitude) * 10000f;
+    float strength = emf * 1000f;
     setStrength(strength);
   }
 
