@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.FlickScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
-import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
-import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IExperimentController;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
@@ -45,6 +45,26 @@ public class ExperimentMenuScreen extends AbstractScreen {
     profile = scienceEngine.getProfileManager().retrieveProfile();
 
     // create the experiments Table
+    table.add(createExperimentsSelector());    
+    table.row();
+
+    // register the back button
+    TextButton backButton = new TextButton("Back to Start", getSkin());
+    backButton.setClickListener(new ClickListener() {
+      public void click(Actor actor, float x, float y) {
+        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.setScreen(new StartScreen(scienceEngine));
+      }
+    });
+    table.row();
+    table.add(backButton).colspan(NUM_COLUMNS);
+  }
+
+  public Actor createExperimentsSelector() {
+    Table table = super.getTable().newTable();
+    FlickScrollPane flickScrollPane = new FlickScrollPane(table, "Experiments");
+    table.setFillParent(false);
+    table.defaults().fill();
     final String[] experimentNames = 
         new String[] {StatesOfMatterController.NAME, 
                       WaveController.NAME, 
@@ -73,19 +93,8 @@ public class ExperimentMenuScreen extends AbstractScreen {
       if (count % NUM_COLUMNS == 0) {
         table.row();
       }
-    }    
-    table.row();
-
-    // register the back button
-    TextButton backButton = new TextButton("Back to Start", getSkin());
-    backButton.setClickListener(new ClickListener() {
-      public void click(Actor actor, float x, float y) {
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        scienceEngine.setScreen(new StartScreen(scienceEngine));
-      }
-    });
-    table.row();
-    table.add(backButton).colspan(NUM_COLUMNS);
+    }
+    return flickScrollPane;
   }
   
   private IExperimentController createExperimentController(

@@ -13,14 +13,14 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetism
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel.Mode;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 
-public class BarMagnetView extends ScienceActor {
+public class BarMagnetActor extends ScienceActor {
   private final BarMagnet barMagnet;
   private final AbstractExperimentView emView;
   private final ElectroMagnetismModel emModel;
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
   
-  public BarMagnetView(TextureRegion textureRegion, ScienceBody body, 
+  public BarMagnetActor(TextureRegion textureRegion, ScienceBody body, 
       AbstractExperimentView experimentView, ElectroMagnetismModel emModel) {
     super(body, textureRegion);
     this.barMagnet = (BarMagnet) body;

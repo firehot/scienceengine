@@ -1,0 +1,41 @@
+{"Levels": [
+  {"name": "Magnetic Field around a Bar Magnet",
+   "description": "A Bar Magnet has a magnetic field around it. Explore using a compass and understand how the magnetic field can be visualized as lines of force. Explore the effect of polarity and strength of the magnet on the magnetic field."
+  },
+  {"name": "Magnetic Field around an infinite current carrying wire",
+   "description": "An infinite wire carrying current produces a magnetic field around itself. Explore using a compass and see the lines of force of the magnetic field. Change the current direction and magnitude to see how the field changes."
+  },
+  {"name": "Magnetic Field with 2 infinite current wires",
+   "description": "Move the two wires around, change their current direction and magnitudes to see how the magnetic field is affected"
+  },
+  {"name": "Magnetic Field around an Electromagnet",
+   "description": "A coil of wire carrying current is an electromagnet. It produces a magnetic field around it. The strength and direction of the magnetic field are affected by the current strength and direction."
+  },
+  {"name": "Induction of current by relative motion of a bar magnet and a coil of wire",
+   "description": "Experiment with how current is induced in a coil of wire when the bar magnet is rotated or moved in its vicinity. Understand how the current induced changes with the polarity, strength of the bar magnet."
+  },
+  {"name": "Induction of current by relative motion of an electromagnet and a coil of wire",
+   "description": "Experiment with how current is induced in a coil of wire when the electromagnet is rotated or moved in its vicinity. Understand how the current induced changes with the polarity, strength of the electromagnet."
+  }
+],
+"Resources": [
+{"type": "video",
+ "duration": "2:03", 
+ "attribution": "ibphysicshelp", 
+ "url": "http://www.youtube.com/watch?v=hajIIGHPeuU", 
+ "description": "Bar Magnet and Coil with multimeter is used to show how current is induced when lines of magnetic field are cut. Electromagnet and coil with multimeter is used to show the same effect."
+},
+{"type": "video",
+ "duration": "5:58", 
+ "attribution": "TutorVista", 
+ "url": "http://www.youtube.com/watch?v=KGTZPTnZBFE", 
+ "description": "TutorVista - Histroy of electromagnetism from Oersted through Faraday. A voltage would be generated across a length of wire if that wire was exposed to a perpendicular magnetic field flux of changing intensity. An easy way to create a magnetic field of changing intensity is to move a permanent magnet next to a wire or coil of wire."
+},
+{"type": "video",
+ "duration": "3:00", 
+ "attribution": "National STEM Center, UK", 
+ "url": "http://www.nationalstemcentre.org.uk/elibrary/resource/4100/electromagnetic-induction", 
+ "description": "Produced by the National STEM Centre and the Institute of Physics, this video demonstrates the process of electromagnetic induction. It shows a simple piece of equipment that can readily be made which contains spinning magnets, a wire coil and a lamp. Spinning the magnets past the coil produces an electric current and lights the lamp."
+}
+]
+}

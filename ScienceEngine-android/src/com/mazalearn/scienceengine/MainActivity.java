@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,8 +10,9 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.utils.UrlFetcher;
 
-public class MainActivity extends AndroidApplication {
+public class MainActivity extends AndroidApplication implements UrlFetcher {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +26,19 @@ public class MainActivity extends AndroidApplication {
         cfg.useCompass = false;
         Uri data = getIntent().getData();
 
+        ScienceEngine scienceEngine = null;
         if (data != null) {
           List<String> params = data.getPathSegments();
-          initialize(new ScienceEngine(params), cfg);
+          scienceEngine = new ScienceEngine(params);
         } else {
-          initialize(new ScienceEngine(), cfg);
+          scienceEngine = new ScienceEngine();
         }
+        scienceEngine.setUrlFetcher(this);
+        initialize(scienceEngine, cfg);
     }
+    
+    public void fetchURL(String url) {
+      Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      startActivity(myIntent);
+    }   
 }

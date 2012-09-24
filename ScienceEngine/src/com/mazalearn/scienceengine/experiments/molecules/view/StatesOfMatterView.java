@@ -6,7 +6,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
-import com.mazalearn.scienceengine.experiments.Configurator;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 
 /**

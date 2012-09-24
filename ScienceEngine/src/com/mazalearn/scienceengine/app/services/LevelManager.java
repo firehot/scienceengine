@@ -21,23 +21,23 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.view.ScienceActor;
-import com.mazalearn.scienceengine.experiments.Configurator;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public class LevelManager {
   private static final float THUMBNAIL_SCALE = 7.5f;
   private Stage stage;
   private FileHandle file;
   private int level = 1;
-  private Configurator configurator;
+  private ControlPanel controlPanel;
   private String description;
 
-  public LevelManager(Stage stage, Configurator configurator) {
+  public LevelManager(Stage stage, ControlPanel controlPanel) {
     this.stage = stage;
-    this.configurator = configurator;
+    this.controlPanel = controlPanel;
   }
 
   public String getName() {
-    return configurator.getExperimentName();
+    return controlPanel.getExperimentName();
   }
 
   public int getLevel() {
@@ -46,7 +46,7 @@ public class LevelManager {
   
   public void setLevel(int level) {
     this.level = level;
-    String fileName = getFileName(configurator.getExperimentName(), ".json", level);
+    String fileName = getFileName(controlPanel.getExperimentName(), ".json", level);
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
     this.file = Gdx.files.internal(fileName);
     if (this.file == null) {
@@ -75,7 +75,7 @@ public class LevelManager {
       System.err.println("[LevelEditor] Error happened while loading "
           + file.path());
     }
-    configurator.refresh();
+    controlPanel.refresh();
   }
 
   public void save() {
@@ -103,14 +103,14 @@ public class LevelManager {
   }
 
   private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
-    jsonWriter.set("name", configurator.getExperimentName());
+    jsonWriter.set("name", controlPanel.getExperimentName());
     jsonWriter.set("level", level);
     jsonWriter.set("description", description);
   }
 
   private void writeConfigs(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("configs");
-    for (final IModelConfig<?> config : configurator.getModelConfigs()) {
+    for (final IModelConfig<?> config : controlPanel.getModelConfigs()) {
       jsonWriter.object()
           .set("name", config.getName())
           .set("permitted", config.isPermitted())
@@ -152,7 +152,7 @@ public class LevelManager {
 
   private void readLevelInfo(OrderedMap<String, ?> info) {
     description = (String) nvl(info.get("description"), 
-        configurator.getExperimentName() + " : Level " + level);
+        controlPanel.getExperimentName() + " : Level " + level);
   }
 
   private void readConfigs(Array<?> configs) {
@@ -211,7 +211,7 @@ public class LevelManager {
 
   private IModelConfig<?> findConfig(String name) {
     if (name == null) return null;
-    for (IModelConfig<?> config : configurator.getModelConfigs()) {
+    for (IModelConfig<?> config : controlPanel.getModelConfigs()) {
       if (config.getName().equals(name)) return config;
     }
     return null;
@@ -250,7 +250,7 @@ public class LevelManager {
    * Take screenshot, convert to a thumbnail and save to the level file as png.
    */
   private void saveLevelThumbnail() {
-    String fileName = getFileName(configurator.getExperimentName(), ".png", level);
+    String fileName = getFileName(controlPanel.getExperimentName(), ".png", level);
     FileHandle screenFile = Gdx.files.external(fileName);
     Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
         Gdx.graphics.getHeight(), true);

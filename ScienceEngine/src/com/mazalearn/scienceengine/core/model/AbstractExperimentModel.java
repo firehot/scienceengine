@@ -22,6 +22,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   private List<List<ScienceBody>> circuits;
   List<IMagneticField.Producer> emProducers;
   List<IMagneticField.Consumer> emConsumers;
+  Vector2 bField = new Vector2(), totalBField = new Vector2();
 
   public AbstractExperimentModel() {
     super();
@@ -57,23 +58,15 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   }
   
   public void propagateField() {
-    Vector2 bField = new Vector2(0, 0);
     for (IMagneticField.Consumer consumer: emConsumers) {
       if (!consumer.isActive()) continue;
-      Vector2 totalBField = new Vector2(0, 0);
-      for (IMagneticField.Producer producer: emProducers) {
-        if (producer != consumer && producer.isActive()) {
-          producer.getBField(consumer.getPosition(), bField);
-          totalBField.x += bField.x;
-          totalBField.y += bField.y;
-        }
-      }
+      // Assume Consumer is not itself a producer
+      getBField(consumer.getPosition(), totalBField);
       consumer.setBField(totalBField);
     }
   }
 
   public void getBField(Vector2 location, Vector2 totalBField) {
-    Vector2 bField = new Vector2(0, 0);
     totalBField.set(0, 0);
     for (IMagneticField.Producer producer: emProducers) {
       if (!producer.isActive()) continue;

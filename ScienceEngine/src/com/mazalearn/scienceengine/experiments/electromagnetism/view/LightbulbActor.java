@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 
-public class LightbulbView extends ScienceActor {
+public class LightbulbActor extends ScienceActor {
   private final Lightbulb lightbulb;
   private TextureRegion lightTexture;
 
-  public LightbulbView(TextureRegion textureRegion, Lightbulb lightbulb) {
+  public LightbulbActor(TextureRegion textureRegion, Lightbulb lightbulb) {
     super(lightbulb, textureRegion);
     this.lightbulb = lightbulb;
     lightTexture = createLightTexture(Color.YELLOW);

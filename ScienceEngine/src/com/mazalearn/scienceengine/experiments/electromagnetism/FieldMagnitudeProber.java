@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IDoneCallback;
 
@@ -20,8 +21,8 @@ class FieldMagnitudeProber extends AbstractProber {
   final Image imageCorrect, imageWrong;
   private final float x, y, width, height;
   // Temporary vectors
-  Vector2 pos1 = new Vector2(), pos2 = new Vector2(), pos = new Vector2();
-  Vector2 bField = new Vector2();
+  Vector2 pos1 = new Vector2(), pos2 = new Vector2();
+  Vector2 bField = new Vector2(), modelPos = new Vector2();
   private IExperimentModel model;
   
   public FieldMagnitudeProber(Skin skin, float x, float y, float width, float height, 
@@ -32,7 +33,8 @@ class FieldMagnitudeProber extends AbstractProber {
     this.y = y;
     this.width = width;
     this.height = height;
-    TextureRegion questionMark = new TextureRegion(new Texture("images/questionmark.png"));
+    TextureRegion questionMark = 
+        new TextureRegion(new Texture("images/questionmark.png"));
     imageCorrect = new Image(questionMark);
     imageCorrect.setClickListener(new ClickListener() {
       @Override
@@ -93,8 +95,8 @@ class FieldMagnitudeProber extends AbstractProber {
   }
   
   private boolean haveSimilarMagnitudes(float v1, float v2) {
-    if (Math.abs(v1 - v2) < 1e-4f) return true;
-    if (Math.abs(v1 - v2) / v2 < TOLERANCE) return true;
+    if (Math.abs(v1 - v2) < ZERO_TOLERANCE) return true;
+    if (Math.abs(v1 - v2) / Math.min(v1, v2) < TOLERANCE) return true;
     return false;
   }
 
@@ -110,7 +112,8 @@ class FieldMagnitudeProber extends AbstractProber {
   }
 
   private float getBFieldMagnitude(Vector2 viewPos) {
-    model.getBField(viewPos, bField /* output */);
+    modelPos.set(viewPos).mul(1f / ScienceEngine.PIXELS_PER_M);
+    model.getBField(modelPos, bField /* output */);
     return bField.len();
   }
 }

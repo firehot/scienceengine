@@ -17,17 +17,17 @@ import com.mazalearn.scienceengine.core.view.ProbeManager;
 import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentSourceView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectroMagnetView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbView;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilView;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentSourceActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectroMagnetActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilActor;
 
 public class ElectroMagnetismView extends AbstractExperimentView {
-  private BarMagnetView barMagnetView;
+  private BarMagnetActor barMagnetActor;
   private ProbeManager probeManager;
   private boolean isFieldPointTouched = false;
   private FieldMeter fieldMeter;
@@ -50,30 +50,30 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       if (textureRegion == null) continue;
       switch (body.getComponentType()) {
       case BarMagnet:       
-        barMagnetView = new BarMagnetView(textureRegion, body, this, emModel);
-        this.addActor(barMagnetView);
+        barMagnetActor = new BarMagnetActor(textureRegion, body, this, emModel);
+        this.addActor(barMagnetActor);
         break;
       case Lightbulb:
-        this.addActor(lightbulb = new LightbulbView(textureRegion, (Lightbulb) body));
+        this.addActor(lightbulb = new LightbulbActor(textureRegion, (Lightbulb) body));
         break;
       case PickupCoil:
-        this.addActor(pickupCoil = new PickupCoilView(body, textureRegion));
+        this.addActor(pickupCoil = new PickupCoilActor(body, textureRegion));
         break;
       case Compass:
-        this.addActor(new CompassView(textureRegion, body));
+        this.addActor(new CompassActor(textureRegion, body));
         break;
       case FieldMeter:
-        this.addActor(new FieldMeterView(textureRegion, body));
+        this.addActor(new FieldMeterActor(textureRegion, body));
         fieldMeter = (FieldMeter) body;
         break;
       case CurrentSource:
-        this.addActor(currentSource = new CurrentSourceView(body, textureRegion));
+        this.addActor(currentSource = new CurrentSourceActor(body, textureRegion));
         break;        
       case CurrentWire:
-        this.addActor(new CurrentWireView(body));
+        this.addActor(new CurrentWireActor(body));
         break;
       case ElectroMagnet:
-        this.addActor(electroMagnet = new ElectroMagnetView(textureRegion, body, this, emModel));
+        this.addActor(electroMagnet = new ElectroMagnetActor(textureRegion, body, this, emModel));
         break;
       default:
         this.addActor(new ScienceActor(body, textureRegion));
@@ -150,8 +150,8 @@ public class ElectroMagnetismView extends AbstractExperimentView {
       if (probeManager == null) {
         probeManager = new ProbeManager(skin, width, height, this, soundManager); 
         this.addActor(probeManager);
-        probeManager.add(new FieldDirectionProber(skin, barMagnetView.x, barMagnetView.y, barMagnetView.width, barMagnetView.height, emModel, probeManager));
-        probeManager.add(new FieldMagnitudeProber(skin, barMagnetView.x, barMagnetView.y, barMagnetView.width, barMagnetView.height, emModel, probeManager));
+        probeManager.add(new FieldDirectionProber(skin, barMagnetActor.x, barMagnetActor.y, barMagnetActor.width, barMagnetActor.height, emModel, probeManager));
+        probeManager.add(new FieldMagnitudeProber(skin, barMagnetActor.x, barMagnetActor.y, barMagnetActor.width, barMagnetActor.height, emModel, probeManager));
       }
       probeManager.startChallenge();
     }

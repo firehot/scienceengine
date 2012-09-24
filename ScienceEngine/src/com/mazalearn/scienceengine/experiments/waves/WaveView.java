@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
-import com.mazalearn.scienceengine.experiments.Configurator;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
 import com.mazalearn.scienceengine.experiments.waves.view.Boundary;
 import com.mazalearn.scienceengine.experiments.waves.view.Hand;
 import com.mazalearn.scienceengine.experiments.waves.view.WaveBox;

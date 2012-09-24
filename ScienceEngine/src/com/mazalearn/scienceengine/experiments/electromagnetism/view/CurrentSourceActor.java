@@ -7,11 +7,11 @@ import com.mazalearn.scienceengine.core.model.ScienceBody;
 import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
 
-public class CurrentSourceView extends ScienceActor {
+public class CurrentSourceActor extends ScienceActor {
   private static TextureRegion current = 
       new TextureRegion(new Texture("images/current.png"));
   private CurrentSource currentSource;
-  public CurrentSourceView(ScienceBody body, TextureRegion textureRegion) {
+  public CurrentSourceActor(ScienceBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     currentSource = (CurrentSource) body;
   }

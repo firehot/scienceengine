@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mazalearn.scienceengine.core.model.ScienceBody;
 import com.mazalearn.scienceengine.core.view.ScienceActor;
 
-public class PickupCoilView extends ScienceActor {
-  public PickupCoilView(ScienceBody body, TextureRegion textureRegion) {
+public class CompassActor extends ScienceActor {
+  public CompassActor(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
     this.setAllowDrag(true);
   }

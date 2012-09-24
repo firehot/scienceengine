@@ -9,11 +9,11 @@ import com.mazalearn.scienceengine.core.view.IExperimentView;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 
 /**
- * Experiment Level screen corresponding to one level of the experiment.
+ * Experiment screen corresponding to one level of the experiment.
  */
-public class ExperimentLevelScreen extends AbstractScreen {
+public class ExperimentScreen extends AbstractScreen {
 
-  public ExperimentLevelScreen(ScienceEngine scienceEngine, 
+  public ExperimentScreen(ScienceEngine scienceEngine, 
       LevelManager levelManager, int level, IExperimentController experimentController) {
     super(scienceEngine, null);
     IExperimentView experimentView = experimentController.getView();

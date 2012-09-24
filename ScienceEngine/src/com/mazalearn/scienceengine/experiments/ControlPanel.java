@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.experiments;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,7 +25,7 @@ import com.mazalearn.scienceengine.core.controller.IViewConfig;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IExperimentView;
 
-public class Configurator extends Table {
+public class ControlPanel extends Table {
   private final IExperimentController experimentController;
   private final IExperimentModel experimentModel;
   private final IExperimentView experimentView;
@@ -35,10 +34,10 @@ public class Configurator extends Table {
   private String experimentName;
   private IViewConfig pauseResumeConfig;
   private IViewConfig challengeConfig;
-  private Table modelConfigTable;
+  private Table modelControlPanel;
   private Label title;
   
-  public Configurator(Skin skin, IExperimentController experimentController) {
+  public ControlPanel(Skin skin, IExperimentController experimentController) {
     super(skin, null, experimentController.getName());
     this.skin = skin;
     this.experimentController = experimentController;
@@ -46,18 +45,26 @@ public class Configurator extends Table {
     this.experimentView = experimentController.getView();
     this.experimentName = experimentController.getName();
     this.defaults().fill();
-    registerStandardButtons(skin, experimentModel, experimentView);
-    this.modelConfigTable = new Table(skin);
-    modelConfigTable.defaults().fill();
-    this.add(modelConfigTable);
-    registerModelConfigs();
+    Actor standardControlPanel = 
+        createStandardControlPanel(skin, experimentModel, experimentView);
+    this.modelControlPanel = createModelControlPanel(skin);
+    this.add(standardControlPanel);
+    this.row();
+    this.add(modelControlPanel);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       debug();
     }
   }
+
+  public Table createModelControlPanel(Skin skin) {
+    Table modelControlPanel = new Table(skin);
+    modelControlPanel.defaults().fill();
+    registerModelConfigs(modelControlPanel);
+    return modelControlPanel;
+  }
   
   public void refresh() {
-    registerModelConfigs();
+    registerModelConfigs(modelControlPanel);
   }
   
   public List<IModelConfig<?>> getModelConfigs() {
@@ -65,22 +72,24 @@ public class Configurator extends Table {
   }
 
   @SuppressWarnings("rawtypes")
-  protected void registerModelConfigs() {
+  protected void registerModelConfigs(Table modelControlPanel) {
     this.configs = new ArrayList<Config>();
-    modelConfigTable.clear();
+    modelControlPanel.clear();
     // Register all model configs
     for (IModelConfig modelConfig: experimentModel.getAllConfigs()) {
-      this.configs.add(createViewConfig(modelConfig, modelConfigTable));
+      this.configs.add(createViewConfig(modelConfig, modelControlPanel));
     }
   }
 
-  protected void registerStandardButtons(Skin skin,
+  protected Actor createStandardControlPanel(Skin skin,
       final IExperimentModel experimentModel,
       final IExperimentView experimentView) {
+    Table standardControls = new Table(skin, null, "Standard");
+    standardControls.defaults().fill();
     // Register name
     this.title = new Label(experimentName, skin);
-    add(title).colspan(2).center();
-    row();
+    standardControls.add(title).colspan(2).center();
+    standardControls.row();
     // register the back button
     TextButton backButton = new TextButton("Back", skin);
     backButton.setClickListener(new ClickListener() {
@@ -90,8 +99,8 @@ public class Configurator extends Table {
             new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentController));
       }
     });
-    this.add(backButton).height(30).colspan(2);
-    row();
+    standardControls.add(backButton).height(30).colspan(2);
+    standardControls.row();
     
     // Add challenge/learn functionality
     AbstractModelConfig<String> challengeModelConfig = 
@@ -108,8 +117,8 @@ public class Configurator extends Table {
             experimentView.isChallengeInProgress() ? "Learn" : "Challenge");
       }
     };
-    this.add(challengeConfig.getActor()).height(30).colspan(2);
-    row();
+    standardControls.add(challengeConfig.getActor()).height(30).colspan(2);
+    standardControls.row();
     
     // Add pause/resume functionality for the experiment
     AbstractModelConfig<String> pauseResumeModelConfig = 
@@ -137,12 +146,14 @@ public class Configurator extends Table {
     };
     IViewConfig resetConfig = new ConfigTextButton(resetModelConfig, skin);
     
-    Table table = new Table(skin);
-    table.defaults().fill().expand();
-    table.add(pauseResumeConfig.getActor()).pad(0,5,0, 5);
-    table.add(resetConfig.getActor());
-    this.add(table).pad(0, 0, 10, 0);
-    row();
+    Table suspendResetTable = new Table(skin);
+    suspendResetTable.defaults().fill().expand();
+    suspendResetTable.add(pauseResumeConfig.getActor()).pad(0,5,0, 5);
+    suspendResetTable.add(resetConfig.getActor());
+    
+    standardControls.add(suspendResetTable).pad(0, 0, 10, 0);
+    standardControls.row();
+    return standardControls;
   }
   
   public Label getTitle() {
@@ -181,7 +192,8 @@ public class Configurator extends Table {
   }
 
   @Override
-  public void draw(SpriteBatch batch, float parentAlpha) {
+  public void act(float delta) {
+    super.act(delta);
     challengeConfig.syncWithModel();
     pauseResumeConfig.syncWithModel();
     for (Config config: configs) {
@@ -189,9 +201,8 @@ public class Configurator extends Table {
     }
     this.invalidate();
     this.validate();
-    super.draw(batch, parentAlpha);
   }
-
+  
   public String getExperimentName() {
     return experimentName;
   }

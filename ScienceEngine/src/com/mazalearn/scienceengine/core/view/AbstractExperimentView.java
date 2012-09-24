@@ -12,7 +12,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.experiments.Configurator;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public abstract class AbstractExperimentView extends Stage implements IExperimentView {
 
@@ -21,7 +21,7 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   protected final SoundManager soundManager;
   private boolean isChallengeInProgress = false;
   private LevelManager levelManager;
-  private Configurator configurator;
+  private ControlPanel controlPanel;
   private String experimentName;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
@@ -96,9 +96,9 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
     }
   }
 
-  public void setConfigurator(Configurator configurator) {
-    this.configurator = configurator;
-    this.addActor(configurator);
-    this.levelManager = new LevelManager(this, configurator);
+  public void setConfigurator(ControlPanel controlPanel) {
+    this.controlPanel = controlPanel;
+    this.addActor(controlPanel);
+    this.levelManager = new LevelManager(this, controlPanel);
   }
 }

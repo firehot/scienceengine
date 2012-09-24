@@ -12,11 +12,11 @@ import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter.FieldSample;
 
-public class FieldMeterView extends ScienceActor {
+public class FieldMeterActor extends ScienceActor {
   private final FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
     
-  public FieldMeterView(TextureRegion textureRegion, ScienceBody body) {
+  public FieldMeterActor(TextureRegion textureRegion, ScienceBody body) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
   }

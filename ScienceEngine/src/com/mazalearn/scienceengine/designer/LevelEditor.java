@@ -31,7 +31,7 @@ import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.ScienceActor;
-import com.mazalearn.scienceengine.experiments.Configurator;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 /**
  * A designer that enables editing the screen layout, configurations available
@@ -65,7 +65,7 @@ public class LevelEditor extends Stage {
   
   private Table layout;
   private IExperimentModel experimentModel;
-  private Configurator configurator;
+  private ControlPanel controlPanel;
   private ShapeRenderer shapeRenderer;
   Vector2 point = new Vector2();
   Vector2 rotatedVector = new Vector2();
@@ -74,18 +74,18 @@ public class LevelEditor extends Stage {
 
   /**
    * Build and initialize the editor.
-   * @param configurator 
+   * @param controlPanel 
    * @param experimentName - name of experiment.
    * @param level - level of experiment.
    * @param stage - stage used by the experiment view
    */
-  public LevelEditor(LevelManager levelManager, Configurator configurator, Stage stage, 
+  public LevelEditor(LevelManager levelManager, ControlPanel controlPanel, Stage stage, 
       IExperimentModel experimentModel, AbstractScreen screen) {
     super(stage.width(), stage.height(), stage.isStretched(), 
         stage.getSpriteBatch());
     this.screen = screen;
     this.experimentModel = experimentModel;
-    this.configurator = configurator;
+    this.controlPanel = controlPanel;
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
@@ -188,7 +188,7 @@ public class LevelEditor extends Stage {
     componentTable.add("Components"); 
     componentTable.row();
     for (final Actor actor: stage.getActors()) {
-      if (actor.name == null || actor == configurator) continue;
+      if (actor.name == null || actor == controlPanel) continue;
       final CheckBox componentCheckbox = new CheckBox(actor.name, skin);
       componentTable.add(componentCheckbox).left();
       componentCheckbox.setChecked(actor.visible);
@@ -201,7 +201,7 @@ public class LevelEditor extends Stage {
             ScienceActor scienceActor = (ScienceActor) actor;
             scienceActor.getBody().setActive(actor.visible);
             refreshConfigsTable(experimentModel, skin, configTable);
-            configurator.refresh();
+            controlPanel.refresh();
          }
         }});
       componentTable.row();
@@ -318,7 +318,7 @@ public class LevelEditor extends Stage {
         Group.toChildCoordinates(actor, stagePoint.x, stagePoint.y, point);
         Actor child = actor.hit(point.x, point.y);
         if (child != null) {
-          if (isAncestor(configurator, actor) && child != configurator.getTitle()) {
+          if (isAncestor(controlPanel, actor) && child != controlPanel.getTitle()) {
             originalStage.touchDown(x, y, pointer, button);
             return true;
           } else {
@@ -363,9 +363,9 @@ public class LevelEditor extends Stage {
     super.touchUp(x, y, pointer, button);
     
     toStageCoordinates(x, y, point);
-    Group.toChildCoordinates(configurator, point.x, point.y, point);
-    Actor child = configurator.hit(point.x, point.y);
-    if (child != null && child != configurator.getTitle()) {
+    Group.toChildCoordinates(controlPanel, point.x, point.y, point);
+    Actor child = controlPanel.hit(point.x, point.y);
+    if (child != null && child != controlPanel.getTitle()) {
       originalStage.touchUp(x, y, pointer, button);
       lastTouch.set(x, y);
       return true;
@@ -391,9 +391,9 @@ public class LevelEditor extends Stage {
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
       toStageCoordinates(x, y, point);
-      Group.toChildCoordinates(configurator, point.x, point.y, point);
-      Actor child = configurator.hit(point.x, point.y);
-      if (child != null && child != configurator.getTitle()) {
+      Group.toChildCoordinates(controlPanel, point.x, point.y, point);
+      Actor child = controlPanel.hit(point.x, point.y);
+      if (child != null && child != controlPanel.getTitle()) {
         originalStage.touchDragged(x, y, pointer);
         lastTouch.set(x, y);
         return true;
@@ -486,9 +486,9 @@ public class LevelEditor extends Stage {
     // Draw outline for actor
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
-    if (actor == configurator) {
+    if (actor == controlPanel) {
       // Bounding box only for title cell
-      actor = configurator.getTitle();
+      actor = controlPanel.getTitle();
     }
     shapeRenderer.rect(actor.x, actor.y, actor.width, actor.height);
 

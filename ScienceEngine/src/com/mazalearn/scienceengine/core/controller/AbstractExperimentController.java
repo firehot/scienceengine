@@ -4,12 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.core.view.IExperimentView;
-import com.mazalearn.scienceengine.experiments.Configurator;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public abstract class AbstractExperimentController implements
     IExperimentController {
 
-  private Configurator configurator;
+  private ControlPanel controlPanel;
   private IExperimentModel experimentModel;
   private AbstractExperimentView experimentView;
   private Skin skin;
@@ -24,8 +24,8 @@ public abstract class AbstractExperimentController implements
       AbstractExperimentView experimentView) {
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
-    this.configurator = new Configurator(skin, this);
-    experimentView.setConfigurator(this.configurator);
+    this.controlPanel = new ControlPanel(skin, this);
+    experimentView.setConfigurator(this.controlPanel);
   }
   
   @Override
@@ -44,7 +44,7 @@ public abstract class AbstractExperimentController implements
   }
 
   @Override
-  public Configurator getConfigurator() {
-    return configurator;
+  public ControlPanel getConfigurator() {
+    return controlPanel;
   }
 }

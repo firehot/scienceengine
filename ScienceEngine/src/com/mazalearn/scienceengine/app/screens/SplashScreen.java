@@ -53,14 +53,10 @@ public class SplashScreen extends AbstractScreen {
           }
 
           @Override
-          public void setTarget(Actor actor) {
-            // TODO Auto-generated method stub
-            
-          }
+          public void setTarget(Actor actor) {}
 
           @Override
           public Action copy() {
-            // TODO Auto-generated method stub
             return null;
           }
         }));

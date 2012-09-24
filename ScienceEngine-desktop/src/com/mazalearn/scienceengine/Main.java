@@ -1,8 +1,11 @@
 package com.mazalearn.scienceengine;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.utils.UrlFetcher;
 
 public class Main {
 	public static void main(String[] args) {
@@ -12,6 +15,27 @@ public class Main {
 		cfg.width = 800;
 		cfg.height = 480;
 		
-		new LwjglApplication(new ScienceEngine(), cfg);
+		ScienceEngine scienceEngine = new ScienceEngine(Arrays.asList(args));
+		scienceEngine.setUrlFetcher(new UrlFetchStub());
+    new LwjglApplication(scienceEngine, cfg);
+	}
+	
+	static class UrlFetchStub implements UrlFetcher {
+	  @Override
+  	public void fetchURL(String url) {
+      if(java.awt.Desktop.isDesktopSupported() ) {
+        java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+        
+        if(desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
+          try {
+            java.net.URI uri = new java.net.URI(url);
+            desktop.browse(uri);
+          }
+          catch ( Exception e ) {
+            System.err.println( e.getMessage() );
+          }
+        }
+      }
+  	}
 	}
 }

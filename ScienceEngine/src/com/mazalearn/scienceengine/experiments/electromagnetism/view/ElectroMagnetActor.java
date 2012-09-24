@@ -7,11 +7,11 @@ import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel.Mode;
 
-public class ElectroMagnetView extends ScienceActor {
+public class ElectroMagnetActor extends ScienceActor {
   private final AbstractExperimentView emView;
   private ElectroMagnetismModel emModel;
   
-  public ElectroMagnetView(TextureRegion textureRegion, ScienceBody body, 
+  public ElectroMagnetActor(TextureRegion textureRegion, ScienceBody body, 
       AbstractExperimentView experimentView, ElectroMagnetismModel emModel) {
     super(body, textureRegion);
     this.emView = experimentView;
