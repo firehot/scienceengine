@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.FlickScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.badlogic.gdx.utils.Array;
@@ -28,6 +30,10 @@ import com.mazalearn.scienceengine.core.view.IExperimentView;
  */
 public class ExperimentHomeScreen extends AbstractScreen {
 
+  private static final int RESOURCE_WIDTH = 120;
+  private static final int THUMBNAIL_WIDTH = 200;
+  private static final int THUMBNAIL_HEIGHT = 150;
+  private static final int INFO_HEIGHT = 50;
   IExperimentController experimentController;
   private Image[] experimentThumbs;
   private LevelManager levelManager;
@@ -52,15 +58,13 @@ public class ExperimentHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     
     table.defaults().fill().center();
-    table.add(experimentController.getName()).colspan(100);
+    table.add(experimentController.getName() + ": " + "Levels");
     table.row();
     
-    Label levels = new Label("L\nE\nV\nE\nL\nS", getSkin());
-    table.add(levels).width(20).pad(10, 0, 5, 0).center();
     table.add(createExperimentLevelPane()).fill();    
     table.row();
-    Label content = new Label("R\nE\nS\nO\nU\nR\nC\nE\nS", smallLabelStyle);
-    table.add(content).width(20).pad(10, 0, 5, 0).center();
+    table.add(experimentController.getName() + ": " + "Resources on the Internet").colspan(100);
+    table.row();
     table.add(createResourcePane()).fill();
     table.row();
     
@@ -74,7 +78,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
       }
     });
     table.row();
-    table.add(backButton).fill().colspan(100);
+    table.add(backButton).fill().colspan(100).pad(10, 20, 10, 20);
   }
 
   private Actor createExperimentLevelPane() {
@@ -93,7 +97,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
       OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
       Label label = new Label((String) levelInfo.get("name"), smallLabelStyle);
       label.setWrap(true);
-      experimentLevels.add(label).width(128).left().pad(5);
+      experimentLevels.add(label).width(THUMBNAIL_WIDTH).left().top().pad(5);
     }
     experimentLevels.row();
     
@@ -111,64 +115,74 @@ public class ExperimentHomeScreen extends AbstractScreen {
         }
       });
       experimentThumbs[i] = experimentThumb;
-      experimentLevels.add(experimentThumb);
+      experimentLevels.add(experimentThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
     }
     experimentLevels.row();
 
     for (int i = 0; i < levels.size; i++) {
       OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
       String description = (String) levelInfo.get("description");
-      Label label = new Label(description.substring(0,80), smallLabelStyle);
+      Label label = new Label(description, smallLabelStyle);
       label.setWrap(true);
-      experimentLevels.add(label).width(128).left().pad(5);
+      ScrollPane scrollPane = new ScrollPane(label, getSkin());
+      scrollPane.setScrollingDisabled(true, false);
+      experimentLevels.add(scrollPane).width(THUMBNAIL_WIDTH).height(INFO_HEIGHT).left().pad(5);
     }
     experimentLevels.row();
+    experimentLevelPane.setScrollingDisabled(false, true);
     return experimentLevelPane;
   }
 
   private Actor createResourcePane() {
-    Table resourceTable = super.getTable().newTable();
-    resourceTable.defaults().fill();
-    FlickScrollPane resourcePane = new FlickScrollPane(resourceTable, "Resource");
+    Table resourcesTable = super.getTable().newTable();
+    resourcesTable.defaults().fill();
+    FlickScrollPane resourcePane = new FlickScrollPane(resourcesTable, "Resource");
     
-    Table buttonTable = resourceTable.newTable();
     for (int i = 0; i < resources.size; i++) {
+      Table resource = resourcesTable.newTable();
       OrderedMap<String, ?> resourceInfo = (OrderedMap<String, ?>) resources.get(i);
       final String type = (String) resourceInfo.get("type");
       final String url = (String) resourceInfo.get("url");
-      buttonTable.defaults().fill().left();
-
-      TextButton button = new TextButton(getSkin());
-      button.setText(type.equals("video") ? "Play" : "Browse");
-      button.setClickListener(new ClickListener() {
-        @Override
-        public void click(Actor actor, float x, float y) {
-          if (type.equals("video")) {
-            scienceEngine.fetchURL(url);
-          } else if (type.equals("web")) {
-            scienceEngine.fetchURL(url);
-          }
-        }
-      });
-      buttonTable.add(button).width(128).pad(5);
-    }
-    resourceTable.add(buttonTable).left();
-    resourceTable.row();
-    
-    Table infoTable = resourceTable.newTable();
-    for (int i = 0; i < resources.size; i++) {
-      OrderedMap<String, ?> resourceInfo = (OrderedMap<String, ?>) resources.get(i);
       String attribution = (String) resourceInfo.get("attribution");
       String description = (String) resourceInfo.get("description");
+      resource.defaults().fill().left();
+
+      Image play = null;
+      if (type.equals("video")) {
+        play = new Image(new Texture("images/videoplay.png"));
+        play.setClickListener(new ClickListener() {
+          @Override
+          public void click(Actor actor, float x, float y) {
+            scienceEngine.browseURL(url);
+          }
+        });
+      } else if (type.equals("web")) {
+        play = new Image(new Texture("images/browser.png"));
+        play.setClickListener(new ClickListener() {
+          @Override
+          public void click(Actor actor, float x, float y) {
+            scienceEngine.browseURL(url);
+          }
+        });
+      }
       
-      Label attributionLabel = new Label("From: " + attribution + "\n" + description.substring(0, 40), smallLabelStyle);
+      resource.add(play).pad(0, 10, 0, 10).width(30).height(30).top().center();
+      resource.row();
+      Label attributionLabel = new Label("From: " + attribution + "\n" + 
+          description, smallLabelStyle);
       attributionLabel.setWrap(true);
-      infoTable.add(attributionLabel).width(128).pad(5);
+      ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
+      scrollPane.setScrollingDisabled(true,  false);
+      resource.add(scrollPane)
+          .width(RESOURCE_WIDTH)
+          .height(INFO_HEIGHT)
+          .left()
+          .top()
+          .pad(0, 5, 0, 5);
+      resourcesTable.add(resource).top().left();
     }
-    infoTable.row();
-    
-    resourceTable.add(infoTable).left();
-    resourceTable.row();
+    resourcesTable.row();
+    resourcePane.setScrollingDisabled(false,  true);
     return resourcePane;   
   }
 

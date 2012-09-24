@@ -5,7 +5,7 @@ import java.util.Arrays;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.utils.UrlFetcher;
+import com.mazalearn.scienceengine.app.utils.UrlViewer;
 
 public class Main {
 	public static void main(String[] args) {
@@ -16,13 +16,13 @@ public class Main {
 		cfg.height = 480;
 		
 		ScienceEngine scienceEngine = new ScienceEngine(Arrays.asList(args));
-		scienceEngine.setUrlFetcher(new UrlFetchStub());
+		scienceEngine.setUrlViewer(new UrlViewerImpl());
     new LwjglApplication(scienceEngine, cfg);
 	}
 	
-	static class UrlFetchStub implements UrlFetcher {
+	static class UrlViewerImpl implements UrlViewer {
 	  @Override
-  	public void fetchURL(String url) {
+  	public void browseURL(String url) {
       if(java.awt.Desktop.isDesktopSupported() ) {
         java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
         

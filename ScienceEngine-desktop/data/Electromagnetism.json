@@ -25,6 +25,11 @@
  "url": "http://www.youtube.com/watch?v=hajIIGHPeuU", 
  "description": "Bar Magnet and Coil with multimeter is used to show how current is induced when lines of magnetic field are cut. Electromagnet and coil with multimeter is used to show the same effect."
 },
+{"type": "web",
+ "attribution": "www.magnetman.com",
+ "url": "http://www.coolmagnetman.com/magindex.htm",
+ "description": "A lot of information about magnets - what is magnetism, types of magnets, strengths of magnets, how magnets work, how strong are magnets, what is a magnetic field, experiments with magnets"
+},
 {"type": "video",
  "duration": "5:58", 
  "attribution": "TutorVista", 

@@ -10,9 +10,9 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.utils.UrlFetcher;
+import com.mazalearn.scienceengine.app.utils.UrlViewer;
 
-public class MainActivity extends AndroidApplication implements UrlFetcher {
+public class MainActivity extends AndroidApplication implements UrlViewer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +33,12 @@ public class MainActivity extends AndroidApplication implements UrlFetcher {
         } else {
           scienceEngine = new ScienceEngine();
         }
-        scienceEngine.setUrlFetcher(this);
+        scienceEngine.setUrlViewer(this);
         initialize(scienceEngine, cfg);
     }
     
-    public void fetchURL(String url) {
+    public void browseURL(String url) {
       Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
       startActivity(myIntent);
-    }   
+    }
 }

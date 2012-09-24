@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
-import com.mazalearn.scienceengine.app.utils.UrlFetcher;
+import com.mazalearn.scienceengine.app.utils.UrlViewer;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
@@ -36,7 +36,7 @@ public class ScienceEngine extends Game {
   private ProfileManager profileManager;
   private MusicManager musicManager;
   private SoundManager soundManager;
-  private UrlFetcher urlFetcher;
+  private UrlViewer urlViewer;
 
   private List<String> params;
 
@@ -77,15 +77,15 @@ public class ScienceEngine extends Game {
     return skin;
   }
   
-  // UrlFetcher interface
+  // UrlViewer interface
   
-  public void setUrlFetcher(UrlFetcher urlFetcher) {
-    this.urlFetcher = urlFetcher;
+  public void setUrlViewer(UrlViewer urlViewer) {
+    this.urlViewer = urlViewer;
   }
   
-  public void fetchURL(String url){
-    if (urlFetcher != null) {
-      urlFetcher.fetchURL(url);
+  public void browseURL(String url){
+    if (urlViewer != null) {
+      urlViewer.browseURL(url);
     }
   }
 
