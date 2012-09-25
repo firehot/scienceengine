@@ -3,8 +3,13 @@ package com.mazalearn.scienceengine.core.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
@@ -18,13 +23,48 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.AbstractProber;
  * 
  */
 public class ProbeManager extends Group implements IDoneCallback {
+  private final class ScoreImage extends Image {
+    private final Skin skin;
+    private int score;
+    private final boolean success;
+    private BitmapFont font;
+
+    private ScoreImage(Texture texture, Skin skin, boolean success) {
+      super(texture);
+      this.skin = skin;
+      this.visible = false;
+      this.success = success;
+      font = skin.getFont("default-font");
+    }
+
+    public void initialize(float x, float y, int score) {
+      this.x = x;
+      this.y = y;
+      this.score = score;
+      this.visible = true;
+    }
+
+    public void act(float delta) {
+      this.y += success ? 2 : -2;
+    }
+
+    public void draw(SpriteBatch batch, float parentAlpha) {
+      super.draw(batch, parentAlpha);
+      Color c = font.getColor();
+      font.setColor(Color.BLACK);
+      font.draw(batch, String.valueOf(score), x + width/2 - 10, y + height/2);
+      font.setColor(c);
+    }
+  }
+
   int current = 0;
   protected Dashboard dashboard;
   private List<AbstractProber> probers = new ArrayList<AbstractProber>();
   private final IDoneCallback doneCallback;
   private final SoundManager soundManager;
+  private final ScoreImage successImage, failureImage;
 
-  public ProbeManager(Skin skin, float width, float height,
+  public ProbeManager(final Skin skin, float width, float height,
       IDoneCallback doneCallback) {
     super();
     this.dashboard = new Dashboard(skin);
@@ -38,6 +78,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.dashboard.y = height - dashboard.getPrefHeight();
     this.dashboard.x = width/2 - dashboard.getPrefWidth()/2;
     //this.dashboard.originX = 
+    this.successImage = new ScoreImage(new Texture("images/balloon.png"), skin, true);
+    this.failureImage = new ScoreImage(new Texture("images/bomb.png"), skin, false);
+    this.addActor(successImage);
+    this.addActor(failureImage);
   }
 
   public void addProbe(AbstractProber prober) {
@@ -65,6 +109,11 @@ public class ProbeManager extends Group implements IDoneCallback {
     soundManager.play(
         success ? ScienceEngineSound.SUCCESS : ScienceEngineSound.FAILURE);
     dashboard.addScore(success ? 10 : -5);
+    if (success) {
+      successImage.initialize(width/2, height/2, 10);
+    } else {
+      failureImage.initialize(width/2, height/2, -5);
+    }
     probers.get(current).activate(false);
     if (dashboard.getScore() > 100) {
       doneCallback.done(true);
