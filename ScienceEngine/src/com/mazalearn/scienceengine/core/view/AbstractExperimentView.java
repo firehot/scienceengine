@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
-import com.mazalearn.scienceengine.app.services.SoundManager;
+import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
@@ -18,21 +18,16 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
 
   protected final IExperimentModel experimentModel;
   protected final Skin skin;
-  protected final SoundManager soundManager;
   private boolean isChallengeInProgress = false;
   private LevelManager levelManager;
-  private ControlPanel controlPanel;
-  private String experimentName;
+  protected ControlPanel controlPanel;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
 
-  public AbstractExperimentView(String experimentName, 
-      IExperimentModel experimentModel, float width, float height, Skin skin, 
-      SoundManager soundManager) {
+  public AbstractExperimentView( 
+      IExperimentModel experimentModel, float width, float height, Skin skin) {
     super(width, height, true);
-    this.experimentName = experimentName;
     this.skin = skin;
-    this.soundManager = soundManager;
     this.experimentModel = experimentModel;
     this.locationGroups = new ArrayList<List<Actor>>();
   }
@@ -56,7 +51,23 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   
   @Override
   public void challenge(boolean challenge) {
+    // Reinitialize level
     experimentModel.reset();
+    // Turn off/on access to parts of control panel
+    controlPanel.enableControls(!challenge);
+    if (challenge) {
+      // Turn off music
+      ScienceEngine.getMusicManager().setEnabled(false);
+      // Make all actors non-movable
+      for (Actor actor: getActors()) {
+        if (actor instanceof ScienceActor) {
+          ((ScienceActor) actor).setAllowDrag(false);
+        }
+      }
+    } else {
+      // Turn on music
+      ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
+    }
     isChallengeInProgress = !isChallengeInProgress;
   }
     
@@ -96,7 +107,7 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
     }
   }
 
-  public void setConfigurator(ControlPanel controlPanel) {
+  public void setControlPanel(ControlPanel controlPanel) {
     this.controlPanel = controlPanel;
     this.addActor(controlPanel);
     this.levelManager = new LevelManager(this, controlPanel);

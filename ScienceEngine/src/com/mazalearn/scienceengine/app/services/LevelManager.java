@@ -123,6 +123,11 @@ public class LevelManager {
   private void writeComponents(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("components");
     for (Actor a : stage.getActors()) {
+      if (!a.visible) continue; 
+      boolean moveAllowed = false;
+      if (a instanceof ScienceActor) {
+        moveAllowed = ((ScienceActor) a).isAllowDrag();
+      }
       jsonWriter.object()
           .set("name", a.name)
           .set("x", a.x)
@@ -133,6 +138,7 @@ public class LevelManager {
           .set("height", a.height)
           .set("visible", a.visible)
           .set("rotation", a.rotation)
+          .set("move", moveAllowed)
           .pop();
     }
     jsonWriter.pop();
@@ -192,6 +198,7 @@ public class LevelManager {
 
   private void readComponent(OrderedMap<String, ?> component) {
     String name = (String) component.get("name");
+    if (name == null) return;
     Actor actor = stage.findActor(name);
     if (actor == null)
       return;
@@ -205,7 +212,9 @@ public class LevelManager {
     actor.visible = (Boolean) nvl(component.get("visible"), true);
     actor.rotation = (Float) nvl(component.get("rotation"), 0f);
     if (actor instanceof ScienceActor) {
-      ((ScienceActor) actor).setPositionFromViewCoords(false);
+      ScienceActor scienceActor = (ScienceActor) actor;
+      scienceActor.setPositionFromViewCoords(false);
+      scienceActor.setAllowDrag((Boolean) nvl(component.get("move"), false));
     }
   }
 

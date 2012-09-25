@@ -7,7 +7,7 @@ import java.util.Arrays;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.utils.UrlViewer;
+import com.mazalearn.scienceengine.app.utils.ResourceViewer;
 
 public class Main {
 	public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class Main {
     new LwjglApplication(scienceEngine, cfg);
 	}
 	
-	static class UrlViewerImpl implements UrlViewer {
+	static class UrlViewerImpl implements ResourceViewer {
 	  @Override
   	public void browseURL(String url) {
       if(java.awt.Desktop.isDesktopSupported() ) {

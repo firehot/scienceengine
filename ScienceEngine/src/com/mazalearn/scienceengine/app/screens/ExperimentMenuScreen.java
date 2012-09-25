@@ -34,7 +34,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     setBackgroundColor(Color.DARK_GRAY);
 
     // start playing the menu music
-    scienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+    ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
 
     // retrieve the default table
     Table table = super.getTable();
@@ -43,7 +43,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     table.row();
 
     // retrieve the table's layout
-    profile = scienceEngine.getProfileManager().retrieveProfile();
+    profile = ScienceEngine.getProfileManager().retrieveProfile();
 
     // create the experiments Table
     table.add(createExperimentsSelector());    
@@ -53,7 +53,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     TextButton backButton = new TextButton("Back to Start", getSkin());
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         scienceEngine.setScreen(new StartScreen(scienceEngine));
       }
     });
@@ -78,7 +78,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
       experimentThumb.setClickListener(new ClickListener() {
         @Override
         public void click(Actor actor, float x, float y) {
-          scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
           Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName);
           IExperimentController experimentController = 
               createExperimentController(experimentName, 
@@ -98,11 +98,11 @@ public class ExperimentMenuScreen extends AbstractScreen {
   private IExperimentController createExperimentController(
       String experimentName, int width, int height) {
     if (experimentName == StatesOfMatterController.NAME) {
-      return new StatesOfMatterController(width, height, scienceEngine.getSkin(), scienceEngine.getSoundManager());
+      return new StatesOfMatterController(width, height, scienceEngine.getSkin());
     } else if (experimentName == WaveController.NAME) {
-      return  new WaveController(width, height, getAtlas(), scienceEngine.getSkin(), scienceEngine.getSoundManager());
+      return  new WaveController(width, height, getAtlas(), scienceEngine.getSkin());
     } else if (experimentName == ElectroMagnetismController.NAME) {
-      return new ElectroMagnetismController(width, height, scienceEngine.getSkin(), scienceEngine.getSoundManager());
+      return new ElectroMagnetismController(width, height, scienceEngine.getSkin());
     }
     return null;
   }

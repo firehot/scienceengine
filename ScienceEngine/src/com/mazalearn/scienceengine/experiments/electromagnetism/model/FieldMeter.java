@@ -72,7 +72,7 @@ public class FieldMeter extends ScienceBody implements IMagneticField.Consumer {
     return fieldVector.len();
   }
 
-  private void addFieldSample(float x, float y, float angle, float bfield) {
+  public void addFieldSample(float x, float y, float angle, float bfield) {
     fieldSamples.add(new FieldSample(x, y, angle, bfield));
   }
 

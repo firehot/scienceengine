@@ -7,21 +7,21 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
 class Dashboard extends Table {
-  Label title, scoreLabel;
+  Label status, scoreLabel;
   int score;
   Dashboard(Skin skin) {
     super(skin, null, "Dashboard");
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       debug();
     }
-    this.setFillParent(true);
+    this.setFillParent(false);
     this.top().center();
-    title = new Label("Probe title", skin);
+    status = new Label("Status", skin);
     scoreLabel = new Label("0", skin);
     this.add("Score").left();
     this.add(scoreLabel).right().fill();
     this.row();
-    this.add(title).colspan(2).fill();
+    this.add(status).colspan(2).fill();
     this.row();
   }
   
@@ -30,8 +30,8 @@ class Dashboard extends Table {
     scoreLabel.setText(String.valueOf(score));
   }
   
-  public void setTitle(String text) {
-    title.setText(text);
+  public void setStatus(String text) {
+    status.setText(text);
   }
 
   public int getScore() {

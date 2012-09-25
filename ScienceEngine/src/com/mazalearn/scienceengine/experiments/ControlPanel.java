@@ -36,6 +36,7 @@ public class ControlPanel extends Table {
   private IViewConfig challengeConfig;
   private Table modelControlPanel;
   private Label title;
+  private Table suspendResetTable;
   
   public ControlPanel(Skin skin, IExperimentController experimentController) {
     super(skin, null, experimentController.getName());
@@ -94,7 +95,8 @@ public class ControlPanel extends Table {
     TextButton backButton = new TextButton("Back", skin);
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
-        ScienceEngine.SCIENCE_ENGINE.getSoundManager().play(ScienceEngineSound.CLICK);
+        experimentController.getView().challenge(false);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.SCIENCE_ENGINE.setScreen(
             new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentController));
       }
@@ -146,7 +148,7 @@ public class ControlPanel extends Table {
     };
     IViewConfig resetConfig = new ConfigTextButton(resetModelConfig, skin);
     
-    Table suspendResetTable = new Table(skin);
+    suspendResetTable = new Table(skin);
     suspendResetTable.defaults().fill().expand();
     suspendResetTable.add(pauseResumeConfig.getActor()).pad(0,5,0, 5);
     suspendResetTable.add(resetConfig.getActor());
@@ -205,5 +207,11 @@ public class ControlPanel extends Table {
   
   public String getExperimentName() {
     return experimentName;
+  }
+
+  public void enableControls(boolean enable) {
+    suspendResetTable.visible = enable;
+    modelControlPanel.visible = enable;
+    this.invalidate();
   }
 }

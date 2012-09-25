@@ -487,7 +487,7 @@ public class LevelEditor extends Stage {
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
     if (actor == controlPanel) {
-      // Bounding box only for title cell
+      // Bounding box only for status cell
       actor = controlPanel.getTitle();
     }
     shapeRenderer.rect(actor.x, actor.y, actor.width, actor.height);

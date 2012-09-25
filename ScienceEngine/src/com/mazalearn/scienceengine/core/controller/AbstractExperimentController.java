@@ -25,7 +25,7 @@ public abstract class AbstractExperimentController implements
     this.experimentModel = experimentModel;
     this.experimentView = experimentView;
     this.controlPanel = new ControlPanel(skin, this);
-    experimentView.setConfigurator(this.controlPanel);
+    experimentView.setControlPanel(this.controlPanel);
   }
   
   @Override

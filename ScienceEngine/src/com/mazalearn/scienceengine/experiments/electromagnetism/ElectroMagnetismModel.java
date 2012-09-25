@@ -43,12 +43,12 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     addBody(electroMagnet = new Electromagnet("Electromagnet", 10, 12, 0));
     addBody(pickupCoil = new PickupCoil("PickupCoil", 23, -4, 0, 2E7f));
     addBody(new Lightbulb("Lightbulb", pickupCoil, 23, 25, 0));
-    addBody(new FieldMeter("FieldMeter", 10, 5, 0));
     addBody(new CurrentWire("Wire A", 10, 12, 0));
     addBody(new CurrentWire("Wire B", 14, 12, 0));
     barMagnet.setType(BodyType.DynamicBody);
     addBody(compass = new Compass("Compass", 0, 5, 0));
     compass.setType(BodyType.KinematicBody);
+    addBody(new FieldMeter("FieldMeter", 10, 5, 0));
     addCircuit(currentSource, electroMagnet);
     
     reset();

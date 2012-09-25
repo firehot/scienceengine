@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism;
 
-import com.badlogic.gdx.graphics.Color;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,15 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.AnimationAction;
 import com.badlogic.gdx.scenes.scene2d.actions.Delay;
-import com.badlogic.gdx.scenes.scene2d.actions.FadeIn;
-import com.badlogic.gdx.scenes.scene2d.actions.FadeOut;
 import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.StartScreen;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IDoneCallback;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
 
 // doubts on direction
 // Generate A at "random" point around magnet
@@ -27,30 +25,18 @@ import com.mazalearn.scienceengine.core.view.IDoneCallback;
 // Then prober becomes generalized.
 class FieldDirectionProber extends AbstractProber {
   protected static final float TOLERANCE = 0.3f;
-  private final Image image, userField, actualField;
-  private final float x, y, width, height;  
-  private Vector2 pos = new Vector2(), modelPos = new Vector2(), bField = new Vector2();
-  private IExperimentModel model;
+  private final Image image, userField;
+  private Vector2 pos = new Vector2(), bField = new Vector2();
   
-  public FieldDirectionProber(Skin skin, float x, float y, float width, float height, IExperimentModel model,
-      final IDoneCallback doneCallback) {
-    super();
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.model = model;
+  public FieldDirectionProber(IExperimentModel model,
+      final IDoneCallback doneCallback, List<Actor> actors, Actor dashboard) {
+    super(model, actors, dashboard);
     
-    userField = new Image(new TextureRegion(new Texture("images/fieldarrow.png")));
+    userField = new Image(new TextureRegion(new Texture("images/fieldarrow-yellow.png")));
     userField.visible = false;
     userField.originX = 0;
     userField.originY = userField.height/2;
     
-    actualField = new Image(new TextureRegion(new Texture("images/fieldarrow.png")));
-    actualField.visible = true;
-    actualField.originX = 0;
-    actualField.originY = actualField.height/2;
-
     TextureRegion questionMark = 
         new TextureRegion(new Texture("images/questionmark.png"));
     image = new Image(questionMark) {
@@ -61,9 +47,6 @@ class FieldDirectionProber extends AbstractProber {
         userField.visible = true;
         userField.x = this.x + this.width/2;
         userField.y = this.y + this.height/3;
-        actualField.x = this.x + this.width/2;
-        actualField.y = this.y + this.height/3;
-        actualField.rotation = bField.angle();
         return true;
       }
       
@@ -79,14 +62,14 @@ class FieldDirectionProber extends AbstractProber {
         lastTouch.sub(x, y);
         float val = lastTouch.nor().dot(bField); // Should be -1
         final boolean success = Math.abs(val + 1) < TOLERANCE;
-        actualField.visible = true;
-        actualField.action(Sequence.$(Delay.$(2.5f),
+        fieldMeterActor.visible = true;
+        userField.action(Sequence.$(Delay.$(2f),
             new AnimationAction() {
               @Override
               public void act(float delta) {
                 doneCallback.done(success);
                 done = true;
-                actualField.visible = userField.visible = false;
+                fieldMeterActor.visible = userField.visible = false;
               }
                   
               @Override
@@ -101,7 +84,6 @@ class FieldDirectionProber extends AbstractProber {
     };
     this.addActor(image);
     this.addActor(userField);
-    this.addActor(actualField);
   }
   
   @Override
@@ -109,27 +91,23 @@ class FieldDirectionProber extends AbstractProber {
     return "Click and drag in direction of magnetic field";
   }
   
-  private void generateProbePoint(Vector2 pos) {
-    pos.set(MathUtils.random(2f) - 1, MathUtils.random(2f) - 1);
-    pos.x *= width;
-    pos.y *= height;
-    pos.add(x + width/2, y + height/2);
-  }
-
-  private void getBFieldDirection(Vector2 viewPos) {
-    modelPos.set(viewPos).mul(1f / ScienceEngine.PIXELS_PER_M);
-    model.getBField(modelPos, bField /* output */);
-    bField.nor();
-  }
-  
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      generateProbePoint(pos);
-      image.x = pos.x;
-      image.y = pos.y;
-      getBFieldDirection(pos);
+      generateProbePoints(pos);
+      image.x = pos.x - image.width/2;
+      image.y = pos.y - image.height/2;
+      getBField(pos, bField);
+      fieldMeter.resetInitial();
+      pos.mul(1f/ScienceEngine.PIXELS_PER_M);
+      fieldMeter.addFieldSample(pos.x, pos.y, bField.angle() * MathUtils.degreesToRadians, bField.len());
+      bField.nor();
     }
     this.visible = activate;
+  }
+
+  @Override
+  protected boolean arePointsAcceptable(Vector2[] points) {
+    return true;
   }
 }

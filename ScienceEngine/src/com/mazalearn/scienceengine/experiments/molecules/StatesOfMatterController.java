@@ -21,12 +21,12 @@ public class StatesOfMatterController extends AbstractExperimentController {
   private StatesOfMatterView statesOfMatterView;
   ControlPanel controlPanel;
   
-  public StatesOfMatterController(int width, int height, Skin skin, SoundManager soundManager) {
+  public StatesOfMatterController(int width, int height, Skin skin) {
     super(NAME, skin);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
     statesOfMatterView = 
-        new StatesOfMatterView(NAME, statesOfMatterModel, width, height, N, skin, soundManager);
+        new StatesOfMatterView(statesOfMatterModel, width, height, N, skin);
     initialize(statesOfMatterModel, statesOfMatterView);    
     
     /*

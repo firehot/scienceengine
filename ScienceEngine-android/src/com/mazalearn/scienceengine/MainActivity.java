@@ -13,9 +13,9 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.utils.UrlViewer;
+import com.mazalearn.scienceengine.app.utils.ResourceViewer;
 
-public class MainActivity extends AndroidApplication implements UrlViewer {
+public class MainActivity extends AndroidApplication implements ResourceViewer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

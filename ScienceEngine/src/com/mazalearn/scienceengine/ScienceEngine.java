@@ -16,7 +16,7 @@ import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
-import com.mazalearn.scienceengine.app.utils.UrlViewer;
+import com.mazalearn.scienceengine.app.utils.ResourceViewer;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
@@ -33,11 +33,11 @@ public class ScienceEngine extends Game {
   private FPSLogger fpsLogger;
 
   // services
-  private PreferencesManager preferencesManager;
-  private ProfileManager profileManager;
-  private MusicManager musicManager;
-  private SoundManager soundManager;
-  private UrlViewer urlViewer;
+  private static PreferencesManager preferencesManager;
+  private static ProfileManager profileManager;
+  private static MusicManager musicManager;
+  private static SoundManager soundManager;
+  private ResourceViewer resourceViewer;
 
   private List<String> params;
 
@@ -54,19 +54,19 @@ public class ScienceEngine extends Game {
     this.params = intentParams;
   }
 
-  public PreferencesManager getPreferencesManager() {
+  public static PreferencesManager getPreferencesManager() {
     return preferencesManager;
   }
 
-  public ProfileManager getProfileManager() {
+  public static ProfileManager getProfileManager() {
     return profileManager;
   }
 
-  public MusicManager getMusicManager() {
+  public static MusicManager getMusicManager() {
     return musicManager;
   }
 
-  public SoundManager getSoundManager() {
+  public static SoundManager getSoundManager() {
     return soundManager;
   }
 
@@ -78,22 +78,22 @@ public class ScienceEngine extends Game {
     return skin;
   }
   
-  // UrlViewer interface
+  // ResourceViewer interface
   
-  public void setUrlViewer(UrlViewer urlViewer) {
-    this.urlViewer = urlViewer;
+  public void setUrlViewer(ResourceViewer resourceViewer) {
+    this.resourceViewer = resourceViewer;
   }
   
   public void browseURL(String url){
-    if (urlViewer != null) {
-      urlViewer.browseURL(url);
+    if (resourceViewer != null) {
+      resourceViewer.browseURL(url);
     }
   }
 
 
   public void openFile(File file) {
-    if (urlViewer != null) {
-      urlViewer.openFile(file);
+    if (resourceViewer != null) {
+      resourceViewer.openFile(file);
     }
   }
   // Game-related methods

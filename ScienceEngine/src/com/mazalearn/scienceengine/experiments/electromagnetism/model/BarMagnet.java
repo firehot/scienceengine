@@ -69,9 +69,10 @@ import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
  */
 public class BarMagnet extends AbstractMagnet {
 
+  private static final double PERIPHERY_SCALE_DOWN = 1.2;
   // values used in MathCAD for generating the grid files
   //strength of the magnet, in Gauss
-  private static final double GRID_MAGNET_STRENGTH = 1;
+  private static final float GRID_MAGNET_STRENGTH = 1;
   //spacing between points in the internal grid, same in both dimensions
   private static final double INTERNAL_GRID_SPACING = 5;
   //spacing between points in the external-near grid, same in both dimensions
@@ -159,14 +160,13 @@ public class BarMagnet extends AbstractMagnet {
     assert (outputVector != null);
 
     // find B-field by interpolating grid points
-    float x = getBx(p.x, p.y);
-    float y = getBy(p.x, p.y);
+    // Bar Magnet model is slightly off, so scale coordinates up
+    float x = getBx(p.x * PERIPHERY_SCALE_DOWN, p.y * PERIPHERY_SCALE_DOWN);
+    float y = getBy(p.x * PERIPHERY_SCALE_DOWN, p.y * PERIPHERY_SCALE_DOWN);
     outputVector.set(x, y);
 
     // scale based on magnet strength
-    outputVector.set(
-        (float) (outputVector.x * getStrength() / GRID_MAGNET_STRENGTH),
-        (float) (outputVector.y * getStrength() / GRID_MAGNET_STRENGTH));
+    outputVector.mul(getStrength() / GRID_MAGNET_STRENGTH);
 
     return outputVector;
   }

@@ -23,8 +23,6 @@ public class FieldMeterActor extends ScienceActor {
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    batch.end();
-    batch.begin();
     List<FieldSample> fieldSamples = fieldMeter.getFieldSamples();
     // Reverse traversal - want to show the latest point first
     for (int i = fieldSamples.size() - 1; i >= 0; i--) {
@@ -43,7 +41,5 @@ public class FieldMeterActor extends ScienceActor {
       batch.draw(getTextureRegion(), pos.x, pos.y, 
           originX, originY, width * magnitude, height * magnitude, 1, 1, rotation);
     }
-    batch.end();
-    batch.begin();
   }
 }

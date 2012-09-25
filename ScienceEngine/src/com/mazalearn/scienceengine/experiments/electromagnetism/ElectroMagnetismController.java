@@ -13,12 +13,11 @@ public class ElectroMagnetismController extends AbstractExperimentController {
   
   public static final String NAME = "Electromagnetism";
 
-  public ElectroMagnetismController(int width, int height, Skin skin, 
-      SoundManager soundManager) {
+  public ElectroMagnetismController(int width, int height, Skin skin) {
     super(NAME, skin);
     ElectroMagnetismModel emModel = new ElectroMagnetismModel();
     AbstractExperimentView emView = 
-        new ElectroMagnetismView(NAME, width, height, emModel, skin, soundManager);
+        new ElectroMagnetismView(width, height, emModel, skin);
     this.initialize(emModel,  emView);
   }
 }

@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.model.ScienceBody;
 import com.mazalearn.scienceengine.core.model.ScienceBody.ComponentType;
 import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
@@ -18,13 +17,10 @@ import com.mazalearn.scienceengine.core.view.ScienceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.CompassActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentSourceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectroMagnetActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilActor;
 
 public class ElectroMagnetismView extends AbstractExperimentView {
   private BarMagnetActor barMagnetActor;
@@ -33,11 +29,12 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
   private ElectroMagnetismModel emModel;
+  private FieldMeterActor fieldMeterActor;
+  private ScienceActor compassActor;
 
-  public ElectroMagnetismView(String experimentName, float width, float height,
-      final ElectroMagnetismModel emModel,
-      Skin skin, SoundManager soundManager) {
-    super(experimentName, emModel, width, height, skin, soundManager);
+  public ElectroMagnetismView(float width, float height,
+      final ElectroMagnetismModel emModel, Skin skin) {
+    super(emModel, width, height, skin);
     this.emModel = emModel;
     
     Actor lightbulb = null, pickupCoil = null;
@@ -57,13 +54,10 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(lightbulb = new LightbulbActor(textureRegion, (Lightbulb) body));
         break;
       case PickupCoil:
-        this.addActor(pickupCoil = new PickupCoilActor(body, textureRegion));
-        break;
-      case Compass:
-        this.addActor(new CompassActor(textureRegion, body));
+        this.addActor(pickupCoil = new ScienceActor(body, textureRegion));
         break;
       case FieldMeter:
-        this.addActor(new FieldMeterActor(textureRegion, body));
+        this.addActor(fieldMeterActor = new FieldMeterActor(textureRegion, body));
         fieldMeter = (FieldMeter) body;
         break;
       case CurrentSource:
@@ -73,7 +67,10 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new CurrentWireActor(body));
         break;
       case ElectroMagnet:
-        this.addActor(electroMagnet = new ElectroMagnetActor(textureRegion, body, this, emModel));
+        this.addActor(electroMagnet = new ScienceActor(body, textureRegion));
+        break;
+      case Compass:
+        this.addActor(compassActor = new ScienceActor(body, textureRegion));
         break;
       default:
         this.addActor(new ScienceActor(body, textureRegion));
@@ -122,7 +119,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   public boolean touchDown(int x, int y, int pointer, int button) {
     super.touchDown(x, y,  pointer, button);
     Actor touchedActor = super.getTouchFocus(pointer);
-    if (!(touchedActor instanceof ScienceActor) && touchedActor != null) return true;
+    if (touchedActor != null) return true;
     // Touch at stage level - not on any actor - Assume field touch
     if (fieldMeter.isActive()) isFieldPointTouched = true;
     return true;
@@ -146,12 +143,17 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   @Override
   public void challenge(boolean challenge) {
     super.challenge(challenge);
+    // Enable/Disable field meter, compass
+    compassActor.visible = !challenge;
+    fieldMeter.setActive(!challenge);
+    fieldMeterActor.visible = !challenge;
     if (challenge) {
       if (probeManager == null) {
-        probeManager = new ProbeManager(skin, width, height, this, soundManager); 
-        this.addActor(probeManager);
-        probeManager.add(new FieldDirectionProber(skin, barMagnetActor.x, barMagnetActor.y, barMagnetActor.width, barMagnetActor.height, emModel, probeManager));
-        probeManager.add(new FieldMagnitudeProber(skin, barMagnetActor.x, barMagnetActor.y, barMagnetActor.width, barMagnetActor.height, emModel, probeManager));
+        probeManager = new ProbeManager(skin, width, height, this);        
+        probeManager.addProbe(new FieldDirectionProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
+        probeManager.addProbe(new FieldMagnitudeProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
+        // Do this only after so that probeManager does not get into excluded actors list of probe
+        this.getRoot().addActorBefore(fieldMeterActor, probeManager);     
       }
       probeManager.startChallenge();
     }
