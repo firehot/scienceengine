@@ -19,7 +19,8 @@ import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterControlle
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
 
 public class ExperimentMenuScreen extends AbstractScreen {
-  private static final int NUM_COLUMNS = 3;
+  private static final int THUMBNAIL_WIDTH = 200;
+  private static final int THUMBNAIL_HEIGHT = 150;
 
   private Profile profile;
 
@@ -38,7 +39,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     // retrieve the default table
     Table table = super.getTable();
     table.defaults().spaceBottom(20).fill().center();
-    table.add("Science Engine").colspan(NUM_COLUMNS).spaceBottom(20);
+    table.add("Science Engine").colspan(10).spaceBottom(20);
     table.row();
 
     // retrieve the table's layout
@@ -57,7 +58,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
       }
     });
     table.row();
-    table.add(backButton).colspan(NUM_COLUMNS);
+    table.add(backButton).colspan(10);
   }
 
   public Actor createExperimentsSelector() {
@@ -88,11 +89,8 @@ public class ExperimentMenuScreen extends AbstractScreen {
       Table levelTable = table.newTable();
       levelTable.add(experimentName);
       levelTable.row();
-      levelTable.add(experimentThumb);
+      levelTable.add(experimentThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
       table.add(levelTable).pad(5);
-      if (count % NUM_COLUMNS == 0) {
-        table.row();
-      }
     }
     return flickScrollPane;
   }

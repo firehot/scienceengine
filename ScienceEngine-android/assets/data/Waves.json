@@ -1,0 +1,15 @@
+{"Levels": [
+  {"name": "Waves in a string",
+   "description": "Create waves in a string to understand travelling waves, transverse waves, interference, superposition."
+  }
+],
+"Resources": [
+{"type": "ignore",
+ "duration": "2:03", 
+ "attribution": "ibphysicshelp", 
+ "url": "http://www.youtube.com/watch?v=hajIIGHPeuU", 
+ "file": "data/Electromagnetism/ElectromagneticInductionIbphysicshelp",
+ "description": "Bar Magnet and Coil with multimeter is used to show how current is induced when lines of magnetic field are cut. Electromagnet and coil with multimeter is used to show the same effect."
+}
+]
+}

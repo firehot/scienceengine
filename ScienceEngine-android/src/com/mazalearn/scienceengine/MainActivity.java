@@ -1,8 +1,11 @@
 package com.mazalearn.scienceengine;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -40,5 +43,17 @@ public class MainActivity extends AndroidApplication implements UrlViewer {
     public void browseURL(String url) {
       Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
       startActivity(myIntent);
+    }
+
+    @Override
+    public void openFile(File file) {
+      MediaPlayer mp = new MediaPlayer(); 
+      try {
+        mp.setDataSource(file.getAbsolutePath());
+        mp.prepare(); 
+      } catch (Exception e) {
+        e.printStackTrace();
+      } 
+      mp.start(); 
     }
 }

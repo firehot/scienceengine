@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +90,12 @@ public class ScienceEngine extends Game {
     }
   }
 
+
+  public void openFile(File file) {
+    if (urlViewer != null) {
+      urlViewer.openFile(file);
+    }
+  }
   // Game-related methods
 
   @Override
@@ -181,5 +188,4 @@ public class ScienceEngine extends Game {
   public List<String> getParams() {
     return params;
   }
-
 }

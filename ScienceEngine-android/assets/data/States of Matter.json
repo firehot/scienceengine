@@ -1,0 +1,15 @@
+{"Levels": [
+  {"name": "States of Matter with molecules",
+   "description": "Heat and coole molecules in a molecule box to understand solid, liquid and gas."
+  }
+],
+"Resources": [
+{"type": "ignore",
+ "duration": "2:03", 
+ "attribution": "ibphysicshelp", 
+ "url": "http://www.youtube.com/watch?v=hajIIGHPeuU", 
+ "file": "data/Electromagnetism/ElectromagneticInductionIbphysicshelp",
+ "description": "Bar Magnet and Coil with multimeter is used to show how current is induced when lines of magnetic field are cut. Electromagnet and coil with multimeter is used to show the same effect."
+}
+]
+}

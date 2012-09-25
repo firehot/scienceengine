@@ -141,10 +141,13 @@ public class ExperimentHomeScreen extends AbstractScreen {
     for (int i = 0; i < resources.size; i++) {
       Table resource = resourcesTable.newTable();
       OrderedMap<String, ?> resourceInfo = (OrderedMap<String, ?>) resources.get(i);
-      final String type = (String) resourceInfo.get("type");
-      final String url = (String) resourceInfo.get("url");
+      String type = (String) resourceInfo.get("type");
+      if (!type.equals("video") && !type.equals("web")) continue;
+      
       String attribution = (String) resourceInfo.get("attribution");
       String description = (String) resourceInfo.get("description");
+      final String url = (String) resourceInfo.get("url");
+      final String fileName = (String) resourceInfo.get("file");
       resource.defaults().fill().left();
 
       Image play = null;
@@ -153,7 +156,18 @@ public class ExperimentHomeScreen extends AbstractScreen {
         play.setClickListener(new ClickListener() {
           @Override
           public void click(Actor actor, float x, float y) {
-            scienceEngine.browseURL(url);
+            if (fileName != null) {
+              // Movie file extensions - we allow a limited set.
+              for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) {
+                FileHandle file = Gdx.files.external(fileName + extension);
+                if (file.exists()) {
+                  scienceEngine.openFile(file.file());
+                  break;
+                }
+              }
+            } else if (url != null) {
+             scienceEngine.browseURL(url);
+            }
           }
         });
       } else if (type.equals("web")) {
