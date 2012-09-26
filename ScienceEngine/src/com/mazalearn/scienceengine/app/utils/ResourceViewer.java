@@ -4,9 +4,11 @@ import java.io.File;
 
 public interface ResourceViewer {
 
+  // Show url in browser
   public void browseURL(String url);
 
-  public void openFile(File file);
+  // Plays video corresponding to file. Returns true iff successful
+  public boolean playVideo(File file);
 
 }
 

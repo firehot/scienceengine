@@ -91,10 +91,11 @@ public class ScienceEngine extends Game {
   }
 
 
-  public void openFile(File file) {
+  public boolean playVideo(File file) {
     if (resourceViewer != null) {
-      resourceViewer.openFile(file);
+      return resourceViewer.playVideo(file);
     }
+    return false;
   }
   // Game-related methods
 

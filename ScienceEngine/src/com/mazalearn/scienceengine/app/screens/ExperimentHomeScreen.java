@@ -156,16 +156,18 @@ public class ExperimentHomeScreen extends AbstractScreen {
         play.setClickListener(new ClickListener() {
           @Override
           public void click(Actor actor, float x, float y) {
+            boolean playedVideo = false;
             if (fileName != null) {
               // Movie file extensions - we allow a limited set.
               for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) {
                 FileHandle file = Gdx.files.external(fileName + extension);
                 if (file.exists()) {
-                  scienceEngine.openFile(file.file());
+                  playedVideo = scienceEngine.playVideo(file.file());
                   break;
                 }
               }
-            } else if (url != null) {
+            }
+            if (url != null && !playedVideo) { // Fallback to the browser
              scienceEngine.browseURL(url);
             }
           }

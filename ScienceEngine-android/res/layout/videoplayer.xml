@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Create a full-screen layout
+    The video I'm playing back is portrait/vertical so
+    set the orientation accordingly.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+ 
+<!-- Create a full-screen VideoView -->
+    <VideoView
+        android:id="@+id/surfacevideoview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+    />
+ 
+</LinearLayout>

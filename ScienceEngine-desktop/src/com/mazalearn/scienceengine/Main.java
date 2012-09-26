@@ -41,25 +41,27 @@ public class Main {
   	}
 
     @Override
-    public void openFile(File file) {
+    public boolean playVideo(File file) {
       if(java.awt.Desktop.isDesktopSupported() ) {
         java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
         
         if(desktop.isSupported(java.awt.Desktop.Action.OPEN)) {
           try {
             desktop.open(file);
+            return true;
           }
           catch ( Exception e ) {
             System.err.println( e.getMessage() );
             try {
               Runtime.getRuntime().exec("cmd.exe /C \"" + file.getAbsolutePath() + "\"");
-            } catch (IOException ignore) {
-              System.err.println( ignore.getMessage() );
-              System.err.println("Sorry, tried our best");
+              return true;
+            } catch (IOException e2) {
+              System.err.println( e2.getMessage() );
             }
           }
         }
       }
+      return false;
     }
 	}
 }

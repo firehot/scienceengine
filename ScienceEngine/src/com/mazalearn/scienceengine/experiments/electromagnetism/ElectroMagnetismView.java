@@ -147,14 +147,14 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     compassActor.visible = !challenge;
     fieldMeter.setActive(!challenge);
     fieldMeterActor.visible = !challenge;
+    if (probeManager == null) {
+      probeManager = new ProbeManager(skin, width, height, this);        
+      probeManager.addProbe(new FieldDirectionProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
+      probeManager.addProbe(new FieldMagnitudeProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
+      // Do this only after so that probeManager does not get into excluded actors list of probe
+      this.getRoot().addActorBefore(fieldMeterActor, probeManager);     
+    }
     if (challenge) {
-      if (probeManager == null) {
-        probeManager = new ProbeManager(skin, width, height, this);        
-        probeManager.addProbe(new FieldDirectionProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
-        probeManager.addProbe(new FieldMagnitudeProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
-        // Do this only after so that probeManager does not get into excluded actors list of probe
-        this.getRoot().addActorBefore(fieldMeterActor, probeManager);     
-      }
       probeManager.startChallenge();
     }
     probeManager.visible = challenge;

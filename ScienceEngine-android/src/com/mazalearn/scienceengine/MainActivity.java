@@ -1,17 +1,14 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.ResourceViewer;
 
@@ -46,14 +43,11 @@ public class MainActivity extends AndroidApplication implements ResourceViewer {
     }
 
     @Override
-    public void openFile(File file) {
-      MediaPlayer mp = new MediaPlayer(); 
-      try {
-        mp.setDataSource(file.getAbsolutePath());
-        mp.prepare(); 
-      } catch (Exception e) {
-        e.printStackTrace();
-      } 
-      mp.start(); 
+    public boolean playVideo(File file) {
+      Intent videoPlaybackActivity = new Intent(this, VideoPlayer.class);
+      videoPlaybackActivity.putExtra("com.mazalearn.scienceengine.FileName", 
+          file.getAbsolutePath());
+      startActivity(videoPlaybackActivity);
+      return true;
     }
 }
