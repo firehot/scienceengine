@@ -28,6 +28,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     private int score;
     private final boolean success;
     private BitmapFont font;
+    private float increment = 0.015f;
 
     private ScoreImage(Texture texture, Skin skin, boolean success) {
       super(texture);
@@ -46,6 +47,12 @@ public class ProbeManager extends Group implements IDoneCallback {
 
     public void act(float delta) {
       this.y += success ? 2 : -2;
+      this.rotation += increment;
+      if (this.rotation >= 5) {
+        increment = -1;
+      } else if (this.rotation <= -5) {
+        increment = 1;
+      }
     }
 
     public void draw(SpriteBatch batch, float parentAlpha) {
@@ -78,8 +85,8 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.dashboard.y = height - dashboard.getPrefHeight();
     this.dashboard.x = width/2 - dashboard.getPrefWidth()/2;
     //this.dashboard.originX = 
-    this.successImage = new ScoreImage(new Texture("images/balloon.png"), skin, true);
-    this.failureImage = new ScoreImage(new Texture("images/bomb.png"), skin, false);
+    this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
+    this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
     this.addActor(successImage);
     this.addActor(failureImage);
   }

@@ -72,10 +72,12 @@ public abstract class AbstractProber extends Group {
     do {
       for (Vector2 point: points) {
         do {
+          // random point in ([0,1],[0,1])
           point.set(MathUtils.random(), MathUtils.random());
-          point.x *= width;
-          point.y *= height;
-          point.add(x, y);
+          // Transform point to [ 0.8 x width, 0.8 x height]
+          point.x *= width * 0.8f;
+          point.y *= height * 0.8f;
+          point.add(x + 0.1f * width, y + 0.1f * height);
         } while (isInsideExcludedActor(point));
       }
     } while (areTooClose(points) || !arePointsAcceptable(points));

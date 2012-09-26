@@ -68,7 +68,7 @@ class FieldMagnitudeProber extends AbstractProber {
     imageCorrect = new Image(questionMark);
     imageCorrect.setClickListener(new ClickResult(true, doneCallback));
     imageWrong = new Image(questionMark);
-    imageWrong.setClickListener(new ClickResult(true, doneCallback));
+    imageWrong.setClickListener(new ClickResult(false, doneCallback));
     this.addActor(imageCorrect);
     this.addActor(imageWrong);
     fieldMeterActor.visible = false;
