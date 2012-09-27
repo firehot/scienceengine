@@ -20,7 +20,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public class LevelManager {
@@ -125,8 +125,8 @@ public class LevelManager {
     for (Actor a : stage.getActors()) {
       if (!a.visible) continue; 
       boolean moveAllowed = false;
-      if (a instanceof ScienceActor) {
-        moveAllowed = ((ScienceActor) a).isAllowDrag();
+      if (a instanceof Science2DActor) {
+        moveAllowed = ((Science2DActor) a).isAllowDrag();
       }
       jsonWriter.object()
           .set("name", a.name)
@@ -175,8 +175,8 @@ public class LevelManager {
     // Make all actors inactive and invisible.
     for (Actor actor: stage.getActors()) {
       actor.visible = false;
-      if (actor instanceof ScienceActor) {
-        ((ScienceActor) actor).setPositionFromViewCoords(false);
+      if (actor instanceof Science2DActor) {
+        ((Science2DActor) actor).setPositionFromViewCoords(false);
       }
     }
   }
@@ -211,10 +211,10 @@ public class LevelManager {
     actor.height = (Float) nvl(component.get("height"), 20f);
     actor.visible = (Boolean) nvl(component.get("visible"), true);
     actor.rotation = (Float) nvl(component.get("rotation"), 0f);
-    if (actor instanceof ScienceActor) {
-      ScienceActor scienceActor = (ScienceActor) actor;
-      scienceActor.setPositionFromViewCoords(false);
-      scienceActor.setAllowDrag((Boolean) nvl(component.get("move"), false));
+    if (actor instanceof Science2DActor) {
+      Science2DActor science2DActor = (Science2DActor) actor;
+      science2DActor.setPositionFromViewCoords(false);
+      science2DActor.setAllowDrag((Boolean) nvl(component.get("move"), false));
     }
   }
 

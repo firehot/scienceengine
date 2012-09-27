@@ -60,8 +60,8 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
       ScienceEngine.getMusicManager().setEnabled(false);
       // Make all actors non-movable
       for (Actor actor: getActors()) {
-        if (actor instanceof ScienceActor) {
-          ((ScienceActor) actor).setAllowDrag(false);
+        if (actor instanceof Science2DActor) {
+          ((Science2DActor) actor).setAllowDrag(false);
         }
       }
     } else {
@@ -90,7 +90,7 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
     locationGroups.add(Arrays.asList(actors));
   }
   
-  public void notifyLocationChangedByUser(ScienceActor actor, Vector2 newPosition) {
+  public void notifyLocationChangedByUser(Science2DActor actor, Vector2 newPosition) {
     for (List<Actor> locationGroup: locationGroups) {
       if (!locationGroup.contains(actor)) continue;
       deltaPosition.set(newPosition)
@@ -100,8 +100,8 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
         if (groupActor == actor || groupActor == null) continue;
         groupActor.x += deltaPosition.x;
         groupActor.y += deltaPosition.y;
-        if (groupActor instanceof ScienceActor) {
-          ((ScienceActor) groupActor).setPositionFromViewCoords(false);
+        if (groupActor instanceof Science2DActor) {
+          ((Science2DActor) groupActor).setPositionFromViewCoords(false);
         }
       }
     }

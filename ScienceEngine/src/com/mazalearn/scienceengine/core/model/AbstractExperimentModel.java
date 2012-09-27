@@ -14,12 +14,12 @@ import com.mazalearn.scienceengine.core.model.IMagneticField.Producer;
 public abstract class AbstractExperimentModel implements IExperimentModel {
 
   protected World box2DWorld;
-  protected List<ScienceBody> bodies = new ArrayList<ScienceBody>(); 
+  protected List<Science2DBody> bodies = new ArrayList<Science2DBody>(); 
   private List<IModelConfig<?>> modelConfigs;
 
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
-  private List<List<ScienceBody>> circuits;
+  private List<List<Science2DBody>> circuits;
   List<IMagneticField.Producer> emProducers;
   List<IMagneticField.Consumer> emConsumers;
   Vector2 bField = new Vector2(), totalBField = new Vector2();
@@ -30,8 +30,8 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     Vector2 gravity = new Vector2(0.0f, 0.0f);
     boolean doSleep = true;
     box2DWorld = new World(gravity, doSleep);
-    ScienceBody.setBox2DWorld(box2DWorld);    
-    this.circuits = new ArrayList<List<ScienceBody>>();
+    Science2DBody.setBox2DWorld(box2DWorld);    
+    this.circuits = new ArrayList<List<Science2DBody>>();
     this.emProducers = new ArrayList<IMagneticField.Producer>();
     this.emConsumers = new ArrayList<IMagneticField.Consumer>();
   }
@@ -46,14 +46,14 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
 
   protected abstract void singleStep();
 
-  public void addBody(ScienceBody scienceBody) {
-    bodies.add(scienceBody);
-    scienceBody.setModel(this);
-    if (scienceBody instanceof IMagneticField.Producer) {
-      emProducers.add((Producer) scienceBody);
+  public void addBody(Science2DBody science2DBody) {
+    bodies.add(science2DBody);
+    science2DBody.setModel(this);
+    if (science2DBody instanceof IMagneticField.Producer) {
+      emProducers.add((Producer) science2DBody);
     }
-    if (scienceBody instanceof IMagneticField.Consumer) {
-      emConsumers.add((Consumer) scienceBody);
+    if (science2DBody instanceof IMagneticField.Consumer) {
+      emConsumers.add((Consumer) science2DBody);
     }
   }
   
@@ -87,7 +87,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     }
   }
   
-  public void addCircuit(ScienceBody... bodies) {
+  public void addCircuit(Science2DBody... bodies) {
     circuits.add(Arrays.asList(bodies));
   }
   
@@ -95,9 +95,9 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   // It will push current through all other current sinks in the circuit.
   public void notifyCurrentChange(ICurrent.Source currentSource) {
     float current = currentSource.getCurrent();
-    for (List<ScienceBody> circuit: circuits) {
+    for (List<Science2DBody> circuit: circuits) {
       if (!circuit.contains(currentSource)) continue;
-      for (ScienceBody component: circuit) {
+      for (Science2DBody component: circuit) {
         if (component instanceof ICurrent.Sink) {
           ((ICurrent.Sink) component).updateCurrent(current);
         }
@@ -112,7 +112,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
       initializeConfigs(modelConfigs);
     }
     allConfigs.addAll(modelConfigs);
-    for (ScienceBody body: bodies) {
+    for (Science2DBody body: bodies) {
       if (body.isActive()) {
         allConfigs.addAll(body.getConfigs());
       }

@@ -4,7 +4,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Lightbulb is the model of a lightbulb. Its intensity is a function of the
@@ -12,7 +12,7 @@ import com.mazalearn.scienceengine.core.model.ScienceBody;
  * 
  * @author sridhar
  */
-public class Lightbulb extends ScienceBody {
+public class Lightbulb extends Science2DBody {
 
   /* Absolute current amplitude below this value is treated as zero. */
   public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.01;

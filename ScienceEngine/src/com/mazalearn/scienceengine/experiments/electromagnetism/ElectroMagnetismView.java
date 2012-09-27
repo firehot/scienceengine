@@ -9,11 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
-import com.mazalearn.scienceengine.core.model.ScienceBody.ComponentType;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody.ComponentType;
 import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
 import com.mazalearn.scienceengine.core.view.ProbeManager;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
@@ -30,7 +30,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
   private Vector2 pos = new Vector2();
   private ElectroMagnetismModel emModel;
   private FieldMeterActor fieldMeterActor;
-  private ScienceActor compassActor;
+  private Science2DActor compassActor;
 
   public ElectroMagnetismView(float width, float height,
       final ElectroMagnetismModel emModel, Skin skin) {
@@ -38,11 +38,11 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     this.emModel = emModel;
     
     Actor lightbulb = null, pickupCoil = null;
-    ScienceActor electroMagnet = null, currentSource = null;
+    Science2DActor electroMagnet = null, currentSource = null;
     Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
         Scaling.stretch, Align.CENTER, "CoilsBack");
     this.addActor(coilsBack);
-    for (final ScienceBody body: emModel.getBodies()) {
+    for (final Science2DBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body.getComponentType());
       if (textureRegion == null) continue;
       switch (body.getComponentType()) {
@@ -54,7 +54,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(lightbulb = new LightbulbActor(textureRegion, (Lightbulb) body));
         break;
       case PickupCoil:
-        this.addActor(pickupCoil = new ScienceActor(body, textureRegion));
+        this.addActor(pickupCoil = new Science2DActor(body, textureRegion));
         break;
       case FieldMeter:
         this.addActor(fieldMeterActor = new FieldMeterActor(textureRegion, body));
@@ -67,13 +67,13 @@ public class ElectroMagnetismView extends AbstractExperimentView {
         this.addActor(new CurrentWireActor(body));
         break;
       case ElectroMagnet:
-        this.addActor(electroMagnet = new ScienceActor(body, textureRegion));
+        this.addActor(electroMagnet = new Science2DActor(body, textureRegion));
         break;
       case Compass:
-        this.addActor(compassActor = new ScienceActor(body, textureRegion));
+        this.addActor(compassActor = new Science2DActor(body, textureRegion));
         break;
       default:
-        this.addActor(new ScienceActor(body, textureRegion));
+        this.addActor(new Science2DActor(body, textureRegion));
         break;
       }
     }

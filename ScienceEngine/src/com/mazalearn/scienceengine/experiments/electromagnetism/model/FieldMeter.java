@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Models a field meter which can store multiple samples at 
@@ -21,7 +21,7 @@ import com.mazalearn.scienceengine.core.model.ScienceBody;
  * 
  * @author sridhar
  */
-public class FieldMeter extends ScienceBody implements IMagneticField.Consumer {
+public class FieldMeter extends Science2DBody implements IMagneticField.Consumer {
 
   // A reusable vector
   private Vector2 fieldVector = new Vector2(), samplePoint = new Vector2();

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * AbstractCoil is the abstract base class for all coils.
@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.core.model.ScienceBody;
  * 
  * @author sridhar
  */
-public abstract class AbstractCoil extends ScienceBody {
+public abstract class AbstractCoil extends Science2DBody {
 
   // Number of loops in the coil.
   private int numberOfLoops;

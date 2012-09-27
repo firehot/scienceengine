@@ -5,14 +5,14 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * AbstractMagnet is the abstract base class for all magnets.
  * 
  * @author sridhar
  */
-public abstract class AbstractMagnet extends ScienceBody 
+public abstract class AbstractMagnet extends Science2DBody 
        implements IMagneticField.Producer {
 
   private static final float TOLERANCE = 0.1f;

@@ -3,7 +3,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Voltmeter is the model of an analog voltmeter. It's needle deflection is a
@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.core.model.ScienceBody;
  * 
  * @author sridhar
  */
-public class Voltmeter extends ScienceBody {
+public class Voltmeter extends Science2DBody {
 
   /* Absolute current amplitude below this value is treated as zero. */
   public static final float CURRENT_AMPLITUDE_THRESHOLD = 0.001f;

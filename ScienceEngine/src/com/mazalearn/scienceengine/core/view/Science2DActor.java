@@ -16,16 +16,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
- * ScienceActor - Takes as model a ScienceBody which is a Box2D body
+ * Science2DActor - Takes as model a Science2DBody which is a Box2D body
  *                and creates an actor view for it.
  * 
  * 
  */
-public class ScienceActor extends Actor {
-  private ScienceBody body;
+public class Science2DActor extends Actor {
+  private Science2DBody body;
   private TextureRegion textureRegion;
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
   protected Vector2 lastTouch = new Vector2();    // view coordinates
@@ -38,7 +38,7 @@ public class ScienceActor extends Actor {
    * @param body - Box2D body
    * @param textureRegion - texture to use to represent body in view
    */
-  public ScienceActor(ScienceBody body, TextureRegion textureRegion) {
+  public Science2DActor(Science2DBody body, TextureRegion textureRegion) {
     super(body.getName());
 
     this.body = body;
@@ -50,7 +50,7 @@ public class ScienceActor extends Actor {
     this.originY = height / 2;
   }
   
-  public ScienceBody getBody() {
+  public Science2DBody getBody() {
     return body;
   }
   

@@ -30,7 +30,7 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 /**
@@ -197,9 +197,9 @@ public class LevelEditor extends Stage {
         public void click(Actor a, float x, float y) {
           listSelectedActor = stage.findActor(actor.name);
           actor.visible = !actor.visible;
-          if (actor instanceof ScienceActor) {
-            ScienceActor scienceActor = (ScienceActor) actor;
-            scienceActor.getBody().setActive(actor.visible);
+          if (actor instanceof Science2DActor) {
+            Science2DActor science2DActor = (Science2DActor) actor;
+            science2DActor.getBody().setActive(actor.visible);
             refreshConfigsTable(experimentModel, skin, configTable);
             controlPanel.refresh();
          }
@@ -401,10 +401,10 @@ public class LevelEditor extends Stage {
       if (draggedActor != null) {
         draggedActor.x += delta3.x;
         draggedActor.y += delta3.y;
-        if (draggedActor instanceof ScienceActor) {
+        if (draggedActor instanceof Science2DActor) {
           // This is a user initiated move but for editing we want the 
           // actors in the location group to be individually moved.
-          ((ScienceActor) draggedActor).setPositionFromViewCoords(false);
+          ((Science2DActor) draggedActor).setPositionFromViewCoords(false);
         }
       } else if (rotatedActor != null) {
         toStageCoordinates(x, y, point);
@@ -412,8 +412,8 @@ public class LevelEditor extends Stage {
         rotatedVector.sub(rotatedActor.width, 0);
         // TODO: UI issues and dont know how to draw rotated rectangles
         // rotatedActor.rotation = rotatedVector.angle();
-        if (rotatedActor instanceof ScienceActor) {
-          ((ScienceActor) rotatedActor).setPositionFromViewCoords(false);
+        if (rotatedActor instanceof Science2DActor) {
+          ((Science2DActor) rotatedActor).setPositionFromViewCoords(false);
         }
       } else if (resizedActor != null) {
         float sizeRatio = resizedActor.width / resizedActor.height;

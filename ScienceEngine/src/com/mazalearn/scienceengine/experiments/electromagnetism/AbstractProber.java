@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
 
@@ -21,7 +21,7 @@ public abstract class AbstractProber extends Group {
   private final IExperimentModel model;
   private final List<Actor> excludedActors;
   protected FieldMeter fieldMeter;
-  protected ScienceActor fieldMeterActor;
+  protected Science2DActor fieldMeterActor;
  
   protected AbstractProber(IExperimentModel model, List<Actor> actors, Actor dashboard) {
     this.model = model;
@@ -29,7 +29,7 @@ public abstract class AbstractProber extends Group {
     excludedActors.add(dashboard);
     for (Actor actor: actors) {
       if (actor.name == "FieldMeter") {
-        this.fieldMeterActor = (ScienceActor) actor;
+        this.fieldMeterActor = (Science2DActor) actor;
         this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
       } else if (actor.visible) {
         excludedActors.add(actor);

@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractExperimentModel;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
@@ -36,7 +36,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     super();
     emField = new EMField();
     
-    ScienceBody electroMagnet = null;
+    Science2DBody electroMagnet = null;
     addBody(barMagnet = new BarMagnet("BarMagnet", 10, 12, 0));
     CurrentSource currentSource = new CurrentSource("Current", 10, 12, 0);
     addBody(currentSource);
@@ -69,7 +69,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
     float dt = Gdx.app.getGraphics().getDeltaTime();
     box2DWorld.step(dt, 3, 3);
     propagateField();
-    for (ScienceBody body: bodies) {
+    for (Science2DBody body: bodies) {
       if (body.isActive()) {
         body.singleStep(dt);
       }
@@ -78,7 +78,7 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
   
   @Override
   public void reset() {
-    for (ScienceBody body: bodies) {
+    for (Science2DBody body: bodies) {
       body.resetInitial();
     }
     if (joint != null) {
@@ -86,13 +86,13 @@ public class ElectroMagnetismModel extends AbstractExperimentModel {
       joint = null;
     }
     if (mode == Mode.Rotate) {
-      jointDef.initialize(barMagnet.getBody(), ScienceBody.getGround(), 
+      jointDef.initialize(barMagnet.getBody(), Science2DBody.getGround(), 
           barMagnet.getWorldPoint(Vector2.Zero));
       joint = box2DWorld.createJoint(jointDef);
     }
   }
 
-  public List<ScienceBody> getBodies() {
+  public List<Science2DBody> getBodies() {
     return bodies;
   }
   

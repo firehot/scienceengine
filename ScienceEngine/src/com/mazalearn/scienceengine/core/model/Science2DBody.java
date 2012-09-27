@@ -19,13 +19,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 
 /**
- * ScienceBody has basic attributes for an element in an EM Field.
+ * Science2DBody has basic attributes for an element in an EM Field.
  * We would like to inherit from box2D body but that is technically a challenge - 
  * so we wrap the box2D body interface with a static proxy.
  * 
  * @author sridhar
  */
-public class ScienceBody implements IBody {
+public class Science2DBody implements IBody {
   // Must be set before using this class
   private static World box2DWorld;
   // Ground body
@@ -58,7 +58,7 @@ public class ScienceBody implements IBody {
     Voltmeter,
   }
   
-  protected ScienceBody(ComponentType componentType, String name, float x, float y, float angle) {
+  protected Science2DBody(ComponentType componentType, String name, float x, float y, float angle) {
     this.componentType = componentType;
     this.name = name;
     this.initialX = x;
@@ -123,12 +123,12 @@ public class ScienceBody implements IBody {
   }
 
   public static void setBox2DWorld(World box2DWorld) {
-    ScienceBody.box2DWorld = box2DWorld;
-    ScienceBody.GROUND = box2DWorld.createBody(new BodyDef());
+    Science2DBody.box2DWorld = box2DWorld;
+    Science2DBody.GROUND = box2DWorld.createBody(new BodyDef());
   }
   
   public static Body getGround() {
-    return ScienceBody.GROUND;
+    return Science2DBody.GROUND;
   }
   
   public String getName() {

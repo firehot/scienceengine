@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 
-public class LightbulbActor extends ScienceActor {
+public class LightbulbActor extends Science2DActor {
   private final Lightbulb lightbulb;
   private TextureRegion lightTexture;
 

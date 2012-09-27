@@ -4,7 +4,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * CurrentSource is the model of an AC or DC Current source.
@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.core.model.ScienceBody;
  * 
  * @author sridhar
  */
-public class CurrentSource extends ScienceBody implements ICurrent.Source {
+public class CurrentSource extends Science2DBody implements ICurrent.Source {
 
   // The minimum number of steps used to approximate one sine wave cycle.
   private static final float MIN_STEPS_PER_CYCLE = 10;

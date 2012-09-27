@@ -7,14 +7,14 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Current wire is an infinite wire carrying current
  * 
  * @author sridhar
  */
-public class CurrentWire extends ScienceBody implements IMagneticField.Producer {
+public class CurrentWire extends Science2DBody implements IMagneticField.Producer {
   // Radius of the wire.
   private float radius;
   // Amplitude of the current in the wire (-1...+1)

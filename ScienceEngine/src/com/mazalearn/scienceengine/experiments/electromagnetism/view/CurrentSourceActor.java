@@ -3,15 +3,15 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mazalearn.scienceengine.core.model.ScienceBody;
-import com.mazalearn.scienceengine.core.view.ScienceActor;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
 
-public class CurrentSourceActor extends ScienceActor {
+public class CurrentSourceActor extends Science2DActor {
   private static TextureRegion current = 
       new TextureRegion(new Texture("images/current.png"));
   private CurrentSource currentSource;
-  public CurrentSourceActor(ScienceBody body, TextureRegion textureRegion) {
+  public CurrentSourceActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     currentSource = (CurrentSource) body;
   }
