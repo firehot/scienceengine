@@ -6,7 +6,7 @@ import com.esotericsoftware.tablelayout.Cell;
 public class Controller {
   final Cell<Table> cellTable;
   final IControl control;
-  private static int CONFIG_HEIGHT = 40;
+  private static int CONTROL_HEIGHT = 40;
 
   public Controller(Cell<Table> cellTable, IControl control) {
     this.cellTable = cellTable;
@@ -16,6 +16,6 @@ public class Controller {
   public void validate() {
     control.syncWithModel();
     cellTable.getWidget().visible = control.isAvailable();
-    cellTable.height(control.isAvailable() ? CONFIG_HEIGHT : 0);
+    cellTable.height(control.isAvailable() ? CONTROL_HEIGHT : 0);
   }
 }

@@ -32,11 +32,11 @@ public class ControlPanel extends Table {
   private final Skin skin;
   private List<Controller> controllers;
   private String experimentName;
-  private IControl pauseResumeConfig;
-  private IControl challengeConfig;
+  private IControl suspendControl;
+  private IControl challengeControl;
   private Table modelControlPanel;
   private Label title;
-  private Table suspendResetTable;
+  private Table suspendResetPanel; // part of viewcontrolpanel
   
   public ControlPanel(Skin skin, IExperimentController experimentController) {
     super(skin, null, experimentController.getName());
@@ -46,10 +46,10 @@ public class ControlPanel extends Table {
     this.experimentView = experimentController.getView();
     this.experimentName = experimentController.getName();
     this.defaults().fill();
-    Actor standardControlPanel = 
-        createStandardControlPanel(skin, experimentModel, experimentView);
+    Actor viewControlPanel = 
+        createViewControlPanel(skin, experimentModel, experimentView);
     this.modelControlPanel = createModelControlPanel(skin);
-    this.add(standardControlPanel);
+    this.add(viewControlPanel);
     this.row();
     this.add(modelControlPanel);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
@@ -82,15 +82,15 @@ public class ControlPanel extends Table {
     }
   }
 
-  protected Actor createStandardControlPanel(Skin skin,
+  protected Actor createViewControlPanel(Skin skin,
       final IExperimentModel experimentModel,
       final IExperimentView experimentView) {
-    Table standardControls = new Table(skin, null, "Standard");
-    standardControls.defaults().fill();
+    Table viewControls = new Table(skin, null, "Standard");
+    viewControls.defaults().fill();
     // Register name
     this.title = new Label(experimentName, skin);
-    standardControls.add(title).colspan(2).center();
-    standardControls.row();
+    viewControls.add(title).colspan(2).center();
+    viewControls.row();
     // register the back button
     TextButton backButton = new TextButton("Back", skin);
     backButton.setClickListener(new ClickListener() {
@@ -101,8 +101,8 @@ public class ControlPanel extends Table {
             new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentController));
       }
     });
-    standardControls.add(backButton).height(30).colspan(2);
-    standardControls.row();
+    viewControls.add(backButton).height(30).colspan(2);
+    viewControls.row();
     
     // Add challenge/learn functionality
     AbstractModelConfig<Boolean> challengeModelConfig = 
@@ -112,15 +112,15 @@ public class ControlPanel extends Table {
           public boolean isPossible() { return true; }
     };
     
-    challengeConfig = new OnOffButtonControl(challengeModelConfig, skin) {
+    challengeControl = new OnOffButtonControl(challengeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(
             experimentView.isChallengeInProgress() ? "End Challenge" : "Challenge");
       }
     };
-    standardControls.add(challengeConfig.getActor()).height(30).colspan(2);
-    standardControls.row();
+    viewControls.add(challengeControl.getActor()).height(30).colspan(2);
+    viewControls.row();
     
     // Add pause/resume functionality for the experiment
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
@@ -129,7 +129,7 @@ public class ControlPanel extends Table {
           public Boolean getValue() { return experimentView.isSuspended(); }
           public boolean isPossible() { return true; }
     };
-    pauseResumeConfig = new OnOffButtonControl(pauseResumeModelConfig, skin) {
+    suspendControl = new OnOffButtonControl(pauseResumeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(experimentView.isSuspended() ? "Resume" : "Pause");
@@ -142,16 +142,16 @@ public class ControlPanel extends Table {
           public void doCommand() { experimentModel.reset(); }
           public boolean isPossible() { return true; }
     };
-    IControl resetConfig = new CommandButtonControl(resetModelConfig, skin);
+    IControl resetControl = new CommandButtonControl(resetModelConfig, skin);
     
-    suspendResetTable = new Table(skin);
-    suspendResetTable.defaults().fill().expand();
-    suspendResetTable.add(pauseResumeConfig.getActor()).pad(0,5,0, 5);
-    suspendResetTable.add(resetConfig.getActor());
+    suspendResetPanel = new Table(skin);
+    suspendResetPanel.defaults().fill().expand();
+    suspendResetPanel.add(suspendControl.getActor()).pad(0,5,0, 5);
+    suspendResetPanel.add(resetControl.getActor());
     
-    standardControls.add(suspendResetTable).pad(0, 0, 10, 0);
-    standardControls.row();
-    return standardControls;
+    viewControls.add(suspendResetPanel).pad(0, 0, 10, 0);
+    viewControls.row();
+    return viewControls;
   }
   
   public Label getTitle() {
@@ -159,7 +159,7 @@ public class ControlPanel extends Table {
   }
   
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  private Controller createViewControl(IModelConfig property, Table modelConfigTable) {
+  private Controller createViewControl(IModelConfig property, Table modelControlTable) {
     Table table = new Table(skin);
     table.defaults().fill().expand();
     IControl control = null;
@@ -184,16 +184,16 @@ public class ControlPanel extends Table {
         table.add(control.getActor());
         break;
     }
-    Controller c = new Controller(modelConfigTable.add(table), control);
-    modelConfigTable.row();
+    Controller c = new Controller(modelControlTable.add(table), control);
+    modelControlTable.row();
     return c;
   }
 
   @Override
   public void act(float delta) {
     super.act(delta);
-    challengeConfig.syncWithModel();
-    pauseResumeConfig.syncWithModel();
+    challengeControl.syncWithModel();
+    suspendControl.syncWithModel();
     for (Controller controller: controllers) {
       controller.validate();
     }
@@ -206,7 +206,7 @@ public class ControlPanel extends Table {
   }
 
   public void enableControls(boolean enable) {
-    suspendResetTable.visible = enable;
+    suspendResetPanel.visible = enable;
     modelControlPanel.touchable = enable;
     this.invalidate();
   }
