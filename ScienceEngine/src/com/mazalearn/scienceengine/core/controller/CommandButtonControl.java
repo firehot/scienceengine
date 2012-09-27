@@ -10,14 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
  * Utility class for experimentModel action buttons using reflection.
  *
  */
-public class ConfigCommandButton implements IViewConfig {
+public class CommandButtonControl implements IControl {
   @SuppressWarnings("rawtypes")
   private final IModelConfig command;
   
   protected final TextButton textButton;
   
   @SuppressWarnings("rawtypes")
-  public ConfigCommandButton(final IModelConfig command, final Skin skin) {
+  public CommandButtonControl(final IModelConfig command, final Skin skin) {
     this.textButton = new TextButton(command.getName(), skin);
     this.command = command;
     textButton.setClickListener(new ClickListener() {

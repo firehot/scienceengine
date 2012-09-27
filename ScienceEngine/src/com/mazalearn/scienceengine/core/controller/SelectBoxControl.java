@@ -5,11 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class ConfigSelectBox implements IViewConfig {
+public class SelectBoxControl implements IControl {
   private final IModelConfig<String> property;
   private final SelectBox selectBox;
 
-  public ConfigSelectBox(final IModelConfig<String> property, Skin skin) {
+  public SelectBoxControl(final IModelConfig<String> property, Skin skin) {
     this.selectBox = new SelectBox (getItems(property), skin);
     this.property = property;
     syncWithModel();

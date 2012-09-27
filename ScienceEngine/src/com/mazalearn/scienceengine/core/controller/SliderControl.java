@@ -9,11 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
  * Utility class for experimentModel floating point sliders using reflection.
  *
  */
-public class ConfigSlider implements IViewConfig {
+public class SliderControl implements IControl {
   private final IModelConfig<Float> property;
   private final Slider slider;
   
-  public ConfigSlider(final IModelConfig<Float> property, Skin skin) {
+  public SliderControl(final IModelConfig<Float> property, Skin skin) {
     this.slider = new Slider(property.getLow(), property.getHigh(), 
         (property.getHigh() - property.getLow())/10, skin);
     this.property = property;

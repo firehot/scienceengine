@@ -5,11 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class ConfigCheckBox implements IViewConfig {
+public class CheckBoxControl implements IControl {
   private final IModelConfig<Boolean> property;
   private final CheckBox checkBox;
 
-  public ConfigCheckBox(final IModelConfig<Boolean> property, Skin skin) {
+  public CheckBoxControl(final IModelConfig<Boolean> property, Skin skin) {
     this.checkBox = new CheckBox(skin);
     this.property = property;
     syncWithModel();

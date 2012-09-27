@@ -14,14 +14,14 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.core.controller.Config;
-import com.mazalearn.scienceengine.core.controller.ConfigCommandButton;
-import com.mazalearn.scienceengine.core.controller.ConfigOnOffButton;
-import com.mazalearn.scienceengine.core.controller.ConfigSelectBox;
-import com.mazalearn.scienceengine.core.controller.ConfigSlider;
+import com.mazalearn.scienceengine.core.controller.Controller;
+import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
+import com.mazalearn.scienceengine.core.controller.OnOffButtonControl;
+import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
+import com.mazalearn.scienceengine.core.controller.SliderControl;
 import com.mazalearn.scienceengine.core.controller.IExperimentController;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.controller.IViewConfig;
+import com.mazalearn.scienceengine.core.controller.IControl;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IExperimentView;
 
@@ -30,10 +30,10 @@ public class ControlPanel extends Table {
   private final IExperimentModel experimentModel;
   private final IExperimentView experimentView;
   private final Skin skin;
-  private List<Config> configs;
+  private List<Controller> controllers;
   private String experimentName;
-  private IViewConfig pauseResumeConfig;
-  private IViewConfig challengeConfig;
+  private IControl pauseResumeConfig;
+  private IControl challengeConfig;
   private Table modelControlPanel;
   private Label title;
   private Table suspendResetTable;
@@ -74,11 +74,11 @@ public class ControlPanel extends Table {
 
   @SuppressWarnings("rawtypes")
   protected void registerModelConfigs(Table modelControlPanel) {
-    this.configs = new ArrayList<Config>();
+    this.controllers = new ArrayList<Controller>();
     modelControlPanel.clear();
-    // Register all model configs
+    // Register all model controllers
     for (IModelConfig modelConfig: experimentModel.getAllConfigs()) {
-      this.configs.add(createViewConfig(modelConfig, modelControlPanel));
+      this.controllers.add(createViewControl(modelConfig, modelControlPanel));
     }
   }
 
@@ -112,7 +112,7 @@ public class ControlPanel extends Table {
           public boolean isPossible() { return true; }
     };
     
-    challengeConfig = new ConfigOnOffButton(challengeModelConfig, skin) {
+    challengeConfig = new OnOffButtonControl(challengeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(
@@ -129,7 +129,7 @@ public class ControlPanel extends Table {
           public Boolean getValue() { return experimentView.isSuspended(); }
           public boolean isPossible() { return true; }
     };
-    pauseResumeConfig = new ConfigOnOffButton(pauseResumeModelConfig, skin) {
+    pauseResumeConfig = new OnOffButtonControl(pauseResumeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(experimentView.isSuspended() ? "Resume" : "Pause");
@@ -142,7 +142,7 @@ public class ControlPanel extends Table {
           public void doCommand() { experimentModel.reset(); }
           public boolean isPossible() { return true; }
     };
-    IViewConfig resetConfig = new ConfigCommandButton(resetModelConfig, skin);
+    IControl resetConfig = new CommandButtonControl(resetModelConfig, skin);
     
     suspendResetTable = new Table(skin);
     suspendResetTable.defaults().fill().expand();
@@ -159,32 +159,32 @@ public class ControlPanel extends Table {
   }
   
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  private Config createViewConfig(IModelConfig property, Table modelConfigTable) {
+  private Controller createViewControl(IModelConfig property, Table modelConfigTable) {
     Table table = new Table(skin);
     table.defaults().fill().expand();
-    IViewConfig viewConfig = null;
+    IControl control = null;
     switch(property.getType()) {
       case ONOFF: 
-        viewConfig = new ConfigOnOffButton(property, skin);
-        table.add(viewConfig.getActor());
+        control = new OnOffButtonControl(property, skin);
+        table.add(control.getActor());
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
       case RANGE: 
         table.add(property.getName());
         table.row();
-        viewConfig = new ConfigSlider(property, skin);
-        table.add(viewConfig.getActor());
+        control = new SliderControl(property, skin);
+        table.add(control.getActor());
         break;
       case LIST:
-        viewConfig = new ConfigSelectBox(property, skin);
-        table.add(viewConfig.getActor());
+        control = new SelectBoxControl(property, skin);
+        table.add(control.getActor());
         break;
       case COMMAND:
-        viewConfig = new ConfigCommandButton(property, skin);
-        table.add(viewConfig.getActor());
+        control = new CommandButtonControl(property, skin);
+        table.add(control.getActor());
         break;
     }
-    Config c = new Config(modelConfigTable.add(table), viewConfig);
+    Controller c = new Controller(modelConfigTable.add(table), control);
     modelConfigTable.row();
     return c;
   }
@@ -194,8 +194,8 @@ public class ControlPanel extends Table {
     super.act(delta);
     challengeConfig.syncWithModel();
     pauseResumeConfig.syncWithModel();
-    for (Config config: configs) {
-      config.validate();
+    for (Controller controller: controllers) {
+      controller.validate();
     }
     this.invalidate();
     this.validate();
