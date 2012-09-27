@@ -15,11 +15,10 @@ import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.Config;
-import com.mazalearn.scienceengine.core.controller.ConfigCheckBox;
+import com.mazalearn.scienceengine.core.controller.ConfigCommandButton;
 import com.mazalearn.scienceengine.core.controller.ConfigOnOffButton;
 import com.mazalearn.scienceengine.core.controller.ConfigSelectBox;
 import com.mazalearn.scienceengine.core.controller.ConfigSlider;
-import com.mazalearn.scienceengine.core.controller.ConfigCommandButton;
 import com.mazalearn.scienceengine.core.controller.IExperimentController;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IViewConfig;
@@ -208,7 +207,7 @@ public class ControlPanel extends Table {
 
   public void enableControls(boolean enable) {
     suspendResetTable.visible = enable;
-    modelControlPanel.visible = enable;
+    modelControlPanel.touchable = enable;
     this.invalidate();
   }
 }

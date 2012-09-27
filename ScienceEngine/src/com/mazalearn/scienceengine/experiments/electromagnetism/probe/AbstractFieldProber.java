@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments.electromagnetism;
+package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
 
-public abstract class AbstractProber extends Group {
+public abstract class AbstractFieldProber extends Group {
   static final float TOLERANCE = 0.3f;
   static final float ZERO_TOLERANCE = 1e-4f;
   private final Vector2 modelPos = new Vector2();
@@ -23,7 +22,7 @@ public abstract class AbstractProber extends Group {
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
  
-  protected AbstractProber(IExperimentModel model, List<Actor> actors, Actor dashboard) {
+  protected AbstractFieldProber(IExperimentModel model, List<Actor> actors, Actor dashboard) {
     this.model = model;
     this.excludedActors = new ArrayList<Actor>();
     excludedActors.add(dashboard);
@@ -73,9 +72,10 @@ public abstract class AbstractProber extends Group {
     return false;
   }
   
-  protected void generateProbePoints(Vector2... points) {
+  protected void generateProbePoints(Vector2[] points, Vector2[] bFields) {
     do {
-      for (Vector2 point: points) {
+      for (int i = 0; i < points.length; i++) {
+        Vector2 point = points[i];
         do {
           // random point in ([0,1],[0,1])
           point.set(MathUtils.random(), MathUtils.random());
@@ -83,9 +83,19 @@ public abstract class AbstractProber extends Group {
           point.x *= width * 0.8f;
           point.y *= height * 0.8f;
           point.add(x + 0.1f * width, y + 0.1f * height);
+          getBField(point, bFields[i]);
         } while (isInsideExcludedActor(point));
       }
     } while (areTooClose(points) || !arePointsAcceptable(points));
+    
+    // Set up fieldmeter samples for all probe points.
+    fieldMeter.resetInitial();
+    for (int i = 0; i < points.length; i++) {
+      fieldMeter.addFieldSample(points[i].x / ScienceEngine.PIXELS_PER_M, 
+          points[i].y /  ScienceEngine.PIXELS_PER_M, 
+          bFields[i].angle() * MathUtils.degreesToRadians, 
+          bFields[i].len());
+    }
   }
   
   protected void getBField(Vector2 viewPos, Vector2 bField) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 
 public interface IExperimentView extends IDoneCallback {
   // Pause/Resume model actions in the experiment. 

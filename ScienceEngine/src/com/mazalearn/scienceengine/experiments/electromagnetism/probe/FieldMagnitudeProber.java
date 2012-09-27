@@ -1,8 +1,7 @@
-package com.mazalearn.scienceengine.experiments.electromagnetism;
+package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
 import java.util.List;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,15 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.actions.Delay;
 import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.core.view.IDoneCallback;
-import com.mazalearn.scienceengine.core.view.ProbeImage;
+import com.mazalearn.scienceengine.core.probe.IDoneCallback;
+import com.mazalearn.scienceengine.core.probe.ProbeImage;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
 // Is the field stronger at A or B?
-class FieldMagnitudeProber extends AbstractProber {
+public class FieldMagnitudeProber extends AbstractFieldProber {
   
   private final class ClickResult implements ClickListener {
     private final IDoneCallback doneCallback;
@@ -55,8 +53,8 @@ class FieldMagnitudeProber extends AbstractProber {
 
   private final Image imageCorrect, imageWrong;
   // Temporary vectors
-  private Vector2 pos0 = new Vector2(), pos1 = new Vector2();
-  private Vector2 bField0 = new Vector2(), bField1 = new Vector2();
+  private Vector2[] pos;
+  private Vector2[] bField;
     
   public FieldMagnitudeProber(IExperimentModel model,
       final IDoneCallback doneCallback, List<Actor> actors, Actor dashboard) {
@@ -65,6 +63,8 @@ class FieldMagnitudeProber extends AbstractProber {
     imageCorrect.setClickListener(new ClickResult(true, doneCallback));
     imageWrong = new ProbeImage();
     imageWrong.setClickListener(new ClickResult(false, doneCallback));
+    this.pos = new Vector2[] { new Vector2(), new Vector2()};
+    this.bField = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
     this.addActor(imageWrong);
     fieldMeterActor.visible = false;
@@ -81,32 +81,25 @@ class FieldMagnitudeProber extends AbstractProber {
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2
-      generateProbePoints(pos0, pos1);
+      generateProbePoints(pos, bField);
       
-      if (bField0.len() > bField1.len()) {
-        imageCorrect.x = pos0.x - imageCorrect.width/2;
-        imageCorrect.y = pos0.y - imageCorrect.height/2;
-        imageWrong.x = pos1.x - imageWrong.width/2;
-        imageWrong.y = pos1.y - imageWrong.width/2;
+      if (bField[0].len() > bField[1].len()) {
+        imageCorrect.x = pos[0].x - imageCorrect.width/2;
+        imageCorrect.y = pos[0].y - imageCorrect.height/2;
+        imageWrong.x = pos[1].x - imageWrong.width/2;
+        imageWrong.y = pos[1].y - imageWrong.width/2;
       } else {
-        imageCorrect.x = pos1.x - imageCorrect.width/2;
-        imageCorrect.y = pos1.y - imageCorrect.height/2;
-        imageWrong.x = pos0.x - imageWrong.width/2;
-        imageWrong.y = pos0.y - imageWrong.width/2;
+        imageCorrect.x = pos[1].x - imageCorrect.width/2;
+        imageCorrect.y = pos[1].y - imageCorrect.height/2;
+        imageWrong.x = pos[0].x - imageWrong.width/2;
+        imageWrong.y = pos[0].y - imageWrong.width/2;
       }
-      fieldMeter.resetInitial();
-      pos0.mul(1f/ScienceEngine.PIXELS_PER_M);
-      pos1.mul(1f/ScienceEngine.PIXELS_PER_M);
-      fieldMeter.addFieldSample(pos0.x, pos0.y, bField0.angle() * MathUtils.degreesToRadians, bField0.len());
-      fieldMeter.addFieldSample(pos1.x, pos1.y, bField1.angle() * MathUtils.degreesToRadians, bField1.len());
     }
     this.visible = activate;
   }
 
   protected boolean arePointsAcceptable(Vector2[] points) {
-    getBField(points[0], bField0);
-    getBField(points[1], bField1);
-    if (haveSimilarMagnitudes(bField0.len(), bField1.len())) return false;
+    if (haveSimilarMagnitudes(bField[0].len(), bField[1].len())) return false;
     return true;
   }
 }

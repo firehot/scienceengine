@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.view;
+package com.mazalearn.scienceengine.core.probe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.experiments.electromagnetism.AbstractProber;
+import com.mazalearn.scienceengine.experiments.electromagnetism.probe.AbstractFieldProber;
 
 /**
  * Cycles through the probers - probing the user with each one.
@@ -24,7 +24,6 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.AbstractProber;
  */
 public class ProbeManager extends Group implements IDoneCallback {
   private final class ScoreImage extends Image {
-    private final Skin skin;
     private int score;
     private final boolean success;
     private BitmapFont font;
@@ -32,7 +31,6 @@ public class ProbeManager extends Group implements IDoneCallback {
 
     private ScoreImage(Texture texture, Skin skin, boolean success) {
       super(texture);
-      this.skin = skin;
       this.visible = false;
       this.success = success;
       font = skin.getFont("default-font");
@@ -66,7 +64,7 @@ public class ProbeManager extends Group implements IDoneCallback {
 
   int current = 0;
   protected Dashboard dashboard;
-  private List<AbstractProber> probers = new ArrayList<AbstractProber>();
+  private List<AbstractFieldProber> probers = new ArrayList<AbstractFieldProber>();
   private final IDoneCallback doneCallback;
   private final SoundManager soundManager;
   private final ScoreImage successImage, failureImage;
@@ -92,7 +90,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.addActor(failureImage);
   }
 
-  public void addProbe(AbstractProber prober) {
+  public void addProbe(AbstractFieldProber prober) {
     probers.add(prober);
     this.addActor(prober);
     prober.activate(false);
