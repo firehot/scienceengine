@@ -53,4 +53,8 @@ class Dashboard extends Table {
   public int getScore() {
     return score;
   }
+
+  public void resetScore() {
+    score = 0;
+  }
 }

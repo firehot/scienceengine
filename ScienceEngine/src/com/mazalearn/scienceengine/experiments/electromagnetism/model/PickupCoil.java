@@ -165,7 +165,7 @@ public class PickupCoil extends AbstractCoil {
   }
 
   /**
-   * Dividing the coil's emf by this number will give us the coil's current
+   * Dividing the coil's emf by this number will give us the coil's currentProber
    * amplitude, a number between 0 and 1 that determines the responsiveness of
    * view components. This number should be set as close as possible to the
    * maximum emf that can be induced given the range of all model parameters.
@@ -247,7 +247,7 @@ public class PickupCoil extends AbstractCoil {
     // Induced emf.
     float emf = -(this.deltaFlux / dt);
     
-    // If the emf has changed, set the current in the coil and notify observers.
+    // If the emf has changed, set the currentProber in the coil and notify observers.
     if (emf != this.emf) {
       this.emf = emf;
     

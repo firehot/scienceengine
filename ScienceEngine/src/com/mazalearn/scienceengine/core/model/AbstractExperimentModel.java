@@ -91,8 +91,8 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     circuits.add(Arrays.asList(bodies));
   }
   
-  // There should be only one current source in a circuit.
-  // It will push current through all other current sinks in the circuit.
+  // There should be only one currentProber source in a circuit.
+  // It will push currentProber through all other currentProber sinks in the circuit.
   public void notifyCurrentChange(ICurrent.Source currentSource) {
     float current = currentSource.getCurrent();
     for (List<Science2DBody> circuit: circuits) {

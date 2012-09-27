@@ -140,9 +140,9 @@ public class Science2DActor extends Actor {
 
   @Override
   public void touchDragged(float localX, float localY, int pointer) {
-    // Screen coords of current touch
+    // Screen coords of currentProber touch
     currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    // Screen coords of current touch
+    // Screen coords of currentProber touch
     getStage().getCamera().unproject(currentTouch);
     // Get negative of movement vector
    lastTouch.sub(currentTouch.x, currentTouch.y);

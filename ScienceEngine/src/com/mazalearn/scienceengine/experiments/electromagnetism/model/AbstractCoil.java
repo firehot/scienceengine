@@ -24,7 +24,7 @@ public abstract class AbstractCoil extends Science2DBody {
   private float wireWidth;
   // Spacing between the loops
   private float loopSpacing;
-  // Amplitude of the current in the coil (-1...+1)
+  // Amplitude of the currentProber in the coil (-1...+1)
   private float current;
 
   // ----------------------------------------------------------------------------
@@ -173,17 +173,17 @@ public abstract class AbstractCoil extends Science2DBody {
   }
 
   /*
-   * Sets the current in the coil. This should only be called by the
+   * Sets the currentProber in the coil. This should only be called by the
    * coil itself. 
    * 
-   * @param current - the current in the coil
+   * @param currentProber - the currentProber in the coil
    */
   protected void setCurrent(float current) {
     this.current = current;
   }
 
   /**
-   * Gets the current in the coil, in amperes
+   * Gets the currentProber in the coil, in amperes
    */
   public float getCurrent() {
     return this.current;

@@ -237,7 +237,7 @@ public class LevelEditor extends Stage {
   }
 
   /**
-   * Enables the editor. Creates all required resources and replace the current
+   * Enables the editor. Creates all required resources and replace the currentProber
    * InputProcessor by its own. Just remove this call from your code once you're
    * happy with the result. Any other call can stay without any side-effect.
    */

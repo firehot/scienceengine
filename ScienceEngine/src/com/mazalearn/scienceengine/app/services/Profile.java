@@ -40,7 +40,7 @@ public class Profile implements Serializable {
   }
 
   /**
-   * Gets the current high score for the given level.
+   * Gets the currentProber high score for the given level.
    */
   public int getHighScore(int levelId) {
     if (highScores == null)

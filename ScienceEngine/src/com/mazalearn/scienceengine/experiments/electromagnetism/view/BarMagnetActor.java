@@ -37,17 +37,17 @@ public class BarMagnetActor extends Science2DActor {
   
   public void touchUp(float x, float y, int pointer) {
     if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return;
-    // Screen coords of current touch
+    // Screen coords of currentProber touch
     currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    // Goto view coords of current touch
+    // Goto view coords of currentProber touch
     getStage().getCamera().unproject(currentTouch);
     // Get negative of movement vector
     lastTouch.sub(currentTouch.x, currentTouch.y);
     // Scale displacement vector suitably to get a proportional force
     lastTouch.mul(-10000);
-    // view coords of current touch
+    // view coords of currentProber touch
     newPos.set(currentTouch.x, currentTouch.y);
-    // box2d point of current touch
+    // box2d point of currentProber touch
     getBox2DPositionFromViewPosition(newPos, newPos, rotation);
     // Use center as origin - dont understand why this step
     newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);

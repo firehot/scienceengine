@@ -44,7 +44,7 @@ public abstract class AbstractExperimentController implements
   }
 
   @Override
-  public ControlPanel getConfigurator() {
+  public ControlPanel getControlPanel() {
     return controlPanel;
   }
 }

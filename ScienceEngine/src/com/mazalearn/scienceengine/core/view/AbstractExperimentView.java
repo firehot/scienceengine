@@ -63,7 +63,7 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
       // Turn on music
       ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
     }
-    isChallengeInProgress = !isChallengeInProgress;
+    isChallengeInProgress = challenge;
   }
     
   @Override

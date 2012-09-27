@@ -63,7 +63,7 @@ public class CellularLJMolecularModel extends LJMolecularModel {
     super.reset();
     this.neighbourCells = createNeighbourCells();
   }
-  // compute accelerations of all molecules from current positions, using
+  // compute accelerations of all molecules from currentProber positions, using
   // Lennard-Jones force law:
   // return potential Energy
   double computeAccelerations() {

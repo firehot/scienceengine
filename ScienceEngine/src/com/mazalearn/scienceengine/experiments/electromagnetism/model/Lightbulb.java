@@ -8,13 +8,13 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Lightbulb is the model of a lightbulb. Its intensity is a function of the
- * current in the pickup coil.
+ * currentProber in the pickup coil.
  * 
  * @author sridhar
  */
 public class Lightbulb extends Science2DBody {
 
-  /* Absolute current amplitude below this value is treated as zero. */
+  /* Absolute currentProber amplitude below this value is treated as zero. */
   public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.01;
   // ----------------------------------------------------------------------------
   // Instance data
@@ -58,14 +58,14 @@ public class Lightbulb extends Science2DBody {
 
     final float currentAmplitude = pickupCoilModel.getCurrent();
 
-    // If current changed angle, turn the light off.
+    // If currentProber changed angle, turn the light off.
     if (Math.signum(currentAmplitude) != Math.signum(previousCurrentAmplitude)) {
       intensity = 0f;
     } else if (Math.abs(currentAmplitude)  < CURRENT_AMPLITUDE_THRESHOLD){
       // Intensity below the threshold is effectively zero.
       intensity = 0f;
     } else {
-      // Light intensity is proportional to amplitude of current in the coil.
+      // Light intensity is proportional to amplitude of currentProber in the coil.
       intensity = currentAmplitude;
     }
 

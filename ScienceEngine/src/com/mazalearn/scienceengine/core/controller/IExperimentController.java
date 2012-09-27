@@ -7,6 +7,6 @@ import com.mazalearn.scienceengine.experiments.ControlPanel;
 public interface IExperimentController {
   public IExperimentView getView();
   public IExperimentModel getModel();
-  public ControlPanel getConfigurator();
+  public ControlPanel getControlPanel();
   public String getName();
 }

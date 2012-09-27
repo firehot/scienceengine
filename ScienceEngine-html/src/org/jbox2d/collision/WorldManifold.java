@@ -34,7 +34,7 @@ import org.jbox2d.common.Vec2;
 
 // updated to rev 100
 /**
- * This is used to compute the current state of a contact manifold.
+ * This is used to compute the currentProber state of a contact manifold.
  * 
  * @author daniel
  */

@@ -120,7 +120,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
    *   <li>origin is the center of the coil, at (0,0) 
    *   <li>(x,y) is the point of interest where we are measuring the magnetic field 
    *   <li>C = a fudge factor, set so that the lightbulb will light 
-   *   <li>m = magnetic moment = C * #loops * current in the coil 
+   *   <li>m = magnetic moment = C * #loops * currentProber in the coil 
    *   <li>R = radius of the coil
    *   <li>r = distance from the origin to (x,y) 
    *   <li>theta = angle between the X axis and (x,y)

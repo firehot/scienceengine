@@ -146,7 +146,7 @@ public abstract class Contact {
 
 	/**
 	 * Enable/disable this contact. This can be used inside the pre-solve
-	 * contact listener. The contact is only disabled for the current time step
+	 * contact listener. The contact is only disabled for the currentProber time step
 	 * (or sub-step in continuous collisions).
 	 * 
 	 * @param flag

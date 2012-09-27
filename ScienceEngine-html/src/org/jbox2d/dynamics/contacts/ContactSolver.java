@@ -752,7 +752,7 @@ public class ContactSolver {
 				Vec2 p2 = bodyB.m_sweep.c + r2;
 				Vec2 dp = p2 - p1;
 	
-				// Approximate the current separation.
+				// Approximate the currentProber separation.
 				float separation = Dot(dp, normal) + ccp.separation;
 	
 				// Track max constraint error.

@@ -150,7 +150,7 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     fieldMeter.setActive(!challenge);
     fieldMeterActor.visible = !challenge;
     if (probeManager == null) {
-      probeManager = new ProbeManager(skin, width, height, this);        
+      probeManager = new ProbeManager(skin, width, height, controlPanel.getModelConfigs(), this);        
       probeManager.addProbe(new FieldDirectionProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
       probeManager.addProbe(new FieldMagnitudeProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
       // Do this only after so that probeManager does not get into excluded actors list of probe

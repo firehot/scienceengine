@@ -7,13 +7,13 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Voltmeter is the model of an analog voltmeter. It's needle deflection is a
- * function of the current in the pickup coil.
+ * function of the currentProber in the pickup coil.
  * 
  * @author sridhar
  */
 public class Voltmeter extends Science2DBody {
 
-  /* Absolute current amplitude below this value is treated as zero. */
+  /* Absolute currentProber amplitude below this value is treated as zero. */
   public static final float CURRENT_AMPLITUDE_THRESHOLD = 0.001f;
 
   // Define the zero point of the needle.
