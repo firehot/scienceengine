@@ -42,6 +42,8 @@ public class ConfigGenerator {
         boolean doCommand = MathUtils.randomBoolean();
         if (doCommand) commandConfig.doCommand();
         break;
+      default:
+        throw new IllegalArgumentException("Unknown config type: " + config);
       }
     }
   }

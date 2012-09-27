@@ -53,8 +53,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
 
   private final Image imageCorrect, imageWrong;
   // Temporary vectors
-  private Vector2[] pos;
-  private Vector2[] bField;
+  private Vector2[] points;
+  private Vector2[] bFields;
     
   public FieldMagnitudeProber(IExperimentModel model,
       final IDoneCallback doneCallback, List<Actor> actors, Actor dashboard) {
@@ -63,8 +63,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     imageCorrect.setClickListener(new ClickResult(true, doneCallback));
     imageWrong = new ProbeImage();
     imageWrong.setClickListener(new ClickResult(false, doneCallback));
-    this.pos = new Vector2[] { new Vector2(), new Vector2()};
-    this.bField = new Vector2[] { new Vector2(), new Vector2()};
+    this.points = new Vector2[] { new Vector2(), new Vector2()};
+    this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
     this.addActor(imageWrong);
     fieldMeterActor.visible = false;
@@ -81,25 +81,37 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2
-      generateProbePoints(pos, bField);
+      do {
+        generateProbePoints(points);
+      } while (!arePointsAcceptable(points, bFields));
       
-      if (bField[0].len() > bField[1].len()) {
-        imageCorrect.x = pos[0].x - imageCorrect.width/2;
-        imageCorrect.y = pos[0].y - imageCorrect.height/2;
-        imageWrong.x = pos[1].x - imageWrong.width/2;
-        imageWrong.y = pos[1].y - imageWrong.width/2;
+      createFieldMeterSamples(points, bFields);
+      
+      if (bFields[0].len() > bFields[1].len()) {
+        imageCorrect.x = points[0].x - imageCorrect.width/2;
+        imageCorrect.y = points[0].y - imageCorrect.height/2;
+        imageWrong.x = points[1].x - imageWrong.width/2;
+        imageWrong.y = points[1].y - imageWrong.width/2;
       } else {
-        imageCorrect.x = pos[1].x - imageCorrect.width/2;
-        imageCorrect.y = pos[1].y - imageCorrect.height/2;
-        imageWrong.x = pos[0].x - imageWrong.width/2;
-        imageWrong.y = pos[0].y - imageWrong.width/2;
+        imageCorrect.x = points[1].x - imageCorrect.width/2;
+        imageCorrect.y = points[1].y - imageCorrect.height/2;
+        imageWrong.x = points[0].x - imageWrong.width/2;
+        imageWrong.y = points[0].y - imageWrong.width/2;
       }
     }
     this.visible = activate;
   }
 
-  protected boolean arePointsAcceptable(Vector2[] points) {
-    if (haveSimilarMagnitudes(bField[0].len(), bField[1].len())) return false;
+  private boolean haveSimilarMagnitudes(float v1, float v2) {
+    if (Math.abs(v1 - v2) < ZERO_TOLERANCE) return true;
+    if (Math.abs(v1 - v2) / Math.min(v1, v2) < TOLERANCE) return true;
+    return false;
+  }
+  
+  protected boolean arePointsAcceptable(Vector2[] points, Vector2[] bFields) {
+    getBField(points[0], bFields[0]);
+    getBField(points[1], bFields[1]);
+    if (haveSimilarMagnitudes(bFields[0].len(), bFields[1].len())) return false;
     return true;
   }
 }

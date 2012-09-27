@@ -22,7 +22,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.probe.AbstractFi
 public class ProbeManager extends Group implements IDoneCallback {
   int currentProber = 0;
   protected Dashboard dashboard;
-  private List<AbstractFieldProber> probers = new ArrayList<AbstractFieldProber>();
+  private List<AbstractProber> probers = new ArrayList<AbstractProber>();
   private final IDoneCallback doneCallback;
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;

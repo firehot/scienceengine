@@ -116,7 +116,7 @@ public class ControlPanel extends Table {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(
-            experimentView.isChallengeInProgress() ? "Challenge Off" : "Challenge");
+            experimentView.isChallengeInProgress() ? "End Challenge" : "Challenge");
       }
     };
     standardControls.add(challengeConfig.getActor()).height(30).colspan(2);

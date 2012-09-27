@@ -20,16 +20,15 @@ import com.mazalearn.scienceengine.core.probe.ProbeImage;
 // What is direction of field at A?
 // doubts on shielding - not yet addressed
 public class FieldDirectionProber extends AbstractFieldProber {
-  protected static final float TOLERANCE = 0.3f;
   private final Image image, userField;
-  private Vector2[] pos, bField;
+  private Vector2[] points, bFields;
   
   public FieldDirectionProber(IExperimentModel model,
       final IDoneCallback doneCallback, List<Actor> actors, Actor dashboard) {
     super(model, actors, dashboard);
     
-    this.pos = new Vector2[] { new Vector2()};
-    this.bField = new Vector2[] { new Vector2()};
+    this.points = new Vector2[] { new Vector2()};
+    this.bFields = new Vector2[] { new Vector2()};
     
     userField = new Image(new TextureRegion(new Texture("images/fieldarrow-yellow.png")));
     userField.visible = false;
@@ -57,7 +56,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
       @Override
       public void touchUp(float x, float y, int pointer) {
         lastTouch.sub(x, y);
-        float val = lastTouch.nor().dot(bField[0]); // Should be -1
+        float val = lastTouch.nor().dot(bFields[0]); // Should be -1
         final boolean success = Math.abs(val + 1) < TOLERANCE;
         fieldMeterActor.visible = true;
         userField.action(Sequence.$(Delay.$(2f),
@@ -91,16 +90,13 @@ public class FieldDirectionProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      generateProbePoints(pos, bField);
-      image.x = pos[0].x - image.width/2;
-      image.y = pos[0].y - image.height/2;
-      bField[0].nor();
+      generateProbePoints(points);
+      getBField(points[0], bFields[0]);
+      createFieldMeterSamples(points, bFields);
+      image.x = points[0].x - image.width/2;
+      image.y = points[0].y - image.height/2;
+      bFields[0].nor();
     }
     this.visible = activate;
-  }
-
-  @Override
-  protected boolean arePointsAcceptable(Vector2[] points) {
-    return true;
   }
 }
