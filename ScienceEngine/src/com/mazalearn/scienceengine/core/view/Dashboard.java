@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.core.view;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
@@ -16,7 +18,21 @@ class Dashboard extends Table {
     }
     this.setFillParent(false);
     this.top().center();
-    status = new Label("Status", skin);
+    status = new Label("Status", skin) {
+      private float increment = 0.01f;
+      private float alpha = 1;
+      @Override
+      public void draw(SpriteBatch batch, float parentAlpha) {
+        Color c = batch.getColor();
+        batch.setColor(c.r, c.g, c.b, alpha);
+        super.draw(batch, alpha);
+        batch.setColor(c);
+        alpha += increment;
+        if (alpha > 1 - increment || alpha <= 0.5f) {
+          increment = -increment;
+        }
+      }      
+    };
     scoreLabel = new Label("0", skin);
     this.add("Score").left();
     this.add(scoreLabel).right().fill();

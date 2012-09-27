@@ -16,9 +16,10 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.Config;
 import com.mazalearn.scienceengine.core.controller.ConfigCheckBox;
+import com.mazalearn.scienceengine.core.controller.ConfigOnOffButton;
 import com.mazalearn.scienceengine.core.controller.ConfigSelectBox;
 import com.mazalearn.scienceengine.core.controller.ConfigSlider;
-import com.mazalearn.scienceengine.core.controller.ConfigTextButton;
+import com.mazalearn.scienceengine.core.controller.ConfigCommandButton;
 import com.mazalearn.scienceengine.core.controller.IExperimentController;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IViewConfig;
@@ -105,38 +106,34 @@ public class ControlPanel extends Table {
     standardControls.row();
     
     // Add challenge/learn functionality
-    AbstractModelConfig<String> challengeModelConfig = 
-        new AbstractModelConfig<String>("Challenge/Learn", "Challenge or Learn") {
-          public void doCommand() { 
-            experimentView.challenge(!experimentView.isChallengeInProgress());
-          }
+    AbstractModelConfig<Boolean> challengeModelConfig = 
+        new AbstractModelConfig<Boolean>("Challenge", "Challenge or Learn", false) {
+          public void setValue(Boolean value) { experimentView.challenge(value);}
+          public Boolean getValue() { return experimentView.isChallengeInProgress(); }
           public boolean isPossible() { return true; }
     };
     
-    challengeConfig = new ConfigTextButton(challengeModelConfig, skin) {
+    challengeConfig = new ConfigOnOffButton(challengeModelConfig, skin) {
       public void syncWithModel() {
-        textButton.setText(
-            experimentView.isChallengeInProgress() ? "Learn" : "Challenge");
+        super.syncWithModel();
+        toggleButton.setText(
+            experimentView.isChallengeInProgress() ? "Challenge Off" : "Challenge");
       }
     };
     standardControls.add(challengeConfig.getActor()).height(30).colspan(2);
     standardControls.row();
     
     // Add pause/resume functionality for the experiment
-    AbstractModelConfig<String> pauseResumeModelConfig = 
-        new AbstractModelConfig<String>("Pause/Resume", "Pause or Resume") {
-          public void doCommand() { 
-            if (experimentView.isPaused()) {
-              experimentView.resume();
-            } else {
-              experimentView.pause();
-            }
-          }
+    AbstractModelConfig<Boolean> pauseResumeModelConfig = 
+        new AbstractModelConfig<Boolean>("Pause/Resume", "Pause or Resume") {
+          public void setValue(Boolean value) { experimentView.suspend(value); }
+          public Boolean getValue() { return experimentView.isSuspended(); }
           public boolean isPossible() { return true; }
     };
-    pauseResumeConfig = new ConfigTextButton(pauseResumeModelConfig, skin) {
+    pauseResumeConfig = new ConfigOnOffButton(pauseResumeModelConfig, skin) {
       public void syncWithModel() {
-        textButton.setText(experimentView.isPaused() ? "Resume" : "Pause");
+        super.syncWithModel();
+        toggleButton.setText(experimentView.isSuspended() ? "Resume" : "Pause");
       }
     };
 
@@ -146,7 +143,7 @@ public class ControlPanel extends Table {
           public void doCommand() { experimentModel.reset(); }
           public boolean isPossible() { return true; }
     };
-    IViewConfig resetConfig = new ConfigTextButton(resetModelConfig, skin);
+    IViewConfig resetConfig = new ConfigCommandButton(resetModelConfig, skin);
     
     suspendResetTable = new Table(skin);
     suspendResetTable.defaults().fill().expand();
@@ -169,9 +166,9 @@ public class ControlPanel extends Table {
     IViewConfig viewConfig = null;
     switch(property.getType()) {
       case ONOFF: 
-        viewConfig = new ConfigCheckBox(property, skin);
+        viewConfig = new ConfigOnOffButton(property, skin);
         table.add(viewConfig.getActor());
-        table.add(property.getName()).pad(0, 5, 0, 5);
+        //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
       case RANGE: 
         table.add(property.getName());
@@ -184,7 +181,7 @@ public class ControlPanel extends Table {
         table.add(viewConfig.getActor());
         break;
       case COMMAND:
-        viewConfig = new ConfigTextButton(property, skin);
+        viewConfig = new ConfigCommandButton(property, skin);
         table.add(viewConfig.getActor());
         break;
     }

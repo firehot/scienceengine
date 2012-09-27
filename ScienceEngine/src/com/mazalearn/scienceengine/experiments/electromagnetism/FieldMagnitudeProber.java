@@ -2,8 +2,6 @@ package com.mazalearn.scienceengine.experiments.electromagnetism;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -16,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IDoneCallback;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
+import com.mazalearn.scienceengine.core.view.ProbeImage;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
@@ -63,11 +61,9 @@ class FieldMagnitudeProber extends AbstractProber {
   public FieldMagnitudeProber(IExperimentModel model,
       final IDoneCallback doneCallback, List<Actor> actors, Actor dashboard) {
     super(model, actors, dashboard);
-    TextureRegion questionMark = 
-        new TextureRegion(new Texture("images/questionmark.png"));
-    imageCorrect = new Image(questionMark);
+    imageCorrect = new ProbeImage();
     imageCorrect.setClickListener(new ClickResult(true, doneCallback));
-    imageWrong = new Image(questionMark);
+    imageWrong = new ProbeImage();
     imageWrong.setClickListener(new ClickResult(false, doneCallback));
     this.addActor(imageCorrect);
     this.addActor(imageWrong);

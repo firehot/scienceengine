@@ -33,17 +33,12 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   }
 
   @Override
-  public void pause() {
-    experimentModel.enable(false);
+  public void suspend(boolean suspend) {
+    experimentModel.enable(!suspend);
   }
 
   @Override
-  public void resume() {
-    experimentModel.enable(true);
-  }
-
-  @Override
-  public boolean isPaused() {
+  public boolean isSuspended() {
     return !experimentModel.isEnabled();
   }
   

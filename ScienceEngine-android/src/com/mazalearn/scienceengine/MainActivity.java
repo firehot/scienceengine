@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import android.content.Intent;
@@ -44,10 +45,11 @@ public class MainActivity extends AndroidApplication implements ResourceViewer {
 
     @Override
     public boolean playVideo(File file) {
-      Intent videoPlaybackActivity = new Intent(this, VideoPlayer.class);
-      videoPlaybackActivity.putExtra("com.mazalearn.scienceengine.FileName", 
+      Intent videoPlayback = new Intent(this, VideoPlayer.class);
+      // videoPlayback.setData(Uri.fromFile(file));
+      videoPlayback.putExtra("com.mazalearn.scienceengine.FileName", 
           file.getAbsolutePath());
-      startActivity(videoPlaybackActivity);
+      startActivity(videoPlayback);
       return true;
     }
 }

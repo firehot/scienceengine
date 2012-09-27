@@ -4,19 +4,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 /**
  * Utility class for experimentModel action buttons using reflection.
  *
  */
-public class ConfigTextButton implements IViewConfig {
+public class ConfigCommandButton implements IViewConfig {
   @SuppressWarnings("rawtypes")
   private final IModelConfig command;
   
   protected final TextButton textButton;
   
   @SuppressWarnings("rawtypes")
-  public ConfigTextButton(final IModelConfig command, final Skin skin) {
+  public ConfigCommandButton(final IModelConfig command, final Skin skin) {
     this.textButton = new TextButton(command.getName(), skin);
     this.command = command;
     textButton.setClickListener(new ClickListener() {

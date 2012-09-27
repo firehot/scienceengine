@@ -33,7 +33,6 @@ public class BarMagnetActor extends Science2DActor {
   public void touchDragged(float x, float y, int pointer) {
     if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
     super.touchDragged(x, y, pointer);
-    emView.resume();
   }
   
   public void touchUp(float x, float y, int pointer) {
@@ -53,7 +52,6 @@ public class BarMagnetActor extends Science2DActor {
     // Use center as origin - dont understand why this step
     newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
     barMagnet.applyForce(lastTouch, newPos);
-    emView.resume();
   }
   
   @Override

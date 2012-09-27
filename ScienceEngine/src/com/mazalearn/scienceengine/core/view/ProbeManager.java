@@ -82,9 +82,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.y = 0;
     this.width = width;
     this.height = height;
-    this.dashboard.y = height - dashboard.getPrefHeight();
-    this.dashboard.x = width/2 - dashboard.getPrefWidth()/2;
-    //this.dashboard.originX = 
+    // For a table, x and y are at center, top of table - not at bottom left
+    this.dashboard.y = height;
+    this.dashboard.x = width/2;
+     
     this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
     this.addActor(successImage);

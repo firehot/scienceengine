@@ -19,8 +19,6 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   private float radius;
   // Amplitude of the current in the wire (-1...+1)
   private float current;
-  // Direction of current: up is true and down is false
-  private boolean direction = true;
 
   public CurrentWire(String name, float x, float y, float angle) {
     super(ComponentType.CurrentWire, name, x, y, angle);
@@ -56,41 +54,34 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
 
   /**
    * Sets the magnitude of current in the wire. 
-   * @param current the current - always >= 0
+   * @param current the current
    */
-  public void setCurrentMagnitude(float current) {
-    this.current = current;
-    getModel().notifyFieldChange();
+  public void setCurrent(float current) {
+    if (this.current != current) {
+      this.current = current;
+      getModel().notifyFieldChange();
+    }
   }
   
-  public void flipCurrentDirection() {
-    this.direction = !this.direction;
-    getModel().notifyFieldChange();
-  }
-  
-  public boolean isDirectionUp() {
-    return direction;
-  }
-
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(getName() + " Current", 
-        "Current in Wire", 0, 10) {
-      public Float getValue() { return getCurrentMagnitude(); }
-      public void setValue(Float value) { setCurrentMagnitude(value); }
+        "Current in Wire", -10, 10) {
+      public Float getValue() { return getCurrent(); }
+      public void setValue(Float value) { setCurrent(value); }
       public boolean isPossible() { return isActive(); }
     });
     configs.add(new AbstractModelConfig<String>(getName() + " Flip Direction", 
         "Current Direction in Wire") {
-      public void doCommand() { flipCurrentDirection(); }
+      public void doCommand() { setCurrent(-getCurrent()); }
       public boolean isPossible() { return isActive(); }
     });
   }
 
   /**
-   * Gets the magnitude of current in the wire
+   * Gets the current in the wire
    * @return the current
    */
-  public float getCurrentMagnitude() {
+  public float getCurrent() {
     return this.current;
   }
 
@@ -98,7 +89,7 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   public Vector2 getBField(Vector2 location, Vector2 bField) {
     Vector2 localPoint = getLocalPoint(location);
     // field = constant * current / distance
-    float magnitude = 50 * current * (direction ? 1 : -1) / localPoint.len();
+    float magnitude = 50 * current / localPoint.len();
     localPoint.nor();
     // Current towards me is +
     bField.set(-localPoint.y, localPoint.x).mul(magnitude);

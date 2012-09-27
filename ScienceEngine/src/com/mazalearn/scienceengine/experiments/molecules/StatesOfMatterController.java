@@ -63,13 +63,13 @@ public class StatesOfMatterController extends AbstractExperimentController {
 
   private TextButton createStateButton(Skin skin, LIST caption, 
       final double temperature) {
-    TextButton textButton = new TextButton(caption, skin);
-    textButton.setClickListener(new ClickListener() {
+    TextButton toggleButton = new TextButton(caption, skin);
+    toggleButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
         statesOfMatterModel.setTemperature(temperature);
       }
     });
-    return textButton;*/
+    return toggleButton;*/
   }
 }

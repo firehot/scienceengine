@@ -6,12 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 
 public interface IExperimentView extends IDoneCallback {
-  // Pause model actions in the experiment. Measurement will still work.
-  public void pause();
-  // Resume model actions
-  public void resume();
+  // Pause/Resume model actions in the experiment. 
+  // Measurement/sensors will still work when paused
+  public void suspend(boolean value);
   // Is the model paused?
-  public boolean isPaused();
+  public boolean isSuspended();
   // Get all the actors
   public List<Actor> getActors();
   // Ask series of questions to probe learner's knowledge and understanding

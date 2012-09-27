@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.view.IDoneCallback;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
+import com.mazalearn.scienceengine.core.view.ProbeImage;
 
 // doubts on direction
 // Generate A at "random" point around magnet
@@ -37,9 +37,7 @@ class FieldDirectionProber extends AbstractProber {
     userField.originX = 0;
     userField.originY = userField.height/2;
     
-    TextureRegion questionMark = 
-        new TextureRegion(new Texture("images/questionmark.png"));
-    image = new Image(questionMark) {
+    image = new ProbeImage() {
       Vector2 lastTouch = new Vector2(), current = new Vector2();
       @Override
       public boolean touchDown(float x, float y, int pointer) {

@@ -54,15 +54,20 @@ public abstract class AbstractProber extends Group {
   
   private boolean isInsideExcludedActor(Vector2 point) {
     for (Actor actor: excludedActors) {
-      float actorWidth = actor.width;
-      float actorHeight = actor.height;
+      // For a table, x and y are at center, top of table - not at bottom left
       if (actor instanceof Table) {
-        actorWidth = ((Table) actor).getPrefWidth();
-        actorHeight = ((Table) actor).getPrefHeight();
-      } 
-      if (point.x >= actor.x && point.x <= actor.x + actorWidth &&
-          point.y >= actor.y && point.y <= actor.y + actorHeight) {
-        return true;
+        float actorWidth = ((Table) actor).getPrefWidth();
+        float actorHeight = ((Table) actor).getPrefHeight();
+        if (point.x >= actor.x - actorWidth/ 2 && point.x <= actor.x + actorWidth/2 &&
+            point.y <= actor.y && point.y >= actor.y - actorHeight) {
+          return true;
+        }
+      } else {
+        if (point.x >= actor.x && point.x <= actor.x + actor.width &&
+            point.y >= actor.y && point.y <= actor.y + actor.height) {
+          return true;
+        }
+        
       }
     }
     return false;

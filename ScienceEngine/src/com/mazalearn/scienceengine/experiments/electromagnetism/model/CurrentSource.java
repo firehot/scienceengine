@@ -39,7 +39,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   // type of current
   private CurrentType currentType = CurrentType.DC;
   // direction of current - applies only to DC.
-  private boolean isDCPositive = true;
+  private boolean isNegativeCurrent = true;
 
   /**
    * Sole constructor.
@@ -76,9 +76,10 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
       public boolean isPossible() { return isActive(); }
     });
     
-    configs.add(new AbstractModelConfig<String>(getName() + " Flip Direction", 
-        "Direction of DC Current") {
-      public void doCommand() { flipDirection(); }
+    configs.add(new AbstractModelConfig<Boolean>(getName() + " Negative Current", 
+        "Direction of DC Current", false) {
+      public void setValue(Boolean value) { setNegativeCurrent(value); }
+      public Boolean getValue() { return isNegativeCurrent; }
       public boolean isPossible() { return isActive() && currentType == CurrentType.DC; }
     });
   }
@@ -120,7 +121,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   @Override
   public void singleStep(float dt) {
     if (currentType == CurrentType.DC) {
-      setCurrent(isDCPositive ? maxCurrent : -maxCurrent);
+      setCurrent(isNegativeCurrent ? maxCurrent : -maxCurrent);
       return;
     }
 
@@ -160,7 +161,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   }
 
   /**
-   * Sets the maximum voltage that this voltage source will produce.
+   * Sets the maximum current that this current source will produce.
    * 
    * @param maxCurrent - the maximum voltage, in volts
    */
@@ -180,7 +181,10 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   /**
    * Changes the direction of DC current.
    */
-  public void flipDirection() {
-    this.isDCPositive = !isDCPositive;
+  public void setNegativeCurrent(boolean negative) {
+    if (this.isNegativeCurrent != negative) {
+      this.isNegativeCurrent = negative;
+      getModel().notifyCurrentChange(this);
+    }
   }
 }

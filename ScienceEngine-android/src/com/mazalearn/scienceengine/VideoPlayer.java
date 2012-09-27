@@ -17,6 +17,7 @@ public class VideoPlayer extends Activity
     public void onCreate(Bundle b) {
         super.onCreate(b);
         Bundle data = getIntent().getExtras();
+        //Uri videoFileName = getIntent().getData();
         String videoFileName = data.getString("com.mazalearn.scienceengine.FileName");
         // Bring the video player to the front
         setContentView(R.layout.videoplayer);
