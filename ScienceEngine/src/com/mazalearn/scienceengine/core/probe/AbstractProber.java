@@ -1,8 +1,5 @@
 package com.mazalearn.scienceengine.core.probe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,16 +10,18 @@ public abstract class AbstractProber extends Group {
 
   protected static final float TOLERANCE = 0.3f;
   protected static final float ZERO_TOLERANCE = 1e-4f;
-  protected final List<Actor> excludedActors;
+  protected final ProbeManager probeManager;
 
-  public AbstractProber(List<Actor> actors, Actor dashboard) {
-    this.excludedActors = new ArrayList<Actor>();
-    excludedActors.add(dashboard);
-    for (Actor actor: actors) {
-      if (actor.visible) {
-        excludedActors.add(actor);
-      }
-    }
+  public AbstractProber(ProbeManager probeManager) {
+    this.probeManager = probeManager;
+    probeManager.registerProber(this);
+  }
+  
+  public void reinitialize(float x, float y, float width, float height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height; 
   }
 
   public abstract void activate(boolean activate);
@@ -36,7 +35,7 @@ public abstract class AbstractProber extends Group {
   }
 
   private boolean isInsideExcludedActor(Vector2 point) {
-    for (Actor actor: excludedActors) {
+    for (Actor actor: probeManager.getExcludedActors()) {
       // For a table, x and y are at center, top of table - not at bottom left
       if (actor instanceof Table) {
         float actorWidth = ((Table) actor).getPrefWidth();
@@ -76,4 +75,7 @@ public abstract class AbstractProber extends Group {
     return Math.abs(len1 - len2) < TOLERANCE;
   }
 
+  public boolean isAvailable() {
+    return true;
+  }
 }

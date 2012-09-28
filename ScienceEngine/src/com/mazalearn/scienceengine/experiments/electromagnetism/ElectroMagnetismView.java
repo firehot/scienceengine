@@ -12,19 +12,20 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.ComponentType;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
-import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
+import com.mazalearn.scienceengine.core.view.Science2DExperimentStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.probe.FieldDirectionProber;
 import com.mazalearn.scienceengine.experiments.electromagnetism.probe.FieldMagnitudeProber;
+import com.mazalearn.scienceengine.experiments.electromagnetism.probe.LightProber;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentSourceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbActor;
 
-public class ElectroMagnetismView extends AbstractExperimentView {
+public class ElectroMagnetismView extends Science2DExperimentStage {
   private BarMagnetActor barMagnetActor;
   private ProbeManager probeManager;
   private boolean isFieldPointTouched = false;
@@ -147,13 +148,11 @@ public class ElectroMagnetismView extends AbstractExperimentView {
     super.challenge(challenge);
     // Enable/Disable field meter, compass
     compassActor.visible = !challenge;
-    fieldMeter.setActive(!challenge);
-    fieldMeterActor.visible = !challenge;
     if (probeManager == null) {
-      probeManager = new ProbeManager(skin, width, height, controlPanel.getModelConfigs(), this);        
-      probeManager.addProbe(new FieldDirectionProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
-      probeManager.addProbe(new FieldMagnitudeProber(emModel, probeManager, this.getActors(), probeManager.getDashboard()));
-      // Do this only after so that probeManager does not get into excluded actors list of probe
+      probeManager = new ProbeManager(skin, width, height, controlPanel.getModelConfigs(), this, controlPanel);        
+      new FieldDirectionProber(emModel, probeManager);
+      new FieldMagnitudeProber(emModel, probeManager);
+      new LightProber(probeManager);
       this.getRoot().addActorBefore(fieldMeterActor, probeManager);     
     }
     if (challenge) {

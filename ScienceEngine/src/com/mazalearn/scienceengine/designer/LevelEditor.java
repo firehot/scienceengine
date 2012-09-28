@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.designer;
 
-import java.util.List;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -51,12 +50,15 @@ public class LevelEditor extends Stage {
   enum Mode {
     CONFIGURE, OVERLAY
   };
+  
+  enum Operation {
+    MOVE, ROTATE, RESIZE
+  };
 
+  private Operation operation = null;
   private Mode mode = Mode.OVERLAY;
   private Color fontColor = Color.WHITE;
-  private Actor selectedActor, listSelectedActor;
-  private Actor draggedActor = null;
-  private Actor resizedActor = null;
+  private Actor selectedActor;
   private final Vector2 lastTouch = new Vector2();
 
   private final Stage originalStage;
@@ -69,7 +71,10 @@ public class LevelEditor extends Stage {
   private ShapeRenderer shapeRenderer;
   Vector2 point = new Vector2();
   Vector2 rotatedVector = new Vector2();
-  private Actor rotatedActor;
+
+  private ActorPropertyPanel actorPropertyPanel;
+
+  private Table configTable;
   
 
   /**
@@ -123,18 +128,17 @@ public class LevelEditor extends Stage {
       }
     });
     
-    Table configTable = createConfigTable(experimentModel, screen.getSkin());
-    Table componentTable = createComponentTable(stage, screen.getSkin(), configTable);
-    Image levelScreen = 
-        new Image(LevelManager.getThumbnail(levelManager.getName(), levelManager.getLevel()));
+    this.actorPropertyPanel = new ActorPropertyPanel(screen.getSkin(), this);
+    configTable = createConfigTable(experimentModel, screen.getSkin());
+    Actor componentsPanel = createComponentsPanel(stage, screen.getSkin(), configTable);
     
     Table menu = createMenu(levelManager, screen.getSkin());
 
     layout.add(titleTable).colspan(3);
     layout.row();
-    layout.add(componentTable).top().pad(10);
-    layout.add(configTable).top().pad(10);
-    layout.add(levelScreen).center().pad(10);
+    layout.add(componentsPanel).top().pad(10).width(150).fill();
+    layout.add(actorPropertyPanel).top().pad(10).fill().width(200);
+    layout.add(configTable).top().pad(10).width(300).right().fill();
     layout.row();
     layout.add(menu).colspan(3);
     layout.row();
@@ -182,31 +186,32 @@ public class LevelEditor extends Stage {
     return menu;
   }
 
-  private Table createComponentTable(final Stage stage, final Skin skin, 
+  private Actor createComponentsPanel(final Stage stage, final Skin skin, 
       final Table configTable) {
-    Table componentTable = new Table(skin);
-    componentTable.add("Components"); 
-    componentTable.row();
+    Table componentsTable= new Table(skin);
+    componentsTable.add("Components"); 
+    componentsTable.row();
+    int i = 0;
     for (final Actor actor: stage.getActors()) {
       if (actor.name == null || actor == controlPanel) continue;
-      final CheckBox componentCheckbox = new CheckBox(actor.name, skin);
-      componentTable.add(componentCheckbox).left();
-      componentCheckbox.setChecked(actor.visible);
-      componentCheckbox.setClickListener(new ClickListener() {
-        @Override
-        public void click(Actor a, float x, float y) {
-          listSelectedActor = stage.findActor(actor.name);
-          actor.visible = !actor.visible;
-          if (actor instanceof Science2DActor) {
-            Science2DActor science2DActor = (Science2DActor) actor;
-            science2DActor.getBody().setActive(actor.visible);
-            refreshConfigsTable(experimentModel, skin, configTable);
-            controlPanel.refresh();
-         }
-        }});
-      componentTable.row();
+      i++;
     }
-    return componentTable;
+    String[] actorNames = new String[i];
+    for (final Actor actor: stage.getActors()) {
+      if (actor.name == null || actor == controlPanel) continue;
+      actorNames[--i] = actor.name;
+    }
+ 
+    List componentsList = new List(actorNames, skin);
+    componentsList.setSelectionListener(new SelectionListener() {
+      @Override
+      public void selected(Actor actor, int index, String actorName) {
+        selectedActor = stage.findActor(actorName);
+        actorPropertyPanel.setActor(selectedActor);
+      }
+    });
+    componentsTable.add(componentsList);
+    return componentsTable;
   }
 
   private Table createConfigTable(IExperimentModel experimentModel, Skin skin) {
@@ -237,7 +242,7 @@ public class LevelEditor extends Stage {
   }
 
   /**
-   * Enables the editor. Creates all required resources and replace the currentProber
+   * Enables the editor. Creates all required resources and replace the current
    * InputProcessor by its own. Just remove this call from your code once you're
    * happy with the result. Any other call can stay without any side-effect.
    */
@@ -306,49 +311,44 @@ public class LevelEditor extends Stage {
 
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
+    lastTouch.set(x,y);
+    if (mode == Mode.CONFIGURE || button != Buttons.LEFT) {
+      return super.touchDown(x, y, pointer, button);
+    }
+    
+    // Assumption, stage does not have groups within
+    Vector2 stagePoint = new Vector2();
+    toStageCoordinates(x, y, stagePoint);
+    Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
+    for (Actor actor : originalStage.getActors()) {
+      Group.toChildCoordinates(actor, stagePoint.x, stagePoint.y, point);
+      Actor child = actor.hit(point.x, point.y);
+      if (child != null) {
+        if (isAncestor(controlPanel, actor) && child != controlPanel.getTitle()) {
+          originalStage.touchDown(x, y, pointer, button);
+          return true;
+        } else {
+          Vector2 handlePos = new Vector2(actor.width - handleSize.x,
+              actor.height - handleSize.y);
 
-    super.touchDown(x, y, pointer, button);
-    switch (button) {
-    case Buttons.LEFT:
-      // Assumption, stage does not have groups within
-      Vector2 stagePoint = new Vector2();
-      toStageCoordinates(x, y, stagePoint);
-      Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
-      for (Actor actor : originalStage.getActors()) {
-        Group.toChildCoordinates(actor, stagePoint.x, stagePoint.y, point);
-        Actor child = actor.hit(point.x, point.y);
-        if (child != null) {
-          if (isAncestor(controlPanel, actor) && child != controlPanel.getTitle()) {
-            originalStage.touchDown(x, y, pointer, button);
-            return true;
+          // Right top corner handle
+          if (handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x
+              && handlePos.y <= point.y
+              && point.y <= handlePos.y + handleSize.y) {
+            operation = Operation.RESIZE;
+          } else if (0 <= point.y && point.y <= handlePos.y && 
+              handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x) {
+            // Right bottom corner handle
+            operation = Operation.ROTATE;
           } else {
-            Vector2 handlePos = new Vector2(actor.width - handleSize.x,
-                actor.height - handleSize.y);
-  
-            if (handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x
-                && handlePos.y <= point.y
-                && point.y <= handlePos.y + handleSize.y) {
-              resizedActor = actor;
-              draggedActor = null;
-              selectedActor = actor;
-            } else if (0 <= point.y && point.y <= handlePos.y && 
-                handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x) {
-              rotatedActor = actor;
-              selectedActor = actor;
-            } else if (resizedActor == null && rotatedActor == null) {
-              draggedActor = actor;
-              selectedActor = actor;
-            }
+            operation = Operation.MOVE;
           }
+          selectedActor = actor;
+          actorPropertyPanel.setActor(selectedActor);
         }
       }
-      break;
-
-    case Buttons.RIGHT:
-      break;
     }
 
-    lastTouch.set(x, y);
     return true;
   }
 
@@ -373,10 +373,9 @@ public class LevelEditor extends Stage {
     
     switch (button) {
     case Buttons.LEFT:
-      draggedActor = resizedActor = selectedActor = rotatedActor = null;
+      operation = null;
       break;
     }
-    selectedActor = listSelectedActor;
     lastTouch.set(x, y);
     return true;
   }
@@ -398,32 +397,7 @@ public class LevelEditor extends Stage {
         lastTouch.set(x, y);
         return true;
       }
-      if (draggedActor != null) {
-        draggedActor.x += delta3.x;
-        draggedActor.y += delta3.y;
-        if (draggedActor instanceof Science2DActor) {
-          // This is a user initiated move but for editing we want the 
-          // actors in the location group to be individually moved.
-          ((Science2DActor) draggedActor).setPositionFromViewCoords(false);
-        }
-      } else if (rotatedActor != null) {
-        toStageCoordinates(x, y, point);
-        Group.toChildCoordinates(rotatedActor, point.x, point.y, rotatedVector);
-        rotatedVector.sub(rotatedActor.width, 0);
-        // TODO: UI issues and dont know how to draw rotated rectangles
-        // rotatedActor.rotation = rotatedVector.angle();
-        if (rotatedActor instanceof Science2DActor) {
-          ((Science2DActor) rotatedActor).setPositionFromViewCoords(false);
-        }
-      } else if (resizedActor != null) {
-        float sizeRatio = resizedActor.width / resizedActor.height;
-        float originXRatio = resizedActor.originX / resizedActor.width;
-        float originYRatio = resizedActor.originY / resizedActor.height;
-        resizedActor.width += delta3.x;
-        resizedActor.height += delta3.x / sizeRatio;
-        resizedActor.originX = originXRatio * resizedActor.width;
-        resizedActor.originY = originYRatio * resizedActor.height;
-      }
+      operateOnActor(selectedActor, x, y, delta3);
     }
 
     if (Gdx.input.isButtonPressed(Buttons.RIGHT)) {
@@ -433,6 +407,38 @@ public class LevelEditor extends Stage {
 
     lastTouch.set(x, y);
     return true;
+  }
+
+  private void operateOnActor(Actor actor, int x, int y, Vector3 delta) {
+    if (operation == null || actor == null) return;
+    
+    switch (operation) {
+    case MOVE:
+      actor.x += delta.x;
+      actor.y += delta.y;
+      break;
+    case ROTATE:
+      toStageCoordinates(x, y, point);
+      Group.toChildCoordinates(actor, point.x, point.y, rotatedVector);
+      rotatedVector.sub(actor.width, 0);
+      // TODO: UI issues and dont know how to draw rotated rectangles
+      // rotatedActor.rotation = rotatedVector.angle();
+      break;
+    case RESIZE:
+      float sizeRatio = actor.width / actor.height;
+      float originXRatio = actor.originX / actor.width;
+      float originYRatio = actor.originY / actor.height;
+      actor.width += delta.x;
+      actor.height += delta.x / sizeRatio;
+      actor.originX = originXRatio * actor.width;
+      actor.originY = originYRatio * actor.height;
+      break;
+    }
+    if (actor instanceof Science2DActor) {
+      // This is a user initiated move but for editing we want the 
+      // actors in the location group to be individually moved.
+      ((Science2DActor) actor).setPositionFromViewCoords(false);
+    }
   }
 
   @Override
@@ -449,7 +455,7 @@ public class LevelEditor extends Stage {
       mode = (mode == Mode.CONFIGURE) ? Mode.OVERLAY : Mode.CONFIGURE;
       break;
     case Keys.TAB: // Cycle to next actor if selected Actor not null
-      List<Actor> actors = originalStage.getActors();
+      java.util.List<Actor> actors = originalStage.getActors();
       for (int i = 0; i < actors.size(); i++) {
         Actor actor = actors.get(i);
         if (selectedActor == actor) {
@@ -466,7 +472,7 @@ public class LevelEditor extends Stage {
   private String getInfo(Actor actor) {
     return String.format(Locale.US, "> %s %s > xy:[%.3f,%.3f] wh:[%.3f,%.3f] rot:%.3f",
         actor.name, 
-        rotatedActor != null ? "Rotating" : resizedActor != null ? "Resizing" : "Selected",
+        operation == null ? "selected" : operation.name(),
         actor.x, actor.y, actor.width, actor.height, actor.rotation);
   }
 
@@ -512,5 +518,10 @@ public class LevelEditor extends Stage {
     shapeRenderer.filledCircle(actor.x + actor.originX, 
         actor.y + actor.originY, handleSize.x / 2);
     shapeRenderer.end();
+  }
+
+  public void refreshOnVisibilityChange() {
+    refreshConfigsTable(experimentModel, screen.getSkin(), configTable);
+    controlPanel.refresh();        
   }
 }

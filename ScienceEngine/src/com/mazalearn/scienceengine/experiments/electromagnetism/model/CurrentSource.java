@@ -9,9 +9,9 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 /**
  * CurrentSource is the model of an AC or DC Current source.
  * <p>
- * The Current source has a configurable maximum currentProber. A client varies the
- * maximum currentProber and frequency. The currentProber amplitude varies over
- * time for AC. The direction of currentProber can be changed for DC.
+ * The Current source has a configurable maximum current. A client varies the
+ * maximum current and frequency. The current amplitude varies over
+ * time for AC. The direction of current can be changed for DC.
  * 
  * @author sridhar
  */
@@ -26,19 +26,19 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   
   public static enum CurrentType {AC, DC};
 
-  // Determines how fast the currentProber will vary. (0...1 inclusive)
+  // Determines how fast the current will vary. (0...1 inclusive)
   private float frequency;
-  // The currentProber angle of the sine wave that describes the AC. (radians)
+  // The current angle of the sine wave that describes the AC. (radians)
   private float acAngle;
-  // The change in acAngle at the currentProber frequency. (radians)
+  // The change in acAngle at the current frequency. (radians)
   private float deltaAngle;
-  // Maximum currentProber peak
+  // Maximum current peak
   private float maxCurrent;
-  // actual currentProber
+  // actual current
   private float current;
-  // type of currentProber
+  // type of current
   private CurrentType currentType = CurrentType.DC;
-  // direction of currentProber - applies only to DC.
+  // direction of current - applies only to DC.
   private boolean isNegativeCurrent = true;
 
   /**
@@ -115,7 +115,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   }
 
   /*
-   * Varies the currentProber over time, based on maxCurrent and frequency.
+   * Varies the current over time, based on maxCurrent and frequency.
    * Guaranteed to hit all peaks and zero crossings.
    */
   @Override
@@ -142,16 +142,16 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   }
 
   /**
-   * Gets the currentProber.
+   * Gets the current.
    * 
-   * @return the currentProber, in amperes
+   * @return the current, in amperes
    */
   public float getCurrent() {
     return this.current;
   }
 
   /**
-   * Sets the currentProber, in amperes - can only be set from within this class
+   * Sets the current, in amperes - can only be set from within this class
    */
   private void setCurrent(float current) {
     if (Math.abs(this.current - current) > TOLERANCE) {
@@ -161,7 +161,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   }
 
   /**
-   * Sets the maximum currentProber that this currentProber source will produce.
+   * Sets the maximum current that this current source will produce.
    * 
    * @param maxCurrent - the maximum voltage, in volts
    */
@@ -170,16 +170,16 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   }
 
   /**
-   * Gets the maximum currentProber that this currentProber source will produce.
+   * Gets the maximum current that this current source will produce.
    * 
-   * @return the maximum currentProber, in amperes
+   * @return the maximum current, in amperes
    */
   public float getMaxCurrent() {
     return this.maxCurrent;
   }
 
   /**
-   * Changes the direction of DC currentProber.
+   * Changes the direction of DC current.
    */
   public void setNegativeCurrent(boolean negative) {
     if (this.isNegativeCurrent != negative) {

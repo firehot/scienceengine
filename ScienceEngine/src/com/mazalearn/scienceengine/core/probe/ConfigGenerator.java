@@ -21,7 +21,7 @@ public class ConfigGenerator {
       case LIST:
         IModelConfig<String> listConfig = (IModelConfig<String>) config;
         Enum[] list = listConfig.getList();
-        int index = MathUtils.random(0, list.length);
+        int index = MathUtils.random(0, list.length - 1);
         listConfig.setValue(list[index].name());
         break;
       case RANGE:

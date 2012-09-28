@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Delay;
 import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
+import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
 // doubts on direction
 // Generate A at "random" point around active elements.
@@ -23,9 +21,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
   
-  public FieldDirectionProber(IExperimentModel model,
-      final IDoneCallback doneCallback, List<Actor> actors, Actor dashboard) {
-    super(model, actors, dashboard);
+  public FieldDirectionProber(IExperimentModel model, final ProbeManager probeManager) {
+    super(model, probeManager);
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};
@@ -63,7 +60,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
             new AnimationAction() {
               @Override
               public void act(float delta) {
-                doneCallback.done(success);
+                probeManager.done(success);
                 done = true;
                 fieldMeterActor.visible = userField.visible = false;
               }
@@ -90,6 +87,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
+      probeManager.randomizeConfig();
       generateProbePoints(points);
       getBField(points[0], bFields[0]);
       createFieldMeterSamples(points, bFields);

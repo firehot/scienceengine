@@ -29,7 +29,7 @@ public class ScienceEngine extends Game {
   // Provide access to this singleton scienceEngine from any class
   public static ScienceEngine SCIENCE_ENGINE;
 
-  // a libgdx helper class that logs the currentProber FPS each second
+  // a libgdx helper class that logs the current FPS each second
   private FPSLogger fpsLogger;
 
   // services
@@ -147,7 +147,7 @@ public class ScienceEngine extends Game {
   @Override
   public void render() {
     super.render();
-    // output the currentProber FPS
+    // output the current FPS
     if (DEV_MODE != DevMode.PRODUCTION) {
       // fpsLogger.log();
     }

@@ -5,9 +5,9 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.AbstractExperimentModel;
+import com.mazalearn.scienceengine.core.model.Science2DExperimentModel;
 
-public class WaveModel extends AbstractExperimentModel {
+public class WaveModel extends Science2DExperimentModel {
   // Enum used for different Boundary Conditions on end of string
   public enum EndType { FixedEnd, LooseEnd, NoEnd };
   // Enum used for mode of wave generation

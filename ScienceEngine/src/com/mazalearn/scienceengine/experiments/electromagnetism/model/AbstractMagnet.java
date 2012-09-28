@@ -51,6 +51,14 @@ public abstract class AbstractMagnet extends Science2DBody
   public float getStrength() {
     return this.strength;
   }
+  
+  public float getAngle() {
+    return super.getAngle();
+  }
+  
+  public void setAngle(float angle) {
+    setPositionAndAngle(getPosition(), angle);
+  }
 
   /**
    * Gets the B-field vector at a point in the global 2D space.

@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
-import com.mazalearn.scienceengine.core.view.AbstractExperimentView;
+import com.mazalearn.scienceengine.core.view.Science2DExperimentStage;
 import com.mazalearn.scienceengine.experiments.waves.view.Boundary;
 import com.mazalearn.scienceengine.experiments.waves.view.Hand;
 import com.mazalearn.scienceengine.experiments.waves.view.WaveBox;
 
-public class WaveView extends AbstractExperimentView {
+public class WaveView extends Science2DExperimentStage {
 
   private Actor hand, boundary, waveBox;
   

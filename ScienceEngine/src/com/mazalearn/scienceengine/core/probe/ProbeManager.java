@@ -9,33 +9,42 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
+import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.experiments.electromagnetism.probe.AbstractFieldProber;
+import com.mazalearn.scienceengine.core.view.IExperimentView;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 /**
- * Cycles through the probers - probing the user with each one.
+ * Cycles through the eligible registeredProbers - probing the user with each one.
  * 
  * @author sridhar
  * 
  */
 public class ProbeManager extends Group implements IDoneCallback {
-  int currentProber = 0;
+  int proberIndex = 0;
+  AbstractProber currentProber;
   protected Dashboard dashboard;
-  private List<AbstractProber> probers = new ArrayList<AbstractProber>();
-  private final IDoneCallback doneCallback;
+  private List<AbstractProber> registeredProbers = new ArrayList<AbstractProber>();
+  private List<AbstractProber> activeProbers = new ArrayList<AbstractProber>();
+  private List<Actor> excludedActors = new ArrayList<Actor>();
+  private final IExperimentView experimentView;
+  private final ControlPanel controlPanel;
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;
   private final ScoreImage successImage, failureImage;
 
   public ProbeManager(final Skin skin, float width, float height,
-      List<IModelConfig<?>> modelConfigs, IDoneCallback doneCallback) {
+      List<IModelConfig<?>> modelConfigs, IExperimentView experimentView, 
+      ControlPanel controlPanel) {
     super();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
-    this.doneCallback = doneCallback;
+    this.experimentView = experimentView;
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator(modelConfigs);
+    this.controlPanel = controlPanel;
     this.x = 0;
     this.y = 0;
     this.width = width;
@@ -50,57 +59,109 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.addActor(failureImage);
   }
 
-  public void addProbe(AbstractFieldProber prober) {
-    probers.add(prober);
+  public void registerProber(AbstractProber prober) {
+    registeredProbers.add(prober);
     this.addActor(prober);
     prober.activate(false);
   }
 
   public void startChallenge() {
-    // Set up space for probers
+    // Reset scores
     dashboard.resetScore();
-    for (Actor prober: probers) {
-      prober.x = x;
-      prober.y = y;
-      prober.width = width;
-      prober.height = height;
+        
+    // Make all actors non-movable
+    for (Actor actor: getActors()) {
+      if (actor instanceof Science2DActor) {
+        ((Science2DActor) actor).setAllowMove(false);
+      }
     }
+
+    // Collect actors to be excluded from probe points.
+    // These are the visible actors.
+    excludedActors.clear();
+    excludedActors.add(dashboard);
+    for (Actor actor: experimentView.getActors()) {
+      if (actor.visible && actor != this) {
+        excludedActors.add(actor);
+      }
+    }
+    // Find active registeredProbers
+    activeProbers.clear();
+    for (AbstractProber prober: registeredProbers) {
+      if (prober.isAvailable()) {
+        activeProbers.add(prober);
+      } else {
+        prober.activate(false);
+      }
+    }
+    
+    if (activeProbers.size() == 0) { // No active probers available
+      endChallenge();
+    }
+    
+    // Reinitialize active Probers
+    for (AbstractProber prober: activeProbers) {
+      prober.reinitialize(x, y, width, height);
+    }
+
     doProbe();
+  }
+  
+  private void endChallenge() {
+    // Turn on access to parts of control panel
+    controlPanel.enableControls(true);
+    experimentView.done(false);
+  }
+  
+  public List<Actor> getExcludedActors() {
+    return this.excludedActors;
   }
 
   /**
    * IDoneCallback interface implementation
    */
   public void done(boolean success) {
-    soundManager.play(
-        success ? ScienceEngineSound.SUCCESS : ScienceEngineSound.FAILURE);
-    dashboard.addScore(success ? 10 : -5);
+    currentProber.activate(false);
     if (success) {
+      soundManager.play(ScienceEngineSound.SUCCESS);
+      dashboard.addScore(10);
       successImage.show(width/2, height/2, 10);
     } else {
+      soundManager.play(ScienceEngineSound.FAILURE);
+      dashboard.addScore(-5);
       failureImage.show(width/2, height/2, -5);
     }
-    probers.get(currentProber).activate(false);
     if (dashboard.getScore() > 100) {
-      doneCallback.done(true);
+      experimentView.done(true);
       return;
     }
-    // Move on to next prober, if available
-    currentProber = (currentProber + 1) % probers.size();
     doProbe();
   }
 
+  // Prerequisite: activeProbers.size() >= 1
   private void doProbe() {
+    // Move on to next active prober
+    proberIndex = (proberIndex + 1) % activeProbers.size();
+    currentProber = activeProbers.get(proberIndex);
+
+    currentProber.activate(true);
+    dashboard.setStatus(currentProber.getTitle());
+  }
+  
+  public void randomizeConfig() {
     configGenerator.generateConfig();
-    probers.get(currentProber).activate(true);
-    dashboard.setStatus(probers.get(currentProber).getTitle());
+    // Turn off access to parts of control panel
+    controlPanel.enableControls(false);
   }
 
   public void setTitle(String text) {
     dashboard.setStatus(text);
   }
 
-  public Actor getDashboard() {
-    return dashboard;
+  public Actor findActorByName(String name) {
+    for (Actor actor: experimentView.getActors()) {
+      if (actor.name.equals(name)) return actor;
+    }
+    return null;
   }
 }

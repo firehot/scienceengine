@@ -56,7 +56,7 @@ public interface IBody {
   public abstract Vector2 getPosition();
 
   /** Get the angle in radians.
-   * @return the currentProber world rotation angle in radians. */
+   * @return the current world rotation angle in radians. */
   public abstract float getAngle();
 
   public abstract Vector2 getWorldCenter();

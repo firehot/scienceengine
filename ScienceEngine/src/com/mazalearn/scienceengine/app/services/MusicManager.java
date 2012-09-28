@@ -92,11 +92,11 @@ public class MusicManager implements Disposable {
   }
 
   /**
-   * Stops and disposes the currentProber music being played, if any.
+   * Stops and disposes the current music being played, if any.
    */
   public void stop() {
     if (musicBeingPlayed != null) {
-      Gdx.app.log(ScienceEngine.LOG, "Stopping currentProber music");
+      Gdx.app.log(ScienceEngine.LOG, "Stopping current music");
       Music musicResource = musicBeingPlayed.getMusicResource();
       musicResource.stop();
       musicResource.dispose();

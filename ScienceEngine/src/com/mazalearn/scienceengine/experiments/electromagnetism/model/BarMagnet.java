@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -130,20 +131,12 @@ public class BarMagnet extends AbstractMagnet {
       public void setValue(Float value) { setStrength(value); }
       public boolean isPossible() { return isActive(); }
     });
-    configs.add(new AbstractModelConfig<String>(getName() + " Flip Polarity", 
-        "Direction of North Pole") {
-      public void doCommand() { flipPolarity(); }
+    configs.add(new AbstractModelConfig<Float>(getName() + " Angle", 
+        "Angle of the magnet", 0f, MathUtils.PI * 2) {
+      public Float getValue() { return getAngle(); }
+      public void setValue(Float value) { setAngle(value); }
       public boolean isPossible() { return isActive(); }
     });
-  }
-
-  /**
-   * Flips the magnet's polarity by rotating it 180 degrees.
-   */
-  public void flipPolarity() {
-    setPositionAndAngle(getPosition().x, getPosition().y, 
-        (float) ((getAngle() + Math.PI) % (2 * Math.PI)));
-    getModel().notifyFieldChange();
   }
 
   /**

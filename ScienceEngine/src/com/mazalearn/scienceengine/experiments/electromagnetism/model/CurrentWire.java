@@ -10,14 +10,14 @@ import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
- * Current wire is an infinite wire carrying currentProber
+ * Current wire is an infinite wire carrying current
  * 
  * @author sridhar
  */
 public class CurrentWire extends Science2DBody implements IMagneticField.Producer {
   // Radius of the wire.
   private float radius;
-  // Amplitude of the currentProber in the wire (-1...+1)
+  // Amplitude of the current in the wire (-1...+1)
   private float current;
 
   public CurrentWire(String name, float x, float y, float angle) {
@@ -53,8 +53,8 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   }
 
   /**
-   * Sets the magnitude of currentProber in the wire. 
-   * @param currentProber the currentProber
+   * Sets the magnitude of current in the wire. 
+   * @param current the current
    */
   public void setCurrent(float current) {
     if (this.current != current) {
@@ -78,8 +78,8 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   }
 
   /**
-   * Gets the currentProber in the wire
-   * @return the currentProber
+   * Gets the current in the wire
+   * @return the current
    */
   public float getCurrent() {
     return this.current;
@@ -88,7 +88,7 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   @Override
   public Vector2 getBField(Vector2 location, Vector2 bField) {
     Vector2 localPoint = getLocalPoint(location);
-    // field = constant * currentProber / distance
+    // field = constant * current / distance
     float magnitude = 50 * current / localPoint.len();
     localPoint.nor();
     // Current towards me is +

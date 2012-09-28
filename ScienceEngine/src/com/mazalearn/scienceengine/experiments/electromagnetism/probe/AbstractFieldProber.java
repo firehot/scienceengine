@@ -1,13 +1,11 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
-import java.util.List;
-
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.probe.AbstractProber;
+import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 
@@ -17,15 +15,23 @@ public abstract class AbstractFieldProber extends AbstractProber {
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
  
-  protected AbstractFieldProber(IExperimentModel model, List<Actor> actors, Actor dashboard) {
-    super(actors, dashboard);
+  protected AbstractFieldProber(IExperimentModel model, ProbeManager probeManager) {
+    super(probeManager);
     this.model = model;
-    for (Actor actor: actors) {
-      if (actor.name == "FieldMeter") {
-        this.fieldMeterActor = (Science2DActor) actor;
-        this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
-      }
-    }
+    this.fieldMeterActor = (Science2DActor) probeManager.findActorByName("FieldMeter");
+    this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
+  }
+  
+  @Override
+  public void reinitialize(float x, float y, float width, float height) {
+    super.reinitialize(x, y, width, height);
+    fieldMeter.setActive(false);
+    fieldMeterActor.visible = false;
+  }  
+
+  @Override
+  public boolean isAvailable() {
+    return fieldMeter.isActive();
   }
   
   protected void createFieldMeterSamples(Vector2[] points, Vector2[] bFields) {

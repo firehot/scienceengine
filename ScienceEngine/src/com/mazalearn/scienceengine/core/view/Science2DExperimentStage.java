@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
-public abstract class AbstractExperimentView extends Stage implements IExperimentView {
+public abstract class Science2DExperimentStage extends Stage implements IExperimentView {
 
   protected final IExperimentModel experimentModel;
   protected final Skin skin;
@@ -24,7 +24,7 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
 
-  public AbstractExperimentView( 
+  public Science2DExperimentStage( 
       IExperimentModel experimentModel, float width, float height, Skin skin) {
     super(width, height, true);
     this.skin = skin;
@@ -48,19 +48,11 @@ public abstract class AbstractExperimentView extends Stage implements IExperimen
   public void challenge(boolean challenge) {
     // Reinitialize level
     experimentModel.reset();
-    // Turn off/on access to parts of control panel
-    controlPanel.enableControls(!challenge);
+
+    // Turn on or turn off music
     if (challenge) {
-      // Turn off music
       ScienceEngine.getMusicManager().setEnabled(false);
-      // Make all actors non-movable
-      for (Actor actor: getActors()) {
-        if (actor instanceof Science2DActor) {
-          ((Science2DActor) actor).setAllowDrag(false);
-        }
-      }
     } else {
-      // Turn on music
       ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
     }
     isChallengeInProgress = challenge;

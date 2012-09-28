@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
-import java.util.List;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
+import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
@@ -57,12 +56,12 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] bFields;
     
   public FieldMagnitudeProber(IExperimentModel model,
-      final IDoneCallback doneCallback, List<Actor> actors, Actor dashboard) {
-    super(model, actors, dashboard);
+      final ProbeManager probeManager) {
+    super(model, probeManager);
     imageCorrect = new ProbeImage();
-    imageCorrect.setClickListener(new ClickResult(true, doneCallback));
+    imageCorrect.setClickListener(new ClickResult(true, probeManager));
     imageWrong = new ProbeImage();
-    imageWrong.setClickListener(new ClickResult(false, doneCallback));
+    imageWrong.setClickListener(new ClickResult(false, probeManager));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
@@ -78,6 +77,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
+      probeManager.randomizeConfig();
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2

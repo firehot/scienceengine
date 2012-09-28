@@ -126,7 +126,7 @@ public class LevelManager {
       if (!a.visible) continue; 
       boolean moveAllowed = false;
       if (a instanceof Science2DActor) {
-        moveAllowed = ((Science2DActor) a).isAllowDrag();
+        moveAllowed = ((Science2DActor) a).isAllowMove();
       }
       jsonWriter.object()
           .set("name", a.name)
@@ -214,7 +214,7 @@ public class LevelManager {
     if (actor instanceof Science2DActor) {
       Science2DActor science2DActor = (Science2DActor) actor;
       science2DActor.setPositionFromViewCoords(false);
-      science2DActor.setAllowDrag((Boolean) nvl(component.get("move"), false));
+      science2DActor.setAllowMove((Boolean) nvl(component.get("move"), false));
     }
   }
 

@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Consumer;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Producer;
 
-public abstract class AbstractExperimentModel implements IExperimentModel {
+public abstract class Science2DExperimentModel implements IExperimentModel {
 
   protected World box2DWorld;
   protected List<Science2DBody> bodies = new ArrayList<Science2DBody>(); 
@@ -24,7 +24,7 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
   List<IMagneticField.Consumer> emConsumers;
   Vector2 bField = new Vector2(), totalBField = new Vector2();
 
-  public AbstractExperimentModel() {
+  public Science2DExperimentModel() {
     super();
     // Initialize the world for Box2D
     Vector2 gravity = new Vector2(0.0f, 0.0f);
@@ -91,8 +91,8 @@ public abstract class AbstractExperimentModel implements IExperimentModel {
     circuits.add(Arrays.asList(bodies));
   }
   
-  // There should be only one currentProber source in a circuit.
-  // It will push currentProber through all other currentProber sinks in the circuit.
+  // There should be only one current source in a circuit.
+  // It will push current through all other current sinks in the circuit.
   public void notifyCurrentChange(ICurrent.Source currentSource) {
     float current = currentSource.getCurrent();
     for (List<Science2DBody> circuit: circuits) {

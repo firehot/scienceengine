@@ -30,7 +30,7 @@ public class Science2DActor extends Actor {
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
   protected Vector2 lastTouch = new Vector2();    // view coordinates
   protected Vector3 currentTouch = new Vector3(); // view coordinates
-  private boolean allowDrag = false;
+  private boolean allowMove = false;
 
   /**
    * Constructor.
@@ -121,7 +121,7 @@ public class Science2DActor extends Actor {
     viewPos.set(x, y);
     getBox2DPositionFromViewPosition(box2DPos, viewPos, rotation);
     if (isUserChange) { // Change initiated by user, hence propagate
-      ((AbstractExperimentView) getStage()).notifyLocationChangedByUser(this, box2DPos);
+      ((Science2DExperimentStage) getStage()).notifyLocationChangedByUser(this, box2DPos);
     }
     float angle = rotation * MathUtils.degreesToRadians;
     body.setPositionAndAngle(box2DPos, angle);
@@ -131,7 +131,7 @@ public class Science2DActor extends Actor {
   
   @Override
   public boolean touchDown(float localX, float localY, int pointer) {
-    if (!allowDrag) return false;
+    if (!allowMove) return false;
     currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
     getStage().getCamera().unproject(currentTouch);
     lastTouch.set(currentTouch.x, currentTouch.y);
@@ -140,9 +140,9 @@ public class Science2DActor extends Actor {
 
   @Override
   public void touchDragged(float localX, float localY, int pointer) {
-    // Screen coords of currentProber touch
+    // Screen coords of current touch
     currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    // Screen coords of currentProber touch
+    // Screen coords of current touch
     getStage().getCamera().unproject(currentTouch);
     // Get negative of movement vector
    lastTouch.sub(currentTouch.x, currentTouch.y);
@@ -153,11 +153,11 @@ public class Science2DActor extends Actor {
     lastTouch.set(currentTouch.x, currentTouch.y);
   }
 
-  public boolean isAllowDrag() {
-    return allowDrag;
+  public boolean isAllowMove() {
+    return allowMove;
   }
 
-  public void setAllowDrag(boolean allowDrag) {
-    this.allowDrag = allowDrag;
+  public void setAllowMove(boolean allowMove) {
+    this.allowMove = allowMove;
   }
 }
