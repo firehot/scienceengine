@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 
 /**
  * PickupCoil is the model of a pickup coil. Its behavior follows Faraday's Law
@@ -59,53 +60,18 @@ public class PickupCoil extends AbstractCoil {
 
     // loosely packed loops
     setLoopSpacing(1.5f * getWireWidth());
+    initializeConfigs();
+  }
+
+  public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<Float>(getName() + " Coil Loops", 
+        "Number of loops of coil", 1f, 4f) {
+      public Float getValue() { return getNumberOfLoops(); }
+      public void setValue(Float value) { setNumberOfLoops(value); }
+      public boolean isPossible() { return isActive(); }
+    });
   }
   
-  /**
-   * Gets the magnetic flux.
-   * 
-   * @return the flux, in Webers
-   */
-  public double getFlux() {
-    return this.flux;
-  }
-
-  /**
-   * Gets the change in magnetic flux.
-   * 
-   * @return change in magnetic flux, in Webers
-   */
-  public double getDeltaFlux() {
-    return this.deltaFlux;
-  }
-
-  /**
-   * Gets the average Bx of the pickup coil's sample points.
-   * 
-   * @return
-   */
-  public float getAverageBx() {
-    return this.averageBx;
-  }
-
-  /**
-   * Gets the emf.
-   * 
-   * @return the emf
-   */
-  public double getEmf() {
-    return this.emf;
-  }
-
-  /**
-   * Gets the biggest emf that the pickup coil has seen.
-   * 
-   * @return the biggest emf
-   */
-  public double getBiggestEmf() {
-    return this.biggestAbsEmf;
-  }
-
   /**
    * Gets the sample points used to measure the B-field and calculate emf.
    * 

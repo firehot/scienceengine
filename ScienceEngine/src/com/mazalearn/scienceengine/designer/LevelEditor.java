@@ -434,6 +434,8 @@ public class LevelEditor extends Stage {
       actor.originY = originYRatio * actor.height;
       break;
     }
+    // Refresh actor properties
+    actorPropertyPanel.setActor(selectedActor);
     if (actor instanceof Science2DActor) {
       // This is a user initiated move but for editing we want the 
       // actors in the location group to be individually moved.

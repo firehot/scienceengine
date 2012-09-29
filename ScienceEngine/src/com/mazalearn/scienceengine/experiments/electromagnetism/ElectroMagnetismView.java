@@ -22,8 +22,10 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.probe.LightProbe
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentSourceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectromagnetActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilActor;
 
 public class ElectroMagnetismView extends Science2DStage {
   private BarMagnetActor barMagnetActor;
@@ -57,7 +59,7 @@ public class ElectroMagnetismView extends Science2DStage {
         this.addActor(lightbulb = new LightbulbActor(textureRegion, (Lightbulb) body));
         break;
       case PickupCoil:
-        this.addActor(pickupCoil = new Science2DActor(body, textureRegion));
+        this.addActor(pickupCoil = new PickupCoilActor(body, textureRegion));
         break;
       case FieldMeter:
         this.addActor(fieldMeterActor = new FieldMeterActor(textureRegion, body));
@@ -70,7 +72,7 @@ public class ElectroMagnetismView extends Science2DStage {
         this.addActor(new CurrentWireActor(body));
         break;
       case ElectroMagnet:
-        this.addActor(electroMagnet = new Science2DActor(body, textureRegion));
+        this.addActor(electroMagnet = new ElectromagnetActor(body, textureRegion));
         break;
       case Compass:
         this.addActor(compassActor = new Science2DActor(body, textureRegion));
@@ -89,13 +91,13 @@ public class ElectroMagnetismView extends Science2DStage {
     Texture texture;
     switch(componentType) {
     case ElectroMagnet:
-      texture = new Texture("images/electromagnet.png");
+      texture = new Texture("images/electromagnet-base.png");
       break;
     case BarMagnet:
       texture = new Texture("images/barmagnet-pivoted.png");
       break;
     case PickupCoil:
-      texture = new Texture("images/coppercoils-front.png");
+      texture = new Texture("images/coppercoils-front1.png");
       break;
     case Lightbulb:
       texture = new Texture("images/lightbulb.png");

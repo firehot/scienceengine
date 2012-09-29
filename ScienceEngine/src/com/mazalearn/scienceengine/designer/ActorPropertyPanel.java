@@ -18,7 +18,6 @@ class ActorPropertyPanel extends Table {
   private CheckBox allowMoveField;
   public ActorPropertyPanel(Skin skin, final LevelEditor levelEditor) {
     super(skin, null, "ActorPropertyPanel");
-    this.debug();
     this.skin = skin;
     this.nameLabel = new Label("Name", skin);
     this.add("Name").left();
