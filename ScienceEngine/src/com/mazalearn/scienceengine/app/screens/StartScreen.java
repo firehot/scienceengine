@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
 public class StartScreen extends AbstractScreen {
@@ -20,16 +21,16 @@ public class StartScreen extends AbstractScreen {
 
     // retrieve the default table actor
     Table table = super.getTable();
-    table.add("Science Engine!").spaceBottom(50);
+    table.add(Messages.getString("ScienceEngine.ScienceEngine")).spaceBottom(50); //$NON-NLS-1$
     table.row();
 
-    registerButton(table, "Experiments", new ExperimentMenuScreen(scienceEngine));
-    registerButton(table, "Options", new OptionsScreen(scienceEngine));
-    TextButton startGameButton = new TextButton("Exit", scienceEngine.getSkin());
+    registerButton(table, Messages.getString("ScienceEngine.Experiments"), new ExperimentMenuScreen(scienceEngine)); //$NON-NLS-1$
+    registerButton(table, Messages.getString("ScienceEngine.Options"), new OptionsScreen(scienceEngine)); //$NON-NLS-1$
+    TextButton startGameButton = new TextButton(Messages.getString("ScienceEngine.Exit"), scienceEngine.getSkin()); //$NON-NLS-1$
     startGameButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         Gdx.app.exit();
       }
     });

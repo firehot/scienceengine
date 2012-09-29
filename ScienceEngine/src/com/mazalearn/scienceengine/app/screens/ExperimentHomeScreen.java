@@ -6,7 +6,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.FlickScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,6 +19,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -58,22 +58,22 @@ public class ExperimentHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     
     table.defaults().fill().center();
-    table.add(science2DController.getName() + ": " + "Levels");
+    table.add(science2DController.getName() + ": " + Messages.getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     
     table.add(createExperimentLevelPane()).fill();    
     table.row();
-    table.add(science2DController.getName() + ": " + "Resources on the Internet").colspan(100);
+    table.add(science2DController.getName() + ": " + Messages.getString("ScienceEngine.ResourcesOnTheInternet")).colspan(100); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     table.add(createResourcePane()).fill();
     table.row();
     
     // register the back button
     TextButton backButton = 
-        new TextButton("Back to Experiments", scienceEngine.getSkin());
+        new TextButton(Messages.getString("ScienceEngine.BackToExperiments"), scienceEngine.getSkin()); //$NON-NLS-1$
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
       }
     });
@@ -83,19 +83,19 @@ public class ExperimentHomeScreen extends AbstractScreen {
 
   private Actor createExperimentLevelPane() {
     final IScience2DStage science2DStage = science2DController.getView();
-    Profile profile = scienceEngine.getProfileManager().retrieveProfile();
+    Profile profile = ScienceEngine.getProfileManager().retrieveProfile();
     int level = Math.max(profile.getCurrentLevelId(), 1);
     levelManager = science2DStage.getLevelManager();
     levelManager.setLevel(level);
     
     Table experimentLevels = super.getTable().newTable();
     FlickScrollPane experimentLevelPane = 
-        new FlickScrollPane(experimentLevels, "Levels");
+        new FlickScrollPane(experimentLevels, "Levels"); //$NON-NLS-1$
     experimentThumbs = new Image[levels.size];
     
     for (int i = 0; i < levels.size; i++) {
       OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
-      Label label = new Label((String) levelInfo.get("name"), smallLabelStyle);
+      Label label = new Label((String) levelInfo.get("name"), smallLabelStyle); //$NON-NLS-1$
       label.setWrap(true);
       experimentLevels.add(label).width(THUMBNAIL_WIDTH).left().top().pad(5);
     }
@@ -121,7 +121,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
 
     for (int i = 0; i < levels.size; i++) {
       OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
-      String description = (String) levelInfo.get("description");
+      String description = (String) levelInfo.get("description"); //$NON-NLS-1$
       Label label = new Label(description, smallLabelStyle);
       label.setWrap(true);
       ScrollPane scrollPane = new ScrollPane(label, getSkin());
@@ -136,30 +136,30 @@ public class ExperimentHomeScreen extends AbstractScreen {
   private Actor createResourcePane() {
     Table resourcesTable = super.getTable().newTable();
     resourcesTable.defaults().fill();
-    FlickScrollPane resourcePane = new FlickScrollPane(resourcesTable, "Resource");
+    FlickScrollPane resourcePane = new FlickScrollPane(resourcesTable, "Resource"); //$NON-NLS-1$
     
     for (int i = 0; i < resources.size; i++) {
       Table resource = resourcesTable.newTable();
       OrderedMap<String, ?> resourceInfo = (OrderedMap<String, ?>) resources.get(i);
-      String type = (String) resourceInfo.get("type");
-      if (!type.equals("video") && !type.equals("web")) continue;
+      String type = (String) resourceInfo.get("type"); //$NON-NLS-1$
+      if (!type.equals("video") && !type.equals("web")) continue; //$NON-NLS-1$ //$NON-NLS-2$
       
-      String attribution = (String) resourceInfo.get("attribution");
-      String description = (String) resourceInfo.get("description");
-      final String url = (String) resourceInfo.get("url");
-      final String fileName = (String) resourceInfo.get("file");
+      String attribution = (String) resourceInfo.get("attribution"); //$NON-NLS-1$
+      String description = (String) resourceInfo.get("description"); //$NON-NLS-1$
+      final String url = (String) resourceInfo.get("url"); //$NON-NLS-1$
+      final String fileName = (String) resourceInfo.get("file"); //$NON-NLS-1$
       resource.defaults().fill().left();
 
       Image play = null;
-      if (type.equals("video")) {
-        play = new Image(new Texture("images/videoplay.png"));
+      if (type.equals("video")) { //$NON-NLS-1$
+        play = new Image(new Texture("images/videoplay.png")); //$NON-NLS-1$
         play.setClickListener(new ClickListener() {
           @Override
           public void click(Actor actor, float x, float y) {
             boolean playedVideo = false;
             if (fileName != null) {
               // Movie file extensions - we allow a limited set.
-              for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) {
+              for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                 FileHandle file = Gdx.files.external(fileName + extension);
                 if (file.exists()) {
                   playedVideo = scienceEngine.playVideo(file.file());
@@ -172,8 +172,8 @@ public class ExperimentHomeScreen extends AbstractScreen {
             }
           }
         });
-      } else if (type.equals("web")) {
-        play = new Image(new Texture("images/browser.png"));
+      } else if (type.equals("web")) { //$NON-NLS-1$
+        play = new Image(new Texture("images/browser.png")); //$NON-NLS-1$
         play.setClickListener(new ClickListener() {
           @Override
           public void click(Actor actor, float x, float y) {
@@ -184,7 +184,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
       
       resource.add(play).pad(0, 10, 0, 10).width(30).height(30).top().center();
       resource.row();
-      Label attributionLabel = new Label("From: " + attribution + "\n" + 
+      Label attributionLabel = new Label(Messages.getString("ScienceEngine.From") + ": " + attribution + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
           description, smallLabelStyle);
       attributionLabel.setWrap(true);
       ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
@@ -205,17 +205,17 @@ public class ExperimentHomeScreen extends AbstractScreen {
   @SuppressWarnings("unchecked")
   public void readExperimentInfo() {
     FileHandle file;
-    String fileName = "data/" + science2DController.getName() + ".json";
-    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
+    String fileName = "data/" + science2DController.getName() + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
+    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
     file = Gdx.files.internal(fileName);
     if (file == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not open file: " + fileName);
+      Gdx.app.log(ScienceEngine.LOG, "Could not open file: " + fileName); //$NON-NLS-1$
     }
     String fileContents = file.readString();
     OrderedMap<String, ?> rootElem = 
         (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
-    this.levels = (Array<?>) rootElem.get("Levels");
-    this.resources = (Array<?>) rootElem.get("Resources");  
+    this.levels = (Array<?>) rootElem.get("Levels"); //$NON-NLS-1$
+    this.resources = (Array<?>) rootElem.get("Resources");   //$NON-NLS-1$
   }
 
 }

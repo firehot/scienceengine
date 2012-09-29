@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
@@ -30,10 +31,10 @@ public class OptionsScreen extends AbstractScreen {
     Table table = super.getTable();
     table.defaults().spaceBottom(30);
     table.columnDefaults(0).padRight(20);
-    table.add("Options").colspan(3);
+    table.add(Messages.getString("ScienceEngine.Options")).colspan(3); //$NON-NLS-1$
 
     // create the labels widgets
-    final CheckBox soundEffectsCheckbox = new CheckBox("", scienceEngine.getSkin());
+    final CheckBox soundEffectsCheckbox = new CheckBox("", scienceEngine.getSkin()); //$NON-NLS-1$
     soundEffectsCheckbox.setChecked(scienceEngine.getPreferencesManager()
         .isSoundEnabled());
     soundEffectsCheckbox.setClickListener(new ClickListener() {
@@ -46,10 +47,10 @@ public class OptionsScreen extends AbstractScreen {
       }
     });
     table.row();
-    table.add("Sound Effects");
+    table.add(Messages.getString("ScienceEngine.SoundEffects")); //$NON-NLS-1$
     table.add(soundEffectsCheckbox).colspan(2).left();
 
-    final CheckBox musicCheckbox = new CheckBox("", scienceEngine.getSkin());
+    final CheckBox musicCheckbox = new CheckBox("", scienceEngine.getSkin()); //$NON-NLS-1$
     musicCheckbox.setChecked(scienceEngine.getPreferencesManager().isMusicEnabled());
     musicCheckbox.setClickListener(new ClickListener() {
       @Override
@@ -65,7 +66,7 @@ public class OptionsScreen extends AbstractScreen {
       }
     });
     table.row();
-    table.add("Music");
+    table.add(Messages.getString("ScienceEngine.Music")); //$NON-NLS-1$
     table.add(musicCheckbox).colspan(2).left();
 
     // range is [0.0,1.0]; step is 0.1f
@@ -82,17 +83,17 @@ public class OptionsScreen extends AbstractScreen {
     });
 
     // create the volume label
-    volumeValue = new Label("", scienceEngine.getSkin());
+    volumeValue = new Label("", scienceEngine.getSkin()); //$NON-NLS-1$
     updateVolumeLabel();
 
     // add the volume row
     table.row();
-    table.add("Volume");
+    table.add(Messages.getString("ScienceEngine.Volume")); //$NON-NLS-1$
     table.add(volumeSlider);
     table.add(volumeValue).width(40);
 
     // register the back button
-    TextButton backButton = new TextButton("Back to main menu", scienceEngine.getSkin());
+    TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToMainMenu"), scienceEngine.getSkin()); //$NON-NLS-1$
     backButton.setClickListener(new ClickListener() {
       @Override
       public void click(Actor actor, float x, float y) {

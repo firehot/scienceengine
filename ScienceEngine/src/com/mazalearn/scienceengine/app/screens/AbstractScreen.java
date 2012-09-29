@@ -88,7 +88,7 @@ public abstract class AbstractScreen implements Screen {
 
   public TextureAtlas getAtlas() {
     if (atlas == null) {
-      atlas = new TextureAtlas(Gdx.files.internal("image-atlases/pages.atlas"));
+      atlas = new TextureAtlas(Gdx.files.internal("image-atlases/pages.atlas")); //$NON-NLS-1$
     }
     return atlas;
   }
@@ -109,7 +109,7 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void show() {
-    Gdx.app.log(ScienceEngine.LOG, "Showing screen: " + getName());
+    Gdx.app.log(ScienceEngine.LOG, "Showing screen: " + getName()); //$NON-NLS-1$
 
     // set the stage as the input processor
     Gdx.input.setInputProcessor(stage);
@@ -117,8 +117,8 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void resize(int width, int height) {
-    Gdx.app.log(ScienceEngine.LOG, "Resizing screen: " + getName() + 
-        " to: " + width + " x " + height);
+    Gdx.app.log(ScienceEngine.LOG, "Resizing screen: " + getName() +  //$NON-NLS-1$
+        " to: " + width + " x " + height); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   @Override
@@ -136,7 +136,7 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void hide() {
-    Gdx.app.log(ScienceEngine.LOG, "Hiding screen: " + getName());
+    Gdx.app.log(ScienceEngine.LOG, "Hiding screen: " + getName()); //$NON-NLS-1$
 
     // dispose the screen when leaving the screen;
     // note that the dipose() method is not called automatically by the
@@ -146,17 +146,17 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void pause() {
-    Gdx.app.log(ScienceEngine.LOG, "Pausing screen: " + getName());
+    Gdx.app.log(ScienceEngine.LOG, "Pausing screen: " + getName()); //$NON-NLS-1$
   }
 
   @Override
   public void resume() {
-    Gdx.app.log(ScienceEngine.LOG, "Resuming screen: " + getName());
+    Gdx.app.log(ScienceEngine.LOG, "Resuming screen: " + getName()); //$NON-NLS-1$
   }
 
   @Override
   public void dispose() {
-    Gdx.app.log(ScienceEngine.LOG, "Disposing screen: " + getName());
+    Gdx.app.log(ScienceEngine.LOG, "Disposing screen: " + getName()); //$NON-NLS-1$
 
     // the following call disposes the screen's stage, but on my computer it
     // crashes the scienceEngine so I commented it out; more info can be found at:

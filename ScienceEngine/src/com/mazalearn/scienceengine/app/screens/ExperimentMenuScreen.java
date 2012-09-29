@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -39,7 +40,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     // retrieve the default table
     Table table = super.getTable();
     table.defaults().spaceBottom(20).fill().center();
-    table.add("Science Engine").colspan(10).spaceBottom(20);
+    table.add(Messages.getString("ScienceEngine.ScienceEngine")).colspan(10).spaceBottom(20); //$NON-NLS-1$
     table.row();
 
     // retrieve the table's layout
@@ -50,7 +51,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     table.row();
 
     // register the back button
-    TextButton backButton = new TextButton("Back to Start", getSkin());
+    TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToStart"), getSkin()); //$NON-NLS-1$
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -63,7 +64,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
 
   public Actor createExperimentsSelector() {
     Table table = super.getTable().newTable();
-    FlickScrollPane flickScrollPane = new FlickScrollPane(table, "Experiments");
+    FlickScrollPane flickScrollPane = new FlickScrollPane(table, "Experiments"); //$NON-NLS-1$
     table.setFillParent(false);
     table.defaults().fill();
     final String[] experimentNames = 
@@ -79,7 +80,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
         @Override
         public void click(Actor actor, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName);
+          Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
           IScience2DController science2DController = 
               createExperimentController(experimentName, 
               VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
