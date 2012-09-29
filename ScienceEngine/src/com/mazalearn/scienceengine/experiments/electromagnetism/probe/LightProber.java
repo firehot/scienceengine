@@ -2,12 +2,12 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mazalearn.scienceengine.core.probe.AbstractProber;
+import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbActor;
 
-public class LightProber extends AbstractProber {
+public class LightProber extends AbstractScience2DProber {
 
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;

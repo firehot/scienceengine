@@ -3,19 +3,19 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.core.probe.AbstractProber;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 
-public abstract class AbstractFieldProber extends AbstractProber {
+public abstract class AbstractFieldProber extends AbstractScience2DProber {
   private final Vector2 modelPos = new Vector2();
-  private final IExperimentModel model;
+  private final IScience2DModel model;
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
  
-  protected AbstractFieldProber(IExperimentModel model, ProbeManager probeManager) {
+  protected AbstractFieldProber(IScience2DModel model, ProbeManager probeManager) {
     super(probeManager);
     this.model = model;
     this.fieldMeterActor = (Science2DActor) probeManager.findActorByName("FieldMeter");

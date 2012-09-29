@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 
-public interface IExperimentModel {
+public interface IScience2DModel {
   // Reset model to initial conditions
   public void reset();
   // Simulate steps of the model. delta is time since last invocation.

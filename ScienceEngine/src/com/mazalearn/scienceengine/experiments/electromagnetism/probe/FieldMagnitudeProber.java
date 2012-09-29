@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Delay;
 import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
@@ -55,7 +55,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] points;
   private Vector2[] bFields;
     
-  public FieldMagnitudeProber(IExperimentModel model,
+  public FieldMagnitudeProber(IScience2DModel model,
       final ProbeManager probeManager) {
     super(model, probeManager);
     imageCorrect = new ProbeImage();

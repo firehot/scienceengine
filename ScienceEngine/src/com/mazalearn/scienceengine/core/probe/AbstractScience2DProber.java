@@ -6,13 +6,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 
-public abstract class AbstractProber extends Group {
+public abstract class AbstractScience2DProber extends Group {
 
   protected static final float TOLERANCE = 0.3f;
   protected static final float ZERO_TOLERANCE = 1e-4f;
   protected final ProbeManager probeManager;
 
-  public AbstractProber(ProbeManager probeManager) {
+  public AbstractScience2DProber(ProbeManager probeManager) {
     this.probeManager = probeManager;
     probeManager.registerProber(this);
   }

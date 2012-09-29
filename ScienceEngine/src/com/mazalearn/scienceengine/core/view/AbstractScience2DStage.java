@@ -13,12 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
-public abstract class Science2DStage extends Stage implements IExperimentView {
+public abstract class AbstractScience2DStage extends Stage implements IScience2DStage {
 
-  protected final IExperimentModel experimentModel;
+  protected final IScience2DModel science2DModel;
   protected final Skin skin;
   private boolean isChallengeInProgress = false;
   private LevelManager levelManager;
@@ -26,22 +26,22 @@ public abstract class Science2DStage extends Stage implements IExperimentView {
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
 
-  public Science2DStage( 
-      IExperimentModel experimentModel, float width, float height, Skin skin) {
+  public AbstractScience2DStage( 
+      IScience2DModel science2DModel, float width, float height, Skin skin) {
     super(width, height, true);
     this.skin = skin;
-    this.experimentModel = experimentModel;
+    this.science2DModel = science2DModel;
     this.locationGroups = new ArrayList<List<Actor>>();
   }
 
   @Override
   public void suspend(boolean suspend) {
-    experimentModel.enable(!suspend);
+    science2DModel.enable(!suspend);
   }
 
   @Override
   public boolean isSuspended() {
-    return !experimentModel.isEnabled();
+    return !science2DModel.isEnabled();
   }
   
   public void done(boolean success) {}
@@ -49,7 +49,7 @@ public abstract class Science2DStage extends Stage implements IExperimentView {
   @Override
   public void challenge(boolean challenge) {
     // Reinitialize level
-    experimentModel.reset();
+    science2DModel.reset();
 
     // Turn on or turn off music
     if (challenge) {
@@ -67,7 +67,7 @@ public abstract class Science2DStage extends Stage implements IExperimentView {
   
   @Override
   public void act(float delta) {
-    experimentModel.simulateSteps(delta);
+    science2DModel.simulateSteps(delta);
     super.act(delta);
   }
   

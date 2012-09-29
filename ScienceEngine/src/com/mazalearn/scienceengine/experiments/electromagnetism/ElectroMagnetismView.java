@@ -12,7 +12,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.ComponentType;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
-import com.mazalearn.scienceengine.core.view.Science2DStage;
+import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
@@ -27,7 +27,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.view.FieldMeterA
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilActor;
 
-public class ElectroMagnetismView extends Science2DStage {
+public class ElectroMagnetismView extends AbstractScience2DStage {
   private BarMagnetActor barMagnetActor;
   private ProbeManager probeManager;
   private boolean isFieldPointTouched = false;

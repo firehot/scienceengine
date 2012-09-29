@@ -27,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
@@ -65,7 +65,7 @@ public class LevelEditor extends Stage {
   private float originalCameraZoom;
   
   private Table layout;
-  private IExperimentModel experimentModel;
+  private IScience2DModel science2DModel;
   private ControlPanel controlPanel;
   private ShapeRenderer shapeRenderer;
   Vector2 point = new Vector2();
@@ -84,22 +84,22 @@ public class LevelEditor extends Stage {
    * @param stage - stage used by the experiment view
    */
   public LevelEditor(LevelManager levelManager, ControlPanel controlPanel, Stage stage, 
-      IExperimentModel experimentModel, AbstractScreen screen) {
+      IScience2DModel science2DModel, AbstractScreen screen) {
     super(stage.width(), stage.height(), stage.isStretched(), 
         stage.getSpriteBatch());
     this.screen = screen;
-    this.experimentModel = experimentModel;
+    this.science2DModel = science2DModel;
     this.controlPanel = controlPanel;
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.camera;
     this.shapeRenderer = new ShapeRenderer();
-    this.layout = createLayout(levelManager, stage, experimentModel, screen);
+    this.layout = createLayout(levelManager, stage, science2DModel, screen);
     this.addActor(layout);
   }
   
   private Table createLayout(final LevelManager levelManager, Stage stage,
-      IExperimentModel experimentModel, AbstractScreen screen) {
+      IScience2DModel science2DModel, AbstractScreen screen) {
     Table layout = new Table(screen.getSkin());
     layout.setFillParent(true);
     layout.defaults().fill();
@@ -128,7 +128,7 @@ public class LevelEditor extends Stage {
     });
     
     this.actorPropertyPanel = new ActorPropertyPanel(screen.getSkin(), this);
-    configTable = createConfigTable(experimentModel, screen.getSkin());
+    configTable = createConfigTable(science2DModel, screen.getSkin());
     Actor componentsPanel = createComponentsPanel(stage, screen.getSkin(), configTable);
     
     Table menu = createMenu(levelManager, screen.getSkin());
@@ -204,7 +204,7 @@ public class LevelEditor extends Stage {
           if (actor instanceof Science2DActor) {
             Science2DActor science2DActor = (Science2DActor) actor;
             science2DActor.getBody().setActive(actor.visible);
-            refreshConfigsTable(experimentModel, skin, configTable);
+            refreshConfigsTable(science2DModel, skin, configTable);
             controlPanel.refresh();
          }
         }});
@@ -213,18 +213,18 @@ public class LevelEditor extends Stage {
     return componentsTable;
   }
 
-  private Table createConfigTable(IExperimentModel experimentModel, Skin skin) {
+  private Table createConfigTable(IScience2DModel science2DModel, Skin skin) {
     Table configTable = new Table(skin);
-    refreshConfigsTable(experimentModel, skin, configTable);
+    refreshConfigsTable(science2DModel, skin, configTable);
     return configTable;
   }
 
-  private void refreshConfigsTable(IExperimentModel experimentModel, Skin skin,
+  private void refreshConfigsTable(IScience2DModel science2DModel, Skin skin,
       Table configTable) {
     configTable.clear();
     configTable.add("Configs");
     configTable.row();
-    for (final IModelConfig<?> config: experimentModel.getAllConfigs()) {
+    for (final IModelConfig<?> config: science2DModel.getAllConfigs()) {
       if (config.isPossible()) {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
         configTable.add(configCheckbox).left();
@@ -249,13 +249,13 @@ public class LevelEditor extends Stage {
     originalCameraZoom = orthographicCamera.zoom;
     originalCameraPos = camera.position.cpy();
     mode = Mode.OVERLAY;
-    experimentModel.enable(false);
+    science2DModel.enable(false);
   }
 
   private void disableEditor() {
     restoreCamera();
     screen.setStage(originalStage);
-    experimentModel.enable(true);
+    science2DModel.enable(true);
   }
 
   /**
@@ -421,7 +421,7 @@ public class LevelEditor extends Stage {
       Group.toChildCoordinates(actor, point.x, point.y, rotatedVector);
       rotatedVector.sub(actor.width, 0);
       // TODO: UI issues and dont know how to draw rotated rectangles
-      // rotatedActor.rotation = rotatedVector.angle();
+      // selectedActor.rotation = rotatedVector.angle();
       break;
     case RESIZE:
       float sizeRatio = actor.width / actor.height;

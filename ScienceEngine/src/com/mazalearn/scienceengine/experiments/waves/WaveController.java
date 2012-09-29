@@ -4,12 +4,12 @@ package com.mazalearn.scienceengine.experiments.waves;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.services.SoundManager;
-import com.mazalearn.scienceengine.core.controller.Science2DController;
+import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 
 /**
- * Wave Motion experimentModel
+ * Wave Motion science2DModel
  */
-public class WaveController extends Science2DController {
+public class WaveController extends AbstractScience2DController {
   
   public static final String NAME = "Waves";
   private static final int NUM_BALLS = 40;

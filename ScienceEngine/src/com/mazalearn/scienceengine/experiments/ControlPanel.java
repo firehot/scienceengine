@@ -22,13 +22,13 @@ import com.mazalearn.scienceengine.core.controller.SliderControl;
 import com.mazalearn.scienceengine.core.controller.IExperimentController;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IControl;
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.core.view.IExperimentView;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
 
 public class ControlPanel extends Table {
   private final IExperimentController experimentController;
-  private final IExperimentModel experimentModel;
-  private final IExperimentView experimentView;
+  private final IScience2DModel science2DModel;
+  private final IScience2DStage science2DStage;
   private final Skin skin;
   private List<Controller> controllers;
   private String experimentName;
@@ -42,12 +42,12 @@ public class ControlPanel extends Table {
     super(skin, null, experimentController.getName());
     this.skin = skin;
     this.experimentController = experimentController;
-    this.experimentModel = experimentController.getModel();
-    this.experimentView = experimentController.getView();
+    this.science2DModel = experimentController.getModel();
+    this.science2DStage = experimentController.getView();
     this.experimentName = experimentController.getName();
     this.defaults().fill();
     Actor viewControlPanel = 
-        createViewControlPanel(skin, experimentModel, experimentView);
+        createViewControlPanel(skin, science2DModel, science2DStage);
     this.modelControlPanel = createModelControlPanel(skin);
     this.add(viewControlPanel);
     this.row();
@@ -69,7 +69,7 @@ public class ControlPanel extends Table {
   }
   
   public List<IModelConfig<?>> getModelConfigs() {
-    return experimentModel.getAllConfigs();
+    return science2DModel.getAllConfigs();
   }
 
   @SuppressWarnings("rawtypes")
@@ -77,14 +77,14 @@ public class ControlPanel extends Table {
     this.controllers = new ArrayList<Controller>();
     modelControlPanel.clear();
     // Register all model controllers
-    for (IModelConfig modelConfig: experimentModel.getAllConfigs()) {
+    for (IModelConfig modelConfig: science2DModel.getAllConfigs()) {
       this.controllers.add(createViewControl(modelConfig, modelControlPanel));
     }
   }
 
   protected Actor createViewControlPanel(Skin skin,
-      final IExperimentModel experimentModel,
-      final IExperimentView experimentView) {
+      final IScience2DModel science2DModel,
+      final IScience2DStage science2DStage) {
     Table viewControls = new Table(skin, null, "Standard");
     viewControls.defaults().fill();
     // Register name
@@ -107,8 +107,8 @@ public class ControlPanel extends Table {
     // Add challenge/learn functionality
     AbstractModelConfig<Boolean> challengeModelConfig = 
         new AbstractModelConfig<Boolean>("Challenge", "Challenge or Learn", false) {
-          public void setValue(Boolean value) { experimentView.challenge(value);}
-          public Boolean getValue() { return experimentView.isChallengeInProgress(); }
+          public void setValue(Boolean value) { science2DStage.challenge(value);}
+          public Boolean getValue() { return science2DStage.isChallengeInProgress(); }
           public boolean isPossible() { return true; }
     };
     
@@ -116,7 +116,7 @@ public class ControlPanel extends Table {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(
-            experimentView.isChallengeInProgress() ? "End Challenge" : "Challenge");
+            science2DStage.isChallengeInProgress() ? "End Challenge" : "Challenge");
       }
     };
     viewControls.add(challengeControl.getActor()).height(30).colspan(2);
@@ -125,21 +125,21 @@ public class ControlPanel extends Table {
     // Add pause/resume functionality for the experiment
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
         new AbstractModelConfig<Boolean>("Pause/Resume", "Pause or Resume") {
-          public void setValue(Boolean value) { experimentView.suspend(value); }
-          public Boolean getValue() { return experimentView.isSuspended(); }
+          public void setValue(Boolean value) { science2DStage.suspend(value); }
+          public Boolean getValue() { return science2DStage.isSuspended(); }
           public boolean isPossible() { return true; }
     };
     suspendControl = new OnOffButtonControl(pauseResumeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
-        toggleButton.setText(experimentView.isSuspended() ? "Resume" : "Pause");
+        toggleButton.setText(science2DStage.isSuspended() ? "Resume" : "Pause");
       }
     };
 
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>("Reset", "Reset to initial state") {
-          public void doCommand() { experimentModel.reset(); }
+          public void doCommand() { science2DModel.reset(); }
           public boolean isPossible() { return true; }
     };
     IControl resetControl = new CommandButtonControl(resetModelConfig, skin);

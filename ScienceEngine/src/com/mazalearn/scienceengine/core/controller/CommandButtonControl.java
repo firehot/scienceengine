@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 /**
- * Utility class for experimentModel action buttons using reflection.
+ * Utility class for science2DModel action buttons using reflection.
  *
  */
 public class CommandButtonControl implements IControl {

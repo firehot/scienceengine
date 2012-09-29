@@ -1,8 +1,8 @@
 package com.mazalearn.scienceengine.experiments.molecules.model;
 
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 
-public interface IMolecularModel extends IExperimentModel {
+public interface IMolecularModel extends IScience2DModel {
 
   // Initialize the molecules configuration (currently uniform random)
   public abstract void reset();

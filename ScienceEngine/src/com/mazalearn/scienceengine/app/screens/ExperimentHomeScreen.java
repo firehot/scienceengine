@@ -23,7 +23,7 @@ import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IExperimentController;
-import com.mazalearn.scienceengine.core.view.IExperimentView;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
 
 /**
  * Experiment Home screen - shows all levels for that experiment.
@@ -82,10 +82,10 @@ public class ExperimentHomeScreen extends AbstractScreen {
   }
 
   private Actor createExperimentLevelPane() {
-    final IExperimentView experimentView = experimentController.getView();
+    final IScience2DStage science2DStage = experimentController.getView();
     Profile profile = scienceEngine.getProfileManager().retrieveProfile();
     int level = Math.max(profile.getCurrentLevelId(), 1);
-    levelManager = experimentView.getLevelManager();
+    levelManager = science2DStage.getLevelManager();
     levelManager.setLevel(level);
     
     Table experimentLevels = super.getTable().newTable();

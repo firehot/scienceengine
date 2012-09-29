@@ -3,14 +3,14 @@ package com.mazalearn.scienceengine.experiments.molecules.view;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.Science2DStage;
+import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 
 /**
  * States of Matter experiment View.
  */
-public class StatesOfMatterView extends Science2DStage {
+public class StatesOfMatterView extends AbstractScience2DStage {
   
   private final Table layoutTable;
   private final IMolecularModel molecularModel;

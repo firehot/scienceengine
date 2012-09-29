@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.AnimationAction;
 import com.badlogic.gdx.scenes.scene2d.actions.Delay;
 import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
@@ -21,7 +21,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
   
-  public FieldDirectionProber(IExperimentModel model, final ProbeManager probeManager) {
+  public FieldDirectionProber(IScience2DModel model, final ProbeManager probeManager) {
     super(model, probeManager);
     
     this.points = new Vector2[] { new Vector2()};

@@ -1,12 +1,12 @@
 package com.mazalearn.scienceengine.core.controller;
 
-import com.mazalearn.scienceengine.core.model.IExperimentModel;
-import com.mazalearn.scienceengine.core.view.IExperimentView;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public interface IExperimentController {
-  public IExperimentView getView();
-  public IExperimentModel getModel();
+  public IScience2DStage getView();
+  public IScience2DModel getModel();
   public ControlPanel getControlPanel();
   public String getName();
 }

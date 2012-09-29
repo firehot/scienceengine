@@ -2,16 +2,16 @@ package com.mazalearn.scienceengine.experiments.molecules;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.services.SoundManager;
-import com.mazalearn.scienceengine.core.controller.Science2DController;
+import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 import com.mazalearn.scienceengine.experiments.molecules.model.LJMolecularModel;
 import com.mazalearn.scienceengine.experiments.molecules.view.StatesOfMatterView;
 
 /**
- * States of Matter experimentModel
+ * States of Matter science2DModel
  */
-public class StatesOfMatterController extends Science2DController {
+public class StatesOfMatterController extends AbstractScience2DController {
   public static final String NAME = "States of Matter";
   private static final int N = 25; // Number of molecules
   private static final int BOX_HEIGHT = 20;

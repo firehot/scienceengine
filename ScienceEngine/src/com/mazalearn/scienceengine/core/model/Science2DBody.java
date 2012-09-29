@@ -32,7 +32,7 @@ public class Science2DBody implements IBody {
   // Ground body
   private static Body GROUND;
   // Model in which this body lives
-  private IExperimentModel model;
+  private IScience2DModel model;
   // Body instance to which methods are proxied
   Body body;
   // Configs exposed by this body
@@ -146,11 +146,11 @@ public class Science2DBody implements IBody {
     return body;
   }
   
-  public IExperimentModel getModel() {
+  public IScience2DModel getModel() {
     return this.model;
   }
   
-  public void setModel(IExperimentModel model) {
+  public void setModel(IScience2DModel model) {
     this.model = model;
   }
 

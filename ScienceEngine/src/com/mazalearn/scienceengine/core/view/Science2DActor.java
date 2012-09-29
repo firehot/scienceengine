@@ -122,7 +122,7 @@ public class Science2DActor extends Actor {
     getBox2DPositionFromViewPosition(box2DPos, viewPos, rotation);
     float angle = rotation * MathUtils.degreesToRadians;
     if (isUserChange) { // Change initiated by user, hence propagate
-      ((Science2DStage) getStage()).notifyLocationChangedByUser(this, box2DPos, angle);
+      ((AbstractScience2DStage) getStage()).notifyLocationChangedByUser(this, box2DPos, angle);
     }
     body.setPositionAndAngle(box2DPos, angle);
     body.setActive(visible);
