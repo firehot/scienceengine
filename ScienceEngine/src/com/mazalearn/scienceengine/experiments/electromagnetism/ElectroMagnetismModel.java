@@ -9,13 +9,12 @@ import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.Science2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.model.Science2DModel;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.EMField;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
@@ -25,7 +24,6 @@ public class ElectroMagnetismModel extends Science2DModel {
   private BarMagnet barMagnet;
   private PickupCoil pickupCoil;
   private Compass compass;
-  private EMField emField;
   private RevoluteJointDef jointDef = new RevoluteJointDef();
   public enum Mode {Free, Rotate};
   
@@ -34,7 +32,6 @@ public class ElectroMagnetismModel extends Science2DModel {
     
   public ElectroMagnetismModel() {   
     super();
-    emField = new EMField();
     
     Science2DBody electroMagnet = null;
     addBody(barMagnet = new BarMagnet("BarMagnet", 10, 12, 0));
@@ -96,10 +93,6 @@ public class ElectroMagnetismModel extends Science2DModel {
     return bodies;
   }
   
-  public EMField getEMField() {
-    return emField;
-  }
-
   public String getMode() {
     return mode.name();
   }

@@ -3,7 +3,10 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * PickupCoil is the model of a pickup coil. Its behavior follows Faraday's Law
@@ -12,36 +15,34 @@ import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
  * @author Chris Malley (cmalley@pixelzoom.com)
  * @author sridhar
  */
-public class PickupCoil extends AbstractCoil {
-
-  // ----------------------------------------------------------------------------
-  // Class data
-  // ----------------------------------------------------------------------------
+public class PickupCoil extends Science2DBody {
 
   private static final boolean DEBUG_CALIBRATION = false;
-  public static final float MIN_PICKUP_LOOP_RADIUS = 68.0f;
+  private static final float MIN_PICKUP_LOOP_RADIUS = 68.0f;
   private static final int NUM_SAMPLE_POINTS = 9;
 
   private float averageBx; // in Gauss
   private float flux; // in webers
-  private float deltaFlux; // in webers
   private float emf; // in volts
   private float biggestAbsEmf; // in volts
   private Vector2 samplePoints[]; // B-field sample points
-  private float transitionSmoothingScale;
   private float calibrationEmf;
 
-  // Reusable objects
   private Vector2 sampleBField;
+  private int numberOfLoops;
+  private float wireWidth;
+  private float current;
+  // Radius of all loops in the coil.
+  private float radius;
 
   /**
    * Constructs a PickupCoil that uses a fixed number of sample points to
    * measure the magnet's B-field.
-   * 
-   * @param emField
+   * Creates a default coil with one loop, radius=10,
+   * wireWidth=16, loopSpacing=25
    */
   public PickupCoil(String name, float x, float y, float angle, float calibrationEmf) {
-    super(ComponentType.PickupCoil, name, x, y, angle);
+    this(ComponentType.PickupCoil, name, x, y, angle, 1, 8, 16, 25);
 
     assert (calibrationEmf >= 1);
     this.calibrationEmf = calibrationEmf;
@@ -50,19 +51,48 @@ public class PickupCoil extends AbstractCoil {
 
     this.averageBx = 0f;
     this.flux = 0.0f;
-    this.deltaFlux = 0.0f;
     this.emf = 0.0f;
     this.biggestAbsEmf = 0.0f;
-    this.transitionSmoothingScale = 1.0f; // no smoothing
 
     // Reusable objects
     this.sampleBField = new Vector2();
 
     // loosely packed loops
-    setLoopSpacing(1.5f * getWireWidth());
     initializeConfigs();
   }
 
+  /**
+   * Fully-specified constructor.
+   * 
+   * @param numberOfLoops -  number of loops in the coil
+   * @param radius - radius used for all loops
+   * @param wireWidth - width of the wire
+   * @param loopSpacing - space between the loops
+   */
+  private PickupCoil(ComponentType componentType, String name, float x, float y, float angle, 
+      int numberOfLoops, float radius, float wireWidth, float loopSpacing) {
+    super(componentType, name, x, y, angle);
+    this.numberOfLoops = numberOfLoops;
+    this.radius = radius;
+    this.wireWidth = wireWidth;
+    this.current = 0f;
+    FixtureDef fixtureDef = new FixtureDef();
+    // This is 2D - so we model the coil as being perpendicular to the plane
+    // and only the intersections at top and bottom with plane are fixtures
+    Vector2 pos = new Vector2();
+    PolygonShape rectangleShape = new PolygonShape();
+    pos.set(0, radius);
+    rectangleShape.setAsBox(this.wireWidth/2, this.wireWidth/2, pos, 0);
+    fixtureDef.density = 1;
+    fixtureDef.shape = rectangleShape;
+    fixtureDef.filter.categoryBits = 0x0000;
+    fixtureDef.filter.maskBits = 0x0000;
+    this.createFixture(fixtureDef);
+    pos.set(0, -radius);
+    rectangleShape.setAsBox(this.wireWidth/2, this.wireWidth/2, pos, 0);
+    this.createFixture(fixtureDef);
+  }
+  
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(getName() + " Coil Loops", 
         "Number of loops of coil", 1f, 4f) {
@@ -79,55 +109,6 @@ public class PickupCoil extends AbstractCoil {
    */
   public Vector2[] getSamplePoints() {
     return this.samplePoints;
-  }
-
-  /**
-   * When the coil's radius changes, update the sample points.
-   */
-  public void setRadius(float radius) {
-    super.setRadius(radius);
-    createSamplePoints();
-  }
-
-  /**
-   * Sets a scaling factor used to smooth out abrupt changes that occur when the
-   * magnet transitions between being inside & outside the coil.
-   * <p/>
-   * This is used to scale the B-field for sample points inside the magnet,
-   * eliminating abrupt transitions at the left and right edges of the magnet.
-   * For any sample point inside the magnet, the B field sample is multiplied by
-   * this value.
-   * <p/>
-   * To set this value, follow these steps:
-   * <ol>
-   * <li>enable the developer controls for "pickup transition scale" and
-   * "display flux"
-   * <li>move the magnet horizontally through the coil until, by moving it one
-   * pixel, you see an abrupt change in the displayed flux value.
-   * <li>note the 2 flux values when the abrupt change occurs
-   * <li>move the magnet so that the larger of the 2 flux values is displayed
-   * <li>adjust the developer control until the larger value is reduced to
-   * approximately the same value as the smaller value.
-   * </ol>
-   * 
-   * @param scale
-   *          0 < scale <= 1
-   */
-  public void setTransitionSmoothingScale(float scale) {
-    if (scale <= 0 || scale > 1) {
-      throw new IllegalArgumentException("scale must be > 0 and <= 1: " + scale);
-    }
-    this.transitionSmoothingScale = scale;
-    // no need to update, wait for next clock tick
-  }
-
-  /**
-   * See setTransitionSmoothingScale.
-   * 
-   * @return
-   */
-  public double getTransitionSmoothingScale() {
-    return this.transitionSmoothingScale;
   }
 
   /**
@@ -164,7 +145,7 @@ public class PickupCoil extends AbstractCoil {
     this.samplePoints = new Vector2[NUM_SAMPLE_POINTS];
     final double numberOfSamplePointsOnRadius = (NUM_SAMPLE_POINTS - 1) / 2;
     final double samplePointsYSpacing = 
-        getRadius() / numberOfSamplePointsOnRadius;
+        radius / numberOfSamplePointsOnRadius;
 
     // all sample points share the same x offset
     final float xOffset = 0;
@@ -181,10 +162,6 @@ public class PickupCoil extends AbstractCoil {
       samplePoints[index++] = new Vector2(xOffset, -y);
     }
   }
-
-  // ----------------------------------------------------------------------------
-  // ModelElement implementation
-  // ----------------------------------------------------------------------------
 
   /**
    * Handles ticks of the simulation clock. Calculates the induced emf using
@@ -207,11 +184,11 @@ public class PickupCoil extends AbstractCoil {
     float flux = getNumberOfLoops() * loopFlux;
     
     // Change in flux.
-    this.deltaFlux = flux - this.flux;
+    float deltaFlux = flux - this.flux;
     this.flux = flux;
     
     // Induced emf.
-    float emf = -(this.deltaFlux / dt);
+    float emf = -(deltaFlux / dt);
     
     // If the emf has changed, set the current in the coil and notify observers.
     if (emf != this.emf) {
@@ -300,10 +277,7 @@ public class PickupCoil extends AbstractCoil {
        * abrupt. See Unfuddle #248.
        */
       double Bx = this.sampleBField.x;
- /*TODO ???     if (Math.abs(Bx) == magnetStrength) {
-        Bx *= this.transitionSmoothingScale;
-      }
-*/
+
       // Accumulate a sum of the sample points.
       sumBx += Bx;
     }
@@ -326,7 +300,38 @@ public class PickupCoil extends AbstractCoil {
    */
   private float getEffectiveLoopArea() {
     float width = MIN_PICKUP_LOOP_RADIUS;
-    float height = 2 * getRadius();
+    float height = 2 * radius;
     return width * height;
+  }
+
+  /**
+   * Sets the number of loops in the coil. This method destroys any existing
+   * loops and creates a new set.
+   * 
+   * @param numberOfLoops
+   *          the number of loops - must be > 0
+   */
+  public void setNumberOfLoops(float numberOfLoops) {
+    this.numberOfLoops = Math.round(numberOfLoops);
+  }
+
+  /**
+   * Gets the number of loops in the coil.
+   * 
+   * @return the number of loops
+   */
+  public float getNumberOfLoops() {
+    return this.numberOfLoops;
+  }
+
+  protected void setCurrent(float current) {
+    this.current = current;
+  }
+
+  /**
+   * Gets the current in the coil, in amperes
+   */
+  public float getCurrent() {
+    return this.current;
   }
 }

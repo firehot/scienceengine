@@ -6,7 +6,7 @@ import com.mazalearn.scienceengine.core.view.Science2DStage;
 import com.mazalearn.scienceengine.core.view.IExperimentView;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
-public abstract class AbstractExperimentController implements
+public abstract class Science2DController implements
     IExperimentController {
 
   private ControlPanel controlPanel;
@@ -15,7 +15,7 @@ public abstract class AbstractExperimentController implements
   private Skin skin;
   private String name;
 
-  protected AbstractExperimentController(String name, Skin skin) {
+  protected Science2DController(String name, Skin skin) {
     this.name = name;
     this.skin = skin;
   }
