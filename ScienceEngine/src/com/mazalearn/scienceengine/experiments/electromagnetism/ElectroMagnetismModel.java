@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.Science2DExperimentModel;
+import com.mazalearn.scienceengine.core.model.Science2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
@@ -21,7 +21,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
 
-public class ElectroMagnetismModel extends Science2DExperimentModel {
+public class ElectroMagnetismModel extends Science2DModel {
   private BarMagnet barMagnet;
   private PickupCoil pickupCoil;
   private Compass compass;

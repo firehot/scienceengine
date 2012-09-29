@@ -191,26 +191,26 @@ public class LevelEditor extends Stage {
     Table componentsTable= new Table(skin);
     componentsTable.add("Components"); 
     componentsTable.row();
-    int i = 0;
     for (final Actor actor: stage.getActors()) {
       if (actor.name == null || actor == controlPanel) continue;
-      i++;
+      final CheckBox componentCheckbox = new CheckBox(actor.name, skin);
+      componentsTable.add(componentCheckbox).left();
+      componentCheckbox.setChecked(actor.visible);
+      componentCheckbox.setClickListener(new ClickListener() {
+        @Override
+        public void click(Actor a, float x, float y) {
+          selectedActor = stage.findActor(actor.name);
+          actorPropertyPanel.setActor(selectedActor);
+          actor.visible = componentCheckbox.isChecked();
+          if (actor instanceof Science2DActor) {
+            Science2DActor science2DActor = (Science2DActor) actor;
+            science2DActor.getBody().setActive(actor.visible);
+            refreshConfigsTable(experimentModel, skin, configTable);
+            controlPanel.refresh();
+         }
+        }});
+      componentsTable.row();
     }
-    String[] actorNames = new String[i];
-    for (final Actor actor: stage.getActors()) {
-      if (actor.name == null || actor == controlPanel) continue;
-      actorNames[--i] = actor.name;
-    }
- 
-    List componentsList = new List(actorNames, skin);
-    componentsList.setSelectionListener(new SelectionListener() {
-      @Override
-      public void selected(Actor actor, int index, String actorName) {
-        selectedActor = stage.findActor(actorName);
-        actorPropertyPanel.setActor(selectedActor);
-      }
-    });
-    componentsTable.add(componentsList);
     return componentsTable;
   }
 
@@ -518,10 +518,5 @@ public class LevelEditor extends Stage {
     shapeRenderer.filledCircle(actor.x + actor.originX, 
         actor.y + actor.originY, handleSize.x / 2);
     shapeRenderer.end();
-  }
-
-  public void refreshOnVisibilityChange() {
-    refreshConfigsTable(experimentModel, screen.getSkin(), configTable);
-    controlPanel.refresh();        
   }
 }

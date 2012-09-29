@@ -2,9 +2,11 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 
 /**
@@ -18,10 +20,13 @@ import com.mazalearn.scienceengine.core.model.ICurrent;
  */
 public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
 
+  private static final float TOLERANCE = 0.1f;
   private static final int ELECTROMAGNET_LOOPS_MAX = 4;
 
   private float maxStrengthOutside; // for debugging
 
+  // Current flowing in coil
+  private float current = 0f;
   // Number of loops in the coil.
   private int numberOfLoops;
 
@@ -44,9 +49,27 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
+    initializeConfigs();
   }
 
-  public void updateCurrent(float current) {
+  public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<Float>(getName() + " Coil Loops", 
+        "Number of loops of coil", 1f, 4f) {
+      public Float getValue() { return getNumberOfLoops(); }
+      public void setValue(Float value) { setNumberOfLoops(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+  }
+
+  public void setCurrent(float current) {
+    if (Math.abs(this.current - current) < TOLERANCE) {
+      return;
+    }
+    this.current = current;
+    updateStrength();
+  }
+  
+  private void updateStrength() {
     // Compute the electromagnet's emf amplitude.
     float emf = (numberOfLoops / (float) ELECTROMAGNET_LOOPS_MAX) * current;
     emf = Clamp.clamp(-MAX_EMF, emf, MAX_EMF);
@@ -173,6 +196,18 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
     // Use this to calibrate.
     if (outputVector.len() > this.maxStrengthOutside) {
       this.maxStrengthOutside = outputVector.len();
+    }
+  }
+
+  public float getNumberOfLoops() {
+    return numberOfLoops;
+  }
+
+  public void setNumberOfLoops(float numberOfLoops) {
+    if (this.numberOfLoops != Math.round(numberOfLoops)) {
+      this.numberOfLoops = Math.round(numberOfLoops);
+      updateStrength();
+      getModel().notifyFieldChange();
     }
   }
 }

@@ -77,11 +77,10 @@ public abstract class AbstractCoil extends Science2DBody {
    * loops and creates a new set.
    * 
    * @param numberOfLoops
-   *          the number of loops
+   *          the number of loops - must be > 0
    */
-  public void setNumberOfLoops(int numberOfLoops) {
-    assert (numberOfLoops > 0);
-    this.numberOfLoops = numberOfLoops;
+  public void setNumberOfLoops(float numberOfLoops) {
+    this.numberOfLoops = Math.round(numberOfLoops);
   }
 
   /**
@@ -89,7 +88,7 @@ public abstract class AbstractCoil extends Science2DBody {
    * 
    * @return the number of loops
    */
-  public int getNumberOfLoops() {
+  public float getNumberOfLoops() {
     return this.numberOfLoops;
   }
 

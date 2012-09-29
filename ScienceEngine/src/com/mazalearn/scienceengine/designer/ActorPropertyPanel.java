@@ -13,8 +13,9 @@ class ActorPropertyPanel extends Table {
   private Actor actor;
   private Skin skin;
   private TextField widthField, heightField, xField, yField, rotationField;
+  private TextField originXField, originYField;
   private Label nameLabel;
-  private CheckBox visibleField, allowMoveField;
+  private CheckBox allowMoveField;
   public ActorPropertyPanel(Skin skin, final LevelEditor levelEditor) {
     super(skin, null, "ActorPropertyPanel");
     this.debug();
@@ -23,22 +24,13 @@ class ActorPropertyPanel extends Table {
     this.add("Name").left();
     this.add(nameLabel).width(50);
     this.row();
-    visibleField = addCheckBoxProperty("Visible");
-    visibleField.setClickListener(new ClickListener() {
-      @Override
-      public void click(Actor clickActor, float x, float y) {
-        actor.visible = visibleField.isChecked();
-        if (actor instanceof Science2DActor) {
-          ((Science2DActor) actor).getBody().setActive(actor.visible);
-          levelEditor.refreshOnVisibilityChange();
-        }
-      }
-    });
     xField = addLabeledProperty("X");
     yField = addLabeledProperty("Y");
     widthField = addLabeledProperty("Width");
     heightField = addLabeledProperty("Height");
     rotationField = addLabeledProperty("Rotation");
+    originXField = addLabeledProperty("Origin X");
+    originYField = addLabeledProperty("Origin Y");
     allowMoveField = addCheckBoxProperty("AllowMove");
   }
 
@@ -74,7 +66,8 @@ class ActorPropertyPanel extends Table {
     actor.width = Float.parseFloat(widthField.getText());
     actor.height = Float.parseFloat(heightField.getText());
     actor.rotation = Float.parseFloat(rotationField.getText());
-    actor.visible = visibleField.isChecked();
+    actor.originX = Float.parseFloat(originXField.getText());
+    actor.originY = Float.parseFloat(originYField.getText());
     if (actor instanceof Science2DActor) {
       ((Science2DActor) actor).setAllowMove(allowMoveField.isChecked());
     }
@@ -87,7 +80,8 @@ class ActorPropertyPanel extends Table {
     widthField.setText(String.valueOf(actor.width));
     heightField.setText(String.valueOf(actor.height));
     rotationField.setText(String.valueOf(actor.rotation));
-    visibleField.setChecked(actor.visible);
+    originXField.setText(String.valueOf(actor.originX));
+    originYField.setText(String.valueOf(actor.originY));
     if (actor instanceof Science2DActor) {
       allowMoveField.setChecked(((Science2DActor) actor).isAllowMove());
     }

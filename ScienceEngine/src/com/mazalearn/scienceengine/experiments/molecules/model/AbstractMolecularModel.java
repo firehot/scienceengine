@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.Science2DExperimentModel;
+import com.mazalearn.scienceengine.core.model.Science2DModel;
 
-public abstract class AbstractMolecularModel extends Science2DExperimentModel 
+public abstract class AbstractMolecularModel extends Science2DModel 
     implements IMolecularModel {
 
   protected static final double WALL_STIFFNESS = 50.0;

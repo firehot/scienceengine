@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -100,6 +101,8 @@ public class Science2DBody implements IBody {
    * @param angle - the orientation
    */
   public void setPositionAndAngle(Vector2 position, float angle) {
+    // Ensure angle is in range 0, 2 * pi
+    angle = angle % (2 * MathUtils.PI);
     body.setTransform(position, angle);
     if (this instanceof IMagneticField.Producer && isActive()) {
       getModel().notifyFieldChange();
@@ -191,7 +194,7 @@ public class Science2DBody implements IBody {
 
   @Override
   public float getAngle() {
-    return body.getAngle();
+    return body.getAngle() % (2 * MathUtils.PI);
   }
 
   @Override

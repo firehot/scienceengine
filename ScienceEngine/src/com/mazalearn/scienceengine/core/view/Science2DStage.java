@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -14,7 +16,7 @@ import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.core.model.IExperimentModel;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
-public abstract class Science2DExperimentStage extends Stage implements IExperimentView {
+public abstract class Science2DStage extends Stage implements IExperimentView {
 
   protected final IExperimentModel experimentModel;
   protected final Skin skin;
@@ -24,7 +26,7 @@ public abstract class Science2DExperimentStage extends Stage implements IExperim
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
 
-  public Science2DExperimentStage( 
+  public Science2DStage( 
       IExperimentModel experimentModel, float width, float height, Skin skin) {
     super(width, height, true);
     this.skin = skin;
@@ -77,16 +79,25 @@ public abstract class Science2DExperimentStage extends Stage implements IExperim
     locationGroups.add(Arrays.asList(actors));
   }
   
-  public void notifyLocationChangedByUser(Science2DActor actor, Vector2 newPosition) {
+  public void notifyLocationChangedByUser(Science2DActor actor, Vector2 newPosition, float newAngle) {
     for (List<Actor> locationGroup: locationGroups) {
       if (!locationGroup.contains(actor)) continue;
       deltaPosition.set(newPosition)
           .sub(actor.getBody().getPosition())
           .mul(ScienceEngine.PIXELS_PER_M);
+      float deltaX = deltaPosition.x;
+      float deltaY = deltaPosition.y;
+      float deltaAngle = (newAngle - actor.getBody().getAngle()) % (2 * MathUtils.PI);
+      float originX = actor.getBody().getPosition().x * ScienceEngine.PIXELS_PER_M;
+      float originY = actor.getBody().getPosition().y * ScienceEngine.PIXELS_PER_M;
       for (Actor groupActor: locationGroup) {
         if (groupActor == actor || groupActor == null) continue;
-        groupActor.x += deltaPosition.x;
-        groupActor.y += deltaPosition.y;
+        Group.toChildCoordinates(groupActor, originX, originY, deltaPosition);
+        groupActor.originX = originX;
+        groupActor.originY = originY;
+        groupActor.rotation += deltaAngle * MathUtils.radiansToDegrees;
+        groupActor.x += deltaX;
+        groupActor.y += deltaY;
         if (groupActor instanceof Science2DActor) {
           ((Science2DActor) groupActor).setPositionFromViewCoords(false);
         }

@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Consumer;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Producer;
 
-public abstract class Science2DExperimentModel implements IExperimentModel {
+public abstract class Science2DModel implements IExperimentModel {
 
   protected World box2DWorld;
   protected List<Science2DBody> bodies = new ArrayList<Science2DBody>(); 
@@ -24,7 +24,7 @@ public abstract class Science2DExperimentModel implements IExperimentModel {
   List<IMagneticField.Consumer> emConsumers;
   Vector2 bField = new Vector2(), totalBField = new Vector2();
 
-  public Science2DExperimentModel() {
+  public Science2DModel() {
     super();
     // Initialize the world for Box2D
     Vector2 gravity = new Vector2(0.0f, 0.0f);
@@ -99,7 +99,7 @@ public abstract class Science2DExperimentModel implements IExperimentModel {
       if (!circuit.contains(currentSource)) continue;
       for (Science2DBody component: circuit) {
         if (component instanceof ICurrent.Sink) {
-          ((ICurrent.Sink) component).updateCurrent(current);
+          ((ICurrent.Sink) component).setCurrent(current);
         }
       }
     }

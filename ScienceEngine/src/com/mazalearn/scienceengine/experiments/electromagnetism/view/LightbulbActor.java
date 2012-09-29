@@ -45,7 +45,6 @@ public class LightbulbActor extends Science2DActor {
   
   public boolean withinLightRegion(float x, float y) {
     point.set(this.x + originX, this.y + originY).sub(x, y);
-    System.out.println("pointlen: " + point.len() + " radius " + lightRadius);
     return point.len() <= lightRadius;
   }
 

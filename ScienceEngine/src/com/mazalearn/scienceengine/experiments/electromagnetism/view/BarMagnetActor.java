@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.Science2DExperimentStage;
+import com.mazalearn.scienceengine.core.view.Science2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel.Mode;
@@ -15,13 +15,13 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 
 public class BarMagnetActor extends Science2DActor {
   private final BarMagnet barMagnet;
-  private final Science2DExperimentStage emView;
+  private final Science2DStage emView;
   private final ElectroMagnetismModel emModel;
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
   
   public BarMagnetActor(TextureRegion textureRegion, Science2DBody body, 
-      Science2DExperimentStage experimentView, ElectroMagnetismModel emModel) {
+      Science2DStage experimentView, ElectroMagnetismModel emModel) {
     super(body, textureRegion);
     this.barMagnet = (BarMagnet) body;
     this.emView = experimentView;
