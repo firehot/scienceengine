@@ -7,7 +7,7 @@ import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public abstract class AbstractScience2DController implements
-    IExperimentController {
+    IScience2DController {
 
   private ControlPanel controlPanel;
   private IScience2DModel science2DModel;

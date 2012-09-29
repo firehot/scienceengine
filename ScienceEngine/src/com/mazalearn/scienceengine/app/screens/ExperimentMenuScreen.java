@@ -13,7 +13,7 @@ import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.core.controller.IExperimentController;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
@@ -80,10 +80,10 @@ public class ExperimentMenuScreen extends AbstractScreen {
         public void click(Actor actor, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
           Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName);
-          IExperimentController experimentController = 
+          IScience2DController science2DController = 
               createExperimentController(experimentName, 
               VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-          scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, experimentController));
+          scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
         }
       });
       Table levelTable = table.newTable();
@@ -95,7 +95,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     return flickScrollPane;
   }
   
-  private IExperimentController createExperimentController(
+  private IScience2DController createExperimentController(
       String experimentName, int width, int height) {
     if (experimentName == StatesOfMatterController.NAME) {
       return new StatesOfMatterController(width, height, scienceEngine.getSkin());

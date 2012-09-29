@@ -22,7 +22,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.core.controller.IExperimentController;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 
 /**
@@ -34,7 +34,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 200;
   private static final int THUMBNAIL_HEIGHT = 150;
   private static final int INFO_HEIGHT = 50;
-  IExperimentController experimentController;
+  IScience2DController science2DController;
   private Image[] experimentThumbs;
   private LevelManager levelManager;
   private Array<?> levels;
@@ -42,9 +42,9 @@ public class ExperimentHomeScreen extends AbstractScreen {
   private LabelStyle smallLabelStyle;
 
   public ExperimentHomeScreen(ScienceEngine scienceEngine, 
-      IExperimentController experimentController) {
+      IScience2DController science2DController) {
     super(scienceEngine);
-    this.experimentController = experimentController;
+    this.science2DController = science2DController;
     setBackgroundColor(Color.DARK_GRAY);
     readExperimentInfo();
     getFont().setScale(0.8f);
@@ -58,12 +58,12 @@ public class ExperimentHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     
     table.defaults().fill().center();
-    table.add(experimentController.getName() + ": " + "Levels");
+    table.add(science2DController.getName() + ": " + "Levels");
     table.row();
     
     table.add(createExperimentLevelPane()).fill();    
     table.row();
-    table.add(experimentController.getName() + ": " + "Resources on the Internet").colspan(100);
+    table.add(science2DController.getName() + ": " + "Resources on the Internet").colspan(100);
     table.row();
     table.add(createResourcePane()).fill();
     table.row();
@@ -82,7 +82,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
   }
 
   private Actor createExperimentLevelPane() {
-    final IScience2DStage science2DStage = experimentController.getView();
+    final IScience2DStage science2DStage = science2DController.getView();
     Profile profile = scienceEngine.getProfileManager().retrieveProfile();
     int level = Math.max(profile.getCurrentLevelId(), 1);
     levelManager = science2DStage.getLevelManager();
@@ -104,13 +104,13 @@ public class ExperimentHomeScreen extends AbstractScreen {
     for (int i = 0; i < levels.size; i++) {
       final int iLevel = i + 1;
       Image experimentThumb = 
-          new Image(LevelManager.getThumbnail(experimentController.getName(), iLevel));
+          new Image(LevelManager.getThumbnail(science2DController.getName(), iLevel));
       experimentThumb.setClickListener(new ClickListener() {
         @Override
         public void click(Actor actor, float x, float y) {
           Screen experimentLevelScreen = 
               new ExperimentScreen(scienceEngine, levelManager, 
-                  iLevel, experimentController);
+                  iLevel, science2DController);
           scienceEngine.setScreen(experimentLevelScreen);
         }
       });
@@ -205,7 +205,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
   @SuppressWarnings("unchecked")
   public void readExperimentInfo() {
     FileHandle file;
-    String fileName = "data/" + experimentController.getName() + ".json";
+    String fileName = "data/" + science2DController.getName() + ".json";
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
     file = Gdx.files.internal(fileName);
     if (file == null) {

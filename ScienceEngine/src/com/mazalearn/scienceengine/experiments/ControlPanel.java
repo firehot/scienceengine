@@ -19,14 +19,14 @@ import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
 import com.mazalearn.scienceengine.core.controller.OnOffButtonControl;
 import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
 import com.mazalearn.scienceengine.core.controller.SliderControl;
-import com.mazalearn.scienceengine.core.controller.IExperimentController;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IControl;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 
 public class ControlPanel extends Table {
-  private final IExperimentController experimentController;
+  private final IScience2DController science2DController;
   private final IScience2DModel science2DModel;
   private final IScience2DStage science2DStage;
   private final Skin skin;
@@ -38,13 +38,13 @@ public class ControlPanel extends Table {
   private Label title;
   private Table suspendResetPanel; // part of viewcontrolpanel
   
-  public ControlPanel(Skin skin, IExperimentController experimentController) {
-    super(skin, null, experimentController.getName());
+  public ControlPanel(Skin skin, IScience2DController science2DController) {
+    super(skin, null, science2DController.getName());
     this.skin = skin;
-    this.experimentController = experimentController;
-    this.science2DModel = experimentController.getModel();
-    this.science2DStage = experimentController.getView();
-    this.experimentName = experimentController.getName();
+    this.science2DController = science2DController;
+    this.science2DModel = science2DController.getModel();
+    this.science2DStage = science2DController.getView();
+    this.experimentName = science2DController.getName();
     this.defaults().fill();
     Actor viewControlPanel = 
         createViewControlPanel(skin, science2DModel, science2DStage);
@@ -95,10 +95,10 @@ public class ControlPanel extends Table {
     TextButton backButton = new TextButton("Back", skin);
     backButton.setClickListener(new ClickListener() {
       public void click(Actor actor, float x, float y) {
-        experimentController.getView().challenge(false);
+        science2DController.getView().challenge(false);
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.SCIENCE_ENGINE.setScreen(
-            new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentController));
+            new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, science2DController));
       }
     });
     viewControls.add(backButton).height(30).colspan(2);

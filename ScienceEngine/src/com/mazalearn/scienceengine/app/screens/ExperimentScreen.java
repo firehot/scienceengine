@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.LevelManager;
-import com.mazalearn.scienceengine.core.controller.IExperimentController;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 
@@ -14,15 +14,15 @@ import com.mazalearn.scienceengine.designer.LevelEditor;
 public class ExperimentScreen extends AbstractScreen {
 
   public ExperimentScreen(ScienceEngine scienceEngine, 
-      LevelManager levelManager, int level, IExperimentController experimentController) {
+      LevelManager levelManager, int level, IScience2DController science2DController) {
     super(scienceEngine, null);
-    IScience2DStage science2DStage = experimentController.getView();
+    IScience2DStage science2DStage = science2DController.getView();
     levelManager.setLevel(level);
     levelManager.load();
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       LevelEditor levelEditor = new LevelEditor(levelManager,
-          experimentController.getControlPanel(),
-          (Stage) science2DStage, experimentController.getModel(), this);
+          science2DController.getControlPanel(),
+          (Stage) science2DStage, science2DController.getModel(), this);
       levelEditor.enableEditor();
       this.setStage(levelEditor);
     } else {
