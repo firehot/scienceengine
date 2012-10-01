@@ -6,14 +6,15 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.ui.FlickScrollPane;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -69,10 +70,13 @@ public class ExperimentHomeScreen extends AbstractScreen {
     table.row();
     
     // register the back button
+    TextButtonStyle textButtonStyle = new TextButtonStyle(getSkin().get("default", TextButtonStyle.class));
+    textButtonStyle.font = getSkin().getFont("kannada");
     TextButton backButton = 
-        new TextButton(Messages.getString("ScienceEngine.BackToExperiments"), scienceEngine.getSkin()); //$NON-NLS-1$
-    backButton.setClickListener(new ClickListener() {
-      public void click(Actor actor, float x, float y) {
+        new TextButton(Messages.getString("ScienceEngine.BackToExperiments"), textButtonStyle); //$NON-NLS-1$
+    backButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
       }
@@ -88,9 +92,10 @@ public class ExperimentHomeScreen extends AbstractScreen {
     levelManager = science2DStage.getLevelManager();
     levelManager.setLevel(level);
     
-    Table experimentLevels = super.getTable().newTable();
-    FlickScrollPane experimentLevelPane = 
-        new FlickScrollPane(experimentLevels, "Levels"); //$NON-NLS-1$
+    Table experimentLevels = new Table(getSkin());
+    experimentLevels.setName("Experiment Levels");
+    ScrollPane experimentLevelPane = 
+        new ScrollPane(experimentLevels, getSkin());
     experimentThumbs = new Image[levels.size];
     
     for (int i = 0; i < levels.size; i++) {
@@ -105,9 +110,9 @@ public class ExperimentHomeScreen extends AbstractScreen {
       final int iLevel = i + 1;
       Image experimentThumb = 
           new Image(LevelManager.getThumbnail(science2DController.getName(), iLevel));
-      experimentThumb.setClickListener(new ClickListener() {
+      experimentThumb.addListener(new ClickListener() {
         @Override
-        public void click(Actor actor, float x, float y) {
+        public void clicked(InputEvent event, float x, float y) {
           Screen experimentLevelScreen = 
               new ExperimentScreen(scienceEngine, levelManager, 
                   iLevel, science2DController);
@@ -134,12 +139,14 @@ public class ExperimentHomeScreen extends AbstractScreen {
   }
 
   private Actor createResourcePane() {
-    Table resourcesTable = super.getTable().newTable();
+    Table resourcesTable = new Table(getSkin());
+    resourcesTable.setName("Resources");
     resourcesTable.defaults().fill();
-    FlickScrollPane resourcePane = new FlickScrollPane(resourcesTable, "Resource"); //$NON-NLS-1$
+    ScrollPane resourcePane = new ScrollPane(resourcesTable, getSkin());
     
     for (int i = 0; i < resources.size; i++) {
-      Table resource = resourcesTable.newTable();
+      Table resource = new Table(getSkin());
+      resource.setName("Resource");
       OrderedMap<String, ?> resourceInfo = (OrderedMap<String, ?>) resources.get(i);
       String type = (String) resourceInfo.get("type"); //$NON-NLS-1$
       if (!type.equals("video") && !type.equals("web")) continue; //$NON-NLS-1$ //$NON-NLS-2$
@@ -153,9 +160,9 @@ public class ExperimentHomeScreen extends AbstractScreen {
       Image play = null;
       if (type.equals("video")) { //$NON-NLS-1$
         play = new Image(new Texture("images/videoplay.png")); //$NON-NLS-1$
-        play.setClickListener(new ClickListener() {
+        play.addListener(new ClickListener() {
           @Override
-          public void click(Actor actor, float x, float y) {
+          public void clicked(InputEvent event, float x, float y) {
             boolean playedVideo = false;
             if (fileName != null) {
               // Movie file extensions - we allow a limited set.
@@ -174,9 +181,9 @@ public class ExperimentHomeScreen extends AbstractScreen {
         });
       } else if (type.equals("web")) { //$NON-NLS-1$
         play = new Image(new Texture("images/browser.png")); //$NON-NLS-1$
-        play.setClickListener(new ClickListener() {
+        play.addListener(new ClickListener() {
           @Override
-          public void click(Actor actor, float x, float y) {
+          public void clicked(InputEvent event, float x, float y) {
             scienceEngine.browseURL(url);
           }
         });

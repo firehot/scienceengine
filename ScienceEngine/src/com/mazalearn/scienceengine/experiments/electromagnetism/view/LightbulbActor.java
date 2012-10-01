@@ -29,7 +29,8 @@ public class LightbulbActor extends Science2DActor {
     lightRadius = diameter / 2;
     Color c = batch.getColor();
     batch.setColor(1, 1, 1, 0.5f + intensity * 0.5f);
-    batch.draw(lightTexture, x + originX - lightRadius, y + originY - lightRadius, diameter, diameter);
+    batch.draw(lightTexture, getX() + getOriginX() - lightRadius, 
+        getY() + getOriginY() - lightRadius, diameter, diameter);
     batch.setColor(c);
     super.draw(batch, parentAlpha);
   }
@@ -44,7 +45,7 @@ public class LightbulbActor extends Science2DActor {
   }
   
   public boolean withinLightRegion(float x, float y) {
-    point.set(this.x + originX, this.y + originY).sub(x, y);
+    point.set(this.getX() + getOriginX(), this.getY() + getOriginY()).sub(x, y);
     return point.len() <= lightRadius;
   }
 

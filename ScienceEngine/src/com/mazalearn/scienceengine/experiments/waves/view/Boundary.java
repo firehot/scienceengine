@@ -2,9 +2,7 @@ package com.mazalearn.scienceengine.experiments.waves.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.experiments.waves.WaveModel.Ball;
 
 public class Boundary extends Image {
@@ -14,16 +12,17 @@ public class Boundary extends Image {
 
   public Boundary(TextureRegion region, Ball ball, float originX, 
       float originY, float ballDiameter) {
-    super(region, Scaling.stretch, Align.CENTER, "Boundary");
+    super(region);
+    this.setName("Boundary");
     this.originY = originY;
     this.ball = ball;
-    this.x = (originX + ball.pos.x) * ballDiameter;
+    this.setX((originX + ball.pos.x) * ballDiameter);
     this.ballDiameter = ballDiameter;
   }
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    this.y = (originY + ball.pos.y) * ballDiameter;
+    this.setY((originY + ball.pos.y) * ballDiameter);
     super.draw(batch, parentAlpha);
   }
 }

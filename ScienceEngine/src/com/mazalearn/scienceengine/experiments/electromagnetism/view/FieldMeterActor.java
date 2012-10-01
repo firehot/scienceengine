@@ -33,13 +33,13 @@ public class FieldMeterActor extends Science2DActor {
       pos.set(fieldSample.x, fieldSample.y);
       pos.mul(ScienceEngine.PIXELS_PER_M);
       // find location of origin
-      float originX = magnitude * width / 2;
-      float originY = magnitude * height / 2;
+      float originX = magnitude * getWidth() / 2;
+      float originY = magnitude * getHeight() / 2;
       // Bottom of arrow position
       pos.sub(originX, originY);
       float rotation =  (fieldSample.angle * MathUtils.radiansToDegrees) % 360;
       batch.draw(getTextureRegion(), pos.x, pos.y, 
-          originX, originY, width * magnitude, height * magnitude, 1, 1, rotation);
+          originX, originY, getWidth() * magnitude, getHeight() * magnitude, 1, 1, rotation);
     }
   }
 }

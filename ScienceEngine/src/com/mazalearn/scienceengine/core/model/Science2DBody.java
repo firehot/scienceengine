@@ -103,9 +103,11 @@ public class Science2DBody implements IBody {
   public void setPositionAndAngle(Vector2 position, float angle) {
     // Ensure angle is in range 0, 2 * pi
     angle = angle % (2 * MathUtils.PI);
-    body.setTransform(position, angle);
-    if (this instanceof IMagneticField.Producer && isActive()) {
-      getModel().notifyFieldChange();
+    if (angle != body.getAngle() || !position.equals(body.getPosition())) {
+      body.setTransform(position, angle);
+      if (this instanceof IMagneticField.Producer && isActive()) {
+        getModel().notifyFieldChange();
+      }
     }
   }
 
@@ -194,7 +196,11 @@ public class Science2DBody implements IBody {
 
   @Override
   public float getAngle() {
-    return body.getAngle() % (2 * MathUtils.PI);
+    float angle = body.getAngle();
+    while (angle < 0) {
+      angle += 2 * MathUtils.PI;
+    }  
+    return angle % (2 * MathUtils.PI);
   }
 
   @Override

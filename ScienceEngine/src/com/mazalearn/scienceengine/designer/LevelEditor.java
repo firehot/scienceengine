@@ -8,22 +8,24 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -68,12 +70,14 @@ public class LevelEditor extends Stage {
   private IScience2DModel science2DModel;
   private ControlPanel controlPanel;
   private ShapeRenderer shapeRenderer;
-  Vector2 point = new Vector2();
-  Vector2 rotatedVector = new Vector2();
+  private final Vector2 stagePoint = new Vector2();;
+  private final Vector2 point = new Vector2();
+  private final Vector2 rotatedVector = new Vector2();
 
   private ActorPropertyPanel actorPropertyPanel;
 
   private Table configTable;
+
   
 
   /**
@@ -85,14 +89,14 @@ public class LevelEditor extends Stage {
    */
   public LevelEditor(LevelManager levelManager, ControlPanel controlPanel, Stage stage, 
       IScience2DModel science2DModel, AbstractScreen screen) {
-    super(stage.width(), stage.height(), stage.isStretched(), 
+    super(stage.getWidth(), stage.getHeight(), false, 
         stage.getSpriteBatch());
     this.screen = screen;
     this.science2DModel = science2DModel;
     this.controlPanel = controlPanel;
     this.originalStage = stage;
     this.setCamera(stage.getCamera());
-    this.orthographicCamera = (OrthographicCamera) this.camera;
+    this.orthographicCamera = (OrthographicCamera) this.getCamera();
     this.shapeRenderer = new ShapeRenderer();
     this.layout = createLayout(levelManager, stage, science2DModel, screen);
     this.addActor(layout);
@@ -101,25 +105,29 @@ public class LevelEditor extends Stage {
   private Table createLayout(final LevelManager levelManager, Stage stage,
       IScience2DModel science2DModel, AbstractScreen screen) {
     Table layout = new Table(screen.getSkin());
+    layout.setName("Layout");
     layout.setFillParent(true);
     layout.defaults().fill();
     Table titleTable = new Table(screen.getSkin());
+    titleTable.setName("Title");
     titleTable.defaults().fill();
     titleTable.add(levelManager.getName()).pad(10);
-    SelectBox level = new SelectBox(screen.getSkin());
-    level.setItems(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+    final SelectBox level = 
+        new SelectBox(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 
+            screen.getSkin());
     level.setSelection(levelManager.getLevel() - 1);
-    level.setSelectionListener(new SelectionListener() {
+    level.addListener(new ChangeListener() {
       @Override
-      public void selected(Actor actor, int index, String value) {
-        levelManager.setLevel(index + 1);
+      public void changed(ChangeEvent event, Actor actor) {
+        levelManager.setLevel(level.getSelectionIndex() + 1);
         levelManager.load();
       }
     });
     titleTable.add("Level").pad(5);
     titleTable.add(level);
     titleTable.row();
-    final TextField description = new TextField(levelManager.getDescription(), screen.getSkin());
+    final TextField description = 
+        new TextField(levelManager.getDescription(), screen.getSkin());
     titleTable.add(description).colspan(3).fill();
     description.setTextFieldListener(new TextFieldListener() {
       public void keyTyped(TextField textField, char key) {
@@ -129,7 +137,8 @@ public class LevelEditor extends Stage {
     
     this.actorPropertyPanel = new ActorPropertyPanel(screen.getSkin(), this);
     configTable = createConfigTable(science2DModel, screen.getSkin());
-    Actor componentsPanel = createComponentsPanel(stage, screen.getSkin(), configTable);
+    Actor componentsPanel = 
+        createComponentsPanel(stage, screen.getSkin(), configTable);
     
     Table menu = createMenu(levelManager, screen.getSkin());
 
@@ -146,10 +155,11 @@ public class LevelEditor extends Stage {
 
   private Table createMenu(final LevelManager levelManager, final Skin skin) {
     Table menu = new Table(skin);
+    menu.setName("Menu");
     TextButton button = new TextButton("Save", skin);
-    button.setClickListener(new ClickListener() {
+    button.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         // Render screen - then we will save level and its screen together
         screen.clearScreen(Color.BLACK);
         originalStage.draw();
@@ -158,25 +168,25 @@ public class LevelEditor extends Stage {
     });
     menu.add(button).pad(10);
     button = new TextButton("Load", skin);
-    button.setClickListener(new ClickListener() {
+    button.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         levelManager.load();
       }
     });
     menu.add(button).pad(10);
     button = new TextButton("Restore Camera", skin);
-    button.setClickListener(new ClickListener() {
+    button.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         restoreCamera();
       }
     });
     menu.add(button).pad(10);
     button = new TextButton("Exit Editor", skin);
-    button.setClickListener(new ClickListener() {
+    button.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         disableEditor();
       }
     });
@@ -188,22 +198,23 @@ public class LevelEditor extends Stage {
   private Actor createComponentsPanel(final Stage stage, final Skin skin, 
       final Table configTable) {
     Table componentsTable= new Table(skin);
+    componentsTable.setName("Components");
     componentsTable.add("Components"); 
     componentsTable.row();
     for (final Actor actor: stage.getActors()) {
-      if (actor.name == null || actor == controlPanel) continue;
-      final CheckBox componentCheckbox = new CheckBox(actor.name, skin);
+      if (actor.getName() == null || actor == controlPanel) continue;
+      final CheckBox componentCheckbox = new CheckBox(actor.getName(), skin);
       componentsTable.add(componentCheckbox).left();
-      componentCheckbox.setChecked(actor.visible);
-      componentCheckbox.setClickListener(new ClickListener() {
+      componentCheckbox.setChecked(actor.isVisible());
+      componentCheckbox.addListener(new ClickListener() {
         @Override
-        public void click(Actor a, float x, float y) {
-          selectedActor = stage.findActor(actor.name);
+        public void clicked(InputEvent event, float x, float y) {
+          selectedActor = stage.getRoot().findActor(actor.getName());
           actorPropertyPanel.setActor(selectedActor);
-          actor.visible = componentCheckbox.isChecked();
+          actor.setVisible(componentCheckbox.isChecked());
           if (actor instanceof Science2DActor) {
             Science2DActor science2DActor = (Science2DActor) actor;
-            science2DActor.getBody().setActive(actor.visible);
+            science2DActor.getBody().setActive(actor.isVisible());
             refreshConfigsTable(science2DModel, skin, configTable);
             controlPanel.refresh();
          }
@@ -215,6 +226,7 @@ public class LevelEditor extends Stage {
 
   private Table createConfigTable(IScience2DModel science2DModel, Skin skin) {
     Table configTable = new Table(skin);
+    configTable.setName("Configs");
     refreshConfigsTable(science2DModel, skin, configTable);
     return configTable;
   }
@@ -229,9 +241,9 @@ public class LevelEditor extends Stage {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
         configTable.add(configCheckbox).left();
         configCheckbox.setChecked(config.isPermitted());
-        configCheckbox.setClickListener(new ClickListener() {
+        configCheckbox.addListener(new ClickListener() {
           @Override
-          public void click(Actor actor, float x, float y) {
+          public void clicked(InputEvent event, float x, float y) {
             config.setPermitted(configCheckbox.isChecked());
           }
         });
@@ -247,7 +259,7 @@ public class LevelEditor extends Stage {
    */
   public void enableEditor() {
     originalCameraZoom = orthographicCamera.zoom;
-    originalCameraPos = camera.position.cpy();
+    originalCameraPos = getCamera().position.cpy();
     mode = Mode.OVERLAY;
     science2DModel.enable(false);
   }
@@ -283,6 +295,7 @@ public class LevelEditor extends Stage {
     }
  
     int top = Gdx.graphics.getHeight() + 5;
+    SpriteBatch batch = getSpriteBatch();
     batch.begin();
     BitmapFont font = screen.getFont();
     font.setColor(fontColor);
@@ -301,11 +314,11 @@ public class LevelEditor extends Stage {
   }
 
   private void drawConfigure() {
-    camera.update();
-    batch.setProjectionMatrix(camera.combined);
-    batch.begin();
-    root.draw(batch, 1);
-    batch.end();
+    getCamera().update();
+    getSpriteBatch().setProjectionMatrix(getCamera().combined);
+    getSpriteBatch().begin();
+    getRoot().draw(getSpriteBatch(), 1);
+    getSpriteBatch().end();
   }
 
   @Override
@@ -315,20 +328,18 @@ public class LevelEditor extends Stage {
       return super.touchDown(x, y, pointer, button);
     }
     
-    // Assumption, stage does not have groups within
-    Vector2 stagePoint = new Vector2();
-    toStageCoordinates(x, y, stagePoint);
+    screenToStageCoordinates(stagePoint.set(x, y));
     Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
     for (Actor actor : originalStage.getActors()) {
-      Group.toChildCoordinates(actor, stagePoint.x, stagePoint.y, point);
-      Actor child = actor.hit(point.x, point.y);
+      actor.stageToLocalCoordinates(point.set(stagePoint));
+      Actor child = actor.hit(point.x, point.y, true);
       if (child != null) {
-        if (isAncestor(controlPanel, actor) && child != controlPanel.getTitle()) {
+        if (controlPanel.isAscendantOf(actor) && child != controlPanel.getTitle()) {
           originalStage.touchDown(x, y, pointer, button);
           return true;
         } else {
-          Vector2 handlePos = new Vector2(actor.width - handleSize.x,
-              actor.height - handleSize.y);
+          Vector2 handlePos = new Vector2(actor.getWidth() - handleSize.x,
+              actor.getHeight() - handleSize.y);
 
           // Right top corner handle
           if (handlePos.x <= point.x && point.x <= handlePos.x + handleSize.x
@@ -351,19 +362,13 @@ public class LevelEditor extends Stage {
     return true;
   }
 
-  private boolean isAncestor(Actor actor1, Actor actor2) {
-    if (actor1 == actor2) return true;
-    if (actor2 == null) return false;
-    return isAncestor(actor1, actor2.parent);
-  }
-
   @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     super.touchUp(x, y, pointer, button);
     
-    toStageCoordinates(x, y, point);
-    Group.toChildCoordinates(controlPanel, point.x, point.y, point);
-    Actor child = controlPanel.hit(point.x, point.y);
+    screenToStageCoordinates(point.set(x, y));
+    controlPanel.stageToLocalCoordinates(point);
+    Actor child = controlPanel.hit(point.x, point.y, true);
     if (child != null && child != controlPanel.getTitle()) {
       originalStage.touchUp(x, y, pointer, button);
       lastTouch.set(x, y);
@@ -382,15 +387,15 @@ public class LevelEditor extends Stage {
   @Override
   public boolean touchDragged(int x, int y, int pointer) {
     Vector3 delta3 = new Vector3(x, y, 0);
-    camera.unproject(delta3);
+    getCamera().unproject(delta3);
     Vector3 d3 = new Vector3(lastTouch.x, lastTouch.y, 0);
-    camera.unproject(d3);
+    getCamera().unproject(d3);
     delta3.sub(d3);
 
     if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-      toStageCoordinates(x, y, point);
-      Group.toChildCoordinates(controlPanel, point.x, point.y, point);
-      Actor child = controlPanel.hit(point.x, point.y);
+      screenToStageCoordinates(point.set(x, y));
+      controlPanel.stageToLocalCoordinates(point);
+      Actor child = controlPanel.hit(point.x, point.y, true);
       if (child != null && child != controlPanel.getTitle()) {
         originalStage.touchDragged(x, y, pointer);
         lastTouch.set(x, y);
@@ -400,8 +405,8 @@ public class LevelEditor extends Stage {
     }
 
     if (Gdx.input.isButtonPressed(Buttons.RIGHT)) {
-      camera.translate(-delta3.x, -delta3.y, 0);
-      camera.update();
+      getCamera().translate(-delta3.x, -delta3.y, 0);
+      getCamera().update();
     }
 
     lastTouch.set(x, y);
@@ -413,24 +418,24 @@ public class LevelEditor extends Stage {
     
     switch (operation) {
     case MOVE:
-      actor.x += delta.x;
-      actor.y += delta.y;
+      actor.setX(actor.getX() + delta.x);
+      actor.setY(actor.getY() + delta.y);
       break;
     case ROTATE:
-      toStageCoordinates(x, y, point);
-      Group.toChildCoordinates(actor, point.x, point.y, rotatedVector);
-      rotatedVector.sub(actor.width, 0);
+      screenToStageCoordinates(rotatedVector.set(x, y));
+      actor.stageToLocalCoordinates(rotatedVector);
+      rotatedVector.sub(actor.getWidth(), 0);
       // TODO: UI issues and dont know how to draw rotated rectangles
       // selectedActor.rotation = rotatedVector.angle();
       break;
     case RESIZE:
-      float sizeRatio = actor.width / actor.height;
-      float originXRatio = actor.originX / actor.width;
-      float originYRatio = actor.originY / actor.height;
-      actor.width += delta.x;
-      actor.height += delta.x / sizeRatio;
-      actor.originX = originXRatio * actor.width;
-      actor.originY = originYRatio * actor.height;
+      float sizeRatio = actor.getWidth() / actor.getHeight();
+      float originXRatio = actor.getOriginX() / actor.getWidth();
+      float originYRatio = actor.getOriginY() / actor.getHeight();
+      actor.setWidth(actor.getWidth() + delta.x);
+      actor.setHeight(actor.getHeight() + (delta.x / sizeRatio));
+      actor.setOriginX(originXRatio * actor.getWidth());
+      actor.setOriginY(originYRatio * actor.getHeight());
       break;
     }
     // Refresh actor properties
@@ -445,7 +450,7 @@ public class LevelEditor extends Stage {
   @Override
   public boolean scrolled(int amount) {
     orthographicCamera.zoom *= amount > 0 ? 1.2f : 1 / 1.2f;
-    camera.update();
+    getCamera().update();
     return true;
   }
 
@@ -456,11 +461,11 @@ public class LevelEditor extends Stage {
       mode = (mode == Mode.CONFIGURE) ? Mode.OVERLAY : Mode.CONFIGURE;
       break;
     case Keys.TAB: // Cycle to next actor if selected Actor not null
-      java.util.List<Actor> actors = originalStage.getActors();
-      for (int i = 0; i < actors.size(); i++) {
+      Array<Actor> actors = originalStage.getActors();
+      for (int i = 0; i < actors.size; i++) {
         Actor actor = actors.get(i);
         if (selectedActor == actor) {
-          selectedActor = actors.get((i + 1) % actors.size());
+          selectedActor = actors.get((i + 1) % actors.size);
           break;
         }
       }
@@ -472,20 +477,20 @@ public class LevelEditor extends Stage {
 
   private String getInfo(Actor actor) {
     return String.format(Locale.US, "> %s %s > xy:[%.3f,%.3f] wh:[%.3f,%.3f] rot:%.3f",
-        actor.name, 
+        actor.getName(), 
         operation == null ? "selected" : operation.name(),
-        actor.x, actor.y, actor.width, actor.height, actor.rotation);
+        actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight(), actor.getRotation());
   }
 
   private void restoreCamera() {
     orthographicCamera.zoom = originalCameraZoom;
-    camera.position.set(originalCameraPos);
-    camera.update();
+    getCamera().position.set(originalCameraPos);
+    getCamera().update();
   }
 
   private Vector2 screenToWorld(int x, int y) {
     Vector3 v3 = new Vector3(x, y, 0);
-    camera.unproject(v3);
+    getCamera().unproject(v3);
     return new Vector2(v3.x, v3.y);
   }
 
@@ -497,27 +502,27 @@ public class LevelEditor extends Stage {
       // Bounding box only for status cell
       actor = controlPanel.getTitle();
     }
-    shapeRenderer.rect(actor.x, actor.y, actor.width, actor.height);
+    shapeRenderer.rect(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
 
     // Draw handle for changing the size of the actor
     Vector2 handleSize = screenToWorld(10, -10).sub(screenToWorld(0, 0));
     shapeRenderer.setColor(Color.GREEN);
-    shapeRenderer.rect(actor.x + actor.width - handleSize.x, 
-        actor.y + actor.height - handleSize.y, handleSize.x, handleSize.y);
+    shapeRenderer.rect(actor.getX() + actor.getWidth() - handleSize.x, 
+        actor.getY() + actor.getHeight() - handleSize.y, handleSize.x, handleSize.y);
     shapeRenderer.end();
     
     // Draw handle for rotation
     shapeRenderer.begin(ShapeType.FilledRectangle);
     shapeRenderer.setColor(Color.GREEN);
-    shapeRenderer.filledRect(actor.x + actor.width - handleSize.x, actor.y, 
+    shapeRenderer.filledRect(actor.getX() + actor.getWidth() - handleSize.x, actor.getY(), 
         handleSize.x, handleSize.y);
     shapeRenderer.end();
     
     // Draw origin
     shapeRenderer.begin(ShapeType.FilledCircle);
     shapeRenderer.setColor(Color.GREEN);
-    shapeRenderer.filledCircle(actor.x + actor.originX, 
-        actor.y + actor.originY, handleSize.x / 2);
+    shapeRenderer.filledCircle(actor.getX() + actor.getOriginX(), 
+        actor.getY() + actor.getOriginY(), handleSize.x / 2);
     shapeRenderer.end();
   }
 }

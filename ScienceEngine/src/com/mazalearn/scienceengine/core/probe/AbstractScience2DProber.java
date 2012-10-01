@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public abstract class AbstractScience2DProber extends Group {
 
@@ -18,10 +18,10 @@ public abstract class AbstractScience2DProber extends Group {
   }
   
   public void reinitialize(float x, float y, float width, float height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height; 
+    this.setX(x);
+    this.setY(y);
+    this.setWidth(width);
+    this.setHeight(height);
   }
 
   public abstract void activate(boolean activate);
@@ -40,13 +40,13 @@ public abstract class AbstractScience2DProber extends Group {
       if (actor instanceof Table) {
         float actorWidth = ((Table) actor).getPrefWidth();
         float actorHeight = ((Table) actor).getPrefHeight();
-        if (point.x >= actor.x - actorWidth/ 2 && point.x <= actor.x + actorWidth/2 &&
-            point.y <= actor.y && point.y >= actor.y - actorHeight) {
+        if (point.x >= actor.getX() - actorWidth/ 2 && point.x <= actor.getX() + actorWidth/2 &&
+            point.y <= actor.getY() && point.y >= actor.getY() - actorHeight) {
           return true;
         }
       } else {
-        if (point.x >= actor.x && point.x <= actor.x + actor.width &&
-            point.y >= actor.y && point.y <= actor.y + actor.height) {
+        if (point.x >= actor.getX() && point.x <= actor.getX() + actor.getWidth() &&
+            point.y >= actor.getY() && point.y <= actor.getY() + actor.getHeight()) {
           return true;
         }
         
@@ -63,9 +63,9 @@ public abstract class AbstractScience2DProber extends Group {
           // random point in ([0,1],[0,1])
           point.set(MathUtils.random(), MathUtils.random());
           // Transform point to [ 0.8 x width, 0.8 x height]
-          point.x *= width * 0.8f;
-          point.y *= height * 0.8f;
-          point.add(x + 0.1f * width, y + 0.1f * height);
+          point.x *= getWidth() * 0.8f;
+          point.y *= getHeight() * 0.8f;
+          point.add(getX() + 0.1f * getWidth(), getY() + 0.1f * getHeight());
         } while (isInsideExcludedActor(point));
       }
     } while (areTooClose(points));    

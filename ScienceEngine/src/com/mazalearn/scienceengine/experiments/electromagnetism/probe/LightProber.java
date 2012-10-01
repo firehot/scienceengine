@@ -24,13 +24,13 @@ public class LightProber extends AbstractScience2DProber {
   
   @Override
   public boolean isAvailable() {
-    return lightbulbActor.visible;
+    return lightbulbActor.isVisible();
   }
   
   @Override
   public void act(float delta) {
     super.act(delta);
-    if (lightbulbActor.withinLightRegion(image.x, image.y)) {
+    if (lightbulbActor.withinLightRegion(image.getX(), image.getY())) {
       probeManager.done(true);
     }
   }
@@ -39,10 +39,10 @@ public class LightProber extends AbstractScience2DProber {
   public void activate(boolean activate) {
     if (activate) {
       generateProbePoints(points);
-      image.x = points[0].x - image.width/2;
-      image.y = points[0].y - image.height/2;
+      image.setX(points[0].x - image.getWidth()/2);
+      image.setY(points[0].y - image.getHeight()/2);
     }
-    this.visible = activate;
+    this.setVisible(activate);
   }
 
   @Override

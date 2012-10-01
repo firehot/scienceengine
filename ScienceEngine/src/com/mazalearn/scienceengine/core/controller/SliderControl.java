@@ -3,7 +3,7 @@ package com.mazalearn.scienceengine.core.controller;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Utility class for science2DModel floating point sliders using reflection.
@@ -15,14 +15,14 @@ public class SliderControl implements IControl {
   
   public SliderControl(final IModelConfig<Float> property, Skin skin) {
     this.slider = new Slider(property.getLow(), property.getHigh(), 
-        (property.getHigh() - property.getLow())/10, skin);
+        (property.getHigh() - property.getLow())/10, false, skin);
     this.property = property;
     syncWithModel();
     // Set value when slider changes
-    slider.setValueChangedListener(new ValueChangedListener() {
+    slider.addListener(new ChangeListener() {
       @Override
-      public void changed(Slider slider, float value) {
-        property.setValue(value);
+      public void changed(ChangeEvent event, Actor actor) {
+        property.setValue(slider.getValue());
       }      
     });
   }

@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.core.controller;
 
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.esotericsoftware.tablelayout.Cell;
 
 public class Controller {
@@ -15,7 +15,7 @@ public class Controller {
 
   public void validate() {
     control.syncWithModel();
-    cellTable.getWidget().visible = control.isAvailable();
+    cellTable.getWidget().setVisible(control.isAvailable());
     cellTable.height(control.isAvailable() ? CONTROL_HEIGHT : 0);
   }
 }

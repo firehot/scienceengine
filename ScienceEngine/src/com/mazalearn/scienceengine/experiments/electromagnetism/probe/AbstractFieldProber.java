@@ -26,7 +26,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   public void reinitialize(float x, float y, float width, float height) {
     super.reinitialize(x, y, width, height);
     fieldMeter.setActive(false);
-    fieldMeterActor.visible = false;
+    fieldMeterActor.setVisible(false);
   }  
 
   @Override

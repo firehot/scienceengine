@@ -23,8 +23,8 @@ public class CurrentSourceActor extends Science2DActor {
     float rotation = scaledCurrent >= 0 ? 90 : 270;
     float width = current.getRegionWidth() * Math.abs(scaledCurrent);
     int height = current.getRegionHeight();
-    batch.draw(current, x + this.width - height/2, 
-        y + this.height/3.5f, 0, height/2, width, height, 
+    batch.draw(current, getX() + this.getWidth() - height/2, 
+        getY() + this.getHeight()/3.5f, 0, height/2, width, height, 
         1, 1, rotation);
   }
 }

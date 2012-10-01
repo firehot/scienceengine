@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
@@ -21,39 +25,64 @@ public class BarMagnetActor extends Science2DActor {
   private Vector2 newPos = new Vector2();
   
   public BarMagnetActor(TextureRegion textureRegion, Science2DBody body, 
-      AbstractScience2DStage experimentView, ElectroMagnetismModel emModel) {
+      AbstractScience2DStage experimentView, final ElectroMagnetismModel emModel) {
     super(body, textureRegion);
     this.barMagnet = (BarMagnet) body;
     this.emView = experimentView;
     this.emModel = emModel;
     this.font = new BitmapFont();
     this.setAllowMove(true);
+    Array<EventListener> listeners = this.getListeners();
+    if (listeners.size == 1) { // Remove the touch listener
+      this.removeListener(listeners.first());
+    }
+    this.addListener(new ClickListener() {
+      @Override
+      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return;
+        // Screen coords of current touch
+        currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        // Goto view coords of current touch
+        getStage().getCamera().unproject(currentTouch);
+        // Get negative of movement vector
+        lastTouch.sub(currentTouch.x, currentTouch.y);
+        // Scale displacement vector suitably to get a proportional force
+        lastTouch.mul(-10000);
+        // view coords of current touch
+        newPos.set(currentTouch.x, currentTouch.y);
+        // box2d point of current touch
+        getBox2DPositionFromViewPosition(newPos, newPos, getRotation());
+        // Use center as origin - dont understand why this step
+        newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
+        barMagnet.applyForce(lastTouch, newPos);
+      }
+
+      @Override
+      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+        if (!isAllowMove()) return false;
+        currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        getStage().getCamera().unproject(currentTouch);
+        lastTouch.set(currentTouch.x, currentTouch.y);
+        return true;
+      }
+
+      @Override
+      public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
+        if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
+        // Screen coords of current touch
+        currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        // Screen coords of current touch
+        getStage().getCamera().unproject(currentTouch);
+        // Get negative of movement vector
+        lastTouch.sub(currentTouch.x, currentTouch.y);
+        setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
+        setPositionFromViewCoords(true);
+        // Recalibrate lastTouch to new coordinates
+        lastTouch.set(currentTouch.x, currentTouch.y);
+      }
+    });
   }
 
-  public void touchDragged(float x, float y, int pointer) {
-    if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
-    super.touchDragged(x, y, pointer);
-  }
-  
-  public void touchUp(float x, float y, int pointer) {
-    if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return;
-    // Screen coords of current touch
-    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    // Goto view coords of current touch
-    getStage().getCamera().unproject(currentTouch);
-    // Get negative of movement vector
-    lastTouch.sub(currentTouch.x, currentTouch.y);
-    // Scale displacement vector suitably to get a proportional force
-    lastTouch.mul(-10000);
-    // view coords of current touch
-    newPos.set(currentTouch.x, currentTouch.y);
-    // box2d point of current touch
-    getBox2DPositionFromViewPosition(newPos, newPos, rotation);
-    // Use center as origin - dont understand why this step
-    newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
-    barMagnet.applyForce(lastTouch, newPos);
-  }
-  
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);

@@ -51,14 +51,15 @@ final class MoleculeBox extends Actor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     // Draw background
-    batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
+    batch.draw(backgroundTexture, this.getX(), this.getY(), 
+        this.getWidth(), this.getHeight());
     // Draw the molecules
-    float scaleX = this.width / boxWidth;
-    float scaleY = this.height / boxHeight;
+    float scaleX = this.getWidth() / boxWidth;
+    float scaleY = this.getHeight() / boxHeight;
     for (int i = 0; i < N; i++) {
       batch.draw(i > 0 ? moleculeTextureGray : moleculeTextureRed,
-          this.x + (float) molecularModel.getMolecule(i).x * scaleX, 
-          this.y + (float) molecularModel.getMolecule(i).y * scaleY);
+          this.getX() + (float) molecularModel.getMolecule(i).x * scaleX, 
+          this.getY() + (float) molecularModel.getMolecule(i).y * scaleY);
     }
     
     //Draw debug information
@@ -69,16 +70,16 @@ final class MoleculeBox extends Actor {
     // Draw debug information
     font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
     font.draw(batch, String.valueOf(molecularModel.getTemperature()), 
-        this.x + 10, this.y + 20);
+        this.getX() + 10, this.getY() + 20);
     font.draw(batch, String.valueOf(molecularModel.getSimulatedTime()), 
-        this.x + 10, this.y + 300);
+        this.getX() + 10, this.getY() + 300);
     long timeNow = System.currentTimeMillis();
     font.draw(batch, String.valueOf(timeNow - timeStart), 
-        this.x + 200, this.y + 300);
+        this.getX() + 200, this.getY() + 300);
   }
   
   @Override
-  public Actor hit(float x, float y) {
+  public Actor hit(float x, float y, boolean touchable) {
     return null;
   }
 

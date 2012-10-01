@@ -123,21 +123,21 @@ public class LevelManager {
   private void writeComponents(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("components");
     for (Actor a : stage.getActors()) {
-      if (!a.visible) continue; 
+      if (!a.isVisible()) continue; 
       boolean moveAllowed = false;
       if (a instanceof Science2DActor) {
         moveAllowed = ((Science2DActor) a).isAllowMove();
       }
       jsonWriter.object()
-          .set("name", a.name)
-          .set("x", a.x)
-          .set("y", a.y)
-          .set("originX", a.originX)
-          .set("originY", a.originY)
-          .set("width", a.width)
-          .set("height", a.height)
-          .set("visible", a.visible)
-          .set("rotation", a.rotation)
+          .set("name", a.getName())
+          .set("x", a.getX())
+          .set("y", a.getY())
+          .set("originX", a.getOriginX())
+          .set("originY", a.getOriginY())
+          .set("width", a.getWidth())
+          .set("height", a.getHeight())
+          .set("visible", a.isVisible())
+          .set("rotation", a.getRotation())
           .set("move", moveAllowed)
           .pop();
     }
@@ -174,7 +174,7 @@ public class LevelManager {
   private void initializeComponents() {
     // Make all actors inactive and invisible.
     for (Actor actor: stage.getActors()) {
-      actor.visible = false;
+      actor.setVisible(false);
       if (actor instanceof Science2DActor) {
         ((Science2DActor) actor).setPositionFromViewCoords(false);
       }
@@ -195,22 +195,22 @@ public class LevelManager {
   private Object nvl(Object val, Object defaultVal) {
     return val == null ? defaultVal : val;
   }
-
+  
   private void readComponent(OrderedMap<String, ?> component) {
     String name = (String) component.get("name");
     if (name == null) return;
-    Actor actor = stage.findActor(name);
+    Actor actor = stage.getRoot().findActor(name);
     if (actor == null)
       return;
 
-    actor.x = (Float) nvl(component.get("x"), 0f);
-    actor.y = (Float) nvl(component.get("y"), 0f);
-    actor.originX = (Float) nvl(component.get("originX"), 0f);
-    actor.originY = (Float) nvl(component.get("originY"), 0f);
-    actor.width = (Float) nvl(component.get("width"), 20f);
-    actor.height = (Float) nvl(component.get("height"), 20f);
-    actor.visible = (Boolean) nvl(component.get("visible"), true);
-    actor.rotation = (Float) nvl(component.get("rotation"), 0f);
+    actor.setX((Float) nvl(component.get("x"), 0f));
+    actor.setY((Float) nvl(component.get("y"), 0f));
+    actor.setOriginX((Float) nvl(component.get("originX"), 0f));
+    actor.setOriginY((Float) nvl(component.get("originY"), 0f));
+    actor.setWidth((Float) nvl(component.get("width"), 20f));
+    actor.setHeight((Float) nvl(component.get("height"), 20f));
+    actor.setVisible((Boolean) nvl(component.get("visible"), true));
+    actor.setRotation((Float) nvl(component.get("rotation"), 0f));
     if (actor instanceof Science2DActor) {
       Science2DActor science2DActor = (Science2DActor) actor;
       science2DActor.setPositionFromViewCoords(false);

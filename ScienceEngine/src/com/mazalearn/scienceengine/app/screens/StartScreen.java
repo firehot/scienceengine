@@ -2,10 +2,10 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -27,9 +27,9 @@ public class StartScreen extends AbstractScreen {
     registerButton(table, Messages.getString("ScienceEngine.Experiments"), new ExperimentMenuScreen(scienceEngine)); //$NON-NLS-1$
     registerButton(table, Messages.getString("ScienceEngine.Options"), new OptionsScreen(scienceEngine)); //$NON-NLS-1$
     TextButton startGameButton = new TextButton(Messages.getString("ScienceEngine.Exit"), scienceEngine.getSkin()); //$NON-NLS-1$
-    startGameButton.setClickListener(new ClickListener() {
+    startGameButton.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         Gdx.app.exit();
       }
@@ -40,10 +40,10 @@ public class StartScreen extends AbstractScreen {
 
   protected void registerButton(Table table, String name, final Screen screen) {
     TextButton startGameButton = new TextButton(name, scienceEngine.getSkin());
-    startGameButton.setClickListener(new ClickListener() {
+    startGameButton.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         scienceEngine.setScreen(screen);
       }
     });

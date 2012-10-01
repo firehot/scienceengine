@@ -17,7 +17,8 @@ public class WaveBox extends Actor {
   public WaveBox(TextureRegion ballTextureRed, TextureRegion ballTextureBlue,
       Texture backgroundTexture, Ball[] balls, float originX, float originY,
       float ballDiameter) {
-    super("WaveBox");
+    super();
+    super.setName("Wavebox");
     this.ballTextureRed = ballTextureRed;
     this.ballTextureBlue = ballTextureBlue;
     this.backgroundTexture = backgroundTexture;
@@ -25,32 +26,27 @@ public class WaveBox extends Actor {
     this.originX = originX;
     this.originY = originY;
     this.ballDiameter = ballDiameter;
-    this.width = this.ballDiameter * (balls.length + 10);
-    this.height = this.ballDiameter * 20;
-    this.x = 0;
-    this.y = 0;
+    this.setWidth(this.ballDiameter * (balls.length + 10));
+    this.setHeight(this.ballDiameter * 20);
+    this.setX(0);
+    this.setY(0);
   }
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     // Draw background
-    batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
+    batch.draw(backgroundTexture, this.getX(), this.getY(), 
+        this.getWidth(), this.getHeight());
     // Draw the molecules
     int i = 1;
     for (Ball ball: balls) {
       i = (i + 1) % 10;
       batch.draw(i == 0 ? ballTextureBlue : ballTextureRed, 
-          x + (originX + ball.pos.x) * ballDiameter,
-          y + (originY + ball.pos.y) * ballDiameter);
+          getX() + (originX + ball.pos.x) * ballDiameter,
+          getY() + (originY + ball.pos.y) * ballDiameter);
     }
   }
 
-  @Override
-  public Actor hit(float x, float y) {
-    return x >= this.x && x < this.x + width && 
-        y >= this.y && y < this.y + height ? this : null;
-  }
-  
   public float getBallDiameter() {
     return ballDiameter;
   }

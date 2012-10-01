@@ -3,11 +3,12 @@ package com.mazalearn.scienceengine.app.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.ui.FlickScrollPane;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.Messages;
@@ -52,8 +53,8 @@ public class ExperimentMenuScreen extends AbstractScreen {
 
     // register the back button
     TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToStart"), getSkin()); //$NON-NLS-1$
-    backButton.setClickListener(new ClickListener() {
-      public void click(Actor actor, float x, float y) {
+    backButton.addListener(new ClickListener() {
+      public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         scienceEngine.setScreen(new StartScreen(scienceEngine));
       }
@@ -63,8 +64,9 @@ public class ExperimentMenuScreen extends AbstractScreen {
   }
 
   public Actor createExperimentsSelector() {
-    Table table = super.getTable().newTable();
-    FlickScrollPane flickScrollPane = new FlickScrollPane(table, "Experiments"); //$NON-NLS-1$
+    Table table = new Table(getSkin());
+    table.setName("Experiment Selector");
+    ScrollPane flickScrollPane = new ScrollPane(table, getSkin());
     table.setFillParent(false);
     table.defaults().fill();
     final String[] experimentNames = 
@@ -76,9 +78,9 @@ public class ExperimentMenuScreen extends AbstractScreen {
       count++;
       Image experimentThumb = 
           new Image(LevelManager.getThumbnail(experimentName, 1));
-      experimentThumb.setClickListener(new ClickListener() {
+      experimentThumb.addListener(new ClickListener() {
         @Override
-        public void click(Actor actor, float x, float y) {
+        public void clicked(InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
           Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
           IScience2DController science2DController = 
@@ -87,7 +89,8 @@ public class ExperimentMenuScreen extends AbstractScreen {
           scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
         }
       });
-      Table levelTable = table.newTable();
+      Table levelTable = new Table(getSkin());
+      levelTable.setName("Level");
       levelTable.add(experimentName);
       levelTable.row();
       levelTable.add(experimentThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);

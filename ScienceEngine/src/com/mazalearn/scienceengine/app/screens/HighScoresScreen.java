@@ -1,10 +1,10 @@
 package com.mazalearn.scienceengine.app.screens;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -20,7 +20,7 @@ public class HighScoresScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    Profile profile = scienceEngine.getProfileManager().retrieveProfile();
+    Profile profile = ScienceEngine.getProfileManager().retrieveProfile();
 
     // retrieve the default table actor
     Table table = super.getTable();
@@ -48,10 +48,10 @@ public class HighScoresScreen extends AbstractScreen {
 
     // register the back button
     TextButton backButton = new TextButton("Back to main menu", scienceEngine.getSkin());
-    backButton.setClickListener(new ClickListener() {
+    backButton.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         scienceEngine.setScreen(new StartScreen(scienceEngine));
       }
     });

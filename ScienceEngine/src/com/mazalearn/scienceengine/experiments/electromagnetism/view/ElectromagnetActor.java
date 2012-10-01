@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromagnet;
 
 public class ElectromagnetActor extends Science2DActor {
@@ -23,7 +22,8 @@ public class ElectromagnetActor extends Science2DActor {
     super.draw(batch, parentAlpha);
     // Add the additional loops
     for (int i = 1; i <= electromagnet.getNumberOfLoops(); i++) {
-      batch.draw(coil, x - i * COIL_OFFSET, y, 0, 0, width, height, 1, 1, rotation);
+      batch.draw(coil, getX() - i * COIL_OFFSET, getY(), 0, 0, getWidth(), 
+          getHeight(), 1, 1, getRotation());
     }
   }
 }

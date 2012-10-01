@@ -1,13 +1,14 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider.ValueChangedListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
@@ -35,15 +36,15 @@ public class OptionsScreen extends AbstractScreen {
 
     // create the labels widgets
     final CheckBox soundEffectsCheckbox = new CheckBox("", scienceEngine.getSkin()); //$NON-NLS-1$
-    soundEffectsCheckbox.setChecked(scienceEngine.getPreferencesManager()
+    soundEffectsCheckbox.setChecked(ScienceEngine.getPreferencesManager()
         .isSoundEnabled());
-    soundEffectsCheckbox.setClickListener(new ClickListener() {
+    soundEffectsCheckbox.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         boolean enabled = soundEffectsCheckbox.isChecked();
-        scienceEngine.getPreferencesManager().setSoundEnabled(enabled);
-        scienceEngine.getSoundManager().setEnabled(enabled);
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.getPreferencesManager().setSoundEnabled(enabled);
+        ScienceEngine.getSoundManager().setEnabled(enabled);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       }
     });
     table.row();
@@ -51,18 +52,18 @@ public class OptionsScreen extends AbstractScreen {
     table.add(soundEffectsCheckbox).colspan(2).left();
 
     final CheckBox musicCheckbox = new CheckBox("", scienceEngine.getSkin()); //$NON-NLS-1$
-    musicCheckbox.setChecked(scienceEngine.getPreferencesManager().isMusicEnabled());
-    musicCheckbox.setClickListener(new ClickListener() {
+    musicCheckbox.setChecked(ScienceEngine.getPreferencesManager().isMusicEnabled());
+    musicCheckbox.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         boolean enabled = musicCheckbox.isChecked();
-        scienceEngine.getPreferencesManager().setMusicEnabled(enabled);
-        scienceEngine.getMusicManager().setEnabled(enabled);
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.getPreferencesManager().setMusicEnabled(enabled);
+        ScienceEngine.getMusicManager().setEnabled(enabled);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
 
         // if the music is now enabled, start playing the menu music
         if (enabled)
-          scienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+          ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
       }
     });
     table.row();
@@ -70,14 +71,15 @@ public class OptionsScreen extends AbstractScreen {
     table.add(musicCheckbox).colspan(2).left();
 
     // range is [0.0,1.0]; step is 0.1f
-    Slider volumeSlider = new Slider(0f, 1f, 0.1f, scienceEngine.getSkin());
-    volumeSlider.setValue(scienceEngine.getPreferencesManager().getVolume());
-    volumeSlider.setValueChangedListener(new ValueChangedListener() {
+    final Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, scienceEngine.getSkin());
+    volumeSlider.setValue(ScienceEngine.getPreferencesManager().getVolume());
+    volumeSlider.addListener(new ChangeListener() {
       @Override
-      public void changed(Slider slider, float value) {
-        scienceEngine.getPreferencesManager().setVolume(value);
-        scienceEngine.getMusicManager().setVolume(value);
-        scienceEngine.getSoundManager().setVolume(value);
+      public void changed(ChangeEvent event, Actor actor) {
+        float value = volumeSlider.getValue();
+        ScienceEngine.getPreferencesManager().setVolume(value);
+        ScienceEngine.getMusicManager().setVolume(value);
+        ScienceEngine.getSoundManager().setVolume(value);
         updateVolumeLabel();
       }
     });
@@ -94,10 +96,10 @@ public class OptionsScreen extends AbstractScreen {
 
     // register the back button
     TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToMainMenu"), scienceEngine.getSkin()); //$NON-NLS-1$
-    backButton.setClickListener(new ClickListener() {
+    backButton.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
-        scienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         scienceEngine.setScreen(new StartScreen(scienceEngine));
       }
     });
@@ -109,7 +111,7 @@ public class OptionsScreen extends AbstractScreen {
    * Updates the volume label next to the slider.
    */
   private void updateVolumeLabel() {
-    float volume = (scienceEngine.getPreferencesManager().getVolume() * 100);
+    float volume = (ScienceEngine.getPreferencesManager().getVolume() * 100);
     volumeValue.setText(String.valueOf(volume));
   }
 }

@@ -2,8 +2,8 @@ package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class SelectBoxControl implements IControl {
   private final IModelConfig<String> property;
@@ -14,10 +14,10 @@ public class SelectBoxControl implements IControl {
     this.property = property;
     syncWithModel();
     // Set value when slider changes
-    selectBox.setSelectionListener(new SelectionListener() {
+    selectBox.addListener(new ChangeListener() {
       @Override
-      public void selected(Actor actor, int index, String value) {
-        property.setValue(value);
+      public void changed(ChangeEvent event, Actor actor) {
+        property.setValue(selectBox.getSelection());
       }      
     });
   }

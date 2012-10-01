@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
-import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
@@ -45,13 +44,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator(modelConfigs);
     this.controlPanel = controlPanel;
-    this.x = 0;
-    this.y = 0;
-    this.width = width;
-    this.height = height;
-    // For a table, x and y are at center, top of table - not at bottom left
-    this.dashboard.y = height;
-    this.dashboard.x = width/2;
+    this.setX(0);
+    this.setY(0);
+    this.setWidth(width);
+    this.setHeight(height);
      
     this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
@@ -70,7 +66,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     dashboard.resetScore();
         
     // Make all actors non-movable
-    for (Actor actor: getActors()) {
+    for (Actor actor: this.getChildren()) {
       if (actor instanceof Science2DActor) {
         ((Science2DActor) actor).setAllowMove(false);
       }
@@ -81,7 +77,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     excludedActors.clear();
     excludedActors.add(dashboard);
     for (Actor actor: science2DStage.getActors()) {
-      if (actor.visible && actor != this) {
+      if (actor.isVisible() && actor != this) {
         excludedActors.add(actor);
       }
     }
@@ -101,7 +97,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     
     // Reinitialize active Probers
     for (AbstractScience2DProber prober: activeProbers) {
-      prober.reinitialize(x, y, width, height);
+      prober.reinitialize(getX(), getY(), getWidth(), getHeight());
     }
 
     doProbe();
@@ -125,11 +121,11 @@ public class ProbeManager extends Group implements IDoneCallback {
     if (success) {
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(10);
-      successImage.show(width/2, height/2, 10);
+      successImage.show(getWidth()/2, getHeight()/2, 10);
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       dashboard.addScore(-5);
-      failureImage.show(width/2, height/2, -5);
+      failureImage.show(getWidth()/2, getHeight()/2, -5);
     }
     if (dashboard.getScore() > 100) {
       science2DStage.done(true);
@@ -160,7 +156,7 @@ public class ProbeManager extends Group implements IDoneCallback {
 
   public Actor findActorByName(String name) {
     for (Actor actor: science2DStage.getActors()) {
-      if (actor.name.equals(name)) return actor;
+      if (name.equals(actor.getName())) return actor;
     }
     return null;
   }

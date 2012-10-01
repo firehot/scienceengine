@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
@@ -13,13 +13,13 @@ class Dashboard extends Table {
   Label status, scoreLabel;
   int score;
   Dashboard(Skin skin) {
-    super(skin, null, "Dashboard");
+    super(skin);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       debug();
     }
     this.setFillParent(false);
     this.top().center();
-    LabelStyle style = skin.getStyle(LabelStyle.class);
+    LabelStyle style = skin.get(LabelStyle.class);
     style.fontColor = Color.YELLOW;
     status = new Label("Challenge", style) {
       private float increment = 0.01f;
@@ -42,8 +42,8 @@ class Dashboard extends Table {
     this.add(scoreLabel).right().fill();
     this.row();
     
-    this.add("Challenge").pad(20, 0, 0, 10).left();
-    this.add(status).pad(20, 0, 0, 0).fill();
+    this.add("Challenge").pad(10, 0, 0, 10).left();
+    this.add(status).pad(10, 0, 0, 0).fill();
     this.row();
   }
   
@@ -53,6 +53,9 @@ class Dashboard extends Table {
   }
   
   public void setStatus(String text) {
+    // For a table, x and y are at center, top of table - not at bottom left
+    this.setY(getParent().getHeight() - getPrefHeight() / 2);
+    this.setX(getParent().getWidth()/2);
     status.setText(text);
   }
 

@@ -1,10 +1,11 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  * Utility class for science2DModel action buttons using reflection.
@@ -17,11 +18,11 @@ public class OnOffButtonControl implements IControl {
   
   public OnOffButtonControl(final IModelConfig<Boolean> property, final Skin skin) {
     this.toggleButton = new TextButton(property.getName(), 
-        skin.getStyle("toggle", TextButtonStyle.class));
+        skin.get("toggle", TextButtonStyle.class));
     this.property = property;
-    toggleButton.setClickListener(new ClickListener() {
+    toggleButton.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         property.setValue(toggleButton.isChecked());
       }
     });

@@ -30,8 +30,6 @@ public class WaveView extends AbstractScience2DStage {
   public WaveView(float width, float height, final WaveModel waveModel,
       Skin skin, TextureAtlas atlas) {
     super(waveModel, width, height, skin);
-    this.width = width;
-    this.height = height;
     this.waveModel = waveModel;
     this.ballDiameter = (int) (width / (waveModel.balls.length + 5));
     this.ORIGIN_X = 2;
@@ -71,7 +69,7 @@ public class WaveView extends AbstractScience2DStage {
   
   @Override
   public void draw() {
-    hand.visible = waveModel.getGenMode() == "Manual";
+    hand.setVisible(waveModel.getGenMode() == "Manual");
     super.draw();
   }
 }

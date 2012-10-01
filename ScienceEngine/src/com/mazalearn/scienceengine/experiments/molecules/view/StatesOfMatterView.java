@@ -1,7 +1,7 @@
 package com.mazalearn.scienceengine.experiments.molecules.view;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
@@ -13,14 +13,12 @@ import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 public class StatesOfMatterView extends AbstractScience2DStage {
   
   private final Table layoutTable;
-  private final IMolecularModel molecularModel;
   
   public StatesOfMatterView(IMolecularModel molecularModel,
       int width, int height, int N, Skin skin) {
     super(molecularModel, width, height, skin);
-    this.molecularModel = molecularModel;
 
-    layoutTable = new Table("Molecule Box");
+    layoutTable = new Table();
     layoutTable.setFillParent(true);
     if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
       layoutTable.debug();

@@ -22,7 +22,8 @@ public class PickupCoilActor extends Science2DActor {
     super.draw(batch, parentAlpha);
     // Add the additional loops
     for (int i = 1; i <= pickupCoil.getNumberOfLoops(); i++) {
-      batch.draw(coil, x + i * COIL_OFFSET, y, 0, 0, width, height, 1, 1, rotation);
+      batch.draw(coil, getX() + i * COIL_OFFSET, getY(), 0, 0, getWidth(), 
+          getHeight(), 1, 1, getRotation());
     }
   }
 }

@@ -2,12 +2,10 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.AnimationAction;
-import com.badlogic.gdx.scenes.scene2d.actions.Delay;
-import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
@@ -18,7 +16,7 @@ import com.mazalearn.scienceengine.core.probe.ProbeManager;
 // Is the field stronger at A or B?
 public class FieldMagnitudeProber extends AbstractFieldProber {
   
-  private final class ClickResult implements ClickListener {
+  private final class ClickResult extends ClickListener {
     private final IDoneCallback doneCallback;
     private final boolean success;
  
@@ -28,23 +26,15 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     }
 
     @Override
-    public void click(Actor actor, float x, float y) {
-      fieldMeterActor.visible = true;
-      actor.action(Sequence.$(Delay.$(2f),
-          new AnimationAction() {
+    public void clicked(InputEvent event, float x, float y) {
+      fieldMeterActor.setVisible(true);
+      fieldMeterActor.addAction(Actions.sequence(Actions.delay(2f),
+          new Action() {
             @Override
-            public void act(float delta) {
-              fieldMeterActor.visible = false;
+            public boolean act(float delta) {
+              fieldMeterActor.setVisible(false);
               doneCallback.done(success);
-              done = true;
-            }
-                
-            @Override
-            public void setTarget(Actor actor) {}
-  
-            @Override
-            public Action copy() {
-              return null;
+              return true;
             }
           }));
     }
@@ -59,14 +49,14 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
       final ProbeManager probeManager) {
     super(model, probeManager);
     imageCorrect = new ProbeImage();
-    imageCorrect.setClickListener(new ClickResult(true, probeManager));
+    imageCorrect.addListener(new ClickResult(true, probeManager));
     imageWrong = new ProbeImage();
-    imageWrong.setClickListener(new ClickResult(false, probeManager));
+    imageWrong.addListener(new ClickResult(false, probeManager));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
     this.addActor(imageWrong);
-    fieldMeterActor.visible = false;
+    fieldMeterActor.setVisible(false);
   }
   
   @Override
@@ -88,18 +78,18 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
       createFieldMeterSamples(points, bFields);
       
       if (bFields[0].len() > bFields[1].len()) {
-        imageCorrect.x = points[0].x - imageCorrect.width/2;
-        imageCorrect.y = points[0].y - imageCorrect.height/2;
-        imageWrong.x = points[1].x - imageWrong.width/2;
-        imageWrong.y = points[1].y - imageWrong.width/2;
+        imageCorrect.setX(points[0].x - imageCorrect.getWidth()/2);
+        imageCorrect.setY(points[0].y - imageCorrect.getHeight()/2);
+        imageWrong.setX(points[1].x - imageWrong.getWidth()/2);
+        imageWrong.setY(points[1].y - imageWrong.getWidth()/2);
       } else {
-        imageCorrect.x = points[1].x - imageCorrect.width/2;
-        imageCorrect.y = points[1].y - imageCorrect.height/2;
-        imageWrong.x = points[0].x - imageWrong.width/2;
-        imageWrong.y = points[0].y - imageWrong.width/2;
+        imageCorrect.setX(points[1].x - imageCorrect.getWidth()/2);
+        imageCorrect.setY(points[1].y - imageCorrect.getHeight()/2);
+        imageWrong.setX(points[0].x - imageWrong.getWidth()/2);
+        imageWrong.setY(points[0].y - imageWrong.getWidth()/2);
       }
     }
-    this.visible = activate;
+    this.setVisible(activate);
   }
 
   private boolean haveSimilarMagnitudes(float v1, float v2) {

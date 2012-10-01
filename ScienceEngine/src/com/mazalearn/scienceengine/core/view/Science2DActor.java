@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -39,15 +41,39 @@ public class Science2DActor extends Actor {
    * @param textureRegion - texture to use to represent body in view
    */
   public Science2DActor(Science2DBody body, TextureRegion textureRegion) {
-    super(body.getName());
-
+    super();
+    this.setName(body.getName());
     this.body = body;
     this.textureRegion = textureRegion;
     // Set the sprite width and height.
-    this.width = textureRegion.getRegionWidth();
-    this.height = textureRegion.getRegionHeight();
-    this.originX = width / 2;
-    this.originY = height / 2;
+    this.setSize(textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
+    this.setOrigin(getWidth() / 2, getHeight() / 2);
+    ClickListener touchLlistener = new ClickListener() {
+      @Override
+      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+        if (!allowMove) return false;
+        currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        getStage().getCamera().unproject(currentTouch);
+        lastTouch.set(currentTouch.x, currentTouch.y);
+        return true;
+      }
+
+      @Override
+      public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
+        // Screen coords of current touch
+        currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        // Screen coords of current touch
+        getStage().getCamera().unproject(currentTouch);
+        // Get negative of movement vector
+       lastTouch.sub(currentTouch.x, currentTouch.y);
+        Science2DActor.this.setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
+        setPositionFromViewCoords(true);
+        // Recalibrate lastTouch to new coordinates
+        lastTouch.set(currentTouch.x, currentTouch.y);
+      }
+
+    };
+    this.addListener(touchLlistener);
   }
   
   public Science2DBody getBody() {
@@ -57,15 +83,16 @@ public class Science2DActor extends Actor {
   @Override
   public void act(float delta) {
     getViewPositionFromBox2DPosition(viewPos);
-    this.x = viewPos.x;
-    this.y = viewPos.y;
-    this.rotation = (body.getAngle() * MathUtils.radiansToDegrees) % 360;
+    this.setX(viewPos.x);
+    this.setY(viewPos.y);
+    this.setRotation((body.getAngle() * MathUtils.radiansToDegrees) % 360);
     super.act(delta);
   }
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    batch.draw(textureRegion, x, y, this.originX, this.originY, width, height, 1, 1, rotation);
+    batch.draw(textureRegion, getX(), getY(), this.getOriginX(), 
+        this.getOriginY(), getWidth(), getHeight(), 1, 1, getRotation());
     // debugDraw(batch);
   }
 
@@ -73,22 +100,16 @@ public class Science2DActor extends Actor {
   public void debugDraw(SpriteBatch batch) {
     Color c = batch.getColor();
     batch.setColor(Color.RED);
-    batch.draw(textureRegion, x, y, 0, 0, width, height, 1, 1, rotation);
+    batch.draw(textureRegion, getX(), getY(), 0, 0, getWidth(), getHeight(), 1, 1, getRotation());
     batch.setColor(c);
-    if (x != px || y != py || body.getPosition().x != pbx || body.getPosition().y != pby || body.getAngle() != pa) {
-      System.out.println(body.getName() + " x = " + x + " y = " + y + 
-          " origin x = " + this.originX + " origin y = " + this.originY + 
+    if (getX() != px || getY() != py || body.getPosition().x != pbx || body.getPosition().y != pby || body.getAngle() != pa) {
+      System.out.println(body.getName() + " x = " + getX() + " y = " + getY() + 
+          " origin x = " + this.getOriginX() + " origin y = " + this.getOriginY() + 
           " body = " + body.getPosition() + " angle = " + body.getAngle());
-      px = x; py = y; pbx = body.getPosition().x; pby = body.getPosition().y; pa = body.getAngle();
+      px = getX(); py = getY(); pbx = body.getPosition().x; pby = body.getPosition().y; pa = body.getAngle();
     }
   }
 
-  @Override
-  public Actor hit(float x, float y) {
-    // x,y are in local coordinates
-    return x > 0 && x < width && y > 0 && y < height ? this : null;
-  }
-  
   public TextureRegion getTextureRegion() {
     return textureRegion;
   }
@@ -102,7 +123,7 @@ public class Science2DActor extends Actor {
   public void getViewPositionFromBox2DPosition(Vector2 viewPos) {
     viewPos.set(body.getWorldCenter());
     viewPos.mul(ScienceEngine.PIXELS_PER_M);
-    viewPos.sub(originX, originY);
+    viewPos.sub(getOriginX(), getOriginY());
   }
   
   /**
@@ -113,46 +134,22 @@ public class Science2DActor extends Actor {
    */
   public void getBox2DPositionFromViewPosition(Vector2 box2DPos, Vector2 viewPos, float rotation) {
     box2DPos.set(viewPos.x, viewPos.y);
-    box2DPos.add(originX, originY);
+    box2DPos.add(getOriginX(), getOriginY());
     box2DPos.mul(1f / ScienceEngine.PIXELS_PER_M);
   }
   
   public void setPositionFromViewCoords(boolean isUserChange) {
-    viewPos.set(x, y);
-    getBox2DPositionFromViewPosition(box2DPos, viewPos, rotation);
-    float angle = rotation * MathUtils.degreesToRadians;
+    viewPos.set(getX(), getY());
+    getBox2DPositionFromViewPosition(box2DPos, viewPos, getRotation());
+    float angle = getRotation() * MathUtils.degreesToRadians;
     if (isUserChange) { // Change initiated by user, hence propagate
       ((AbstractScience2DStage) getStage()).notifyLocationChangedByUser(this, box2DPos, angle);
     }
     body.setPositionAndAngle(box2DPos, angle);
-    body.setActive(visible);
+    body.setActive(isVisible());
     body.setInitial();
   }
   
-  @Override
-  public boolean touchDown(float localX, float localY, int pointer) {
-    if (!allowMove) return false;
-    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    getStage().getCamera().unproject(currentTouch);
-    lastTouch.set(currentTouch.x, currentTouch.y);
-    return true;
-  }
-
-  @Override
-  public void touchDragged(float localX, float localY, int pointer) {
-    // Screen coords of current touch
-    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-    // Screen coords of current touch
-    getStage().getCamera().unproject(currentTouch);
-    // Get negative of movement vector
-   lastTouch.sub(currentTouch.x, currentTouch.y);
-    this.x -= lastTouch.x;
-    this.y -= lastTouch.y;
-    setPositionFromViewCoords(true);
-    // Recalibrate lastTouch to new coordinates
-    lastTouch.set(currentTouch.x, currentTouch.y);
-  }
-
   public boolean isAllowMove() {
     return allowMove;
   }

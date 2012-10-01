@@ -4,10 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Scaling;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.ComponentType;
@@ -44,8 +42,8 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     
     Actor lightbulb = null, pickupCoil = null;
     Science2DActor electroMagnet = null, currentSource = null;
-    Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"),
-        Scaling.stretch, Align.CENTER, "CoilsBack");
+    Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"));
+    coilsBack.setName("CoilsBack");
     this.addActor(coilsBack);
     for (final Science2DBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body.getComponentType());
@@ -123,8 +121,8 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
     super.touchDown(x, y,  pointer, button);
-    Actor touchedActor = super.getTouchFocus(pointer);
-    if (touchedActor != null) return true;
+    //Actor touchedActor = super.getTouchFocus(pointer); ???
+    //if (touchedActor != null) return true;
     // Touch at stage level - not on any actor - Assume field touch
     if (fieldMeter.isActive()) isFieldPointTouched = true;
     return true;
@@ -137,7 +135,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       isFieldPointTouched = false;
       // Move field sampler here.
       // view coords
-      toStageCoordinates(x, y, pos);
+      screenToStageCoordinates(pos.set(x, y));
       // model coords
       pos.mul(1f / ScienceEngine.PIXELS_PER_M);
       fieldMeter.setPositionAndAngle(pos, 0);
@@ -149,9 +147,10 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   public void challenge(boolean challenge) {
     super.challenge(challenge);
     // Enable/Disable field meter, compass
-    compassActor.visible = !challenge;
+    compassActor.setVisible(!challenge);
     if (probeManager == null) {
-      probeManager = new ProbeManager(skin, width, height, controlPanel.getModelConfigs(), this, controlPanel);        
+      probeManager = new ProbeManager(skin, getWidth(), getHeight(), 
+          controlPanel.getModelConfigs(), this, controlPanel);        
       new FieldDirectionProber(emModel, probeManager);
       new FieldMagnitudeProber(emModel, probeManager);
       new LightProber(probeManager);
@@ -160,7 +159,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     if (challenge) {
       probeManager.startChallenge();
     }
-    probeManager.visible = challenge;
+    probeManager.setVisible(challenge);
   };
   
   public void done(boolean success) {

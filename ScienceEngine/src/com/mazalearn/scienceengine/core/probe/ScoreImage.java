@@ -15,24 +15,24 @@ final class ScoreImage extends Image {
 
   ScoreImage(Texture texture, Skin skin, boolean success) {
     super(texture);
-    this.visible = false;
+    this.setVisible(false);
     this.success = success;
     font = skin.getFont("default-font");
   }
 
   public void show(float x, float y, int score) {
-    this.x = x;
-    this.y = y;
+    this.setX(x);
+    this.setY(y);
     this.score = score;
-    this.visible = true;
+    this.setVisible(true);
   }
 
   public void act(float delta) {
-    this.y += success ? 2 : -2;
-    this.rotation += increment;
-    if (this.rotation >= 5) {
+    this.setY(this.getY() + (success ? 2 : -2));
+    this.setRotation(this.getRotation() + increment);
+    if (this.getRotation() >= 5) {
       increment = -1;
-    } else if (this.rotation <= -5) {
+    } else if (this.getRotation() <= -5) {
       increment = 1;
     }
   }
@@ -41,7 +41,7 @@ final class ScoreImage extends Image {
     super.draw(batch, parentAlpha);
     Color c = font.getColor();
     font.setColor(Color.BLACK);
-    font.draw(batch, String.valueOf(score), x + width/2 - 10, y + height/2);
+    font.draw(batch, String.valueOf(score), getX() + getWidth()/2 - 10, getY() + getHeight()/2);
     font.setColor(c);
   }
 }

@@ -1,10 +1,10 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 /**
  * Utility class for science2DModel action buttons using reflection.
@@ -20,9 +20,9 @@ public class CommandButtonControl implements IControl {
   public CommandButtonControl(final IModelConfig command, final Skin skin) {
     this.textButton = new TextButton(command.getName(), skin);
     this.command = command;
-    textButton.setClickListener(new ClickListener() {
+    textButton.addListener(new ClickListener() {
       @Override
-      public void click(Actor actor, float x, float y) {
+      public void clicked(InputEvent event, float x, float y) {
         command.doCommand();
       }
     });

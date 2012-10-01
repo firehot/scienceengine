@@ -25,7 +25,7 @@ public class ColorPanel extends Widget {
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
     // Draw background
-    batch.draw(backgroundTexture, this.x, this.y, this.width, this.height);
+    batch.draw(backgroundTexture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
   }
   
 }

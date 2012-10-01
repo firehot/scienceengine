@@ -7,7 +7,6 @@ import java.util.List;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -79,25 +78,27 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     locationGroups.add(Arrays.asList(actors));
   }
   
-  public void notifyLocationChangedByUser(Science2DActor actor, Vector2 newPosition, float newAngle) {
+  public void notifyLocationChangedByUser(Science2DActor actor, Vector2 newBodyPosition, float newBodyAngle) {
     for (List<Actor> locationGroup: locationGroups) {
       if (!locationGroup.contains(actor)) continue;
-      deltaPosition.set(newPosition)
+      deltaPosition.set(newBodyPosition)
           .sub(actor.getBody().getPosition())
           .mul(ScienceEngine.PIXELS_PER_M);
       float deltaX = deltaPosition.x;
       float deltaY = deltaPosition.y;
-      float deltaAngle = (newAngle - actor.getBody().getAngle()) % (2 * MathUtils.PI);
+      float deltaAngle = (newBodyAngle - actor.getBody().getAngle()) % (2 * MathUtils.PI);
       float originX = actor.getBody().getPosition().x * ScienceEngine.PIXELS_PER_M;
       float originY = actor.getBody().getPosition().y * ScienceEngine.PIXELS_PER_M;
       for (Actor groupActor: locationGroup) {
         if (groupActor == actor || groupActor == null) continue;
-        Group.toChildCoordinates(groupActor, originX, originY, deltaPosition);
-        groupActor.originX = originX;
-        groupActor.originY = originY;
-        groupActor.rotation += deltaAngle * MathUtils.radiansToDegrees;
-        groupActor.x += deltaX;
-        groupActor.y += deltaY;
+        groupActor.parentToLocalCoordinates(deltaPosition);
+        // For rotation - not yet working
+        groupActor.setOriginX(originX);
+        groupActor.setOriginY(originY);
+        groupActor.setRotation(groupActor.getRotation() + (deltaAngle * MathUtils.radiansToDegrees));
+        // For translation
+        groupActor.setX(groupActor.getX() + deltaX);
+        groupActor.setY(groupActor.getY() + deltaY);
         if (groupActor instanceof Science2DActor) {
           ((Science2DActor) groupActor).setPositionFromViewCoords(false);
         }

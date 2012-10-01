@@ -3,25 +3,29 @@ package com.mazalearn.scienceengine.experiments;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.tablelayout.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
+import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.core.controller.Controller;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
+import com.mazalearn.scienceengine.core.controller.Controller;
+import com.mazalearn.scienceengine.core.controller.IControl;
+import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.controller.OnOffButtonControl;
 import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
 import com.mazalearn.scienceengine.core.controller.SliderControl;
-import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.controller.IControl;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 
@@ -39,8 +43,9 @@ public class ControlPanel extends Table {
   private Table suspendResetPanel; // part of viewcontrolpanel
   
   public ControlPanel(Skin skin, IScience2DController science2DController) {
-    super(skin, null, science2DController.getName());
+    super(skin);
     this.skin = skin;
+    this.setName("ControlPanel");
     this.science2DController = science2DController;
     this.science2DModel = science2DController.getModel();
     this.science2DStage = science2DController.getView();
@@ -59,6 +64,7 @@ public class ControlPanel extends Table {
 
   public Table createModelControlPanel(Skin skin) {
     Table modelControlPanel = new Table(skin);
+    modelControlPanel.setName("Model Controls");
     modelControlPanel.defaults().fill();
     registerModelConfigs(modelControlPanel);
     return modelControlPanel;
@@ -85,16 +91,17 @@ public class ControlPanel extends Table {
   protected Actor createViewControlPanel(Skin skin,
       final IScience2DModel science2DModel,
       final IScience2DStage science2DStage) {
-    Table viewControls = new Table(skin, null, "Standard");
+    Table viewControls = new Table(skin);
+    viewControls.setName("View Controls");
     viewControls.defaults().fill();
     // Register name
     this.title = new Label(experimentName, skin);
     viewControls.add(title).colspan(2).center();
     viewControls.row();
     // register the back button
-    TextButton backButton = new TextButton("Back", skin);
-    backButton.setClickListener(new ClickListener() {
-      public void click(Actor actor, float x, float y) {
+    TextButton backButton = new TextButton(Messages.getString("ControlPanel.Back"), skin); //$NON-NLS-1$
+    backButton.addListener(new ClickListener() {
+      public void clicked(InputEvent event, float x, float y) {
         science2DController.getView().challenge(false);
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.SCIENCE_ENGINE.setScreen(
@@ -106,7 +113,7 @@ public class ControlPanel extends Table {
     
     // Add challenge/learn functionality
     AbstractModelConfig<Boolean> challengeModelConfig = 
-        new AbstractModelConfig<Boolean>("Challenge", "Challenge or Learn", false) {
+        new AbstractModelConfig<Boolean>(Messages.getString("ControlPanel.Challenge"), "Challenge or Learn", false) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.challenge(value);}
           public Boolean getValue() { return science2DStage.isChallengeInProgress(); }
           public boolean isPossible() { return true; }
@@ -116,7 +123,7 @@ public class ControlPanel extends Table {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(
-            science2DStage.isChallengeInProgress() ? "End Challenge" : "Challenge");
+            science2DStage.isChallengeInProgress() ? Messages.getString("ControlPanel.EndChallenge") : Messages.getString("ControlPanel.Challenge")); //$NON-NLS-1$ //$NON-NLS-2$
       }
     };
     viewControls.add(challengeControl.getActor()).height(30).colspan(2);
@@ -124,7 +131,7 @@ public class ControlPanel extends Table {
     
     // Add pause/resume functionality for the experiment
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
-        new AbstractModelConfig<Boolean>("Pause/Resume", "Pause or Resume") {
+        new AbstractModelConfig<Boolean>(Messages.getString("ControlPanel.PauseResume"), Messages.getString("ControlPanel.PauseOrResume")) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.suspend(value); }
           public Boolean getValue() { return science2DStage.isSuspended(); }
           public boolean isPossible() { return true; }
@@ -132,19 +139,20 @@ public class ControlPanel extends Table {
     suspendControl = new OnOffButtonControl(pauseResumeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
-        toggleButton.setText(science2DStage.isSuspended() ? "Resume" : "Pause");
+        toggleButton.setText(science2DStage.isSuspended() ? Messages.getString("ControlPanel.Resume") : Messages.getString("ControlPanel.Pause")); //$NON-NLS-1$ //$NON-NLS-2$
       }
     };
 
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
-        new AbstractModelConfig<String>("Reset", "Reset to initial state") {
+        new AbstractModelConfig<String>(Messages.getString("ControlPanel.Reset"), Messages.getString("ControlPanel.ResetToInitialState")) { //$NON-NLS-1$ //$NON-NLS-2$
           public void doCommand() { science2DModel.reset(); }
           public boolean isPossible() { return true; }
     };
     IControl resetControl = new CommandButtonControl(resetModelConfig, skin);
     
     suspendResetPanel = new Table(skin);
+    suspendResetPanel.setName("SuspendReset");
     suspendResetPanel.defaults().fill().expand();
     suspendResetPanel.add(suspendControl.getActor()).pad(0,5,0, 5);
     suspendResetPanel.add(resetControl.getActor());
@@ -161,6 +169,7 @@ public class ControlPanel extends Table {
   @SuppressWarnings({ "rawtypes", "unchecked" })
   private Controller createViewControl(IModelConfig property, Table modelControlTable) {
     Table table = new Table(skin);
+    table.setName(property.getName());
     table.defaults().fill().expand();
     IControl control = null;
     switch(property.getType()) {
@@ -206,8 +215,8 @@ public class ControlPanel extends Table {
   }
 
   public void enableControls(boolean enable) {
-    suspendResetPanel.visible = enable;
-    modelControlPanel.touchable = enable;
+    suspendResetPanel.setVisible(enable);
+    modelControlPanel.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
     this.invalidate();
   }
 }

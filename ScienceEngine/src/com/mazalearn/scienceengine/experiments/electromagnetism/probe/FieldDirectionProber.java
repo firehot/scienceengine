@@ -4,11 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.AnimationAction;
-import com.badlogic.gdx.scenes.scene2d.actions.Delay;
-import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
@@ -28,53 +27,47 @@ public class FieldDirectionProber extends AbstractFieldProber {
     this.bFields = new Vector2[] { new Vector2()};
     
     userField = new Image(new TextureRegion(new Texture("images/fieldarrow-yellow.png")));
-    userField.visible = false;
-    userField.originX = 0;
-    userField.originY = userField.height/2;
+    userField.setVisible(false);
+    userField.setOriginX(0);
+    userField.setOriginY(userField.getHeight()/2);
     
-    image = new ProbeImage() {
+    image = new ProbeImage();
+    image.addListener(new ClickListener() {
       Vector2 lastTouch = new Vector2(), current = new Vector2();
       @Override
-      public boolean touchDown(float x, float y, int pointer) {
+      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         lastTouch.set(x, y);
-        userField.visible = true;
-        userField.x = this.x + this.width/2;
-        userField.y = this.y + this.height/3;
+        userField.setVisible(true);
+        userField.setX(image.getX() + image.getWidth()/2);
+        userField.setY(image.getY() + image.getHeight()/3);
         return true;
       }
       
       @Override
-      public void touchDragged(float x, float y, int pointer) {
+      public void touchDragged(InputEvent event, float x, float y, int pointer) {
         current.set(x, y);
         current.sub(lastTouch);
-        userField.rotation = current.angle();
+        userField.setRotation(current.angle());
       }
       
       @Override
-      public void touchUp(float x, float y, int pointer) {
+      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         lastTouch.sub(x, y);
         float val = lastTouch.nor().dot(bFields[0]); // Should be -1
         final boolean success = Math.abs(val + 1) < TOLERANCE;
-        fieldMeterActor.visible = true;
-        userField.action(Sequence.$(Delay.$(2f),
-            new AnimationAction() {
+        fieldMeterActor.setVisible(true);
+        userField.addAction(Actions.sequence(Actions.delay(2f),
+            new Action() {
               @Override
-              public void act(float delta) {
+              public boolean act(float delta) {
                 probeManager.done(success);
-                done = true;
-                fieldMeterActor.visible = userField.visible = false;
-              }
-                  
-              @Override
-              public void setTarget(Actor actor) {}
-    
-              @Override
-              public Action copy() {
-                return null;
+                fieldMeterActor.setVisible(false);
+                userField.setVisible(false);
+                return true;
               }
             }));
       }
-    };
+    });
     this.addActor(image);
     this.addActor(userField);
   }
@@ -91,10 +84,10 @@ public class FieldDirectionProber extends AbstractFieldProber {
       generateProbePoints(points);
       getBField(points[0], bFields[0]);
       createFieldMeterSamples(points, bFields);
-      image.x = points[0].x - image.width/2;
-      image.y = points[0].y - image.height/2;
+      image.setX(points[0].x - image.getWidth()/2);
+      image.setY(points[0].y - image.getHeight()/2);
       bFields[0].nor();
     }
-    this.visible = activate;
+    this.setVisible(activate);
   }
 }
