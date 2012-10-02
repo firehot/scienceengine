@@ -191,17 +191,22 @@ public class ExperimentHomeScreen extends AbstractScreen {
       
       resource.add(play).pad(0, 10, 0, 10).width(30).height(30).top().center();
       resource.row();
-      Label attributionLabel = new Label(Messages.getString("ScienceEngine.From") + ": " + attribution + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
-          description, smallLabelStyle);
+      Label attributionLabel = 
+          new Label(Messages.getString("ScienceEngine.From") + ": " + 
+                    attribution + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
+                    description, smallLabelStyle);
       attributionLabel.setWrap(true);
       ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
       scrollPane.setScrollingDisabled(true,  false);
+      scrollPane.setFlickScroll(false);
+      resource.debug();
       resource.add(scrollPane)
           .width(RESOURCE_WIDTH)
           .height(INFO_HEIGHT)
           .left()
           .top()
           .pad(0, 5, 0, 5);
+      resource.row();
       resourcesTable.add(resource).top().left();
     }
     resourcesTable.row();

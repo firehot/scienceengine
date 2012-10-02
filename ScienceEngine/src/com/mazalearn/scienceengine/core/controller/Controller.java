@@ -6,16 +6,16 @@ import com.esotericsoftware.tablelayout.Cell;
 public class Controller {
   final Cell<Table> cellTable;
   final IControl control;
-  private static int CONTROL_HEIGHT = 40;
+  final Table table;
 
   public Controller(Cell<Table> cellTable, IControl control) {
     this.cellTable = cellTable;
     this.control = control;
+    this.table = cellTable.getWidget();
   }
 
   public void validate() {
     control.syncWithModel();
-    cellTable.getWidget().setVisible(control.isAvailable());
-    cellTable.height(control.isAvailable() ? CONTROL_HEIGHT : 0);
+    cellTable.setWidget(control.isAvailable() ? this.table : null);
   }
 }

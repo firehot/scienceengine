@@ -4,8 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.ComponentType;
@@ -82,6 +84,18 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     }
     addLocationGroup(coilsBack, pickupCoil, lightbulb);
     addLocationGroup(currentSource, electroMagnet);
+    
+    getRoot().addListener(new ClickListener() {
+      @Override
+      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        super.touchUp(event, x, y, pointer, button);
+        if (fieldMeter.isActive() && event.getTarget() == getRoot()) {
+          // Move field sampler here and convert to model coords
+          pos.set(x, y).mul(1f / ScienceEngine.PIXELS_PER_M);
+          fieldMeter.setPositionAndAngle(pos, 0);
+        }
+      }       
+    });
   }
   
   // TODO: Use texture Atlas for this
@@ -116,31 +130,6 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       return null;
     }
     return new TextureRegion(texture);
-  }
-  
-  @Override
-  public boolean touchDown(int x, int y, int pointer, int button) {
-    super.touchDown(x, y,  pointer, button);
-    //Actor touchedActor = super.getTouchFocus(pointer); ???
-    //if (touchedActor != null) return true;
-    // Touch at stage level - not on any actor - Assume field touch
-    if (fieldMeter.isActive()) isFieldPointTouched = true;
-    return true;
-  }
-
-  @Override
-  public boolean touchUp(int x, int y, int pointer, int button) {
-    super.touchUp(x, y, pointer, button);
-    if (fieldMeter.isActive() && isFieldPointTouched) {
-      isFieldPointTouched = false;
-      // Move field sampler here.
-      // view coords
-      screenToStageCoordinates(pos.set(x, y));
-      // model coords
-      pos.mul(1f / ScienceEngine.PIXELS_PER_M);
-      fieldMeter.setPositionAndAngle(pos, 0);
-    }
-    return true;
   }
   
   @Override

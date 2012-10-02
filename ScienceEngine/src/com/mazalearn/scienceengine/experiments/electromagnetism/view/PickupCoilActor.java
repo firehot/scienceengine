@@ -3,6 +3,8 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
@@ -26,4 +28,11 @@ public class PickupCoilActor extends Science2DActor {
           getHeight(), 1, 1, getRotation());
     }
   }
+
+  public Actor hit (float x, float y, boolean touchable) {
+    if (touchable && getTouchable() != Touchable.enabled) return null;
+    return x >= 0 && x < getWidth() + (pickupCoil.getNumberOfLoops() - 1) * COIL_OFFSET 
+        && y >= 0 && y < getHeight() ? this : null;
+  }
+
 }
