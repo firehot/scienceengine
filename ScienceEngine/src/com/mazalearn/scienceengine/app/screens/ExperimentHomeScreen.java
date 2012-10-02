@@ -59,7 +59,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     
     table.defaults().fill().center();
-    table.add(science2DController.getName() + ": " + Messages.getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
+    table.add(Messages.getString("ScienceEngine." + science2DController.getName()) + ": " + Messages.getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     
     table.add(createExperimentLevelPane()).fill();    
@@ -71,7 +71,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     
     // register the back button
     TextButtonStyle textButtonStyle = new TextButtonStyle(getSkin().get("default", TextButtonStyle.class));
-    textButtonStyle.font = getSkin().getFont("kannada");
+    textButtonStyle.font = getSkin().getFont(Messages.getLocale().getLanguage());
     TextButton backButton = 
         new TextButton(Messages.getString("ScienceEngine.BackToExperiments"), textButtonStyle); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {

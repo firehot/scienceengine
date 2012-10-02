@@ -34,6 +34,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     super();
     
     Science2DBody electroMagnet = null;
+    addBody(new FieldMeter("FieldMeter", 10, 5, 0));
     addBody(barMagnet = new BarMagnet("BarMagnet", 10, 12, 0));
     CurrentSource currentSource = new CurrentSource("Current", 10, 12, 0);
     addBody(currentSource);
@@ -45,7 +46,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     barMagnet.setType(BodyType.DynamicBody);
     addBody(compass = new Compass("Compass", 0, 5, 0));
     compass.setType(BodyType.KinematicBody);
-    addBody(new FieldMeter("FieldMeter", 10, 5, 0));
     addCircuit(currentSource, electroMagnet);
     
     reset();
