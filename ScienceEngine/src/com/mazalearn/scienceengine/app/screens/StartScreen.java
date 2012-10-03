@@ -26,7 +26,7 @@ public class StartScreen extends AbstractScreen {
 
     registerButton(table, Messages.getString("ScienceEngine.Experiments"), new ExperimentMenuScreen(scienceEngine)); //$NON-NLS-1$
     registerButton(table, Messages.getString("ScienceEngine.Options"), new OptionsScreen(scienceEngine)); //$NON-NLS-1$
-    TextButton startGameButton = new TextButton(Messages.getString("ScienceEngine.Exit"), scienceEngine.getSkin()); //$NON-NLS-1$
+    TextButton startGameButton = new TextButton(Messages.getString("ScienceEngine.Exit"), getSkin()); //$NON-NLS-1$
     startGameButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -39,7 +39,7 @@ public class StartScreen extends AbstractScreen {
   }
 
   protected void registerButton(Table table, String name, final Screen screen) {
-    TextButton startGameButton = new TextButton(name, scienceEngine.getSkin());
+    TextButton startGameButton = new TextButton(name, getSkin());
     startGameButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

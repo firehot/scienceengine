@@ -104,7 +104,7 @@ public class OptionsScreen extends AbstractScreen {
     });
 
     // create the volume label
-    volumeValue = new Label("", scienceEngine.getSkin()); //$NON-NLS-1$
+    volumeValue = new Label("", ScienceEngine.getSkin()); //$NON-NLS-1$
     updateVolumeLabel();
 
     // add the volume row

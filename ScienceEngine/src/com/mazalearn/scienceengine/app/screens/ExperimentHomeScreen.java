@@ -31,7 +31,7 @@ import com.mazalearn.scienceengine.core.view.IScience2DStage;
  */
 public class ExperimentHomeScreen extends AbstractScreen {
 
-  private static final int RESOURCE_WIDTH = 120;
+  private static final int RESOURCE_WIDTH = 130;
   private static final int THUMBNAIL_WIDTH = 200;
   private static final int THUMBNAIL_HEIGHT = 150;
   private static final int INFO_HEIGHT = 50;
@@ -58,7 +58,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     
     Table table = super.getTable();
     
-    table.defaults().fill().center();
+    table.defaults().fill().center().padLeft(30);
     table.add(Messages.getString("ScienceEngine." + science2DController.getName()) + ": " + Messages.getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     
@@ -151,11 +151,16 @@ public class ExperimentHomeScreen extends AbstractScreen {
       String type = (String) resourceInfo.get("type"); //$NON-NLS-1$
       if (!type.equals("video") && !type.equals("web")) continue; //$NON-NLS-1$ //$NON-NLS-2$
       
+      Float rating = (Float) resourceInfo.get("rating"); //$NON-NLS-1$
+      String duration = (String) resourceInfo.get("duration"); //$NON-NLS-1$
+      if (duration == null) {
+        duration = "";
+      }
       String attribution = (String) resourceInfo.get("attribution"); //$NON-NLS-1$
       String description = (String) resourceInfo.get("description"); //$NON-NLS-1$
       final String url = (String) resourceInfo.get("url"); //$NON-NLS-1$
       final String fileName = (String) resourceInfo.get("file"); //$NON-NLS-1$
-      resource.defaults().fill().left();
+      resource.defaults().fill();
 
       Image play = null;
       if (type.equals("video")) { //$NON-NLS-1$
@@ -188,8 +193,11 @@ public class ExperimentHomeScreen extends AbstractScreen {
           }
         });
       }
-      
-      resource.add(play).pad(0, 10, 0, 10).width(30).height(30).top().center();
+      String rated = "*****".substring(0, (int) Math.floor(rating));
+      Label ratingLabel = new Label(rated, getSkin(), "en", Color.YELLOW);
+      resource.add(ratingLabel).right().width(50);
+      resource.add(play).width(30).height(30).top().center();
+      resource.add(new Label(duration, smallLabelStyle)).padLeft(10).width(40);
       resource.row();
       Label attributionLabel = 
           new Label(Messages.getString("ScienceEngine.From") + ": " + 
@@ -205,7 +213,8 @@ public class ExperimentHomeScreen extends AbstractScreen {
           .height(INFO_HEIGHT)
           .left()
           .top()
-          .pad(0, 5, 0, 5);
+          .pad(0, 5, 0, 5)
+          .colspan(3);
       resource.row();
       resourcesTable.add(resource).top().left();
     }

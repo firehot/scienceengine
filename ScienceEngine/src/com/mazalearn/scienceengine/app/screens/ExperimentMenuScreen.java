@@ -73,9 +73,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
         new String[] {StatesOfMatterController.NAME, 
                       WaveController.NAME, 
                       ElectroMagnetismController.NAME};
-    int count = 0;
     for (final String experimentName: experimentNames) {
-      count++;
       Image experimentThumb = 
           new Image(LevelManager.getThumbnail(experimentName, 1));
       experimentThumb.addListener(new ClickListener() {
@@ -102,11 +100,11 @@ public class ExperimentMenuScreen extends AbstractScreen {
   private IScience2DController createExperimentController(
       String experimentName, int width, int height) {
     if (experimentName == StatesOfMatterController.NAME) {
-      return new StatesOfMatterController(width, height, scienceEngine.getSkin());
+      return new StatesOfMatterController(width, height, getSkin());
     } else if (experimentName == WaveController.NAME) {
-      return  new WaveController(width, height, getAtlas(), scienceEngine.getSkin());
+      return  new WaveController(width, height, getAtlas(), getSkin());
     } else if (experimentName == ElectroMagnetismController.NAME) {
-      return new ElectroMagnetismController(width, height, scienceEngine.getSkin());
+      return new ElectroMagnetismController(width, height, getSkin());
     }
     return null;
   }

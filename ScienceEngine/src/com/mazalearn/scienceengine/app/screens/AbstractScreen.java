@@ -95,7 +95,7 @@ public abstract class AbstractScreen implements Screen {
 
   protected Table getTable() {
     if (table == null) {
-      table = new Table(scienceEngine.getSkin());
+      table = new Table(getSkin());
       table.setFillParent(true);
       if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
         table.debug();
@@ -175,7 +175,7 @@ public abstract class AbstractScreen implements Screen {
   }
 
   public Skin getSkin() {
-    return scienceEngine.getSkin();
+    return ScienceEngine.getSkin();
   }
 
   public Color getBackgroundColor() {

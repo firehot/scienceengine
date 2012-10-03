@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.ExperimentMenuScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
+import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
@@ -74,6 +76,7 @@ public class ScienceEngine extends Game {
     if (skin == null) {
       FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
       skin = new Skin(skinFile);
+      Messages.setLocale(new Locale("en"));
     }
     return skin;
   }
