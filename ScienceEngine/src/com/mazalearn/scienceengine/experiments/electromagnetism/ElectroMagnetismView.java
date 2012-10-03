@@ -30,7 +30,6 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilA
 public class ElectroMagnetismView extends AbstractScience2DStage {
   private BarMagnetActor barMagnetActor;
   private ProbeManager probeManager;
-  private boolean isFieldPointTouched = false;
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
   private ElectroMagnetismModel emModel;

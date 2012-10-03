@@ -47,7 +47,6 @@ public class OptionsScreen extends AbstractScreen {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         Locale locale = new Locale(localeSelect.getSelection());
         Messages.setLocale(locale);
-        scienceEngine.setFont(locale);
       }
     });
     table.row();
