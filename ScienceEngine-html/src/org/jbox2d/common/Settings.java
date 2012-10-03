@@ -129,7 +129,7 @@ public class Settings {
 	
 	/**
 	 * This is used to fatten AABBs in the dynamic tree. This is used to predict
-	 * the future position based on the currentProber displacement.
+	 * the future position based on the current displacement.
 	 * This is a dimensionless multiplier.
 	 */
 	public static float aabbMultiplier = 2.0f;

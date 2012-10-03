@@ -113,7 +113,7 @@ public class PrismaticJoint extends Joint {
 		return inv_dt * m_impulse.y;
 	}
 	
-	// / Get the currentProber joint translation, usually in meters.
+	// / Get the current joint translation, usually in meters.
 	public float getJointTranslation() {
 		Body b1 = m_bodyA;
 		Body b2 = m_bodyB;
@@ -133,7 +133,7 @@ public class PrismaticJoint extends Joint {
 		return translation;
 	}
 	
-	// / Get the currentProber joint translation speed, usually in meters per second.
+	// / Get the current joint translation speed, usually in meters per second.
 	public float getJointSpeed() {
 		Body b1 = m_bodyA;
 		Body b2 = m_bodyB;
@@ -241,7 +241,7 @@ public class PrismaticJoint extends Joint {
 		m_maxMotorForce = force;
 	}
 	
-	// / Get the currentProber motor force, usually in N.
+	// / Get the current motor force, usually in N.
 	public float getMotorForce() {
 		return m_motorImpulse;
 	}

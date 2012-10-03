@@ -63,7 +63,7 @@ position error is re-computed for each raint and the positions are updated
 after the raint is solved. The radius vectors (aka Jacobians) are
 re-computed too (otherwise the algorithm has horrible instability). The pseudo
 velocity states are not needed because they are effectively zero at the beginning
-of each iteration. Since we have the currentProber position error, we allow the
+of each iteration. Since we have the current position error, we allow the
 iterations to terminate early if the error becomes smaller than _linearSlop.
 
 Full NGS or just NGS - Like Modified NGS except the effective mass are re-computed

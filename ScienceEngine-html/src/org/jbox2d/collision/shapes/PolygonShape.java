@@ -203,7 +203,7 @@ public class PolygonShape extends Shape {
 				edge.set(m_vertices[i2]).subLocal(m_vertices[i1]);
 				
 				for (int j = 0; j < m_vertexCount; ++j) {
-					// Don't check vertices on the currentProber edge.
+					// Don't check vertices on the current edge.
 					if (j == i1 || j == i2) {
 						continue;
 					}
