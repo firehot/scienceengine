@@ -34,14 +34,13 @@ class ActorPropertyPanel extends Table {
 
   protected CheckBox addCheckBoxProperty(String label) {
     CheckBox checkBox = new CheckBox(label, skin);
-    this.add(label).left();
     this.add(checkBox).width(50);
     this.row();
     return checkBox;
   }
 
   protected TextField addLabeledProperty(String label) {
-    TextField textField = new TextField(label, skin);
+    TextField textField = new TextField("", skin);
     this.add(label).left(); 
     this.add(textField).width(50);
     this.row();
@@ -49,13 +48,18 @@ class ActorPropertyPanel extends Table {
   }
 
   public void setActor(Actor actor) {
-    if (this.actor != null && this.actor != actor) {
+    if (this.actor == actor) {
+      showActorProperties(actor);
+      return;
+    }
+    if (this.actor != null) {
       saveActorProperties(this.actor);
     }
-    this.actor = actor;
     if (actor != null) {
       showActorProperties(actor);
     }
+    
+    this.actor = actor;
   }
   
   private void saveActorProperties(Actor actor) {

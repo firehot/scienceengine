@@ -121,7 +121,7 @@ splash-screen/splash-image
   offset: 0, 0
   index: -1
 
-hand-pointer1.png
+hand-pointer.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -130,115 +130,5 @@ wave-view/hand-pointer
   xy: 1, 1
   size: 16, 16
   orig: 256, 256
-  offset: 0, 0
-  index: -1
-
-pages3.png
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-start-game-screen/front-gun-missile-launcher
-  rotate: false
-  xy: 1, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/front-gun-proton-launcher
-  rotate: false
-  xy: 25, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/front-gun-pulse-cannon
-  rotate: false
-  xy: 49, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/front-gun-vulcan-cannon
-  rotate: false
-  xy: 73, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/front-gun-wave-cannon
-  rotate: false
-  xy: 97, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/shield-aif
-  rotate: false
-  xy: 121, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/shield-ghef
-  rotate: false
-  xy: 145, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/shield-gles
-  rotate: false
-  xy: 169, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/shield-mlxs
-  rotate: false
-  xy: 193, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/shield-sif
-  rotate: false
-  xy: 217, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/ship-model-gencore-ii
-  rotate: false
-  xy: 241, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/ship-model-gencore-phoenix
-  rotate: false
-  xy: 265, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/ship-model-microsol-stalker
-  rotate: false
-  xy: 289, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/ship-model-super-carrot
-  rotate: false
-  xy: 313, 1
-  size: 22, 28
-  orig: 22, 28
-  offset: 0, 0
-  index: -1
-start-game-screen/ship-model-usp-talon
-  rotate: false
-  xy: 337, 1
-  size: 22, 28
-  orig: 22, 28
   offset: 0, 0
   index: -1

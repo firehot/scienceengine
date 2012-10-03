@@ -12,7 +12,7 @@ import com.mazalearn.scienceengine.experiments.molecules.view.StatesOfMatterView
  * States of Matter science2DModel
  */
 public class StatesOfMatterController extends AbstractScience2DController {
-  public static final String NAME = "States of Matter";
+  public static final String NAME = "StatesOfMatter";
   private static final int N = 25; // Number of molecules
   private static final int BOX_HEIGHT = 20;
   private static final int BOX_WIDTH = 20;

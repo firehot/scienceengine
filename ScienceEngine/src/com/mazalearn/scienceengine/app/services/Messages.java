@@ -16,7 +16,7 @@ public class Messages {
   private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.app.services.data.messages"; //$NON-NLS-1$
 
   private static Locale locale = new Locale("en");
-  private static ResourceBundle resoourceBundle = 
+  private static ResourceBundle resourceBundle = 
       ResourceBundle.getBundle(BUNDLE_NAME, locale);
 
 
@@ -25,7 +25,7 @@ public class Messages {
 
   public static String getString(String key) {
     try {
-      String val = resoourceBundle.getString(key);
+      String val = resourceBundle.getString(key);
       return new String(val.getBytes("ISO-8859-1"), "UTF-8");
     } catch (Exception e) {
       e.printStackTrace();
@@ -39,7 +39,7 @@ public class Messages {
 
   public static void setLocale(Locale locale) {
     Messages.locale = locale;
-    resoourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
+    resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
     setFont();
   }
 

@@ -19,7 +19,6 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 
 public class BarMagnetActor extends Science2DActor {
   private final BarMagnet barMagnet;
-  private final AbstractScience2DStage emView;
   private final ElectroMagnetismModel emModel;
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
@@ -28,7 +27,6 @@ public class BarMagnetActor extends Science2DActor {
       AbstractScience2DStage experimentView, final ElectroMagnetismModel emModel) {
     super(body, textureRegion);
     this.barMagnet = (BarMagnet) body;
-    this.emView = experimentView;
     this.emModel = emModel;
     this.font = new BitmapFont();
     this.setAllowMove(true);

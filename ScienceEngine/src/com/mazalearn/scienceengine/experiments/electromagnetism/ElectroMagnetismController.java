@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.experiments.electromagnetism;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 

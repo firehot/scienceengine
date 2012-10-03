@@ -23,6 +23,7 @@ final class MoleculeBox extends Actor {
   private final int N;
 
   public MoleculeBox(IMolecularModel molecularModel, int N, int boxWidth, int boxHeight, int pixelsPerM) {
+    this.setName("MoleculeBox");
     this.molecularModel = molecularModel;
     this.boxWidth = boxWidth;
     this.boxHeight = boxHeight;

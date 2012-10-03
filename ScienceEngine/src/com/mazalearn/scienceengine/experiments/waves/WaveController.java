@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.experiments.waves;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 
 /**

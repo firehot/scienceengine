@@ -128,7 +128,7 @@ public class LevelEditor extends Stage {
     titleTable.row();
     final TextField description = 
         new TextField(levelManager.getDescription(), screen.getSkin());
-    titleTable.add(description).colspan(3).fill();
+    titleTable.add(description).colspan(3).fill().width(600);
     description.setTextFieldListener(new TextFieldListener() {
       public void keyTyped(TextField textField, char key) {
         levelManager.setDescription(description.getText());
@@ -470,6 +470,11 @@ public class LevelEditor extends Stage {
         }
       }
       if (selectedActor == null) selectedActor = actors.get(0);
+      actorPropertyPanel.setActor(selectedActor);
+      break;
+    case Keys.ESCAPE: // Clear selected actor
+      selectedActor = null;
+      actorPropertyPanel.setActor(selectedActor);
       break;
     }
     return true;
@@ -500,7 +505,12 @@ public class LevelEditor extends Stage {
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
     if (actor == controlPanel) {
       // Bounding box only for status cell
-      actor = controlPanel.getTitle();
+      Actor title = controlPanel.getTitle();
+      shapeRenderer.rect(actor.getX() - controlPanel.getPrefWidth()/2, 
+          actor.getY() + controlPanel.getPrefHeight()/2 - title.getHeight(), 
+          title.getWidth(), title.getHeight());
+      shapeRenderer.end();
+      return;
     }
     shapeRenderer.rect(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
 
