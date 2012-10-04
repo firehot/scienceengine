@@ -4,6 +4,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
@@ -12,7 +13,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * 
  * @author sridhar
  */
-public class Lightbulb extends Science2DBody {
+public class Lightbulb extends Science2DBody implements ICurrent.Sink {
 
   /* Absolute current amplitude below this value is treated as zero. */
   public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.01;
@@ -20,8 +21,9 @@ public class Lightbulb extends Science2DBody {
   // Instance data
   // ----------------------------------------------------------------------------
 
-  private PickupCoil pickupCoilModel;
-  private float previousCurrentAmplitude;
+  private float previousCurrent;
+  private float current;
+  private float intensity;
 
   // ----------------------------------------------------------------------------
   // Constructors
@@ -32,11 +34,10 @@ public class Lightbulb extends Science2DBody {
    * 
    * @param pickupCoilModel - the pickup coil that the lightbulb is across
    */
-  public Lightbulb(String name, PickupCoil pickupCoilModel, float x, float y, float angle) {
+  public Lightbulb(String name, float x, float y, float angle) {
     super(ComponentType.Lightbulb, name, x, y, angle);
 
-    this.pickupCoilModel = pickupCoilModel;
-    this.previousCurrentAmplitude = 0f;
+    this.previousCurrent = 0f;
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(6);
@@ -53,25 +54,29 @@ public class Lightbulb extends Science2DBody {
    * @return the intensity (0.0 - 1.0)
    */
   public float getIntensity() {
+    return intensity;
+  }
 
-    float intensity = 0f;
-
-    final float currentAmplitude = pickupCoilModel.getCurrent();
-
+  private void setIntensity() {
     // If current changed angle, turn the light off.
-    if (Math.signum(currentAmplitude) != Math.signum(previousCurrentAmplitude)) {
+    if (Math.signum(current) != Math.signum(previousCurrent)) {
       intensity = 0f;
-    } else if (Math.abs(currentAmplitude)  < CURRENT_AMPLITUDE_THRESHOLD){
+    } else if (Math.abs(current)  < CURRENT_AMPLITUDE_THRESHOLD){
       // Intensity below the threshold is effectively zero.
       intensity = 0f;
     } else {
       // Light intensity is proportional to amplitude of current in the coil.
-      intensity = currentAmplitude;
+      intensity = current;
     }
 
-    previousCurrentAmplitude = currentAmplitude;
+    previousCurrent = current;
+  }
 
-    assert (intensity >= 0 && intensity <= 1);
-    return intensity;
+  @Override
+  public void setCurrent(float current) {
+    if (this.current != current) {
+      this.current = current;
+      setIntensity();
+    }
   }
 }

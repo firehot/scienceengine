@@ -5,7 +5,6 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -36,25 +35,8 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
     circleShape.dispose();  // TODO: dispose other created shapes
-    initializeConfigs();
   }
   
-  /**
-   * Sets the radius of the wire.
-   * @param radius - the radius
-   */
-  public void setRadius(float radius) {
-    this.radius = radius;
-  }
-
-  /**
-   * Gets the radius of the coil.
-   * @return the radius
-   */
-  public float getRadius() {
-    return this.radius;
-  }
-
   /**
    * Sets the magnitude of current in the wire. 
    * @param current the current
@@ -66,20 +48,6 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
     }
   }
   
-  public void initializeConfigs() {
-    configs.add(new AbstractModelConfig<Float>(getName() + " Current", 
-        "Current in Wire", -10, 10) {
-      public Float getValue() { return getCurrent(); }
-      public void setValue(Float value) { setCurrent(value); }
-      public boolean isPossible() { return isActive(); }
-    });
-    configs.add(new AbstractModelConfig<String>(getName() + " Flip Direction", 
-        "Current Direction in Wire") {
-      public void doCommand() { setCurrent(-getCurrent()); }
-      public boolean isPossible() { return isActive(); }
-    });
-  }
-
   /**
    * Gets the current in the wire
    * @return the current

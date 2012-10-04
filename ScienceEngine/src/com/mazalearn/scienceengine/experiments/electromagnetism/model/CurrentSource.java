@@ -22,7 +22,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
 
   private static final float DEFAULT_MAX_CURRENT = 5f;
 
-  protected static final float TOLERANCE = 0.01f;
+  private static final float TOLERANCE = 0.01f;
   
   public static enum CurrentType {AC, DC};
 

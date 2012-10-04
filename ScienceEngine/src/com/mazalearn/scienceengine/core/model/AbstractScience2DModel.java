@@ -89,8 +89,30 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     }
   }
   
-  public void addCircuit(Science2DBody... bodies) {
-    circuits.add(Arrays.asList(bodies));
+  public void addCircuit(Science2DBody[] bodies) {
+    List<Science2DBody> circuit = Arrays.asList(bodies);
+    circuits.add(circuit);
+    for (Science2DBody science2DBody: circuit) {
+      if (science2DBody instanceof ICurrent.Source) {
+        notifyCurrentChange((ICurrent.Source) science2DBody);
+      }
+    }
+  }
+  
+  public List<List<Science2DBody>> getCircuits() {
+    return circuits;
+  }
+  
+  public void removeCircuits() {
+    // Remove current from all circuits
+    for (List<Science2DBody> circuit: circuits) {
+      for (Science2DBody science2DBody: circuit) {
+        if (science2DBody instanceof ICurrent.Sink) {
+          ((ICurrent.Sink) science2DBody).setCurrent(0); 
+        }
+      }
+    }
+    circuits.clear();
   }
   
   // There should be only one current source in a circuit.

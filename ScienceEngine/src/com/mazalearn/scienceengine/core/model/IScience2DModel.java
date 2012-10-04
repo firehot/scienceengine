@@ -20,7 +20,16 @@ public interface IScience2DModel {
   public void enable(boolean enable);
   // whether model is enabled
   public boolean isEnabled();
+  // notify of a current change at specified currentsource
   public void notifyCurrentChange(ICurrent.Source currentSource);
+  // notify of a field change
   public void notifyFieldChange();
+  // get magnetic field at a specific position
   public void getBField(Vector2 position, Vector2 fieldVector /* output */);
+  // Get list of circuits - each circuit is a list of science2dbodies
+  public List<List<Science2DBody>> getCircuits();
+  // Remove all circuits
+  public void removeCircuits();
+  // Create a circuit with specified list of circuit elements
+  public void addCircuit(Science2DBody[] circuitElements);
 }

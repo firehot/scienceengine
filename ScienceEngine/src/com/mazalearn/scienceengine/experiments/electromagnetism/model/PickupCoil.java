@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
@@ -15,11 +16,12 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * @author Chris Malley (cmalley@pixelzoom.com)
  * @author sridhar
  */
-public class PickupCoil extends Science2DBody {
+public class PickupCoil extends Science2DBody implements ICurrent.Source {
 
   private static final boolean DEBUG_CALIBRATION = false;
   private static final float MIN_PICKUP_LOOP_RADIUS = 68.0f;
   private static final int NUM_SAMPLE_POINTS = 9;
+  private static final float TOLERANCE = 0.01f;
 
   private float averageBx; // in Gauss
   private float flux; // in webers
@@ -194,9 +196,9 @@ public class PickupCoil extends Science2DBody {
     if (emf != this.emf) {
       this.emf = emf;
     
-      // Current amplitude is proportional to emf amplitude.
-      float amplitude = Clamp.clamp(-1, emf / this.calibrationEmf, +1);
-      setCurrent(amplitude);
+      // Current is proportional to emf
+      float current = Clamp.clamp(-1, emf / this.calibrationEmf, +1);
+      setCurrent(current);
     }
     
     calibrateEmf();
@@ -324,8 +326,11 @@ public class PickupCoil extends Science2DBody {
     return this.numberOfLoops;
   }
 
-  protected void setCurrent(float current) {
-    this.current = current;
+  private void setCurrent(float current) {
+    if (Math.abs(this.current - current) > TOLERANCE) {
+      this.current = current;
+      getModel().notifyCurrentChange(this);
+    }
   }
 
   /**

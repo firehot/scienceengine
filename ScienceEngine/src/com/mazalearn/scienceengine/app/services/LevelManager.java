@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.app.services;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -21,6 +22,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
@@ -31,9 +34,11 @@ public class LevelManager {
   private int level = 1;
   private ControlPanel controlPanel;
   private String description;
+  private IScience2DModel science2DModel;
 
-  public LevelManager(Stage stage, ControlPanel controlPanel) {
+  public LevelManager(Stage stage, IScience2DModel science2DModel, ControlPanel controlPanel) {
     this.stage = stage;
+    this.science2DModel = science2DModel;
     this.controlPanel = controlPanel;
   }
 
@@ -97,6 +102,7 @@ public class LevelManager {
     jsonWriter = jsonWriter.object();
     writeLevelInfo(jsonWriter);
     writeComponents(jsonWriter);
+    writeCircuits(jsonWriter);
     writeConfigs(jsonWriter);
 
     jsonWriter.flush();
@@ -117,6 +123,18 @@ public class LevelManager {
           .set("permitted", config.isPermitted())
           .set("value", config.getValue())
           .pop();
+    }
+    jsonWriter.pop();
+  }
+
+  private void writeCircuits(JsonWriter jsonWriter) throws IOException {
+    jsonWriter.array("circuits");
+    for (final List<Science2DBody> circuit : science2DModel.getCircuits()) {
+      jsonWriter.array();
+      for (final Science2DBody science2DBody: circuit) {
+          jsonWriter.value(science2DBody.getName());
+      }
+      jsonWriter.pop();
     }
     jsonWriter.pop();
   }
@@ -157,12 +175,38 @@ public class LevelManager {
     readLevelInfo(rootElem);
     initializeComponents();
     readComponents((Array<?>) rootElem.get("components"));
+    readCircuits((Array<?>) rootElem.get("circuits"));
     readConfigs((Array<?>) rootElem.get("configs"));
   }
 
   private void readLevelInfo(OrderedMap<String, ?> info) {
     description = (String) nvl(info.get("description"), 
         controlPanel.getExperimentName() + " : Level " + level);
+  }
+
+  private void readCircuits(Array<?> circuits) {
+    science2DModel.removeCircuits();
+
+    if (circuits == null) return;
+    
+    for (int i = 0; i < circuits.size; i++) {
+      @SuppressWarnings("unchecked")
+      Array<String> circuit = (Array<String>) circuits.get(i);
+      readCircuit(circuit);
+    }
+  }
+  
+  private void readCircuit(Array<String> circuit) {
+    Science2DBody[] circuitElements = new Science2DBody[circuit.size];
+    for (int i = 0; i < circuit.size; i++) {
+      String name = circuit.get(i);
+      Actor actor = stage.getRoot().findActor(name);
+      if (actor == null) {
+        throw new IllegalArgumentException("Component not found: " + name);
+      }
+      circuitElements[i] = ((Science2DActor) actor).getBody();      
+    }
+    science2DModel.addCircuit(circuitElements);
   }
 
   private void readConfigs(Array<?> configs) {

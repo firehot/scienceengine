@@ -92,10 +92,10 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
       for (Actor groupActor: locationGroup) {
         if (groupActor == actor || groupActor == null) continue;
         groupActor.parentToLocalCoordinates(deltaPosition);
-        // For rotation - not yet working
-        groupActor.setOriginX(originX);
-        groupActor.setOriginY(originY);
-        groupActor.setRotation(groupActor.getRotation() + (deltaAngle * MathUtils.radiansToDegrees));
+        // For rotation - not yet working and wrong
+        //groupActor.setOriginX(originX);
+        //groupActor.setOriginY(originY);
+        //groupActor.setRotation(groupActor.getRotation() + (deltaAngle * MathUtils.radiansToDegrees));
         // For translation
         groupActor.setX(groupActor.getX() + deltaX);
         groupActor.setY(groupActor.getY() + deltaY);
@@ -109,6 +109,6 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   public void setControlPanel(ControlPanel controlPanel) {
     this.controlPanel = controlPanel;
     this.addActor(controlPanel);
-    this.levelManager = new LevelManager(this, controlPanel);
+    this.levelManager = new LevelManager(this, science2DModel, controlPanel);
   }
 }

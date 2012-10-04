@@ -38,7 +38,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
     super(ComponentType.ElectroMagnet, name, x, y, angle);
     this.numberOfLoops = 1;
     // Modeled as a square with diameter equal to side of square
-    this.setSize(16, 16); 
+    this.setSize(16, 16);
     this.maxStrengthOutside = 0.0f;
     FixtureDef fixtureDef = new FixtureDef();
     PolygonShape rectangleShape = new PolygonShape();
