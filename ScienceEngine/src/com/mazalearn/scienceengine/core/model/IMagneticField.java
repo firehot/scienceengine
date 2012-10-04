@@ -14,6 +14,7 @@ public interface IMagneticField {
   public interface Producer {
     Vector2 getBField(Vector2 location, Vector2 magneticField /* output */);
     boolean isActive();
+    Vector2 getPosition(); // TODO: remove this being used for dedup
   }
 
 }

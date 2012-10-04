@@ -70,6 +70,8 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     totalBField.set(0, 0);
     for (IMagneticField.Producer producer: emProducers) {
       if (!producer.isActive()) continue;
+      // Disallow position identical to producer itself.
+      if (producer.getPosition().equals(location)) continue;
       producer.getBField(location, bField);
       totalBField.x += bField.x;
       totalBField.y += bField.y;
@@ -97,9 +99,13 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     float current = currentSource.getCurrent();
     for (List<Science2DBody> circuit: circuits) {
       if (!circuit.contains(currentSource)) continue;
+      // Components before currentSource in circuit get negative current
+      boolean isNegative = true;
       for (Science2DBody component: circuit) {
         if (component instanceof ICurrent.Sink) {
-          ((ICurrent.Sink) component).setCurrent(current);
+          ((ICurrent.Sink) component).setCurrent(isNegative ? -current : current);
+        } else if (component == currentSource) {
+          isNegative = false;
         }
       }
     }

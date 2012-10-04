@@ -111,6 +111,7 @@ public class BarMagnet extends AbstractMagnet {
     fixtureDef.filter.categoryBits = 0x0001;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
+    rectangleShape.dispose();
     this.setAngularDamping(0.1f);
     initializeConfigs();
 

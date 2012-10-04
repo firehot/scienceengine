@@ -47,10 +47,10 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     coilsBack.setName("CoilsBack");
     this.addActor(coilsBack);
     for (final Science2DBody body: emModel.getBodies()) {
-      TextureRegion textureRegion = getTextureRegionForBody(body.getComponentType());
+      TextureRegion textureRegion = getTextureRegionForBody(body);
       if (textureRegion == null) continue;
       switch (body.getComponentType()) {
-      case BarMagnet:       
+      case BarMagnet:
         barMagnetActor = new BarMagnetActor(textureRegion, body, this, emModel);
         this.addActor(barMagnetActor);
         break;
@@ -98,14 +98,17 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   }
   
   // TODO: Use texture Atlas for this
-  private TextureRegion getTextureRegionForBody(ComponentType componentType) {
-    Texture texture;
-    switch(componentType) {
+  private TextureRegion getTextureRegionForBody(Science2DBody body) {
+    Texture texture = null;
+    switch(body.getComponentType()) {
     case ElectroMagnet:
       texture = new Texture("images/electromagnet-base.png");
       break;
     case BarMagnet:
       texture = new Texture("images/barmagnet-pivoted.png");
+      break;
+    case FieldMagnet:
+      texture = new Texture("images/simplemagnetsn.png");
       break;
     case PickupCoil:
       texture = new Texture("images/coppercoils-front1.png");

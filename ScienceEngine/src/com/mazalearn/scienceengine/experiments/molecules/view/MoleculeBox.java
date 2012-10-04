@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 
 final class MoleculeBox extends Actor {
@@ -22,13 +23,13 @@ final class MoleculeBox extends Actor {
   private final int boxWidth;
   private final int N;
 
-  public MoleculeBox(IMolecularModel molecularModel, int N, int boxWidth, int boxHeight, int pixelsPerM) {
+  public MoleculeBox(IMolecularModel molecularModel, int N, int boxWidth, int boxHeight) {
     this.setName("MoleculeBox");
     this.molecularModel = molecularModel;
     this.boxWidth = boxWidth;
     this.boxHeight = boxHeight;
     this.N = N;
-    
+    int pixelsPerM = ScienceEngine.PIXELS_PER_M;
     Pixmap pixmap = new Pixmap(pixelsPerM, pixelsPerM, Format.RGBA8888);
     pixmap.setColor(Color.DARK_GRAY);
     pixmap.fillCircle(pixelsPerM / 2, pixelsPerM / 2, pixelsPerM / 2);

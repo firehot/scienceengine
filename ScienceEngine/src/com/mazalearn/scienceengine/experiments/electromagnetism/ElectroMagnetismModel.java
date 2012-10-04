@@ -16,6 +16,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromagnet;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
@@ -33,20 +34,23 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
   public ElectroMagnetismModel() {   
     super();
     
-    Science2DBody electroMagnet = null;
+    Science2DBody electroMagnet = null, wireA = null, wireB = null;
     addBody(new FieldMeter("FieldMeter", 10, 5, 0));
     addBody(barMagnet = new BarMagnet("BarMagnet", 10, 12, 0));
+    addBody(new FieldMagnet("SimpleMagnetSN", 8, 8, 0));
+    addBody(new FieldMagnet("SimpleMagnetNS", 12, 8, 0));
     CurrentSource currentSource = new CurrentSource("Current", 10, 12, 0);
     addBody(currentSource);
     addBody(electroMagnet = new Electromagnet("Electromagnet", 10, 12, 0));
     addBody(pickupCoil = new PickupCoil("PickupCoil", 23, -4, 0, 2E7f));
     addBody(new Lightbulb("Lightbulb", pickupCoil, 23, 25, 0));
-    addBody(new CurrentWire("Wire A", 10, 12, 0));
-    addBody(new CurrentWire("Wire B", 14, 12, 0));
+    addBody(wireA = new CurrentWire("Wire A", 10, 12, 0));
+    addBody(wireB = new CurrentWire("Wire B", 14, 12, 0));
     barMagnet.setType(BodyType.DynamicBody);
+    wireA.setType(BodyType.DynamicBody);
+    wireB.setType(BodyType.DynamicBody);
     addBody(compass = new Compass("Compass", 0, 5, 0));
-    compass.setType(BodyType.KinematicBody);
-    addCircuit(currentSource, electroMagnet);
+    addCircuit(wireB, currentSource, electroMagnet, wireA);
     
     reset();
   }

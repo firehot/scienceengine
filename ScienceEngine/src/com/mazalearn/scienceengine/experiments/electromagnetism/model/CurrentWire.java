@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -14,15 +15,17 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * 
  * @author sridhar
  */
-public class CurrentWire extends Science2DBody implements IMagneticField.Producer {
+public class CurrentWire extends Science2DBody implements IMagneticField.Producer, ICurrent.Sink {
   // Radius of the wire.
   private float radius;
-  // Amplitude of the current in the wire (-1...+1)
+  // Current in the wire
   private float current;
+  // Field acting on the wire
+  private Vector2 forceVector = new Vector2();
 
   public CurrentWire(String name, float x, float y, float angle) {
     super(ComponentType.CurrentWire, name, x, y, angle);
-    this.radius = 1;
+    this.radius = 0.1f;
     this.current = 1f;
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
@@ -94,5 +97,19 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
     // Current towards me is +
     bField.set(-localPoint.y, localPoint.x).mul(magnitude);
     return bField;
+  }
+  
+  @Override
+  public void singleStep(float dt) {
+    // Force is given by B * i * l 
+    // magnetic field * current * length
+    // Direction is given by Fleming's left hand rule
+    getModel().getBField(getPosition(), forceVector /* output */);
+    forceVector.mul(getCurrent()).mul(0.01f); // TODO: tune multiplier
+    applyForce(forceVector, getWorldCenter());
+  }
+  
+  public Vector2 getBForce() {
+    return forceVector;
   }
 }

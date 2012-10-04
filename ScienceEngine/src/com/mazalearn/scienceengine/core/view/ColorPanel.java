@@ -11,8 +11,9 @@ public class ColorPanel extends Widget {
   
   Texture backgroundTexture;
   
-  public ColorPanel() {
+  public ColorPanel(String name) {
     super();
+    this.setName(name);
     // Use light-gray background color
     Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
     pixmap.setColor(Color.BLUE);

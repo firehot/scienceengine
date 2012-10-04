@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.designer;
 
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,6 +16,7 @@ class ActorPropertyPanel extends Table {
   private TextField originXField, originYField;
   private Label nameLabel;
   private CheckBox allowMoveField;
+  private CheckBox dynamicBodyField;
   public ActorPropertyPanel(Skin skin, final LevelEditor levelEditor) {
     super(skin);
     this.skin = skin;
@@ -29,17 +31,19 @@ class ActorPropertyPanel extends Table {
     rotationField = addLabeledProperty("Rotation");
     originXField = addLabeledProperty("Origin X");
     originYField = addLabeledProperty("Origin Y");
-    allowMoveField = addCheckBoxProperty("AllowMove");
+    allowMoveField = addCheckBoxProperty("Allow Move");
+    dynamicBodyField = addCheckBoxProperty("Dynamic Body");
   }
 
-  protected CheckBox addCheckBoxProperty(String label) {
-    CheckBox checkBox = new CheckBox(label, skin);
+  private CheckBox addCheckBoxProperty(String label) {
+    CheckBox checkBox = new CheckBox("", skin);
+    this.add(label).left(); 
     this.add(checkBox).width(50);
     this.row();
     return checkBox;
   }
 
-  protected TextField addLabeledProperty(String label) {
+  private TextField addLabeledProperty(String label) {
     TextField textField = new TextField("", skin);
     this.add(label).left(); 
     this.add(textField).width(50);
@@ -71,7 +75,10 @@ class ActorPropertyPanel extends Table {
     actor.setOriginX(Float.parseFloat(originXField.getText()));
     actor.setOriginY(Float.parseFloat(originYField.getText()));
     if (actor instanceof Science2DActor) {
-      ((Science2DActor) actor).setAllowMove(allowMoveField.isChecked());
+      Science2DActor science2DActor = (Science2DActor) actor;
+      science2DActor.setAllowMove(allowMoveField.isChecked());
+      science2DActor.getBody().setType(
+          dynamicBodyField.isChecked() ? BodyType.DynamicBody : BodyType.StaticBody);
     }
   }
   
@@ -86,9 +93,13 @@ class ActorPropertyPanel extends Table {
     originYField.setText(String.valueOf(actor.getOriginY()));
     if (actor instanceof Science2DActor) {
       allowMoveField.setDisabled(false);
-      allowMoveField.setChecked(((Science2DActor) actor).isAllowMove());
+      Science2DActor science2DActor = (Science2DActor) actor;
+      allowMoveField.setChecked(science2DActor.isAllowMove());
+      dynamicBodyField.setChecked(
+          science2DActor.getBody().getType() == BodyType.DynamicBody);
     } else {
       allowMoveField.setDisabled(true);
+      dynamicBodyField.setDisabled(true);
     }
   }    
 }

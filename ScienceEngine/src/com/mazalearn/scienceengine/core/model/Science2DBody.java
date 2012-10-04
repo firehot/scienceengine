@@ -56,7 +56,8 @@ public class Science2DBody implements IBody {
     PickupCoil,
     CurrentWire,
     SourceCoil,
-    Voltmeter,
+    Voltmeter, 
+    FieldMagnet,
   }
   
   protected Science2DBody(ComponentType componentType, String name, float x, float y, float angle) {
@@ -69,6 +70,7 @@ public class Science2DBody implements IBody {
     bodyDef.position.set(x, y);
     bodyDef.angle = angle;
     bodyDef.type = BodyDef.BodyType.StaticBody;
+    bodyDef.active = false;
     this.body = box2DWorld.createBody(bodyDef);
     this.configs = new ArrayList<IModelConfig<?>>();
   }

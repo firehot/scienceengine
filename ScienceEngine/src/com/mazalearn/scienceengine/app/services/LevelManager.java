@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -124,9 +125,11 @@ public class LevelManager {
     jsonWriter.array("components");
     for (Actor a : stage.getActors()) {
       if (!a.isVisible()) continue; 
-      boolean moveAllowed = false;
+      boolean moveAllowed = false, dynamicBody = false;
       if (a instanceof Science2DActor) {
-        moveAllowed = ((Science2DActor) a).isAllowMove();
+        Science2DActor science2DActor = (Science2DActor) a;
+        moveAllowed = science2DActor.isAllowMove();
+        dynamicBody = science2DActor.getBody().getType() == BodyType.DynamicBody;
       }
       jsonWriter.object()
           .set("name", a.getName())
@@ -139,6 +142,7 @@ public class LevelManager {
           .set("visible", a.isVisible())
           .set("rotation", a.getRotation())
           .set("move", moveAllowed)
+          .set("bodytype", dynamicBody)
           .pop();
     }
     jsonWriter.pop();
@@ -215,6 +219,11 @@ public class LevelManager {
       Science2DActor science2DActor = (Science2DActor) actor;
       science2DActor.setPositionFromViewCoords(false);
       science2DActor.setAllowMove((Boolean) nvl(component.get("move"), false));
+      if ((Boolean)nvl(component.get("bodytype"), false)) {
+        science2DActor.getBody().setType(BodyType.DynamicBody);
+      } else {
+        science2DActor.getBody().setType(BodyType.StaticBody);
+      }
     }
   }
 
