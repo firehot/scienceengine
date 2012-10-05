@@ -46,6 +46,7 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
+    circleShape.dispose();
   }
 
   /**

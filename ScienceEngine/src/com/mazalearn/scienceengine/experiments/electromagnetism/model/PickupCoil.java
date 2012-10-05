@@ -93,6 +93,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
     pos.set(0, -radius);
     rectangleShape.setAsBox(this.wireWidth/2, this.wireWidth/2, pos, 0);
     this.createFixture(fixtureDef);
+    rectangleShape.dispose();
   }
   
   public void initializeConfigs() {

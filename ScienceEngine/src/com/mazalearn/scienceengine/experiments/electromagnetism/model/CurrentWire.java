@@ -35,7 +35,7 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
     fixtureDef.filter.categoryBits = 0x0002;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
-    circleShape.dispose();  // TODO: dispose other created shapes
+    circleShape.dispose();
   }
   
   /**
