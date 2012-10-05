@@ -65,6 +65,13 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   }
   
   @Override
+  public void reinitialize(float x, float y, float width, float height) {
+    super.reinitialize(x,  y, width, height);
+    imageCorrect.setVisible(false);
+    imageWrong.setVisible(false);
+  }
+  
+  @Override
   public void activate(boolean activate) {
     if (activate) {
       probeManager.randomizeConfig();
@@ -88,6 +95,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
         imageWrong.setX(points[0].x - imageWrong.getWidth()/2);
         imageWrong.setY(points[0].y - imageWrong.getWidth()/2);
       }
+      imageWrong.setVisible(true);
+      imageCorrect.setVisible(true);
     }
     this.setVisible(activate);
   }

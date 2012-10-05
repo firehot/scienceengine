@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
@@ -35,14 +34,13 @@ public class ProbeManager extends Group implements IDoneCallback {
   private final ScoreImage successImage, failureImage;
 
   public ProbeManager(final Skin skin, float width, float height,
-      List<IModelConfig<?>> modelConfigs, IScience2DStage science2DStage, 
-      ControlPanel controlPanel) {
+      IScience2DStage science2DStage, ControlPanel controlPanel) {
     super();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
     this.science2DStage = science2DStage;
     this.soundManager = ScienceEngine.getSoundManager();
-    this.configGenerator = new ConfigGenerator(modelConfigs);
+    this.configGenerator = new ConfigGenerator(controlPanel.getModelConfigs());
     this.controlPanel = controlPanel;
     this.setX(0);
     this.setY(0);
@@ -62,6 +60,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   }
 
   public void startChallenge() {
+    this.setVisible(true);
     // Reset scores
     dashboard.resetScore();
         
@@ -103,7 +102,8 @@ public class ProbeManager extends Group implements IDoneCallback {
     doProbe();
   }
   
-  private void endChallenge() {
+  public void endChallenge() {
+    this.setVisible(false);
     // Turn on access to parts of control panel
     controlPanel.enableControls(true);
     science2DStage.done(false);

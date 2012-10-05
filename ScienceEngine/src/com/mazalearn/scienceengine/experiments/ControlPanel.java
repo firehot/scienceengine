@@ -34,7 +34,7 @@ public class ControlPanel extends Table {
   private final IScience2DModel science2DModel;
   private final IScience2DStage science2DStage;
   private final Skin skin;
-  private List<Controller> controllers;
+  private List<Controller> controllers = new ArrayList<Controller>();
   private String experimentName;
   private IControl suspendControl;
   private IControl challengeControl;
@@ -83,7 +83,7 @@ public class ControlPanel extends Table {
 
   @SuppressWarnings("rawtypes")
   protected void registerModelConfigs(Table modelControlPanel) {
-    this.controllers = new ArrayList<Controller>();
+    this.controllers.clear();
     modelControlPanel.clear();
     // Register all model controllers
     for (IModelConfig modelConfig: science2DModel.getAllConfigs()) {

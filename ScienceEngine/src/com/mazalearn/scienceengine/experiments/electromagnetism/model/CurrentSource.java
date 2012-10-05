@@ -46,7 +46,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
    */
   public CurrentSource(String name, float x, float y, float angle) {
     super(ComponentType.CurrentSource, name, x, y, angle);
-    this.frequency = 1.0f; // fastest
+    this.frequency = 1.0f;
     this.acAngle = 0.0f; // radians
     this.deltaAngle = (float) ((2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE); // radians
     this.maxCurrent = DEFAULT_MAX_CURRENT;
@@ -63,7 +63,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
     });
     
     configs.add(new AbstractModelConfig<Float>(getName() + " Frequency", 
-        "Frequency of AC", 0f, 1f) {
+        "Frequency of AC", 0f, 4f) {
       public Float getValue() { return getFrequency(); }
       public void setValue(Float value) { setFrequency(value); }
       public boolean isPossible() { return isActive() && currentType == CurrentType.AC; }

@@ -78,6 +78,12 @@ public class FieldDirectionProber extends AbstractFieldProber {
   }
   
   @Override
+  public void reinitialize(float x, float y, float width, float height) {
+    super.reinitialize(x,  y, width, height);
+    image.setVisible(false);
+  }
+  
+  @Override
   public void activate(boolean activate) {
     if (activate) {
       probeManager.randomizeConfig();
@@ -87,6 +93,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
       image.setX(points[0].x - image.getWidth()/2);
       image.setY(points[0].y - image.getHeight()/2);
       bFields[0].nor();
+      image.setVisible(true);
     }
     this.setVisible(activate);
   }

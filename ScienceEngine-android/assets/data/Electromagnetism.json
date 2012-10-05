@@ -16,11 +16,15 @@
   },
   {"name": "Induction of current by relative motion of an electromagnet and a coil of wire",
    "description": "Experiment with how current is induced in a coil of wire when the electromagnet is rotated or moved in its vicinity. Understand how the current induced changes with the polarity, strength of the electromagnet."
+  },
+  {"name": "Motor - current carrying wire in a magnetic field",
+   "description": "Experiment with how a motor can be created by passing current through a wire placed in a magnetic field."
   }
 ],
 "Resources": [
 {"type": "video",
- "duration": "2:03", 
+ "duration": "2:03",
+ "rating":3,
  "attribution": "ibphysicshelp", 
  "url": "http://www.youtube.com/watch?v=hajIIGHPeuU", 
  "file": "data/Electromagnetism/ElectromagneticInductionIbphysicshelp",
@@ -28,11 +32,13 @@
 },
 {"type": "web",
  "attribution": "www.magnetman.com",
+ "rating":4,
  "url": "http://www.coolmagnetman.com/magindex.htm",
  "description": "A lot of information about magnets - what is magnetism, types of magnets, strengths of magnets, how magnets work, how strong are magnets, what is a magnetic field, experiments with magnets"
 },
 {"type": "video",
  "duration": "5:58", 
+ "rating":3,
  "attribution": "TutorVista", 
  "url": "http://www.youtube.com/watch?v=KGTZPTnZBFE", 
  "file": "data/Electromagnetism/ElectromagneticInductionTutorvista",
@@ -40,10 +46,25 @@
 },
 {"type": "video",
  "duration": "3:00", 
+ "rating":3.5,
  "attribution": "National STEM Center, UK", 
  "url": "http://www.nationalstemcentre.org.uk/elibrary/resource/4100/electromagnetic-induction",
  "file": "data/Electromagnetism/ElectromagneticInductionNscuk",
  "description": "Produced by the National STEM Centre and the Institute of Physics, this video demonstrates the process of electromagnetic induction. It shows a simple piece of equipment that can readily be made which contains spinning magnets, a wire coil and a lamp. Spinning the magnets past the coil produces an electric current and lights the lamp."
+},
+{"type": "web",
+ "rating":4,
+ "attribution": "Arvind Gupta Toys", 
+ "url": "http://www.arvindguptatoys.com/toys/motor.html",
+ "description": "Very simple way to make a motor with easily accessible materials."
+},
+{"type": "video",
+ "duration": "1:00", 
+ "rating":3.5,
+ "attribution": "Arvind Gupta Toys", 
+ "url": "http://www.youtube.com/watch?v=vSPFwibREUg",
+ "file": "data/Electromagnetism/D C MOTOR - ArvindGupta",
+ "description": "Very simple and intuitive way to make a motor with easily accessible materials."
 }
 ]
 }

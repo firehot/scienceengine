@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Joint;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -22,11 +23,14 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil
 
 public class ElectroMagnetismModel extends AbstractScience2DModel {
   private BarMagnet barMagnet;
-  private RevoluteJointDef jointDef = new RevoluteJointDef();
+  private RevoluteJointDef magnetRotationJointDef = new RevoluteJointDef();
+  private DistanceJointDef wiresDistanceJointDef = new DistanceJointDef();
   public enum Mode {Free, Rotate};
   
   private Mode mode = Mode.Free;
-  private Joint joint;
+  private Joint magnetRotationJoint, wiresDistanceJoint;
+  private CurrentWire wireA;
+  private CurrentWire wireB;
     
   public ElectroMagnetismModel() {   
     super();
@@ -40,11 +44,14 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     addBody(new Electromagnet("Electromagnet", 10, 12, 0));
     addBody(new PickupCoil("PickupCoil", 23, -4, 0, 2E7f));
     addBody(new Lightbulb("Lightbulb", 23, 25, 0));
-    addBody(new CurrentWire("Wire A", 10, 12, 0));
-    addBody(new CurrentWire("Wire B", 14, 12, 0));
+    addBody(wireA = new CurrentWire("Wire A", 10, 12, 0));
+    addBody(wireB = new CurrentWire("Wire B", 14, 12, 0));
     addBody(new Compass("Compass", 0, 5, 0));
     
     reset();
+    wiresDistanceJointDef.initialize(wireA.getBody(), wireB.getBody(), 
+        wireA.getWorldCenter(), wireB.getWorldCenter());
+    wiresDistanceJoint = box2DWorld.createJoint(wiresDistanceJointDef);
   }
 
   @Override
@@ -74,14 +81,14 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     for (Science2DBody body: bodies) {
       body.resetInitial();
     }
-    if (joint != null) {
-      box2DWorld.destroyJoint(joint);
-      joint = null;
+    if (magnetRotationJoint != null) {
+      box2DWorld.destroyJoint(magnetRotationJoint);
+      magnetRotationJoint = null;
     }
     if (mode == Mode.Rotate) {
-      jointDef.initialize(barMagnet.getBody(), Science2DBody.getGround(), 
+      magnetRotationJointDef.initialize(barMagnet.getBody(), Science2DBody.getGround(), 
           barMagnet.getWorldPoint(Vector2.Zero));
-      joint = box2DWorld.createJoint(jointDef);
+      magnetRotationJoint = box2DWorld.createJoint(magnetRotationJointDef);
     }
   }
 

@@ -88,10 +88,8 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
    * @return true iff p is contained inside magnet's area
    */
   public boolean isInside(Vector2 p) {
-    float x = p.x / 5;
-    float y = p.y / 5;
-    return x >= -getWidth()/2 && x <= getWidth()/2 &&
-        y >= -getHeight()/2 && y <= getHeight()/2;
+    return p.x >= -getWidth()/2 && p.x <= getWidth()/2 &&
+        p.y >= -getHeight()/2 && p.y <= getHeight()/2;
   }
 
   // ----------------------------------------------------------------------------
@@ -166,7 +164,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
    * @param outputVector - bfield
    */
   private void getBFieldOutside(Vector2 p, Vector2 outputVector /* output */) {
-    // Elemental terms
+    // Elemental terms - scale point coords up by MODEL_SCALE
     double x = p.x;
     double y = p.y;
     double r = Math.sqrt((x * x) + (y * y));
@@ -180,8 +178,8 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
     double m = getStrength() * Math.pow(R, distanceExponent) / 2;
 
     // Recurring terms
-    // Fudge factor of 100 below as multiple
-    double C1 = 100 * m / Math.pow(r, distanceExponent);
+    // Fudge factor of 1 below as multiple
+    double C1 = 1 * m / Math.pow(r, distanceExponent);
     double cosTheta = x / r;
     double sinTheta = y / r;
 

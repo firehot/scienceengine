@@ -5,12 +5,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.experiments.ControlPanel;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
 
 public abstract class AbstractScience2DProber extends Group {
 
   protected static final float TOLERANCE = 0.3f;
   protected static final float ZERO_TOLERANCE = 1e-4f;
   protected final ProbeManager probeManager;
+  private Vector2 localPoint = new Vector2();
 
   public AbstractScience2DProber(ProbeManager probeManager) {
     this.probeManager = probeManager;
@@ -34,27 +39,32 @@ public abstract class AbstractScience2DProber extends Group {
         (approxEquals(points[0].x, points[1].x) || approxEquals(points[0].y, points[1].y));
   }
 
-  private boolean isInsideExcludedActor(Vector2 point) {
+  private boolean isInsideExcludedActor(Vector2 stagePoint) {
     for (Actor actor: probeManager.getExcludedActors()) {
+      // Translate to local coordinates of actor
+      localPoint.set(stagePoint);
+      actor.stageToLocalCoordinates(localPoint);
+      if (actor.hit(localPoint.x, localPoint.y, true) != null) {
+        return true;
+      }
       // For a table, x and y are at center, top of table - not at bottom left
-      if (actor instanceof Table) {
+      if (actor instanceof Table) { // since labels do not seem to get hit
         float actorWidth = ((Table) actor).getPrefWidth();
         float actorHeight = ((Table) actor).getPrefHeight();
-        if (point.x >= actor.getX() - actorWidth/ 2 && point.x <= actor.getX() + actorWidth/2 &&
-            point.y <= actor.getY() && point.y >= actor.getY() - actorHeight) {
+        if (stagePoint.x >= actor.getX() - actorWidth/ 2 && stagePoint.x <= actor.getX() + actorWidth/2 &&
+            stagePoint.y <= actor.getY() && stagePoint.y >= actor.getY() - actorHeight) {
           return true;
         }
-      } else {
-        if (point.x >= actor.getX() && point.x <= actor.getX() + actor.getWidth() &&
-            point.y >= actor.getY() && point.y <= actor.getY() + actor.getHeight()) {
-          return true;
-        }
-        
       }
+      if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION)
+      System.out.println(actor.getClass().getName() + " Stagepoint: " + stagePoint + " localpoint: " + localPoint);
     }
     return false;
   }
 
+  // Probe points are generated in stage coordinates not too close to periphery
+  // Then checked for being outside of excluded actors
+  // Then checked for being too close to each other
   protected void generateProbePoints(Vector2[] points) {
     do {
       for (int i = 0; i < points.length; i++) {
@@ -65,6 +75,7 @@ public abstract class AbstractScience2DProber extends Group {
           // Transform point to [ 0.8 x width, 0.8 x height]
           point.x *= getWidth() * 0.8f;
           point.y *= getHeight() * 0.8f;
+          // Move point to [0.1 x width, 0.9 x width],[0.1 x height,0.9 x height]
           point.add(getX() + 0.1f * getWidth(), getY() + 0.1f * getHeight());
         } while (isInsideExcludedActor(point));
       }

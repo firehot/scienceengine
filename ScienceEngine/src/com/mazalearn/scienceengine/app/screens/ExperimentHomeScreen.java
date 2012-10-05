@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -207,7 +208,9 @@ public class ExperimentHomeScreen extends AbstractScreen {
       ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
       scrollPane.setScrollingDisabled(true,  false);
       scrollPane.setFlickScroll(false);
-      resource.debug();
+      if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+        resource.debug();
+      }
       resource.add(scrollPane)
           .width(RESOURCE_WIDTH)
           .height(INFO_HEIGHT)

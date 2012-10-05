@@ -15,6 +15,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * @author sridhar
  */
 public class CurrentWire extends Science2DBody implements IMagneticField.Producer, ICurrent.Sink {
+  private static final int DISTANCE_SCALE = 50;
   // Radius of the wire.
   private float radius;
   // Current in the wire
@@ -60,7 +61,7 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   public Vector2 getBField(Vector2 location, Vector2 bField) {
     Vector2 localPoint = getLocalPoint(location);
     // field = constant * current / distance
-    float magnitude = 50 * current / localPoint.len();
+    float magnitude = DISTANCE_SCALE * current / localPoint.len();
     localPoint.nor();
     // Current towards me is +
     bField.set(-localPoint.y, localPoint.x).mul(magnitude);

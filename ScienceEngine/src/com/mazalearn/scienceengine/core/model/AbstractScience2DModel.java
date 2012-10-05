@@ -15,7 +15,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   protected World box2DWorld;
   protected List<Science2DBody> bodies = new ArrayList<Science2DBody>(); 
-  private List<IModelConfig<?>> modelConfigs;
+  private List<IModelConfig<?>> modelConfigs = new ArrayList<IModelConfig<?>>();
 
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
@@ -134,18 +134,15 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   }
 
   public List<IModelConfig<?>> getAllConfigs() {
-    List<IModelConfig<?>> allConfigs = new ArrayList<IModelConfig<?>>();
-    if (modelConfigs == null) {
-      modelConfigs = new ArrayList<IModelConfig<?>>();
-      initializeConfigs(modelConfigs);
-    }
-    allConfigs.addAll(modelConfigs);
+    modelConfigs.clear();
+    initializeConfigs(modelConfigs);
+    
     for (Science2DBody body: bodies) {
       if (body.isActive()) {
-        allConfigs.addAll(body.getConfigs());
+        modelConfigs.addAll(body.getConfigs());
       }
     }
-    return Collections.unmodifiableList(allConfigs);
+    return Collections.unmodifiableList(modelConfigs);
   }
   
   public IModelConfig<?> getConfig(String name) {

@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.model.Science2DBody.ComponentType;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -141,7 +140,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     compassActor.setVisible(!challenge);
     if (probeManager == null) {
       probeManager = new ProbeManager(skin, getWidth(), getHeight(), 
-          controlPanel.getModelConfigs(), this, controlPanel);        
+          this, controlPanel);        
       new FieldDirectionProber(emModel, probeManager);
       new FieldMagnitudeProber(emModel, probeManager);
       new LightProber(probeManager);
@@ -149,13 +148,15 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     }
     if (challenge) {
       probeManager.startChallenge();
+    } else {
+      probeManager.endChallenge();
     }
-    probeManager.setVisible(challenge);
   };
   
   public void done(boolean success) {
     if (success) {
       int level = getLevelManager().getLevel() + 1;
+      // TODO: put in a proper celebration here
       probeManager.setTitle("Congratulations! You move to Level " + level);
       challenge(false);
       getLevelManager().setLevel(level);

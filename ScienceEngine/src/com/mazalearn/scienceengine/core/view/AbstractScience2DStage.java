@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -86,9 +85,9 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
           .mul(ScienceEngine.PIXELS_PER_M);
       float deltaX = deltaPosition.x;
       float deltaY = deltaPosition.y;
-      float deltaAngle = (newBodyAngle - actor.getBody().getAngle()) % (2 * MathUtils.PI);
-      float originX = actor.getBody().getPosition().x * ScienceEngine.PIXELS_PER_M;
-      float originY = actor.getBody().getPosition().y * ScienceEngine.PIXELS_PER_M;
+      //float deltaAngle = (newBodyAngle - actor.getBody().getAngle()) % (2 * MathUtils.PI);
+      //float originX = actor.getBody().getPosition().x * ScienceEngine.PIXELS_PER_M;
+      //float originY = actor.getBody().getPosition().y * ScienceEngine.PIXELS_PER_M;
       for (Actor groupActor: locationGroup) {
         if (groupActor == actor || groupActor == null) continue;
         groupActor.parentToLocalCoordinates(deltaPosition);

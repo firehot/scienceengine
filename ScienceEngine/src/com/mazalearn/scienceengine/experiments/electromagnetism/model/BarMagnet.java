@@ -94,6 +94,10 @@ public class BarMagnet extends AbstractMagnet {
   private static final String BY_EXTERNAL_NEAR_RESOURCE_NAME = "data/bfield/BY_external_near.csv";
   private static final String BX_EXTERNAL_FAR_RESOURCE_NAME = "data/bfield/BX_external_far.csv";
   private static final String BY_EXTERNAL_FAR_RESOURCE_NAME = "data/bfield/BY_external_far.csv";
+  // Canonical BarMagnet grid model is of size 250,50. 
+  // We have a much smaller magnet in box2D coordinates
+  // This scales it up appropriately.
+  private static final float MODEL_SCALE = 5;
 
   private final Grid internalGrid; // internal to the magnet
   private final Grid externalNearGrid; // near the magnet
@@ -155,8 +159,9 @@ public class BarMagnet extends AbstractMagnet {
 
     // find B-field by interpolating grid points
     // Bar Magnet model is slightly off, so scale coordinates up
-    float x = getBx(p.x * PERIPHERY_SCALE_DOWN, p.y * PERIPHERY_SCALE_DOWN);
-    float y = getBy(p.x * PERIPHERY_SCALE_DOWN, p.y * PERIPHERY_SCALE_DOWN);
+    // Bar Magnet model is at 250, 50 scale - so scale up to this magnitude
+    float x = getBx(p.x * MODEL_SCALE * PERIPHERY_SCALE_DOWN, p.y * MODEL_SCALE * PERIPHERY_SCALE_DOWN);
+    float y = getBy(p.x * MODEL_SCALE * PERIPHERY_SCALE_DOWN, p.y * MODEL_SCALE * PERIPHERY_SCALE_DOWN);
     outputVector.set(x, y);
 
     // scale based on magnet strength
