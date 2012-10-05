@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -48,7 +49,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
     super(ComponentType.CurrentSource, name, x, y, angle);
     this.frequency = 1.0f;
     this.acAngle = 0.0f; // radians
-    this.deltaAngle = (float) ((2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE); // radians
+    this.deltaAngle = (2 * MathUtils.PI * this.frequency) / MIN_STEPS_PER_CYCLE; // radians
     this.maxCurrent = DEFAULT_MAX_CURRENT;
     this.current = this.maxCurrent;
     this.initializeConfigs();
@@ -102,7 +103,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
     assert (frequency >= 0 && frequency <= 1);
     this.frequency = frequency;
     this.acAngle = 0.0f;
-    this.deltaAngle = (float) ((2 * Math.PI * this.frequency) / MIN_STEPS_PER_CYCLE);
+    this.deltaAngle = (2 * MathUtils.PI * this.frequency) / MIN_STEPS_PER_CYCLE;
   }
 
   /**
@@ -134,11 +135,11 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
     this.acAngle += (dt * this.deltaAngle);
 
     // Limit the acAngle to 360 degrees.
-    if (this.acAngle >= 2 * Math.PI) {
-      this.acAngle = (float) (this.acAngle % (2 * Math.PI));
+    if (this.acAngle >= 2 * MathUtils.PI) {
+      this.acAngle = this.acAngle % (2 * MathUtils.PI);
     }
     // Calculate and set the amplitude.
-    setCurrent(maxCurrent * (float) Math.sin(this.acAngle));
+    setCurrent(maxCurrent * MathUtils.sin(this.acAngle));
   }
 
   /**

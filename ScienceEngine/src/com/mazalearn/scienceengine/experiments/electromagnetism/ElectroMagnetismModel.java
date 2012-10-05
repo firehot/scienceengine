@@ -44,8 +44,8 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     addBody(new Electromagnet("Electromagnet", 10, 12, 0));
     addBody(new PickupCoil("PickupCoil", 23, -4, 0, 2E7f));
     addBody(new Lightbulb("Lightbulb", 23, 25, 0));
-    addBody(wireA = new CurrentWire("Wire A", 10, 12, 0));
-    addBody(wireB = new CurrentWire("Wire B", 14, 12, 0));
+    addBody(wireA = new CurrentWire("Wire A", 8, 12, 0));
+    addBody(wireB = new CurrentWire("Wire B", 16, 12, 0));
     addBody(new Compass("Compass", 0, 5, 0));
     
     reset();

@@ -5,6 +5,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 
@@ -19,6 +20,7 @@ import com.mazalearn.scienceengine.core.model.ICurrent;
  */
 public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
 
+  private static final float OUTPUT_SCALE = 200f;
   private static final float TOLERANCE = 0.1f;
   private static final int ELECTROMAGNET_LOOPS_MAX = 4;
 
@@ -30,6 +32,8 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   private int numberOfLoops;
 
   private static final float MAX_EMF = 25;
+  private static final float DISPLAY_WIDTH = 38f;
+  private static final float COIL_WIDTH = DISPLAY_WIDTH / ScienceEngine.PIXELS_PER_M;
 
   /**
    * Sole constructor.
@@ -78,7 +82,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
      * Set the strength. This is a bit of a "fudge". We set the strength of the
      * magnet to be proportional to its emf.
      */
-    float strength = emf * 200f;
+    float strength = emf * OUTPUT_SCALE;
     setStrength(strength);
   }
 
@@ -89,7 +93,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
    * @return true iff p is contained inside magnet's area
    */
   public boolean isInside(Vector2 p) {
-    return p.x >= -getWidth()/2 && p.x <= getWidth()/2 &&
+    return p.x >= -(getWidth()/2 + numberOfLoops * COIL_WIDTH) && p.x <= getWidth()/2 &&
         p.y >= -getHeight()/2 && p.y <= getHeight()/2;
   }
 
@@ -138,7 +142,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
    * <p> Terminology: 
    * <ul> 
    *   <li>axes oriented with +X right, +Y up 
-   *   <li>origin is the center of the coil, at (0,0) 
+   *   <li>origin is the center of the coil, at (0,0) including number of loops
    *   <li>(x,y) is the point of interest where we are measuring the magnetic field 
    *   <li>C = a fudge factor, set so that the lightbulb will light 
    *   <li>m = magnetic moment = C * #loops * current in the coil 
@@ -165,28 +169,30 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
    * @param outputVector - bfield
    */
   private void getBFieldOutside(Vector2 p, Vector2 outputVector /* output */) {
-    // Elemental terms - scale point coords up by MODEL_SCALE
-    double x = p.x;
-    double y = p.y;
-    double r = Math.sqrt((x * x) + (y * y));
-    double R = getWidth() / 2;
-    double distanceExponent = 3;
+    // x,y are relative to Electromagnet at body position with 0 loops i.e. width/2, height/2.
+    // Adjust for number of loops - origin is at width/2 - #loops * coilwidth/2
+    
+    float x = p.x - numberOfLoops * COIL_WIDTH;
+    float y = p.y;
+    float r = (float) Math.sqrt((x * x) + (y * y));
+    float R = getWidth() / 2;
+    float distanceExponent = 3;
 
     /*
      * Inside the magnet, Bx = magnet strength = (2 * m) / (R^3). Rewriting this
      * gives us m = (magnet strength) * (R^3) / 2.
      */
-    double m = getStrength() * Math.pow(R, distanceExponent) / 2;
+    float m = (float) (getStrength() * Math.pow(R, distanceExponent) / 2);
 
     // Recurring terms
     // Fudge factor of 1 below as multiple
-    double C1 = 1 * m / Math.pow(r, distanceExponent);
-    double cosTheta = x / r;
-    double sinTheta = y / r;
+    float C1 = (float) (1 * m / Math.pow(r, distanceExponent));
+    float cosTheta = x / r;
+    float sinTheta = y / r;
 
     // B-field component vectors
-    float Bx = (float) (C1 * ((3 * cosTheta * cosTheta) - 1));
-    float By = (float) (C1 * (3 * cosTheta * sinTheta));
+    float Bx = C1 * ((3 * cosTheta * cosTheta) - 1);
+    float By = C1 * (3 * cosTheta * sinTheta);
 
     // B-field vector
     outputVector.set(Bx, By);
@@ -207,5 +213,9 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
       updateStrength();
       getModel().notifyFieldChange();
     }
+  }
+
+  public float getCoilWidth() {
+    return COIL_WIDTH;
   }
 }

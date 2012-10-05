@@ -15,7 +15,8 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   protected World box2DWorld;
   protected List<Science2DBody> bodies = new ArrayList<Science2DBody>(); 
-  private List<IModelConfig<?>> modelConfigs = new ArrayList<IModelConfig<?>>();
+  // Configs at model level itself - possibly affecting multiple bodies
+  private List<IModelConfig<?>> modelConfigs;
 
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
@@ -117,41 +118,38 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   
   // There should be only one current source in a circuit.
   // It will push current through all other current sinks in the circuit.
+  // Sinks before the source in the circuit get negative current and
+  // sinks after the source in the circuit get positive current.
   public void notifyCurrentChange(ICurrent.Source currentSource) {
-    float current = currentSource.getCurrent();
+    float current = -currentSource.getCurrent();
     for (List<Science2DBody> circuit: circuits) {
       if (!circuit.contains(currentSource)) continue;
       // Components before currentSource in circuit get negative current
-      boolean isNegative = true;
       for (Science2DBody component: circuit) {
         if (component instanceof ICurrent.Sink) {
-          ((ICurrent.Sink) component).setCurrent(isNegative ? -current : current);
+          ((ICurrent.Sink) component).setCurrent(current);
         } else if (component == currentSource) {
-          isNegative = false;
+          current = -current;
         }
       }
     }
   }
 
   public List<IModelConfig<?>> getAllConfigs() {
-    modelConfigs.clear();
-    initializeConfigs(modelConfigs);
-    
+    List<IModelConfig<?>> allConfigs = new ArrayList<IModelConfig<?>>();
+    if (modelConfigs == null) {
+      modelConfigs = new ArrayList<IModelConfig<?>>();
+      initializeConfigs(modelConfigs);
+    }
+    allConfigs.addAll(modelConfigs);
     for (Science2DBody body: bodies) {
       if (body.isActive()) {
-        modelConfigs.addAll(body.getConfigs());
+        allConfigs.addAll(body.getConfigs());
       }
     }
-    return Collections.unmodifiableList(modelConfigs);
+    return Collections.unmodifiableList(allConfigs);
   }
   
-  public IModelConfig<?> getConfig(String name) {
-    for (IModelConfig<?> modelConfig: modelConfigs) {
-      if (modelConfig.getName().equals(name)) return modelConfig;
-    }
-    return null;
-  }
-
   @Override
   public boolean isEnabled() {
     return isEnabled;

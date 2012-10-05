@@ -13,8 +13,7 @@ public interface IScience2DModel {
   public void simulateSteps(float delta);
   // Get all configs of the model
   public List<IModelConfig<?>> getAllConfigs();
-  // Get a specific named config of the model
-  public IModelConfig<?> getConfig(String name);
+  // Box2D World corresponding to model
   public World getBox2DWorld();
   // enable (or disable) the model to progress in simulate steps
   public void enable(boolean enable);

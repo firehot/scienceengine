@@ -95,8 +95,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     
     Table experimentLevels = new Table(getSkin());
     experimentLevels.setName("Experiment Levels");
-    ScrollPane experimentLevelPane = 
-        new ScrollPane(experimentLevels, getSkin());
+    ScrollPane experimentLevelPane = new ScrollPane(experimentLevels, getSkin());
     experimentThumbs = new Image[levels.size];
     
     for (int i = 0; i < levels.size; i++) {
@@ -132,6 +131,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
       label.setWrap(true);
       ScrollPane scrollPane = new ScrollPane(label, getSkin());
       scrollPane.setScrollingDisabled(true, false);
+      scrollPane.setFlickScroll(false);
       experimentLevels.add(scrollPane).width(THUMBNAIL_WIDTH).height(INFO_HEIGHT).left().pad(5);
     }
     experimentLevels.row();
