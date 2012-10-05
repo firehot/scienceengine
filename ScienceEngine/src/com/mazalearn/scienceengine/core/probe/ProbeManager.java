@@ -60,7 +60,6 @@ public class ProbeManager extends Group implements IDoneCallback {
   }
 
   public void startChallenge() {
-    this.setVisible(true);
     // Reset scores
     dashboard.resetScore();
         
@@ -103,7 +102,6 @@ public class ProbeManager extends Group implements IDoneCallback {
   }
   
   public void endChallenge() {
-    this.setVisible(false);
     // Turn on access to parts of control panel
     controlPanel.enableControls(true);
     science2DStage.done(false);

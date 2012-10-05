@@ -57,7 +57,8 @@ public class Science2DBody implements IBody {
     CurrentWire,
     SourceCoil,
     Voltmeter, 
-    FieldMagnet,
+    FieldMagnet, 
+    CurrentCoil,
   }
   
   protected Science2DBody(ComponentType componentType, String name, float x, float y, float angle) {

@@ -19,6 +19,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.probe.FieldDirec
 import com.mazalearn.scienceengine.experiments.electromagnetism.probe.FieldMagnitudeProber;
 import com.mazalearn.scienceengine.experiments.electromagnetism.probe.LightProber;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentCoilActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentSourceActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.CurrentWireActor;
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.ElectromagnetActor;
@@ -63,6 +64,9 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
         this.addActor(fieldMeterActor = new FieldMeterActor(textureRegion, body));
         fieldMeter = (FieldMeter) body;
         break;
+      case CurrentCoil:
+        this.addActor(new CurrentCoilActor(body, textureRegion));
+        break;        
       case CurrentSource:
         this.addActor(currentSource = new CurrentSourceActor(body, textureRegion));
         break;        
@@ -120,6 +124,9 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       break;
     case FieldMeter:
       texture = new Texture("images/arrow.png");
+      break;
+    case CurrentCoil:
+      texture = new Texture("images/currentcoil.png");
       break;
     case CurrentWire:
       texture = new Texture("images/currentwire-up.png");

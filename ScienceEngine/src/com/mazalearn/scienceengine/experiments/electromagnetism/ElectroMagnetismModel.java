@@ -5,7 +5,6 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Joint;
-import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -13,6 +12,7 @@ import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentCoil;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromagnet;
@@ -24,13 +24,12 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil
 public class ElectroMagnetismModel extends AbstractScience2DModel {
   private BarMagnet barMagnet;
   private RevoluteJointDef magnetRotationJointDef = new RevoluteJointDef();
-  private DistanceJointDef wiresDistanceJointDef = new DistanceJointDef();
+  private RevoluteJointDef coilRotationJointDef = new RevoluteJointDef();
   public enum Mode {Free, Rotate};
   
   private Mode mode = Mode.Free;
-  private Joint magnetRotationJoint, wiresDistanceJoint;
-  private CurrentWire wireA;
-  private CurrentWire wireB;
+  private Joint magnetRotationJoint, coilRotationJoint;
+  private CurrentCoil currentCoil;
     
   public ElectroMagnetismModel() {   
     super();
@@ -44,14 +43,12 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     addBody(new Electromagnet("Electromagnet", 10, 12, 0));
     addBody(new PickupCoil("PickupCoil", 23, -4, 0, 2E7f));
     addBody(new Lightbulb("Lightbulb", 23, 25, 0));
-    addBody(wireA = new CurrentWire("Wire A", 8, 12, 0));
-    addBody(wireB = new CurrentWire("Wire B", 16, 12, 0));
+    addBody(new CurrentWire("Wire A", 8, 12, 0));
+    addBody(new CurrentWire("Wire B", 16, 12, 0));
+    addBody(currentCoil = new CurrentCoil("CurrentCoil", 43, 28, 0));
     addBody(new Compass("Compass", 0, 5, 0));
     
     reset();
-    wiresDistanceJointDef.initialize(wireA.getBody(), wireB.getBody(), 
-        wireA.getWorldCenter(), wireB.getWorldCenter());
-    wiresDistanceJoint = box2DWorld.createJoint(wiresDistanceJointDef);
   }
 
   @Override
@@ -89,6 +86,11 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
       magnetRotationJointDef.initialize(barMagnet.getBody(), Science2DBody.getGround(), 
           barMagnet.getWorldPoint(Vector2.Zero));
       magnetRotationJoint = box2DWorld.createJoint(magnetRotationJointDef);
+    }
+    if (coilRotationJoint == null) {
+      coilRotationJointDef.initialize(currentCoil.getBody(), Science2DBody.getGround(), 
+          currentCoil.getWorldPoint(Vector2.Zero));
+      coilRotationJoint = box2DWorld.createJoint(coilRotationJointDef);
     }
   }
 
