@@ -45,7 +45,10 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     Science2DActor electroMagnet = null, currentSource = null;
     Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"));
     coilsBack.setName("CoilsBack");
+    Actor brushes = new Image(new Texture("images/brush.png"));
+    brushes.setName("Brushes");
     this.addActor(coilsBack);
+    this.addActor(brushes);
     for (final Science2DBody body: emModel.getBodies()) {
       TextureRegion textureRegion = getTextureRegionForBody(body);
       if (textureRegion == null) continue;

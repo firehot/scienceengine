@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -25,7 +26,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   public CurrentCoil(String name, float x, float y, float angle) {
     super(ComponentType.CurrentCoil, name, x, y, angle);
     this.width = 16f;
-    this.height = 4f;
+    this.height = 2f;
     FixtureDef fixtureDef = new FixtureDef();
     PolygonShape rectangleShape = new PolygonShape();
     rectangleShape.setAsBox(width/2, height/2);
@@ -50,7 +51,9 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
    * @return the current
    */
   public float getCurrent() {
-    return this.current;
+    // Effect of split ring commutator - current is reversed from 180-360 rotation
+    float angle = getAngle() % (2 * MathUtils.PI);
+    return (angle > MathUtils.PI) ? -current : current;
   }
 
   @Override
@@ -63,4 +66,13 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     forceVector.set(forceVector.y, -forceVector.x);
     applyForce(forceVector, getWorldPoint(pos.set(-width / 2, 0)));
   }
+
+  public float getWidth() {
+    return width;
+  }
+
+  public float getHeight() {
+    return height;
+  }
 }
+
