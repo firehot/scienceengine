@@ -72,12 +72,13 @@ public class ScienceEngine extends Game {
     return soundManager;
   }
 
-  public static Skin getSkin() {
+  public Skin getSkin() {
     if (skin == null) {
       FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
       skin = new Skin(skinFile);
-      Messages.setLocale(new Locale("en"));
-    }
+      skin.add("en", skin.getFont("default-font"));
+      Messages.setLocale(skin, new Locale("en"), getPlatform());
+   }
     return skin;
   }
   
@@ -101,6 +102,10 @@ public class ScienceEngine extends Game {
     return false;
   }
   // Game-related methods
+  
+  public ResourceViewer.Platform getPlatform() {
+    return resourceViewer.getPlatform();
+  }
 
   @Override
   public void create() {

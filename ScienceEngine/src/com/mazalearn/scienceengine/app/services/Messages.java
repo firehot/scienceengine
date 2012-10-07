@@ -10,12 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.utils.ResourceViewer.Platform;
 
 public class Messages {
+  private static final String HINDI_TTF = "skin/aksharhindi.ttf";
+  private static final String KANNADA_TTF = "skin/aksharkannada.ttf";
   private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.app.services.data.messages"; //$NON-NLS-1$
 
   private static Locale locale = new Locale("en");
+  private static Platform platform;
   private static ResourceBundle resourceBundle = 
       ResourceBundle.getBundle(BUNDLE_NAME, locale);
   
@@ -25,7 +28,7 @@ public class Messages {
   public static String getString(String key) {
     try {
       String val = resourceBundle.getString(key);
-      return new String(val.getBytes("ISO-8859-1"), "UTF-8");
+      return platform == Platform.Android ? val : new String(val.getBytes("ISO-8859-1"), "UTF-8");
     } catch (Exception e) {
       e.printStackTrace();
       return '!' + key + '!';
@@ -36,23 +39,23 @@ public class Messages {
     return locale;
   }
 
-  public static void setLocale(Locale locale) {
+  public static void setLocale(Skin skin, Locale locale, Platform platfrm) {
     Messages.locale = locale;
     resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
-    setFont();
+    platform = platfrm;
+    setFont(skin);
   }
 
-  private static void setFont() {
+  private static void setFont(Skin skin) {
     BitmapFont font = null;
-    String fontFile = "skin/";
-    String chars = null;
     String language = locale.getLanguage();
-    Skin skin = ScienceEngine.getSkin();
     if (language.equals("en")) {
-     font = skin.getFont("default-font");
+     font = skin.getFont("en");
     } else {
+      String fontFile = null;
+      String chars = null;
       if (language.equals("ka")) {
-        fontFile += "aksharkannada.ttf";
+        fontFile = KANNADA_TTF;
         chars = FreeTypeFontGenerator.DEFAULT_CHARS + 
             "ಕಕಾಕಿಕೀಕುಕೂಕೃಕೆಕೇಕೈಕೊಕೋಕೌಕಂಕಃಕ್ಖಖಾಖಿಖೀಖುಖೂಖೃಖೆಖೇಖೈಖೊಖೋಖೌಖಂಖಃಖ್ಗಗಾಗಿಗೀಗುಗೂಗೃಗೆಗೇಗೈಗೊಗೋಗೌಗಂಗಃಗ್" +
             "ಘಘಾಘಿಘೀಘುಘೂಘೃಘೆಘೇಘೈಘೊಘೋಘೌಘಂಘಃಘ್ಙಙಾಙಿಙೀಙುಙೂಙೃಙೆಙೇಙೈಙೊಙೋಙೌಙಂಙಃಙ್ಚಚಾಚಿಚೀಚುಚೂಚೃಚೆಚೇಚೈಚೊಚೋಚೌಚಂಚಃಚ್" +
@@ -67,7 +70,7 @@ public class Messages {
             "ಶಶಾಶಿಶೀಶುಶೂಶೃಶೆಶೇಶೈಶೊಶೋಶೌಶಂಶಃಶ್ಷಷಾಷಿಷೀಷುಷೂಷೃಷೆಷೇಷೈಷೊಷೋಷೌಷಂಷಃಷ್ಸಸಾಸಿಸೀಸುಸೂಸೃಸೆಸೇಸೈಸೊಸೋಸೌಸಂಸಃಸ್" +
             "ಹಹಾಹಿಹೀಹುಹೂಹೃಹೆಹೇಹೈಹೊಹೋಹೌಹಂಹಃಹ್ಳಳಾಳಿಳೀಳುಳೂಳೃಳೆಳೇಳೈಳೊಳೋಳೌಳಂಳಃಳ್ೞೞಾೞಿೞೀೞುೞೂೞೃೞೆೞೇೞೈೞೊೞೋೞೌೞಂೞಃ";
       } else if (language.equals("hi")) {
-          fontFile +=  "aksharhindi.ttf";
+          fontFile =  HINDI_TTF;
           chars = FreeTypeFontGenerator.DEFAULT_CHARS + 
               "ऀँंःऄअआइईउऊऋऌऍऎएऐऑऒओऔकखगघङचछजझञटठडढणतथदधनऩपफबभमयरऱलळऴवशषसहऺऻ़" +
               "ऽािीुूृॄॅॆेैॉॊोौ्ॎॏॐ॒॑॓॔ॕॖॗक़ख़ग़ज़ड़ढ़फ़य़ॠॡॢॣ।॥०१२३४५६७८९॰ॱॲॳॴॵॶॷॹॺॻॼॽॾॿ" +

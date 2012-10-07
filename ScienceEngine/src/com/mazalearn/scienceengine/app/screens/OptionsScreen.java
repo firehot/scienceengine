@@ -46,7 +46,7 @@ public class OptionsScreen extends AbstractScreen {
       public void changed(ChangeEvent event, Actor actor) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         Locale locale = new Locale(localeSelect.getSelection());
-        Messages.setLocale(locale);
+        Messages.setLocale(getSkin(), locale, scienceEngine.getPlatform());
       }
     });
     table.row();
@@ -104,7 +104,7 @@ public class OptionsScreen extends AbstractScreen {
     });
 
     // create the volume label
-    volumeValue = new Label("", ScienceEngine.getSkin()); //$NON-NLS-1$
+    volumeValue = new Label("", getSkin()); //$NON-NLS-1$
     updateVolumeLabel();
 
     // add the volume row

@@ -175,7 +175,7 @@ public abstract class AbstractScreen implements Screen {
   }
 
   public Skin getSkin() {
-    return ScienceEngine.getSkin();
+    return scienceEngine.getSkin();
   }
 
   public Color getBackgroundColor() {

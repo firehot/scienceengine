@@ -24,6 +24,11 @@ public class Main {
 	
 	static class UrlViewerImpl implements ResourceViewer {
 	  @Override
+	  public Platform getPlatform() {
+	    return Platform.Desktop;
+	  }
+	  
+	  @Override
   	public void browseURL(String url) {
       if(java.awt.Desktop.isDesktopSupported() ) {
         java.awt.Desktop desktop = java.awt.Desktop.getDesktop();

@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 
 import android.content.Intent;
@@ -36,6 +35,10 @@ public class MainActivity extends AndroidApplication implements ResourceViewer {
         }
         scienceEngine.setUrlViewer(this);
         initialize(scienceEngine, cfg);
+    }
+    
+    public Platform getPlatform() {
+      return Platform.Android;
     }
     
     public void browseURL(String url) {

@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * @author sridhar
  */
 public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
-  private static final float OUTPUT_SCALE = 0.01f;
+  private static final float OUTPUT_SCALE = 10f;
   // Dimensions of the coil.
   private float width, height;
   // Current in the wire
@@ -62,7 +62,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     // magnetic field * current * length
     // Direction is given by Fleming's left hand rule
     getModel().getBField(getPosition(), forceVector /* output */);
-    forceVector.mul(getCurrent()).mul(OUTPUT_SCALE).mul(1000);
+    forceVector.mul(getCurrent()).mul(OUTPUT_SCALE);
     forceVector.set(forceVector.y, -forceVector.x);
     applyForce(forceVector, getWorldPoint(pos.set(-width / 2, 0)));
   }
