@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
@@ -182,6 +183,8 @@ public class LevelManager {
   private void readLevelInfo(OrderedMap<String, ?> info) {
     description = (String) nvl(info.get("description"), 
         controlPanel.getExperimentName() + " : Level " + level);
+    Label title = (Label) stage.getRoot().findActor("Title");
+    title.setText(description);
   }
 
   private void readCircuits(Array<?> circuits) {
@@ -222,7 +225,9 @@ public class LevelManager {
   private void initializeComponents() {
     // Make all actors inactive and invisible.
     for (Actor actor: stage.getActors()) {
-      actor.setVisible(false);
+      if (!"Title".equals(actor.getName())) {
+        actor.setVisible(false);
+      }
       if (actor instanceof Science2DActor) {
         ((Science2DActor) actor).setPositionFromViewCoords(false);
       }

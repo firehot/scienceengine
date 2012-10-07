@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
@@ -109,5 +111,9 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     this.controlPanel = controlPanel;
     this.addActor(controlPanel);
     this.levelManager = new LevelManager(this, science2DModel, controlPanel);
+    Label title = new Label(levelManager.getDescription(), skin);
+    title.setPosition(100, getHeight() - 20);
+    title.setName("Title");
+    this.addActor(title);
   }
 }
