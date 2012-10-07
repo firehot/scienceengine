@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.Messages;
@@ -55,8 +55,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToStart"), getSkin()); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {
       public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        scienceEngine.setScreen(new StartScreen(scienceEngine));
+        goBack();
       }
     });
     table.row();
@@ -107,6 +106,12 @@ public class ExperimentMenuScreen extends AbstractScreen {
       return new ElectroMagnetismController(width, height, getSkin());
     }
     return null;
+  }
+
+  @Override
+  protected void goBack() {
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    scienceEngine.setScreen(new StartScreen(scienceEngine));
   }
   
 }

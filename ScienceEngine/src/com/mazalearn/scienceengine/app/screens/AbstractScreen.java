@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -42,19 +44,23 @@ public abstract class AbstractScreen implements Screen {
     this.scienceEngine = game;
     int width = (isExperimentScreen() ? VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
     int height = (isExperimentScreen() ? VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
-    this.stage = new Stage(width, height, false) {
+    this.stage = new Stage(width, height, false);
+    stage.addListener(new InputListener() {
       @Override
-      public boolean keyDown(int keycode) {
+      public boolean keyDown(InputEvent event, int keycode) {
         if (keycode == Keys.ALT_LEFT) {
           if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
             ScienceEngine.DEV_MODE = DevMode.DESIGN;
           } else if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
             ScienceEngine.DEV_MODE = DevMode.DEBUG;
-          }
+          } 
+        } else if (keycode == Keys.BACK) {
+          goBack();
+          return true;
         }
-        return super.keyDown(keycode);
+        return super.keyDown(event, keycode);
       }      
-    };
+    });
   }
 
   public void setStage(Stage stage) {
@@ -69,6 +75,9 @@ public abstract class AbstractScreen implements Screen {
   protected boolean isExperimentScreen() {
     return false;
   }
+  
+  // Go back one screen in static navigation hierarchy
+  protected abstract void goBack();
 
   // Lazily loaded collaborators
 
@@ -113,6 +122,10 @@ public abstract class AbstractScreen implements Screen {
 
     // set the stage as the input processor
     Gdx.input.setInputProcessor(stage);
+    // We also treat as back key press
+    Gdx.input.setCatchBackKey(true);
+    // Catch menu key to prevent onscreen keyboard coming up
+    Gdx.input.setCatchMenuKey(true);
   }
 
   @Override

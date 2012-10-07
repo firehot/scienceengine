@@ -58,4 +58,11 @@ public class HighScoresScreen extends AbstractScreen {
     table.row();
     table.add(backButton).size(250, 60).colspan(2);
   }
+  
+  @Override
+  protected void goBack() {
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    scienceEngine.setScreen(new StartScreen(scienceEngine));
+  }
+  
 }

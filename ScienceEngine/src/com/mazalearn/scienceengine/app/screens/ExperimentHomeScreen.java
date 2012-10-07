@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
@@ -53,6 +53,11 @@ public class ExperimentHomeScreen extends AbstractScreen {
     smallLabelStyle = new LabelStyle(getFont(), Color.WHITE);
   }
 
+  protected void goBack() {
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
+  }
+  
   @Override
   public void show() {
     super.show();
@@ -78,8 +83,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     backButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
+        goBack();
       }
     });
     table.row();

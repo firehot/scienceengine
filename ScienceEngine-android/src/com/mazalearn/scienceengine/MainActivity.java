@@ -15,26 +15,26 @@ import com.mazalearn.scienceengine.app.utils.ResourceViewer;
 public class MainActivity extends AndroidApplication implements ResourceViewer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        // Android always in production mode
-        ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
+      super.onCreate(savedInstanceState);
+      
+      // Android always in production mode
+      ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
 
-        AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-        cfg.useGL20 = true;
-        cfg.useAccelerometer = false;
-        cfg.useCompass = false;
-        Uri data = getIntent().getData();
+      AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
+      cfg.useGL20 = true;
+      cfg.useAccelerometer = false;
+      cfg.useCompass = false;
+      Uri data = getIntent().getData();
 
-        ScienceEngine scienceEngine = null;
-        if (data != null) {
-          List<String> params = data.getPathSegments();
-          scienceEngine = new ScienceEngine(params);
-        } else {
-          scienceEngine = new ScienceEngine();
-        }
-        scienceEngine.setUrlViewer(this);
-        initialize(scienceEngine, cfg);
+      ScienceEngine scienceEngine = null;
+      if (data != null) {
+        List<String> params = data.getPathSegments();
+        scienceEngine = new ScienceEngine(params);
+      } else {
+        scienceEngine = new ScienceEngine();
+      }
+      scienceEngine.setUrlViewer(this);
+      initialize(scienceEngine, cfg);
     }
     
     public Platform getPlatform() {

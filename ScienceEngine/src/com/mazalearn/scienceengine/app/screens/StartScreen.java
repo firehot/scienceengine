@@ -26,15 +26,14 @@ public class StartScreen extends AbstractScreen {
 
     registerButton(table, Messages.getString("ScienceEngine.Experiments"), new ExperimentMenuScreen(scienceEngine)); //$NON-NLS-1$
     registerButton(table, Messages.getString("ScienceEngine.Options"), new OptionsScreen(scienceEngine)); //$NON-NLS-1$
-    TextButton startGameButton = new TextButton(Messages.getString("ScienceEngine.Exit"), getSkin()); //$NON-NLS-1$
-    startGameButton.addListener(new ClickListener() {
+    TextButton exitButton = new TextButton(Messages.getString("ScienceEngine.Exit"), getSkin()); //$NON-NLS-1$
+    exitButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        Gdx.app.exit();
+        goBack();
       }
     });
-    table.add(startGameButton).size(300, 60).uniform().spaceBottom(10);
+    table.add(exitButton).size(300, 60).uniform().spaceBottom(10);
     table.row();
   }
 
@@ -50,4 +49,11 @@ public class StartScreen extends AbstractScreen {
     table.add(startGameButton).size(300, 60).uniform().spaceBottom(10);
     table.row();
   }
+
+  @Override
+  protected void goBack() {
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    Gdx.app.exit();
+  }
+  
 }

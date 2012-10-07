@@ -133,4 +133,11 @@ public class OptionsScreen extends AbstractScreen {
     float volume = (ScienceEngine.getPreferencesManager().getVolume() * 100);
     volumeValue.setText(String.valueOf(volume));
   }
+  
+  @Override
+  protected void goBack() {
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    scienceEngine.setScreen(new StartScreen(scienceEngine));
+  }
+  
 }

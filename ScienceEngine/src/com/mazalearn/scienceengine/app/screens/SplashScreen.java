@@ -1,11 +1,13 @@
 package com.mazalearn.scienceengine.app.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
 /**
  * Shows a splash image and moves on to the next screen.
@@ -51,4 +53,12 @@ public class SplashScreen extends AbstractScreen {
     // and finally we add the actor to the stage
     stage.addActor(splashImage);
   }
+
+
+  @Override
+  protected void goBack() {
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    Gdx.app.exit();
+  }
+  
 }
