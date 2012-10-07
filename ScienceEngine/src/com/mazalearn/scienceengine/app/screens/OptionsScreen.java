@@ -114,12 +114,11 @@ public class OptionsScreen extends AbstractScreen {
     table.add(volumeValue).width(40);
 
     // register the back button
-    TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToMainMenu"), getSkin()); //$NON-NLS-1$
+    TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToMain"), getSkin()); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        scienceEngine.setScreen(new StartScreen(scienceEngine));
+        goBack();
       }
     });
     table.row();
@@ -137,7 +136,7 @@ public class OptionsScreen extends AbstractScreen {
   @Override
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    scienceEngine.setScreen(new StartScreen(scienceEngine));
+    scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   
 }

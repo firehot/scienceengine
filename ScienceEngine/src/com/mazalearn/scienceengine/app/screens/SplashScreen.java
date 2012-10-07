@@ -1,11 +1,21 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
@@ -13,7 +23,35 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
  * Shows a splash image and moves on to the next screen.
  */
 public class SplashScreen extends AbstractScreen {
-  private Image splashImage;
+
+  private final class SplashImage extends Image {
+    private SplashImage(TextureRegion region) {
+      super(region);
+      this.setFillParent(true);
+
+      // this is needed for the fade-in effect to work correctly; we're just
+      // making the image completely transparent
+      this.getColor().a = 0f;
+
+      // configure the fade-in/out effect on the splash image
+      this.addAction(Actions.sequence(Actions.fadeIn(0.75f), Actions.delay(2.5f)));
+      
+      this.addListener(new ClickListener() {
+        public void clicked (InputEvent event, float x, float y) {
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+          scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
+        }      
+      });
+    }
+
+    @Override
+    public void draw(SpriteBatch batch, float parentAlpha) {
+      super.draw(batch, parentAlpha);
+      BitmapFont font = getFont();
+      font.setScale(2.0f);
+      font.draw(batch, "Touch to Enter", MENU_VIEWPORT_WIDTH / 2, MENU_VIEWPORT_HEIGHT / 2);
+    }
+  }
 
   public SplashScreen(ScienceEngine game) {
     super(game);
@@ -30,30 +68,23 @@ public class SplashScreen extends AbstractScreen {
     AtlasRegion splashRegion = getAtlas().findRegion(
         "splash-screen/splash-image"); //$NON-NLS-1$
 
-    // here we create the splash image actor; its size is set when the
+    // We create the splash image actor; its size is set when the
     // resize() method gets called
-    splashImage = new Image(splashRegion);
-    splashImage.setFillParent(true);
-
-    // this is needed for the fade-in effect to work correctly; we're just
-    // making the image completely transparent
-    splashImage.getColor().a = 0f;
-
-    // configure the fade-in/out effect on the splash image
-    splashImage.addAction(Actions.sequence(Actions.fadeIn(0.75f), Actions.delay(2.5f), Actions.fadeOut(0.75f),
-        new Action() {
-          @Override
-          public boolean act(float delta) {
-            // the last action will move to the next screen
-            scienceEngine.setScreen(new StartScreen(scienceEngine));
-            return true;
-          }
-        }));
-
-    // and finally we add the actor to the stage
-    stage.addActor(splashImage);
+    stage.addActor(new SplashImage(splashRegion));
+    TextButton options = new TextButton("Options...", getSkin());
+    options.setPosition(VIEWPORT_WIDTH - 100, 60);
+    Color c = options.getColor();
+    options.setColor(c.r, c.g, c.b, 0.3f);
+    options.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        scienceEngine.setScreen(new OptionsScreen(scienceEngine));
+      }      
+    });
+    stage.addActor(options);
+    
+//    registerButton(table, Messages.getString("ScienceEngine.Options"), new OptionsScreen(scienceEngine)); //$NON-NLS-1$
   }
-
 
   @Override
   protected void goBack() {

@@ -51,8 +51,7 @@ public class HighScoresScreen extends AbstractScreen {
     backButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        scienceEngine.setScreen(new StartScreen(scienceEngine));
+        goBack();
       }
     });
     table.row();
@@ -62,7 +61,7 @@ public class HighScoresScreen extends AbstractScreen {
   @Override
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    scienceEngine.setScreen(new StartScreen(scienceEngine));
+    scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   
 }

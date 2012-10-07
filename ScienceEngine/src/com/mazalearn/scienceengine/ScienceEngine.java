@@ -148,7 +148,8 @@ public class ScienceEngine extends Game {
     // show the splash screen when the scienceEngine is resized for the first time;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(DEV_MODE != DevMode.PRODUCTION ? new ExperimentMenuScreen(this) : new SplashScreen(this));
+      //setScreen(DEV_MODE != DevMode.PRODUCTION ? new ExperimentMenuScreen(this) : new SplashScreen(this));
+      setScreen(new SplashScreen(this));
     }
   }
 
