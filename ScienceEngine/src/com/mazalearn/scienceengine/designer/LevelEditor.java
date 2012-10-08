@@ -113,9 +113,9 @@ public class LevelEditor extends Stage {
     titleTable.defaults().fill();
     titleTable.add(levelManager.getName()).pad(10);
     final SelectBox level = 
-        new SelectBox(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 
+        new SelectBox(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, 
             screen.getSkin());
-    level.setSelection(levelManager.getLevel() - 1);
+    level.setSelection(levelManager.getLevel());
     level.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {

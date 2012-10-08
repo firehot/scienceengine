@@ -10,9 +10,9 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.utils.ResourceViewer;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 
-public class MainActivity extends AndroidApplication implements ResourceViewer {
+public class MainActivity extends AndroidApplication implements PlatformAdapter {
     @Override
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);

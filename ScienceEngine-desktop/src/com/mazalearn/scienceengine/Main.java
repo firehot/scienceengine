@@ -7,7 +7,7 @@ import java.util.Arrays;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.utils.ResourceViewer;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 
 public class Main {
 	public static void main(String[] args) {
@@ -18,11 +18,17 @@ public class Main {
 		cfg.height = 480;
 		
 		ScienceEngine scienceEngine = new ScienceEngine(Arrays.asList(args));
-		scienceEngine.setUrlViewer(new UrlViewerImpl());
-    new LwjglApplication(scienceEngine, cfg);
+		scienceEngine.setUrlViewer(new PlatformAdapterImpl());
+    new LwjglApplication(scienceEngine, cfg) {
+      @Override
+      public void exit() {
+        ScienceEngine.getProfileManager().persist();
+        super.exit();
+      }
+    };
 	}
 	
-	static class UrlViewerImpl implements ResourceViewer {
+	static class PlatformAdapterImpl implements PlatformAdapter {
 	  @Override
 	  public Platform getPlatform() {
 	    return Platform.Desktop;

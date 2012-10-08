@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.mazalearn.scienceengine.app.utils.ResourceViewer.Platform;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 public class Messages {
   private static final String HINDI_TTF = "skin/aksharhindi.ttf";

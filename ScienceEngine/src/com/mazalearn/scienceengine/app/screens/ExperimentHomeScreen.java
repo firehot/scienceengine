@@ -25,7 +25,6 @@ import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
 
 /**
  * Experiment Home screen - shows all levels for that experiment.
@@ -38,10 +37,10 @@ public class ExperimentHomeScreen extends AbstractScreen {
   private static final int INFO_HEIGHT = 50;
   IScience2DController science2DController;
   private Image[] experimentThumbs;
-  private LevelManager levelManager;
   private Array<?> levels;
   private Array<?> resources;
   private LabelStyle smallLabelStyle;
+  private Profile profile;
 
   public ExperimentHomeScreen(ScienceEngine scienceEngine, 
       IScience2DController science2DController) {
@@ -51,16 +50,23 @@ public class ExperimentHomeScreen extends AbstractScreen {
     readExperimentInfo();
     getFont().setScale(0.8f);
     smallLabelStyle = new LabelStyle(getFont(), Color.WHITE);
+    profile = ScienceEngine.getProfileManager().retrieveProfile();
+    profile.setExperiment(science2DController.getName());
   }
 
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    profile.setExperiment("");
     scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
   }
   
   @Override
   public void show() {
     super.show();
+    if (profile.getCurrentLevel() != 0) {
+      gotoExperimentLevel(profile.getCurrentLevel());
+      return;
+    }
     
     Table table = super.getTable();
     
@@ -90,13 +96,8 @@ public class ExperimentHomeScreen extends AbstractScreen {
     table.add(backButton).fill().colspan(100).pad(10, 20, 10, 20);
   }
 
+  @SuppressWarnings("unchecked")
   private Actor createExperimentLevelPane() {
-    final IScience2DStage science2DStage = science2DController.getView();
-    Profile profile = ScienceEngine.getProfileManager().retrieveProfile();
-    int level = Math.max(profile.getCurrentLevelId(), 1);
-    levelManager = science2DStage.getLevelManager();
-    levelManager.setLevel(level);
-    
     Table experimentLevels = new Table(getSkin());
     experimentLevels.setName("Experiment Levels");
     ScrollPane experimentLevelPane = new ScrollPane(experimentLevels, getSkin());
@@ -117,10 +118,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
       experimentThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          Screen experimentLevelScreen = 
-              new ExperimentScreen(scienceEngine, levelManager, 
-                  iLevel, science2DController);
-          scienceEngine.setScreen(experimentLevelScreen);
+          gotoExperimentLevel(iLevel);
         }
       });
       experimentThumbs[i] = experimentThumb;
@@ -143,6 +141,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     return experimentLevelPane;
   }
 
+  @SuppressWarnings("unchecked")
   private Actor createResourcePane() {
     Table resourcesTable = new Table(getSkin());
     resourcesTable.setName("Resources");
@@ -230,6 +229,13 @@ public class ExperimentHomeScreen extends AbstractScreen {
     return resourcePane;   
   }
 
+
+  private void gotoExperimentLevel(final int iLevel) {
+    Screen experimentLevelScreen = 
+        new ExperimentScreen(scienceEngine, iLevel, science2DController);
+    scienceEngine.setScreen(experimentLevelScreen);
+  }
+  
   @SuppressWarnings("unchecked")
   public void readExperimentInfo() {
     FileHandle file;

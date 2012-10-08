@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -20,6 +21,10 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   private float width, height;
   // Current in the wire
   private float current;
+  // type of commutator connector
+  public enum CommutatorType { Connector, Commutator, Disconnected};
+  
+  private CommutatorType commutatorType = CommutatorType.Disconnected;
   // Field acting on the wire
   private Vector2 forceVector = new Vector2(), pos = new Vector2();
 
@@ -36,6 +41,16 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
     rectangleShape.dispose();
+    initializeConfigs();
+  }
+
+  public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<String>(getName() + " Commutator", 
+        "Type of Commutator", CommutatorType.values()) {
+      public String getValue() { return commutatorType.name(); }
+      public void setValue(String value) { commutatorType = CommutatorType.valueOf(value); }
+      public boolean isPossible() { return isActive(); }
+    });
   }
   
   /**
@@ -73,6 +88,10 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
 
   public float getHeight() {
     return height;
+  }
+
+  public CommutatorType getCommutatorType() {
+    return commutatorType;
   }
 }
 

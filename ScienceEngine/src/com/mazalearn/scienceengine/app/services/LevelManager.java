@@ -225,7 +225,7 @@ public class LevelManager {
   private void initializeComponents() {
     // Make all actors inactive and invisible.
     for (Actor actor: stage.getActors()) {
-      if (!"Title".equals(actor.getName())) {
+      if (!"Title".equals(actor.getName()) && !"Circuit".equals(actor.getName())) {
         actor.setVisible(false);
       }
       if (actor instanceof Science2DActor) {

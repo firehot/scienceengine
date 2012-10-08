@@ -107,6 +107,7 @@ public class ControlPanel extends Table {
       public void clicked(InputEvent event, float x, float y) {
         science2DController.getView().challenge(false);
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.getProfileManager().retrieveProfile().setCurrentLevel(0);
         ScienceEngine.SCIENCE_ENGINE.setScreen(
             new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, science2DController));
       }

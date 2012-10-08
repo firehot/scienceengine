@@ -11,14 +11,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.app.screens.ExperimentMenuScreen;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.screens.ExperimentScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
+import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
-import com.mazalearn.scienceengine.app.utils.ResourceViewer;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
@@ -39,7 +44,7 @@ public class ScienceEngine extends Game {
   private static ProfileManager profileManager;
   private static MusicManager musicManager;
   private static SoundManager soundManager;
-  private ResourceViewer resourceViewer;
+  private PlatformAdapter platformAdapter;
 
   private List<String> params;
 
@@ -82,29 +87,29 @@ public class ScienceEngine extends Game {
     return skin;
   }
   
-  // ResourceViewer interface
+  // PlatformAdapter interface
   
-  public void setUrlViewer(ResourceViewer resourceViewer) {
-    this.resourceViewer = resourceViewer;
+  public void setUrlViewer(PlatformAdapter platformAdapter) {
+    this.platformAdapter = platformAdapter;
   }
   
   public void browseURL(String url){
-    if (resourceViewer != null) {
-      resourceViewer.browseURL(url);
+    if (platformAdapter != null) {
+      platformAdapter.browseURL(url);
     }
   }
 
 
   public boolean playVideo(File file) {
-    if (resourceViewer != null) {
-      return resourceViewer.playVideo(file);
+    if (platformAdapter != null) {
+      return platformAdapter.playVideo(file);
     }
     return false;
   }
   // Game-related methods
   
-  public ResourceViewer.Platform getPlatform() {
-    return resourceViewer.getPlatform();
+  public PlatformAdapter.Platform getPlatform() {
+    return platformAdapter.getPlatform();
   }
 
   @Override
@@ -145,11 +150,33 @@ public class ScienceEngine extends Game {
     Gdx.app.log(ScienceEngine.LOG, "Resizing engine to: " + width + " x "
         + height);
 
-    // show the splash screen when the scienceEngine is resized for the first time;
+    // show the starting screen when the scienceEngine is resized for the first time;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(new SplashScreen(this));
+      setScreen(createStartScreen());
     }
+  }
+
+  private AbstractScreen createStartScreen() {
+    // Look through params to identify right screen
+    // params come as pathsegments
+    // e.g. science/karnataka/electromagnetism?t=20
+    // TODO: Later handle first 2 path segments identifying subject and board
+    if (params.size() >= 4) {
+      String topic = params.get(2);
+      String level = params.get(3);
+      int iLevel = (level.equals("t=20")) ? 4 : 1;
+      if (topic.equals("electromagnetism")) {
+        IScience2DController science2DController = 
+            new ElectroMagnetismController(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT, getSkin());
+        final IScience2DStage science2DStage = science2DController.getView();
+        LevelManager levelManager = science2DStage.getLevelManager();
+        levelManager.setLevel(iLevel);
+  
+        return new ExperimentScreen(this, iLevel, science2DController);
+      }
+    }
+    return new SplashScreen(this);
   }
 
   @Override

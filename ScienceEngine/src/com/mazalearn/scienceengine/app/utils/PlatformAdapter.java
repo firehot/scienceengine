@@ -2,7 +2,7 @@ package com.mazalearn.scienceengine.app.utils;
 
 import java.io.File;
 
-public interface ResourceViewer {
+public interface PlatformAdapter {
 
   // Platform - required for utf-8/iso-8859 in characters
   enum Platform { Desktop, Android, GWT};

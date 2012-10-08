@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.app.services.Profile;
+import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
@@ -18,12 +20,17 @@ import com.mazalearn.scienceengine.designer.LevelEditor;
 public class ExperimentScreen extends AbstractScreen {
 
   private IScience2DController science2DController;
+  private Profile profile;
 
   public ExperimentScreen(ScienceEngine scienceEngine, 
-      LevelManager levelManager, int level, IScience2DController science2DController) {
+      int level, IScience2DController science2DController) {
     super(scienceEngine, null);
     this.science2DController = science2DController;
     IScience2DStage science2DStage = science2DController.getView();
+    ProfileManager profileManager = ScienceEngine.getProfileManager();
+    profile = profileManager.retrieveProfile();
+    profile.setCurrentLevel(level);
+    LevelManager levelManager = science2DStage.getLevelManager();
     levelManager.setLevel(level);
     levelManager.load();
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
@@ -51,6 +58,7 @@ public class ExperimentScreen extends AbstractScreen {
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
+    profile.setCurrentLevel(0);
   }
   
 }

@@ -53,8 +53,8 @@ public class SplashScreen extends AbstractScreen {
     }
   }
 
-  public SplashScreen(ScienceEngine game) {
-    super(game);
+  public SplashScreen(ScienceEngine scienceEngine) {
+    super(scienceEngine);
   }
 
   @Override
@@ -82,13 +82,13 @@ public class SplashScreen extends AbstractScreen {
       }      
     });
     stage.addActor(options);
-    
-//    registerButton(table, Messages.getString("ScienceEngine.Options"), new OptionsScreen(scienceEngine)); //$NON-NLS-1$
   }
 
   @Override
   protected void goBack() {
+    ScienceEngine.getProfileManager().persist();
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    Gdx.app.log(ScienceEngine.LOG, "Exiting engine"); //$NON-NLS-1$
     Gdx.app.exit();
   }
   

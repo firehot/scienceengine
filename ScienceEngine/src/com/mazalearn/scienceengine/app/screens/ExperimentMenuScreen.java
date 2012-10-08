@@ -28,11 +28,16 @@ public class ExperimentMenuScreen extends AbstractScreen {
 
   public ExperimentMenuScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
+    profile = ScienceEngine.getProfileManager().retrieveProfile();
   }
 
   @Override
   public void show() {
     super.show();
+    if (!profile.getExperiment().equals("")) {
+      gotoExperimentHome(profile.getExperiment());
+      return;
+    }
     setBackgroundColor(Color.DARK_GRAY);
 
     // start playing the menu music
@@ -43,9 +48,6 @@ public class ExperimentMenuScreen extends AbstractScreen {
     table.defaults().spaceBottom(20).fill().center();
     table.add(Messages.getString("ScienceEngine.ScienceEngine")).colspan(10).spaceBottom(20); //$NON-NLS-1$
     table.row();
-
-    // retrieve the table's layout
-    profile = ScienceEngine.getProfileManager().retrieveProfile();
 
     // create the experiments Table
     table.add(createExperimentsSelector());    
@@ -79,12 +81,9 @@ public class ExperimentMenuScreen extends AbstractScreen {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
-          IScience2DController science2DController = 
-              createExperimentController(experimentName, 
-              VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-          scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
+          gotoExperimentHome(experimentName);
         }
+
       });
       Table levelTable = new Table(getSkin());
       levelTable.setName("Level");
@@ -98,11 +97,11 @@ public class ExperimentMenuScreen extends AbstractScreen {
   
   private IScience2DController createExperimentController(
       String experimentName, int width, int height) {
-    if (experimentName == StatesOfMatterController.NAME) {
+    if (experimentName.equals(StatesOfMatterController.NAME)) {
       return new StatesOfMatterController(width, height, getSkin());
-    } else if (experimentName == WaveController.NAME) {
+    } else if (experimentName.equals(WaveController.NAME)) {
       return  new WaveController(width, height, getAtlas(), getSkin());
-    } else if (experimentName == ElectroMagnetismController.NAME) {
+    } else if (experimentName.equals(ElectroMagnetismController.NAME)) {
       return new ElectroMagnetismController(width, height, getSkin());
     }
     return null;
@@ -114,4 +113,11 @@ public class ExperimentMenuScreen extends AbstractScreen {
     scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   
+  private void gotoExperimentHome(final String experimentName) {
+    Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
+    IScience2DController science2DController = 
+        createExperimentController(experimentName, 
+        VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+    scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
+  }
 }
