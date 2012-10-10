@@ -31,7 +31,6 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.view.LightbulbAc
 import com.mazalearn.scienceengine.experiments.electromagnetism.view.PickupCoilActor;
 
 public class ElectroMagnetismView extends AbstractScience2DStage {
-  private BarMagnetActor barMagnetActor;
   private ProbeManager probeManager;
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
@@ -59,8 +58,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
           new TextureRegion(new Texture(textureFilename));
       switch (componentType) {
       case BarMagnet:
-        barMagnetActor = new BarMagnetActor(textureRegion, body, this, emModel);
-        this.addActor(barMagnetActor);
+        this.addActor(new BarMagnetActor(textureRegion, body, this, emModel));
         break;
       case Lightbulb:
         this.addActor(new LightbulbActor(textureRegion, (Lightbulb) body));

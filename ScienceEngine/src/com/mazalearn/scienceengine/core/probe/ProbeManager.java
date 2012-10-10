@@ -102,6 +102,7 @@ public class ProbeManager extends Group implements IDoneCallback {
       prober.reinitialize(getX(), getY(), getWidth(), getHeight());
     }
 
+    this.setVisible(true);
     doProbe();
   }
   

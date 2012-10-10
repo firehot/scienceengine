@@ -9,8 +9,11 @@ public interface PlatformAdapter {
   
   public Platform getPlatform();
   
-  // Show url in browser
+  // Show url in any browser
   public void browseURL(String url);
+  
+  // Show url in captive browser
+  public void showURL(String uri);
 
   // Plays video corresponding to file. Returns true iff successful
   public boolean playVideo(File file);

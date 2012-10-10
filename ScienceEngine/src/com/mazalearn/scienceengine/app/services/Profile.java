@@ -60,7 +60,10 @@ public class Profile implements Serializable {
   @Override
   public void read(Json json, OrderedMap<String, Object> jsonData) {
 
-    properties = json.readValue("properties", HashMap.class, String.class, jsonData); 
+    properties = json.readValue("properties", HashMap.class, String.class, jsonData);
+    if (properties == null) {
+      properties = new HashMap<String, String>();
+    }
     // libgdx handles the keys of JSON formatted HashMaps as Strings, but we
     // want it to be an integer instead (levelId)
     Map<String, Integer> highScores = json.readValue("highScores",

@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">ScienceEngine</string>
     <string name="video">ScienceEngine Video</string>
+    <string name="webview">ScienceEngine WebView</string>
 </resources>

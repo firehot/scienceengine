@@ -2,13 +2,12 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -21,8 +20,6 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 public class SplashScreen extends AbstractScreen {
 
   private final class SplashImage extends Image {
-    private float increment = 0.01f;
-    private float alpha = 1;
 
     private SplashImage(TextureRegion region) {
       super(region);
@@ -32,29 +29,15 @@ public class SplashScreen extends AbstractScreen {
       // making the image completely transparent
       this.getColor().a = 0f;
 
-      // configure the fade-in/out effect on the splash image
-      this.addAction(Actions.sequence(Actions.fadeIn(0.75f), Actions.delay(2.5f)));
+      // configure the fade-in effect on the splash image
+      this.addAction(Actions.fadeIn(0.75f));
       
       this.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
           scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
         }      
-      });
-    }
-
-    @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-      super.draw(batch, parentAlpha);
-      BitmapFont font = getFont();
-      Color c = font.getColor();
-      font.setColor(c.r, c.g, c.b, alpha);
-      font.setScale(2.0f);
-      font.draw(batch, "Touch to Enter", MENU_VIEWPORT_WIDTH / 2, MENU_VIEWPORT_HEIGHT / 2);
-      alpha += increment;
-      if (alpha > 1 - increment || alpha <= 0.1f) {
-        increment = -increment;
-      }
+      });      
     }
   }
 
@@ -68,6 +51,16 @@ public class SplashScreen extends AbstractScreen {
 
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+
+    Label label = new Label("Touch to Enter", scienceEngine.getSkin());
+    label.setFontScale(2f);
+    label.setPosition(MENU_VIEWPORT_WIDTH / 2, MENU_VIEWPORT_HEIGHT / 2);
+    label.addAction(
+        Actions.forever(
+            Actions.sequence(
+                Actions.fadeIn(1f), 
+                Actions.delay(0.5f), 
+                Actions.fadeOut(1f))));
 
     // retrieve the splash image's region from the atlas
     AtlasRegion splashRegion = getAtlas().findRegion(
@@ -86,6 +79,7 @@ public class SplashScreen extends AbstractScreen {
         scienceEngine.setScreen(new OptionsScreen(scienceEngine));
       }      
     });
+    stage.addActor(label);
     stage.addActor(options);
   }
 

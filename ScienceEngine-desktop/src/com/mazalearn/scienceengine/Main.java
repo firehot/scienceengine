@@ -52,6 +52,11 @@ public class Main {
   	}
 
     @Override
+    public void showURL(String url) {
+      browseURL(url);
+    }
+
+    @Override
     public boolean playVideo(File file) {
       if(java.awt.Desktop.isDesktopSupported() ) {
         java.awt.Desktop desktop = java.awt.Desktop.getDesktop();

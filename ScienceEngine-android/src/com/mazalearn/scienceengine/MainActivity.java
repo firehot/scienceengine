@@ -46,6 +46,11 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
       startActivity(myIntent);
     }
 
+    public void showURL(String url) {
+      Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      startActivity(myIntent);
+    }
+
     @Override
     public boolean playVideo(File file) {
       Intent videoPlayback = new Intent(this, VideoPlayer.class);

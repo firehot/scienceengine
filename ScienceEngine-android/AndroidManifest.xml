@@ -6,6 +6,7 @@
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:icon="@drawable/ic_launcher_scienceengine"
         android:label="@string/app_name" >
@@ -31,6 +32,17 @@
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|orientation">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WebViewActivity"
+            android:label="@string/webview"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation">
+            <intent-filter>
+                <data android:scheme="file" android:host="/sdcard/data"/>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

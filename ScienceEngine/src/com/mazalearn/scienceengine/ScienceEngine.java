@@ -44,7 +44,7 @@ public class ScienceEngine extends Game {
   private static ProfileManager profileManager;
   private static MusicManager musicManager;
   private static SoundManager soundManager;
-  private PlatformAdapter platformAdapter;
+  private static PlatformAdapter platformAdapter;
 
   private List<String> params;
 
@@ -223,5 +223,9 @@ public class ScienceEngine extends Game {
 
   public List<String> getParams() {
     return params;
+  }
+
+  public static PlatformAdapter getPlatformAdapter() {
+    return platformAdapter;  
   }
 }

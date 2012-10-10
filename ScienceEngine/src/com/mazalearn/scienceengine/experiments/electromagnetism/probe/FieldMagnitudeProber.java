@@ -28,15 +28,18 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     @Override
     public void clicked(InputEvent event, float x, float y) {
       fieldMeterActor.setVisible(true);
-      fieldMeterActor.addAction(Actions.sequence(Actions.delay(2f),
-          new Action() {
-            @Override
-            public boolean act(float delta) {
-              fieldMeterActor.setVisible(false);
-              doneCallback.done(success);
-              return true;
-            }
-          }));
+      fieldMeterActor.addAction(
+          Actions.sequence(
+              Actions.delay(2f),
+              new Action() {
+                @Override
+                public boolean act(float delta) {
+                  fieldMeterActor.setVisible(false);
+                  doneCallback.done(success);
+                  return true;
+                }
+              })
+          );
     }
   };
 
