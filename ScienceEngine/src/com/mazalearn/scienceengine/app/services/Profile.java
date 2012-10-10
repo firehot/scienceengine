@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.app.services;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;

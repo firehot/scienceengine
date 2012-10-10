@@ -40,6 +40,11 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     }
   };
 
+  private String[] hints = {
+      "The field is stronger closer to the object generating the field",
+      "Usually, the field is stronger if the current is bigger"
+  };
+  
   private final Image imageCorrect, imageWrong;
   // Temporary vectors
   private Vector2[] points;
@@ -112,5 +117,10 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     getBField(points[1], bFields[1]);
     if (haveSimilarMagnitudes(bFields[0].len(), bFields[1].len())) return false;
     return true;
+  }
+
+  @Override
+  public String[] getHints() {
+    return hints;
   }
 }

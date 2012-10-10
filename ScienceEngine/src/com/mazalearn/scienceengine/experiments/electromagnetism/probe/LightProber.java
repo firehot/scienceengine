@@ -13,6 +13,13 @@ public class LightProber extends AbstractScience2DProber {
   private Image image;
   private LightbulbActor lightbulbActor;
   private ProbeManager probeManager;
+  private String[] hints = {
+      "Light intensity increases when more current is induced in the coil.",
+      "More current is induced in the coil if the magnetic field changes faster at the coil.",
+      "Magnetic field change at the coil increases when the magnet moves faster relative to the coil.",
+      "If the coil has more loops, more current will be induced.",
+      "If the magnet is stronger, more current will be induced."
+  };
   
   public LightProber(final ProbeManager probeManager) {
     super(probeManager);
@@ -48,6 +55,11 @@ public class LightProber extends AbstractScience2DProber {
   @Override
   public String getTitle() {
     return "Make the light reach the blinking point.";
+  }
+
+  @Override
+  public String[] getHints() {
+    return hints;
   }
 
 }

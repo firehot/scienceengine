@@ -1,21 +1,17 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
@@ -25,6 +21,9 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 public class SplashScreen extends AbstractScreen {
 
   private final class SplashImage extends Image {
+    private float increment = 0.01f;
+    private float alpha = 1;
+
     private SplashImage(TextureRegion region) {
       super(region);
       this.setFillParent(true);
@@ -48,8 +47,14 @@ public class SplashScreen extends AbstractScreen {
     public void draw(SpriteBatch batch, float parentAlpha) {
       super.draw(batch, parentAlpha);
       BitmapFont font = getFont();
+      Color c = font.getColor();
+      font.setColor(c.r, c.g, c.b, alpha);
       font.setScale(2.0f);
       font.draw(batch, "Touch to Enter", MENU_VIEWPORT_WIDTH / 2, MENU_VIEWPORT_HEIGHT / 2);
+      alpha += increment;
+      if (alpha > 1 - increment || alpha <= 0.1f) {
+        increment = -increment;
+      }
     }
   }
 

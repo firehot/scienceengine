@@ -38,6 +38,9 @@ class Dashboard extends Table {
     };
     style.fontColor = Color.WHITE;
     scoreLabel = new Label("0", skin);
+
+    this.add(new Label("", skin)).pad(30, 0, 0, 0);
+    this.row();
     this.add("Score").left();
     this.add(scoreLabel).right().fill();
     this.row();

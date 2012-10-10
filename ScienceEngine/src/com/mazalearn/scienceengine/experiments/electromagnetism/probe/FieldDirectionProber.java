@@ -19,6 +19,11 @@ import com.mazalearn.scienceengine.core.probe.ProbeManager;
 public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
+  private String[] hints = {
+      "The direction of the field is the direction in which a " +
+      "free North Pole would move if placed at that point.",
+      "The direction of the field is where the compass needle's North would point."
+  };
   
   public FieldDirectionProber(IScience2DModel model, final ProbeManager probeManager) {
     super(model, probeManager);
@@ -96,5 +101,10 @@ public class FieldDirectionProber extends AbstractFieldProber {
       image.setVisible(true);
     }
     this.setVisible(activate);
+  }
+
+  @Override
+  public String[] getHints() {
+    return hints;
   }
 }

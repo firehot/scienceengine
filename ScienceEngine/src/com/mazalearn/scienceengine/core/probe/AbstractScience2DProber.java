@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.experiments.ControlPanel;
-import com.mazalearn.scienceengine.experiments.electromagnetism.view.BarMagnetActor;
 
 public abstract class AbstractScience2DProber extends Group {
 
@@ -89,4 +87,6 @@ public abstract class AbstractScience2DProber extends Group {
   public boolean isAvailable() {
     return true;
   }
+
+  public abstract String[] getHints();
 }

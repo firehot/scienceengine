@@ -71,7 +71,8 @@ public class ExperimentHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     
     table.defaults().fill().center().padLeft(30);
-    table.add(Messages.getString("ScienceEngine." + science2DController.getName()) + ": " + Messages.getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
+    table.add(Messages.getString("ScienceEngine." + science2DController.getName()) +
+        "- " + Messages.getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     
     table.add(createExperimentLevelPane()).fill();    
