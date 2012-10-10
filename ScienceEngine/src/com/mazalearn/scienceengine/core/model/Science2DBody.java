@@ -44,24 +44,9 @@ public class Science2DBody implements IBody {
   private final Vector2 aPosition = new Vector2();
   private final String name;
   private boolean initialIsActive;
-  private ComponentType componentType;
+  private IComponentType componentType;
   
-  public enum ComponentType {
-    BarMagnet,
-    CurrentSource,
-    Compass,
-    ElectroMagnet,
-    Lightbulb,
-    FieldMeter,
-    PickupCoil,
-    CurrentWire,
-    SourceCoil,
-    Voltmeter, 
-    FieldMagnet, 
-    CurrentCoil,
-  }
-  
-  protected Science2DBody(ComponentType componentType, String name, float x, float y, float angle) {
+  protected Science2DBody(IComponentType componentType, String name, float x, float y, float angle) {
     this.componentType = componentType;
     this.name = name;
     this.initialX = x;
@@ -143,7 +128,7 @@ public class Science2DBody implements IBody {
     return name;
   }
   
-  public ComponentType getComponentType() {
+  public IComponentType getComponentType() {
     return componentType;
   }
   

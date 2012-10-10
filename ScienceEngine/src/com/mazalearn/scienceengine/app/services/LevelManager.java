@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -25,20 +24,21 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public class LevelManager {
   private static final float THUMBNAIL_SCALE = 7.5f;
-  private Stage stage;
+  private IScience2DStage science2DStage;
   private FileHandle file;
   private int level = 1;
   private ControlPanel controlPanel;
   private String description;
   private IScience2DModel science2DModel;
 
-  public LevelManager(Stage stage, IScience2DModel science2DModel, ControlPanel controlPanel) {
-    this.stage = stage;
+  public LevelManager(IScience2DStage stage, IScience2DModel science2DModel, ControlPanel controlPanel) {
+    this.science2DStage = stage;
     this.science2DModel = science2DModel;
     this.controlPanel = controlPanel;
   }
@@ -103,6 +103,7 @@ public class LevelManager {
     jsonWriter = jsonWriter.object();
     writeLevelInfo(jsonWriter);
     writeComponents(jsonWriter);
+    writeGroups(jsonWriter);
     writeCircuits(jsonWriter);
     writeConfigs(jsonWriter);
 
@@ -128,6 +129,18 @@ public class LevelManager {
     jsonWriter.pop();
   }
 
+  private void writeGroups(JsonWriter jsonWriter) throws IOException {
+    jsonWriter.array("groups");
+    for (final List<Actor> locationGroup : science2DStage.getLocationGroups()) {
+      jsonWriter.array();
+      for (final Actor actor: locationGroup) {
+          jsonWriter.value(actor.getName());
+      }
+      jsonWriter.pop();
+    }
+    jsonWriter.pop();
+  }
+
   private void writeCircuits(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("circuits");
     for (final List<Science2DBody> circuit : science2DModel.getCircuits()) {
@@ -142,7 +155,7 @@ public class LevelManager {
 
   private void writeComponents(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("components");
-    for (Actor a : stage.getActors()) {
+    for (Actor a : science2DStage.getActors()) {
       if (!a.isVisible()) continue; 
       boolean moveAllowed = false, dynamicBody = false;
       if (a instanceof Science2DActor) {
@@ -176,6 +189,7 @@ public class LevelManager {
     readLevelInfo(rootElem);
     initializeComponents();
     readComponents((Array<?>) rootElem.get("components"));
+    readGroups((Array<?>) rootElem.get("groups"));
     readCircuits((Array<?>) rootElem.get("circuits"));
     readConfigs((Array<?>) rootElem.get("configs"));
   }
@@ -183,7 +197,7 @@ public class LevelManager {
   private void readLevelInfo(OrderedMap<String, ?> info) {
     description = (String) nvl(info.get("description"), 
         controlPanel.getExperimentName() + " : Level " + level);
-    Label title = (Label) stage.getRoot().findActor("Title");
+    Label title = (Label) science2DStage.findActor("Title");
     title.setText(description);
   }
 
@@ -203,13 +217,38 @@ public class LevelManager {
     Science2DBody[] circuitElements = new Science2DBody[circuit.size];
     for (int i = 0; i < circuit.size; i++) {
       String name = circuit.get(i);
-      Actor actor = stage.getRoot().findActor(name);
+      Actor actor = science2DStage.findActor(name);
       if (actor == null) {
         throw new IllegalArgumentException("Component not found: " + name);
       }
       circuitElements[i] = ((Science2DActor) actor).getBody();      
     }
     science2DModel.addCircuit(circuitElements);
+  }
+
+  private void readGroups(Array<?> groups) {
+    science2DModel.removeCircuits();
+
+    if (groups == null) return;
+    
+    for (int i = 0; i < groups.size; i++) {
+      @SuppressWarnings("unchecked")
+      Array<String> group = (Array<String>) groups.get(i);
+      readGroup(group);
+    }
+  }
+  
+  private void readGroup(Array<String> group) {
+    Actor[] groupElements = new Actor[group.size];
+    for (int i = 0; i < group.size; i++) {
+      String name = group.get(i);
+      Actor actor = science2DStage.findActor(name);
+      if (actor == null) {
+        throw new IllegalArgumentException("Actor not found: " + name);
+      }
+      groupElements[i] = actor;      
+    }
+    science2DStage.addLocationGroup(groupElements);
   }
 
   private void readConfigs(Array<?> configs) {
@@ -224,7 +263,7 @@ public class LevelManager {
 
   private void initializeComponents() {
     // Make all actors inactive and invisible.
-    for (Actor actor: stage.getActors()) {
+    for (Actor actor: science2DStage.getActors()) {
       if (!"Title".equals(actor.getName()) && !"Circuit".equals(actor.getName())) {
         actor.setVisible(false);
       }
@@ -252,7 +291,7 @@ public class LevelManager {
   private void readComponent(OrderedMap<String, ?> component) {
     String name = (String) component.get("name");
     if (name == null) return;
-    Actor actor = stage.getRoot().findActor(name);
+    Actor actor = science2DStage.findActor(name);
     if (actor == null)
       return;
 

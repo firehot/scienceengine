@@ -13,8 +13,10 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.experiments.electromagnetism.probe.FieldDirectionProber;
 import com.mazalearn.scienceengine.experiments.electromagnetism.probe.FieldMagnitudeProber;
 import com.mazalearn.scienceengine.experiments.electromagnetism.probe.LightProber;
@@ -42,8 +44,6 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     super(emModel, width, height, skin);
     this.emModel = emModel;
     
-    Actor lightbulb = null, pickupCoil = null;
-    Science2DActor electroMagnet = null, currentSource = null;
     Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"));
     coilsBack.setName("CoilsBack");
     Actor brushes = new Image(new Texture("images/brush.png"));
@@ -51,18 +51,22 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     this.addActor(coilsBack);
     this.addActor(brushes);
     for (final Science2DBody body: emModel.getBodies()) {
-      TextureRegion textureRegion = getTextureRegionForBody(body);
-      if (textureRegion == null) continue;
-      switch (body.getComponentType()) {
+      ComponentType componentType = ComponentType.valueOf(body.getComponentType());
+      String textureFilename = componentType.getTextureFilename();
+      if (textureFilename == null) continue;
+
+      TextureRegion textureRegion = 
+          new TextureRegion(new Texture(textureFilename));
+      switch (componentType) {
       case BarMagnet:
         barMagnetActor = new BarMagnetActor(textureRegion, body, this, emModel);
         this.addActor(barMagnetActor);
         break;
       case Lightbulb:
-        this.addActor(lightbulb = new LightbulbActor(textureRegion, (Lightbulb) body));
+        this.addActor(new LightbulbActor(textureRegion, (Lightbulb) body));
         break;
       case PickupCoil:
-        this.addActor(pickupCoil = new PickupCoilActor(body, textureRegion));
+        this.addActor(new PickupCoilActor((PickupCoil) body, textureRegion));
         break;
       case FieldMeter:
         this.addActor(fieldMeterActor = new FieldMeterActor(textureRegion, body));
@@ -72,13 +76,13 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
         this.addActor(new CurrentCoilActor(body));
         break;        
       case CurrentSource:
-        this.addActor(currentSource = new CurrentSourceActor(body, textureRegion));
+        this.addActor(new CurrentSourceActor(body, textureRegion));
         break;        
       case CurrentWire:
         this.addActor(new CurrentWireActor(body));
         break;
       case ElectroMagnet:
-        this.addActor(electroMagnet = new ElectromagnetActor(body, textureRegion));
+        this.addActor(new ElectromagnetActor(body, textureRegion));
         break;
       case Compass:
         this.addActor(compassActor = new Science2DActor(body, textureRegion));
@@ -89,8 +93,6 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       }
     }
     this.addActor(new CircuitActor(emModel));
-    addLocationGroup(coilsBack, pickupCoil, lightbulb);
-    addLocationGroup(currentSource, electroMagnet);
     
     getRoot().addListener(new ClickListener() {
       @Override
@@ -103,46 +105,6 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
         }
       }       
     });
-  }
-  
-  // TODO: Use texture Atlas for this
-  private TextureRegion getTextureRegionForBody(Science2DBody body) {
-    Texture texture = null;
-    switch(body.getComponentType()) {
-    case ElectroMagnet:
-      texture = new Texture("images/electromagnet-base.png");
-      break;
-    case BarMagnet:
-      texture = new Texture("images/barmagnet-pivoted.png");
-      break;
-    case FieldMagnet:
-      texture = new Texture("images/simplemagnetsn.png");
-      break;
-    case PickupCoil:
-      texture = new Texture("images/coppercoils-front1.png");
-      break;
-    case Lightbulb:
-      texture = new Texture("images/lightbulb.png");
-      break;
-    case Compass:
-      texture = new Texture("images/compass.png");
-      break;
-    case FieldMeter:
-      texture = new Texture("images/arrow.png");
-      break;
-    case CurrentCoil:
-      texture = new Texture("images/currentcoil_nocommutator.png");
-      break;
-    case CurrentWire:
-      texture = new Texture("images/currentwire-up.png");
-      break;
-    case CurrentSource:
-      texture = new Texture("images/currentsource.png");
-      break;
-    default:
-      return null;
-    }
-    return new TextureRegion(texture);
   }
   
   @Override

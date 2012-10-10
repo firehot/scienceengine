@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.core.view;
 
+import java.util.List;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.services.LevelManager;
@@ -18,5 +20,12 @@ public interface IScience2DStage extends IDoneCallback {
   public void challenge(boolean challenge);
   // Whether probe mode is on
   public boolean isChallengeInProgress();
+  // Get level manager for this science2DStage
   public LevelManager getLevelManager();
+  // Return actor corresponding to name, if exists else null
+  public Actor findActor(String name);
+  // Return list of location groups
+  public List<List<Actor>> getLocationGroups();
+  // Add location group consisting of actors
+  public void addLocationGroup(Actor[] actors);
 }

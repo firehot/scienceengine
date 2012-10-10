@@ -46,6 +46,12 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   
   public void done(boolean success) {}
   
+
+  @Override
+  public Actor findActor(String name) {
+    return getRoot().findActor(name);
+  }
+
   @Override
   public void challenge(boolean challenge) {
     // Reinitialize level
@@ -75,8 +81,14 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     return levelManager;
   }
   
-  public void addLocationGroup(Actor... actors) {
+  public void addLocationGroup(Actor[] actors) {
     locationGroups.add(Arrays.asList(actors));
+  }
+  
+
+  @Override
+  public List<List<Actor>> getLocationGroups() {
+    return locationGroups;
   }
   
   public void notifyLocationChangedByUser(Science2DActor actor, Vector2 newBodyPosition, float newBodyAngle) {
