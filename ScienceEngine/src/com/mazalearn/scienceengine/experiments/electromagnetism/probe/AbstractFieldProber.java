@@ -18,7 +18,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected AbstractFieldProber(IScience2DModel model, ProbeManager probeManager) {
     super(probeManager);
     this.model = model;
-    this.fieldMeterActor = (Science2DActor) probeManager.findActorByName("FieldMeter");
+    this.fieldMeterActor = (Science2DActor) probeManager.findStageActor("FieldMeter");
     this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
   }
   

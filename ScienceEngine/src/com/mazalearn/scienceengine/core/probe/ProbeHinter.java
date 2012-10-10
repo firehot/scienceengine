@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class GeniusHints extends Group {
+public class ProbeHinter extends Group {
   private static List<Image> SCIENTISTS = new ArrayList<Image>();
   private TextButton hintButton;
   float increment = 1, count = 0;
@@ -28,7 +28,7 @@ public class GeniusHints extends Group {
     SCIENTISTS.add(new Image(new Texture("images/faraday.png")));
     SCIENTISTS.get(2).setName("Michael Faraday");
   }
-  public GeniusHints(Skin skin) {
+  public ProbeHinter(Skin skin) {
     
     hintButton = new TextButton("", skin);
     hintButton.setColor(Color.YELLOW);
@@ -70,7 +70,10 @@ public class GeniusHints extends Group {
   }
   
   public void setHint(String hint) {
-    if (hint == null) return;
+    if (hint == null) {
+      this.setVisible(false);
+      return;
+    }
     hintButton.setText("Hint: " + hint + "\n-" + SCIENTISTS.get(scientistIndex).getName());
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
     hintButton.setSize(300, 100); 

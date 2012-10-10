@@ -20,7 +20,8 @@ public class SoundManager implements
   public enum ScienceEngineSound {
     CLICK("sound/click.wav"), 
     SUCCESS("sound/success.mp3"), 
-    FAILURE("sound/failure.mp3");
+    FAILURE("sound/failure.mp3"),
+    CELEBRATE("sound/celebrate.mp3");
 
     private final String fileName;
 

@@ -26,7 +26,7 @@ public class LightProber extends AbstractScience2DProber {
     this.probeManager = probeManager;
     image = new ProbeImage();
     this.addActor(image);
-    this.lightbulbActor = (LightbulbActor) probeManager.findActorByName("Lightbulb");
+    this.lightbulbActor = (LightbulbActor) probeManager.findStageActor("Lightbulb");
   }
   
   @Override

@@ -33,7 +33,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;
   private final ScoreImage successImage, failureImage;
-  private GeniusHints geniusHints;
+  private ProbeHinter probeHinter;
 
   public ProbeManager(final Skin skin, float width, float height,
       IScience2DStage science2DStage, ControlPanel controlPanel) {
@@ -51,11 +51,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
     this.addActor(successImage);
     this.addActor(failureImage);
-    geniusHints = new GeniusHints(skin);
-    geniusHints.setName("GeniusHints");
-    geniusHints.setPosition(controlPanel.getX(),
+    probeHinter = new ProbeHinter(skin);
+    probeHinter.setPosition(controlPanel.getX(),
         controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 42);
-    this.addActor(geniusHints);
+    this.addActor(probeHinter);
   }
 
   public void registerProber(AbstractScience2DProber prober) {
@@ -125,14 +124,16 @@ public class ProbeManager extends Group implements IDoneCallback {
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(10);
       successImage.show(getWidth()/2, getHeight()/2, 10);
+      probeHinter.setHint(null);
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       dashboard.addScore(-5);
       failureImage.show(getWidth()/2, getHeight()/2, -5);
       String[] hints = currentProber.getHints();
-      geniusHints.setHint(hints[MathUtils.random(hints.length - 1)]);
+      probeHinter.setHint(hints[MathUtils.random(hints.length - 1)]);
     }
-    if (dashboard.getScore() > 100) {
+    if (dashboard.getScore() > 10) {
+      soundManager.play(ScienceEngineSound.CELEBRATE);
       science2DStage.done(true);
       this.setVisible(false);
       return;
@@ -146,7 +147,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     proberIndex = (proberIndex + 1) % activeProbers.size();
     currentProber = activeProbers.get(proberIndex);
 
-    currentProber.addActor(geniusHints);
+    currentProber.addActor(probeHinter);
     currentProber.activate(true);
     dashboard.setStatus(currentProber.getTitle());
   }
@@ -161,7 +162,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     dashboard.setStatus(text);
   }
 
-  public Actor findActorByName(String name) {
+  public Actor findStageActor(String name) {
     for (Actor actor: science2DStage.getActors()) {
       if (name.equals(actor.getName())) return actor;
     }
