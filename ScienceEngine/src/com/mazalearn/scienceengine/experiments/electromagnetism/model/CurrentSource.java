@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -187,5 +188,15 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
       this.isNegativeCurrent = negative;
       getModel().notifyCurrentChange(this);
     }
+  }
+
+  @Override
+  public Vector2 getFirstTerminalPosition() {
+    return new Vector2(getPosition().x, getPosition().y + 1.5f);
+  }
+
+  @Override
+  public Vector2 getSecondTerminalPosition() {
+    return new Vector2(getPosition().x, getPosition().y - 4.5f);
   }
 }

@@ -218,4 +218,15 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   public float getCoilWidth() {
     return COIL_WIDTH;
   }
+
+  @Override
+  public Vector2 getFirstTerminalPosition() {
+    return new Vector2(getPosition().x + 5, getPosition().y + 6);
+  }
+
+  @Override
+  public Vector2 getSecondTerminalPosition() {
+    return new Vector2(getPosition().x + 5, getPosition().y + 11.5f);
+  }
+  
 }

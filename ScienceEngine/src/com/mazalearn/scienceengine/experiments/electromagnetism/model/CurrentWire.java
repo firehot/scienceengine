@@ -81,4 +81,14 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   public Vector2 getBForce() {
     return forceVector;
   }
+  
+  @Override
+  public Vector2 getFirstTerminalPosition() {
+    return new Vector2(-10, -10);
+  }
+
+  @Override
+  public Vector2 getSecondTerminalPosition() {
+    return new Vector2(-10, -10);
+  }
 }

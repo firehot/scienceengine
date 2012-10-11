@@ -28,4 +28,6 @@ public interface IScience2DStage extends IDoneCallback {
   public List<List<Actor>> getLocationGroups();
   // Add location group consisting of actors
   public void addLocationGroup(Actor[] actors);
+  // Remove all location groups
+  public void removeLocationGroups();
 }

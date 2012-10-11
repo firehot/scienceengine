@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.core.model.ICurrent;
@@ -24,10 +25,6 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
   private float previousCurrent;
   private float current;
   private float intensity;
-
-  // ----------------------------------------------------------------------------
-  // Constructors
-  // ----------------------------------------------------------------------------
 
   /**
    * Sole constructor.
@@ -80,4 +77,15 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
       setIntensity();
     }
   }
+  
+  @Override
+  public Vector2 getFirstTerminalPosition() {
+    return new Vector2(getPosition().x, getPosition().y - 2.5f);
+  }
+
+  @Override
+  public Vector2 getSecondTerminalPosition() {
+    return new Vector2(getPosition().x + 0.5f, getPosition().y - 3);
+  }
+  
 }

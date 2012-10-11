@@ -93,5 +93,15 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   public CommutatorType getCommutatorType() {
     return commutatorType;
   }
+
+  @Override
+  public Vector2 getFirstTerminalPosition() {
+    return getPosition();
+  }
+
+  @Override
+  public Vector2 getSecondTerminalPosition() {
+    return getPosition();
+  }
 }
 

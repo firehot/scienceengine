@@ -8,6 +8,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Consumer;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Producer;
 
@@ -20,7 +21,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
-  private List<List<Science2DBody>> circuits;
+  private List<List<ICurrent.CircuitElement>> circuits;
   List<IMagneticField.Producer> emProducers;
   List<IMagneticField.Consumer> emConsumers;
   Vector2 bField = new Vector2(), totalBField = new Vector2();
@@ -32,7 +33,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     boolean doSleep = true;
     box2DWorld = new World(gravity, doSleep);
     Science2DBody.setBox2DWorld(box2DWorld);    
-    this.circuits = new ArrayList<List<Science2DBody>>();
+    this.circuits = new ArrayList<List<ICurrent.CircuitElement>>();
     this.emProducers = new ArrayList<IMagneticField.Producer>();
     this.emConsumers = new ArrayList<IMagneticField.Consumer>();
   }
@@ -90,26 +91,26 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     }
   }
   
-  public void addCircuit(Science2DBody[] bodies) {
-    List<Science2DBody> circuit = Arrays.asList(bodies);
+  public void addCircuit(CircuitElement[] bodies) {
+    List<CircuitElement> circuit = Arrays.asList(bodies);
     circuits.add(circuit);
-    for (Science2DBody science2DBody: circuit) {
-      if (science2DBody instanceof ICurrent.Source) {
-        notifyCurrentChange((ICurrent.Source) science2DBody);
+    for (CircuitElement circuitElement: circuit) {
+      if (circuitElement instanceof ICurrent.Source) {
+        notifyCurrentChange((ICurrent.Source) circuitElement);
       }
     }
   }
   
-  public List<List<Science2DBody>> getCircuits() {
+  public List<List<CircuitElement>> getCircuits() {
     return circuits;
   }
   
   public void removeCircuits() {
     // Remove current from all circuits
-    for (List<Science2DBody> circuit: circuits) {
-      for (Science2DBody science2DBody: circuit) {
-        if (science2DBody instanceof ICurrent.Sink) {
-          ((ICurrent.Sink) science2DBody).setCurrent(0); 
+    for (List<CircuitElement> circuit: circuits) {
+      for (CircuitElement circuitElement: circuit) {
+        if (circuitElement instanceof ICurrent.Sink) {
+          ((ICurrent.Sink) circuitElement).setCurrent(0); 
         }
       }
     }
@@ -122,13 +123,13 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   // sinks after the source in the circuit get positive current.
   public void notifyCurrentChange(ICurrent.Source currentSource) {
     float current = -currentSource.getCurrent();
-    for (List<Science2DBody> circuit: circuits) {
+    for (List<CircuitElement> circuit: circuits) {
       if (!circuit.contains(currentSource)) continue;
       // Components before currentSource in circuit get negative current
-      for (Science2DBody component: circuit) {
-        if (component instanceof ICurrent.Sink) {
-          ((ICurrent.Sink) component).setCurrent(current);
-        } else if (component == currentSource) {
+      for (CircuitElement circuitElement: circuit) {
+        if (circuitElement instanceof ICurrent.Sink) {
+          ((ICurrent.Sink) circuitElement).setCurrent(current);
+        } else if (circuitElement == currentSource) {
           current = -current;
         }
       }

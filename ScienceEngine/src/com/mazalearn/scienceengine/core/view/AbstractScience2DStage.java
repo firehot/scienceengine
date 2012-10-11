@@ -91,6 +91,11 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     return locationGroups;
   }
   
+  @Override
+  public void removeLocationGroups() {
+    locationGroups.clear();
+  }
+  
   public void notifyLocationChangedByUser(Science2DActor actor, Vector2 newBodyPosition, float newBodyAngle) {
     for (List<Actor> locationGroup: locationGroups) {
       if (!locationGroup.contains(actor)) continue;

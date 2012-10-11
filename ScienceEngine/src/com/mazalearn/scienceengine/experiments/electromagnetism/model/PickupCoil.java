@@ -340,4 +340,15 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   public float getCurrent() {
     return this.current;
   }
+  
+  @Override
+  public Vector2 getFirstTerminalPosition() {
+    return new Vector2(getPosition().x + 4, getPosition().y + 29);
+  }
+
+  @Override
+  public Vector2 getSecondTerminalPosition() {
+    return new Vector2(getPosition().x + 4, getPosition().y + 30);
+  }
+  
 }

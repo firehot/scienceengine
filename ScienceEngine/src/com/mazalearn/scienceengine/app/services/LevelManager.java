@@ -22,6 +22,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
@@ -143,10 +144,10 @@ public class LevelManager {
 
   private void writeCircuits(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("circuits");
-    for (final List<Science2DBody> circuit : science2DModel.getCircuits()) {
+    for (final List<CircuitElement> circuit : science2DModel.getCircuits()) {
       jsonWriter.array();
-      for (final Science2DBody science2DBody: circuit) {
-          jsonWriter.value(science2DBody.getName());
+      for (final CircuitElement circuitElement: circuit) {
+          jsonWriter.value(((Science2DBody) circuitElement).getName());
       }
       jsonWriter.pop();
     }
@@ -214,20 +215,20 @@ public class LevelManager {
   }
   
   private void readCircuit(Array<String> circuit) {
-    Science2DBody[] circuitElements = new Science2DBody[circuit.size];
+    CircuitElement[] circuitElements = new CircuitElement[circuit.size];
     for (int i = 0; i < circuit.size; i++) {
       String name = circuit.get(i);
       Actor actor = science2DStage.findActor(name);
       if (actor == null) {
         throw new IllegalArgumentException("Component not found: " + name);
       }
-      circuitElements[i] = ((Science2DActor) actor).getBody();      
+      circuitElements[i] = (CircuitElement) (((Science2DActor) actor).getBody());      
     }
     science2DModel.addCircuit(circuitElements);
   }
 
   private void readGroups(Array<?> groups) {
-    science2DModel.removeCircuits();
+    science2DStage.removeLocationGroups();
 
     if (groups == null) return;
     
@@ -264,7 +265,7 @@ public class LevelManager {
   private void initializeComponents() {
     // Make all actors inactive and invisible.
     for (Actor actor: science2DStage.getActors()) {
-      if (!"Title".equals(actor.getName()) && !"Circuit".equals(actor.getName())) {
+      if (!"Title".equals(actor.getName()) && !"CircuitElement".equals(actor.getName())) {
         actor.setVisible(false);
       }
       if (actor instanceof Science2DActor) {

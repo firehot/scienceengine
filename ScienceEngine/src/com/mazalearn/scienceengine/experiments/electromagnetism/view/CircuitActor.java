@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
@@ -19,41 +21,44 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentCoi
 public class CircuitActor extends Actor {
   private final IScience2DModel science2DModel;
   private ShapeRenderer shapeRenderer;
+  private Vector2 delta = new Vector2();
       
     
   public CircuitActor(IScience2DModel science2DModel) {
     super();
     this.science2DModel = science2DModel;
     this.shapeRenderer = new ShapeRenderer();
-    this.setName("Circuit");
+    this.setName("CircuitElement");
   }
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    if (true) return;
+    batch.end();
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     // Draw the circuit
-    shapeRenderer.begin(ShapeType.Line);
-    shapeRenderer.setColor(Color.YELLOW);
-    for (List<Science2DBody> circuit: science2DModel.getCircuits()) {
+    shapeRenderer.begin(ShapeType.FilledRectangle);
+    shapeRenderer.setColor(Color.GREEN);
+    for (List<CircuitElement> circuit: science2DModel.getCircuits()) {
       if (circuit.size() <= 1) continue;
       for (int i = 1; i < circuit.size(); i++) {
-        Science2DBody prev = circuit.get(i - 1);
-        Science2DBody curr = circuit.get(i);
+        CircuitElement prev = circuit.get(i - 1);
+        CircuitElement curr = circuit.get(i);
         //draw a line from prev body to this one
-        shapeRenderer.line(prev.getPosition().x * ScienceEngine.PIXELS_PER_M, 
-            prev.getPosition().y * ScienceEngine.PIXELS_PER_M, 
-            curr.getPosition().x * ScienceEngine.PIXELS_PER_M, 
-            curr.getPosition().y * ScienceEngine.PIXELS_PER_M);
+        drawConnection(prev.getSecondTerminalPosition(), curr.getFirstTerminalPosition());
       }
-      Science2DBody prev = circuit.get(circuit.size() - 1);
-      Science2DBody curr = circuit.get(0);
-      // draw a line from last to first to close the circuit
-      shapeRenderer.line(prev.getPosition().x * ScienceEngine.PIXELS_PER_M, 
-          prev.getPosition().y * ScienceEngine.PIXELS_PER_M, 
-          curr.getPosition().x * ScienceEngine.PIXELS_PER_M, 
-          curr.getPosition().y * ScienceEngine.PIXELS_PER_M);
+      CircuitElement prev = circuit.get(circuit.size() - 1);
+      CircuitElement curr = circuit.get(0);
+      drawConnection(prev.getSecondTerminalPosition(), curr.getFirstTerminalPosition());
     }
     shapeRenderer.end();
+    batch.begin();
+  }
+
+  private void drawConnection(Vector2 from, Vector2 to) {
+    delta.set(to).sub(from);
+    shapeRenderer.identity();
+    shapeRenderer.translate(from.x * ScienceEngine.PIXELS_PER_M, from.y * ScienceEngine.PIXELS_PER_M, 0);  
+    shapeRenderer.rotate(0, 0, 1, delta.angle());
+    shapeRenderer.filledRect(0, 0, delta.len() * ScienceEngine.PIXELS_PER_M, 4);
   }
 }
