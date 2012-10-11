@@ -42,8 +42,8 @@
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|orientation">
             <intent-filter>
-                <data android:scheme="file" android:host="/sdcard/data"/>
-                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="file" /> 
+                <action android:name="com.mazalearn.scienceengine.intent.action.WebViewActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

@@ -95,18 +95,6 @@ public class ExperimentMenuScreen extends AbstractScreen {
     return flickScrollPane;
   }
   
-  private IScience2DController createExperimentController(
-      String experimentName, int width, int height) {
-    if (experimentName.equals(StatesOfMatterController.NAME)) {
-      return new StatesOfMatterController(width, height, getSkin());
-    } else if (experimentName.equals(WaveController.NAME)) {
-      return  new WaveController(width, height, getAtlas(), getSkin());
-    } else if (experimentName.equals(ElectroMagnetismController.NAME)) {
-      return new ElectroMagnetismController(width, height, getSkin());
-    }
-    return null;
-  }
-
   @Override
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -116,7 +104,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
   private void gotoExperimentHome(final String experimentName) {
     Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
     IScience2DController science2DController = 
-        createExperimentController(experimentName, 
+        scienceEngine.createExperimentController(experimentName, 
         VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
   }

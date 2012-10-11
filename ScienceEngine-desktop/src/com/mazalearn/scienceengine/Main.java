@@ -17,8 +17,8 @@ public class Main {
 		cfg.width = 800;
 		cfg.height = 480;
 		
-		ScienceEngine scienceEngine = new ScienceEngine(Arrays.asList(args));
-		scienceEngine.setUrlViewer(new PlatformAdapterImpl());
+		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "");
+		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
     new LwjglApplication(scienceEngine, cfg) {
       @Override
       public void exit() {

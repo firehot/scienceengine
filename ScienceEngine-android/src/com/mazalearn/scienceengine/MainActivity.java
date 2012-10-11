@@ -28,12 +28,11 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
 
       ScienceEngine scienceEngine = null;
       if (data != null) {
-        List<String> params = data.getPathSegments();
-        scienceEngine = new ScienceEngine(params);
+        scienceEngine = new ScienceEngine(data.toString());
       } else {
         scienceEngine = new ScienceEngine();
       }
-      scienceEngine.setUrlViewer(this);
+      scienceEngine.setPlatformAdapter(this);
       initialize(scienceEngine, cfg);
     }
     
@@ -47,7 +46,9 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
     }
 
     public void showURL(String url) {
-      Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      Intent myIntent = 
+          new Intent("com.mazalearn.scienceengine.intent.action.WebViewActivity");
+      myIntent.setData(Uri.parse(url));
       startActivity(myIntent);
     }
 

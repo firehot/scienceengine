@@ -31,8 +31,6 @@ public abstract class AbstractScreen implements Screen {
 
   private BitmapFont font;
   private SpriteBatch batch;
-  private Skin skin;
-  private TextureAtlas atlas;
   private Table table;
   private Color backgroundColor = Color.BLACK;
 
@@ -96,10 +94,7 @@ public abstract class AbstractScreen implements Screen {
   }
 
   public TextureAtlas getAtlas() {
-    if (atlas == null) {
-      atlas = new TextureAtlas(Gdx.files.internal("image-atlases/pages.atlas")); //$NON-NLS-1$
-    }
-    return atlas;
+    return scienceEngine.getAtlas();
   }
 
   protected Table getTable() {
@@ -181,10 +176,6 @@ public abstract class AbstractScreen implements Screen {
       font.dispose();
     if (batch != null)
       batch.dispose();
-    if (skin != null)
-      skin.dispose();
-    if (atlas != null)
-      atlas.dispose();
   }
 
   public Skin getSkin() {

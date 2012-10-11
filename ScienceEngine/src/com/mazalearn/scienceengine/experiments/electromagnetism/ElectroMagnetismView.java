@@ -130,6 +130,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       int level = getLevelManager().getLevel() + 1;
       // TODO: put in a proper celebration here
       probeManager.setTitle("Congratulations! You move to Level " + level);
+      // ScienceEngine.getPlatformAdapter().showURL("file:///sdcard/data/electromagneticinduction.html");
       challenge(false);
       getLevelManager().setLevel(level);
       getLevelManager().load();
