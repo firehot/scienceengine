@@ -74,6 +74,7 @@ public class ProbeHinter extends Group {
       this.setVisible(false);
       return;
     }
+    this.setVisible(true);
     hintButton.setText("Hint: " + hint + "\n-" + SCIENTISTS.get(scientistIndex).getName());
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
     hintButton.setSize(300, 100); 

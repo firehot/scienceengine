@@ -1,4 +1,5 @@
-package java.lang;
+package gwtemul.org.jbox2d.emul.java.lang;
+// package java.lang;
 
 public class StrictMath {
   

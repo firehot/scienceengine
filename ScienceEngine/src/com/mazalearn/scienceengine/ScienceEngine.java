@@ -199,11 +199,13 @@ public class ScienceEngine extends Game {
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedTopic(pathSegments[i])) {
         IScience2DController science2DController = 
-            createExperimentController(pathSegments[i], AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+            createExperimentController(pathSegments[i], 
+                AbstractScreen.VIEWPORT_WIDTH, 
+                AbstractScreen.VIEWPORT_HEIGHT);
         Integer iLevel = null;
         if (uri.getQuery() != null) {
           String[] queryParts = uri.getQuery().toLowerCase().split("&");
-          if (queryParts[0].equals("level")) {
+          if (queryParts[0].startsWith("level")) {
             iLevel = Integer.parseInt(queryParts[0].substring("level=".length()));
           }
         }
@@ -280,8 +282,11 @@ public class ScienceEngine extends Game {
     // persist the profile, because we don't know if the player will come
     // back to the scienceEngine
     profileManager.persist();
+    // For some reason, skin and atlas do not survive pause
+    skin = null;
+    atlas = null;
   }
-
+  
   @Override
   public void resume() {
     super.resume();

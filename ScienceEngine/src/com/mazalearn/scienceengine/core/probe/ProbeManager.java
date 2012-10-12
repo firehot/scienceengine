@@ -53,7 +53,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.addActor(failureImage);
     probeHinter = new ProbeHinter(skin);
     probeHinter.setPosition(controlPanel.getX(),
-        controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 42);
+        controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 35);
     this.addActor(probeHinter);
   }
 
