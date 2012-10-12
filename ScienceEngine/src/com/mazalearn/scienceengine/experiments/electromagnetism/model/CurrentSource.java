@@ -193,12 +193,12 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   }
 
   @Override
-  public Vector2 getFirstTerminalPosition() {
-    return firstTerminal.set(getPosition()).add(0, 1.5f);
+  public Vector2 getT1Position() {
+    return firstTerminal.set(getPosition()).add(-1, 1.5f);
   }
 
   @Override
-  public Vector2 getSecondTerminalPosition() {
-    return secondTerminal.set(getPosition()).add(0, -4.5f);
+  public Vector2 getT2Position() {
+    return secondTerminal.set(getPosition()).add(-1, -4.5f);
   }
 }

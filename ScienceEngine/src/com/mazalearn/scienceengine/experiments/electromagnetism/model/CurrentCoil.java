@@ -97,12 +97,12 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   }
 
   @Override
-  public Vector2 getFirstTerminalPosition() {
+  public Vector2 getT1Position() {
     return firstTerminal.set(getPosition()).add(1.5f, 0);
   }
 
   @Override
-  public Vector2 getSecondTerminalPosition() {
+  public Vector2 getT2Position() {
     return secondTerminal.set(getPosition()).add(-1.5f, 0);
   }
 }

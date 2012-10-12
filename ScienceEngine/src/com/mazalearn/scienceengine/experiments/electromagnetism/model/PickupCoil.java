@@ -344,12 +344,12 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   }
   
   @Override
-  public Vector2 getFirstTerminalPosition() {
+  public Vector2 getT1Position() {
     return firstTerminal.set(getPosition()).add(-4.5f, 12f);
   }
 
   @Override
-  public Vector2 getSecondTerminalPosition() {
+  public Vector2 getT2Position() {
     return secondTerminal.set(getPosition()).add(-4.5f, 13.5f);
   }
   

@@ -85,12 +85,12 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   }
   
   @Override
-  public Vector2 getFirstTerminalPosition() {
+  public Vector2 getT1Position() {
     return firstTerminal.set(-10, -10);
   }
 
   @Override
-  public Vector2 getSecondTerminalPosition() {
+  public Vector2 getT2Position() {
     return secondTerminal.set(-10, -10);
   }
 }

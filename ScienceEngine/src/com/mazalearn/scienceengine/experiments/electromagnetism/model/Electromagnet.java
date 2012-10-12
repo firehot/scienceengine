@@ -222,12 +222,12 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   }
 
   @Override
-  public Vector2 getFirstTerminalPosition() {
+  public Vector2 getT1Position() {
     return firstTerminal.set(getPosition()).add(1f, -2f);
   }
 
   @Override
-  public Vector2 getSecondTerminalPosition() {
+  public Vector2 getT2Position() {
     return secondTerminal.set(getPosition()).add(1.5f, 3.5f);
   }
   

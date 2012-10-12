@@ -78,13 +78,13 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
   }
   
   @Override
-  public Vector2 getFirstTerminalPosition() {
-    return firstTerminal.set(getPosition()).add(0, -2.5f);
+  public Vector2 getT2Position() {
+    return firstTerminal.set(getPosition()).add(-0.5f, -2.75f);
   }
 
   @Override
-  public Vector2 getSecondTerminalPosition() {
-    return secondTerminal.set(getPosition()).add(0.5f, -3);
+  public Vector2 getT1Position() {
+    return secondTerminal.set(getPosition()).add(0.5f, -3.75f);
   }
   
 }
