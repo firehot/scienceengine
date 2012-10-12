@@ -18,13 +18,12 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
 
   /* Absolute current amplitude below this value is treated as zero. */
   public static final double CURRENT_AMPLITUDE_THRESHOLD = 0.01;
-  // ----------------------------------------------------------------------------
-  // Instance data
-  // ----------------------------------------------------------------------------
 
   private float previousCurrent;
   private float current;
   private float intensity;
+  // Terminals
+  private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
   /**
    * Sole constructor.
@@ -80,12 +79,12 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
   
   @Override
   public Vector2 getFirstTerminalPosition() {
-    return new Vector2(getPosition().x, getPosition().y - 2.5f);
+    return firstTerminal.set(getPosition()).add(0, -2.5f);
   }
 
   @Override
   public Vector2 getSecondTerminalPosition() {
-    return new Vector2(getPosition().x + 0.5f, getPosition().y - 3);
+    return secondTerminal.set(getPosition()).add(0.5f, -3);
   }
   
 }

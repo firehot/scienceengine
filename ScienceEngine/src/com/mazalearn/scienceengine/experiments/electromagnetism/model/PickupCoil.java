@@ -36,6 +36,8 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   private float current;
   // Radius of all loops in the coil.
   private float radius;
+  // Terminals
+  private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
   /**
    * Constructs a PickupCoil that uses a fixed number of sample points to
@@ -343,12 +345,12 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   
   @Override
   public Vector2 getFirstTerminalPosition() {
-    return new Vector2(getPosition().x + 4, getPosition().y + 29);
+    return firstTerminal.set(getPosition()).add(-4.5f, 12f);
   }
 
   @Override
   public Vector2 getSecondTerminalPosition() {
-    return new Vector2(getPosition().x + 4, getPosition().y + 30);
+    return secondTerminal.set(getPosition()).add(-4.5f, 13.5f);
   }
   
 }

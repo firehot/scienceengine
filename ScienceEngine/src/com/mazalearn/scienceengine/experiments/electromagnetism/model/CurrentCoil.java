@@ -27,6 +27,8 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   private CommutatorType commutatorType = CommutatorType.Disconnected;
   // Field acting on the wire
   private Vector2 forceVector = new Vector2(), pos = new Vector2();
+  // Terminals
+  private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
   public CurrentCoil(String name, float x, float y, float angle) {
     super(ComponentType.CurrentCoil, name, x, y, angle);
@@ -96,12 +98,12 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
 
   @Override
   public Vector2 getFirstTerminalPosition() {
-    return getPosition();
+    return firstTerminal.set(getPosition()).add(1.5f, 0);
   }
 
   @Override
   public Vector2 getSecondTerminalPosition() {
-    return getPosition();
+    return secondTerminal.set(getPosition()).add(-1.5f, 0);
   }
 }
 

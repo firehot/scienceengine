@@ -23,6 +23,9 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   private static final float OUTPUT_SCALE = 200f;
   private static final float TOLERANCE = 0.1f;
   private static final int ELECTROMAGNET_LOOPS_MAX = 4;
+  private static final float MAX_EMF = 25;
+  private static final float DISPLAY_WIDTH = 38f;
+  private static final float COIL_WIDTH = DISPLAY_WIDTH / ScienceEngine.PIXELS_PER_M;
 
   private float maxStrengthOutside; // for debugging
 
@@ -30,10 +33,9 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   private float current = 0f;
   // Number of loops in the coil.
   private int numberOfLoops;
+  // Terminals
+  private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
-  private static final float MAX_EMF = 25;
-  private static final float DISPLAY_WIDTH = 38f;
-  private static final float COIL_WIDTH = DISPLAY_WIDTH / ScienceEngine.PIXELS_PER_M;
 
   /**
    * Sole constructor.
@@ -221,12 +223,12 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
 
   @Override
   public Vector2 getFirstTerminalPosition() {
-    return new Vector2(getPosition().x + 5, getPosition().y + 6);
+    return firstTerminal.set(getPosition()).add(1f, -2f);
   }
 
   @Override
   public Vector2 getSecondTerminalPosition() {
-    return new Vector2(getPosition().x + 5, getPosition().y + 11.5f);
+    return secondTerminal.set(getPosition()).add(1.5f, 3.5f);
   }
   
 }

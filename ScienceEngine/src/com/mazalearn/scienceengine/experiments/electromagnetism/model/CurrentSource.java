@@ -42,6 +42,8 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   private CurrentType currentType = CurrentType.DC;
   // direction of current - applies only to DC.
   private boolean isNegativeCurrent = true;
+  // Terminals
+  private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
   /**
    * Sole constructor.
@@ -192,11 +194,11 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
 
   @Override
   public Vector2 getFirstTerminalPosition() {
-    return new Vector2(getPosition().x, getPosition().y + 1.5f);
+    return firstTerminal.set(getPosition()).add(0, 1.5f);
   }
 
   @Override
   public Vector2 getSecondTerminalPosition() {
-    return new Vector2(getPosition().x, getPosition().y - 4.5f);
+    return secondTerminal.set(getPosition()).add(0, -4.5f);
   }
 }

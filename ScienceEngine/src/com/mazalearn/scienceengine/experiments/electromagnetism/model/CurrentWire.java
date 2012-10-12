@@ -22,6 +22,8 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   private float current;
   // Field acting on the wire
   private Vector2 forceVector = new Vector2();
+  // Terminals
+  private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
   public CurrentWire(String name, float x, float y, float angle) {
     super(ComponentType.CurrentWire, name, x, y, angle);
@@ -84,11 +86,11 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   
   @Override
   public Vector2 getFirstTerminalPosition() {
-    return new Vector2(-10, -10);
+    return firstTerminal.set(-10, -10);
   }
 
   @Override
   public Vector2 getSecondTerminalPosition() {
-    return new Vector2(-10, -10);
+    return secondTerminal.set(-10, -10);
   }
 }
