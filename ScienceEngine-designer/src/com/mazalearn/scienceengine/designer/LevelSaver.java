@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -24,16 +25,14 @@ public class LevelSaver {
   
   private static final float THUMBNAIL_SCALE = 7.5f;
 
-  private String description;
   private int level;
   private IScience2DStage science2DStage;
   private IScience2DModel science2DModel;
   private ControlPanel controlPanel;
 
-  public LevelSaver(String description, int level,
+  public LevelSaver(int level,
       ControlPanel controlPanel, IScience2DStage science2DStage,
       IScience2DModel science2DModel) {
-    this.description = description;
     this.level = level;
     this.controlPanel = controlPanel;
     this.science2DStage = science2DStage;
@@ -75,7 +74,8 @@ private void saveLevelThumbnail() {
 private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
   jsonWriter.set("name", controlPanel.getExperimentName());
   jsonWriter.set("level", level);
-  jsonWriter.set("description", description);
+  Label title = (Label) science2DStage.findActor("Title");
+  jsonWriter.set("description", title.getText());
 }
 
 private void writeConfigs(JsonWriter jsonWriter) throws IOException {

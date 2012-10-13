@@ -20,7 +20,6 @@ public class LevelLoader {
     
     private IScience2DStage science2DStage;
     private IScience2DModel science2DModel;
-    private String description;
     private ControlPanel controlPanel;
     private int level;
 
@@ -32,11 +31,7 @@ public class LevelLoader {
       this.science2DModel = science2DModel;
       this.controlPanel = controlPanel;
     }
-
-    public String getDescription() {
-      return description;
-    }
-    
+   
   @SuppressWarnings("unchecked") void load() {
     String fileName = LevelManager.getFileName(controlPanel.getExperimentName(), ".json", level);
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
@@ -58,7 +53,7 @@ public class LevelLoader {
   }
 
   private void readLevelInfo(OrderedMap<String, ?> info) {
-    description = (String) nvl(info.get("description"), 
+    String description = (String) nvl(info.get("description"), 
         controlPanel.getExperimentName() + " : Level " + level);
     Label title = (Label) science2DStage.findActor("Title");
     title.setText(description);
@@ -210,9 +205,4 @@ public class LevelLoader {
       }
     }
   }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-  
 }

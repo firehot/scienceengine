@@ -13,12 +13,9 @@ import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public class LevelManager {
   private IScience2DStage science2DStage;
-  //private FileHandle file;
   private int level = 1;
   private ControlPanel controlPanel;
   private IScience2DModel science2DModel;
-  private LevelLoader levelLoader;
-  private String description = "";
 
   public LevelManager(IScience2DStage stage, IScience2DModel science2DModel, ControlPanel controlPanel) {
     this.science2DStage = stage;
@@ -38,10 +35,6 @@ public class LevelManager {
     this.level = level;
   }
 
-  public String getDescription() {
-    return description;
-  }
-  
   /**
    * Loads the content of the provided file and automatically position and size
    * the objects.
@@ -52,7 +45,6 @@ public class LevelManager {
       LevelLoader levelLoader = new LevelLoader(level, 
           controlPanel, science2DStage, science2DModel);
       levelLoader.load();
-      this.description = levelLoader.getDescription();
       Gdx.app.log(ScienceEngine.LOG, "[LevelEditor] Level successfully loaded!");
     } catch (GdxRuntimeException ex) {
       System.err.println("[LevelEditor] Error happened while loading level");
@@ -74,10 +66,6 @@ public class LevelManager {
     Texture texture = new Texture(pixmap);
     pixmap.dispose();
     return texture;
-  }
-
-  public void setDescription(String description) {
-    levelLoader.setDescription(description);
   }
 
   public static int powerOf2Ceiling(float value) {

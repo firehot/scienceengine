@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -78,7 +79,6 @@ public class LevelEditor extends Stage {
   private final Vector2 rotatedVector = new Vector2();
 
   private ActorPropertyPanel actorPropertyPanel;
-
   private Table configTable;
 
   
@@ -132,12 +132,13 @@ public class LevelEditor extends Stage {
     titleTable.add("Level").pad(5);
     titleTable.add(level);
     titleTable.row();
+    final Label titleLabel = (Label) originalStage.getRoot().findActor("Title");
     final TextField description = 
-        new TextField(levelManager.getDescription(), screen.getSkin());
+        new TextField((String) titleLabel.getText(), screen.getSkin());
     titleTable.add(description).colspan(3).fill().width(600);
     description.setTextFieldListener(new TextFieldListener() {
       public void keyTyped(TextField textField, char key) {
-        levelManager.setDescription(description.getText());
+        titleLabel.setText(description.getText());
       }
     });
     
@@ -171,7 +172,7 @@ public class LevelEditor extends Stage {
         originalStage.draw();
         try {
           LevelSaver levelSaver = new LevelSaver(
-              levelManager.getDescription(), levelManager.getLevel(), 
+              levelManager.getLevel(), 
               controlPanel, (IScience2DStage) originalStage, science2DModel);
           levelSaver.save();
           System.out.println("[LevelEditor] Level successfully saved!");
