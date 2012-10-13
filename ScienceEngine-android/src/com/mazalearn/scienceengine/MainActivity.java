@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
-import java.util.List;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,8 +8,12 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.designer.LevelEditor;
 
 public class MainActivity extends AndroidApplication implements PlatformAdapter {
     @Override
@@ -60,5 +63,11 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
           file.getAbsolutePath());
       startActivity(videoPlayback);
       return true;
+    }
+
+    @Override
+    public Stage createLevelEditor(IScience2DController science2DController,
+        AbstractScreen screen) {
+      return new LevelEditor(science2DController, screen);
     }
 }

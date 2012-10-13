@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.designer;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
@@ -29,7 +30,9 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
@@ -87,23 +90,26 @@ public class LevelEditor extends Stage {
    * @param level - level of experiment.
    * @param stage - stage used by the experiment view
    */
-  public LevelEditor(LevelManager levelManager, ControlPanel controlPanel, Stage stage, 
-      IScience2DModel science2DModel, AbstractScreen screen) {
-    super(stage.getWidth(), stage.getHeight(), false, 
-        stage.getSpriteBatch());
+  public LevelEditor(IScience2DController controller, AbstractScreen screen) {
+    super(((Stage)controller.getView()).getWidth(), 
+        ((Stage) controller.getView()).getHeight(), 
+        false, 
+        ((Stage)controller.getView()).getSpriteBatch());
     this.screen = screen;
-    this.science2DModel = science2DModel;
-    this.controlPanel = controlPanel;
-    this.originalStage = stage;
-    this.setCamera(stage.getCamera());
+    this.science2DModel = controller.getModel();
+    this.controlPanel = controller.getControlPanel();
+    this.originalStage = (Stage) controller.getView();
+    this.setCamera(originalStage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.getCamera();
     this.shapeRenderer = new ShapeRenderer();
-    this.layout = createLayout(levelManager, stage, science2DModel, screen);
+    this.layout = createLayout(controller.getView().getLevelManager(),
+        originalStage, science2DModel);
     this.addActor(layout);
+    this.enableEditor();
   }
   
   private Table createLayout(final LevelManager levelManager, Stage stage,
-      IScience2DModel science2DModel, AbstractScreen screen) {
+      IScience2DModel science2DModel) {
     Table layout = new Table(screen.getSkin());
     layout.setName("Layout");
     layout.setFillParent(true);
@@ -163,7 +169,15 @@ public class LevelEditor extends Stage {
         // Render screen - then we will save level and its screen together
         screen.clearScreen(Color.BLACK);
         originalStage.draw();
-        levelManager.save();
+        try {
+          LevelSaver levelSaver = new LevelSaver(
+              levelManager.getDescription(), levelManager.getLevel(), 
+              controlPanel, (IScience2DStage) originalStage, science2DModel);
+          levelSaver.save();
+          System.out.println("[LevelEditor] Level successfully saved!");
+        } catch (IOException ex) {
+          System.err.println("[LevelEditor] Error happened while writing level file");
+        }
       }      
     });
     menu.add(button).pad(10);
@@ -257,7 +271,7 @@ public class LevelEditor extends Stage {
    * InputProcessor by its own. Just remove this call from your code once you're
    * happy with the result. Any other call can stay without any side-effect.
    */
-  public void enableEditor() {
+  private void enableEditor() {
     originalCameraZoom = orthographicCamera.zoom;
     originalCameraPos = getCamera().position.cpy();
     mode = Mode.OVERLAY;

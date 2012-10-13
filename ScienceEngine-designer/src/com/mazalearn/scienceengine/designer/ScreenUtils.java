@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.utils;
+package com.mazalearn.scienceengine.designer;
 
 import java.nio.ByteBuffer;
 
@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.mazalearn.scienceengine.app.services.LevelManager;
 
 public class ScreenUtils {
 
@@ -43,10 +44,6 @@ public class ScreenUtils {
     return screenShot;
   }
   
-  public static int powerOf2Ceiling(float value) {
-    return 1 << (int) Math.ceil(Math.log(value) / Math.log(2));
-  }
-
   /**
    * Scale down pixmap to create a thumbnail with width and height powers of 2.
    * @param pixmap - pixmap to be scaled down
@@ -55,8 +52,8 @@ public class ScreenUtils {
    */
   public static Pixmap createThumbnail(Pixmap pixmap, float scale) {
     // Thumbnail should create a power of 2 texture for android
-    Pixmap thumbnail = new Pixmap(powerOf2Ceiling(pixmap.getWidth() / scale), 
-        powerOf2Ceiling(pixmap.getHeight() / scale), Format.RGBA8888);
+    Pixmap thumbnail = new Pixmap(LevelManager.powerOf2Ceiling(pixmap.getWidth() / scale), 
+        LevelManager.powerOf2Ceiling(pixmap.getHeight() / scale), Format.RGBA8888);
     thumbnail.drawPixmap(pixmap, 0, 0, pixmap.getWidth(), pixmap.getHeight(), 
         0, 0, thumbnail.getWidth(), thumbnail.getHeight());
     return thumbnail;

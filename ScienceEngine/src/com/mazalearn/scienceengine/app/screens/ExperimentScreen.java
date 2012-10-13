@@ -12,7 +12,6 @@ import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
-import com.mazalearn.scienceengine.designer.LevelEditor;
 
 /**
  * Experiment screen corresponding to one level of the experiment.
@@ -34,10 +33,8 @@ public class ExperimentScreen extends AbstractScreen {
     levelManager.setLevel(level);
     levelManager.load();
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
-      LevelEditor levelEditor = new LevelEditor(levelManager,
-          science2DController.getControlPanel(),
-          (Stage) science2DStage, science2DController.getModel(), this);
-      levelEditor.enableEditor();
+      Stage levelEditor = 
+          ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
       this.setStage(levelEditor);
     } else {
       this.setStage((Stage) science2DStage);      
