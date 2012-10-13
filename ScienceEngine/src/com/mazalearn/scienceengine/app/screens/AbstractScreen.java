@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.services.IMessage;
 
 /**
  * The base class for all scienceEngine screens.
@@ -36,6 +37,10 @@ public abstract class AbstractScreen implements Screen {
 
   public AbstractScreen(ScienceEngine scienceEngine, Stage stage) {
     this.scienceEngine = scienceEngine;
+  }
+  
+  public IMessage getMsg() {
+    return ScienceEngine.getMsg();
   }
   
   public AbstractScreen(ScienceEngine game) {

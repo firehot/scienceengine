@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.services;
+package com.mazalearn.scienceengine;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -10,22 +10,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
-public class Messages {
+public class Messages implements IMessage {
   private static final String HINDI_TTF = "skin/aksharhindi.ttf";
   private static final String KANNADA_TTF = "skin/aksharkannada.ttf";
   private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.app.services.data.messages"; //$NON-NLS-1$
 
-  private static Locale locale = new Locale("en");
-  private static Platform platform;
-  private static ResourceBundle resourceBundle = 
+  private Locale locale = new Locale("en");
+  private Platform platform;
+  private ResourceBundle resourceBundle = 
       ResourceBundle.getBundle(BUNDLE_NAME, locale);
   
-  private Messages() {
+  public Messages(Platform platform) {
+    this.platform = platform;
   }
 
-  public static String getString(String key) {
+  public String getString(String key) {
     try {
       String val = resourceBundle.getString(key);
       return platform == Platform.Android ? val : new String(val.getBytes("ISO-8859-1"), "UTF-8");
@@ -35,23 +38,22 @@ public class Messages {
     }
   }
   
-  public static Locale getLocale() {
-    return locale;
+  public String getLanguage() {
+    return locale.getLanguage();
   }
 
-  public static void setLocale(Skin skin, Locale locale, Platform platfrm) {
-    Messages.locale = locale;
+  public void setLanguage(Skin skin, String language) {
+    locale = new Locale(language);
     resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
-    platform = platfrm;
     setFont(skin);
   }
 
-  private static void setFont(Skin skin) {
+  private void setFont(Skin skin) {
     BitmapFont font = null;
     String language = locale.getLanguage();
-    if (language.equals("en")) {
-     font = skin.getFont("en");
-    } else {
+    try {
+      font = skin.getFont(language);
+    } catch (GdxRuntimeException e) { // font not found
       String fontFile = null;
       String chars = null;
       if (language.equals("ka")) {

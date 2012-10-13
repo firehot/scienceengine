@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelManager;
-import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -46,7 +45,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     // retrieve the default table
     Table table = super.getTable();
     table.defaults().spaceBottom(20).fill().center();
-    table.add(Messages.getString("ScienceEngine.ScienceEngine")).colspan(10).spaceBottom(20); //$NON-NLS-1$
+    table.add(getMsg().getString("ScienceEngine.ScienceEngine")).colspan(10).spaceBottom(20); //$NON-NLS-1$
     table.row();
 
     // create the experiments Table
@@ -54,7 +53,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
     table.row();
 
     // register the back button
-    TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToMain"), getSkin()); //$NON-NLS-1$
+    TextButton backButton = new TextButton(getMsg().getString("ScienceEngine.BackToMain"), getSkin()); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {
       public void clicked(InputEvent event, float x, float y) {
         goBack();

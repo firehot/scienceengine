@@ -1,13 +1,8 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -20,8 +15,8 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
+import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.LevelManager;
-import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
@@ -53,11 +48,12 @@ public class ScienceEngine extends Game {
   private static MusicManager musicManager;
   private static SoundManager soundManager;
   private static PlatformAdapter platformAdapter;
-
-  private URI uri;
-
   private static Skin skin;
+
+  private String uri;
+
   private TextureAtlas atlas;
+
 
   public static final int PIXELS_PER_M = 8;
 
@@ -67,14 +63,7 @@ public class ScienceEngine extends Game {
   
   public ScienceEngine(String url) {
     if (url == null) return;
-    
-    try {
-      this.uri = (new URL(url)).toURI();
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
+    this.uri = url;
   }
 
   public static PreferencesManager getPreferencesManager() {
@@ -98,7 +87,7 @@ public class ScienceEngine extends Game {
       FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
       skin = new Skin(skinFile);
       skin.add("en", skin.getFont("default-font"));
-      Messages.setLocale(skin, new Locale("en"), getPlatform());
+      getMsg().setLanguage(skin, "en");
    }
     return skin;
   }
@@ -113,7 +102,7 @@ public class ScienceEngine extends Game {
   // PlatformAdapter interface
   
   public void setPlatformAdapter(PlatformAdapter platformAdapter) {
-    this.platformAdapter = platformAdapter;
+    ScienceEngine.platformAdapter = platformAdapter;
   }
   
   public void browseURL(String url){
@@ -131,10 +120,6 @@ public class ScienceEngine extends Game {
   }
   // Game-related methods
   
-  public PlatformAdapter.Platform getPlatform() {
-    return platformAdapter.getPlatform();
-  }
-
   @Override
   public void create() {
     Gdx.app.log(ScienceEngine.LOG, "Creating Engine on " + Gdx.app.getType());
@@ -191,9 +176,18 @@ public class ScienceEngine extends Game {
    * @param uri
    * @return screen corresponding to uri
    */
-  private AbstractScreen createScreen(URI uri) {
+  private AbstractScreen createScreen(String uri) {
     if (uri != null) {
-      String[] pathSegments = uri.getPath().toLowerCase().split("/");
+      String path, query;
+      int qmark = uri.indexOf("?");
+      if (qmark == -1) {
+        path = uri;
+        query = null;
+      } else {
+        path = uri.substring(0, qmark);
+        query = uri.substring(qmark);
+      }
+      String[] pathSegments = path.toLowerCase().split("/");
       int i = 1;
       if (pathSegments.length > i && isSupportedSubject(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
@@ -203,8 +197,8 @@ public class ScienceEngine extends Game {
                 AbstractScreen.VIEWPORT_WIDTH, 
                 AbstractScreen.VIEWPORT_HEIGHT);
         Integer iLevel = null;
-        if (uri.getQuery() != null) {
-          String[] queryParts = uri.getQuery().toLowerCase().split("&");
+        if (query != null) {
+          String[] queryParts = query.toLowerCase().split("&");
           if (queryParts[0].startsWith("level")) {
             iLevel = Integer.parseInt(queryParts[0].substring("level=".length()));
           }
@@ -302,5 +296,9 @@ public class ScienceEngine extends Game {
 
   public static PlatformAdapter getPlatformAdapter() {
     return platformAdapter;  
+  }
+
+  public static IMessage getMsg() {
+    return platformAdapter.getMsg();
   }
 }

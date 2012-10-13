@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
@@ -21,7 +20,6 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.LevelManager;
-import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -71,22 +69,20 @@ public class ExperimentHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     
     table.defaults().fill().center().padLeft(30);
-    table.add(Messages.getString("ScienceEngine." + science2DController.getName()) +
-        "- " + Messages.getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
+    table.add(getMsg().getString("ScienceEngine." + science2DController.getName()) +
+        "- " + getMsg().getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     
     table.add(createExperimentLevelPane()).fill();    
     table.row();
-    table.add(science2DController.getName() + ": " + Messages.getString("ScienceEngine.ResourcesOnTheInternet")).colspan(100); //$NON-NLS-1$ //$NON-NLS-2$
+    table.add(science2DController.getName() + ": " + getMsg().getString("ScienceEngine.ResourcesOnTheInternet")).colspan(100); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     table.add(createResourcePane()).fill();
     table.row();
     
     // register the back button
-    TextButtonStyle textButtonStyle = new TextButtonStyle(getSkin().get("default", TextButtonStyle.class));
-    textButtonStyle.font = getSkin().getFont(Messages.getLocale().getLanguage());
     TextButton backButton = 
-        new TextButton(Messages.getString("ScienceEngine.BackToExperiments"), textButtonStyle); //$NON-NLS-1$
+        new TextButton(getMsg().getString("ScienceEngine.BackToExperiments"), getSkin()); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -205,7 +201,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
       resource.add(new Label(duration, smallLabelStyle)).padLeft(10).width(40);
       resource.row();
       Label attributionLabel = 
-          new Label(Messages.getString("ScienceEngine.From") + ": " + 
+          new Label(getMsg().getString("ScienceEngine.From") + ": " + 
                     attribution + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
                     description, smallLabelStyle);
       attributionLabel.setWrap(true);

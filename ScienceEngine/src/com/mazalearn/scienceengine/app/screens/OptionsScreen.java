@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.app.screens;
 
-import java.util.Locale;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -13,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.Messages;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
@@ -35,23 +32,22 @@ public class OptionsScreen extends AbstractScreen {
     Table table = super.getTable();
     table.defaults().spaceBottom(30);
     table.columnDefaults(0).padRight(20);
-    table.add(Messages.getString("ScienceEngine.Options")).colspan(3); //$NON-NLS-1$
+    table.add(getMsg().getString("ScienceEngine.Options")).colspan(3); //$NON-NLS-1$
 
     // Create locale selection box
-    final SelectBox localeSelect = 
+    final SelectBox languageSelect = 
         new SelectBox(new String[] { "en", "ka", "hi"}, getSkin());
-    localeSelect.setSelection(Messages.getLocale().getLanguage());
-    localeSelect.addListener(new ChangeListener() {
+    languageSelect.setSelection(getMsg().getLanguage());
+    languageSelect.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        Locale locale = new Locale(localeSelect.getSelection());
-        Messages.setLocale(getSkin(), locale, scienceEngine.getPlatform());
+        getMsg().setLanguage(getSkin(), languageSelect.getSelection());
       }
     });
     table.row();
-    table.add(Messages.getString("ScienceEngine.Language")); // $NON-NLS-1$
-    table.add(localeSelect).colspan(2).left();
+    table.add(getMsg().getString("ScienceEngine.Language")); // $NON-NLS-1$
+    table.add(languageSelect).colspan(2).left();
     
     // create the labels widgets
     final CheckBox soundEffectsCheckbox = new CheckBox("", getSkin()); //$NON-NLS-1$
@@ -67,7 +63,7 @@ public class OptionsScreen extends AbstractScreen {
       }
     });
     table.row();
-    table.add(Messages.getString("ScienceEngine.SoundEffects")); //$NON-NLS-1$
+    table.add(getMsg().getString("ScienceEngine.SoundEffects")); //$NON-NLS-1$
     table.add(soundEffectsCheckbox).colspan(2).left();
 
     final CheckBox musicCheckbox = new CheckBox("", getSkin()); //$NON-NLS-1$
@@ -86,7 +82,7 @@ public class OptionsScreen extends AbstractScreen {
       }
     });
     table.row();
-    table.add(Messages.getString("ScienceEngine.Music")); //$NON-NLS-1$
+    table.add(getMsg().getString("ScienceEngine.Music")); //$NON-NLS-1$
     table.add(musicCheckbox).colspan(2).left();
 
     // range is [0.0,1.0]; step is 0.1f
@@ -109,12 +105,12 @@ public class OptionsScreen extends AbstractScreen {
 
     // add the volume row
     table.row();
-    table.add(Messages.getString("ScienceEngine.Volume")); //$NON-NLS-1$
+    table.add(getMsg().getString("ScienceEngine.Volume")); //$NON-NLS-1$
     table.add(volumeSlider);
     table.add(volumeValue).width(40);
 
     // register the back button
-    TextButton backButton = new TextButton(Messages.getString("ScienceEngine.BackToMain"), getSkin()); //$NON-NLS-1$
+    TextButton backButton = new TextButton(getMsg().getString("ScienceEngine.BackToMain"), getSkin()); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

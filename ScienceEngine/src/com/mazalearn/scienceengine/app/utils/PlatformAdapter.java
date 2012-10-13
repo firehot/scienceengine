@@ -4,14 +4,13 @@ import java.io.File;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public interface PlatformAdapter {
 
   // Platform - required for utf-8/iso-8859 in characters
   enum Platform { Desktop, Android, GWT};
-  
-  public Platform getPlatform();
   
   // Show url in any browser
   public void browseURL(String url);
@@ -25,6 +24,9 @@ public interface PlatformAdapter {
   // Abstracting level editor out so that GWT is not affected by it
   public Stage createLevelEditor(IScience2DController science2dController,
       AbstractScreen screen);
+
+  // Return the i18n message adapter
+  public IMessage getMsg();
 
 }
 

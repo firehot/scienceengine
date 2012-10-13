@@ -11,11 +11,14 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 
 public class MainActivity extends AndroidApplication implements PlatformAdapter {
+    private IMessage messages;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -39,8 +42,11 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
       initialize(scienceEngine, cfg);
     }
     
-    public Platform getPlatform() {
-      return Platform.Android;
+    public IMessage getMsg() {
+      if (messages == null) {
+        messages = new Messages(Platform.Android);
+      }
+      return messages;
     }
     
     public void browseURL(String url) {

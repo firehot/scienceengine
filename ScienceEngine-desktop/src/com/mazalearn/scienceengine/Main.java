@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
@@ -31,10 +32,8 @@ public class Main {
 	}
 	
 	static class PlatformAdapterImpl implements PlatformAdapter {
-	  @Override
-	  public Platform getPlatform() {
-	    return Platform.Desktop;
-	  }
+	  
+	  IMessage messages;
 	  
 	  @Override
   	public void browseURL(String url) {
@@ -87,6 +86,14 @@ public class Main {
     public Stage createLevelEditor(IScience2DController science2DController,
         AbstractScreen screen) {
       return new LevelEditor(science2DController, screen);
+    }
+    
+    @Override
+    public IMessage getMsg() {
+      if (messages == null) {
+        this.messages = new Messages(Platform.Desktop);
+      }
+      return messages;
     }
 	}
 }
