@@ -95,6 +95,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     
     if (activeProbers.size() == 0) { // No active probers available
       endChallenge();
+      return;
     }
     
     // Reinitialize active Probers
