@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 public class Messages implements IMessage {
   private static final String HINDI_TTF = "skin/aksharhindi.ttf";
   private static final String KANNADA_TTF = "skin/aksharkannada.ttf";
-  private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.data.messages"; //$NON-NLS-1$
+  private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.data.Messages"; //$NON-NLS-1$
 
   private Locale locale = new Locale("en");
   private Platform platform;
