@@ -29,37 +29,37 @@ public class ProfileManager {
     // create the handle for the profile data file
     FileHandle profileDataFile = null;
     try {
-    profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
-    Gdx.app.log(ScienceEngine.LOG,
-        "Retrieving profile from: " + profileDataFile.path());
-
-    // if the profile is already loaded, just return it
-    if (profile != null)
-      return profile;
-    } catch (Exception e) {
-      // Ignore - GWT does not support profiles
-    }
-    // create the JSON utility object
-    Json json = new Json();
-
-    // check if the profile data file exists
-    if (profileDataFile != null && profileDataFile.exists()) {
-
-      // load the profile from the data file
-      try {
-
-        // read the file as text
-        String profileAsText = profileDataFile.readString().trim();
-
-        // decode the contents (if it's base64 encoded)
-        if (profileAsText.matches("^[A-Za-z0-9/+=]+$")) {
-          Gdx.app.log(ScienceEngine.LOG, "Persisted profile is base64 encoded");
-          profileAsText = Base64Coder.decodeString(profileAsText);
-        }
-
-        // restore the state
-        profile = json.fromJson(Profile.class, profileAsText);
-
+      profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
+      Gdx.app.log(ScienceEngine.LOG,
+          "Retrieving profile from: " + profileDataFile.path());
+  
+      // if the profile is already loaded, just return it
+      if (profile != null)
+        return profile;
+      } catch (Exception e) {
+        // Ignore - GWT does not support profiles
+      }
+      // create the JSON utility object
+      Json json = new Json();
+  
+      // check if the profile data file exists
+      if (profileDataFile != null && profileDataFile.exists()) {
+  
+        // load the profile from the data file
+        try {
+  
+          // read the file as text
+          String profileAsText = profileDataFile.readString().trim();
+  
+          // decode the contents (if it's base64 encoded)
+          if (profileAsText.matches("^[A-Za-z0-9/+=]+$")) {
+            Gdx.app.log(ScienceEngine.LOG, "Persisted profile is base64 encoded");
+            profileAsText = Base64Coder.decodeString(profileAsText);
+          }
+  
+          // restore the state
+          profile = json.fromJson(Profile.class, profileAsText);
+  
       } catch (Exception e) {
 
         // log the exception
@@ -88,24 +88,24 @@ public class ProfileManager {
    */
   protected void persist(Profile profile) {
     try {
-    // create the handle for the profile data file
-    FileHandle profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
-    Gdx.app.log(ScienceEngine.LOG, 
-        "Persisting profile in: " + profileDataFile.path());
-
-    // create the JSON utility object
-    Json json = new Json();
-
-    // convert the given profile to text
-    String profileAsText = json.toJson(profile);
-
-    // encode the text
-    if (ScienceEngine.DEV_MODE == ScienceEngine.DevMode.PRODUCTION) {
-      profileAsText = Base64Coder.encodeString(profileAsText);
-    }
-
-    // write the profile data file
-    profileDataFile.writeString(profileAsText, false);
+      // create the handle for the profile data file
+      FileHandle profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
+      Gdx.app.log(ScienceEngine.LOG, 
+          "Persisting profile in: " + profileDataFile.path());
+  
+      // create the JSON utility object
+      Json json = new Json();
+  
+      // convert the given profile to text
+      String profileAsText = json.toJson(profile);
+  
+      // encode the text
+      if (ScienceEngine.DEV_MODE == ScienceEngine.DevMode.PRODUCTION) {
+        profileAsText = Base64Coder.encodeString(profileAsText);
+      }
+  
+      // write the profile data file
+      profileDataFile.writeString(profileAsText, false);
     } catch (Exception e) {
       // Ignored - GWT does not support 
     }

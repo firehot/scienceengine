@@ -9,6 +9,7 @@ import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
@@ -26,6 +27,7 @@ public class GwtLauncher extends GwtApplication {
 	public ApplicationListener getApplicationListener () {
 		ScienceEngine scienceEngine = new ScienceEngine();
 		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
+		scienceEngine.DEV_MODE = DevMode.PRODUCTION;
     return scienceEngine;
 	}
   static class PlatformAdapterImpl implements PlatformAdapter {

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -46,6 +47,9 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   
   public void done(boolean success) {}
   
+  public BitmapFont getFont() {
+    return skin.getFont("default-font");
+  }
 
   @Override
   public Actor findActor(String name) {

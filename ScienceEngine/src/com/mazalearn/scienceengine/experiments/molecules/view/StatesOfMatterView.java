@@ -17,7 +17,8 @@ public class StatesOfMatterView extends AbstractScience2DStage {
 
     int boxWidth = 20;
     int boxHeight = 20;
-    Actor moleculeBox = new MoleculeBox(molecularModel, N, boxWidth, boxHeight);
+    Actor moleculeBox = new MoleculeBox(molecularModel, N, boxWidth, boxHeight, 
+        getFont());
     this.addActor(new ColorPanel("Ceiling"));
     this.addActor(new ColorPanel("LeftSide"));
     this.addActor(moleculeBox);

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -46,7 +47,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     this.science2DController = science2DController;
     setBackgroundColor(Color.DARK_GRAY);
     readExperimentInfo();
-    getFont().setScale(0.8f);
+    getFont().setScale(0.7f);
     smallLabelStyle = new LabelStyle(getFont(), Color.WHITE);
     profile = ScienceEngine.getProfileManager().retrieveProfile();
     profile.setExperiment(science2DController.getName());
@@ -173,10 +174,14 @@ public class ExperimentHomeScreen extends AbstractScreen {
             if (fileName != null) {
               // Movie file extensions - we allow a limited set.
               for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                FileHandle file = Gdx.files.external(fileName + extension);
-                if (file.exists()) {
-                  playedVideo = scienceEngine.playVideo(file.file());
-                  break;
+                try {
+                  FileHandle file = Gdx.files.external(fileName + extension);
+                  if (file.exists()) {
+                    playedVideo = scienceEngine.playVideo(file.file());
+                    break;
+                  }
+                } catch (GdxRuntimeException e) {
+                  // Ignore - it is ok for file to be inaccessible
                 }
               }
             }

@@ -28,7 +28,7 @@ public class BarMagnetActor extends Science2DActor {
     super(body, textureRegion);
     this.barMagnet = (BarMagnet) body;
     this.emModel = emModel;
-    this.font = new BitmapFont();
+    this.font = experimentView.getFont();
     this.setAllowMove(true);
     Array<EventListener> listeners = this.getListeners();
     if (listeners.size == 1) { // Remove the touch listener

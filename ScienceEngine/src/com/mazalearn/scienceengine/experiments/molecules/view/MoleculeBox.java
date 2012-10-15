@@ -23,7 +23,7 @@ final class MoleculeBox extends Actor {
   private final int boxWidth;
   private final int N;
 
-  public MoleculeBox(IMolecularModel molecularModel, int N, int boxWidth, int boxHeight) {
+  public MoleculeBox(IMolecularModel molecularModel, int N, int boxWidth, int boxHeight, BitmapFont font) {
     this.setName("MoleculeBox");
     this.molecularModel = molecularModel;
     this.boxWidth = boxWidth;
@@ -46,7 +46,6 @@ final class MoleculeBox extends Actor {
     backgroundTexture = new Texture(pixmap);
     pixmap.dispose();
     
-    font = new BitmapFont();
     timeStart = System.currentTimeMillis();
   }
 

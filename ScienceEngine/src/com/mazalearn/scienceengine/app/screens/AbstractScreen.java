@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.app.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -86,7 +87,10 @@ public abstract class AbstractScreen implements Screen {
 
   public BitmapFont getFont() {
     if (font == null) {
-      font = new BitmapFont();
+      // ??? TODO: problems with GWT
+      FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
+      Skin  skin = new Skin(skinFile);
+      font = skin.getFont("default-font");
     }
     return font;
   }
