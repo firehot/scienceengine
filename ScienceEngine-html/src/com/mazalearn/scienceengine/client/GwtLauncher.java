@@ -75,7 +75,8 @@ public class GwtLauncher extends GwtApplication {
     
     @Override
     public String getString(String msg) {
-      return msg;
+      int pos = msg.indexOf(".");
+      return msg.substring(pos + 1);
     }
 
     @Override
