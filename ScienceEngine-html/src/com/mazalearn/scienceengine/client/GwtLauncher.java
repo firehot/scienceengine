@@ -24,7 +24,9 @@ public class GwtLauncher extends GwtApplication {
 
 	@Override
 	public ApplicationListener getApplicationListener () {
-		return new ScienceEngine();
+		ScienceEngine scienceEngine = new ScienceEngine();
+		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
+    return scienceEngine;
 	}
   static class PlatformAdapterImpl implements PlatformAdapter {
     

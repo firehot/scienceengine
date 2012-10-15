@@ -130,15 +130,19 @@ public class ScienceEngine extends Game {
     // create the preferences manager
     preferencesManager = new PreferencesManager();
 
-    // create the music manager
-    musicManager = new MusicManager();
-    musicManager.setVolume(preferencesManager.getVolume());
-    musicManager.setEnabled(preferencesManager.isMusicEnabled());
-
-    // create the sound manager
-    soundManager = new SoundManager();
-    soundManager.setVolume(preferencesManager.getVolume());
-    soundManager.setEnabled(preferencesManager.isSoundEnabled());
+    try {
+      // create the music manager
+      musicManager = new MusicManager();
+      musicManager.setVolume(preferencesManager.getVolume());
+      musicManager.setEnabled(preferencesManager.isMusicEnabled());
+  
+      // create the sound manager
+      soundManager = new SoundManager();
+      soundManager.setVolume(preferencesManager.getVolume());
+      soundManager.setEnabled(preferencesManager.isSoundEnabled());
+    } catch (RuntimeException e) {
+      // ignore - not having sound is OK. Added for GWT.
+    }
 
     // create the profile manager
     profileManager = new ProfileManager();
@@ -185,10 +189,10 @@ public class ScienceEngine extends Game {
         query = null;
       } else {
         path = uri.substring(0, qmark);
-        query = uri.substring(qmark);
+        query = uri.substring(qmark + 1);
       }
       String[] pathSegments = path.toLowerCase().split("/");
-      int i = 1;
+      int i = 3;
       if (pathSegments.length > i && isSupportedSubject(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedTopic(pathSegments[i])) {
