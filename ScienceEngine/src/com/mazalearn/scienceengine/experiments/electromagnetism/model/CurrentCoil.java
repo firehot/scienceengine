@@ -68,9 +68,16 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
    * @return the current
    */
   public float getCurrent() {
-    // Effect of split ring commutator - current is reversed from 180-360 rotation
-    float angle = getAngle() % (2 * MathUtils.PI);
-    return (angle > MathUtils.PI) ? -current : current;
+    switch (commutatorType) {
+    case Commutator:
+      // Effect of split ring commutator
+      // current is reversed from 90-270 i.e. pi/2 - 3pi/2 rotation
+      float angle = getAngle() % (2 * MathUtils.PI);
+      return (angle > MathUtils.PI * 0.5 && angle <= MathUtils.PI * 1.5) ? -current : current;
+    case Connector:
+      return current;
+    }
+    return 0;
   }
 
   @Override
