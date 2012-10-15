@@ -134,7 +134,7 @@ public class LevelEditor extends Stage {
     titleTable.row();
     final Label titleLabel = (Label) originalStage.getRoot().findActor("Title");
     final TextField description = 
-        new TextField((String) titleLabel.getText(), screen.getSkin());
+        new TextField(titleLabel.getText().toString(), screen.getSkin());
     titleTable.add(description).colspan(3).fill().width(600);
     description.setTextFieldListener(new TextFieldListener() {
       public void keyTyped(TextField textField, char key) {

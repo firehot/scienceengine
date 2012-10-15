@@ -29,6 +29,7 @@ final class MoleculeBox extends Actor {
     this.boxWidth = boxWidth;
     this.boxHeight = boxHeight;
     this.N = N;
+    this.font = font;
     int pixelsPerM = ScienceEngine.PIXELS_PER_M;
     Pixmap pixmap = new Pixmap(pixelsPerM, pixelsPerM, Format.RGBA8888);
     pixmap.setColor(Color.DARK_GRAY);
