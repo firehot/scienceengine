@@ -6,6 +6,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
@@ -26,7 +27,7 @@ public class GwtLauncher extends GwtApplication {
 	public ApplicationListener getApplicationListener () {
 		ScienceEngine scienceEngine = new ScienceEngine();
 		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
-		scienceEngine.DEV_MODE = DevMode.PRODUCTION;
+		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     return scienceEngine;
 	}
   static class PlatformAdapterImpl implements PlatformAdapter {
@@ -35,6 +36,7 @@ public class GwtLauncher extends GwtApplication {
     
     @Override
     public void browseURL(String url) {
+      Window.open(url, "_blank", "");
     }
 
     @Override
@@ -46,7 +48,6 @@ public class GwtLauncher extends GwtApplication {
     public boolean playVideo(File file) {
       return false;
     }
-
 
     @Override
     public Stage createLevelEditor(IScience2DController science2DController,

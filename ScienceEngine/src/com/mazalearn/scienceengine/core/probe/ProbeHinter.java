@@ -48,7 +48,8 @@ public class ProbeHinter extends Group {
         public void clicked (InputEvent event, float x, float y) {
           jumpingMode = false;
           hintButton.setVisible(true);
-          hintButton.setPosition(image.getX() - hintButton.getWidth(), image.getY());
+          hintButton.setPosition(image.getX() - hintButton.getWidth(), 
+              image.getY() - 50);
         }
       });    
     }
@@ -75,12 +76,16 @@ public class ProbeHinter extends Group {
       return;
     }
     this.setVisible(true);
-    hintButton.setText("Hint: " + hint + "\n-" + SCIENTISTS.get(scientistIndex).getName());
+    Image image = SCIENTISTS.get(scientistIndex);
+    image.setVisible(false);
+    hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
     hintButton.setSize(300, 100); 
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
     jumpingMode = true;
-    SCIENTISTS.get(scientistIndex).setVisible(true);
+    image = SCIENTISTS.get(scientistIndex);
+    image.setVisible(true);
+    image.setY(0);
   }
 
 }
