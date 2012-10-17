@@ -130,12 +130,17 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
 
   public void setControlPanel(ControlPanel controlPanel) {
     this.controlPanel = controlPanel;
+    // Register control panel
     this.addActor(controlPanel);
+    // Register title
     Label title = new Label("", skin);
     title.setPosition(10, getHeight() - 20);
     title.setName("Title");
     title.setColor(Color.YELLOW);
     this.addActor(title);
+    // Register help
+    Actor help = new Helper(skin, 650, getHeight()  - 90);
+    this.addActor(help);
     this.levelManager = new LevelManager(this, science2DModel, controlPanel);
   }
 }

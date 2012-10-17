@@ -20,6 +20,7 @@ public class OnOffButtonControl implements IControl {
     this.toggleButton = new TextButton(property.getName(), 
         skin.get("toggle", TextButtonStyle.class));
     this.property = property;
+    toggleButton.setName(property.getDescription()); 
     toggleButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

@@ -13,6 +13,7 @@ public class SelectBoxControl implements IControl {
     this.selectBox = new SelectBox (getItems(property), skin);
     this.property = property;
     syncWithModel();
+    selectBox.setName(property.getDescription());
     // Set value when slider changes
     selectBox.addListener(new ChangeListener() {
       @Override

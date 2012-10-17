@@ -122,7 +122,8 @@ public class LevelLoader {
   private void initializeComponents() {
     // Make all actors inactive and invisible.
     for (Actor actor: science2DStage.getActors()) {
-      if (!"Title".equals(actor.getName()) && !"CircuitElement".equals(actor.getName())) {
+      if (!"Title".equals(actor.getName()) && !"CircuitElement".equals(actor.getName()) &&
+          !"Help".equals(actor.getName())) {
         actor.setVisible(false);
       }
       if (actor instanceof Science2DActor) {

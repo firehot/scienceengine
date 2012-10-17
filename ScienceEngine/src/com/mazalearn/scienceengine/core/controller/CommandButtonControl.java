@@ -20,6 +20,7 @@ public class CommandButtonControl implements IControl {
   public CommandButtonControl(final IModelConfig command, final Skin skin) {
     this.textButton = new TextButton(command.getName(), skin);
     this.command = command;
+    textButton.setName(command.getDescription());
     textButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

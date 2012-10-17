@@ -17,8 +17,11 @@
   {"name": "Induction of current by relative motion of an electromagnet and a coil of wire",
    "description": "Experiment with how current is induced in a coil of wire when the electromagnet is rotated or moved in its vicinity. Understand how the current induced changes with the polarity, strength of the electromagnet."
   },
-  {"name": "Motor - current carrying wire in a magnetic field",
-   "description": "Experiment with how a motor can be created by passing current through a wire placed in a magnetic field."
+  {"name": "DC Motor - A current carrying coil in a magnetic field rotates to create a motor",
+   "description": "Experiment with how a motor can be created by passing current through a wire placed in a magnetic field. How a commutator works with Direct Current."
+  },
+  {"name": "AC Motor - A coil carrying Alternating Current in a magnetic field rotates to create a motor",
+   "description": "Experiment with how a motor can be created by passing alternating current through a wire placed in a magnetic field. The frequency has to be matched to rate of rotation to sustain the spin."
   }
 ],
 "Resources": [

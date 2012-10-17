@@ -52,8 +52,9 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.addActor(successImage);
     this.addActor(failureImage);
     probeHinter = new ProbeHinter(skin);
+    // Place hinter to right of question mark above the controls.
     probeHinter.setPosition(controlPanel.getX(),
-        controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 35);
+        controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 20);
     this.addActor(probeHinter);
   }
 

@@ -65,7 +65,7 @@ public class Science2DActor extends Actor {
         // Screen coords of current touch
         getStage().getCamera().unproject(currentTouch);
         // Get negative of movement vector
-       lastTouch.sub(currentTouch.x, currentTouch.y);
+        lastTouch.sub(currentTouch.x, currentTouch.y);
         Science2DActor.this.setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
         setPositionFromViewCoords(true);
         // Recalibrate lastTouch to new coordinates

@@ -18,6 +18,7 @@ public class SliderControl implements IControl {
         (property.getHigh() - property.getLow())/10, false, skin);
     this.property = property;
     syncWithModel();
+    slider.setName(property.getDescription());
     // Set value when slider changes
     slider.addListener(new ChangeListener() {
       @Override
