@@ -40,8 +40,8 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   /**
    * Sole constructor.
    */
-  public Electromagnet(String name, float x, float y, float angle) {
-    super(ComponentType.ElectroMagnet, name, x, y, angle);
+  public Electromagnet(float x, float y, float angle) {
+    super(ComponentType.ElectroMagnet, x, y, angle);
     this.numberOfLoops = 1;
     // Modeled as a square with diameter equal to side of square
     this.setSize(16, 16);
@@ -55,9 +55,9 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
     rectangleShape.dispose();
-    initializeConfigs();
   }
 
+  @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(getName() + " Coil Loops", 
         "Number of loops of coil", 1f, 4f) {

@@ -10,7 +10,7 @@ public enum ComponentType implements IComponentType {
   Lightbulb("images/lightbulb.png"),
   FieldMeter("images/arrow.png"),
   PickupCoil("images/coppercoils-front1.png"),
-  CurrentWire("images/currentwire-up.png"),
+  Wire("images/currentwire-up.png"),
   Voltmeter(""), 
   FieldMagnet("images/simplemagnetsn.png"),
   CurrentCoil("images/currentcoil_nocommutator.png");
@@ -23,6 +23,11 @@ public enum ComponentType implements IComponentType {
   
   public String getTextureFilename() {
     return textureFilename;
+  }
+  
+  // TODO: localize this
+  public String toString() {
+    return name();
   }
   
   public static ComponentType valueOf(IComponentType cType) {

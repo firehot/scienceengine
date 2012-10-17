@@ -30,8 +30,8 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
    * 
    * @param pickupCoilModel - the pickup coil that the lightbulb is across
    */
-  public Lightbulb(String name, float x, float y, float angle) {
-    super(ComponentType.Lightbulb, name, x, y, angle);
+  public Lightbulb(float x, float y, float angle) {
+    super(ComponentType.Lightbulb, x, y, angle);
 
     this.previousCurrent = 0f;
     FixtureDef fixtureDef = new FixtureDef();

@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * 
  * @author sridhar
  */
-public class CurrentWire extends Science2DBody implements IMagneticField.Producer, ICurrent.Sink {
+public class Wire extends Science2DBody implements IMagneticField.Producer, ICurrent.Sink {
   private static final int OUTPUT_SCALE = 50;
   // Radius of the wire.
   private float radius;
@@ -25,8 +25,8 @@ public class CurrentWire extends Science2DBody implements IMagneticField.Produce
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
-  public CurrentWire(String name, float x, float y, float angle) {
-    super(ComponentType.CurrentWire, name, x, y, angle);
+  public Wire(float x, float y, float angle) {
+    super(ComponentType.Wire, x, y, angle);
     this.radius = 0.1f;
     this.current = 1f;
     FixtureDef fixtureDef = new FixtureDef();

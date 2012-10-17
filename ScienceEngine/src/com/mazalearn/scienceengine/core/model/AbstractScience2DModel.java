@@ -48,7 +48,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   protected abstract void singleStep();
 
-  public void addBody(Science2DBody science2DBody) {
+  public Science2DBody addBody(Science2DBody science2DBody) {
     bodies.add(science2DBody);
     science2DBody.setModel(this);
     if (science2DBody instanceof IMagneticField.Producer) {
@@ -57,6 +57,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     if (science2DBody instanceof IMagneticField.Consumer) {
       emConsumers.add((Consumer) science2DBody);
     }
+    return science2DBody;
   }
   
   public void propagateField() {

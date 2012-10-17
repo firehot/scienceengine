@@ -76,7 +76,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       case CurrentSource:
         this.addActor(new CurrentSourceActor(body, textureRegion));
         break;        
-      case CurrentWire:
+      case Wire:
         this.addActor(new CurrentWireActor(body));
         break;
       case ElectroMagnet:

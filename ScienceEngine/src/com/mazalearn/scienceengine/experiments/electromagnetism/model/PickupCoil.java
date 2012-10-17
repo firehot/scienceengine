@@ -45,8 +45,8 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
    * Creates a default coil with one loop, radius=10,
    * wireWidth=16, loopSpacing=25
    */
-  public PickupCoil(String name, float x, float y, float angle, float calibrationEmf) {
-    this(ComponentType.PickupCoil, name, x, y, angle, 1, 8, 16, 25);
+  public PickupCoil(float x, float y, float angle, float calibrationEmf) {
+    this(ComponentType.PickupCoil, x, y, angle, 1, 8, 16, 25);
 
     assert (calibrationEmf >= 1);
     this.calibrationEmf = calibrationEmf;
@@ -60,9 +60,6 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
 
     // Reusable objects
     this.sampleBField = new Vector2();
-
-    // loosely packed loops
-    initializeConfigs();
   }
 
   /**
@@ -73,9 +70,9 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
    * @param wireWidth - width of the wire
    * @param loopSpacing - space between the loops
    */
-  private PickupCoil(ComponentType componentType, String name, float x, float y, float angle, 
+  private PickupCoil(ComponentType componentType, float x, float y, float angle, 
       int numberOfLoops, float radius, float wireWidth, float loopSpacing) {
-    super(componentType, name, x, y, angle);
+    super(componentType, x, y, angle);
     this.numberOfLoops = numberOfLoops;
     this.radius = radius;
     this.wireWidth = wireWidth;
@@ -98,6 +95,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
     rectangleShape.dispose();
   }
   
+  @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(getName() + " Coil Loops", 
         "Number of loops of coil", 1f, 4f) {

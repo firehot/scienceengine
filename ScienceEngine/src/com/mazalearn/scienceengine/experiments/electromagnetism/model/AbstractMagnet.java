@@ -23,8 +23,8 @@ public abstract class AbstractMagnet extends Science2DBody
    * Sole constructor
    * @param  emField - Electromagnetic field to which magnet is coupled
    */
-  public AbstractMagnet(ComponentType componentType, String name, float x, float y, float angle) {
-    super(componentType, name, x, y, angle);
+  public AbstractMagnet(ComponentType componentType, float x, float y, float angle) {
+    super(componentType, x, y, angle);
     this.strength = 1.0f;
   }
   

@@ -103,8 +103,8 @@ public class BarMagnet extends AbstractMagnet {
   private final Grid externalNearGrid; // near the magnet
   private final Grid externalFarGrid; // far from the magnet
 
-  public BarMagnet(String name, float x, float y, float angle) {
-    super(ComponentType.BarMagnet, name, x, y, angle);
+  public BarMagnet(float x, float y, float angle) {
+    super(ComponentType.BarMagnet, x, y, angle);
     
     this.setSize(32, 8);
     FixtureDef fixtureDef = new FixtureDef();
@@ -117,7 +117,6 @@ public class BarMagnet extends AbstractMagnet {
     this.createFixture(fixtureDef);
     rectangleShape.dispose();
     this.setAngularDamping(0.1f);
-    initializeConfigs();
 
     internalGrid = new Grid(BX_INTERNAL_RESOURCE_NAME,
         BY_INTERNAL_RESOURCE_NAME, INTERNAL_GRID_SIZE, INTERNAL_GRID_SPACING);
@@ -129,6 +128,7 @@ public class BarMagnet extends AbstractMagnet {
         EXTERNAL_FAR_GRID_SPACING);
   }
 
+  @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(getName() + " Strength", 
         "Strength of magnet", 0f, 10000f) {

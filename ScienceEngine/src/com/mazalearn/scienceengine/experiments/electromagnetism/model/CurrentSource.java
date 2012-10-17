@@ -48,16 +48,16 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   /**
    * Sole constructor.
    */
-  public CurrentSource(String name, float x, float y, float angle) {
-    super(ComponentType.CurrentSource, name, x, y, angle);
+  public CurrentSource(float x, float y, float angle) {
+    super(ComponentType.CurrentSource, x, y, angle);
     this.frequency = 1.0f;
     this.acAngle = 0.0f; // radians
     this.deltaAngle = (2 * MathUtils.PI * this.frequency) / MIN_STEPS_PER_CYCLE; // radians
     this.maxCurrent = DEFAULT_MAX_CURRENT;
     this.current = this.maxCurrent;
-    this.initializeConfigs();
   }
 
+  @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<String>(getName() + " Type", 
         "Type of Current", CurrentType.values()) {
@@ -80,7 +80,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
       public boolean isPossible() { return isActive(); }
     });
     
-    configs.add(new AbstractModelConfig<Boolean>(getName() + " Negative Current", 
+    configs.add(new AbstractModelConfig<Boolean>(getName() + " Invert", 
         "Direction of DC Current", false) {
       public void setValue(Boolean value) { setNegativeCurrent(value); }
       public Boolean getValue() { return isNegativeCurrent; }

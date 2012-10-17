@@ -22,8 +22,8 @@ public class Compass extends Science2DBody {
   /**
    * @param emField
    */
-  public Compass(String name, float x, float y, float angle) {
-    super(ComponentType.Compass, name, x, y, angle);
+  public Compass(float x, float y, float angle) {
+    super(ComponentType.Compass, x, y, angle);
     getBody().setType(BodyType.StaticBody);
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();

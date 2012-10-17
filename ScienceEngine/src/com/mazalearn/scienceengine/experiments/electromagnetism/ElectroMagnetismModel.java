@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentCoil;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.Wire;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
@@ -34,20 +34,23 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
   public ElectroMagnetismModel() {   
     super();
     
-    addBody(new FieldMeter("FieldMeter", 10, 5, 0));
-    addBody(barMagnet = new BarMagnet("BarMagnet", 10, 12, 0));
-    addBody(new FieldMagnet("SimpleMagnetSN", 8, 8, 0));
-    addBody(new FieldMagnet("SimpleMagnetNS", 12, 8, 0));
-    addBody(new CurrentSource("Current B", 12, 14, 0));
-    addBody(new CurrentSource("Current", 10, 12, 0));
-    addBody(new Electromagnet("Electromagnet", 10, 12, 0));
-    addBody(new PickupCoil("PickupCoil", 23, -4, 0, 2E7f));
-    addBody(new Lightbulb("Lightbulb", 23, 25, 0));
-    addBody(new CurrentWire("Wire A", 8, 12, 0));
-    addBody(new CurrentWire("Wire B", 16, 12, 0));
-    addBody(currentCoil = new CurrentCoil("CurrentCoil", 43, 28, 0));
-    addBody(new Compass("Compass", 0, 5, 0));
+    addBody(new FieldMeter(10, 5, 0));
+    addBody(barMagnet = new BarMagnet(10, 12, 0));
+    addBody(new FieldMagnet(8, 8, 0)).setCount(1);
+    addBody(new FieldMagnet(12, 8, 0)).setCount(2);
+    addBody(new CurrentSource(12, 14, 0)).setCount(1);
+    addBody(new CurrentSource(10, 12, 0)).setCount(2);
+    addBody(new Electromagnet(10, 12, 0));
+    addBody(new PickupCoil(23, -4, 0, 2E7f));
+    addBody(new Lightbulb(23, 25, 0));
+    addBody(new Wire(8, 12, 0)).setCount(1);
+    addBody(new Wire(16, 12, 0)).setCount(2);
+    addBody(currentCoil = new CurrentCoil(43, 28, 0));
+    addBody(new Compass(0, 5, 0));
     
+    for (Science2DBody body: bodies) {
+      body.initializeConfigs();
+    }
     reset();
   }
 

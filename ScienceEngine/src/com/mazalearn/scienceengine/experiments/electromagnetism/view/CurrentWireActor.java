@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentWire;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.Wire;
 
 public class CurrentWireActor extends Science2DActor {
-  private final CurrentWire currentWire;
+  private final Wire currentWire;
   private static Texture currentWireDown = 
       new Texture("images/currentwire-down.png");
   private static Texture currentWireUp = 
@@ -16,7 +16,7 @@ public class CurrentWireActor extends Science2DActor {
     
   public CurrentWireActor(Science2DBody body) {
     super(body, new TextureRegion(currentWireUp));
-    this.currentWire = (CurrentWire) body;
+    this.currentWire = (Wire) body;
     this.setAllowMove(true);
   }
   

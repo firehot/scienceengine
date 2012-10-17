@@ -30,8 +30,8 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
-  public CurrentCoil(String name, float x, float y, float angle) {
-    super(ComponentType.CurrentCoil, name, x, y, angle);
+  public CurrentCoil(float x, float y, float angle) {
+    super(ComponentType.CurrentCoil, x, y, angle);
     this.width = 16f;
     this.height = 2f;
     FixtureDef fixtureDef = new FixtureDef();
@@ -44,9 +44,9 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     this.createFixture(fixtureDef);
     this.setAngularDamping(0.2f);
     rectangleShape.dispose();
-    initializeConfigs();
   }
 
+  @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<String>(getName() + " Commutator", 
         "Type of Commutator", CommutatorType.values()) {

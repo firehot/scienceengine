@@ -42,13 +42,13 @@ public class Science2DBody implements IBody {
   float initialX, initialY, initialAngle;
   // Used for temporary work
   private final Vector2 aPosition = new Vector2();
-  private final String name;
+  private String name;
   private boolean initialIsActive;
   private IComponentType componentType;
   
-  protected Science2DBody(IComponentType componentType, String name, float x, float y, float angle) {
+  protected Science2DBody(IComponentType componentType, float x, float y, float angle) {
     this.componentType = componentType;
-    this.name = name;
+    this.name = componentType.toString();
     this.initialX = x;
     this.initialY = y;
     this.initialAngle = angle;
@@ -61,6 +61,18 @@ public class Science2DBody implements IBody {
     this.configs = new ArrayList<IModelConfig<?>>();
   }
   
+  /**
+   * When there are multiple instances of same component type, 
+   * the count of the instances may be set to differentiate them.
+   * @param count
+   */
+  public void setCount(int count) {
+    this.name += " " + String.valueOf(count);
+  }
+
+  public void initializeConfigs() {
+  }
+
   public List<IModelConfig<?>> getConfigs() {
     return Collections.unmodifiableList(configs);
   }
@@ -436,4 +448,5 @@ public class Science2DBody implements IBody {
   public void setUserData(Object userData) {
     body.setUserData(userData);
   }
+
 }

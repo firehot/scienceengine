@@ -41,8 +41,8 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   /**
    * @param emField
    */
-  public FieldMeter(String name, float x, float y, float angle) {
-    super(ComponentType.FieldMeter, name, x, y, angle);
+  public FieldMeter(float x, float y, float angle) {
+    super(ComponentType.FieldMeter, x, y, angle);
     getBody().setType(BodyType.DynamicBody);
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
