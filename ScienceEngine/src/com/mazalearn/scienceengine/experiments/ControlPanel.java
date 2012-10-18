@@ -115,7 +115,7 @@ public class ControlPanel extends Table {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.getProfileManager().retrieveProfile().setCurrentLevel(0);
         ScienceEngine.SCIENCE_ENGINE.setScreen(
-            new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, science2DController));
+            new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentName));
       }
     });
     viewControls.add(backButton).height(30).colspan(2);

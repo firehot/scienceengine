@@ -58,7 +58,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
       }
     }
     if (count > 0) {
-      science2DBody.setCount(count);
+      science2DBody.setCount(++count);
     }
     bodies.add(science2DBody);
     science2DBody.setModel(this);

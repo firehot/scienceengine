@@ -14,7 +14,6 @@ import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
@@ -102,9 +101,6 @@ public class ExperimentMenuScreen extends AbstractScreen {
   
   private void gotoExperimentHome(final String experimentName) {
     Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
-    IScience2DController science2DController = 
-        scienceEngine.createExperimentController(experimentName, 
-        VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-    scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
+    scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, experimentName));
   }
 }

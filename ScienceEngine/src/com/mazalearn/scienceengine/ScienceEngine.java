@@ -16,14 +16,12 @@ import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
@@ -196,10 +194,7 @@ public class ScienceEngine extends Game {
       if (pathSegments.length > i && isSupportedSubject(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedTopic(pathSegments[i])) {
-        IScience2DController science2DController = 
-            createExperimentController(pathSegments[i], 
-                AbstractScreen.VIEWPORT_WIDTH, 
-                AbstractScreen.VIEWPORT_HEIGHT);
+        String experimentName = pathSegments[i];
         Integer iLevel = null;
         if (query != null) {
           String[] queryParts = query.toLowerCase().split("&");
@@ -208,12 +203,9 @@ public class ScienceEngine extends Game {
           }
         }
         if (iLevel == null) {
-          return new ExperimentHomeScreen(this, science2DController);
+          return new ExperimentHomeScreen(this, experimentName);
         }
-        final IScience2DStage science2DStage = science2DController.getView();
-        LevelManager levelManager = science2DStage.getLevelManager();
-        levelManager.setLevel(iLevel);    
-        return new ExperimentScreen(this, iLevel, science2DController);
+        return new ExperimentScreen(this, iLevel, experimentName);
       }
     }
     return new SplashScreen(this);

@@ -8,7 +8,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   private boolean isPermitted;
 
   private final float low, high;    // Range
-  private boolean on;         // OnOff
+  private boolean on;               // OnOff
   @SuppressWarnings("rawtypes")
   private Enum[] values;            // List
   

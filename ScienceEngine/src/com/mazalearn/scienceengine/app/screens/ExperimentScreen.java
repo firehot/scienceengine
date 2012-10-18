@@ -20,11 +20,14 @@ public class ExperimentScreen extends AbstractScreen {
 
   private IScience2DController science2DController;
   private Profile profile;
+  private String experimentName;
 
   public ExperimentScreen(ScienceEngine scienceEngine, 
-      int level, IScience2DController science2DController) {
+      int level, String experimentName) {
     super(scienceEngine, null);
-    this.science2DController = science2DController;
+    this.experimentName = experimentName;
+    this.science2DController = 
+        scienceEngine.createExperimentController(experimentName, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     IScience2DStage science2DStage = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
@@ -54,7 +57,7 @@ public class ExperimentScreen extends AbstractScreen {
   @Override
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, science2DController));
+    scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, experimentName));
     profile.setCurrentLevel(0);
   }
   
