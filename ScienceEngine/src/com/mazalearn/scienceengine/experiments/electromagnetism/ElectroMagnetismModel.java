@@ -12,46 +12,67 @@ import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Compass;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentCoil;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.CurrentSource;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.Wire;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.Electromagnet;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.ElectroMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMagnet;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.Wire;
 
 public class ElectroMagnetismModel extends AbstractScience2DModel {
-  private BarMagnet barMagnet;
+  private Science2DBody barMagnet;
   private RevoluteJointDef magnetRotationJointDef = new RevoluteJointDef();
   private RevoluteJointDef coilRotationJointDef = new RevoluteJointDef();
   public enum Mode {Free, Rotate};
   
   private Mode mode = Mode.Free;
   private Joint magnetRotationJoint, coilRotationJoint;
-  private CurrentCoil currentCoil;
+  private Science2DBody currentCoil;
     
-  public ElectroMagnetismModel() {   
+  public ElectroMagnetismModel() {
     super();
     
-    addBody(new FieldMeter(10, 5, 0));
-    addBody(barMagnet = new BarMagnet(10, 12, 0));
-    addBody(new FieldMagnet(8, 8, 0)).setCount(1);
-    addBody(new FieldMagnet(12, 8, 0)).setCount(2);
-    addBody(new CurrentSource(12, 14, 0)).setCount(1);
-    addBody(new CurrentSource(10, 12, 0)).setCount(2);
-    addBody(new Electromagnet(10, 12, 0));
-    addBody(new PickupCoil(23, -4, 0, 2E7f));
-    addBody(new Lightbulb(23, 25, 0));
-    addBody(new Wire(8, 12, 0)).setCount(1);
-    addBody(new Wire(16, 12, 0)).setCount(2);
-    addBody(currentCoil = new CurrentCoil(43, 28, 0));
-    addBody(new Compass(0, 5, 0));
+    addBody(createScience2DBody(ComponentType.FieldMeter, 10, 5, 0));
+    addBody(createScience2DBody(ComponentType.BarMagnet, 10, 12, 0));
+    addBody(createScience2DBody(ComponentType.FieldMagnet, 8, 8, 0));
+    addBody(createScience2DBody(ComponentType.FieldMagnet, 12, 8, 0));
+    addBody(createScience2DBody(ComponentType.CurrentSource, 12, 14, 0));
+    addBody(createScience2DBody(ComponentType.CurrentSource, 10, 12, 0));
+    addBody(createScience2DBody(ComponentType.ElectroMagnet, 10, 12, 0));
+    addBody(createScience2DBody(ComponentType.PickupCoil, 23, -4, 0));
+    addBody(createScience2DBody(ComponentType.Lightbulb, 23, 25, 0));
+    addBody(createScience2DBody(ComponentType.Wire, 8, 12, 0));
+    addBody(createScience2DBody(ComponentType.Wire, 16, 12, 0));
+    addBody(createScience2DBody(ComponentType.CurrentCoil, 43, 28, 0));
+    addBody(createScience2DBody(ComponentType.Compass, 0, 5, 0));
+    
+    barMagnet = findBody(ComponentType.BarMagnet);
+    currentCoil = findBody(ComponentType.CurrentCoil);
     
     for (Science2DBody body: bodies) {
       body.initializeConfigs();
     }
     reset();
+  }
+  
+  private Science2DBody createScience2DBody(ComponentType componentType, 
+      float x, float y, float rotation) {
+    switch(componentType) {
+    case FieldMeter: return new FieldMeter(x, y, rotation);
+    case BarMagnet: return new BarMagnet(x, y, rotation);
+    case FieldMagnet: return new FieldMagnet(x, y, rotation);
+    case CurrentSource: return new CurrentSource(x, y, rotation);
+    case ElectroMagnet: return new ElectroMagnet(x, y, rotation);
+    case PickupCoil: return new PickupCoil(x, y, rotation, 2E7f);
+    case Lightbulb: return new Lightbulb(x, y, rotation);
+    case Wire: return new Wire(x, y, rotation);
+    case CurrentCoil: return new CurrentCoil(x, y, rotation);
+    case Compass: return new Compass(x, y, rotation);
+    }
+    return null;
   }
 
   @Override
@@ -60,7 +81,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
         "Mode of operation of magnet", Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
-      public boolean isPossible() { return barMagnet.isActive(); }
+      public boolean isPossible() { return barMagnet != null && barMagnet.isActive(); }
     });
   }
 
@@ -85,12 +106,12 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
       box2DWorld.destroyJoint(magnetRotationJoint);
       magnetRotationJoint = null;
     }
-    if (mode == Mode.Rotate) {
+    if (mode == Mode.Rotate && barMagnet != null) {
       magnetRotationJointDef.initialize(barMagnet.getBody(), Science2DBody.getGround(), 
           barMagnet.getWorldPoint(Vector2.Zero));
       magnetRotationJoint = box2DWorld.createJoint(magnetRotationJointDef);
     }
-    if (coilRotationJoint == null) {
+    if (coilRotationJoint == null && currentCoil != null) {
       coilRotationJointDef.initialize(currentCoil.getBody(), Science2DBody.getGround(), 
           currentCoil.getWorldPoint(Vector2.Zero));
       coilRotationJoint = box2DWorld.createJoint(coilRotationJointDef);

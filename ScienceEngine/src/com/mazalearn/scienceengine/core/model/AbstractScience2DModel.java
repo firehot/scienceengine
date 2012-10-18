@@ -49,6 +49,17 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   protected abstract void singleStep();
 
   public Science2DBody addBody(Science2DBody science2DBody) {
+    // Set count of bodies with same component type.
+    int count = 0;
+    for (Science2DBody body: bodies) {
+      if (body.getComponentType() == science2DBody.getComponentType()) {
+        count++;
+        body.setCount(count);
+      }
+    }
+    if (count > 0) {
+      science2DBody.setCount(count);
+    }
     bodies.add(science2DBody);
     science2DBody.setModel(this);
     if (science2DBody instanceof IMagneticField.Producer) {
@@ -58,6 +69,15 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
       emConsumers.add((Consumer) science2DBody);
     }
     return science2DBody;
+  }
+
+  public Science2DBody findBody(IComponentType componentType) {
+    for (Science2DBody body: bodies) {
+      if (body.getComponentType() == componentType) {
+        return body;
+      }
+    }
+    return null;
   }
   
   public void propagateField() {

@@ -11,6 +11,15 @@
     </init-param>
   </servlet>
 
+  <security-constraint>
+    <web-resource-collection>
+        <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>*</role-name>
+    </auth-constraint>
+  </security-constraint>
+  
   <servlet-mapping>
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>

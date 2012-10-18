@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.core.model.ICurrent;
  * 
  * @author sridhar
  */
-public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
+public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
 
   private static final float OUTPUT_SCALE = 200f;
   private static final float TOLERANCE = 0.1f;
@@ -40,7 +40,7 @@ public class Electromagnet extends AbstractMagnet implements ICurrent.Sink {
   /**
    * Sole constructor.
    */
-  public Electromagnet(float x, float y, float angle) {
+  public ElectroMagnet(float x, float y, float angle) {
     super(ComponentType.ElectroMagnet, x, y, angle);
     this.numberOfLoops = 1;
     // Modeled as a square with diameter equal to side of square
