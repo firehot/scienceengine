@@ -12,8 +12,8 @@ public class ElectroMagnetismController extends AbstractScience2DController {
   
   public static final String NAME = "Electromagnetism";
 
-  public ElectroMagnetismController(int width, int height, Skin skin) {
-    super(NAME, skin);
+  public ElectroMagnetismController(int level, int width, int height, Skin skin) {
+    super(NAME, level, skin);
     ElectroMagnetismModel emModel = new ElectroMagnetismModel();
     AbstractScience2DStage emView = 
         new ElectroMagnetismView(width, height, emModel, skin);

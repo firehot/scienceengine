@@ -25,11 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
-import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -81,6 +80,8 @@ public class LevelEditor extends Stage {
   private ActorPropertyPanel actorPropertyPanel;
   private Table configTable;
 
+  private IScience2DController science2DController;
+
   
 
   /**
@@ -95,6 +96,7 @@ public class LevelEditor extends Stage {
         ((Stage) controller.getView()).getHeight(), 
         false, 
         ((Stage)controller.getView()).getSpriteBatch());
+    this.science2DController = controller;
     this.screen = screen;
     this.science2DModel = controller.getModel();
     this.controlPanel = controller.getControlPanel();
@@ -102,14 +104,12 @@ public class LevelEditor extends Stage {
     this.setCamera(originalStage.getCamera());
     this.orthographicCamera = (OrthographicCamera) this.getCamera();
     this.shapeRenderer = new ShapeRenderer();
-    this.layout = createLayout(controller.getView().getLevelManager(),
-        originalStage, science2DModel);
+    this.layout = createLayout(originalStage, science2DModel);
     this.addActor(layout);
     this.enableEditor();
   }
   
-  private Table createLayout(final LevelManager levelManager, Stage stage,
-      IScience2DModel science2DModel) {
+  private Table createLayout(Stage stage, IScience2DModel science2DModel) {
     Table layout = new Table(screen.getSkin());
     layout.setName("Layout");
     layout.setFillParent(true);
@@ -117,18 +117,19 @@ public class LevelEditor extends Stage {
     Table titleTable = new Table(screen.getSkin());
     titleTable.setName("Title");
     titleTable.defaults().fill();
-    titleTable.add(levelManager.getName()).pad(10);
+    titleTable.add(science2DController.getName()).pad(10);
     final SelectBox level = 
         new SelectBox(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, 
             screen.getSkin());
-    level.setSelection(levelManager.getLevel());
+    level.setSelection(science2DController.getLevel());
+    /*
     level.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
         levelManager.setLevel(level.getSelectionIndex() + 1);
         levelManager.load();
       }
-    });
+    }); */
     titleTable.add("Level").pad(5);
     titleTable.add(level);
     titleTable.row();
@@ -147,7 +148,7 @@ public class LevelEditor extends Stage {
     Actor componentsPanel = 
         createComponentsPanel(stage, screen.getSkin(), configTable);
     
-    Table menu = createMenu(levelManager, screen.getSkin());
+    Table menu = createMenu(screen.getSkin());
 
     layout.add(titleTable).colspan(3);
     layout.row();
@@ -160,7 +161,7 @@ public class LevelEditor extends Stage {
     return layout;
   }
 
-  private Table createMenu(final LevelManager levelManager, final Skin skin) {
+  private Table createMenu(final Skin skin) {
     Table menu = new Table(skin);
     menu.setName("Menu");
     TextButton button = new TextButton("Save", skin);
@@ -172,7 +173,7 @@ public class LevelEditor extends Stage {
         originalStage.draw();
         try {
           LevelSaver levelSaver = new LevelSaver(
-              levelManager.getLevel(), 
+              science2DController.getLevel(), 
               controlPanel, (IScience2DStage) originalStage, science2DModel);
           levelSaver.save();
           System.out.println("[LevelEditor] Level successfully saved!");
@@ -186,7 +187,7 @@ public class LevelEditor extends Stage {
     button.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        levelManager.load();
+        new LevelLoader(science2DController).load();
       }
     });
     menu.add(button).pad(10);

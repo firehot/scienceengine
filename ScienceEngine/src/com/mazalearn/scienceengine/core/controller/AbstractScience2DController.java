@@ -14,9 +14,11 @@ public abstract class AbstractScience2DController implements
   private AbstractScience2DStage experimentView;
   private Skin skin;
   private String name;
+  private int level;
 
-  protected AbstractScience2DController(String name, Skin skin) {
+  protected AbstractScience2DController(String name, int level, Skin skin) {
     this.name = name;
+    this.level = level;
     this.skin = skin;
   }
   
@@ -31,6 +33,11 @@ public abstract class AbstractScience2DController implements
   @Override
   public String getName() {
     return name;
+  }
+  
+  @Override
+  public int getLevel() {
+    return level;
   }
   
   @Override

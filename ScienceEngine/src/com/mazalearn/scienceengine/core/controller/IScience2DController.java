@@ -9,4 +9,5 @@ public interface IScience2DController {
   public IScience2DModel getModel();
   public ControlPanel getControlPanel();
   public String getName();
+  int getLevel();
 }

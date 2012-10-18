@@ -9,7 +9,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
@@ -18,26 +20,25 @@ import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public class LevelLoader {
     
-    private IScience2DStage science2DStage;
-    private IScience2DModel science2DModel;
-    private ControlPanel controlPanel;
-    private int level;
+  private IScience2DStage science2DStage;
+  private IScience2DModel science2DModel;
+  private ControlPanel controlPanel;
+  private int level;
 
-    public LevelLoader(int level,
-        ControlPanel controlPanel, IScience2DStage science2DStage, 
-        IScience2DModel science2DModel) {
-      this.level = level;
-      this.science2DStage = science2DStage;
-      this.science2DModel = science2DModel;
-      this.controlPanel = controlPanel;
-    }
+  public LevelLoader(IScience2DController science2DController) {
+    this.level = science2DController.getLevel();
+    this.science2DStage = science2DController.getView();
+    this.science2DModel = science2DController.getModel();
+    this.controlPanel = science2DController.getControlPanel();
+  }
    
-  @SuppressWarnings("unchecked") void load() {
-    String fileName = LevelManager.getFileName(controlPanel.getExperimentName(), ".json", level);
-    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName);
-    FileHandle file = Gdx.files.internal(fileName);
+  @SuppressWarnings("unchecked")
+  public void load() {
+    Gdx.app.log(ScienceEngine.LOG, "Opening level json file");
+    FileHandle file = 
+        LevelUtil.getLevelFile(controlPanel.getExperimentName(), ".json", level);
     if (file == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not open file");
+      Gdx.app.log(ScienceEngine.LOG, "Could not open level json file");
       return;
     }
     String str = file.readString();
@@ -50,6 +51,8 @@ public class LevelLoader {
     readGroups((Array<?>) rootElem.get("groups"));
     readCircuits((Array<?>) rootElem.get("circuits"));
     readConfigs((Array<?>) rootElem.get("configs"));
+    
+    controlPanel.refresh();
   }
 
   private void readLevelInfo(OrderedMap<String, ?> info) {

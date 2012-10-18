@@ -21,8 +21,8 @@ public class StatesOfMatterController extends AbstractScience2DController {
   private StatesOfMatterView statesOfMatterView;
   ControlPanel controlPanel;
   
-  public StatesOfMatterController(int width, int height, Skin skin) {
-    super(NAME, skin);
+  public StatesOfMatterController(int level, int width, int height, Skin skin) {
+    super(NAME, level, skin);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
     statesOfMatterView = 

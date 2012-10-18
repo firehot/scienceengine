@@ -229,18 +229,6 @@ public class ScienceEngine extends Game {
     return topics.contains(token);
   }
   
-  public IScience2DController createExperimentController(
-      String experimentName, int width, int height) {
-    if (experimentName.equalsIgnoreCase(StatesOfMatterController.NAME)) {
-      return new StatesOfMatterController(width, height, getSkin());
-    } else if (experimentName.equalsIgnoreCase(WaveController.NAME)) {
-      return  new WaveController(width, height, getAtlas(), getSkin());
-    } else if (experimentName.equalsIgnoreCase(ElectroMagnetismController.NAME)) {
-      return new ElectroMagnetismController(width, height, getSkin());
-    }
-    return null;
-  }
-
   @Override
   public void render() {
     super.render();

@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 
 public class ScreenUtils {
 
@@ -52,8 +52,8 @@ public class ScreenUtils {
    */
   public static Pixmap createThumbnail(Pixmap pixmap, float scale) {
     // Thumbnail should create a power of 2 texture for android
-    Pixmap thumbnail = new Pixmap(LevelManager.powerOf2Ceiling(pixmap.getWidth() / scale), 
-        LevelManager.powerOf2Ceiling(pixmap.getHeight() / scale), Format.RGBA8888);
+    Pixmap thumbnail = new Pixmap(LevelUtil.powerOf2Ceiling(pixmap.getWidth() / scale), 
+        LevelUtil.powerOf2Ceiling(pixmap.getHeight() / scale), Format.RGBA8888);
     thumbnail.drawPixmap(pixmap, 0, 0, pixmap.getWidth(), pixmap.getHeight(), 
         0, 0, thumbnail.getWidth(), thumbnail.getHeight());
     return thumbnail;

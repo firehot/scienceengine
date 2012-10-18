@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
@@ -22,7 +21,6 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   protected final IScience2DModel science2DModel;
   protected final Skin skin;
   private boolean isChallengeInProgress = false;
-  private LevelManager levelManager;
   protected ControlPanel controlPanel;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
@@ -81,11 +79,7 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     super.act(delta);
   }
   
-  public LevelManager getLevelManager() {
-    return levelManager;
-  }
-  
-  public void addLocationGroup(Actor[] actors) {
+ public void addLocationGroup(Actor[] actors) {
     locationGroups.add(Arrays.asList(actors));
   }
   
@@ -141,6 +135,5 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     // Register help
     Actor help = new Helper(skin, 650, getHeight()  - 90);
     this.addActor(help);
-    this.levelManager = new LevelManager(this, science2DModel, controlPanel);
   }
 }

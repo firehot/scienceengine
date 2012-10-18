@@ -20,9 +20,9 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 
 /**
  * Experiment Home screen - shows all levels for that experiment.
@@ -110,7 +110,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     for (int i = 0; i < levels.size; i++) {
       final int iLevel = i + 1;
       Image experimentThumb = 
-          new Image(LevelManager.getThumbnail(experimentName, iLevel));
+          new Image(LevelUtil.getLevelThumbnail(experimentName, iLevel));
       experimentThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {

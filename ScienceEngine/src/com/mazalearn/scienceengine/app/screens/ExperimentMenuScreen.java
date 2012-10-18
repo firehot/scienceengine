@@ -10,10 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.LevelManager;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
@@ -74,7 +74,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
                       ElectroMagnetismController.NAME};
     for (final String experimentName: experimentNames) {
       Image experimentThumb = 
-          new Image(LevelManager.getThumbnail(experimentName, 1));
+          new Image(LevelUtil.getLevelThumbnail(experimentName, 1));
       experimentThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {

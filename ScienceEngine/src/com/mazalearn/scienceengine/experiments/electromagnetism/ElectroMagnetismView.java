@@ -127,13 +127,10 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   
   public void done(boolean success) {
     if (success) {
-      int level = getLevelManager().getLevel() + 1;
       // TODO: put in a proper celebration here
-      probeManager.setTitle("Congratulations! You move to Level " + level);
+      probeManager.setTitle("Congratulations! You move to the next Level ");
       // ScienceEngine.getPlatformAdapter().showURL("file:///sdcard/data/electromagneticinduction.html");
       challenge(false);
-      getLevelManager().setLevel(level);
-      getLevelManager().load();
     }
   }
 }

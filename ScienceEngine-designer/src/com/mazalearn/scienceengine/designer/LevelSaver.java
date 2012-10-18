@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.mazalearn.scienceengine.app.services.LevelManager;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -40,8 +40,8 @@ public class LevelSaver {
   }
   
 public void save() throws IOException {
-  String fileName = LevelManager.getFileName(controlPanel.getExperimentName(), ".json", level);
-  FileHandle file = Gdx.files.external(fileName);
+  FileHandle file = LevelUtil.getLevelFile(controlPanel.getExperimentName(), ".json", level);
+  file = Gdx.files.external(file.path());
   FileWriter writer = new FileWriter(file.file());
   JsonWriter jsonWriter = new JsonWriter(writer);
 
@@ -61,8 +61,9 @@ public void save() throws IOException {
  * Take screenshot, convert to a thumbnail and save to the level file as png.
  */
 private void saveLevelThumbnail() {
-  String fileName = LevelManager.getFileName(controlPanel.getExperimentName(), ".png", level);
-  FileHandle screenFile = Gdx.files.external(fileName);
+  FileHandle screenFile = 
+      LevelUtil.getLevelFile(controlPanel.getExperimentName(), ".png", level);
+  screenFile = Gdx.files.external(screenFile.path());
   Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
       Gdx.graphics.getHeight(), true);
   Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, THUMBNAIL_SCALE);
