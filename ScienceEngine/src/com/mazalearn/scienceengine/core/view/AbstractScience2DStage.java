@@ -5,15 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public abstract class AbstractScience2DStage extends Stage implements IScience2DStage {
@@ -33,6 +36,25 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     this.locationGroups = new ArrayList<List<Actor>>();
   }
 
+  @Override
+  public void addVisualActor(String name, String textureFile) {
+    Actor actor = new Image(new Texture(textureFile));
+    actor.setName(name);
+    this.addActor(actor);
+  }
+
+  @Override
+  public boolean addScience2DActor(Science2DBody body) {
+    Actor actor = createActor(body);
+    if (actor == null) return false;
+    
+    this.addActor(actor);
+    return true;
+  }
+  
+  // Factory method for creating science2D actors
+  protected abstract Actor createActor(Science2DBody body);
+  
   @Override
   public void suspend(boolean suspend) {
     science2DModel.enable(!suspend);

@@ -1,12 +1,17 @@
 package com.mazalearn.scienceengine.experiments.waves;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.experiments.waves.view.Boundary;
 import com.mazalearn.scienceengine.experiments.waves.view.Hand;
@@ -69,5 +74,23 @@ public class WaveView extends AbstractScience2DStage {
     hand.setX(waveBox.getX() + (ORIGIN_X - 1 + waveModel.balls[0].pos.x) * ballDiameter);
     boundary.setBallDiameter(ballDiameter);
     boundary.setX(waveBox.getX() + (ORIGIN_X + 1 + waveModel.balls[waveModel.balls.length - 1].pos.x) * ballDiameter);
+  }
+
+  @Override
+  public void addCircuit(List<CircuitElement> circuit) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  protected Actor createActor(Science2DBody body) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void prepareStage() {
+    // TODO Auto-generated method stub
+    
   }
 }

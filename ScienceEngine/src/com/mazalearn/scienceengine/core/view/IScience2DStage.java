@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 
 public interface IScience2DStage extends IDoneCallback {
@@ -27,4 +29,13 @@ public interface IScience2DStage extends IDoneCallback {
   public void addLocationGroup(Actor[] actors);
   // Remove all location groups
   public void removeLocationGroups();
+  // Add an actor with science model behind
+  boolean addScience2DActor(Science2DBody science2DBody);
+  // Add an actor with only visual behaviour and no model
+  void addVisualActor(String name, String textureFile);
+  // Add a circuit
+  // TODO: this should move to a separate interface.
+  void addCircuit(List<CircuitElement> circuit);
+  // Once all actors are created, prepare the stage
+  void prepareStage();
 }

@@ -7,12 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -58,29 +57,33 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       }       
     });
 
-    Actor coilsBack = new Image(new Texture("images/coppercoils-back.png"));
-    coilsBack.setName("CoilsBack");
-    Actor brushes = new Image(new Texture("images/brush.png"));
-    brushes.setName("Brushes");
-    this.addActor(coilsBack);
-    this.addActor(brushes);
+    addVisualActor("CoilsBack", "images/coppercoils-back.png");
+    addVisualActor("Brushes", "images/brush.png");
+
     for (Science2DBody body: emModel.getBodies()) {
-      Actor actor = createActor(emModel, body);
-      if (actor != null) {
-        this.addActor(actor);
-      }
+      addScience2DActor(body);
     }
     
     for (List<CircuitElement> circuit: science2DModel.getCircuits()) {
-      this.addActor(new CircuitActor(circuit));
+      addCircuit(circuit);
     }
 
-    fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
-    compassActor = findActor(ComponentType.Compass.name());
-    
+    prepareStage();   
   }
 
-  private Actor createActor(ElectroMagnetismModel emModel, Science2DBody body) {
+  @Override
+  public void prepareStage() {
+    fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
+    compassActor = findActor(ComponentType.Compass.name());
+  }
+  
+  @Override
+  public void addCircuit(List<CircuitElement> circuit) {
+    this.addActor(new CircuitActor(circuit));
+  }
+  
+  @Override
+  protected Actor createActor(Science2DBody body) {
     ComponentType componentType = ComponentType.valueOf(body.getComponentType());
     
     String textureFilename = componentType.getTextureFilename();
