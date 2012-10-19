@@ -66,6 +66,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     for (List<CircuitElement> circuit: emModel.getCircuits()) {
       this.addActor(new CircuitActor(circuit));
     }
+    super.prepareStage();
   }
   
   @Override

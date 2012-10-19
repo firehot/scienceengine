@@ -146,6 +146,13 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
       }
     }
   }
+  
+  @Override
+  public void prepareStage() {
+    // Register help after all actors are already added so it is on top
+    Actor help = new Helper(skin, 650, getHeight()  - 90);
+    this.addActor(help);
+  }
 
   public void setControlPanel(ControlPanel controlPanel) {
     this.controlPanel = controlPanel;
@@ -157,8 +164,5 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     title.setName("Title");
     title.setColor(Color.YELLOW);
     this.addActor(title);
-    // Register help
-    Actor help = new Helper(skin, 650, getHeight()  - 90);
-    this.addActor(help);
   }
 }

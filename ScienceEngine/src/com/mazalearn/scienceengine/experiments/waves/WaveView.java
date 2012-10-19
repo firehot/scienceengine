@@ -89,5 +89,6 @@ public class WaveView extends AbstractScience2DStage {
     boundary = (Boundary) findActor("Boundary");
     boundary.setWaveBox(waveBox);
     this.setBallDiameter(waveBox.getBallDiameter());
+    super.prepareStage();
   }
 }

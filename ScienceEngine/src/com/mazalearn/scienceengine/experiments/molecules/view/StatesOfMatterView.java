@@ -29,10 +29,6 @@ public class StatesOfMatterView extends AbstractScience2DStage {
   }
 
   @Override
-  public void prepareStage() {
-  }
-
-  @Override
   protected Actor createActor(String type) {
     int boxWidth = 20;
     int boxHeight = 20;
