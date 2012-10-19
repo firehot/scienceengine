@@ -20,12 +20,14 @@ import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 public class LevelLoader {
     
+  private IScience2DController science2DController;
   private IScience2DStage science2DStage;
   private IScience2DModel science2DModel;
   private ControlPanel controlPanel;
   private int level;
 
   public LevelLoader(IScience2DController science2DController) {
+    this.science2DController = science2DController;
     this.level = science2DController.getLevel();
     this.science2DStage = science2DController.getView();
     this.science2DModel = science2DController.getModel();
@@ -36,7 +38,7 @@ public class LevelLoader {
   public void load() {
     Gdx.app.log(ScienceEngine.LOG, "Opening level json file");
     FileHandle file = 
-        LevelUtil.getLevelFile(controlPanel.getExperimentName(), ".json", level);
+        LevelUtil.getLevelFile(science2DController.getName(), ".json", level);
     if (file == null) {
       Gdx.app.log(ScienceEngine.LOG, "Could not open level json file");
       return;
@@ -57,7 +59,7 @@ public class LevelLoader {
 
   private void readLevelInfo(OrderedMap<String, ?> info) {
     String description = (String) nvl(info.get("description"), 
-        controlPanel.getExperimentName() + " : Level " + level);
+        science2DController.getName() + " : Level " + level);
     Label title = (Label) science2DStage.findActor("Title");
     title.setText(description);
   }

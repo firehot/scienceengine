@@ -32,7 +32,6 @@ import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
 
@@ -172,9 +171,7 @@ public class LevelEditor extends Stage {
         screen.clearScreen(Color.BLACK);
         originalStage.draw();
         try {
-          LevelSaver levelSaver = new LevelSaver(
-              science2DController.getLevel(), 
-              controlPanel, (IScience2DStage) originalStage, science2DModel);
+          LevelSaver levelSaver = new LevelSaver(science2DController);
           levelSaver.save();
           System.out.println("[LevelEditor] Level successfully saved!");
         } catch (IOException ex) {

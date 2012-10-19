@@ -67,7 +67,7 @@ public class ControlPanel extends Table {
     }
   }
   
-  public IMessage getMsg() {
+  private IMessage getMsg() {
     return messages;
   }
 
@@ -227,10 +227,6 @@ public class ControlPanel extends Table {
     this.validate();
   }
   
-  public String getExperimentName() {
-    return experimentName;
-  }
-
   public void enableControls(boolean enable) {
     suspendResetPanel.setVisible(enable);
     modelControlPanel.setTouchable(enable ? Touchable.enabled : Touchable.disabled);
