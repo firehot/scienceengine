@@ -36,4 +36,9 @@ public interface IScience2DModel {
   public void addCircuit(CircuitElement[] circuitElements);
   // notify of a current change at specified currentsource
   public void notifyCurrentChange(ICurrent.Source currentSource);
+  // Add body to the model
+  Science2DBody addBody(String componentTypeName, 
+      float x, float y, float rotation);
+  // Prepare model
+  void prepareModel();
 }

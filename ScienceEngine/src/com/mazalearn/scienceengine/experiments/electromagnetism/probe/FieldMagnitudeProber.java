@@ -64,7 +64,6 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
     this.addActor(imageWrong);
-    fieldMeterActor.setVisible(false);
   }
   
   @Override

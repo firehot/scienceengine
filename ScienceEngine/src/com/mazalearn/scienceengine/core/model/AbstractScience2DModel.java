@@ -48,7 +48,12 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   protected abstract void singleStep();
 
-  public Science2DBody addBody(Science2DBody science2DBody) {
+  @Override
+  public Science2DBody addBody(String componentTypeName, 
+      float x, float y, float rotation) {
+    Science2DBody science2DBody = createScience2DBody(componentTypeName, 
+        x, y, rotation);
+    if (science2DBody == null) return null;
     // Set count of bodies with same component type.
     int count = 0;
     for (Science2DBody body: bodies) {
@@ -187,4 +192,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   }
 
   public abstract void initializeConfigs(List<IModelConfig<?>> modelConfigs);
+
+  protected abstract Science2DBody createScience2DBody(String componentTypeName,
+      float x, float y, float rotation);
 }

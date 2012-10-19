@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -56,30 +57,15 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
         }
       }       
     });
-
-    addVisualActor("CoilsBack", "images/coppercoils-back.png");
-    addVisualActor("Brushes", "images/brush.png");
-
-    for (Science2DBody body: emModel.getBodies()) {
-      addScience2DActor(body);
-    }
-    
-    for (List<CircuitElement> circuit: science2DModel.getCircuits()) {
-      addCircuit(circuit);
-    }
-
-    prepareStage();   
   }
 
   @Override
   public void prepareStage() {
     fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
     compassActor = findActor(ComponentType.Compass.name());
-  }
-  
-  @Override
-  public void addCircuit(List<CircuitElement> circuit) {
-    this.addActor(new CircuitActor(circuit));
+    for (List<CircuitElement> circuit: emModel.getCircuits()) {
+      this.addActor(new CircuitActor(circuit));
+    }
   }
   
   @Override
@@ -116,6 +102,17 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   }
   
   @Override
+  protected Actor createActor(String name) {
+    if (name.equals("CoilsBack")) {
+      return new Image(new Texture("images/coppercoils-back.png"));
+    }
+    if (name.equals("Brushes")) {
+      return new Image(new Texture("images/brush.png"));
+    }
+    return null;
+  }
+
+    @Override
   public void challenge(boolean challenge) {
     super.challenge(challenge);
     // Enable/Disable compass
@@ -128,7 +125,11 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       new FieldDirectionProber(emModel, probeManager);
       new FieldMagnitudeProber(emModel, probeManager);
       new LightProber(probeManager);
-      this.getRoot().addActorBefore(fieldMeterActor, probeManager);     
+      if (fieldMeterActor != null) {
+        this.getRoot().addActorBefore(fieldMeterActor, probeManager);
+      } else {
+        this.addActor(probeManager);
+      }
     }
     if (challenge) {
       probeManager.startChallenge();

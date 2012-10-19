@@ -14,6 +14,7 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
@@ -48,13 +49,15 @@ public class LevelLoader {
         .parse(str);
 
     readLevelInfo(rootElem);
-    initializeComponents();
+    //initializeComponents();
     readComponents((Array<?>) rootElem.get("components"));
     readGroups((Array<?>) rootElem.get("groups"));
     readCircuits((Array<?>) rootElem.get("circuits"));
-    readConfigs((Array<?>) rootElem.get("configs"));
     
+    science2DModel.prepareModel();
+    science2DStage.prepareStage();
     controlPanel.refresh();
+    readConfigs((Array<?>) rootElem.get("configs"));    
   }
 
   private void readLevelInfo(OrderedMap<String, ?> info) {
@@ -153,12 +156,22 @@ public class LevelLoader {
   }
   
   private void readComponent(OrderedMap<String, ?> component) {
-    String name = (String) component.get("name");
-    if (name == null) return;
-    Actor actor = science2DStage.findActor(name);
-    if (actor == null)
-      return;
+    String type = (String) component.get("type");
+    if (type == null) return;
+    
+    Science2DBody science2DBody = science2DModel.addBody(type, 0, 0, 0);
+    Actor actor = null;
+    if (science2DBody != null) {
+      actor = science2DStage.addScience2DActor(science2DBody);
+    } else {
+      actor = science2DStage.addVisualActor(type);
+    }
+    if (actor == null) {
+      if (!type.equals("ControlPanel")) return;
+      actor = controlPanel;
+    }
 
+    actor.setName((String) nvl(component.get("name"), type));
     actor.setX((Float) nvl(component.get("x"), 0f));
     actor.setY((Float) nvl(component.get("y"), 0f));
     actor.setOriginX((Float) nvl(component.get("originX"), 0f));

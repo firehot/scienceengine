@@ -5,12 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -37,23 +35,28 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   }
 
   @Override
-  public void addVisualActor(String name, String textureFile) {
-    Actor actor = new Image(new Texture(textureFile));
+  public Actor addVisualActor(String name) {
+    Actor actor = createActor(name);
+    if (actor == null) return null;
     actor.setName(name);
     this.addActor(actor);
+    return actor;
   }
 
   @Override
-  public boolean addScience2DActor(Science2DBody body) {
+  public Actor addScience2DActor(Science2DBody body) {
     Actor actor = createActor(body);
-    if (actor == null) return false;
+    if (actor == null) return null;
     
     this.addActor(actor);
-    return true;
+    return actor;
   }
   
   // Factory method for creating science2D actors
   protected abstract Actor createActor(Science2DBody body);
+  
+  // Factory method for creating visual actors
+  protected abstract Actor createActor(String body);
   
   @Override
   public void suspend(boolean suspend) {

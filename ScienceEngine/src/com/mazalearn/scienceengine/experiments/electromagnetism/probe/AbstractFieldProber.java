@@ -19,7 +19,10 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     super(probeManager);
     this.model = model;
     this.fieldMeterActor = (Science2DActor) probeManager.findStageActor("FieldMeter");
-    this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
+    if (fieldMeterActor != null) {
+      this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
+      fieldMeterActor.setVisible(false);
+    }
   }
   
   @Override
@@ -31,7 +34,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
 
   @Override
   public boolean isAvailable() {
-    return fieldMeter.isActive();
+    return fieldMeterActor != null;
   }
   
   protected void createFieldMeterSamples(Vector2[] points, Vector2[] bFields) {

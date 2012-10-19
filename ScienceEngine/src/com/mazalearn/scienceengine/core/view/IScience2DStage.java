@@ -30,12 +30,9 @@ public interface IScience2DStage extends IDoneCallback {
   // Remove all location groups
   public void removeLocationGroups();
   // Add an actor with science model behind
-  boolean addScience2DActor(Science2DBody science2DBody);
+  Actor addScience2DActor(Science2DBody science2DBody);
   // Add an actor with only visual behaviour and no model
-  void addVisualActor(String name, String textureFile);
-  // Add a circuit
-  // TODO: this should move to a separate interface.
-  void addCircuit(List<CircuitElement> circuit);
+  Actor addVisualActor(String name);
   // Once all actors are created, prepare the stage
   void prepareStage();
 }

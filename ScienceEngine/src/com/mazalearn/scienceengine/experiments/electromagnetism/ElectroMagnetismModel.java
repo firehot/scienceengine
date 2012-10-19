@@ -27,22 +27,11 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
   private Science2DBody currentCoil;
     
   public ElectroMagnetismModel() {
-    super();
-    
-    addBody(createScience2DBody(ComponentType.FieldMeter, 10, 5, 0));
-    addBody(createScience2DBody(ComponentType.BarMagnet, 10, 12, 0));
-    addBody(createScience2DBody(ComponentType.FieldMagnet, 8, 8, 0));
-    addBody(createScience2DBody(ComponentType.FieldMagnet, 12, 8, 0));
-    addBody(createScience2DBody(ComponentType.CurrentSource, 12, 14, 0));
-    addBody(createScience2DBody(ComponentType.CurrentSource, 10, 12, 0));
-    addBody(createScience2DBody(ComponentType.ElectroMagnet, 10, 12, 0));
-    addBody(createScience2DBody(ComponentType.PickupCoil, 23, -4, 0));
-    addBody(createScience2DBody(ComponentType.Lightbulb, 23, 25, 0));
-    addBody(createScience2DBody(ComponentType.Wire, 8, 12, 0));
-    addBody(createScience2DBody(ComponentType.Wire, 16, 12, 0));
-    addBody(createScience2DBody(ComponentType.CurrentCoil, 43, 28, 0));
-    addBody(createScience2DBody(ComponentType.Compass, 0, 5, 0));
-    
+    super();    
+  }
+
+  @Override
+  public void prepareModel() {
     currentCoil = findBody(ComponentType.CurrentCoil);
     
     for (Science2DBody body: bodies) {
@@ -51,8 +40,17 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     reset();
   }
   
-  private Science2DBody createScience2DBody(ComponentType componentType, 
+  @Override
+  protected Science2DBody createScience2DBody(String componentTypeName, 
       float x, float y, float rotation) {
+    
+    ComponentType componentType = null;
+    try {
+      componentType = ComponentType.valueOf(componentTypeName);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
+    
     switch(componentType) {
     case FieldMeter: return new FieldMeter(x, y, rotation);
     case BarMagnet: return new BarMagnet(x, y, rotation);
