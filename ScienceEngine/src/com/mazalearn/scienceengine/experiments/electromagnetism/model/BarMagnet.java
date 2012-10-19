@@ -12,9 +12,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.app.utils.Dimension;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Model of a bar magnet that uses a grid of precomputed B-field values.
@@ -69,7 +72,12 @@ import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
  * @author Chris Malley (cmalley@pixelzoom.com)
  */
 public class BarMagnet extends AbstractMagnet {
-
+  
+  public enum Mode {Free, Rotate};
+  private Mode mode = Mode.Free;
+  private RevoluteJointDef magnetRotationJointDef = new RevoluteJointDef();
+  private Joint magnetRotationJoint;
+  
   private static final double PERIPHERY_SCALE_DOWN = 1.2;
   // values used in MathCAD for generating the grid files
   //strength of the magnet, in Gauss
@@ -142,6 +150,31 @@ public class BarMagnet extends AbstractMagnet {
       public void setValue(Float value) { setAngle(value); }
       public boolean isPossible() { return isActive(); }
     });
+    configs.add(new AbstractModelConfig<String>(getName() + " Mode", 
+        "Mode of operation of magnet", Mode.values()) {
+      public String getValue() { return getMode(); }
+      public void setValue(String value) { setMode(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+  }
+
+  public String getMode() {
+    return mode.name();
+  }
+
+  public void setMode(String mode) {
+    this.mode = Mode.valueOf(mode);
+    if (magnetRotationJoint != null) {
+      getModel().getBox2DWorld().destroyJoint(magnetRotationJoint);
+      magnetRotationJoint = null;
+    }
+    if (this.mode == Mode.Rotate) {
+      magnetRotationJointDef.initialize(getBody(), Science2DBody.getGround(), 
+          getWorldPoint(Vector2.Zero));
+      magnetRotationJoint = 
+          getModel().getBox2DWorld().createJoint(magnetRotationJointDef);
+    }
+//    getModel().reset();
   }
 
   /**

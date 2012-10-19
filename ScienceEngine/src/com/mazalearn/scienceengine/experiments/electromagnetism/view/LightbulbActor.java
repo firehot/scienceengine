@@ -15,7 +15,7 @@ public class LightbulbActor extends Science2DActor {
   private float lightRadius;
   private Vector2 point = new Vector2();
 
-  public LightbulbActor(TextureRegion textureRegion, Lightbulb lightbulb) {
+  public LightbulbActor(Lightbulb lightbulb, TextureRegion textureRegion) {
     super(lightbulb, textureRegion);
     this.lightbulb = lightbulb;
     lightTexture = createLightTexture(Color.YELLOW);

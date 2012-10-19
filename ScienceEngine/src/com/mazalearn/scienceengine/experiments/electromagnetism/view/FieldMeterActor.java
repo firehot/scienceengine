@@ -16,7 +16,7 @@ public class FieldMeterActor extends Science2DActor {
   private final FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
     
-  public FieldMeterActor(TextureRegion textureRegion, Science2DBody body) {
+  public FieldMeterActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
   }

@@ -11,24 +11,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel;
-import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismModel.Mode;
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.BarMagnet.Mode;
 
 public class BarMagnetActor extends Science2DActor {
   private final BarMagnet barMagnet;
-  private final ElectroMagnetismModel emModel;
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
   
-  public BarMagnetActor(TextureRegion textureRegion, Science2DBody body, 
-      AbstractScience2DStage experimentView, final ElectroMagnetismModel emModel) {
+  public BarMagnetActor(Science2DBody body, TextureRegion textureRegion, 
+      BitmapFont font) {
     super(body, textureRegion);
     this.barMagnet = (BarMagnet) body;
-    this.emModel = emModel;
-    this.font = experimentView.getFont();
+    this.font = font;
     this.setAllowMove(true);
     Array<EventListener> listeners = this.getListeners();
     if (listeners.size == 1) { // Remove the touch listener
@@ -37,7 +33,7 @@ public class BarMagnetActor extends Science2DActor {
     this.addListener(new ClickListener() {
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        if (Mode.valueOf(emModel.getMode()) != Mode.Rotate) return;
+        if (Mode.valueOf(barMagnet.getMode()) != Mode.Rotate) return;
         // Screen coords of current touch
         currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         // Goto view coords of current touch
@@ -66,7 +62,7 @@ public class BarMagnetActor extends Science2DActor {
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
-        if (Mode.valueOf(emModel.getMode()) != Mode.Free) return;
+        if (Mode.valueOf(barMagnet.getMode()) != Mode.Free) return;
         // Screen coords of current touch
         currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         // Screen coords of current touch
@@ -84,7 +80,7 @@ public class BarMagnetActor extends Science2DActor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
-    if (Mode.valueOf(emModel.getMode()) == Mode.Rotate) { // Display RPM
+    if (Mode.valueOf(barMagnet.getMode()) == Mode.Rotate) { // Display RPM
       drawRpm(batch, parentAlpha);
     }
   }

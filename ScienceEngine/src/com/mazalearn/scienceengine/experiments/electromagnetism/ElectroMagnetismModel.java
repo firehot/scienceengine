@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -23,13 +22,8 @@ import com.mazalearn.scienceengine.experiments.electromagnetism.model.PickupCoil
 import com.mazalearn.scienceengine.experiments.electromagnetism.model.Wire;
 
 public class ElectroMagnetismModel extends AbstractScience2DModel {
-  private Science2DBody barMagnet;
-  private RevoluteJointDef magnetRotationJointDef = new RevoluteJointDef();
   private RevoluteJointDef coilRotationJointDef = new RevoluteJointDef();
-  public enum Mode {Free, Rotate};
-  
-  private Mode mode = Mode.Free;
-  private Joint magnetRotationJoint, coilRotationJoint;
+  private Joint coilRotationJoint;
   private Science2DBody currentCoil;
     
   public ElectroMagnetismModel() {
@@ -49,7 +43,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     addBody(createScience2DBody(ComponentType.CurrentCoil, 43, 28, 0));
     addBody(createScience2DBody(ComponentType.Compass, 0, 5, 0));
     
-    barMagnet = findBody(ComponentType.BarMagnet);
     currentCoil = findBody(ComponentType.CurrentCoil);
     
     for (Science2DBody body: bodies) {
@@ -77,12 +70,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
 
   @Override
   public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
-    modelConfigs.add(new AbstractModelConfig<String>("Magnet Mode", 
-        "Mode of operation of magnet", Mode.values()) {
-      public String getValue() { return getMode(); }
-      public void setValue(String value) { setMode(value); }
-      public boolean isPossible() { return barMagnet != null && barMagnet.isActive(); }
-    });
   }
 
   @Override
@@ -102,15 +89,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     for (Science2DBody body: bodies) {
       body.resetInitial();
     }
-    if (magnetRotationJoint != null) {
-      box2DWorld.destroyJoint(magnetRotationJoint);
-      magnetRotationJoint = null;
-    }
-    if (mode == Mode.Rotate && barMagnet != null) {
-      magnetRotationJointDef.initialize(barMagnet.getBody(), Science2DBody.getGround(), 
-          barMagnet.getWorldPoint(Vector2.Zero));
-      magnetRotationJoint = box2DWorld.createJoint(magnetRotationJointDef);
-    }
     if (coilRotationJoint == null && currentCoil != null) {
       coilRotationJointDef.initialize(currentCoil.getBody(), Science2DBody.getGround(), 
           currentCoil.getWorldPoint(Vector2.Zero));
@@ -120,14 +98,5 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
 
   public List<Science2DBody> getBodies() {
     return bodies;
-  }
-  
-  public String getMode() {
-    return mode.name();
-  }
-
-  public void setMode(String mode) {
-    this.mode = Mode.valueOf(mode);
-    reset();
   }
 }
