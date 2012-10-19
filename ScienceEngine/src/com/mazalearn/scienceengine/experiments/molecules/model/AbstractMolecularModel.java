@@ -5,6 +5,7 @@ import java.util.List;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public abstract class AbstractMolecularModel extends AbstractScience2DModel 
     implements IMolecularModel {
@@ -248,4 +249,14 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
     });
   }
 
+  @Override
+  public void prepareModel() {
+    reset();
+  }
+
+  @Override
+  protected Science2DBody createScience2DBody(String componentTypeName,
+      float x, float y, float rotation) {
+    return null;
+  }
 }

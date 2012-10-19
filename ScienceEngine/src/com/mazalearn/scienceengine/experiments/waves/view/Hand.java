@@ -11,8 +11,8 @@ public class Hand extends Image {
   float lastTouchedY, originX, originY;
   private int ballDiameter;
 
-  public Hand(Texture texture, final Ball ball, float originX, float originY) {
-    super(texture);
+  public Hand(final Ball ball, float originX, float originY) {
+    super(new Texture("image-atlases/hand-pointer1.png"));
     this.setName("Hand");
     this.originX = originX;
     this.originY = originY;

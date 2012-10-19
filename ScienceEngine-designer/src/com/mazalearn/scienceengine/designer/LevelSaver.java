@@ -54,7 +54,7 @@ public class LevelSaver {
     writeGroups(jsonWriter);
     writeCircuits(jsonWriter);
     writeConfigs(jsonWriter);
-  
+ 
     jsonWriter.flush();
     jsonWriter.close();
     saveLevelThumbnail();

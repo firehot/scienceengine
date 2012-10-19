@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class WaveModel extends AbstractScience2DModel {
   // Enum used for different Boundary Conditions on end of string
@@ -251,6 +252,16 @@ public class WaveModel extends AbstractScience2DModel {
       public void setValue(Float value) { setDamping(value); }
       public boolean isPossible() { return true; }
     });
+  }
+
+  @Override
+  public void prepareModel() {
+  }
+
+  @Override
+  protected Science2DBody createScience2DBody(String componentTypeName,
+      float x, float y, float rotation) {
+    return null;
   }
   
 }

@@ -10,11 +10,9 @@ public class Boundary extends Image {
   private int ballDiameter;
   private WaveBox waveBox;
 
-  public Boundary(TextureRegion region, Ball ball, float originY, 
-      WaveBox waveBox) {
+  public Boundary(TextureRegion region, Ball ball, float originY) {
     super(region);
     this.setName("Boundary");
-    this.waveBox = waveBox;
     this.originY = originY;
     this.ball = ball;
   }
@@ -28,5 +26,9 @@ public class Boundary extends Image {
   public void setBallDiameter(int ballDiameter) {
     this.ballDiameter = ballDiameter;
     this.setSize(ballDiameter, ballDiameter);
+  }
+
+  public void setWaveBox(WaveBox waveBox) {
+    this.waveBox = waveBox;
   }
 }

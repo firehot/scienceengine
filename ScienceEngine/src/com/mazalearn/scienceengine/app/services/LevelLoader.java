@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.app.services;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -49,7 +50,6 @@ public class LevelLoader {
         .parse(str);
 
     readLevelInfo(rootElem);
-    //initializeComponents();
     readComponents((Array<?>) rootElem.get("components"));
     readGroups((Array<?>) rootElem.get("groups"));
     readCircuits((Array<?>) rootElem.get("circuits"));
@@ -127,26 +127,12 @@ public class LevelLoader {
     }
   }
 
-  private void initializeComponents() {
-    // Make all actors inactive and invisible.
-    for (Actor actor: science2DStage.getActors()) {
-      if (!"Title".equals(actor.getName()) && !"CircuitElement".equals(actor.getName()) &&
-          !"Help".equals(actor.getName())) {
-        actor.setVisible(false);
-      }
-      if (actor instanceof Science2DActor) {
-        ((Science2DActor) actor).setPositionFromViewCoords(false);
-      }
-    }
-  }
-  
   private void readComponents(Array<?> components) {
     if (components == null) return;
     
     for (int i = 0; i < components.size; i++) {
       @SuppressWarnings("unchecked")
-      OrderedMap<String, ?> component = (OrderedMap<String, ?>) components
-          .get(i);
+      OrderedMap<String, ?> component = (OrderedMap<String, ?>) components.get(i);
       readComponent(component);
     }
   }
@@ -158,8 +144,14 @@ public class LevelLoader {
   private void readComponent(OrderedMap<String, ?> component) {
     String type = (String) component.get("type");
     if (type == null) return;
+    float x = (Float) nvl(component.get("x"), 0f);
+    float y = (Float) nvl(component.get("y"), 0f);
+    float rotation = (Float) nvl(component.get("rotation"), 0f);
     
-    Science2DBody science2DBody = science2DModel.addBody(type, 0, 0, 0);
+    Science2DBody science2DBody = 
+        science2DModel.addBody(type, x / ScienceEngine.PIXELS_PER_M, 
+            y / ScienceEngine.PIXELS_PER_M, 
+            rotation * MathUtils.degreesToRadians);
     Actor actor = null;
     if (science2DBody != null) {
       actor = science2DStage.addScience2DActor(science2DBody);
@@ -172,14 +164,14 @@ public class LevelLoader {
     }
 
     actor.setName((String) nvl(component.get("name"), type));
-    actor.setX((Float) nvl(component.get("x"), 0f));
-    actor.setY((Float) nvl(component.get("y"), 0f));
+    actor.setX(x);
+    actor.setY(y);
     actor.setOriginX((Float) nvl(component.get("originX"), 0f));
     actor.setOriginY((Float) nvl(component.get("originY"), 0f));
     actor.setWidth((Float) nvl(component.get("width"), 20f));
     actor.setHeight((Float) nvl(component.get("height"), 20f));
     actor.setVisible((Boolean) nvl(component.get("visible"), true));
-    actor.setRotation((Float) nvl(component.get("rotation"), 0f));
+    actor.setRotation(rotation);
     if (actor instanceof Science2DActor) {
       Science2DActor science2DActor = (Science2DActor) actor;
       science2DActor.setPositionFromViewCoords(false);

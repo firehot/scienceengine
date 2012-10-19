@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.experiments.molecules.model;
 
+import com.mazalearn.scienceengine.core.model.Science2DBody;
+
 public class LJMolecularModel extends AbstractMolecularModel {
   // Assumptions
   // LJ_EPSILON = 1.0 = Depth of potential well

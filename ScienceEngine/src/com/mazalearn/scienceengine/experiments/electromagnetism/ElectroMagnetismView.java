@@ -102,11 +102,11 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   }
   
   @Override
-  protected Actor createActor(String name) {
-    if (name.equals("CoilsBack")) {
+  protected Actor createActor(String type) {
+    if (type.equals("CoilsBack")) {
       return new Image(new Texture("images/coppercoils-back.png"));
     }
-    if (name.equals("Brushes")) {
+    if (type.equals("Brushes")) {
       return new Image(new Texture("images/brush.png"));
     }
     return null;

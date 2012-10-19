@@ -56,7 +56,7 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   protected abstract Actor createActor(Science2DBody body);
   
   // Factory method for creating visual actors
-  protected abstract Actor createActor(String body);
+  protected abstract Actor createActor(String type);
   
   @Override
   public void suspend(boolean suspend) {
