@@ -2,14 +2,14 @@ package com.badlogic.gdx.graphics.g2d.harfbuzz;
 
 public class ComplexScriptLayout {
   
-  private String language;
-  private String fontFilePath;
+  private static String fontLanguage, loadedLanguage;
+  private static String fontFilePath;
 
   private native int[] jniGetGlyphsForText(String unicodeText);
   
   // Initialize MUST be called before using for layout.
   // This means setLanguage must be called on the class before using.
-  private synchronized native void jniInitialize(String fontFilePath, String language); 
+  private static synchronized native void jniInitialize(String fontFilePath, String language); 
 
   static {
     System.loadLibrary("complex_script_layout");
@@ -20,15 +20,17 @@ public class ComplexScriptLayout {
     return glyphs;
   }
 
-  public void setLanguage(String language, String fontFileName) {
-    this.fontFilePath = "/sdcard/data/" + fontFileName;
+  public synchronized static void setLanguage(String language, String fontFileName) {
+    if (language.equals(loadedLanguage)) return;
+    fontFilePath = "/sdcard/data/" + fontFileName;
     if (language.equals("ka")) {
-      this.language = "Knda";
+      fontLanguage = "Knda";
     } else if (language.equals("hi")) {
-      this.language = "Deva";      
+      fontLanguage = "Deva";      
     } else if (language.equals("ta")) {
-      this.language = "Taml";
+      fontLanguage = "Taml";
     }
-    jniInitialize(this.fontFilePath, this.language);
+    jniInitialize(fontFilePath, fontLanguage);
+    loadedLanguage = language;
   }
 }
