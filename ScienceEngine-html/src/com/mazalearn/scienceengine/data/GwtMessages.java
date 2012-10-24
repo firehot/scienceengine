@@ -37,4 +37,10 @@ public class GwtMessages implements IMessage {
   public void setLanguage(Skin skin, String language) {
     this.language = language;
   }
+
+  @Override
+  public void setFont(Skin skin) {
+    // TODO Auto-generated method stub
+    
+  }
 }

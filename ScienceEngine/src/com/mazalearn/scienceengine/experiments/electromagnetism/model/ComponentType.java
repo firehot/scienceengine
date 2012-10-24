@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ComponentType implements IComponentType {
@@ -25,9 +26,8 @@ public enum ComponentType implements IComponentType {
     return textureFilename;
   }
   
-  // TODO: localize this
   public String toString() {
-    return name();
+    return ScienceEngine.getPlatformAdapter().getMsg().getString(name());  
   }
   
   public static ComponentType valueOf(IComponentType cType) {

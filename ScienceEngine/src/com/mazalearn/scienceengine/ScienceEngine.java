@@ -21,10 +21,6 @@ import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
-import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
-import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
-import com.mazalearn.scienceengine.experiments.waves.WaveController;
 
 public class ScienceEngine extends Game {
   // constant useful for logging

@@ -12,7 +12,6 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.data.GwtMessages;
 
@@ -25,11 +24,12 @@ public class GwtLauncher extends GwtApplication {
 
 	@Override
 	public ApplicationListener getApplicationListener () {
-		ScienceEngine scienceEngine = new ScienceEngine();
+    ScienceEngine scienceEngine = new ScienceEngine();
 		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
 		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     return scienceEngine;
 	}
+
   static class PlatformAdapterImpl implements PlatformAdapter {
     
     IMessage messages;

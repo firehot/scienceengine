@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mazalearn.scienceengine.ScienceEngine;
 
 public class Helper extends Group {
   private TextButton helpBox;
@@ -30,7 +31,7 @@ public class Helper extends Group {
     this.helpIcon = new Image(new Texture("images/help.png"));
     helpIcon.setSize(48, 48);
     helpIcon.setPosition(x, y);
-    this.helpBox = new TextButton("Really long Helptext", skin);
+    this.helpBox = new TextButton("Helptext", skin);
     helpBox.setColor(Color.YELLOW);
     helpBox.setVisible(false);
     //helpBox.getLabel().setWrap(true);
@@ -78,7 +79,7 @@ public class Helper extends Group {
         }
         if (actor != null && actor.getName() != null) {
           helpBox.setVisible(true);
-          helpBox.setText(actor.getName());
+          helpBox.setText(ScienceEngine.getMsg().getString("Help." + actor.getName()));
           helpBox.invalidate();
           // Translate to group coordinates
           stageToLocalCoordinates(lastTouch.set(currentTouch.x, currentTouch.y));

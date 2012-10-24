@@ -44,7 +44,8 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
     
     public IMessage getMsg() {
       if (messages == null) {
-        messages = new Messages(Platform.Android);
+        messages = new Messages(android.os.Build.FINGERPRINT.contains("generic") 
+            ? Platform.AndroidEmulator : Platform.Android);
       }
       return messages;
     }

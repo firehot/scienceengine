@@ -4,19 +4,21 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.services.IMessage;
+import com.mazalearn.scienceengine.app.utils.FreeTypeFontGenerator;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 public class Messages implements IMessage {
-  private static final String HINDI_TTF = "skin/aksharhindi.ttf";
-  private static final String KANNADA_TTF = "skin/aksharkannada.ttf";
+  private static final String HINDI_TTF = "aksharhindi.ttf";
+  private static final String KANNADA_TTF = "aksharkannada.ttf";
   private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.data.Messages"; //$NON-NLS-1$
 
   private Locale locale = new Locale("en");
@@ -48,38 +50,36 @@ public class Messages implements IMessage {
     setFont(skin);
   }
 
-  private void setFont(Skin skin) {
+  public void setFont(Skin skin) {
     BitmapFont font = null;
     String language = locale.getLanguage();
     try {
       font = skin.getFont(language);
     } catch (GdxRuntimeException e) { // font not found
-      String fontFile = null;
+      String fontFileName = null;
       String chars = null;
+      char beginChar = '\0', endChar = '\0';
       if (language.equals("ka")) {
-        fontFile = KANNADA_TTF;
-        chars = FreeTypeFontGenerator.DEFAULT_CHARS + 
-            "ಕಕಾಕಿಕೀಕುಕೂಕೃಕೆಕೇಕೈಕೊಕೋಕೌಕಂಕಃಕ್ಖಖಾಖಿಖೀಖುಖೂಖೃಖೆಖೇಖೈಖೊಖೋಖೌಖಂಖಃಖ್ಗಗಾಗಿಗೀಗುಗೂಗೃಗೆಗೇಗೈಗೊಗೋಗೌಗಂಗಃಗ್" +
-            "ಘಘಾಘಿಘೀಘುಘೂಘೃಘೆಘೇಘೈಘೊಘೋಘೌಘಂಘಃಘ್ಙಙಾಙಿಙೀಙುಙೂಙೃಙೆಙೇಙೈಙೊಙೋಙೌಙಂಙಃಙ್ಚಚಾಚಿಚೀಚುಚೂಚೃಚೆಚೇಚೈಚೊಚೋಚೌಚಂಚಃಚ್" +
-            "ಛಛಾಛಿಛೀಛುಛೂಛೃಛೆಛೇಛೈಛೊಛೋಛೌಛಂಛಃಛ್ಜಜಾಜಿಜೀಜುಜೂಜೃಜೆಜೇಜೈಜೊಜೋಜೌಜಂಜಃಜ್ಝಝಾಝಿಝೀಝುಝೂಝೃಝೆಝೇಝೈಝೊಝೋಝೌಝಂಝಃಝ್" +
-            "ಞಞಾಞಿಞೀಞುಞೂಞೃಞೆಞೇಞೈಞೊಞೋಞೌಞಂಞಃಞ್ಟಟಾಟಿಟೀಟುಟೂಟೃಟೆಟೇಟೈಟೊಟೋಟೌಟಂಟಃಟ್ಠಠಾಠಿಠೀಠುಠೂಠೃಠೆಠೇಠೈಠೊಠೋಠೌಠಂಠಃಠ್" +
-            "ಡಡಾಡಿಡೀಡುಡೂಡೃಡೆಡೇಡೈಡೊಡೋಡೌಡಂಡಃಡ್ಢಢಾಢಿಢೀಢುಢೂಢೃಢೆಢೇಢೈಢೊಢೋಢೌಢಂಢಃಢ್ಣಣಾಣಿಣೀಣುಣೂಣೃಣೆಣೇಣೈಣೊಣೋಣೌಣಂಣಃಣ್" +
-            "ತತಾತಿತೀತುತೂತೃತೆತೇತೈತೊತೋತೌತಂತಃತ್ಥಥಾಥಿಥೀಥುಥೂಥೃಥೆಥೇಥೈಥೊಥೋಥೌಥಂಥಃಥ್ದದಾದಿದೀದುದೂದೃದೆದೇದೈದೊದೋದೌದಂದಃದ್" +
-            "ಧಧಾಧಿಧೀಧುಧೂಧೃಧೆಧೇಧೈಧೊಧೋಧೌಧಂಧಃಧ್ನನಾನಿನೀನುನೂನೃನೆನೇನೈನೊನೋನೌನಂನಃನ್ಪಪಾಪಿಪೀಪುಪೂಪೃಪೆಪೇಪೈಪೊಪೋಪೌಪಂಪಃಪ್" +
-            "ಫಫಾಫಿಫೀಫುಫೂಫೃಫೆಫೇಫೈಫೊಫೋಫೌಫಂಫಃಫ್ಬಬಾಬಿಬೀಬುಬೂಬೃಬೆಬೇಬೈಬೊಬೋಬೌಬಂಬಃಬ್ಭಭಾಭಿಭೀಭುಭೂಭೃಭೆಭೇಭೈಭೊಭೋಭೌಭಂಭಃಭ್" +
-            "ಮಮಾಮಿಮೀಮುಮೂಮೃಮೆಮೇಮೈಮೊಮೋಮೌಮಂಮಃಮ್ಯಯಾಯಿಯೀಯುಯೂಯೃಯೆಯೇಯೈಯೊಯೋಯೌಯಂಯಃಯ್ರರಾರಿರೀರುರೂರೃರೆರೇರೈರೊರೋರೌರಂರಃರ್" +
-            "ಱಱಾಱಿಱೀಱುಱೂಱೃಱೆಱೇಱೈಱೊಱೋಱೌಱಂಱಃಱ್ಲಲಾಲಿಲೀಲುಲೂಲೃಲೆಲೇಲೈಲೊಲೋಲೌಲಂಲಃಲ್ವವಾವಿವೀವುವೂವೃವೆವೇವೈವೊವೋವೌವಂವಃವ್" +
-            "ಶಶಾಶಿಶೀಶುಶೂಶೃಶೆಶೇಶೈಶೊಶೋಶೌಶಂಶಃಶ್ಷಷಾಷಿಷೀಷುಷೂಷೃಷೆಷೇಷೈಷೊಷೋಷೌಷಂಷಃಷ್ಸಸಾಸಿಸೀಸುಸೂಸೃಸೆಸೇಸೈಸೊಸೋಸೌಸಂಸಃಸ್" +
-            "ಹಹಾಹಿಹೀಹುಹೂಹೃಹೆಹೇಹೈಹೊಹೋಹೌಹಂಹಃಹ್ಳಳಾಳಿಳೀಳುಳೂಳೃಳೆಳೇಳೈಳೊಳೋಳೌಳಂಳಃಳ್ೞೞಾೞಿೞೀೞುೞೂೞೃೞೆೞೇೞೈೞೊೞೋೞೌೞಂೞಃ";
+        fontFileName = KANNADA_TTF;
+        beginChar = '\u0C80';
+        endChar = '\u0CFF';
       } else if (language.equals("hi")) {
-          fontFile =  HINDI_TTF;
-          chars = FreeTypeFontGenerator.DEFAULT_CHARS + 
-              "ऀँंःऄअआइईउऊऋऌऍऎएऐऑऒओऔकखगघङचछजझञटठडढणतथदधनऩपफबभमयरऱलळऴवशषसहऺऻ़" +
-              "ऽािीुूृॄॅॆेैॉॊोौ्ॎॏॐ॒॑॓॔ॕॖॗक़ख़ग़ज़ड़ढ़फ़य़ॠॡॢॣ।॥०१२३४५६७८९॰ॱॲॳॴॵॶॷॹॺॻॼॽॾॿ" +
-              "꣠  ꣡ ꣢ ꣣ ꣤ ꣥ ꣦ ꣧ ꣨ ꣩ ꣪ ꣫ ꣬ ꣭ ꣮ ꣯꣰  ꣱ ꣲ ꣳ ꣴ ꣵ ꣶ ꣷ ꣸ ꣹ ꣺ ꣻ";
+          fontFileName =  HINDI_TTF;
+          beginChar = '\u0900';
+          endChar = '\u097F';
       }
+      if (platform == Platform.Android || platform == Platform.AndroidEmulator) {
+        BitmapFontCache.setComplexScriptLayout(language, fontFileName);
+      }
+      FileHandle fontFileHandle = Gdx.files.internal("skin/" + fontFileName);
       FreeTypeFontGenerator generator = 
-          new FreeTypeFontGenerator(Gdx.files.internal(fontFile));
+          new FreeTypeFontGenerator(fontFileHandle);
+      chars = FreeTypeFontGenerator.DEFAULT_CHARS;
+      StringBuilder s = new StringBuilder("*+-/");
+      for (char c = beginChar; c <= endChar; c++) {
+        s.append(c);
+      }
+      chars += s;
       StringBuffer dedupChars = new StringBuffer();
       for (int i = 0; i < chars.length(); i++) {
         if (chars.indexOf(chars.charAt(i)) == i) {

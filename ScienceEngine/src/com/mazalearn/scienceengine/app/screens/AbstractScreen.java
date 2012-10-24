@@ -87,10 +87,12 @@ public abstract class AbstractScreen implements Screen {
 
   public BitmapFont getFont() {
     if (font == null) {
-      // ??? TODO: problems with GWT
       FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
       Skin  skin = new Skin(skinFile);
+      skin.add("en", skin.getFont("default-font"));
+      getMsg().setFont(skin);
       font = skin.getFont("default-font");
+
     }
     return font;
   }
