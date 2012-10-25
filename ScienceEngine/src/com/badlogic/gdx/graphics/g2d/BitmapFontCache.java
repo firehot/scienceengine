@@ -19,6 +19,7 @@ package com.badlogic.gdx.graphics.g2d;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.Glyph;
@@ -27,6 +28,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.harfbuzz.ComplexScriptLayout;
 import com.badlogic.gdx.utils.NumberUtils;
+import com.mazalearn.scienceengine.ScienceEngine;
 
 /** Caches glyph geometry for a BitmapFont, providing a fast way to render static text. This saves needing to compute the location
  * of each glyph each frame.
@@ -41,6 +43,8 @@ public class BitmapFontCache {
   private final Color tempColor = new Color(Color.WHITE);
   private final TextBounds textBounds = new TextBounds();
   private boolean integer = true;
+  private boolean fallbackMode;
+  private static BitmapFont fallbackFont;
   private static ComplexScriptLayout complexScriptLayout;
 
   public BitmapFontCache (BitmapFont font) {
@@ -117,6 +121,7 @@ public class BitmapFontCache {
   }
 
   public void draw (SpriteBatch spriteBatch) {
+    BitmapFont font = fallbackMode ? fallbackFont : this.font;
     spriteBatch.draw(font.getRegion().getTexture(), vertices, 0, idx);
   }
 
@@ -153,8 +158,7 @@ public class BitmapFontCache {
   }
 
   private void require (int glyphCount) {
-    int FUDGE = 2; // char to glyph is assumed at most 1 to 2
-    int vertexCount = idx + glyphCount * FUDGE * 20;
+    int vertexCount = idx + glyphCount * 20;
     if (vertices == null || vertices.length < vertexCount) {
       float[] newVertices = new float[vertexCount];
       System.arraycopy(vertices, 0, newVertices, 0, idx);
@@ -167,18 +171,29 @@ public class BitmapFontCache {
     BitmapFont font = this.font;
     Glyph lastGlyph = null;
     BitmapFontData data = font.data;
+    float scaleX = data.scaleX;
+    float scaleY = data.scaleY;
+    fallbackMode = false;
     if (isComplexScriptLayoutEnabled()) {
-      List<Glyph> glyphs = getGlyphsAfterShaping(str, start, end, data);
-      for (Glyph g: glyphs) {
-        addGlyph(g, x + g.xoffset * data.scaleX, 
-            y + g.yoffset * data.scaleY, 
-            g.width * data.scaleX,
-            g.height * data.scaleY);
-        x += g.xadvance * data.scaleX;
+      if (fallbackFont != null && isAsciiText(str, start, end)) {
+        data = fallbackFont.data;
+        Gdx.app.log(ScienceEngine.LOG, "fallbackfont data " + data);
+        fallbackMode = true;
+      } else {
+        List<Glyph> glyphs = getGlyphsAfterShaping(str, start, end, data);
+        require(glyphs.size());
+        for (Glyph g: glyphs) {
+          addGlyph(g, x + g.xoffset * scaleX, 
+              y + g.yoffset * scaleY, 
+              g.width * scaleX,
+              g.height * scaleY);
+          x += g.xadvance * scaleX;
+        }
+        return x - startX;
       }
-      return x - startX;
     }
-    if (data.scaleX == 1 && data.scaleY == 1) {
+    require(end - start);
+    if (scaleX == 1 && scaleY == 1) {
       while (start < end) {
         lastGlyph = data.getGlyph(str.charAt(start++));
         if (lastGlyph != null) {
@@ -198,7 +213,6 @@ public class BitmapFontCache {
         }
       }
     } else {
-      float scaleX = data.scaleX, scaleY = data.scaleY;
       while (start < end) {
         lastGlyph = data.getGlyph(str.charAt(start++));
         if (lastGlyph != null) {
@@ -229,6 +243,13 @@ public class BitmapFontCache {
     return x - startX;
   }
 
+  private boolean isAsciiText(CharSequence str, int start, int end) {
+    for (int i = start; i < end; i++) {
+      if (str.charAt(i) >= 128) return false;
+    }
+    return true;
+  }
+
   // Here we make a JNI call to get the complex script shaping done
   private List<Glyph> getGlyphsAfterShaping(CharSequence str, int start,
       int end, BitmapFontData data) {
@@ -244,16 +265,28 @@ public class BitmapFontCache {
   }
 
   private boolean isComplexScriptLayoutEnabled() {
-    return complexScriptLayout != null;
+    // Little dirty since we are trying to avoid changing BitmapFont.
+    // To that end, we use static variables for complexScriptLayout and
+    // need to check in this way.
+    return complexScriptLayout != null && font != fallbackFont;
   }
   
-  public synchronized static void setComplexScriptLayout(String language, String fontFileName) {
+  /**
+   * Setup complex script layout
+   * @param language - 2 letter language code.
+   * @param fontFileName - font file to be used by freetype
+   * @param asciiFont - fallbackfont for ascii characters. 
+   *                    complex script fonts often do not have ascii
+   */
+  public synchronized static void setComplexScriptLayout(String language, String fontFileName, 
+      BitmapFont asciiFont) {
     if (language == null) {
       complexScriptLayout = null;
       return;
     }
     complexScriptLayout = new ComplexScriptLayout();
-    complexScriptLayout.setLanguage(language, fontFileName);
+    ComplexScriptLayout.setLanguage(language, fontFileName);
+    fallbackFont = asciiFont;
   }
 
   private void addGlyph (Glyph glyph, float x, float y, float width, float height) {
@@ -328,7 +361,6 @@ public class BitmapFontCache {
    * @param end The last character of the string to draw (exclusive).
    * @return The bounds of the cached string (the height is the distance from y to the baseline). */
   public TextBounds addText (CharSequence str, float x, float y, int start, int end) {
-    require(end - start);
     y += font.data.ascent;
     textBounds.width = addToCache(str, x, y, start, end);
     textBounds.height = font.data.capHeight;
@@ -365,7 +397,6 @@ public class BitmapFontCache {
     BitmapFont font = this.font;
 
     int length = str.length();
-    require(length);
 
     y += font.data.ascent;
     float down = font.data.down;
@@ -426,7 +457,6 @@ public class BitmapFontCache {
     BitmapFont font = this.font;
 
     int length = str.length();
-    require(length);
 
     y += font.data.ascent;
     float down = font.data.down;

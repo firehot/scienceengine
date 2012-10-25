@@ -9,11 +9,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.app.utils.FreeTypeFontGenerator;
+import com.mazalearn.scienceengine.app.utils.FreeTypeComplexFontGenerator;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 public class Messages implements IMessage {
@@ -56,48 +57,39 @@ public class Messages implements IMessage {
     try {
       font = skin.getFont(language);
     } catch (GdxRuntimeException e) { // font not found
-      String fontFileName = null;
-      String chars = null;
-      char beginChar = '\0', endChar = '\0';
-      if (language.equals("ka")) {
-        fontFileName = KANNADA_TTF;
-        beginChar = '\u0C80';
-        endChar = '\u0CFF';
-      } else if (language.equals("hi")) {
-          fontFileName =  HINDI_TTF;
-          beginChar = '\u0900';
-          endChar = '\u097F';
-      }
-      if (platform == Platform.Android || platform == Platform.AndroidEmulator) {
-        BitmapFontCache.setComplexScriptLayout(language, fontFileName);
-      }
-      FileHandle fontFileHandle = Gdx.files.internal("skin/" + fontFileName);
-      FreeTypeFontGenerator generator = 
-          new FreeTypeFontGenerator(fontFileHandle);
-      chars = FreeTypeFontGenerator.DEFAULT_CHARS;
-      StringBuilder s = new StringBuilder("*+-/");
-      for (char c = beginChar; c <= endChar; c++) {
-        s.append(c);
-      }
-      chars += s;
-      StringBuffer dedupChars = new StringBuffer();
-      for (int i = 0; i < chars.length(); i++) {
-        if (chars.indexOf(chars.charAt(i)) == i) {
-          dedupChars.append(chars.charAt(i));
-        }
-      }
-      font = generator.generateFont(16, dedupChars.toString(), false);
-      generator.dispose();
+      font = loadFont(skin, language);
     }
     skin.add(language, font);
   
     TextButtonStyle style1 = skin.get(TextButtonStyle.class);
     style1.font = font;
-    skin.add("default", style1);
+    style1 = skin.get("toggle", TextButtonStyle.class);
+    style1.font = font;
     LabelStyle style2 = skin.get(LabelStyle.class);
     style2.font = font;
     CheckBoxStyle style3 = skin.get(CheckBoxStyle.class);
     style3.font = font;
+    SelectBoxStyle style4 = skin.get(SelectBoxStyle.class);
+    style4.font = font;
     skin.add("default-font", font);
+  }
+
+  private BitmapFont loadFont(Skin skin, String language) {
+    BitmapFont font;
+    String fontFileName = null;
+    if (language.equals("ka")) {
+      fontFileName = KANNADA_TTF; // unicode: 0C80-0CFF
+    } else if (language.equals("hi")) {
+      fontFileName =  HINDI_TTF; // unicode: 0900-097F
+    }
+    if (platform == Platform.Android || platform == Platform.AndroidEmulator) {
+      BitmapFontCache.setComplexScriptLayout(language, fontFileName, skin.getFont("en"));
+    }
+    FileHandle fontFileHandle = Gdx.files.internal("skin/" + fontFileName);
+    FreeTypeComplexFontGenerator generator = 
+        new FreeTypeComplexFontGenerator(fontFileHandle);
+    font = generator.generateFont(16, false);
+    generator.dispose();
+    return font;
   }
 }

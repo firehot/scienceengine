@@ -31,7 +31,7 @@ public class LightProber extends AbstractScience2DProber {
   
   @Override
   public boolean isAvailable() {
-    return lightbulbActor.isVisible();
+    return lightbulbActor != null && lightbulbActor.isVisible();
   }
   
   @Override
