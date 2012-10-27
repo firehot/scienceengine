@@ -174,23 +174,21 @@ public class BitmapFontCache {
     float scaleX = data.scaleX;
     float scaleY = data.scaleY;
     fallbackMode = false;
-    if (isComplexScriptLayoutEnabled()) {
-      if (fallbackFont != null && isAsciiText(str, start, end)) {
-        data = fallbackFont.data;
-        Gdx.app.log(ScienceEngine.LOG, "fallbackfont data " + data);
-        fallbackMode = true;
-      } else {
-        List<Glyph> glyphs = getGlyphsAfterShaping(str, start, end, data);
-        require(glyphs.size());
-        for (Glyph g: glyphs) {
-          addGlyph(g, x + g.xoffset * scaleX, 
-              y + g.yoffset * scaleY, 
-              g.width * scaleX,
-              g.height * scaleY);
-          x += g.xadvance * scaleX;
-        }
-        return x - startX;
+    if (fallbackFont != null && isAsciiText(str, start, end)) {
+      data = fallbackFont.data;
+      Gdx.app.log(ScienceEngine.LOG, "fallbackfont data " + data);
+      fallbackMode = true;
+    } else if (isComplexScriptLayoutEnabled()) {
+      List<Glyph> glyphs = getGlyphsAfterShaping(str, start, end, data);
+      require(glyphs.size());
+      for (Glyph g: glyphs) {
+        addGlyph(g, x + g.xoffset * scaleX, 
+            y + g.yoffset * scaleY, 
+            g.width * scaleX,
+            g.height * scaleY);
+        x += g.xadvance * scaleX;
       }
+      return x - startX;
     }
     require(end - start);
     if (scaleX == 1 && scaleY == 1) {
@@ -275,20 +273,25 @@ public class BitmapFontCache {
    * Setup complex script layout
    * @param language - 2 letter language code.
    * @param fontFileName - font file to be used by freetype
-   * @param asciiFont - fallbackfont for ascii characters. 
-   *                    complex script fonts often do not have ascii
    */
-  public synchronized static void setComplexScriptLayout(String language, String fontFileName, 
-      BitmapFont asciiFont) {
+  public synchronized static void setComplexScriptLayout(String language, String fontFileName) {
     if (language == null) {
       complexScriptLayout = null;
       return;
     }
     complexScriptLayout = new ComplexScriptLayout();
     ComplexScriptLayout.setLanguage(language, fontFileName);
-    fallbackFont = asciiFont;
   }
 
+
+ /**
+  * @param asciiFont - fallbackfont for ascii characters. 
+  *                    complex script fonts often do not have ascii
+  */
+  public static void setFallbackFont(BitmapFont asciiFont) {
+    fallbackFont = asciiFont;    
+  }
+  
   private void addGlyph (Glyph glyph, float x, float y, float width, float height) {
     float x2 = x + width;
     float y2 = y + height;

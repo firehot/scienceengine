@@ -74,7 +74,8 @@ public class ExperimentHomeScreen extends AbstractScreen {
     
     table.add(createExperimentLevelPane()).fill();    
     table.row();
-    table.add(experimentName + ": " + getMsg().getString("ScienceEngine.ResourcesOnTheInternet")).colspan(100); //$NON-NLS-1$ //$NON-NLS-2$
+    table.add(getMsg().getString("ScienceEngine." + experimentName) + "- " + 
+        getMsg().getString("ScienceEngine.ResourcesOnTheInternet")).colspan(100); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     table.add(createResourcePane()).fill();
     table.row();
