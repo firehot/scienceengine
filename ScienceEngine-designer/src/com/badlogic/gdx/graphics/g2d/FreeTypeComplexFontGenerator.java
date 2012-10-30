@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.utils;
+package com.badlogic.gdx.graphics.g2d;
 
 /*******************************************************************************
  * Copyright 2011 See AUTHORS file.
