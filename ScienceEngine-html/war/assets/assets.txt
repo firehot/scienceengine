@@ -23,6 +23,8 @@ t:data/Electromagnetism/6.json
 i:data/Electromagnetism/6.png
 t:data/Electromagnetism/7.json
 i:data/Electromagnetism/7.png
+t:data/Electromagnetism/8.json
+i:data/Electromagnetism/8.png
 t:data/Electromagnetism.json
 d:data/StatesOfMatter
 t:data/StatesOfMatter/1.json
@@ -77,6 +79,7 @@ i:images/fire-texture.jpg
 i:images/galileo.png
 i:images/galvani.png
 i:images/greenballoon.png
+i:images/help.png
 i:images/iceberg.jpg
 i:images/lightbulb.png
 i:images/mariecurie.png
@@ -100,6 +103,9 @@ b:skin/aksharhindi.ttf
 b:skin/aksharkannada.ttf
 t:skin/default.fnt
 i:skin/default.png
+b:skin/Lohit-Devanagari.ttf
+b:skin/Lohit-Kannada.ttf
+b:skin/Lohit-Tamil.ttf
 b:skin/uiskin.atlas
 t:skin/uiskin.json
 i:skin/uiskin.png

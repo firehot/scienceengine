@@ -36,7 +36,7 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
       if (data != null) {
         scienceEngine = new ScienceEngine(data.toString());
       } else {
-        scienceEngine = new ScienceEngine();
+        scienceEngine = new ScienceEngine("");
       }
       scienceEngine.setPlatformAdapter(this);
       initialize(scienceEngine, cfg);

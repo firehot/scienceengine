@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.client;
+package com.mazalearn.gwt.client;
 
 import java.io.File;
 
@@ -16,21 +16,22 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.data.GwtMessages;
 
 public class GwtLauncher extends GwtApplication {
-	@Override
+@Override
 	public GwtApplicationConfiguration getConfig () {
-		GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(960,640);
+		GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(800,480);
 		return cfg;
 	}
 
 	@Override
 	public ApplicationListener getApplicationListener () {
-    ScienceEngine scienceEngine = new ScienceEngine();
+	  String href = Window.Location.getHref().replace("/#", "");
+    ScienceEngine scienceEngine = new ScienceEngine(href);
 		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
 		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     return scienceEngine;
 	}
 
-  static class PlatformAdapterImpl implements PlatformAdapter {
+	static class PlatformAdapterImpl implements PlatformAdapter {
     
     IMessage messages;
     

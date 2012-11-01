@@ -51,12 +51,7 @@ public class ScienceEngine extends Game {
 
   public static final int PIXELS_PER_M = 8;
 
-  public ScienceEngine() {
-    this(null);
-  }
-  
   public ScienceEngine(String url) {
-    if (url == null) return;
     this.uri = url;
   }
 
@@ -189,8 +184,8 @@ public class ScienceEngine extends Game {
       int i = 3;
       if (pathSegments.length > i && isSupportedSubject(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
-      if (pathSegments.length > i && isSupportedTopic(pathSegments[i])) {
-        String experimentName = pathSegments[i];
+      if (pathSegments.length > i && findSupportedTopic(pathSegments[i]) != null) {
+        String experimentName = findSupportedTopic(pathSegments[i]);
         Integer iLevel = null;
         if (query != null) {
           String[] queryParts = query.toLowerCase().split("&");
@@ -219,10 +214,12 @@ public class ScienceEngine extends Game {
     return boards.contains(token);
   }
   
-  private boolean isSupportedTopic(String token) {
-    List<String> topics = 
-        Arrays.asList(new String[] {"electromagnetism", "waves", "statesofmatter"});
-    return topics.contains(token);
+  private String findSupportedTopic(String token) {
+    String[] topics = new String[] {"Electromagnetism", "Waves", "StatesOfMatter"};
+    for (String topic: topics) {
+      if (topic.toLowerCase().equals(token)) return topic;
+    }
+    return null;
   }
   
   @Override
