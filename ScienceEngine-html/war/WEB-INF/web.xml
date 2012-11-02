@@ -15,6 +15,7 @@
   <security-constraint>
     <web-resource-collection>
         <url-pattern>/science/*</url-pattern>
+        <url-pattern>/scienceengine/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
         <role-name>*</role-name>
@@ -47,6 +48,7 @@
   <filter-mapping>
     <filter-name>UserFilter</filter-name>
     <url-pattern>/science/*</url-pattern>
+    <url-pattern>/scienceengine/*</url-pattern>
   </filter-mapping>
 
   <servlet-mapping>

@@ -50,6 +50,10 @@ public class UserFilter implements Filter {
     }
     if (UserPermissionServlet.checkUserPermitted(user.getEmail())) {
       String requestURI = httpRequest.getRequestURI();
+      if (requestURI.startsWith("/scienceengine")) {
+        chain.doFilter(request, response);
+        return;
+      }
       System.out.println(requestURI);
       String requestURL = requestURI + "?" + httpRequest.getQueryString();
       System.out.println(requestURL);
