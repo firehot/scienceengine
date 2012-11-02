@@ -10,16 +10,7 @@
       <param-value/>
     </init-param>
   </servlet>
-  <servlet>
-    <servlet-name>LoginServlet</servlet-name>
-    <servlet-class>com.mazalearn.gwt.server.LoginServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LoginServlet</servlet-name>
-    <url-pattern>
-        /science/*
-    </url-pattern>
-  </servlet-mapping>
+  
 
   <security-constraint>
     <web-resource-collection>
@@ -30,6 +21,51 @@
     </auth-constraint>
   </security-constraint>
   
+  <security-constraint>
+    <web-resource-collection>
+        <url-pattern>/user</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  
+  <filter>
+    <filter-name>UserFilter</filter-name>
+    <filter-class>com.mazalearn.gwt.server.UserFilter</filter-class>
+  </filter>
+  <servlet>
+    <servlet-name>UserPermissionServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.UserPermissionServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>MainServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.MainServlet</servlet-class>
+  </servlet>
+
+  <filter-mapping>
+    <filter-name>UserFilter</filter-name>
+    <url-pattern>
+        /science/*
+    </url-pattern>
+    <url-pattern>
+        /com.mazalearn.GwtDefinition/*
+    </url-pattern>
+  </filter-mapping>
+
+  <servlet-mapping>
+    <servlet-name>UserPermissionServlet</servlet-name>
+    <url-pattern>
+        /user
+    </url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MainServlet</servlet-name>
+    <url-pattern>
+        /
+    </url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>
