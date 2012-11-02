@@ -49,8 +49,12 @@ public class UserFilter implements Filter {
       throw new ServletException("User not logged in");
     }
     if (UserPermissionServlet.checkUserPermitted(user.getEmail())) {
-      String requestURL = httpRequest.getRequestURI() + "?" + httpRequest.getQueryString();
-      httpResponse.sendRedirect("/#" + requestURL);
+      String requestURI = httpRequest.getRequestURI();
+      System.out.println(requestURI);
+      String requestURL = requestURI + "?" + httpRequest.getQueryString();
+      System.out.println(requestURL);
+      httpResponse.sendRedirect("/scienceengine#" + requestURL);
+      return;
     }
     response.getWriter().append("Sorry, please request permission to view demo");
   }

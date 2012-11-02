@@ -14,7 +14,7 @@
 
   <security-constraint>
     <web-resource-collection>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/science/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
         <role-name>*</role-name>
@@ -40,31 +40,23 @@
   </servlet>
 
   <servlet>
-    <servlet-name>MainServlet</servlet-name>
-    <servlet-class>com.mazalearn.gwt.server.MainServlet</servlet-class>
+    <servlet-name>ScienceEngineServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.ScienceEngineServlet</servlet-class>
   </servlet>
 
   <filter-mapping>
     <filter-name>UserFilter</filter-name>
-    <url-pattern>
-        /science/*
-    </url-pattern>
-    <url-pattern>
-        /com.mazalearn.GwtDefinition/*
-    </url-pattern>
+    <url-pattern>/science/*</url-pattern>
   </filter-mapping>
 
   <servlet-mapping>
     <servlet-name>UserPermissionServlet</servlet-name>
-    <url-pattern>
-        /user
-    </url-pattern>
+    <url-pattern>/user</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>MainServlet</servlet-name>
-    <url-pattern>
-        /
-    </url-pattern>
+    <servlet-name>ScienceEngineServlet</servlet-name>
+    <url-pattern>/scienceengine/*</url-pattern>
+    <url-pattern>/demo</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SystemServiceServlet</servlet-name>
