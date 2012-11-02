@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -56,9 +55,6 @@ public class ControlPanel extends Table {
     Actor viewControlPanel = 
         createViewControlPanel(skin, science2DModel, science2DStage);
     this.modelControlPanel = createModelControlPanel(skin);
-    ScrollPane scrollPane = new ScrollPane(modelControlPanel, skin);
-    scrollPane.setFlickScroll(false);
-    scrollPane.setScrollingDisabled(true, false);
     this.add(viewControlPanel);
     this.row();
     this.add(modelControlPanel);
@@ -97,7 +93,7 @@ public class ControlPanel extends Table {
     }
   }
 
-  protected Actor createViewControlPanel(Skin skin,
+  private Actor createViewControlPanel(Skin skin,
       final IScience2DModel science2DModel,
       final IScience2DStage science2DStage) {
     Table viewControls = new Table(skin);

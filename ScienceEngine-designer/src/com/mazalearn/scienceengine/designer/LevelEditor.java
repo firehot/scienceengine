@@ -85,10 +85,8 @@ public class LevelEditor extends Stage {
 
   /**
    * Build and initialize the editor.
-   * @param controlPanel 
-   * @param experimentName - name of experiment.
-   * @param level - level of experiment.
-   * @param stage - stage used by the experiment view
+   * @param science2DController 
+   * @param screen - screen for this level
    */
   public LevelEditor(IScience2DController controller, AbstractScreen screen) {
     super(((Stage)controller.getView()).getWidth(), 
