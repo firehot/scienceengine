@@ -15,6 +15,11 @@ class PlatformAdapterImpl implements PlatformAdapter {
   IMessage messages;
   
   @Override
+  public Platform getPlatform() {
+    return Platform.GWT;
+  }
+  
+  @Override
   public void browseURL(String url) {
     Window.open(url, "_blank", "");
   }

@@ -42,6 +42,12 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
       initialize(scienceEngine, cfg);
     }
     
+    @Override
+    public Platform getPlatform() {
+      return android.os.Build.FINGERPRINT.contains("generic") 
+          ? Platform.AndroidEmulator : Platform.Android;
+    }
+    
     public IMessage getMsg() {
       if (messages == null) {
         messages = new Messages(android.os.Build.FINGERPRINT.contains("generic") 

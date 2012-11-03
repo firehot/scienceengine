@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -54,7 +55,11 @@ public class ExperimentHomeScreen extends AbstractScreen {
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     profile.setExperiment("");
-    scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
+    if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
+      scienceEngine.setScreen(new SplashScreen(scienceEngine));
+    } else {
+      scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
+    }
   }
   
   @Override

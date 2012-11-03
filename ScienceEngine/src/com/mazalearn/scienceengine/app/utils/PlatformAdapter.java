@@ -28,5 +28,8 @@ public interface PlatformAdapter {
   // Return the i18n message adapter
   public IMessage getMsg();
 
+  // return platform for this adapter
+  public Platform getPlatform();
+
 }
 

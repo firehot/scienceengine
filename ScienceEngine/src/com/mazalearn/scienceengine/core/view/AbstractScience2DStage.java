@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.experiments.ControlPanel;
@@ -164,5 +165,12 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     title.setName("Title");
     title.setColor(Color.YELLOW);
     this.addActor(title);
+    // If GWT, register a disclaimer about demo at bottom of screen
+    if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
+      Label disclaimer = new Label("Demo only. Best experienced on Android Tablet", skin);
+      disclaimer.setPosition(10, 20);
+      disclaimer.setColor(Color.RED);
+      this.addActor(disclaimer);
+    }
   }
 }
