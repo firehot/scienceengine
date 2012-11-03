@@ -48,7 +48,7 @@ public class Science2DBody implements IBody {
   
   protected Science2DBody(IComponentType componentType, float x, float y, float angle) {
     this.componentType = componentType;
-    this.name = componentType.toString();
+    this.name = componentType.name();
     this.initialX = x;
     this.initialY = y;
     this.initialAngle = angle;
