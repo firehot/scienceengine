@@ -91,7 +91,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.randomizeConfig();
+      probeManager.randomizeConfig(false);
       generateProbePoints(points);
       getBField(points[0], bFields[0]);
       createFieldMeterSamples(points, bFields);

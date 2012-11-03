@@ -45,6 +45,7 @@ public class LightProber extends AbstractScience2DProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
+      probeManager.randomizeConfig(true);
       generateProbePoints(points);
       image.setX(points[0].x - image.getWidth()/2);
       image.setY(points[0].y - image.getHeight()/2);

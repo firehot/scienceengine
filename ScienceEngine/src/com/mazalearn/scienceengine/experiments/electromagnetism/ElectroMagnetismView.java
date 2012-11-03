@@ -126,11 +126,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       new FieldDirectionProber(emModel, probeManager);
       new FieldMagnitudeProber(emModel, probeManager);
       new LightProber(probeManager);
-      if (fieldMeterActor != null) {
-        this.getRoot().addActorBefore(fieldMeterActor, probeManager);
-      } else {
-        this.addActor(probeManager);
-      }
+      this.getRoot().addActorBefore(controlPanel, probeManager);
     }
     if (challenge) {
       probeManager.startChallenge();

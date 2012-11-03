@@ -81,7 +81,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.randomizeConfig();
+      probeManager.randomizeConfig(false);
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2

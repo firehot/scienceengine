@@ -198,7 +198,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
       this.emf = emf;
     
       // Current is proportional to emf
-      float current = Clamp.clamp(-1, emf / this.calibrationEmf, +1);
+      float current = Clamp.clamp(-2.5f, emf / this.calibrationEmf, +2.5f);
       setCurrent(current);
     }
     

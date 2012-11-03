@@ -112,6 +112,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     // Turn on access to parts of control panel
     controlPanel.enableControls(true);
     science2DStage.done(false);
+    this.setVisible(false);
   }
   
   public List<Actor> getExcludedActors() {
@@ -135,7 +136,7 @@ public class ProbeManager extends Group implements IDoneCallback {
       String[] hints = currentProber.getHints();
       probeHinter.setHint(hints[MathUtils.random(hints.length - 1)]);
     }
-    if (dashboard.getScore() > 10) {
+    if (dashboard.getScore() > 100) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
       science2DStage.done(true);
       this.setVisible(false);
@@ -155,10 +156,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     dashboard.setStatus(currentProber.getTitle());
   }
   
-  public void randomizeConfig() {
+  public void randomizeConfig(boolean enableControls) {
     configGenerator.generateConfig();
     // Turn off access to parts of control panel
-    controlPanel.enableControls(false);
+    controlPanel.enableControls(enableControls);
   }
 
   public void setTitle(String text) {
