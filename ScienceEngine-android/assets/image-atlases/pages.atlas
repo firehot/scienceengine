@@ -128,7 +128,7 @@ repeat: none
 wave-view/hand-pointer
   rotate: false
   xy: 1, 1
-  size: 16, 16
+  size: 32, 32
   orig: 256, 256
   offset: 0, 0
   index: -1

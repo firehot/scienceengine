@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class ProbeImage extends Image {
-  private static Texture QUESTION_MARK = new Texture("images/questionmark.png");
+  private static Texture QUESTION_MARK = new Texture("images/questionmark1.png");
   private float increment = 0.01f;
   private float alpha = 1;
   

@@ -180,6 +180,9 @@ public class ExperimentHomeScreen extends AbstractScreen {
               for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                 try {
                   FileHandle file = Gdx.files.external(fileName + extension);
+                  if (!file.exists()) { // Try out absolute path
+                    file = Gdx.files.absolute("/LocalDisk/" + fileName + extension);
+                  }
                   if (file.exists()) {
                     playedVideo = scienceEngine.playVideo(file.file());
                     break;
@@ -237,6 +240,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
 
 
   private void gotoExperimentLevel(final int iLevel) {
+    ScienceEngine.getPlatformAdapter().showProgressDialog();
     Screen experimentLevelScreen = 
         new ExperimentScreen(scienceEngine, iLevel, experimentName);
     scienceEngine.setScreen(experimentLevelScreen);

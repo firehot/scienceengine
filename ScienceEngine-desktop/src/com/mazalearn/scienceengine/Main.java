@@ -100,5 +100,9 @@ public class Main {
       }
       return messages;
     }
+
+    @Override
+    public void showProgressDialog() {
+    }
 	}
 }

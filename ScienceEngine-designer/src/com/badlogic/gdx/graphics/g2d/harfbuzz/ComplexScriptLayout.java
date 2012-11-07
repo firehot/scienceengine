@@ -1,5 +1,8 @@
 package com.badlogic.gdx.graphics.g2d.harfbuzz;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
 public class ComplexScriptLayout {
   
   private static String fontLanguage, loadedLanguage;
@@ -22,13 +25,18 @@ public class ComplexScriptLayout {
 
   public synchronized static void setLanguage(String language, String fontFileName) {
     if (language.equals(loadedLanguage)) return;
-    fontFilePath = "/sdcard/data/" + fontFileName;
     if (language.equals("ka")) {
       fontLanguage = "Knda";
     } else if (language.equals("hi")) {
       fontLanguage = "Deva";      
     } else if (language.equals("ta")) {
       fontLanguage = "Taml";
+    }
+    fontFilePath = null;
+    for (String dir: new String[] {"/sdcard/data/", "/LocalDisk/data/"} ) {
+      fontFilePath = dir + fontFileName;
+      FileHandle file = Gdx.files.absolute(fontFilePath);
+      if (file.exists()) break;
     }
     jniInitialize(fontFilePath, fontLanguage);
     loadedLanguage = language;

@@ -31,5 +31,8 @@ public interface PlatformAdapter {
   // return platform for this adapter
   public Platform getPlatform();
 
+  // Show progress animation - required for slow android tablets
+  public void showProgressDialog();
+
 }
 

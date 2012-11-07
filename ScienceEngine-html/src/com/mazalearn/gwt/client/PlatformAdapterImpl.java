@@ -47,4 +47,8 @@ class PlatformAdapterImpl implements PlatformAdapter {
     }
     return messages;
   }
+
+  @Override
+  public void showProgressDialog() {
+  }
 }
