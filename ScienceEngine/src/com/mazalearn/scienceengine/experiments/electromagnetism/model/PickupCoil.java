@@ -5,6 +5,8 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -202,7 +204,9 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
       setCurrent(current);
     }
     
-    calibrateEmf();
+    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+      calibrateEmf();
+    }
   }
 
   /*
@@ -263,10 +267,8 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
    */
   private float getSumBx() {
 
-    //TODO ??? final double magnetStrength = this.emField.getStrength();
-
     // Sum the B-field sample points.
-    double sumBx = 0;
+    float sumBx = 0;
     for (int i = 0; i < this.samplePoints.length; i++) {
       // Translate to global coordinates from local
       Vector2 globalPoint = this.getWorldPoint(this.samplePoints[i]);
@@ -279,13 +281,13 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
        * sample so that the transitions between inside and outside are not
        * abrupt. See Unfuddle #248.
        */
-      double Bx = this.sampleBField.x;
+      float Bx = this.sampleBField.x;
 
       // Accumulate a sum of the sample points.
       sumBx += Bx;
     }
 
-    return (float) sumBx;
+    return sumBx;
   }
 
   /*

@@ -36,7 +36,7 @@ default-round-large
 default-slider-knob
   rotate: false
   xy: 1, 1
-  size: 9, 18
+  size: 15, 30
   orig: 9, 18
   offset: 0, 0
   index: -1
@@ -95,7 +95,7 @@ tree-plus
 default-slider
   rotate: false
   xy: 29, 20
-  size: 8, 8
+  size: 12, 12
   split: 2, 2, 2, 2
   orig: 8, 8
   offset: 0, 0

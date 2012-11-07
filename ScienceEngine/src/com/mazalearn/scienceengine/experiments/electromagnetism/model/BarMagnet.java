@@ -78,7 +78,6 @@ public class BarMagnet extends AbstractMagnet {
   private RevoluteJointDef magnetRotationJointDef = new RevoluteJointDef();
   private Joint magnetRotationJoint;
   
-  private static final double PERIPHERY_SCALE_DOWN = 1.2;
   // values used in MathCAD for generating the grid files
   //strength of the magnet, in Gauss
   private static final float GRID_MAGNET_STRENGTH = 1;
@@ -102,10 +101,12 @@ public class BarMagnet extends AbstractMagnet {
   private static final String BY_EXTERNAL_NEAR_RESOURCE_NAME = "data/bfield/BY_external_near.csv";
   private static final String BX_EXTERNAL_FAR_RESOURCE_NAME = "data/bfield/BX_external_far.csv";
   private static final String BY_EXTERNAL_FAR_RESOURCE_NAME = "data/bfield/BY_external_far.csv";
+  // There is a problem with bar magnet field model near edge. We scale to avoid this.
+  private static final float PERIPHERY_SCALE_DOWN = 1.2f;
   // Canonical BarMagnet grid model is of size 250,50. 
   // We have a much smaller magnet in box2D coordinates
   // This scales it up appropriately.
-  private static final float MODEL_SCALE = 5;
+  private static final float MODEL_SCALE = 5 * PERIPHERY_SCALE_DOWN;
 
   private final Grid internalGrid; // internal to the magnet
   private final Grid externalNearGrid; // near the magnet
@@ -193,8 +194,8 @@ public class BarMagnet extends AbstractMagnet {
     // find B-field by interpolating grid points
     // Bar Magnet model is slightly off, so scale coordinates up
     // Bar Magnet model is at 250, 50 scale - so scale up to this magnitude
-    float x = getBx(p.x * MODEL_SCALE * PERIPHERY_SCALE_DOWN, p.y * MODEL_SCALE * PERIPHERY_SCALE_DOWN);
-    float y = getBy(p.x * MODEL_SCALE * PERIPHERY_SCALE_DOWN, p.y * MODEL_SCALE * PERIPHERY_SCALE_DOWN);
+    float x = getBx(p.x * MODEL_SCALE, p.y * MODEL_SCALE);
+    float y = getBy(p.x * MODEL_SCALE, p.y * MODEL_SCALE);
     outputVector.set(x, y);
 
     // scale based on magnet strength
