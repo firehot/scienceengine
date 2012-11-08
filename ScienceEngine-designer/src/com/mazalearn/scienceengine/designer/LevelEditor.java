@@ -308,7 +308,7 @@ public class LevelEditor extends Stage {
     int top = Gdx.graphics.getHeight() + 5;
     SpriteBatch batch = getSpriteBatch();
     batch.begin();
-    BitmapFont font = screen.getFont();
+    BitmapFont font = screen.getSmallFont();
     font.setColor(fontColor);
     font.draw(batch, "LEVEL Editor", 5, top - 15 * 0);
     font.draw(batch,

@@ -70,7 +70,7 @@ public class WaveModel extends AbstractScience2DModel {
     }
   }
 
-  public void singleStep(double d) {
+  private void singleStep(double d) {
     balls[0].pos.y = (float) d;
     
     switch (this.endType) {

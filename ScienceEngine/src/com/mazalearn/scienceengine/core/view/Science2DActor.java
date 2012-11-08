@@ -60,6 +60,8 @@ public class Science2DActor extends Actor {
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
+        // Granularity should be at least 100ms elapsed between drags.
+        if (Gdx.graphics.getDeltaTime() < 0.1) return;
         // Screen coords of current touch
         currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         // Screen coords of current touch

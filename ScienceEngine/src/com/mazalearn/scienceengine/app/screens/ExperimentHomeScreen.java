@@ -46,8 +46,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     this.experimentName = experimentName;
     setBackgroundColor(Color.DARK_GRAY);
     readExperimentInfo();
-    getFont().setScale(0.7f);
-    smallLabelStyle = new LabelStyle(getFont(), Color.WHITE);
+    smallLabelStyle = new LabelStyle(getSmallFont(), Color.WHITE);
     profile = ScienceEngine.getProfileManager().retrieveProfile();
     profile.setExperiment(experimentName);
   }

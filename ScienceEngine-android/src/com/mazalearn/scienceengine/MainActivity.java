@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.Window;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -24,6 +25,7 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
     @Override
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
+      requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); 
       
       // Android always in production mode
       ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
@@ -97,11 +99,12 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
 
     @Override
     public void showProgressDialog() {
-/*      Looper.prepare();
+      MainActivity.this.setProgressBarIndeterminateVisibility(true);           
+  /*    Looper.prepare();
       ProgressDialog dialog = new ProgressDialog(this);
       dialog.setMessage("Loading...");
       dialog.setIndeterminate(true);
       dialog.setCancelable(false);
-      dialog.show(); */
+      dialog.show();*/
     }
 }

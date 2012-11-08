@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -31,7 +32,7 @@ public abstract class AbstractScreen implements Screen {
   protected final ScienceEngine scienceEngine;
   protected Stage stage;
 
-  private BitmapFont font;
+  private static BitmapFont font;
   private SpriteBatch batch;
   private Table table;
   private Color backgroundColor = Color.BLACK;
@@ -85,14 +86,17 @@ public abstract class AbstractScreen implements Screen {
 
   // Lazily loaded collaborators
 
-  public BitmapFont getFont() {
+  public BitmapFont getSmallFont() {
     if (font == null) {
-      FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
-      Skin  skin = new Skin(skinFile);
-      skin.add("en", skin.getFont("default-font"));
-      getMsg().setFont(skin);
-      font = skin.getFont("default-font");
-
+      FileHandle fontFileHandle = Gdx.files.internal("skin/Roboto-Regular.ttf");
+      StringBuilder characters = new StringBuilder();
+      for (char c = 0; c <= 127; c++) {
+        characters.append(c);
+      }
+      FreeTypeFontGenerator generator = 
+          new FreeTypeFontGenerator(fontFileHandle);
+      font = generator.generateFont(10, characters.toString(), false);
+      generator.dispose();
     }
     return font;
   }
@@ -183,8 +187,6 @@ public abstract class AbstractScreen implements Screen {
     // stage.dispose();
 
     // as the collaborators are lazily loaded, they may be null
-    if (font != null)
-      font.dispose();
     if (batch != null)
       batch.dispose();
   }
