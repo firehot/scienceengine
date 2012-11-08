@@ -27,6 +27,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
   public ExperimentMenuScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
     profile = ScienceEngine.getProfileManager().retrieveProfile();
+    Gdx.graphics.setContinuousRendering(false);
   }
 
   @Override
@@ -78,7 +79,6 @@ public class ExperimentMenuScreen extends AbstractScreen {
       experimentThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
           gotoExperimentHome(experimentName);
         }
 
@@ -101,6 +101,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
   
   private void gotoExperimentHome(final String experimentName) {
     Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, experimentName));
   }
 }

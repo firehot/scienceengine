@@ -1,9 +1,13 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
 /**
  * Utility class for science2DModel floating point sliders using reflection.
@@ -25,6 +29,12 @@ public class SliderControl implements IControl {
       public void changed(ChangeEvent event, Actor actor) {
         property.setValue(slider.getValue());
       }      
+    });
+    slider.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      }
     });
   }
   

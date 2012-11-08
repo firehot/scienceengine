@@ -43,6 +43,7 @@ public class SplashScreen extends AbstractScreen {
 
   public SplashScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
+    Gdx.graphics.setContinuousRendering(true);
   }
 
   @Override

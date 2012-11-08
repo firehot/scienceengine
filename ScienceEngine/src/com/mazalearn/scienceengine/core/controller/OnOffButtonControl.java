@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
 /**
  * Utility class for science2DModel action buttons using reflection.
@@ -24,6 +26,7 @@ public class OnOffButtonControl implements IControl {
     toggleButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         property.setValue(toggleButton.isChecked());
       }
     });

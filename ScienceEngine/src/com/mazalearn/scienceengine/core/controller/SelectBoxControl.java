@@ -4,6 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
 public class SelectBoxControl implements IControl {
   private final IModelConfig<String> property;
@@ -18,6 +20,7 @@ public class SelectBoxControl implements IControl {
     selectBox.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         property.setValue(selectBox.getSelection());
       }      
     });

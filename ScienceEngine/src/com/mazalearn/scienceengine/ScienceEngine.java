@@ -137,10 +137,10 @@ public class ScienceEngine extends Game {
     profileManager = new ProfileManager();
     profileManager.retrieveProfile();
 
-    if (DEV_MODE != DevMode.PRODUCTION) {
+    //if (DEV_MODE != DevMode.PRODUCTION) {
       // create the helper objects
       fpsLogger = new FPSLogger();
-    }
+    //}
     
     SCIENCE_ENGINE = this;
   }
@@ -227,7 +227,7 @@ public class ScienceEngine extends Game {
     super.render();
     // output the current FPS
     if (DEV_MODE != DevMode.PRODUCTION) {
-      // fpsLogger.log();
+       fpsLogger.log();
     }
   }
 

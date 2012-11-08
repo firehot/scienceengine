@@ -55,6 +55,7 @@ public class ExperimentScreen extends AbstractScreen {
         return super.keyDown(event, keycode);
       }      
     });
+    Gdx.graphics.setContinuousRendering(true);
   }
 
   /**

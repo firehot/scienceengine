@@ -49,6 +49,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
     smallLabelStyle = new LabelStyle(getSmallFont(), Color.WHITE);
     profile = ScienceEngine.getProfileManager().retrieveProfile();
     profile.setExperiment(experimentName);
+    Gdx.graphics.setContinuousRendering(false);
   }
 
   protected void goBack() {
@@ -173,6 +174,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
         play.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
+            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
             boolean playedVideo = false;
             if (fileName != null) {
               // Movie file extensions - we allow a limited set.
@@ -201,6 +203,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
         play.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
+            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
             scienceEngine.browseURL(url);
           }
         });
@@ -240,6 +243,7 @@ public class ExperimentHomeScreen extends AbstractScreen {
 
   private void gotoExperimentLevel(final int iLevel) {
     ScienceEngine.getPlatformAdapter().showProgressDialog();
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     Screen experimentLevelScreen = 
         new ExperimentScreen(scienceEngine, iLevel, experimentName);
     scienceEngine.setScreen(experimentLevelScreen);

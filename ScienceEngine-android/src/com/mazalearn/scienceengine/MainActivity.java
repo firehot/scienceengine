@@ -34,6 +34,7 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
       cfg.useGL20 = true;
       cfg.useAccelerometer = false;
       cfg.useCompass = false;
+      cfg.touchSleepTime = 16; // supposed to be for pre-2.2 android.
       Uri data = getIntent().getData();
 
       ScienceEngine scienceEngine = null;
