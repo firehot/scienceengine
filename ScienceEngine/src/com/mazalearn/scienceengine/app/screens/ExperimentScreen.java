@@ -63,8 +63,8 @@ public class ExperimentScreen extends AbstractScreen {
 
   @Override
   public void show() {
-    load(level, science2DController);
     super.show();
+    load(level, science2DController);
   }
   
   /**
