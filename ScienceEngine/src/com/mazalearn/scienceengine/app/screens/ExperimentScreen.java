@@ -28,6 +28,7 @@ public class ExperimentScreen extends AbstractScreen {
   private IScience2DController science2DController;
   private Profile profile;
   private String experimentName;
+  private int level;
 
   public ExperimentScreen(ScienceEngine scienceEngine, 
       int level, String experimentName) {
@@ -35,11 +36,11 @@ public class ExperimentScreen extends AbstractScreen {
     this.experimentName = experimentName;
     this.science2DController = 
         createExperimentController(experimentName, level, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+    this.level = level;
     IScience2DStage science2DStage = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
     profile.setCurrentLevel(level);
-    load(level, science2DController);
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
@@ -60,6 +61,12 @@ public class ExperimentScreen extends AbstractScreen {
     Gdx.graphics.setContinuousRendering(true);
   }
 
+  @Override
+  public void show() {
+    load(level, science2DController);
+    super.show();
+  }
+  
   /**
    * Loads the content of the provided file and automatically position and size
    * the objects.
@@ -98,6 +105,9 @@ public class ExperimentScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
+    ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);
+    ScienceEngine.assetManager.load("images/brush.png", Texture.class);
+    
     for (ComponentType componentType: ComponentType.values()) {
       String textureFilename = componentType.getTextureFilename();
       if (textureFilename != null && !textureFilename.equals("")) {

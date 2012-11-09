@@ -4,7 +4,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ComponentType implements IComponentType {
-  BarMagnet("images/barmagnet-pivoted.png"),
+  BarMagnet("images/barmagnet.png"),
   CurrentSource("images/currentsource.png"),
   Compass("images/compass.png"),
   ElectroMagnet("images/electromagnet-base.png"),
