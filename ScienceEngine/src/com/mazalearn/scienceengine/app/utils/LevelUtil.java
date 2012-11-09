@@ -16,13 +16,17 @@ public class LevelUtil {
     try {
       pixmap = new Pixmap(screenFile);
     } catch (GdxRuntimeException e) {
-      pixmap = new Pixmap(LevelUtil.powerOf2Ceiling(Gdx.graphics.getWidth()/7.5f), 
-          LevelUtil.powerOf2Ceiling(Gdx.graphics.getHeight()/7.5f), 
-          Format.RGBA8888);
+      pixmap = getEmptyThumbnail();
     }
     Texture texture = new Texture(pixmap);
     pixmap.dispose();
     return texture;
+  }
+
+  public static Pixmap getEmptyThumbnail() {
+    return new Pixmap(LevelUtil.powerOf2Ceiling(Gdx.graphics.getWidth()/7.5f), 
+        LevelUtil.powerOf2Ceiling(Gdx.graphics.getHeight()/7.5f), 
+        Format.RGBA8888);
   }
 
   public static int powerOf2Ceiling(float value) {
@@ -30,7 +34,12 @@ public class LevelUtil {
   }
 
   public static FileHandle getLevelFile(String experimentName, String extension, int level) {
-    return Gdx.files.internal("data/" + experimentName + "/" + level + extension);
+    return Gdx.files.internal(getLevelFilename(experimentName, extension, level));
+  }
+
+  public static String getLevelFilename(String experimentName,
+      String extension, int level) {
+    return "data/" + experimentName + "/" + level + extension;
   }
 
 }

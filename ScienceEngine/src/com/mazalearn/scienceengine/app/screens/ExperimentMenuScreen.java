@@ -102,6 +102,7 @@ public class ExperimentMenuScreen extends AbstractScreen {
   private void gotoExperimentHome(final String experimentName) {
     Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, experimentName));
+    AbstractScreen experimentHomeScreen = new ExperimentHomeScreen(scienceEngine, experimentName);
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, experimentHomeScreen));
   }
 }

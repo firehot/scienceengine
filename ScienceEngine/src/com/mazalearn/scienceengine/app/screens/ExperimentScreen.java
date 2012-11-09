@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +16,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.experiments.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.experiments.waves.WaveController;
 
@@ -76,7 +78,9 @@ public class ExperimentScreen extends AbstractScreen {
   @Override
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    scienceEngine.setScreen(new ExperimentHomeScreen(scienceEngine, experimentName));
+    ExperimentHomeScreen experimentHomeScreen = 
+        new ExperimentHomeScreen(scienceEngine, experimentName);
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, experimentHomeScreen));
     profile.setCurrentLevel(0);
   }
   
@@ -90,6 +94,16 @@ public class ExperimentScreen extends AbstractScreen {
       return new ElectroMagnetismController(level, width, height, getSkin());
     }
     return null;
+  }
+  
+  @Override
+  public void addAssets() {
+    for (ComponentType componentType: ComponentType.values()) {
+      String textureFilename = componentType.getTextureFilename();
+      if (textureFilename != null && !textureFilename.equals("")) {
+        ScienceEngine.assetManager.load(textureFilename, Texture.class);
+      }
+    }    
   }
 
 }

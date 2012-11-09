@@ -1,8 +1,8 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.probe.IDoneCallback;
-import com.mazalearn.scienceengine.experiments.electromagnetism.model.ComponentType;
 
 /**
  * @author Mats Svensson
@@ -31,16 +30,18 @@ public class LoadingScreen extends AbstractScreen {
 
     private Actor loadingBar;
 
-    private IDoneCallback doneCallback;
+    private AbstractScreen nextScreen;
 
-    public LoadingScreen(ScienceEngine scienceEngine, IDoneCallback doneCallback) {
+    public LoadingScreen(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
         super(scienceEngine);
-        this.doneCallback = doneCallback;
+        this.nextScreen = nextScreen;
         Gdx.graphics.setContinuousRendering(true);
         // Tell the assetManager to load assets for the loading screen
         ScienceEngine.assetManager.load("image-atlases/loading.pack", TextureAtlas.class);
         // Wait until they are finished loading
         ScienceEngine.assetManager.finishLoading();
+        // Add everything to be loaded to asset manager
+        nextScreen.addAssets();
     }
 
     @Override
@@ -117,7 +118,7 @@ public class LoadingScreen extends AbstractScreen {
 
         // Load some, will return true if done loading
         if (ScienceEngine.assetManager.update()) {
-           doneCallback.done(true);
+          scienceEngine.setScreen(nextScreen);
         }
 
         // Interpolate the percentage to make it more smooth

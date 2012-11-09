@@ -191,4 +191,8 @@ public abstract class AbstractScreen implements Screen {
   public void setBackgroundColor(Color backgroundColor) {
     this.backgroundColor = backgroundColor;
   }
+
+  // Adds all assets required for this screen to reduce load time
+  public void addAssets() {
+  }
 }

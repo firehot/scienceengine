@@ -2,8 +2,10 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.PixmapLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -117,8 +119,14 @@ public class ExperimentHomeScreen extends AbstractScreen {
     
     for (int i = 0; i < levels.size; i++) {
       final int iLevel = i + 1;
-      Image experimentThumb = 
-          new Image(LevelUtil.getLevelThumbnail(experimentName, iLevel));
+      String filename = LevelUtil.getLevelFilename(experimentName, ".png", iLevel);
+      Pixmap pixmap;
+      if (ScienceEngine.assetManager.isLoaded(filename)) {
+        pixmap = ScienceEngine.assetManager.get(filename, Pixmap.class);
+      } else {
+        pixmap = LevelUtil.getEmptyThumbnail();
+      }
+      Image experimentThumb = new Image(new Texture(pixmap));
       experimentThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
@@ -245,24 +253,10 @@ public class ExperimentHomeScreen extends AbstractScreen {
 
   private void gotoExperimentLevel(final int iLevel) {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    // Setup loading screen.
-    LoadingScreen loadingScreen = new LoadingScreen(scienceEngine, new IDoneCallback() {
-      @Override
-      public void done(boolean success) {
-        Screen experimentLevelScreen = 
-            new ExperimentScreen(scienceEngine, iLevel, experimentName);
-        scienceEngine.setScreen(experimentLevelScreen);
-      }    
-    });
-    // Add everything to be loaded to asset manager
-    for (ComponentType componentType: ComponentType.values()) {
-      String textureFilename = componentType.getTextureFilename();
-      if (textureFilename != null && !textureFilename.equals("")) {
-        ScienceEngine.assetManager.load(textureFilename, Texture.class);
-      }
-    }
-    // Invoke loading screen, which will later callback and transition
-    scienceEngine.setScreen(loadingScreen);
+    AbstractScreen experimentLevelScreen = 
+        new ExperimentScreen(scienceEngine, iLevel, experimentName);
+    // Set loading screen
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, experimentLevelScreen));
   }
   
   @SuppressWarnings("unchecked")
@@ -279,6 +273,14 @@ public class ExperimentHomeScreen extends AbstractScreen {
         (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
     this.levels = (Array<?>) rootElem.get("Levels"); //$NON-NLS-1$
     this.resources = (Array<?>) rootElem.get("Resources");   //$NON-NLS-1$
+  }
+  
+  @Override
+  public void addAssets() {
+    for (int i = 0; i < levels.size; i++) {
+      String filename = LevelUtil.getLevelFilename(experimentName, ".png", i + 1);
+      ScienceEngine.assetManager.load(filename, Pixmap.class);
+    }
   }
 
 }
