@@ -54,7 +54,7 @@ public class MusicManager implements Disposable {
   private boolean enabled = true;
 
   /**
-   * Creates the music manager.
+   * Creates the music assetManager.
    */
   public MusicManager() {
   }
@@ -136,10 +136,10 @@ public class MusicManager implements Disposable {
   }
 
   /**
-   * Disposes the music manager.
+   * Disposes the music assetManager.
    */
   public void dispose() {
-    Gdx.app.log(ScienceEngine.LOG, "Disposing music manager");
+    Gdx.app.log(ScienceEngine.LOG, "Disposing music assetManager");
     stop();
   }
 }

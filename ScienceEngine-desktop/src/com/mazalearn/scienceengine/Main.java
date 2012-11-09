@@ -100,10 +100,5 @@ public class Main {
       }
       return messages;
     }
-
-    @Override
-    public void showProgressDialog() {
-      System.out.println("Showing progress dialog");
-    }
 	}
 }

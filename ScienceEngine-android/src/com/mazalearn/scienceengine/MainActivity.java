@@ -24,9 +24,7 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); 
-      
+      super.onCreate(savedInstanceState);      
       // Android always in production mode
       ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
 
@@ -34,7 +32,6 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
       cfg.useGL20 = true;
       cfg.useAccelerometer = false;
       cfg.useCompass = false;
-      cfg.touchSleepTime = 16; // supposed to be for pre-2.2 android.
       Uri data = getIntent().getData();
 
       ScienceEngine scienceEngine = null;
@@ -95,17 +92,5 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
     public Stage createLevelEditor(IScience2DController science2DController,
         AbstractScreen screen) {
       return new LevelEditor(science2DController, screen);
-    }
-
-
-    @Override
-    public void showProgressDialog() {
-      MainActivity.this.setProgressBarIndeterminateVisibility(true);           
-  /*    Looper.prepare();
-      ProgressDialog dialog = new ProgressDialog(this);
-      dialog.setMessage("Loading...");
-      dialog.setIndeterminate(true);
-      dialog.setCancelable(false);
-      dialog.show();*/
     }
 }

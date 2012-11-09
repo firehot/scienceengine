@@ -24,6 +24,8 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
+import com.mazalearn.scienceengine.core.probe.IDoneCallback;
+import com.mazalearn.scienceengine.experiments.electromagnetism.model.ComponentType;
 
 /**
  * Experiment Home screen - shows all levels for that experiment.
@@ -242,11 +244,25 @@ public class ExperimentHomeScreen extends AbstractScreen {
 
 
   private void gotoExperimentLevel(final int iLevel) {
-    ScienceEngine.getPlatformAdapter().showProgressDialog();
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    Screen experimentLevelScreen = 
-        new ExperimentScreen(scienceEngine, iLevel, experimentName);
-    scienceEngine.setScreen(experimentLevelScreen);
+    // Setup loading screen.
+    LoadingScreen loadingScreen = new LoadingScreen(scienceEngine, new IDoneCallback() {
+      @Override
+      public void done(boolean success) {
+        Screen experimentLevelScreen = 
+            new ExperimentScreen(scienceEngine, iLevel, experimentName);
+        scienceEngine.setScreen(experimentLevelScreen);
+      }    
+    });
+    // Add everything to be loaded to asset manager
+    for (ComponentType componentType: ComponentType.values()) {
+      String textureFilename = componentType.getTextureFilename();
+      if (textureFilename != null && !textureFilename.equals("")) {
+        ScienceEngine.assetManager.load(textureFilename, Texture.class);
+      }
+    }
+    // Invoke loading screen, which will later callback and transition
+    scienceEngine.setScreen(loadingScreen);
   }
   
   @SuppressWarnings("unchecked")

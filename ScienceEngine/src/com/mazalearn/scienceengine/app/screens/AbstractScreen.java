@@ -7,7 +7,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -33,7 +32,6 @@ public abstract class AbstractScreen implements Screen {
   protected Stage stage;
 
   private static BitmapFont font;
-  private SpriteBatch batch;
   private Table table;
   private Color backgroundColor = Color.BLACK;
 
@@ -99,13 +97,6 @@ public abstract class AbstractScreen implements Screen {
       generator.dispose();
     }
     return font;
-  }
-
-  public SpriteBatch getBatch() {
-    if (batch == null) {
-      batch = new SpriteBatch();
-    }
-    return batch;
   }
 
   public TextureAtlas getAtlas() {
@@ -187,8 +178,6 @@ public abstract class AbstractScreen implements Screen {
     // stage.dispose();
 
     // as the collaborators are lazily loaded, they may be null
-    if (batch != null)
-      batch.dispose();
   }
 
   public Skin getSkin() {

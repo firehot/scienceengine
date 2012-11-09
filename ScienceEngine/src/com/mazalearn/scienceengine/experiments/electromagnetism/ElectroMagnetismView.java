@@ -38,7 +38,6 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
   private ElectroMagnetismModel emModel;
-  private FieldMeterActor fieldMeterActor;
   private Actor compassActor;
 
   public ElectroMagnetismView(float width, float height,
@@ -77,7 +76,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     if (textureFilename == null) return null;
 
     TextureRegion textureRegion = 
-        new TextureRegion(new Texture(textureFilename));
+        new TextureRegion(ScienceEngine.assetManager.get(textureFilename, Texture.class));
     
     switch (componentType) {
     case BarMagnet:
@@ -87,7 +86,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     case PickupCoil:
       return new PickupCoilActor((PickupCoil) body, textureRegion);
     case FieldMeter:
-      return fieldMeterActor = new FieldMeterActor(body, textureRegion);
+      return new FieldMeterActor(body, textureRegion);
     case CurrentCoil:
       return new CurrentCoilActor(body);
     case CurrentSource:

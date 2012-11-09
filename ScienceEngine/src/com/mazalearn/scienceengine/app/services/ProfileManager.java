@@ -17,7 +17,7 @@ public class ProfileManager {
   private Profile profile;
 
   /**
-   * Creates the profile manager.
+   * Creates the profile assetManager.
    */
   public ProfileManager() {
   }

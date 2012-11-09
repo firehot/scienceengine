@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -48,6 +49,7 @@ public class ScienceEngine extends Game {
 
   private TextureAtlas atlas;
 
+  public static AssetManager assetManager;
 
   public static final int PIXELS_PER_M = 8;
 
@@ -116,16 +118,16 @@ public class ScienceEngine extends Game {
     // Resize to full screen
     //Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode());
 
-    // create the preferences manager
+    // create the preferences Manager
     preferencesManager = new PreferencesManager();
 
     try {
-      // create the music manager
+      // create the music Manager
       musicManager = new MusicManager();
       musicManager.setVolume(preferencesManager.getVolume());
       musicManager.setEnabled(preferencesManager.isMusicEnabled());
   
-      // create the sound manager
+      // create the sound Manager
       soundManager = new SoundManager();
       soundManager.setVolume(preferencesManager.getVolume());
       soundManager.setEnabled(preferencesManager.isSoundEnabled());
@@ -133,9 +135,12 @@ public class ScienceEngine extends Game {
       // ignore - not having sound is OK. Added for GWT.
     }
 
-    // create the profile manager
+    // create the profile Manager
     profileManager = new ProfileManager();
     profileManager.retrieveProfile();
+    
+    // create the asset Manager
+    assetManager = new AssetManager();
 
     //if (DEV_MODE != DevMode.PRODUCTION) {
       // create the helper objects

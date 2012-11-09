@@ -50,7 +50,7 @@ public class SoundManager implements
   private final LRUCache<ScienceEngineSound, Sound> soundCache;
 
   /**
-   * Creates the sound manager.
+   * Creates the sound assetManager.
    */
   public SoundManager() {
     soundCache = new LRUCache<SoundManager.ScienceEngineSound, Sound>(10);
@@ -108,10 +108,10 @@ public class SoundManager implements
   }
 
   /**
-   * Disposes the sound manager.
+   * Disposes the sound assetManager.
    */
   public void dispose() {
-    Gdx.app.log(ScienceEngine.LOG, "Disposing sound manager");
+    Gdx.app.log(ScienceEngine.LOG, "Disposing sound assetManager");
     for (Sound sound : soundCache.retrieveAll()) {
       sound.stop();
       sound.dispose();
