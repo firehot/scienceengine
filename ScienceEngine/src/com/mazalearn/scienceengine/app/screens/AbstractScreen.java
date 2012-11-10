@@ -86,15 +86,7 @@ public abstract class AbstractScreen implements Screen {
 
   public BitmapFont getSmallFont() {
     if (font == null) {
-      FileHandle fontFileHandle = Gdx.files.internal("skin/Roboto-Regular.ttf");
-      StringBuilder characters = new StringBuilder();
-      for (char c = 0; c <= 127; c++) {
-        characters.append(c);
-      }
-      FreeTypeFontGenerator generator = 
-          new FreeTypeFontGenerator(fontFileHandle);
-      font = generator.generateFont(10, characters.toString(), false);
-      generator.dispose();
+      font = ScienceEngine.getPlatformAdapter().getFont(10);
     }
     return font;
   }

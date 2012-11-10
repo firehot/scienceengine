@@ -2,15 +2,16 @@ package com.mazalearn.scienceengine;
 
 import java.io.File;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
-import android.view.Window;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
@@ -92,5 +93,19 @@ public class MainActivity extends AndroidApplication implements PlatformAdapter 
     public Stage createLevelEditor(IScience2DController science2DController,
         AbstractScreen screen) {
       return new LevelEditor(science2DController, screen);
+    }
+
+    @Override
+    public BitmapFont getFont(int pointSize) {
+      FileHandle fontFileHandle = Gdx.files.internal("skin/Roboto-Regular.ttf");
+      StringBuilder characters = new StringBuilder();
+      for (char c = 0; c <= 127; c++) {
+        characters.append(c);
+      }
+      FreeTypeFontGenerator generator = 
+          new FreeTypeFontGenerator(fontFileHandle);
+      BitmapFont font = generator.generateFont(pointSize, characters.toString(), false);
+      generator.dispose();
+      return font;
     }
 }
