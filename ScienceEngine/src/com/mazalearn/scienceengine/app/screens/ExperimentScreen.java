@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.services.LevelLoader;
+import com.mazalearn.scienceengine.app.services.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.experiments.electromagnetism.ElectroMagnetismController;
@@ -28,15 +28,18 @@ public class ExperimentScreen extends AbstractScreen {
   private IScience2DController science2DController;
   private Profile profile;
   private String experimentName;
-  private int level;
 
   public ExperimentScreen(ScienceEngine scienceEngine, 
       int level, String experimentName) {
     super(scienceEngine, null);
     this.experimentName = experimentName;
-    this.science2DController = 
-        createExperimentController(experimentName, level, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-    this.level = level;
+    String fileName = LevelUtil.getLevelFilename(experimentName, ".json", level);
+    if (ScienceEngine.assetManager.isLoaded(fileName)) {
+      this.science2DController = ScienceEngine.assetManager.get(fileName);
+    } else {
+      this.science2DController = 
+          createExperimentController(experimentName, level, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+    }
     IScience2DStage science2DStage = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
@@ -46,7 +49,7 @@ public class ExperimentScreen extends AbstractScreen {
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
       this.setStage(levelEditor);
     } else {
-      this.setStage((Stage) science2DStage);      
+      this.setStage((Stage) science2DStage);
     }
     stage.addListener(new InputListener() {
       @Override
@@ -64,22 +67,6 @@ public class ExperimentScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    load(level, science2DController);
-  }
-  
-  /**
-   * Loads the content of the provided file and automatically position and size
-   * the objects.
-   * @param index 
-   */
-  private void load(int level, IScience2DController science2DController) {
-    try {
-      LevelLoader levelLoader = new LevelLoader(science2DController);
-      levelLoader.load();
-      Gdx.app.log(ScienceEngine.LOG, "[LevelEditor] Level successfully loaded!");
-    } catch (GdxRuntimeException ex) {
-      System.err.println("[LevelEditor] Error happened while loading level");
-    }
   }
   
   @Override
@@ -105,6 +92,10 @@ public class ExperimentScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
+    String fileName = LevelUtil.getLevelFilename(science2DController.getName(), ".json", science2DController.getLevel());
+    if (ScienceEngine.assetManager.isLoaded(fileName)) {
+      return;
+    }
     ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);
     ScienceEngine.assetManager.load("images/brush.png", Texture.class);
     
@@ -113,7 +104,10 @@ public class ExperimentScreen extends AbstractScreen {
       if (textureFilename != null && !textureFilename.equals("")) {
         ScienceEngine.assetManager.load(textureFilename, Texture.class);
       }
-    }    
+    }
+    AsyncLevelLoader.LevelLoaderParameter parameter = new AsyncLevelLoader.LevelLoaderParameter();
+    parameter.science2DController = science2DController;
+    ScienceEngine.assetManager.load(fileName, IScience2DController.class, parameter);
   }
 
 }

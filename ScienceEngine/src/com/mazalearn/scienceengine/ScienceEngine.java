@@ -9,6 +9,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -18,12 +19,14 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
+import com.mazalearn.scienceengine.app.services.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
@@ -143,6 +146,8 @@ public class ScienceEngine extends Game {
     
     // create the asset Manager
     assetManager = new AssetManager();
+    assetManager.setLoader(IScience2DController.class, 
+        new AsyncLevelLoader(new InternalFileHandleResolver()));
 
     //if (DEV_MODE != DevMode.PRODUCTION) {
       // create the helper objects
@@ -233,9 +238,9 @@ public class ScienceEngine extends Game {
   public void render() {
     super.render();
     // output the current FPS
-    if (DEV_MODE != DevMode.PRODUCTION) {
+ //   if (DEV_MODE != DevMode.PRODUCTION) {
        fpsLogger.log();
-    }
+ //   }
   }
 
   @Override

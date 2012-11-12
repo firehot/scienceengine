@@ -7,13 +7,11 @@ package com.mazalearn.scienceengine.core.view;
  * 
  */
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -31,7 +29,6 @@ public class Science2DActor extends Actor {
   private TextureRegion textureRegion;
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
   protected Vector2 lastTouch = new Vector2();    // view coordinates
-  protected Vector3 currentTouch = new Vector3(); // view coordinates
   private boolean allowMove = false;
 
   /**
@@ -52,26 +49,18 @@ public class Science2DActor extends Actor {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         if (!allowMove) return false;
-        currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        getStage().getCamera().unproject(currentTouch);
-        lastTouch.set(currentTouch.x, currentTouch.y);
+        lastTouch.set(event.getStageX(), event.getStageY());
         return true;
       }
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
-        // Granularity should be at least 100ms elapsed between drags.
-        if (Gdx.graphics.getDeltaTime() < 0.1) return;
-        // Screen coords of current touch
-        currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        // Screen coords of current touch
-        getStage().getCamera().unproject(currentTouch);
         // Get negative of movement vector
-        lastTouch.sub(currentTouch.x, currentTouch.y);
+        lastTouch.sub(event.getStageX(), event.getStageY());
         Science2DActor.this.setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
         setPositionFromViewCoords(true);
         // Recalibrate lastTouch to new coordinates
-        lastTouch.set(currentTouch.x, currentTouch.y);
+        lastTouch.set(event.getStageX(), event.getStageY());
       }
 
     };
