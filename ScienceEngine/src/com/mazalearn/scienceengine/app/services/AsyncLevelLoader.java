@@ -11,17 +11,21 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 /** {@link AssetLoader} for Level instances. The Level is loaded asynchronously.
  * @author sridhar sundaram */
 public class AsyncLevelLoader extends AsynchronousAssetLoader<IScience2DController, AsyncLevelLoader.LevelLoaderParameter> {
+  private LevelLoader levelLoader;
+
   public AsyncLevelLoader (FileHandleResolver resolver) {
     super(resolver);
   }
 
   @Override
   public void loadAsync (AssetManager manager, String fileName, LevelLoaderParameter parameter) {
+    levelLoader = new LevelLoader(parameter.science2DController);
+    levelLoader.getJsonFromFile();
   }
 
   @Override
   public IScience2DController loadSync (AssetManager manager, String fileName, LevelLoaderParameter parameter) {
-    new LevelLoader(parameter.science2DController).load();
+    levelLoader.loadFromJson();
     return parameter.science2DController;
   }
 

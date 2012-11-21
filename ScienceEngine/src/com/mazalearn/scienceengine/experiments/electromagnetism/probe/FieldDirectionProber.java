@@ -33,6 +33,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
     
     userField = new Image(new TextureRegion(new Texture("images/fieldarrow-yellow.png")));
     userField.setVisible(false);
+    userField.setWidth(userField.getWidth() * 2);
+    userField.setHeight(userField.getHeight() * 2);
     userField.setOriginX(0);
     userField.setOriginY(userField.getHeight()/2);
     
@@ -83,8 +85,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
   }
   
   @Override
-  public void reinitialize(float x, float y, float width, float height) {
-    super.reinitialize(x,  y, width, height);
+  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
+    super.reinitialize(x,  y, width, height, probeMode);
     image.setVisible(false);
   }
   

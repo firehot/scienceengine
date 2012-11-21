@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.experiments.electromagnetism.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,7 +26,8 @@ public class LightbulbActor extends Science2DActor {
   public void draw(SpriteBatch batch, float parentAlpha) {
     float intensity = Math.abs(lightbulb.getIntensity());
     // Draw a circle of yellow light with radius and alpha proportional to intensity
-    int diameter = Math.round(intensity * 256);
+    int scale = Gdx.graphics.getFramesPerSecond() < 10 ? 512 : 128;
+    int diameter = Math.round(intensity * scale);
     lightRadius = diameter / 2;
     Color c = batch.getColor();
     batch.setColor(1, 1, 1, 0.5f + intensity * 0.5f);

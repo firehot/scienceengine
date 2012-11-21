@@ -64,6 +64,8 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
       public String getValue() { return getCurrentType(); }
       public void setValue(String value) { setCurrentType(value); }
       public boolean isPossible() { return isActive(); }
+      public boolean hasProbeMode() { return true; }
+      public void setProbeMode() { setCurrentType(CurrentType.DC.name()); }
     });
     
     configs.add(new AbstractModelConfig<Float>(getName() + " Frequency", 

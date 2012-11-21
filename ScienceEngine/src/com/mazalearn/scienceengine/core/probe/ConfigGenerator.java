@@ -17,6 +17,10 @@ public class ConfigGenerator {
   public void generateConfig() {
     for (IModelConfig<?> config: modelConfigs) {
       if (!config.isAvailable()) continue;
+      if (config.hasProbeMode()) {
+        config.setProbeMode();
+        continue;
+      }
       switch(config.getType()) {
       case LIST:
         IModelConfig<String> listConfig = (IModelConfig<String>) config;

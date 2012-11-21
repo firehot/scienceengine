@@ -13,7 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
+import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
@@ -110,8 +112,9 @@ public class ControlPanel extends Table {
         science2DController.getView().challenge(false);
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.getProfileManager().retrieveProfile().setCurrentLevel(0);
+        AbstractScreen screen = new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentName);
         ScienceEngine.SCIENCE_ENGINE.setScreen(
-            new ExperimentHomeScreen(ScienceEngine.SCIENCE_ENGINE, experimentName));
+            new LoadingScreen(ScienceEngine.SCIENCE_ENGINE, screen));
       }
     });
     viewControls.add(backButton).height(30).colspan(2);

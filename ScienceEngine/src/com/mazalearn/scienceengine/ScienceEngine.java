@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Logger;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
 import com.mazalearn.scienceengine.app.screens.ExperimentScreen;
+import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.services.IMessage;
@@ -166,7 +167,7 @@ public class ScienceEngine extends Game {
     // show the starting screen when the scienceEngine is resized for the first time;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(createScreen(uri));
+      setScreen(new LoadingScreen(this, createScreen(uri)));
     }
   }
 
@@ -239,7 +240,7 @@ public class ScienceEngine extends Game {
     super.render();
     // output the current FPS
  //   if (DEV_MODE != DevMode.PRODUCTION) {
-       fpsLogger.log();
+ //      fpsLogger.log();
  //   }
   }
 

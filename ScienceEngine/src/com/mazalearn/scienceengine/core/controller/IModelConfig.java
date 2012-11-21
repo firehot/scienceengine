@@ -24,6 +24,12 @@ public interface IModelConfig<T> {
   @SuppressWarnings("rawtypes")
   public Enum[] getList();
   public void setPermitted(boolean isPermitted);
+  // Is manipulation of this config permitted in this context?
   public boolean isPermitted();
+  // Is manipulation of this config possible consistent with this context?
   public boolean isPossible();
+  // Does it have a probe mode?
+  public boolean hasProbeMode();
+  // Set probe mode - has to support if it has a probe mode
+  public void setProbeMode();
 }

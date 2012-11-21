@@ -27,6 +27,7 @@ public class LevelLoader {
   private IScience2DModel science2DModel;
   private ControlPanel controlPanel;
   private int level;
+  private OrderedMap<String, ?> rootElem;
 
   public LevelLoader(IScience2DController science2DController) {
     this.science2DController = science2DController;
@@ -36,19 +37,27 @@ public class LevelLoader {
     this.controlPanel = science2DController.getControlPanel();
   }
    
-  @SuppressWarnings("unchecked")
   public void load() {
+    rootElem = getJsonFromFile();
+    loadFromJson();
+  }
+
+  @SuppressWarnings("unchecked")
+  public OrderedMap<String, ?> getJsonFromFile() {
     Gdx.app.log(ScienceEngine.LOG, "Opening level json file");
-    FileHandle file = 
-        LevelUtil.getLevelFile(science2DController.getName(), ".json", level);
+    String experimentName = science2DController.getName();
+    int level = science2DController.getLevel();
+    FileHandle file = LevelUtil.getLevelFile(experimentName, ".json", level);
     if (file == null) {
       Gdx.app.log(ScienceEngine.LOG, "Could not open level json file");
-      return;
+      return null;
     }
     String str = file.readString();
-    OrderedMap<String, ?> rootElem = (OrderedMap<String, ?>) new JsonReader()
-        .parse(str);
-
+    rootElem = (OrderedMap<String, ?>) new JsonReader().parse(str);
+    return rootElem;
+  }
+  
+  public void loadFromJson() {
     readLevelInfo(rootElem);
     readComponents((Array<?>) rootElem.get("components"));
     readGroups((Array<?>) rootElem.get("groups"));

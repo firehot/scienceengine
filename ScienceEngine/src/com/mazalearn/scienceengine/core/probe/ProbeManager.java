@@ -101,7 +101,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     
     // Reinitialize active Probers
     for (AbstractScience2DProber prober: activeProbers) {
-      prober.reinitialize(getX(), getY(), getWidth(), getHeight());
+      prober.reinitialize(getX(), getY(), getWidth(), getHeight(), true);
     }
 
     this.setVisible(true);
@@ -109,6 +109,11 @@ public class ProbeManager extends Group implements IDoneCallback {
   }
   
   public void endChallenge() {
+    // Reinitialize current prober, if any
+    if (currentProber != null) {
+      currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+    }
+
     // Turn on access to parts of control panel
     controlPanel.enableControls(true);
     science2DStage.done(false);
@@ -124,6 +129,7 @@ public class ProbeManager extends Group implements IDoneCallback {
    */
   public void done(boolean success) {
     currentProber.activate(false);
+    currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
     if (success) {
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(10);
@@ -158,6 +164,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   
   public void randomizeConfig(boolean enableControls) {
     configGenerator.generateConfig();
+    controlPanel.act(0f); // Force sync with model
     // Turn off access to parts of control panel
     controlPanel.enableControls(enableControls);
   }

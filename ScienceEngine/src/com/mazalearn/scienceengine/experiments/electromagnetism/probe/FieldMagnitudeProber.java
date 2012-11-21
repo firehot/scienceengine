@@ -45,7 +45,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
 
   private String[] hints = {
       "The field is stronger closer to the object generating the field",
-      "Usually, the field is stronger if the current is bigger"
+      "The field is stronger if the current or magnet strength is larger"
   };
   
   private final Image imageCorrect, imageWrong;
@@ -72,8 +72,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   }
   
   @Override
-  public void reinitialize(float x, float y, float width, float height) {
-    super.reinitialize(x,  y, width, height);
+  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
+    super.reinitialize(x,  y, width, height, probeMode);
     imageCorrect.setVisible(false);
     imageWrong.setVisible(false);
   }

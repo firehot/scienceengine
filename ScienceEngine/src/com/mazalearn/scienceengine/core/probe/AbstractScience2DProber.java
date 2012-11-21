@@ -20,7 +20,8 @@ public abstract class AbstractScience2DProber extends Group {
     probeManager.registerProber(this);
   }
   
-  public void reinitialize(float x, float y, float width, float height) {
+  public void reinitialize(float x, float y, float width, float height, 
+      boolean probeMode) {
     this.setX(x);
     this.setY(y);
     this.setWidth(width);

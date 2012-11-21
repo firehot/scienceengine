@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.experiments.electromagnetism.probe;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
@@ -26,10 +27,23 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   }
   
   @Override
-  public void reinitialize(float x, float y, float width, float height) {
-    super.reinitialize(x, y, width, height);
-    fieldMeter.setActive(false);
-    fieldMeterActor.setVisible(false);
+  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
+    super.reinitialize(x, y, width, height, probeMode);
+    reinitializeConfigs(probeMode);
+  }
+
+  private void reinitializeConfigs(boolean probeMode) {
+    fieldMeter.setActive(!probeMode);
+    fieldMeterActor.setVisible(!probeMode);
+    // Make all active elements not movable
+    String[] actorNames = 
+        new String[] { "BarMagnet", "Wire 1", "Wire 2", "ElectroMagnet"};
+    for (String actorName: actorNames) {
+      Science2DActor actor = (Science2DActor) probeManager.findStageActor(actorName);
+      if (actor != null) {
+        actor.setAllowMove(!probeMode);
+      }
+    }
   }  
 
   @Override

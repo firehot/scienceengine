@@ -60,6 +60,8 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   public void setValue(T value) {}
   public abstract boolean isPossible();
   public boolean isAvailable() { return isPermitted && isPossible();}
+  public boolean hasProbeMode() { return false; }
+  public void setProbeMode() {}
   
   //  For Range type only
   public float getLow() { return low;}
