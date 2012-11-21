@@ -35,7 +35,7 @@ public class SplashScreen extends AbstractScreen {
       this.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          scienceEngine.setScreen(new ExperimentMenuScreen(scienceEngine));
+          scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
         }      
       });      
     }

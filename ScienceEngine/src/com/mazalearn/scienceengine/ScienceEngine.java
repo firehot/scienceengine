@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,10 +13,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Logger;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
-import com.mazalearn.scienceengine.app.screens.ExperimentHomeScreen;
-import com.mazalearn.scienceengine.app.screens.ExperimentScreen;
+import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
+import com.mazalearn.scienceengine.app.screens.ActivityScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.AsyncLevelLoader;
@@ -207,9 +205,9 @@ public class ScienceEngine extends Game {
           }
         }
         if (iLevel == null) {
-          return new ExperimentHomeScreen(this, experimentName);
+          return new DomainHomeScreen(this, experimentName);
         }
-        return new ExperimentScreen(this, iLevel, experimentName);
+        return new ActivityScreen(this, iLevel, experimentName);
       }
     }
     return new SplashScreen(this);

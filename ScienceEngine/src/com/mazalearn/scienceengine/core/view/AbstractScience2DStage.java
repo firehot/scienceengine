@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -158,18 +157,26 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     this.controlPanel = controlPanel;
     // Register control panel
     this.addActor(controlPanel);
-    // Register title
-    Label title = new Label("", skin);
-    title.setPosition(10, getHeight() - 20);
-    title.setName("Title");
-    title.setColor(Color.YELLOW);
-    this.addActor(title);
-    // If GWT, register a disclaimer about demo at bottom of screen
+    // Register stage components
+    for (StageComponent stageComponent: StageComponent.values()) {
+      Label component = new Label("", skin);
+      float x = stageComponent.getX();
+      if (x < 0) {
+        x = getWidth() - x;
+      }
+      float y = stageComponent.getY();
+      if (y < 0) {
+        y = getHeight() - y;
+      }
+      component.setPosition(x, y);
+      component.setName(stageComponent.name());
+      component.setColor(stageComponent.getColor());
+      this.addActor(component);
+    }
+    // If GWT, make status a disclaimer about experiencing on Android Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
-      Label disclaimer = new Label("Demo only. Best experienced on Android Tablet", skin);
-      disclaimer.setPosition(10, 20);
-      disclaimer.setColor(Color.RED);
-      this.addActor(disclaimer);
+      Label status = (Label) findActor(StageComponent.Status.name());
+      status.setText("Demo only. Best experienced on Android Tablet");
     }
   }
 }

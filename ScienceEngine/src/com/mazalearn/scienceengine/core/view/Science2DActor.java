@@ -14,8 +14,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
@@ -65,6 +67,29 @@ public class Science2DActor extends Actor {
 
     };
     this.addListener(touchLlistener);
+    ClickListener helpLlistener = new ClickListener() {
+      @Override
+      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        super.enter(event, x, y, pointer, fromActor);
+        IScience2DStage stage = (IScience2DStage) getStage();
+        Label status = (Label) stage.findActor(StageComponent.Status.name());
+        IComponentType componentType = Science2DActor.this.body.getComponentType();
+        status.setText(
+            ScienceEngine.getMsg().getString("Name." + componentType.name()) + 
+            "  -  " +
+            ScienceEngine.getMsg().getString("Help." + componentType.name()));
+      }
+      
+      @Override
+      public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+        super.exit(event, x, y, pointer, toActor);
+        IScience2DStage stage = (IScience2DStage) getStage();
+        Label status = (Label) stage.findActor(StageComponent.Status.name());
+        status.setText("");
+      }
+    };
+    this.addListener(helpLlistener);
+      
   }
   
   public Science2DBody getBody() {
