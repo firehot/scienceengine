@@ -88,8 +88,7 @@ public class Science2DActor extends Actor {
         status.setText("");
       }
     };
-    this.addListener(helpLlistener);
-      
+    this.addListener(helpLlistener);     
   }
   
   public Science2DBody getBody() {

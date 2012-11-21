@@ -128,13 +128,14 @@ public class ProbeManager extends Group implements IDoneCallback {
    * IDoneCallback interface implementation
    */
   public void done(boolean success) {
-    currentProber.activate(false);
-    currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
     if (success) {
+      currentProber.activate(false);
+      currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(10);
       successImage.show(getWidth()/2, getHeight()/2, 10);
       probeHinter.setHint(null);
+      doProbe();
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       dashboard.addScore(-5);
@@ -148,7 +149,6 @@ public class ProbeManager extends Group implements IDoneCallback {
       this.setVisible(false);
       return;
     }
-    doProbe();
   }
 
   // Prerequisite: activeProbers.size() >= 1

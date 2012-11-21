@@ -32,8 +32,8 @@ import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.experiments.ControlPanel;
 
 /**
  * A designer that enables editing the screen layout, configurations available

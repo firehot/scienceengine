@@ -101,6 +101,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
       image.setY(points[0].y - image.getHeight()/2);
       bFields[0].nor();
       image.setVisible(true);
+      fieldMeterActor.setVisible(false);
     }
     this.setVisible(activate);
   }

@@ -104,6 +104,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
       }
       imageWrong.setVisible(true);
       imageCorrect.setVisible(true);
+      fieldMeterActor.setVisible(false);
     }
     this.setVisible(activate);
   }
