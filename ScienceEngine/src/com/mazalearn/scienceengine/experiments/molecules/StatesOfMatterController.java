@@ -3,7 +3,7 @@ package com.mazalearn.scienceengine.experiments.molecules;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
-import com.mazalearn.scienceengine.experiments.ControlPanel;
+import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.experiments.molecules.model.IMolecularModel;
 import com.mazalearn.scienceengine.experiments.molecules.model.LJMolecularModel;
 import com.mazalearn.scienceengine.experiments.molecules.view.StatesOfMatterView;

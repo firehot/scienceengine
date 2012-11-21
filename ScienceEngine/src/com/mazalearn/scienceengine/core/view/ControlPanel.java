@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.experiments;
+package com.mazalearn.scienceengine.core.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ import com.mazalearn.scienceengine.core.controller.OnOffButtonControl;
 import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
 import com.mazalearn.scienceengine.core.controller.SliderControl;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
 
 public class ControlPanel extends Table {
   private final IScience2DController science2DController;
