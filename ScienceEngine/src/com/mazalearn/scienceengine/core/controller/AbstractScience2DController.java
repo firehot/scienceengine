@@ -11,7 +11,7 @@ public abstract class AbstractScience2DController implements
 
   private ControlPanel controlPanel;
   private IScience2DModel science2DModel;
-  private AbstractScience2DStage experimentView;
+  private AbstractScience2DStage science2DView;
   private Skin skin;
   private String name;
   private int level;
@@ -23,11 +23,11 @@ public abstract class AbstractScience2DController implements
   }
   
   protected void initialize(IScience2DModel science2DModel, 
-      AbstractScience2DStage experimentView) {
+      AbstractScience2DStage science2DView) {
     this.science2DModel = science2DModel;
-    this.experimentView = experimentView;
+    this.science2DView = science2DView;
     this.controlPanel = new ControlPanel(skin, this);
-    experimentView.setControlPanel(this.controlPanel);
+    science2DView.setControlPanel(this.controlPanel);
   }
   
   @Override
@@ -42,7 +42,7 @@ public abstract class AbstractScience2DController implements
   
   @Override
   public IScience2DStage getView() {
-    return experimentView;
+    return science2DView;
   }
 
   @Override

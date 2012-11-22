@@ -145,7 +145,7 @@ public class BarMagnet extends AbstractMagnet {
       public void setValue(Float value) { setStrength(value); }
       public boolean isPossible() { return isActive(); }
     });
-    configs.add(new AbstractModelConfig<Float>(getName() + " Angle", 
+    configs.add(new AbstractModelConfig<Float>(getName() + " Rotation", 
         Attribute.MagnetRotation, 0f, MathUtils.PI * 2) {
       public Float getValue() { return getAngle(); }
       public void setValue(Float value) { setAngle(value); }

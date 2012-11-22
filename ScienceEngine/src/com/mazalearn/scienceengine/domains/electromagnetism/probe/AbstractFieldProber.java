@@ -21,7 +21,6 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     this.fieldMeterActor = (Science2DActor) probeManager.findStageActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
-      fieldMeterActor.setVisible(false);
     }
   }
   

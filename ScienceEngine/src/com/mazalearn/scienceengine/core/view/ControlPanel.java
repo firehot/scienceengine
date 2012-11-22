@@ -199,7 +199,7 @@ public class ControlPanel extends Table {
         table.add(control.getActor());
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
-      case RANGE: 
+      case RANGE:
         table.add(property.getName());
         table.row();
         control = new SliderControl(property, skin);
