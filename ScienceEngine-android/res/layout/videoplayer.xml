@@ -12,7 +12,7 @@
  
 <!-- Create a full-screen VideoView -->
     <VideoView
-        android:id="@+id/surfacevideoview"
+        android:id="@+id/videoview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
     />

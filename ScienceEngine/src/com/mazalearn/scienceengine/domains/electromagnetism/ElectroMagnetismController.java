@@ -16,7 +16,7 @@ public class ElectroMagnetismController extends AbstractScience2DController {
     super(NAME, level, skin);
     ElectroMagnetismModel emModel = new ElectroMagnetismModel();
     AbstractScience2DStage emView = 
-        new ElectroMagnetismView(width, height, emModel, skin);
+        new ElectroMagnetismView(width, height, emModel, skin, this);
     this.initialize(emModel,  emView);
   }
 }

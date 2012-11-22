@@ -8,14 +8,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.core.view.StageComponent;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
@@ -39,11 +42,13 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   private Vector2 pos = new Vector2();
   private ElectroMagnetismModel emModel;
   private Actor compassActor;
+  private IScience2DController controller;
 
   public ElectroMagnetismView(float width, float height,
-      final ElectroMagnetismModel emModel, Skin skin) {
+      final ElectroMagnetismModel emModel, Skin skin, IScience2DController controller) {
     super(emModel, width, height, skin);
     this.emModel = emModel;
+    this.controller = controller;
     
     getRoot().addListener(new ClickListener() {
       @Override
@@ -53,6 +58,11 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
           // Move field sampler here and convert to model coords
           pos.set(x, y).mul(1f / ScienceEngine.PIXELS_PER_M);
           fieldMeter.setPositionAndAngle(pos, 0);
+          Label status = (Label) findActor(StageComponent.Status.name());
+          status.setText(
+              ScienceEngine.getMsg().getString("Name." + fieldMeter.getComponentType().name()) + 
+              "  -  " +
+              ScienceEngine.getMsg().getString("Help." + fieldMeter.getComponentType().name()));
         }
       }       
     });
@@ -138,7 +148,9 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     if (success) {
       // TODO: put in a proper celebration here
       probeManager.setTitle("Congratulations! You move to the next Level ");
-      // ScienceEngine.getPlatformAdapter().showURL("file:///sdcard/data/electromagneticinduction.html");
+      // TODO: generalize
+      ScienceEngine.getPlatformAdapter().showURL(
+          "data/" + controller.getName() + "/" + controller.getLevel() + ".html");
       challenge(false);
     }
   }

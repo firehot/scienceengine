@@ -190,6 +190,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   public void setNegativeCurrent(boolean negative) {
     if (this.isNegativeCurrent != negative) {
       this.isNegativeCurrent = negative;
+      setCurrent(isNegativeCurrent ? maxCurrent : -maxCurrent);
       getModel().notifyCurrentChange(this);
     }
   }

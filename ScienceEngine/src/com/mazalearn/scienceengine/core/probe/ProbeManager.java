@@ -143,7 +143,7 @@ public class ProbeManager extends Group implements IDoneCallback {
       String[] hints = currentProber.getHints();
       probeHinter.setHint(hints[MathUtils.random(hints.length - 1)]);
     }
-    if (dashboard.getScore() > 100) {
+    if (dashboard.getScore() >= 100) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
       science2DStage.done(true);
       this.setVisible(false);
@@ -164,7 +164,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   
   public void randomizeConfig(boolean enableControls) {
     configGenerator.generateConfig();
-    controlPanel.act(0f); // Force sync with model
+    controlPanel.syncWithModel(); // Force sync with model
     // Turn off access to parts of control panel
     controlPanel.enableControls(enableControls);
   }

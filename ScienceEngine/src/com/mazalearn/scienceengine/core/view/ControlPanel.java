@@ -215,14 +215,18 @@ public class ControlPanel extends Table {
 
   @Override
   public void act(float delta) {
+    syncWithModel();
     super.act(delta);
+    this.invalidate();
+    this.validate();
+  }
+
+  public void syncWithModel() {
     challengeControl.syncWithModel();
     suspendControl.syncWithModel();
     for (Controller controller: controllers) {
       controller.validate();
     }
-    this.invalidate();
-    this.validate();
   }
   
   public void enableControls(boolean enable) {

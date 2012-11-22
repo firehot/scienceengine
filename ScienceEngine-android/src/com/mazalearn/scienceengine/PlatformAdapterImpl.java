@@ -4,6 +4,7 @@ import java.io.File;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -47,7 +48,8 @@ public class PlatformAdapterImpl implements PlatformAdapter {
   public void showURL(String url) {
     Intent myIntent = 
         new Intent("com.mazalearn.scienceengine.intent.action.WebViewActivity");
-    myIntent.setData(Uri.parse(url));
+    myIntent.setData( 
+        Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/" + url));
     application.startActivity(myIntent);
   }
 

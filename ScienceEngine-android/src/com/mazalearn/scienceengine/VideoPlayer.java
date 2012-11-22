@@ -23,7 +23,7 @@ public class VideoPlayer extends Activity
         setContentView(R.layout.videoplayer);
         // Get a handle on the VideoView
         mVideoView =
-            (VideoView)findViewById(R.id.surfacevideoview);
+            (VideoView)findViewById(R.id.videoview);
         // Load in the video file
         mVideoView.setVideoPath(videoFileName);
         // Enable controller

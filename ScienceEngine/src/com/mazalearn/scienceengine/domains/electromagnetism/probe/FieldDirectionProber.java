@@ -59,9 +59,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
       
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        lastTouch.sub(x, y);
-        float val = lastTouch.nor().dot(bFields[0]); // Should be -1
-        final boolean success = Math.abs(val + 1) < TOLERANCE;
+        final boolean success = Math.abs(userField.getRotation() - bFields[0].angle()) < TOLERANCE * 100;
         fieldMeterActor.setVisible(true);
         userField.addAction(Actions.sequence(Actions.delay(2f),
             new Action() {
