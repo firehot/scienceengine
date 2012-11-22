@@ -140,19 +140,19 @@ public class BarMagnet extends AbstractMagnet {
   @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(getName() + " Strength", 
-        "Strength of magnet", 0f, 10000f) {
+        Attribute.MagnetStrength, 0f, 10000f) {
       public Float getValue() { return getStrength(); }
       public void setValue(Float value) { setStrength(value); }
       public boolean isPossible() { return isActive(); }
     });
     configs.add(new AbstractModelConfig<Float>(getName() + " Angle", 
-        "Angle of the magnet", 0f, MathUtils.PI * 2) {
+        Attribute.MagnetRotation, 0f, MathUtils.PI * 2) {
       public Float getValue() { return getAngle(); }
       public void setValue(Float value) { setAngle(value); }
       public boolean isPossible() { return isActive(); }
     });
     configs.add(new AbstractModelConfig<String>(getName() + " Mode", 
-        "Mode of operation of magnet", Mode.values()) {
+        Attribute.MagnetMode, Mode.values()) {
       public String getValue() { return getMode(); }
       public void setValue(String value) { setMode(value); }
       public boolean isPossible() { return isActive(); }

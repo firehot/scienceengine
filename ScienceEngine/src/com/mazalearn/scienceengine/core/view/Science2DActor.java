@@ -79,14 +79,6 @@ public class Science2DActor extends Actor {
             "  -  " +
             ScienceEngine.getMsg().getString("Help." + componentType.name()));
       }
-      
-      @Override
-      public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-        super.exit(event, x, y, pointer, toActor);
-        IScience2DStage stage = (IScience2DStage) getStage();
-        Label status = (Label) stage.findActor(StageComponent.Status.name());
-        status.setText("");
-      }
     };
     this.addListener(helpLlistener);     
   }

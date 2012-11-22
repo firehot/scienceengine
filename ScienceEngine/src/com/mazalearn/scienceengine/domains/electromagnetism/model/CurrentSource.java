@@ -60,7 +60,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<String>(getName() + " Type", 
-        "Type of Current", CurrentType.values()) {
+        Attribute.CurrentType, CurrentType.values()) {
       public String getValue() { return getCurrentType(); }
       public void setValue(String value) { setCurrentType(value); }
       public boolean isPossible() { return isActive(); }
@@ -69,21 +69,21 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
     });
     
     configs.add(new AbstractModelConfig<Float>(getName() + " Frequency", 
-        "Frequency of AC", 0f, 4f) {
+        Attribute.CurrentFrequency, 0f, 4f) {
       public Float getValue() { return getFrequency(); }
       public void setValue(Float value) { setFrequency(value); }
       public boolean isPossible() { return isActive() && currentType == CurrentType.AC; }
     });
     
     configs.add(new AbstractModelConfig<Float>(getName() + " Max", 
-        "Max Current of AC", 0f, DEFAULT_MAX_CURRENT) {
+        Attribute.CurrentMax, 0f, DEFAULT_MAX_CURRENT) {
       public Float getValue() { return getMaxCurrent(); }
       public void setValue(Float value) { setMaxCurrent(value); }
       public boolean isPossible() { return isActive(); }
     });
     
     configs.add(new AbstractModelConfig<Boolean>(getName() + " Invert", 
-        "Direction of DC Current", false) {
+        Attribute.CurrentDirection, false) {
       public void setValue(Boolean value) { setNegativeCurrent(value); }
       public Boolean getValue() { return isNegativeCurrent; }
       public boolean isPossible() { return isActive() && currentType == CurrentType.DC; }

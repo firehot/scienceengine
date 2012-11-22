@@ -1,11 +1,16 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.StageComponent;
 
 public class SelectBoxControl implements IControl {
   private final IModelConfig<String> property;
@@ -15,7 +20,7 @@ public class SelectBoxControl implements IControl {
     this.selectBox = new SelectBox (getItems(property), skin);
     this.property = property;
     syncWithModel();
-    selectBox.setName(property.getDescription());
+    selectBox.setName(property.getName());
     // Set value when slider changes
     selectBox.addListener(new ChangeListener() {
       @Override
@@ -23,6 +28,15 @@ public class SelectBoxControl implements IControl {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         property.setValue(selectBox.getSelection());
       }      
+    });
+    selectBox.addListener(new ClickListener() {   
+      @Override
+      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        super.enter(event, x, y, pointer, fromActor);
+        IScience2DStage stage = (IScience2DStage) selectBox.getStage();
+        Label status = (Label) stage.findActor(StageComponent.Status.name());
+        status.setText(ScienceEngine.getMsg().getString("Help." + property.getAttribute().name()));
+      }
     });
   }
 

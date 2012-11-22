@@ -105,7 +105,7 @@ public class ControlPanel extends Table {
     viewControls.add(title).colspan(2).center();
     viewControls.row();
     // register the back button
-    TextButton backButton = new TextButton(getMsg().getString("ControlPanel.Back"), skin); //$NON-NLS-1$
+    final TextButton backButton = new TextButton(getMsg().getString("ControlPanel.Back"), skin); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {
       public void clicked(InputEvent event, float x, float y) {
         science2DController.getView().challenge(false);
@@ -115,14 +115,22 @@ public class ControlPanel extends Table {
         ScienceEngine.SCIENCE_ENGINE.setScreen(
             new LoadingScreen(ScienceEngine.SCIENCE_ENGINE, screen));
       }
+      
+      @Override
+      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        super.enter(event, x, y, pointer, fromActor);
+        IScience2DStage stage = (IScience2DStage) backButton.getStage();
+        Label status = (Label) stage.findActor(StageComponent.Status.name());
+        status.setText(ScienceEngine.getMsg().getString("Help.Back"));
+      }
     });
     viewControls.add(backButton).height(30).colspan(2);
     viewControls.row();
     
     // Add challenge/learn functionality
     AbstractModelConfig<Boolean> challengeModelConfig = 
-        new AbstractModelConfig<Boolean>(getMsg().getString("ControlPanel.Challenge"), 
-            "Challenge or Learn", false) { //$NON-NLS-1$ //$NON-NLS-2$
+        new AbstractModelConfig<Boolean>("Challenge", 
+            Attribute.Challenge, false) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.challenge(value);}
           public Boolean getValue() { return science2DStage.isChallengeInProgress(); }
           public boolean isPossible() { return true; }
@@ -142,8 +150,7 @@ public class ControlPanel extends Table {
     
     // Add pause/resume functionality for the experiment
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
-        new AbstractModelConfig<Boolean>(getMsg().getString("ControlPanel.PauseResume"), 
-            getMsg().getString("ControlPanel.PauseOrResume")) { //$NON-NLS-1$ //$NON-NLS-2$
+        new AbstractModelConfig<Boolean>("PauseResume", Attribute.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.suspend(value); }
           public Boolean getValue() { return science2DStage.isSuspended(); }
           public boolean isPossible() { return true; }
@@ -159,8 +166,7 @@ public class ControlPanel extends Table {
 
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
-        new AbstractModelConfig<String>(getMsg().getString("ControlPanel.Reset"), 
-            getMsg().getString("ControlPanel.ResetToInitialState")) { //$NON-NLS-1$ //$NON-NLS-2$
+        new AbstractModelConfig<String>("Reset", Attribute.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
           public void doCommand() { science2DModel.reset(); }
           public boolean isPossible() { return true; }
     };

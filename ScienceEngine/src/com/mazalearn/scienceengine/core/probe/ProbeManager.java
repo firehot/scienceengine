@@ -22,6 +22,8 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
  * 
  */
 public class ProbeManager extends Group implements IDoneCallback {
+  private static final int WIN_THRESHOLD = 100;
+  private static final int LOSS_THRESHOLD = -30;
   int proberIndex = 0;
   AbstractScience2DProber currentProber;
   protected Dashboard dashboard;
@@ -34,6 +36,8 @@ public class ProbeManager extends Group implements IDoneCallback {
   private final SoundManager soundManager;
   private final ScoreImage successImage, failureImage;
   private ProbeHinter probeHinter;
+  private int deltaSuccessScore;
+  private int deltaFailureScore;
 
   public ProbeManager(final Skin skin, float width, float height,
       IScience2DStage science2DStage, ControlPanel controlPanel) {
@@ -132,20 +136,29 @@ public class ProbeManager extends Group implements IDoneCallback {
       currentProber.activate(false);
       currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
       soundManager.play(ScienceEngineSound.SUCCESS);
-      dashboard.addScore(10);
-      successImage.show(getWidth()/2, getHeight()/2, 10);
+      dashboard.addScore(deltaSuccessScore);
+      successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
       probeHinter.setHint(null);
       doProbe();
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
-      dashboard.addScore(-5);
-      failureImage.show(getWidth()/2, getHeight()/2, -5);
+      // Equate success and failure scores so that 0 progress after second try
+      deltaSuccessScore = -deltaFailureScore;
+      dashboard.addScore(deltaFailureScore);
+      failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
       String[] hints = currentProber.getHints();
       probeHinter.setHint(hints[MathUtils.random(hints.length - 1)]);
     }
-    if (dashboard.getScore() >= 100) {
+    // Win
+    if (dashboard.getScore() >= WIN_THRESHOLD) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
       science2DStage.done(true);
+      this.setVisible(false);
+      return;
+    }
+    // Loss
+    if (dashboard.getScore() <= LOSS_THRESHOLD) {
+      science2DStage.done(false);
       this.setVisible(false);
       return;
     }
@@ -157,6 +170,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     proberIndex = (proberIndex + 1) % activeProbers.size();
     currentProber = activeProbers.get(proberIndex);
 
+    // Set up initial success and failure scores
+    deltaSuccessScore = 10;
+    deltaFailureScore = -5;
+    
     currentProber.addActor(probeHinter);
     currentProber.activate(true);
     dashboard.setStatus(currentProber.getTitle());

@@ -1,11 +1,13 @@
 package com.mazalearn.scienceengine.core.controller;
 
+import com.mazalearn.scienceengine.core.model.IComponentType;
+
 public interface IModelConfig<T> {
   enum ConfigType { RANGE, LIST, COMMAND, ONOFF };
   
   public ConfigType getType();
   public String getName();
-  public String getDescription();
+  public IComponentType getAttribute();
   // Is this configuration hook available with current configs?
   public boolean isAvailable();
 
