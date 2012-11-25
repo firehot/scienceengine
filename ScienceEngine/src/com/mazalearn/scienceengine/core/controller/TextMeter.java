@@ -4,38 +4,30 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.StageComponent;
 
 /**
- * Utility class for science2DModel action buttons using reflection.
+ * Utility class for science2DModel text meter
  *
  */
-public class OnOffButtonControl implements IControl {
-  private final IModelConfig<Boolean> property;
+public class TextMeter implements IControl {
+  @SuppressWarnings("rawtypes")
+  private final IModelConfig property;
   
-  protected final TextButton toggleButton;
+  protected final Label label;
   
-  public OnOffButtonControl(final IModelConfig<Boolean> property, final Skin skin) {
-    this.toggleButton = new TextButton(property.getAttribute().name(), 
-        skin.get("toggle", TextButtonStyle.class));
+  @SuppressWarnings("rawtypes")
+  public TextMeter(final IModelConfig property, final Skin skin) {
+    this.label = new Label(property.getAttribute().name(), skin);
     this.property = property;
-    toggleButton.setName(property.getName()); 
-    toggleButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        property.setValue(toggleButton.isChecked());
-      }
-      
+    label.setName(property.getName());
+    label.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        IScience2DStage stage = (IScience2DStage) toggleButton.getStage();
+        IScience2DStage stage = (IScience2DStage) label.getStage();
         Label status = (Label) stage.findActor(StageComponent.Status.name());
         String component = "";
         if (ScienceEngine.getSelectedBody() != null) {
@@ -49,12 +41,12 @@ public class OnOffButtonControl implements IControl {
   }
   
   public Actor getActor() {
-    return toggleButton;
+    return label;
   }
 
   @Override
   public void syncWithModel() {
-    this.toggleButton.setChecked(property.getValue());
+    label.setText(String.valueOf(property.getValue()));
   }
   
   public boolean isAvailable() {

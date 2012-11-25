@@ -86,11 +86,11 @@ public class Wire extends Science2DBody implements IMagneticField.Producer, ICur
   
   @Override
   public Vector2 getT1Position() {
-    return firstTerminal.set(-10, -10);
+    return firstTerminal.set(Float.NaN, Float.NaN);
   }
 
   @Override
   public Vector2 getT2Position() {
-    return secondTerminal.set(-10, -10);
+    return secondTerminal.set(Float.NaN, Float.NaN);
   }
 }

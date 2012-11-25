@@ -17,7 +17,6 @@ public abstract class AbstractScience2DProber extends Group {
 
   public AbstractScience2DProber(ProbeManager probeManager) {
     this.probeManager = probeManager;
-    probeManager.registerProber(this);
   }
   
   public void reinitialize(float x, float y, float width, float height, 
@@ -90,4 +89,16 @@ public abstract class AbstractScience2DProber extends Group {
   }
 
   public abstract String[] getHints();
+
+  public int getDeltaSuccessScore() {
+    return 10;
+  }
+  
+  public int getSubsequentDeltaSuccessScore() {
+    return 5;
+  }
+  
+  public int getDeltaFailureScore() {
+    return -5;
+  }
 }

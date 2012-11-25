@@ -28,6 +28,7 @@ import com.mazalearn.scienceengine.core.controller.OnOffButtonControl;
 import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
 import com.mazalearn.scienceengine.core.controller.SliderControl;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class ControlPanel extends Table {
   private final IScience2DController science2DController;
@@ -70,7 +71,7 @@ public class ControlPanel extends Table {
 
   public Table createModelControlPanel(Skin skin) {
     Table modelControlPanel = new Table(skin);
-    modelControlPanel.setName("Model Controls");
+    modelControlPanel.setName("ModelControls");
     modelControlPanel.defaults().fill();
     registerModelConfigs(modelControlPanel);
     return modelControlPanel;
@@ -88,6 +89,23 @@ public class ControlPanel extends Table {
   protected void registerModelConfigs(Table modelControlPanel) {
     this.controllers.clear();
     modelControlPanel.clear();
+    // TODO: Add name of selected body
+/*    AbstractModelConfig<String> selectedBodyConfig = 
+        new AbstractModelConfig<String>(null, --> problem - when is this enabled ???
+            Attribute.NameOfSelectedBody, false) { //$NON-NLS-1$ //$NON-NLS-2$
+          public String getValue() { 
+            Science2DBody body = ScienceEngine.getSelectedBody();
+            String name = "Global";
+            if (body != null) {
+              name = body.getComponentType().name();
+            }
+            return getMsg().getString("Name." + name);
+          }
+          public boolean isPossible() { return true; }
+    }; */
+    
+    modelControlPanel.add("\n" + getMsg().getString("ControlPanel.Parameters")).center();
+    modelControlPanel.row();
     // Register all model controllers
     for (IModelConfig modelConfig: science2DModel.getAllConfigs()) {
       this.controllers.add(createViewControl(modelConfig, modelControlPanel));
@@ -98,7 +116,7 @@ public class ControlPanel extends Table {
       final IScience2DModel science2DModel,
       final IScience2DStage science2DStage) {
     Table viewControls = new Table(skin);
-    viewControls.setName("View Controls");
+    viewControls.setName("ViewControls");
     viewControls.defaults().fill();
     // Register name
     this.title = new Label(experimentName, skin);
@@ -129,7 +147,7 @@ public class ControlPanel extends Table {
     
     // Add challenge/learn functionality
     AbstractModelConfig<Boolean> challengeModelConfig = 
-        new AbstractModelConfig<Boolean>("Challenge", 
+        new AbstractModelConfig<Boolean>(null, 
             Attribute.Challenge, false) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.challenge(value);}
           public Boolean getValue() { return science2DStage.isChallengeInProgress(); }
@@ -150,7 +168,7 @@ public class ControlPanel extends Table {
     
     // Add pause/resume functionality for the experiment
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
-        new AbstractModelConfig<Boolean>("PauseResume", Attribute.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
+        new AbstractModelConfig<Boolean>(null, Attribute.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.suspend(value); }
           public Boolean getValue() { return science2DStage.isSuspended(); }
           public boolean isPossible() { return true; }
@@ -166,7 +184,7 @@ public class ControlPanel extends Table {
 
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
-        new AbstractModelConfig<String>("Reset", Attribute.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
+        new AbstractModelConfig<String>(null, Attribute.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
           public void doCommand() { science2DModel.reset(); }
           public boolean isPossible() { return true; }
     };
@@ -200,7 +218,7 @@ public class ControlPanel extends Table {
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
       case RANGE:
-        table.add(property.getName());
+        table.add(property.getAttribute().name());
         table.row();
         control = new SliderControl(property, skin);
         table.add(control.getActor());

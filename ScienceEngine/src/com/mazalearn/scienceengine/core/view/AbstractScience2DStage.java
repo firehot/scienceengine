@@ -15,6 +15,7 @@ import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
 public abstract class AbstractScience2DStage extends Stage implements IScience2DStage {
 
@@ -24,6 +25,7 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   protected ControlPanel controlPanel;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
+  private ProbeManager probeManager;
 
   public AbstractScience2DStage( 
       IScience2DModel science2DModel, float width, float height, Skin skin) {
@@ -33,6 +35,15 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     this.locationGroups = new ArrayList<List<Actor>>();
   }
 
+  @Override
+  public ProbeManager getProbeManager() {
+    if (probeManager == null) {
+      probeManager = new ProbeManager(skin, getWidth(), getHeight(), this, controlPanel);
+      this.getRoot().addActorBefore(controlPanel, probeManager);
+    }
+    return probeManager;
+  }
+  
   @Override
   public Actor addVisualActor(String name) {
     Actor actor = createActor(name);
@@ -149,8 +160,8 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   @Override
   public void prepareStage() {
     // Register help after all actors are already added so it is on top
-    Actor help = new Helper(skin, 650, getHeight()  - 90);
-    this.addActor(help);
+    //Actor help = new Helper(skin, 650, getHeight()  - 90);
+    //this.addActor(help);
   }
 
   public void setControlPanel(ControlPanel controlPanel) {

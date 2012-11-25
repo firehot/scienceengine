@@ -38,6 +38,16 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     this.emConsumers = new ArrayList<IMagneticField.Consumer>();
   }
 
+  // find a config by name
+  public IModelConfig<?> getConfig(String configName) {
+    for (IModelConfig<?> config: getAllConfigs()) {
+      if (configName.equals(config.getName())) {
+        return config;
+      }
+    }
+    return null;
+  }
+
   @Override
   public void simulateSteps(float delta) {
     if (!isEnabled) return;

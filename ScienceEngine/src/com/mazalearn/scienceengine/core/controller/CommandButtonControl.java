@@ -23,7 +23,7 @@ public class CommandButtonControl implements IControl {
   
   @SuppressWarnings("rawtypes")
   public CommandButtonControl(final IModelConfig command, final Skin skin) {
-    this.textButton = new TextButton(command.getName(), skin);
+    this.textButton = new TextButton(command.getAttribute().name(), skin);
     this.command = command;
     textButton.setName(command.getName());
     textButton.addListener(new ClickListener() {
@@ -34,11 +34,16 @@ public class CommandButtonControl implements IControl {
       }
       
       @Override
-      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        super.enter(event, x, y, pointer, fromActor);
+      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         IScience2DStage stage = (IScience2DStage) textButton.getStage();
         Label status = (Label) stage.findActor(StageComponent.Status.name());
-        status.setText(ScienceEngine.getMsg().getString("Help." + command.getAttribute().name()));
+        String component = "";
+        if (ScienceEngine.getSelectedBody() != null) {
+          component = ScienceEngine.getSelectedBody().getComponentType().name() + " - ";
+        }
+        status.setText( component + 
+            ScienceEngine.getMsg().getString("Help." + command.getAttribute().name()));
+        return super.touchDown(event, localX, localY, pointer, button);
       }
     });
   }

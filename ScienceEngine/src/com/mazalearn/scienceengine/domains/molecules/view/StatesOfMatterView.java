@@ -3,8 +3,13 @@ package com.mazalearn.scienceengine.domains.molecules.view;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
+import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirectionProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.probe.VariablesProber;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
 
 /**
@@ -37,6 +42,11 @@ public class StatesOfMatterView extends AbstractScience2DStage {
     } else if (type.equals("ColorPanel")) {
       return new ColorPanel(type);
     }
+    return null;
+  }
+  
+  @Override
+  public AbstractScience2DProber createProber(String name, ProbeManager probeManager) {
     return null;
   }  
 }

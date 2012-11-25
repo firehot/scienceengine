@@ -60,6 +60,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     probeHinter.setPosition(controlPanel.getX(),
         controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 20);
     this.addActor(probeHinter);
+    this.setVisible(false);
   }
 
   public void registerProber(AbstractScience2DProber prober) {
@@ -143,7 +144,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
-      deltaSuccessScore = -deltaFailureScore;
+      deltaSuccessScore = currentProber.getSubsequentDeltaSuccessScore();
       dashboard.addScore(deltaFailureScore);
       failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
       String[] hints = currentProber.getHints();
@@ -171,8 +172,8 @@ public class ProbeManager extends Group implements IDoneCallback {
     currentProber = activeProbers.get(proberIndex);
 
     // Set up initial success and failure scores
-    deltaSuccessScore = 10;
-    deltaFailureScore = -5;
+    deltaSuccessScore = currentProber.getDeltaSuccessScore();
+    deltaFailureScore = currentProber.getDeltaFailureScore();
     
     currentProber.addActor(probeHinter);
     currentProber.activate(true);

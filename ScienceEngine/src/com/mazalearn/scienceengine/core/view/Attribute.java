@@ -6,7 +6,8 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 public enum Attribute implements IComponentType {
   Reset,
   Challenge,
-  PauseResume;
+  PauseResume,
+  NameOfSelectedBody;
   
   private Attribute() {
   }

@@ -16,6 +16,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -66,7 +67,8 @@ public class LevelLoader {
     science2DModel.prepareModel();
     science2DStage.prepareStage();
     controlPanel.refresh();
-    readConfigs((Array<?>) rootElem.get("configs"));    
+    readConfigs((Array<?>) rootElem.get("configs"));
+    readProbers((Array<?>) rootElem.get("probers"));
   }
 
   private void readLevelInfo(OrderedMap<String, ?> info) {
@@ -136,6 +138,16 @@ public class LevelLoader {
     }
   }
 
+  private void readProbers(Array<?> probers) {
+    if (probers == null) return;
+    
+    for (int i = 0; i < probers.size; i++) {
+      @SuppressWarnings("unchecked")
+      OrderedMap<String, ?> prober = (OrderedMap<String, ?>) probers.get(i);
+      readProber(prober);
+    }
+  }
+
   private void readComponents(Array<?> components) {
     if (components == null) return;
     
@@ -169,7 +181,7 @@ public class LevelLoader {
     }
     if (actor == null) {
       if (!type.equals("ControlPanel")) return;
-      actor = controlPanel;
+      actor = science2DStage.findActor((String) component.get("name"));
     }
 
     actor.setName((String) nvl(component.get("name"), type));
@@ -224,5 +236,11 @@ public class LevelLoader {
         break;
       }
     }
+  }
+
+  private void readProber(OrderedMap<String, ?> proberObj) {
+    String proberName = (String) proberObj.get("name");
+    ProbeManager probeManager = science2DStage.getProbeManager();
+    probeManager.registerProber(science2DStage.createProber(proberName, probeManager));
   }
 }

@@ -26,6 +26,7 @@ import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
@@ -54,6 +55,8 @@ public class ScienceEngine extends Game {
   private TextureAtlas atlas;
 
   public static AssetManager assetManager;
+
+  private static Science2DBody selectedBody;
 
   public static final int PIXELS_PER_M = 8;
 
@@ -288,5 +291,13 @@ public class ScienceEngine extends Game {
 
   public static IMessage getMsg() {
     return platformAdapter.getMsg();
+  }
+
+  public static Science2DBody getSelectedBody() {
+    return selectedBody;
+  }
+
+  public static void setSelectedBody(Science2DBody body) {
+    selectedBody = body;
   }
 }

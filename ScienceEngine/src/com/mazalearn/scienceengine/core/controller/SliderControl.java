@@ -40,11 +40,16 @@ public class SliderControl implements IControl {
       }
       
       @Override
-      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        super.enter(event, x, y, pointer, fromActor);
+      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         IScience2DStage stage = (IScience2DStage) slider.getStage();
         Label status = (Label) stage.findActor(StageComponent.Status.name());
-        status.setText(ScienceEngine.getMsg().getString("Help." + property.getAttribute().name()));
+        String component = "";
+        if (ScienceEngine.getSelectedBody() != null) {
+          component = ScienceEngine.getSelectedBody().getComponentType().name() + " - ";
+        }
+        status.setText( component + 
+            ScienceEngine.getMsg().getString("Help." + property.getAttribute().name()));
+        return super.touchDown(event, localX, localY, pointer, button);
       }
     });
   }

@@ -39,9 +39,10 @@ public class Science2DActor extends Actor {
    * @param body - Box2D body
    * @param textureRegion - texture to use to represent body in view
    */
-  public Science2DActor(Science2DBody body, TextureRegion textureRegion) {
+  public Science2DActor(final Science2DBody body, TextureRegion textureRegion) {
     super();
-    this.setName(body.getName());
+    this.setName(body.getComponentType().name() + 
+        (body.getCount() == 0 ? "" : body.getCount()));
     this.body = body;
     this.textureRegion = textureRegion;
     // Set the sprite width and height.
@@ -67,20 +68,22 @@ public class Science2DActor extends Actor {
 
     };
     this.addListener(touchLlistener);
-    ClickListener helpLlistener = new ClickListener() {
+    ClickListener helpListener = new ClickListener() {
       @Override
-      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        super.enter(event, x, y, pointer, fromActor);
+      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+        super.touchDown(event, localX, localY, pointer, button);
+        ScienceEngine.setSelectedBody(body);
         IScience2DStage stage = (IScience2DStage) getStage();
         Label status = (Label) stage.findActor(StageComponent.Status.name());
         IComponentType componentType = Science2DActor.this.body.getComponentType();
         status.setText(
             ScienceEngine.getMsg().getString("Name." + componentType.name()) + 
-            "  -  " +
+            (body.getCount() == 0 ? "" : " " + body.getCount()) + "  -  " +
             ScienceEngine.getMsg().getString("Help." + componentType.name()));
+        return false;
       }
     };
-    this.addListener(helpLlistener);     
+    this.addListener(helpListener);     
   }
   
   public Science2DBody getBody() {
@@ -110,7 +113,7 @@ public class Science2DActor extends Actor {
     batch.draw(textureRegion, getX(), getY(), 0, 0, getWidth(), getHeight(), 1, 1, getRotation());
     batch.setColor(c);
     if (getX() != px || getY() != py || body.getPosition().x != pbx || body.getPosition().y != pby || body.getAngle() != pa) {
-      System.out.println(body.getName() + " x = " + getX() + " y = " + getY() + 
+      System.out.println(getName() + " x = " + getX() + " y = " + getY() + 
           " origin x = " + this.getOriginX() + " origin y = " + this.getOriginY() + 
           " body = " + body.getPosition() + " angle = " + body.getAngle());
       px = getX(); py = getY(); pbx = body.getPosition().x; pby = body.getPosition().y; pa = body.getAngle();
@@ -154,7 +157,9 @@ public class Science2DActor extends Actor {
     }
     body.setPositionAndAngle(box2DPos, angle);
     body.setActive(isVisible());
-    body.setInitial();
+    if (!isUserChange) {
+      body.setInitial();
+    }
   }
   
   public boolean isAllowMove() {

@@ -41,4 +41,6 @@ public interface IScience2DModel {
       float x, float y, float rotation);
   // Prepare model
   void prepareModel();
+  // find a config by name
+  public IModelConfig<?> getConfig(String configName);
 }

@@ -236,13 +236,13 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
 
   @Override
   public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
-    modelConfigs.add(new AbstractModelConfig<String>("State", Attribute.StateOfMatter, State.values()) {
+    modelConfigs.add(new AbstractModelConfig<String>(null, Attribute.StateOfMatter, State.values()) {
       public String getValue() { return getState(); }
       public void setValue(String value) { setState(value); }
       public boolean isPossible() { return true; }
     });
 
-    modelConfigs.add(new AbstractModelConfig<String>("HeatingLevel", Attribute.HeatingLevel, HeatingLevel.values()) {
+    modelConfigs.add(new AbstractModelConfig<String>(null, Attribute.HeatingLevel, HeatingLevel.values()) {
       public String getValue() { return getHeatingLevel(); }
       public void setValue(String value) { setHeatingLevel(value); }
       public boolean isPossible() { return true; }

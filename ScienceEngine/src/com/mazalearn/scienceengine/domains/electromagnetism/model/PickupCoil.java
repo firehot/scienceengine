@@ -99,8 +99,8 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   
   @Override
   public void initializeConfigs() {
-    configs.add(new AbstractModelConfig<Float>(getName() + " Coil Loops", 
-        Attribute.NumberCoilLoops, 1f, 4f) {
+    configs.add(new AbstractModelConfig<Float>(this, 
+        Attribute.CoilLoops, 1f, 4f) {
       public Float getValue() { return getNumberOfLoops(); }
       public void setValue(Float value) { setNumberOfLoops(value); }
       public boolean isPossible() { return isActive(); }

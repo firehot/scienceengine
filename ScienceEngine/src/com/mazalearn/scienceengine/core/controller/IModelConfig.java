@@ -1,10 +1,12 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.mazalearn.scienceengine.core.model.IComponentType;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public interface IModelConfig<T> {
   enum ConfigType { RANGE, LIST, COMMAND, ONOFF };
   
+  public Science2DBody getBody();
   public ConfigType getType();
   public String getName();
   public IComponentType getAttribute();

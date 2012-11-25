@@ -12,7 +12,10 @@ public enum Attribute implements IComponentType {
   MagnetRotation,
   MagnetMode,
   CommutatorType,
-  NumberCoilLoops;
+  CoilLoops, 
+  AirPermittivity, // Dummy
+  RoomTemperature, // Dummy
+  EarthMagneticField; // Dummy
   
   private Attribute() {
   }

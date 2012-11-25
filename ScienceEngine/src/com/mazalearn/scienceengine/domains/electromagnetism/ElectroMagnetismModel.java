@@ -6,9 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Attribute;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
@@ -20,11 +22,13 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Wire;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource.CurrentType;
 
 public class ElectroMagnetismModel extends AbstractScience2DModel {
   private RevoluteJointDef coilRotationJointDef = new RevoluteJointDef();
   private Joint coilRotationJoint;
   private Science2DBody currentCoil;
+  private Lightbulb lightbulb;
     
   public ElectroMagnetismModel() {
     super();    
@@ -58,7 +62,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case CurrentSource: return new CurrentSource(x, y, rotation);
     case ElectroMagnet: return new ElectroMagnet(x, y, rotation);
     case PickupCoil: return new PickupCoil(x, y, rotation, 2E7f);
-    case Lightbulb: return new Lightbulb(x, y, rotation);
+    case Lightbulb: return lightbulb = new Lightbulb(x, y, rotation);
     case Wire: return new Wire(x, y, rotation);
     case CurrentCoil: return new CurrentCoil(x, y, rotation);
     case Compass: return new Compass(x, y, rotation);
@@ -66,8 +70,31 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     return null;
   }
 
+  // TODO: Dummy configs - do in a cleaner way
+  float[] dummies = new float[10];
   @Override
   public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
+    modelConfigs.add(new AbstractModelConfig<Float>(null, 
+        Attribute.AirPermittivity, 0f, 4f) {
+      public Float getValue() { return dummies[0]; }
+      public void setValue(Float value) { dummies[0] = value; }
+     public boolean isPossible() { return lightbulb != null; }
+    });
+    
+    modelConfigs.add(new AbstractModelConfig<Float>(null, 
+        Attribute.RoomTemperature, 0f, 4f) {
+      public Float getValue() { return dummies[1]; }
+      public void setValue(Float value) { dummies[1] = value; }
+      public boolean isPossible() { return lightbulb != null; }
+    });
+    
+    modelConfigs.add(new AbstractModelConfig<Float>(null, 
+        Attribute.EarthMagneticField, 0f, 4f) {
+      public Float getValue() { return dummies[2]; }
+      public void setValue(Float value) { dummies[2] = value; }
+      public boolean isPossible() { return lightbulb != null; }
+    });
+    
   }
 
   @Override

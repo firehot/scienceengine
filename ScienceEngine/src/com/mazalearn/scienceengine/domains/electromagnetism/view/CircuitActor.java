@@ -47,6 +47,9 @@ public class CircuitActor extends Actor {
   }
 
   private void drawConnection(Vector2 from, Vector2 to) {
+    if (from.x == Float.NaN || from.y == Float.NaN || to.x == Float.NaN || to.y == Float.NaN) {
+      return;
+    }
     delta.set(to).sub(from).mul(ScienceEngine.PIXELS_PER_M);
     shapeRenderer.identity();
     shapeRenderer.translate(from.x * ScienceEngine.PIXELS_PER_M, from.y * ScienceEngine.PIXELS_PER_M, 0);

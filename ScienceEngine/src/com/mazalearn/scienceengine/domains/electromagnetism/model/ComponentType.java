@@ -13,7 +13,7 @@ public enum ComponentType implements IComponentType {
   PickupCoil("images/coppercoils-front1.png"),
   Wire("images/currentwire-up.png"),
   Voltmeter(""), 
-  FieldMagnet("images/simplemagnetsn.png"),
+  FieldMagnet("images/horseshoemagnet.png"),
   CurrentCoil("images/currentcoil_nocommutator.png");
   
   private String textureFilename;
