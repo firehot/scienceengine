@@ -97,7 +97,7 @@ public class Science2DBody implements IBody {
    * Sets the position and angle in 2D space.
    * 
    * @param position - the position
-   * @param angle - the orientation
+   * @param angle - the orientation in radians
    */
   public void setPositionAndAngle(Vector2 position, float angle) {
     // Ensure angle is in range 0, 2 * pi

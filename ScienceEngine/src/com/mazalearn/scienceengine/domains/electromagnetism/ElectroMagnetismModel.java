@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMagnet;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.HorseshoeMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
@@ -58,7 +58,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     switch(componentType) {
     case FieldMeter: return new FieldMeter(x, y, rotation);
     case BarMagnet: return new BarMagnet(x, y, rotation);
-    case FieldMagnet: return new FieldMagnet(x, y, rotation);
+    case HorseshoeMagnet: return new HorseshoeMagnet(x, y, rotation);
     case CurrentSource: return new CurrentSource(x, y, rotation);
     case ElectroMagnet: return new ElectroMagnet(x, y, rotation);
     case PickupCoil: return new PickupCoil(x, y, rotation, 2E7f);
