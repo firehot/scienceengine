@@ -22,9 +22,14 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     this(ConfigType.COMMAND, body, attribute, false, 0, 0, null);
   }
   
-  // OnOff type constructor
+  // Text type constructor
+  public AbstractModelConfig(Science2DBody body, IComponentType attribute, String text) {
+    this(ConfigType.TEXT, body, attribute, false, 0, 0, null);
+  }
+  
+  // Toggle type constructor
   public AbstractModelConfig(Science2DBody body, IComponentType attribute, boolean on) {
-    this(ConfigType.ONOFF, body, attribute, on, 0, 0, null);
+    this(ConfigType.TOGGLE, body, attribute, on, 0, 0, null);
   }
   
   // Range type constructor

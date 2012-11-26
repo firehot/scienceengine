@@ -29,7 +29,7 @@ public class ConfigGenerator {
         float value = MathUtils.random(low + delta, high - delta);
         rangeConfig.setValue(value);
         break;
-      case ONOFF:
+      case TOGGLE:
         IModelConfig<Boolean> onOffConfig = (IModelConfig<Boolean>) config;
         boolean on = MathUtils.random(0, 1) == 1;
         onOffConfig.setValue(on);

@@ -220,7 +220,7 @@ public class LevelLoader {
     config.setPermitted((Boolean) nvl(configObj.get("permitted"), false));
     if (configObj.get("value") != null) {
       switch (config.getType()) {
-      case ONOFF:
+      case TOGGLE:
         ((IModelConfig<Boolean>) config).setValue((Boolean) configObj
             .get("value"));
         break;

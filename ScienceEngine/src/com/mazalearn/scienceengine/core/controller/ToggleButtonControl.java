@@ -16,12 +16,12 @@ import com.mazalearn.scienceengine.core.view.StageComponent;
  * Utility class for science2DModel action buttons using reflection.
  *
  */
-public class OnOffButtonControl implements IControl {
+public class ToggleButtonControl implements IControl {
   private final IModelConfig<Boolean> property;
   
   protected final TextButton toggleButton;
   
-  public OnOffButtonControl(final IModelConfig<Boolean> property, final Skin skin) {
+  public ToggleButtonControl(final IModelConfig<Boolean> property, final Skin skin) {
     this.toggleButton = new TextButton(property.getAttribute().name(), 
         skin.get("toggle", TextButtonStyle.class));
     this.property = property;

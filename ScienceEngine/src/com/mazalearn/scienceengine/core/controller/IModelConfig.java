@@ -4,7 +4,7 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public interface IModelConfig<T> {
-  enum ConfigType { RANGE, LIST, COMMAND, ONOFF };
+  enum ConfigType { RANGE, LIST, COMMAND, TOGGLE, TEXT };
   
   public Science2DBody getBody();
   public ConfigType getType();
@@ -16,7 +16,7 @@ public interface IModelConfig<T> {
   // Only for COMMAND type
   public void doCommand();
   
-  // get and set only for RANGE, LIST, ONOFF types
+  // get and set only for RANGE, LIST, TOGGLE types
   public T getValue();
   public void setValue(T value);
   

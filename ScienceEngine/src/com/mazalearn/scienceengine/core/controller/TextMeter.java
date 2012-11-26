@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.core.controller;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -22,6 +23,7 @@ public class TextMeter implements IControl {
   @SuppressWarnings("rawtypes")
   public TextMeter(final IModelConfig property, final Skin skin) {
     this.label = new Label(property.getAttribute().name(), skin);
+    label.setColor(Color.YELLOW);
     this.property = property;
     label.setName(property.getName());
     label.addListener(new ClickListener() {

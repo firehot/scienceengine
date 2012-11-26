@@ -24,10 +24,12 @@ import com.mazalearn.scienceengine.core.controller.Controller;
 import com.mazalearn.scienceengine.core.controller.IControl;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.controller.OnOffButtonControl;
+import com.mazalearn.scienceengine.core.controller.TextMeter;
+import com.mazalearn.scienceengine.core.controller.ToggleButtonControl;
 import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
 import com.mazalearn.scienceengine.core.controller.SliderControl;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class ControlPanel extends Table {
   private final IScience2DController science2DController;
@@ -84,10 +86,9 @@ public class ControlPanel extends Table {
   protected void registerModelConfigs(Table modelControlPanel) {
     this.controllers.clear();
     modelControlPanel.clear();
-    // TODO: Add name of selected body
-/*    AbstractModelConfig<String> selectedBodyConfig = 
-        new AbstractModelConfig<String>(null, --> problem - when is this enabled ???
-            Attribute.NameOfSelectedBody, false) { //$NON-NLS-1$ //$NON-NLS-2$
+    AbstractModelConfig<String> selectedBodyConfig = 
+        new AbstractModelConfig<String>(null,
+            Attribute.NameOfSelectedBody, "") { //$NON-NLS-1$ //$NON-NLS-2$
           public String getValue() { 
             Science2DBody body = ScienceEngine.getSelectedBody();
             String name = "Global";
@@ -97,9 +98,10 @@ public class ControlPanel extends Table {
             return getMsg().getString("Name." + name);
           }
           public boolean isPossible() { return true; }
-    }; */
+          public boolean isAvailable() { return true; }
+    };
     
-    modelControlPanel.add("\n" + getMsg().getString("ControlPanel.Parameters")).center();
+    this.controllers.add(createViewControl(selectedBodyConfig, modelControlPanel));
     modelControlPanel.row();
     // Register all model controllers
     for (IModelConfig modelConfig: science2DModel.getAllConfigs()) {
@@ -149,7 +151,7 @@ public class ControlPanel extends Table {
           public boolean isPossible() { return true; }
     };
     
-    challengeControl = new OnOffButtonControl(challengeModelConfig, skin) {
+    challengeControl = new ToggleButtonControl(challengeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(
@@ -168,7 +170,7 @@ public class ControlPanel extends Table {
           public Boolean getValue() { return science2DStage.isSuspended(); }
           public boolean isPossible() { return true; }
     };
-    suspendControl = new OnOffButtonControl(pauseResumeModelConfig, skin) {
+    suspendControl = new ToggleButtonControl(pauseResumeModelConfig, skin) {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(science2DStage.isSuspended() ? 
@@ -207,8 +209,8 @@ public class ControlPanel extends Table {
     table.defaults().fill().expand();
     IControl control = null;
     switch(property.getType()) {
-      case ONOFF: 
-        control = new OnOffButtonControl(property, skin);
+      case TOGGLE: 
+        control = new ToggleButtonControl(property, skin);
         table.add(control.getActor());
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
@@ -226,6 +228,9 @@ public class ControlPanel extends Table {
         control = new CommandButtonControl(property, skin);
         table.add(control.getActor());
         break;
+      case TEXT:
+        control = new TextMeter(property, skin);
+        table.add(control.getActor());
     }
     Controller c = new Controller(modelControlTable.add(table), control);
     modelControlTable.row();
