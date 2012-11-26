@@ -8,7 +8,8 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   
   private final ConfigType type;
   private final Science2DBody body;
-  private final IComponentType attribute;
+  // Not final, protected so that dummy probe will work
+  protected IComponentType attribute;
   private boolean isPermitted;
 
   private final float low, high;    // Range
@@ -70,7 +71,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   public void setValue(T value) {}
   public abstract boolean isPossible();
   public boolean isAvailable() { 
-    return isPermitted && isPossible() && body == ScienceEngine.getSelectedBody();
+    return isPermitted && isPossible() && !ScienceEngine.isProbeMode() && body == ScienceEngine.getSelectedBody();
   }
   public boolean hasProbeMode() { return false; }
   public void setProbeMode() {}

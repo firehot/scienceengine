@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -46,7 +47,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.addActor(dashboard);
     this.science2DStage = science2DStage;
     this.soundManager = ScienceEngine.getSoundManager();
-    this.configGenerator = new ConfigGenerator(controlPanel.getModelConfigs());
+    this.configGenerator = new ConfigGenerator();
     this.controlPanel = controlPanel;
     this.setPosition(0, 0);
     this.setSize(width, height);
@@ -122,6 +123,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     // Turn on access to parts of control panel
     controlPanel.enableControls(true);
     science2DStage.done(false);
+    ScienceEngine.setProbeMode(false);
     this.setVisible(false);
   }
   
@@ -148,7 +150,9 @@ public class ProbeManager extends Group implements IDoneCallback {
       dashboard.addScore(deltaFailureScore);
       failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
       String[] hints = currentProber.getHints();
-      probeHinter.setHint(hints[MathUtils.random(hints.length - 1)]);
+      if (hints.length > 0) {
+        probeHinter.setHint(hints[MathUtils.random(hints.length - 1)]);
+      }
     }
     // Win
     if (dashboard.getScore() >= WIN_THRESHOLD) {
@@ -180,9 +184,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     dashboard.setStatus(currentProber.getTitle());
   }
   
-  public void randomizeConfig(boolean enableControls) {
-    configGenerator.generateConfig();
+  public void setupProbeConfigs(List<IModelConfig<?>> configs, boolean enableControls) {
+    configGenerator.generateConfig(configs);
     controlPanel.syncWithModel(); // Force sync with model
+    controlPanel.refresh();
     // Turn off access to parts of control panel
     controlPanel.enableControls(enableControls);
   }

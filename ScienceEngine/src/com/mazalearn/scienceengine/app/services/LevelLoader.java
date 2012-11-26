@@ -1,5 +1,8 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
@@ -13,9 +16,12 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
+import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
@@ -205,18 +211,10 @@ public class LevelLoader {
     }
   }
 
-  private IModelConfig<?> findConfig(String name) {
-    if (name == null) return null;
-    for (IModelConfig<?> config : controlPanel.getModelConfigs()) {
-      if (config.getName().equals(name)) return config;
-    }
-    return null;
-  }
-  
   @SuppressWarnings("unchecked")
   private void readConfig(OrderedMap<String, ?> configObj) {
     String name = (String) configObj.get("name");
-    IModelConfig<?> config = findConfig(name);
+    IModelConfig<?> config = science2DModel.getConfig(name);
     if (config == null) return;
     
     config.setPermitted((Boolean) nvl(configObj.get("permitted"), false));
@@ -238,9 +236,27 @@ public class LevelLoader {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private void readProber(OrderedMap<String, ?> proberObj) {
     String proberName = (String) proberObj.get("name");
     ProbeManager probeManager = science2DStage.getProbeManager();
-    probeManager.registerProber(science2DStage.createProber(proberName, probeManager));
+    AbstractScience2DProber prober = science2DStage.createProber(proberName, probeManager);
+    probeManager.registerProber(prober);
+    String configName = (String) proberObj.get("config");
+    String type = (String) proberObj.get("type");
+    IModelConfig<?> config = science2DModel.getConfig(configName);
+    if (config != null) {
+      ((ParameterMagnitudeProber) prober).setProbeConfig((IModelConfig<Float>) config, type);
+    }
+    Array<String> depends = (Array<String>) proberObj.get("depends");
+    if (depends != null) {
+      List<IModelConfig<?>> dependConfigs = new ArrayList<IModelConfig<?>>();
+      for (int i = 0; i < depends.size; i++) {
+        configName = (String) depends.get(i);
+        config = science2DModel.getConfig(configName);
+        dependConfigs.add(config);
+      }
+      ((ParameterDirectionProber) prober).setProbeConfig(dependConfigs, type);
+    }
   }
 }

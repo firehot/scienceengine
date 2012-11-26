@@ -86,6 +86,10 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   protected Actor createActor(Science2DBody body) {
     ComponentType componentType = ComponentType.valueOf(body.getComponentType());
     
+    if (componentType == null) {
+      return super.createActor(body);
+    }
+    
     String textureFilename = componentType.getTextureFilename();
     if (textureFilename == null) return null;
 
@@ -144,17 +148,14 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
   public AbstractScience2DProber createProber(String name, ProbeManager probeManager) {
     if ("FieldMagnitudeProber".equals(name)) {
       return new FieldMagnitudeProber(emModel, probeManager);
-    }
-    if ("FieldDirectionProber".equals(name)) {
+    } else if ("FieldDirectionProber".equals(name)) {
       return new FieldDirectionProber(emModel, probeManager);
-    }
-    if ("LightProber".equals(name)) {
-      return new LightProber(probeManager);
-    }
-    if ("VariablesProber".equals(name)) {
+    } else if ("LightProber".equals(name)) {
+      return new LightProber(emModel, probeManager);
+    } else if ("VariablesProber".equals(name)) {
       return new VariablesProber(probeManager, emModel, skin, findActor("ModelControls"), controlPanel);
     }
-    return null;
+    return super.createProber(name, probeManager);
   }
   
   public void done(boolean success) {

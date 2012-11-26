@@ -41,7 +41,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   // find a config by name
   public IModelConfig<?> getConfig(String configName) {
     for (IModelConfig<?> config: getAllConfigs()) {
-      if (configName.equals(config.getName())) {
+      if (config.getName().equals(configName)) {
         return config;
       }
     }
@@ -203,6 +203,11 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   public abstract void initializeConfigs(List<IModelConfig<?>> modelConfigs);
 
-  protected abstract Science2DBody createScience2DBody(String componentTypeName,
-      float x, float y, float rotation);
+  protected Science2DBody createScience2DBody(String componentTypeName,
+      float x, float y, float rotation) {
+    if (componentTypeName.equals("Dummy")) {
+      return new Dummy(x, y, rotation);
+    }
+    return null;
+  }
 }

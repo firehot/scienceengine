@@ -11,13 +11,13 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 
 public abstract class AbstractFieldProber extends AbstractScience2DProber {
   private final Vector2 modelPos = new Vector2();
-  private final IScience2DModel model;
+  protected final IScience2DModel science2DModel;
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
  
-  protected AbstractFieldProber(IScience2DModel model, ProbeManager probeManager) {
+  protected AbstractFieldProber(IScience2DModel science2DModel, ProbeManager probeManager) {
     super(probeManager);
-    this.model = model;
+    this.science2DModel = science2DModel;
     this.fieldMeterActor = (Science2DActor) probeManager.findStageActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
@@ -61,6 +61,6 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   
   protected void getBField(Vector2 viewPos, Vector2 bField) {
     modelPos.set(viewPos).mul(1f / ScienceEngine.PIXELS_PER_M);
-    model.getBField(modelPos, bField /* output */);
+    science2DModel.getBField(modelPos, bField /* output */);
   }
 }

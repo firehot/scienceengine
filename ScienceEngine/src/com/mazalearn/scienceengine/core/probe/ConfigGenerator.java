@@ -7,16 +7,9 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 
 public class ConfigGenerator {
   
-  private List<IModelConfig<?>> modelConfigs;
-
-  public ConfigGenerator(List<IModelConfig<?>> modelConfigs) {
-    this.modelConfigs = modelConfigs;
-  }
-  
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public void generateConfig() {
+  public void generateConfig(List<IModelConfig<?>> modelConfigs) {
     for (IModelConfig<?> config: modelConfigs) {
-      if (!config.isAvailable()) continue;
       if (config.hasProbeMode()) {
         config.setProbeMode();
         continue;

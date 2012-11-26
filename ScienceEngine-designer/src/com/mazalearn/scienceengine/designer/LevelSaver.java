@@ -18,7 +18,6 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
@@ -30,13 +29,11 @@ public class LevelSaver {
   private IScience2DController science2DController;
   private IScience2DStage science2DStage;
   private IScience2DModel science2DModel;
-  private ControlPanel controlPanel;
 
 
   public LevelSaver(IScience2DController science2DController) {
     this.science2DController = science2DController;
     this.level = science2DController.getLevel();
-    this.controlPanel = science2DController.getControlPanel();
     this.science2DStage = science2DController.getView();
     this.science2DModel = science2DController.getModel();
   }
@@ -84,7 +81,7 @@ public class LevelSaver {
   
   private void writeConfigs(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("configs");
-    for (final IModelConfig<?> config : controlPanel.getModelConfigs()) {
+    for (final IModelConfig<?> config : science2DModel.getAllConfigs()) {
       jsonWriter.object()
           .set("name", config.getName())
           .set("permitted", config.isPermitted())

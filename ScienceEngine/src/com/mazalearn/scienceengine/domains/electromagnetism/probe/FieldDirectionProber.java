@@ -25,8 +25,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
       "The direction of the field is where the compass needle's North would point."
   };
   
-  public FieldDirectionProber(IScience2DModel model, final ProbeManager probeManager) {
-    super(model, probeManager);
+  public FieldDirectionProber(IScience2DModel science2DModel, final ProbeManager probeManager) {
+    super(science2DModel, probeManager);
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};
@@ -40,7 +40,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
     
     image = new ProbeImage();
     image.addListener(new ClickListener() {
-      Vector2 lastTouch = new Vector2(), current = new Vector2();
+      Vector2 lastTouch = new Vector2(), currentTouch = new Vector2();
       @Override
       public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         lastTouch.set(x, y);
@@ -52,9 +52,9 @@ public class FieldDirectionProber extends AbstractFieldProber {
       
       @Override
       public void touchDragged(InputEvent event, float x, float y, int pointer) {
-        current.set(x, y);
-        current.sub(lastTouch);
-        userField.setRotation(current.angle());
+        currentTouch.set(x, y);
+        currentTouch.sub(lastTouch);
+        userField.setRotation(currentTouch.angle());
       }
       
       @Override
@@ -91,7 +91,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.randomizeConfig(false);
+      probeManager.setupProbeConfigs(science2DModel.getAllConfigs(), false);
       generateProbePoints(points);
       getBField(points[0], bFields[0]);
       createFieldMeterSamples(points, bFields);

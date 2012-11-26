@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +19,9 @@ import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
+import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
 public abstract class AbstractScience2DStage extends Stage implements IScience2DStage {
@@ -39,6 +46,7 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   public ProbeManager getProbeManager() {
     if (probeManager == null) {
       probeManager = new ProbeManager(skin, getWidth(), getHeight(), this, controlPanel);
+      this.getRoot().addActor(controlPanel); // Move control Panel to top
       this.getRoot().addActorBefore(controlPanel, probeManager);
     }
     return probeManager;
@@ -63,7 +71,18 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   }
   
   // Factory method for creating science2D actors
-  protected abstract Actor createActor(Science2DBody body);
+  protected Actor createActor(Science2DBody body) {
+    if (body.getComponentType().name().equals("Dummy")) {
+      Pixmap pixmap = new Pixmap(2, 2, Format.RGBA8888);
+      pixmap.fillCircle(1, 1, 1);
+      TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
+      pixmap.dispose();
+      Actor actor = new Science2DActor(body, textureRegion);
+      actor.setName("Dummy");
+      return actor;
+    }
+    return null;
+  }
   
   // Factory method for creating visual actors
   protected abstract Actor createActor(String type);
@@ -190,4 +209,15 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
       status.setText("Demo only. Best experienced on Android Tablet");
     }
   }
+  
+  @Override
+  public AbstractScience2DProber createProber(String proberName, ProbeManager probeManager) {
+    if ("ParameterMagnitudeProber".equals(proberName)) {
+      return new ParameterMagnitudeProber(science2DModel, probeManager);
+    } else if ("ParameterDirectionProber".equals(proberName)) {
+      return new ParameterDirectionProber(science2DModel, probeManager);
+    }
+    return null;
+  }
+
 }

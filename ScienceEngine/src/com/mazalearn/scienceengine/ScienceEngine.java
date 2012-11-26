@@ -58,6 +58,8 @@ public class ScienceEngine extends Game {
 
   private static Science2DBody selectedBody;
 
+  private static boolean isProbeMode;
+
   public static final int PIXELS_PER_M = 8;
 
   public ScienceEngine(String url) {
@@ -299,5 +301,13 @@ public class ScienceEngine extends Game {
 
   public static void setSelectedBody(Science2DBody body) {
     selectedBody = body;
+  }
+
+  public static void setProbeMode(boolean probeMode) {
+    isProbeMode = probeMode;
+  }
+
+  public static boolean isProbeMode() {
+    return isProbeMode;
   }
 }

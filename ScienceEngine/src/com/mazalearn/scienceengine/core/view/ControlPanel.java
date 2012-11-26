@@ -28,7 +28,6 @@ import com.mazalearn.scienceengine.core.controller.OnOffButtonControl;
 import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
 import com.mazalearn.scienceengine.core.controller.SliderControl;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class ControlPanel extends Table {
   private final IScience2DController science2DController;
@@ -81,10 +80,6 @@ public class ControlPanel extends Table {
     registerModelConfigs(modelControlPanel);
   }
   
-  public List<IModelConfig<?>> getModelConfigs() {
-    return science2DModel.getAllConfigs();
-  }
-
   @SuppressWarnings("rawtypes")
   protected void registerModelConfigs(Table modelControlPanel) {
     this.controllers.clear();
@@ -249,8 +244,8 @@ public class ControlPanel extends Table {
     challengeControl.syncWithModel();
     suspendControl.syncWithModel();
     for (Controller controller: controllers) {
-      controller.validate();
-    }
+       controller.validate();
+     }
   }
   
   public void enableControls(boolean enable) {

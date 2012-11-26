@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
@@ -20,10 +21,12 @@ public class LightProber extends AbstractScience2DProber {
       "If the coil has more loops, more current will be induced.",
       "If the magnet is stronger, more current will be induced."
   };
+  private IScience2DModel science2DModel;
   
-  public LightProber(final ProbeManager probeManager) {
+  public LightProber(IScience2DModel science2DModel, ProbeManager probeManager) {
     super(probeManager);
     this.probeManager = probeManager;
+    this.science2DModel = science2DModel;
     image = new ProbeImage();
     this.addActor(image);
     this.lightbulbActor = (LightbulbActor) probeManager.findStageActor("Lightbulb");
@@ -45,7 +48,7 @@ public class LightProber extends AbstractScience2DProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.randomizeConfig(true);
+      probeManager.setupProbeConfigs(science2DModel.getAllConfigs(), true);
       generateProbePoints(points);
       image.setX(points[0].x - image.getWidth()/2);
       image.setY(points[0].y - image.getHeight()/2);

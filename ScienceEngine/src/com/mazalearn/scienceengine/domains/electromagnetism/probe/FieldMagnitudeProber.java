@@ -53,9 +53,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] points;
   private Vector2[] bFields;
     
-  public FieldMagnitudeProber(IScience2DModel model,
+  public FieldMagnitudeProber(IScience2DModel science2DModel,
       final ProbeManager probeManager) {
-    super(model, probeManager);
+    super(science2DModel, probeManager);
     imageCorrect = new ProbeImage();
     imageCorrect.addListener(new ClickResult(true, probeManager));
     imageWrong = new ProbeImage();
@@ -81,7 +81,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.randomizeConfig(false);
+      probeManager.setupProbeConfigs(science2DModel.getAllConfigs(), false);
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2
