@@ -16,7 +16,7 @@ public enum Attribute implements IComponentType {
   }
   
   public String toString() {
-    return ScienceEngine.getPlatformAdapter().getMsg().getString("Name." + name());  
+    return ScienceEngine.getMsg().getString("Name." + name());  
   }
   
   public static Attribute valueOf(IComponentType cType) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
+import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
@@ -72,14 +75,21 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   
   // Factory method for creating science2D actors
   protected Actor createActor(Science2DBody body) {
-    if (body.getComponentType().name().equals("Dummy")) {
-      Pixmap pixmap = new Pixmap(2, 2, Format.RGBA8888);
-      pixmap.fillCircle(1, 1, 1);
+    IComponentType componentType = body.getComponentType();
+    if (componentType == ComponentType.Dummy) {
+      Pixmap pixmap = new Pixmap(10, 10, Format.RGBA8888);
+      pixmap.setColor(Color.LIGHT_GRAY);
+      pixmap.fillRectangle(0, 0, 10, 10);
       TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
       pixmap.dispose();
-      Actor actor = new Science2DActor(body, textureRegion);
-      actor.setName("Dummy");
-      return actor;
+      return new Science2DActor(body, textureRegion);
+    } else if (componentType == ComponentType.Environment) {
+      TextureRegion textureRegion = 
+          new TextureRegion(new Texture("images/environment.jpg"));
+      Science2DActor science2DActor = new Science2DActor(body, textureRegion);
+      science2DActor.setPositionFromViewCoords(false);
+      return science2DActor;
+      
     }
     return null;
   }

@@ -28,6 +28,7 @@ import com.mazalearn.scienceengine.core.controller.TextMeter;
 import com.mazalearn.scienceengine.core.controller.ToggleButtonControl;
 import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
 import com.mazalearn.scienceengine.core.controller.SliderControl;
+import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -86,16 +87,19 @@ public class ControlPanel extends Table {
   protected void registerModelConfigs(Table modelControlPanel) {
     this.controllers.clear();
     modelControlPanel.clear();
+    // Register Environment into ControlPanel
+    Science2DActor environment = 
+        (Science2DActor) science2DStage.findActor(ComponentType.Environment.name());
+    if (environment != null) {
+      modelControlPanel.add(environment);
+      modelControlPanel.row();
+    }    
     AbstractModelConfig<String> selectedBodyConfig = 
         new AbstractModelConfig<String>(null,
             Attribute.NameOfSelectedBody, "") { //$NON-NLS-1$ //$NON-NLS-2$
           public String getValue() { 
             Science2DBody body = ScienceEngine.getSelectedBody();
-            String name = "Global";
-            if (body != null) {
-              name = body.getComponentType().name();
-            }
-            return getMsg().getString("Name." + name);
+            return body != null ? body.getComponentType().toString() : "";
           }
           public boolean isPossible() { return true; }
           public boolean isAvailable() { return true; }
@@ -132,11 +136,12 @@ public class ControlPanel extends Table {
       }
       
       @Override
-      public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        super.enter(event, x, y, pointer, fromActor);
+      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+        super.touchDown(event, localX, localY, pointer, button);
         IScience2DStage stage = (IScience2DStage) backButton.getStage();
         Label status = (Label) stage.findActor(StageComponent.Status.name());
         status.setText(ScienceEngine.getMsg().getString("Help.Back"));
+        return true;
       }
     });
     viewControls.add(backButton).height(30).colspan(2);

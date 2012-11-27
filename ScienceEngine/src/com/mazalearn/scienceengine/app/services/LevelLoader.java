@@ -16,6 +16,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.EnvironmentBody;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -67,6 +69,7 @@ public class LevelLoader {
   public void loadFromJson() {
     readLevelInfo(rootElem);
     readComponents((Array<?>) rootElem.get("components"));
+    readEnvironment((Array<?>) rootElem.get("environment"));
     readGroups((Array<?>) rootElem.get("groups"));
     readCircuits((Array<?>) rootElem.get("circuits"));
     
@@ -76,7 +79,7 @@ public class LevelLoader {
     readConfigs((Array<?>) rootElem.get("configs"));
     readProbers((Array<?>) rootElem.get("probers"));
   }
-
+  
   private void readLevelInfo(OrderedMap<String, ?> info) {
     String description = (String) nvl(info.get("description"), 
         science2DController.getName() + " : Level " + level);
@@ -151,6 +154,20 @@ public class LevelLoader {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> prober = (OrderedMap<String, ?>) probers.get(i);
       readProber(prober);
+    }
+  }
+
+  private void readEnvironment(Array<?> environmentObj) {
+    if (environmentObj == null) return;
+    
+    EnvironmentBody environment = 
+        (EnvironmentBody) science2DModel.addBody(ComponentType.Environment.name(), 0, 0, 0);
+    science2DStage.addScience2DActor(environment);
+    for (int i = 0; i < environmentObj.size; i++) {
+      @SuppressWarnings("unchecked")
+      OrderedMap<String, ?> parameter = (OrderedMap<String, ?>) environmentObj.get(i);
+      String parameterName = (String) parameter.get("name");
+      environment.addParameter(parameterName);
     }
   }
 

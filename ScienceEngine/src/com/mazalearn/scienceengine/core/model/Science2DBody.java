@@ -135,6 +135,10 @@ public class Science2DBody implements IBody {
     return Science2DBody.GROUND;
   }
   
+  public String getComponentTypeName() {
+    return componentType.name();
+  }
+
   public int getCount() {
     return count;
   }

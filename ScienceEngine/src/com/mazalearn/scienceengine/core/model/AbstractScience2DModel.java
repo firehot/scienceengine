@@ -205,8 +205,10 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   protected Science2DBody createScience2DBody(String componentTypeName,
       float x, float y, float rotation) {
-    if (componentTypeName.equals("Dummy")) {
-      return new Dummy(x, y, rotation);
+    if (componentTypeName.equals(ComponentType.Dummy.name())) {
+      return new DummyBody(x, y, rotation);
+    } else if (componentTypeName.equals(ComponentType.Environment.name())) {
+      return new EnvironmentBody(x, y, rotation);
     }
     return null;
   }

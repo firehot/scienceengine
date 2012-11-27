@@ -9,7 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.Dummy;
+import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.DummyBody;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
@@ -71,7 +72,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
   private float[] outcomes;
   private IModelConfig<Float> probeConfig;
 
-  private Dummy dummy;
+  private DummyBody dummy;
 
   private ClickResult image1Listener;
 
@@ -95,8 +96,8 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
     this.outcomes = new float[2];
     this.addActor(image1);
     this.addActor(image2);
-    Science2DActor dummyActor = (Science2DActor) probeManager.findStageActor("Dummy");
-    dummy = (Dummy) dummyActor.getBody();
+    Science2DActor dummyActor = (Science2DActor) probeManager.findStageActor(ComponentType.Dummy.name());
+    dummy = (DummyBody) dummyActor.getBody();
   }
   
   @Override
