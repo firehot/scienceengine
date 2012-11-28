@@ -2,15 +2,12 @@ package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
-import com.mazalearn.scienceengine.core.view.StageComponent;
 
 /**
  * Utility class for science2DModel floating point sliders using reflection.
@@ -35,20 +32,9 @@ public class SliderControl implements IControl {
     });
     slider.addListener(new ClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-      }
-      
-      @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        IScience2DStage stage = (IScience2DStage) slider.getStage();
-        Label status = (Label) stage.findActor(StageComponent.Status.name());
-        String component = "";
-        if (ScienceEngine.getSelectedBody() != null) {
-          component = ScienceEngine.getSelectedBody().getComponentType().toString() + " - ";
-        }
-        status.setText( component + 
-            ScienceEngine.getMsg().getString("Help." + property.getAttribute().name()));
+        ScienceEngine.selectParameter(property.getAttribute(), 
+            (IScience2DStage) slider.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

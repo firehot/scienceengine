@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
-import com.mazalearn.scienceengine.core.view.StageComponent;
 
 /**
  * Utility class for science2DModel text meter
@@ -29,14 +28,8 @@ public class TextMeter implements IControl {
     label.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        IScience2DStage stage = (IScience2DStage) label.getStage();
-        Label status = (Label) stage.findActor(StageComponent.Status.name());
-        String component = "";
-        if (ScienceEngine.getSelectedBody() != null) {
-          component = ScienceEngine.getSelectedBody().getComponentType().toString() + " - ";
-        }
-        status.setText( component + 
-            ScienceEngine.getMsg().getString("Help." + property.getAttribute().name()));
+        ScienceEngine.selectParameter(property.getAttribute(), 
+            (IScience2DStage) label.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

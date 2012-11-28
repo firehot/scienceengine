@@ -14,10 +14,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
@@ -71,13 +69,7 @@ public class Science2DActor extends Actor {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         super.touchDown(event, localX, localY, pointer, button);
-        ScienceEngine.setSelectedBody(body);
-        IScience2DStage stage = (IScience2DStage) getStage();
-        Label status = (Label) stage.findActor(StageComponent.Status.name());
-        IComponentType componentType = body.getComponentType();
-        status.setText(
-            body.toString() + "  -  " +
-            ScienceEngine.getMsg().getString("Help." + componentType.name()));
+        ScienceEngine.selectBody(body, (IScience2DStage) getStage());
         return false;
       }
     };

@@ -12,7 +12,6 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.DummyBody;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.Science2DActor;
 
 // outcome = function of parameter
 // doubts on how parameter change affects magnitude of outcome

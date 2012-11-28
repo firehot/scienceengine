@@ -112,7 +112,7 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
       image.setVisible(true);
     } 
     ScienceEngine.setProbeMode(activate);
-    ScienceEngine.setSelectedBody(null);
+    ScienceEngine.selectBody(null, null);
     this.setVisible(activate);
   }
   

@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -19,7 +18,6 @@ import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.core.view.StageComponent;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
@@ -32,11 +30,11 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CircuitActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentSourceActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ElectromagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 
 public class ElectroMagnetismView extends AbstractScience2DStage {
   private FieldMeter fieldMeter;
@@ -56,16 +54,11 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         super.touchUp(event, x, y, pointer, button);
         if (event.getTarget() == getRoot()) {
-          ScienceEngine.setSelectedBody(null);
+          ScienceEngine.selectBody(fieldMeter, ElectroMagnetismView.this);
           if (fieldMeter != null && fieldMeter.isActive() && event.getTarget() == getRoot()) {
             // Move field sampler here and convert to model coords
             pos.set(x, y).mul(1f / ScienceEngine.PIXELS_PER_M);
             fieldMeter.setPositionAndAngle(pos, 0);
-            Label status = (Label) findActor(StageComponent.Status.name());
-            status.setText(
-                fieldMeter.getComponentType().toString() + 
-                "  -  " +
-                ScienceEngine.getMsg().getString("Help." + fieldMeter.getComponentTypeName()));
           }
         }
       }       

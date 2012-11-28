@@ -2,15 +2,12 @@ package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
-import com.mazalearn.scienceengine.core.view.StageComponent;
 
 public class SelectBoxControl implements IControl {
   private final IModelConfig<String> property;
@@ -25,21 +22,14 @@ public class SelectBoxControl implements IControl {
     selectBox.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         property.setValue(selectBox.getSelection());
       }      
     });
     selectBox.addListener(new ClickListener() {   
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        IScience2DStage stage = (IScience2DStage) selectBox.getStage();
-        Label status = (Label) stage.findActor(StageComponent.Status.name());
-        String component = "";
-        if (ScienceEngine.getSelectedBody() != null) {
-          component = ScienceEngine.getSelectedBody().getComponentType().toString() + " - ";
-        }
-        status.setText( component + 
-            ScienceEngine.getMsg().getString("Help." + property.getAttribute().name()));
+        ScienceEngine.selectParameter(property.getAttribute(), 
+            (IScience2DStage) selectBox.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

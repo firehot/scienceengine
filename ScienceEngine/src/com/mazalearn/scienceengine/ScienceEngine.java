@@ -12,6 +12,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
@@ -24,9 +25,13 @@ import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.StageComponent;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
@@ -299,8 +304,28 @@ public class ScienceEngine extends Game {
     return selectedBody;
   }
 
-  public static void setSelectedBody(Science2DBody body) {
+  public static void selectBody(Science2DBody body, IScience2DStage stage) {
+    getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
+    if (body == null) return;
+    displayStatus(body.getComponentType(), stage);
+  }
+
+  public static void selectParameter(IComponentType parameter,
+      IScience2DStage stage) {
+    getSoundManager().play(ScienceEngineSound.CLICK);
+    displayStatus(parameter, stage);
+  }
+
+  private static void displayStatus(IComponentType parameter,
+      IScience2DStage stage) {
+    Label status = (Label) stage.findActor(StageComponent.Status.name());
+    String component = "";
+    if (getSelectedBody() != null) {
+      component = getSelectedBody().toString() + " - ";
+    }
+    status.setText( component + 
+        getMsg().getString("Help." + parameter.name()));
   }
 
   public static void setProbeMode(boolean probeMode) {

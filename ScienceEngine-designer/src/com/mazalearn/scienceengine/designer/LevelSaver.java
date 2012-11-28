@@ -109,7 +109,7 @@ public class LevelSaver {
       jsonWriter.array();
       // TODO: I think we might get this wrong if there are two of same componentype in acivity
       for (final CircuitElement circuitElement: circuit) {
-        jsonWriter.value(((Science2DBody) circuitElement).getComponentType().name());
+        jsonWriter.value(((Science2DBody) circuitElement).getComponentTypeName());
       }
       jsonWriter.pop();
     }
