@@ -139,8 +139,14 @@ public class Science2DBody implements IBody {
     return componentType.name();
   }
 
-  public int getCount() {
-    return count;
+  // name of body
+  public String name() {
+    return componentType.name() + (count == 0 ? "" : "." + count);
+  }
+  
+  // localized name of body
+  public String toString() {
+    return componentType.toString() + (count == 0 ? "" : " " + count);
   }
 
   public IComponentType getComponentType() {

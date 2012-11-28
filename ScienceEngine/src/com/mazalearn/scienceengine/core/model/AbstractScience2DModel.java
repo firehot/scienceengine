@@ -86,6 +86,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     return science2DBody;
   }
 
+  @Override
   public Science2DBody findBody(IComponentType componentType) {
     for (Science2DBody body: bodies) {
       if (body.getComponentType() == componentType) {
@@ -205,9 +206,9 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
 
   protected Science2DBody createScience2DBody(String componentTypeName,
       float x, float y, float rotation) {
-    if (componentTypeName.equals(ComponentType.Dummy.name())) {
+    if (ComponentType.Dummy.name().equals(componentTypeName)) {
       return new DummyBody(x, y, rotation);
-    } else if (componentTypeName.equals(ComponentType.Environment.name())) {
+    } else if (ComponentType.Environment.name().equals(componentTypeName)) {
       return new EnvironmentBody(x, y, rotation);
     }
     return null;

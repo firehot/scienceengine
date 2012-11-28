@@ -204,10 +204,9 @@ public class LevelLoader {
     }
     if (actor == null) {
       if (!type.equals("ControlPanel")) return;
-      actor = science2DStage.findActor((String) component.get("name"));
+      actor = science2DStage.findActor(type);
     }
 
-    actor.setName((String) nvl(component.get("name"), type));
     actor.setX(x);
     actor.setY(y);
     actor.setOriginX((Float) nvl(component.get("originX"), 0f));

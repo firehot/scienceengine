@@ -24,10 +24,7 @@ import com.mazalearn.scienceengine.core.controller.Controller;
 import com.mazalearn.scienceengine.core.controller.IControl;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.controller.TextMeter;
 import com.mazalearn.scienceengine.core.controller.ToggleButtonControl;
-import com.mazalearn.scienceengine.core.controller.SelectBoxControl;
-import com.mazalearn.scienceengine.core.controller.SliderControl;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -105,11 +102,11 @@ public class ControlPanel extends Table {
           public boolean isAvailable() { return true; }
     };
     
-    this.controllers.add(createViewControl(selectedBodyConfig, modelControlPanel));
+    this.controllers.add(Controller.createController(selectedBodyConfig, modelControlPanel, skin));
     modelControlPanel.row();
     // Register all model controllers
     for (IModelConfig modelConfig: science2DModel.getAllConfigs()) {
-      this.controllers.add(createViewControl(modelConfig, modelControlPanel));
+      this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
     }
   }
 
@@ -207,41 +204,6 @@ public class ControlPanel extends Table {
     return this.title;
   }
   
-  @SuppressWarnings({ "rawtypes", "unchecked" })
-  private Controller createViewControl(IModelConfig property, Table modelControlTable) {
-    Table table = new Table(skin);
-    table.setName(property.getName());
-    table.defaults().fill().expand();
-    IControl control = null;
-    switch(property.getType()) {
-      case TOGGLE: 
-        control = new ToggleButtonControl(property, skin);
-        table.add(control.getActor());
-        //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
-        break;
-      case RANGE:
-        table.add(property.getAttribute().name());
-        table.row();
-        control = new SliderControl(property, skin);
-        table.add(control.getActor());
-        break;
-      case LIST:
-        control = new SelectBoxControl(property, skin);
-        table.add(control.getActor());
-        break;
-      case COMMAND:
-        control = new CommandButtonControl(property, skin);
-        table.add(control.getActor());
-        break;
-      case TEXT:
-        control = new TextMeter(property, skin);
-        table.add(control.getActor());
-    }
-    Controller c = new Controller(modelControlTable.add(table), control);
-    modelControlTable.row();
-    return c;
-  }
-
   @Override
   public void act(float delta) {
     syncWithModel();

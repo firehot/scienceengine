@@ -63,9 +63,9 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
             fieldMeter.setPositionAndAngle(pos, 0);
             Label status = (Label) findActor(StageComponent.Status.name());
             status.setText(
-                ScienceEngine.getMsg().getString("Name." + fieldMeter.getComponentType().name()) + 
+                fieldMeter.getComponentType().toString() + 
                 "  -  " +
-                ScienceEngine.getMsg().getString("Help." + fieldMeter.getComponentType().name()));
+                ScienceEngine.getMsg().getString("Help." + fieldMeter.getComponentTypeName()));
           }
         }
       }       

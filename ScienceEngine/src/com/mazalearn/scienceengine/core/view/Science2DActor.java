@@ -41,8 +41,7 @@ public class Science2DActor extends Actor {
    */
   public Science2DActor(final Science2DBody body, TextureRegion textureRegion) {
     super();
-    this.setName(body.getComponentType().name() + 
-        (body.getCount() == 0 ? "" : body.getCount()));
+    this.setName(body.name());
     this.body = body;
     this.textureRegion = textureRegion;
     // Set the sprite width and height.
@@ -75,10 +74,9 @@ public class Science2DActor extends Actor {
         ScienceEngine.setSelectedBody(body);
         IScience2DStage stage = (IScience2DStage) getStage();
         Label status = (Label) stage.findActor(StageComponent.Status.name());
-        IComponentType componentType = Science2DActor.this.body.getComponentType();
+        IComponentType componentType = body.getComponentType();
         status.setText(
-            ScienceEngine.getMsg().getString("Name." + componentType.name()) + 
-            (body.getCount() == 0 ? "" : " " + body.getCount()) + "  -  " +
+            body.toString() + "  -  " +
             ScienceEngine.getMsg().getString("Help." + componentType.name()));
         return false;
       }
@@ -99,6 +97,14 @@ public class Science2DActor extends Actor {
     super.act(delta);
   }
 
+  /**
+   * return name of the body associated with the actor
+   */
+  @Override
+  public String getName() {
+    return body.name();
+  }
+  
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     batch.draw(textureRegion, getX(), getY(), this.getOriginX(), 

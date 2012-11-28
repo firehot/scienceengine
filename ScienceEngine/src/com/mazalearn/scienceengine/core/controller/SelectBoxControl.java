@@ -36,7 +36,7 @@ public class SelectBoxControl implements IControl {
         Label status = (Label) stage.findActor(StageComponent.Status.name());
         String component = "";
         if (ScienceEngine.getSelectedBody() != null) {
-          component = ScienceEngine.getSelectedBody().getComponentType().name() + " - ";
+          component = ScienceEngine.getSelectedBody().getComponentType().toString() + " - ";
         }
         status.setText( component + 
             ScienceEngine.getMsg().getString("Help." + property.getAttribute().name()));

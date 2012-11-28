@@ -13,7 +13,6 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   private boolean isPermitted;
 
   private final float low, high;    // Range
-  private boolean on;               // OnOff
   @SuppressWarnings("rawtypes")
   private Enum[] values;            // List
   
@@ -50,7 +49,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     this.type = type;
     this.body = body;
     this.attribute = attribute;
-    this.on = on;
+    // Ignoring <code>on</code>;
     this.low = low;
     this.high = high;
     this.values = values;
@@ -67,7 +66,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   public Science2DBody getBody() { return body; }
   public String getName() { 
     if (body != null) {
-      return body.getComponentType().name() + " " + (body.getCount() == 0 ? "" : body.getCount() + " ") + attribute.name();
+      return body.name() + "." + attribute.name();
     }
     return attribute.name();
   }

@@ -43,4 +43,6 @@ public interface IScience2DModel {
   void prepareModel();
   // find a config by name
   public IModelConfig<?> getConfig(String configName);
+  // Find a body by component type. If there are multiple, return any one.
+  public Science2DBody findBody(IComponentType componentType);
 }

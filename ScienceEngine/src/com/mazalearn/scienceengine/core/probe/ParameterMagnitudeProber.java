@@ -96,8 +96,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
     this.outcomes = new float[2];
     this.addActor(image1);
     this.addActor(image2);
-    Science2DActor dummyActor = (Science2DActor) probeManager.findStageActor(ComponentType.Dummy.name());
-    dummy = (DummyBody) dummyActor.getBody();
+    dummy = (DummyBody) model.findBody(ComponentType.Dummy);
   }
   
   @Override

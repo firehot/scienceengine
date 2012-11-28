@@ -1,2 +1,15 @@
-{"name":"Electromagnetism","level":5,"description":"Magnetic Field of an ElectroMagnet","components":[{"type":"CurrentSource", "name":"CurrentSource 1","x":389.0,"y":181.0,"originX":32.0,"originY":64.0,"width":64.0,"height":128.0,"visible":true,"rotation":0.0,"move":false},{"type":"ElectroMagnet", "name":"ElectroMagnet","x":356.57684,"y":162.42311,"originX":32.0,"originY":64.0,"width":64.0,"height":128.0,"visible":true,"rotation":0.0,"move":true},{"type":"Compass", "name":"Compass","x":26.983902,"y":337.06427,"originX":32.0,"originY":8.0,"width":64.0,"height":16.0,"visible":true,"rotation":0.0,"move":true},{"type":"FieldMeter", "name":"FieldMeter","x":281.0,"y":130.0,"originX":8.5,"originY":4.25,"width":17.0,"height":8.5,"visible":true,"rotation":0.0,"move":false},{"type":"ControlPanel", "name":"ControlPanel","x":703.0,"y":255.0,"originX":0.0,"originY":0.0,"width":0.0,"height":0.0,"visible":true,"rotation":0.0,"move":false}],"groups":[["ElectroMagnet","CurrentSource 1"]],"circuits":[["CurrentSource 1","ElectroMagnet"]],"configs":[{"name":"CurrentSource 1 CurrentType","permitted":true,"value":"DC"},{"name":"CurrentSource 1 Frequency","permitted":true,"value":1.0},{"name":"CurrentSource 1 CurrentMax","permitted":true,"value":5.0},{"name":"CurrentSource 1 CurrentDirection","permitted":true,"value":true},{"name":"ElectroMagnet CoilLoops","permitted":true,"value":1.0}],
+{"name":"Electromagnetism","level":5,"description":"Magnetic Field of an ElectroMagnet",
+"components":[
+{"type":"CurrentSource","x":389.0,"y":181.0,"originX":32.0,"originY":64.0,"width":64.0,"height":128.0,"visible":true,"rotation":0.0,"move":false},
+{"type":"ElectroMagnet","x":356.57684,"y":162.42311,"originX":32.0,"originY":64.0,"width":64.0,"height":128.0,"visible":true,"rotation":0.0,"move":true},
+{"type":"Compass","x":26.983902,"y":337.06427,"originX":32.0,"originY":8.0,"width":64.0,"height":16.0,"visible":true,"rotation":0.0,"move":true},
+{"type":"FieldMeter","x":281.0,"y":130.0,"originX":8.5,"originY":4.25,"width":17.0,"height":8.5,"visible":true,"rotation":0.0,"move":false},{"type":"ControlPanel","x":703.0,"y":255.0,"originX":0.0,"originY":0.0,"width":0.0,"height":0.0,"visible":true,"rotation":0.0,"move":false}],
+"groups":[["ElectroMagnet","CurrentSource"]],
+"circuits":[["CurrentSource","ElectroMagnet"]],
+"configs":[
+{"name":"CurrentSource.CurrentType","permitted":true,"value":"DC"},
+{"name":"CurrentSource.Frequency","permitted":true,"value":1.0},
+{"name":"CurrentSource.CurrentMax","permitted":true,"value":5.0},
+{"name":"CurrentSource.CurrentDirection","permitted":true,"value":true},
+{"name":"ElectroMagnet.CoilLoops","permitted":true,"value":1.0}],
 "probers":[{"name": "FieldMagnitudeProber"}, {"name":"FieldDirectionProber"}]}
