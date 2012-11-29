@@ -6,7 +6,7 @@ import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 public class DummyBody extends Science2DBody {
   
   float[] parameters = new float[10];
-  private ProbeConfig probeConfig1, probeConfig2;
+  private ProbeConfig probeConfig;
   
   private final class ProbeConfig extends AbstractModelConfig<Float> {
     private int num;
@@ -35,19 +35,15 @@ public class DummyBody extends Science2DBody {
 
   @Override
   public void initializeConfigs() {
-    probeConfig1 = new ProbeConfig(null, 4);
-    probeConfig2 = new ProbeConfig(null, 5);
-    configs.add(probeConfig1);
-    configs.add(probeConfig2);
+    probeConfig = new ProbeConfig(null, 4);
+    configs.add(probeConfig);
   }
   
-  public void setConfigAttribute(IComponentType attribute, float[] points) {
+  public void setConfigAttribute(IComponentType attribute, float value) {
     if (attribute == null) {
       attribute = ComponentType.Dummy;
     }
-    probeConfig1.setConfigAttribute(attribute);
-    probeConfig1.setValue(points[0]);
-    probeConfig2.setConfigAttribute(attribute);
-    probeConfig2.setValue(points[1]);
+    probeConfig.setConfigAttribute(attribute);
+    probeConfig.setValue(value);
   }
 }

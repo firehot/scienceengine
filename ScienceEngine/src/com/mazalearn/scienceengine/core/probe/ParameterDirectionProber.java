@@ -3,10 +3,7 @@ package com.mazalearn.scienceengine.core.probe;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -22,73 +19,51 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
     None;
   }
   
-  private final class ClickResult extends ClickListener {
-    private final IDoneCallback doneCallback;
-    private boolean clockwise;
- 
-    private ClickResult(IDoneCallback doneCallback) {
-      this.doneCallback = doneCallback;
-    }
-    
-    public void setClockwise(boolean clockwise) {
-      this.clockwise = clockwise;
-    }
-
-    @Override
-    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-      super.touchDown(event, x, y, pointer, button);
-      spinClockwise.setVisible(true);
-      return true;
-    }
-    
-    @Override
-    public void touchDragged(InputEvent event, float x, float y, int pointer) {
-      spinClockwise.setVisible(x < image.getWidth() / 2);
-      spinAntiClockwise.setVisible(x > image.getWidth() / 2);
-    }
-    
-    @Override
-    public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-      super.touchUp(event, x, y, pointer, button);
-      boolean success = (clockwise && spinClockwise.isVisible()) ||
-          (!clockwise && spinAntiClockwise.isVisible());
-      spinClockwise.setVisible(false);
-      spinAntiClockwise.setVisible(false);
-      doneCallback.done(success);
-    }
-  };
-
   private String[] hints = {
       "Use Fleming's left hand rule"
   };
   
-  private final Image image, spinClockwise, spinAntiClockwise;
+  private final Image image;
+  private final Image clockwise, antiClockwise, dontCare;
   private ClickResult imageListener;
   private List<IModelConfig<?>> dependConfigs;
+  
+  private Image createResultImage(String path, float x, float y) {
+    Image image = new Image(new Texture(path));
+    image.setVisible(false);
+    image.setPosition(x - image.getWidth() / 2, y - image.getHeight() / 2);
+    return image;
+  }
     
   public ParameterDirectionProber(IScience2DModel model, ProbeManager probeManager) {
     super(probeManager);
     
     image = new ProbeImage();
-    imageListener = new ClickResult(probeManager);
-    image.addListener(imageListener);
     image.setX(probeManager.getWidth() / 2 - image.getWidth() / 2 - 50);
     image.setY(probeManager.getHeight() / 2 - image.getHeight() / 2);
     
-    spinClockwise = new Image(new TextureRegion(new Texture("images/clockwise.png")));
-    spinClockwise.setVisible(false);
-    spinClockwise.setSize(spinClockwise.getWidth() * 2, spinClockwise.getHeight() * 2);
-    spinAntiClockwise = new Image(new TextureRegion(new Texture("images/anticlockwise.png")));
-    spinAntiClockwise.setSize(spinAntiClockwise.getWidth() * 2, spinAntiClockwise.getHeight() * 2);
-    spinAntiClockwise.setVisible(false);
-    spinClockwise.setX(image.getX() + image.getWidth() / 2 - spinClockwise.getWidth() / 2);
-    spinClockwise.setY(image.getY() + image.getHeight() / 2 - spinClockwise.getHeight() / 2);
-    spinAntiClockwise.setX(image.getX() + image.getWidth() / 2 - spinAntiClockwise.getWidth() / 2);
-    spinAntiClockwise.setY(image.getY() + image.getHeight() / 2 - spinAntiClockwise.getHeight() / 2);
+    clockwise = createResultImage("images/clockwise.png", 
+        image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
+    dontCare = createResultImage("images/cross.png", 
+        image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
+    antiClockwise = createResultImage("images/anticlockwise.png", 
+        image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
+
+    imageListener = new ClickResult(probeManager, new Image[] {clockwise, antiClockwise, dontCare},
+        new ClickResult.StateMapper() {
+      @Override
+      public int map(float x, float y) {
+        if (x < image.getWidth() / 2 && y > 0) return 0;
+        if (x > image.getWidth() / 2&& y > 0) return 1;
+        return 2;
+      }
+    });
+    image.addListener(imageListener);   
 
     this.addActor(image);
-    this.addActor(spinClockwise);
-    this.addActor(spinAntiClockwise);
+    this.addActor(clockwise);
+    this.addActor(antiClockwise);
+    this.addActor(dontCare);
   }
   
   @Override
@@ -108,7 +83,7 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
       probeManager.setupProbeConfigs(dependConfigs, false);
       boolean current = (Boolean) dependConfigs.get(0).getValue();
       boolean magnet =  (Boolean) dependConfigs.get(1).getValue();
-      imageListener.setClockwise(current == magnet);
+      imageListener.setResult(current == magnet ? clockwise : antiClockwise);
       image.setVisible(true);
     } 
     ScienceEngine.setProbeMode(activate);

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 
 /**
  * A simple options screen.
@@ -23,7 +24,10 @@ public class OptionsScreen extends AbstractScreen {
 
   public OptionsScreen(ScienceEngine game) {
     super(game);
-    Gdx.graphics.setContinuousRendering(false);
+    if (ScienceEngine.getPlatformAdapter().getPlatform() != PlatformAdapter.Platform.GWT) {
+      Gdx.graphics.setContinuousRendering(false);
+      Gdx.graphics.requestRendering();
+    }
   }
 
   @Override

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 
 /**
  * Shows a splash image and moves on to the next screen.
@@ -43,7 +44,9 @@ public class SplashScreen extends AbstractScreen {
 
   public SplashScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
-    Gdx.graphics.setContinuousRendering(true);
+    if (ScienceEngine.getPlatformAdapter().getPlatform() != PlatformAdapter.Platform.GWT) {
+      Gdx.graphics.setContinuousRendering(true);
+    }
   }
 
   @Override
