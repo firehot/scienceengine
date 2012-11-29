@@ -20,6 +20,7 @@ import com.mazalearn.scienceengine.app.screens.ActivityScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.AsyncLevelLoader;
+import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
@@ -64,6 +65,8 @@ public class ScienceEngine extends Game {
   private static Science2DBody selectedBody;
 
   private static boolean isProbeMode;
+
+  private static EventLog eventLog = new EventLog();
 
   public static final int PIXELS_PER_M = 8;
 
@@ -307,6 +310,7 @@ public class ScienceEngine extends Game {
   public static void selectBody(Science2DBody body, IScience2DStage stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
+    eventLog.logBodyEvent(body);
     if (body == null) return;
     displayStatus(body.getComponentType(), stage);
   }
@@ -315,17 +319,15 @@ public class ScienceEngine extends Game {
       IScience2DStage stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayStatus(parameter, stage);
+    eventLog.logParameterEvent(getSelectedBody(), parameter);
   }
 
   private static void displayStatus(IComponentType parameter,
       IScience2DStage stage) {
     Label status = (Label) stage.findActor(StageComponent.Status.name());
-    String component = "";
-    if (getSelectedBody() != null) {
-      component = getSelectedBody().toString() + " - ";
-    }
-    status.setText( component + 
-        getMsg().getString("Help." + parameter.name()));
+    String component = 
+        getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";
+    status.setText( component + getMsg().getString("Help." + parameter.name()));
   }
 
   public static void setProbeMode(boolean probeMode) {

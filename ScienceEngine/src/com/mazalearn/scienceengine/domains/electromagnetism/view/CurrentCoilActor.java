@@ -28,9 +28,9 @@ public class CurrentCoilActor extends Science2DActor {
     // Flip if negative current so that +, - on coil are correctly shown
     TextureRegion textureRegion = null;
     float rotation = getRotation();
+    rotation += currentCoil.getCurrent() < 0 ? 180 : 0;
     switch(currentCoil.getCommutatorType()) {
     case Commutator: 
-      rotation += currentCoil.getCurrent() < 0 ? 180 : 0;
       textureRegion = commutatorDc;
       break;
     case Connector:

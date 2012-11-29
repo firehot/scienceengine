@@ -100,7 +100,8 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
   
   @Override
   public String getTitle() {
-    return "Click on ? for the parameter value which will make the motor run faster.\nLong press for equal";
+    return "Select decrease or increase parameter to make the motor run faster.\n" +
+    		"Select X if parameter does not affect motor.";
   }
   
   @Override
