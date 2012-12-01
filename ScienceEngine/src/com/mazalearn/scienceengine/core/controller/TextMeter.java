@@ -21,14 +21,14 @@ public class TextMeter implements IControl {
   
   @SuppressWarnings("rawtypes")
   public TextMeter(final IModelConfig property, final Skin skin) {
-    this.label = new Label(property.getAttribute().name(), skin);
+    this.label = new Label(property.getParameter().name(), skin);
     label.setColor(Color.YELLOW);
     this.property = property;
     label.setName(property.getName());
     label.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getAttribute(), 
+        ScienceEngine.selectParameter(property.getParameter(), 
             (IScience2DStage) label.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

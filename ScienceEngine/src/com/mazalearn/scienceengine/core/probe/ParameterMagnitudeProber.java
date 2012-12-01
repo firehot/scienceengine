@@ -93,7 +93,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
   public void activate(boolean activate) {
     if (activate) {
       float value = MathUtils.random(0f, 10f);
-      dummy.setConfigAttribute(probeConfig.getAttribute(), value);
+      dummy.setConfigParameter(probeConfig.getParameter(), value);
       probeManager.setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
       
       switch (type) {
@@ -103,7 +103,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
       }
       image.setVisible(true);
     } else {
-      dummy.setConfigAttribute(null, 0);
+      dummy.setConfigParameter(null, 0);
     }
     ScienceEngine.setProbeMode(activate);
     this.setVisible(activate);

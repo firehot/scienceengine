@@ -2,22 +2,25 @@ package com.mazalearn.scienceengine.core.view;
 
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
+import com.mazalearn.scienceengine.core.model.IParameter;
 
-public enum Attribute implements IComponentType {
+public enum Parameter implements IParameter {
   Reset,
   Challenge,
   PauseResume,
+  Select,
+  Move,
   NameOfSelectedBody;
   
-  private Attribute() {
+  private Parameter() {
   }
   
   public String toString() {
     return ScienceEngine.getMsg().getString("Name." + name());  
   }
   
-  public static Attribute valueOf(IComponentType cType) {
-    for (Attribute componentType: Attribute.values()) {
+  public static Parameter valueOf(IComponentType cType) {
+    for (Parameter componentType: Parameter.values()) {
       if (componentType.name().equals(cType.name())) {
         return componentType;
       }

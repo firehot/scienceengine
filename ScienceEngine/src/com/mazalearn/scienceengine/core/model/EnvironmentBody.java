@@ -12,10 +12,10 @@ public class EnvironmentBody extends Science2DBody {
   List<Float> parameters;
   private List<IModelConfig<?>> environmentConfigs;
   
-  private class Attribute implements IComponentType {
+  private class Parameter implements IParameter {
     private String name;
 
-    private Attribute(String name) {
+    private Parameter(String name) {
       this.name = name;
     }
     
@@ -41,15 +41,15 @@ public class EnvironmentBody extends Science2DBody {
   }
   
   public void addParameter(String parameterName) {
-    Attribute attribute = new Attribute(parameterName);
+    Parameter parameter = new Parameter(parameterName);
     final int index = parameters.size();
     parameters.add(5f);
-    IModelConfig<Float> attributeConfig = new AbstractModelConfig<Float>(this, 
-        attribute, 0f, 10f) {
+    IModelConfig<Float> parameterConfig = new AbstractModelConfig<Float>(this, 
+        parameter, 0f, 10f) {
       public Float getValue() { return parameters.get(index); }
       public void setValue(Float value) { parameters.set(index, value); }
       public boolean isPossible() { return true; }
     };
-    environmentConfigs.add(attributeConfig);
+    environmentConfigs.add(parameterConfig);
   }
 }

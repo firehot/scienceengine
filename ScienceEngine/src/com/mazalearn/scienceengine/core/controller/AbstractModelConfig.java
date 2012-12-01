@@ -1,7 +1,7 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.IComponentType;
+import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
@@ -9,7 +9,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   private final ConfigType type;
   private final Science2DBody body;
   // Not final, protected so that dummy probe will work
-  protected IComponentType attribute;
+  protected IParameter parameter;
   private boolean isPermitted;
 
   private final float low, high;    // Range
@@ -17,38 +17,38 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   private Enum[] values;            // List
   
   // Command type constructor
-  public AbstractModelConfig(Science2DBody body, IComponentType attribute) {
+  public AbstractModelConfig(Science2DBody body, IParameter attribute) {
     this(ConfigType.COMMAND, body, attribute, false, 0, 0, null);
   }
   
   // Text type constructor
-  public AbstractModelConfig(Science2DBody body, IComponentType attribute, String text) {
+  public AbstractModelConfig(Science2DBody body, IParameter attribute, String text) {
     this(ConfigType.TEXT, body, attribute, false, 0, 0, null);
   }
   
   // Toggle type constructor
-  public AbstractModelConfig(Science2DBody body, IComponentType attribute, boolean on) {
+  public AbstractModelConfig(Science2DBody body, IParameter attribute, boolean on) {
     this(ConfigType.TOGGLE, body, attribute, on, 0, 0, null);
   }
   
   // Range type constructor
-  public AbstractModelConfig(Science2DBody body, IComponentType attribute, float low, float high) {
+  public AbstractModelConfig(Science2DBody body, IParameter attribute, float low, float high) {
     this(ConfigType.RANGE, body, attribute, false, low, high, null);
   }
   
   // List type constructor
   @SuppressWarnings("rawtypes")
-  public AbstractModelConfig(Science2DBody body, IComponentType attribute, Enum[] values) {
+  public AbstractModelConfig(Science2DBody body, IParameter attribute, Enum[] values) {
     this(ConfigType.LIST, body, attribute, false, 0, 0, values);
   }
   
   // Canonical constructor - only used internally
   @SuppressWarnings("rawtypes")
-  private AbstractModelConfig(ConfigType type, Science2DBody body, IComponentType attribute, 
+  private AbstractModelConfig(ConfigType type, Science2DBody body, IParameter attribute, 
       boolean on, float low, float high, Enum[] values) {
     this.type = type;
     this.body = body;
-    this.attribute = attribute;
+    this.parameter = attribute;
     // Ignoring <code>on</code>;
     this.low = low;
     this.high = high;
@@ -66,11 +66,11 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   public Science2DBody getBody() { return body; }
   public String getName() { 
     if (body != null) {
-      return body.name() + "." + attribute.name();
+      return body.name() + "." + parameter.name();
     }
-    return attribute.name();
+    return parameter.name();
   }
-  public IComponentType getAttribute() { return attribute; }
+  public IParameter getParameter() { return parameter; }
   public T getValue() { return null; }
   public void setValue(T value) {}
   public abstract boolean isPossible();

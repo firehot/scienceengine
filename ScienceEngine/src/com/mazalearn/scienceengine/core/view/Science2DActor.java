@@ -59,6 +59,7 @@ public class Science2DActor extends Actor {
         lastTouch.sub(event.getStageX(), event.getStageY());
         Science2DActor.this.setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
         setPositionFromViewCoords(true);
+        ScienceEngine.selectParameter(Parameter.Move, (IScience2DStage) getStage());
         // Recalibrate lastTouch to new coordinates
         lastTouch.set(event.getStageX(), event.getStageY());
       }

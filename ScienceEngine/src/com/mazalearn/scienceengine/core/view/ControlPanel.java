@@ -93,7 +93,7 @@ public class ControlPanel extends Table {
     }    
     AbstractModelConfig<String> selectedBodyConfig = 
         new AbstractModelConfig<String>(null,
-            Attribute.NameOfSelectedBody, "") { //$NON-NLS-1$ //$NON-NLS-2$
+            Parameter.NameOfSelectedBody, "") { //$NON-NLS-1$ //$NON-NLS-2$
           public String getValue() { 
             Science2DBody body = ScienceEngine.getSelectedBody();
             return body != null ? body.getComponentType().toString() : "";
@@ -147,7 +147,7 @@ public class ControlPanel extends Table {
     // Add challenge/learn functionality
     AbstractModelConfig<Boolean> challengeModelConfig = 
         new AbstractModelConfig<Boolean>(null, 
-            Attribute.Challenge, false) { //$NON-NLS-1$ //$NON-NLS-2$
+            Parameter.Challenge, false) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.challenge(value);}
           public Boolean getValue() { return science2DStage.isChallengeInProgress(); }
           public boolean isPossible() { return true; }
@@ -167,7 +167,7 @@ public class ControlPanel extends Table {
     
     // Add pause/resume functionality for the experiment
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
-        new AbstractModelConfig<Boolean>(null, Attribute.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
+        new AbstractModelConfig<Boolean>(null, Parameter.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DStage.suspend(value); }
           public Boolean getValue() { return science2DStage.isSuspended(); }
           public boolean isPossible() { return true; }
@@ -183,7 +183,7 @@ public class ControlPanel extends Table {
 
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
-        new AbstractModelConfig<String>(null, Attribute.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
+        new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
           public void doCommand() { science2DModel.reset(); }
           public boolean isPossible() { return true; }
     };

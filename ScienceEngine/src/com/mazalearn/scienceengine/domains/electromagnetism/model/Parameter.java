@@ -2,8 +2,9 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
+import com.mazalearn.scienceengine.core.model.IParameter;
 
-public enum Attribute implements IComponentType {
+public enum Parameter implements IParameter {
   CurrentType,
   CurrentFrequency,
   CurrentMax,
@@ -15,15 +16,15 @@ public enum Attribute implements IComponentType {
   CoilLoops,
   Flip;
   
-  private Attribute() {
+  private Parameter() {
   }
   
   public String toString() {
     return ScienceEngine.getMsg().getString("Name." + name());  
   }
   
-  public static Attribute valueOf(IComponentType cType) {
-    for (Attribute componentType: Attribute.values()) {
+  public static Parameter valueOf(IComponentType cType) {
+    for (Parameter componentType: Parameter.values()) {
       if (componentType.name().equals(cType.name())) {
         return componentType;
       }

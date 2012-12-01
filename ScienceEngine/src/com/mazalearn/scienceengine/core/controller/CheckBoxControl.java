@@ -26,7 +26,7 @@ public class CheckBoxControl implements IControl {
       
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getAttribute(), 
+        ScienceEngine.selectParameter(property.getParameter(), 
             (IScience2DStage) checkBox.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

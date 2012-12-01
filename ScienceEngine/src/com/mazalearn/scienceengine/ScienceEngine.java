@@ -30,6 +30,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IComponentType;
+import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.StageComponent;
@@ -312,22 +313,20 @@ public class ScienceEngine extends Game {
     selectedBody = body;
     eventLog.logBodyEvent(body);
     if (body == null) return;
-    displayStatus(body.getComponentType(), stage);
+    displayStatus(body.getComponentTypeName(), stage);
   }
 
-  public static void selectParameter(IComponentType parameter,
-      IScience2DStage stage) {
+  public static void selectParameter(IParameter parameter, IScience2DStage stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
-    displayStatus(parameter, stage);
+    displayStatus(parameter.name(), stage);
     eventLog.logParameterEvent(getSelectedBody(), parameter);
   }
 
-  private static void displayStatus(IComponentType parameter,
-      IScience2DStage stage) {
+  private static void displayStatus(String entityName, IScience2DStage stage) {
     Label status = (Label) stage.findActor(StageComponent.Status.name());
     String component = 
         getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";
-    status.setText( component + getMsg().getString("Help." + parameter.name()));
+    status.setText( component + getMsg().getString("Help." + entityName));
   }
 
   public static void setProbeMode(boolean probeMode) {

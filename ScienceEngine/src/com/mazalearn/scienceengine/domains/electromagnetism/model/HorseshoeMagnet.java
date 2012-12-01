@@ -24,14 +24,14 @@ public class HorseshoeMagnet extends AbstractMagnet {
   @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(this, 
-        Attribute.MagnetStrength, 0f, 10f) {
+        Parameter.MagnetStrength, 0f, 10f) {
       public Float getValue() { return getStrength(); }
       public void setValue(Float value) { setStrength(value); }
       public boolean isPossible() { return isActive(); }
     });
 
     configs.add(new AbstractModelConfig<Boolean>(this, 
-        Attribute.Flip, false) {
+        Parameter.Flip, false) {
       public Boolean getValue() { return getAngle() != 0f; }
       public void setValue(Boolean value) { setAngle(value ? MathUtils.PI : 0); }
       public boolean isPossible() { return isActive(); }

@@ -60,7 +60,7 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
   @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<Float>(this, 
-        Attribute.CoilLoops, 1f, 4f) {
+        Parameter.CoilLoops, 1f, 4f) {
       public Float getValue() { return getNumberOfLoops(); }
       public void setValue(Float value) { setNumberOfLoops(value); }
       public boolean isPossible() { return isActive(); }

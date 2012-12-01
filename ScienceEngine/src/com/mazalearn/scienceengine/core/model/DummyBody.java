@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.core.model;
 
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
+import com.mazalearn.scienceengine.core.view.Parameter;
 
 public class DummyBody extends Science2DBody {
   
@@ -12,7 +13,7 @@ public class DummyBody extends Science2DBody {
     private int num;
 
     private ProbeConfig(Science2DBody body, int num) {
-      super(body, ComponentType.Dummy, 0f, 10f);
+      super(body, Parameter.Select, 0f, 10f);
       this.num = num;
     }
 
@@ -22,10 +23,10 @@ public class DummyBody extends Science2DBody {
 
     public boolean isPossible() { return true; }
 
-    public boolean isAvailable() { return ScienceEngine.isProbeMode() && attribute != ComponentType.Dummy; }
+    public boolean isAvailable() { return ScienceEngine.isProbeMode() && parameter != Parameter.Select; }
 
-    public void setConfigAttribute(IComponentType attribute) {
-      this.attribute = attribute;
+    public void setConfigParameter(IParameter parameter) {
+      this.parameter = parameter;
     }
   }
 
@@ -39,11 +40,11 @@ public class DummyBody extends Science2DBody {
     configs.add(probeConfig);
   }
   
-  public void setConfigAttribute(IComponentType attribute, float value) {
-    if (attribute == null) {
-      attribute = ComponentType.Dummy;
+  public void setConfigParameter(IParameter parameter, float value) {
+    if (parameter == null) {
+      parameter = Parameter.Select;
     }
-    probeConfig.setConfigAttribute(attribute);
+    probeConfig.setConfigParameter(parameter);
     probeConfig.setValue(value);
   }
 }

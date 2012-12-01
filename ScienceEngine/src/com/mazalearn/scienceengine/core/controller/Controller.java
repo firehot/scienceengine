@@ -38,7 +38,7 @@ public class Controller {
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
       case RANGE:
-        Label name = new Label(property.getAttribute().name(), skin);
+        Label name = new Label(property.getParameter().name(), skin);
         table.add(name);
         table.row();
         control = new SliderControl(property, skin);

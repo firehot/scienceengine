@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.core.controller;
 
-import com.mazalearn.scienceengine.core.model.IComponentType;
+import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public interface IModelConfig<T> {
@@ -9,7 +9,7 @@ public interface IModelConfig<T> {
   public Science2DBody getBody();
   public ConfigType getType();
   public String getName();
-  public IComponentType getAttribute();
+  public IParameter getParameter();
   // Is this configuration hook available with current configs?
   public boolean isAvailable();
 

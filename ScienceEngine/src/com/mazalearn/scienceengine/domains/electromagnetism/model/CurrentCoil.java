@@ -49,7 +49,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<String>(this, 
-        Attribute.CommutatorType, CommutatorType.values()) {
+        Parameter.CommutatorType, CommutatorType.values()) {
       public String getValue() { return commutatorType.name(); }
       public void setValue(String value) { commutatorType = CommutatorType.valueOf(value); }
       public boolean isPossible() { return isActive(); }

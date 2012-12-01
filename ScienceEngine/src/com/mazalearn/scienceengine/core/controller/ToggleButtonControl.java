@@ -19,7 +19,7 @@ public class ToggleButtonControl implements IControl {
   protected final TextButton toggleButton;
   
   public ToggleButtonControl(final IModelConfig<Boolean> property, final Skin skin) {
-    this.toggleButton = new TextButton(property.getAttribute().name(), 
+    this.toggleButton = new TextButton(property.getParameter().name(), 
         skin.get("toggle", TextButtonStyle.class));
     this.property = property;
     toggleButton.setName(property.getName()); 
@@ -31,7 +31,7 @@ public class ToggleButtonControl implements IControl {
       
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getAttribute(), 
+        ScienceEngine.selectParameter(property.getParameter(), 
             (IScience2DStage) toggleButton.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
