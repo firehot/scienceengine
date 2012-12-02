@@ -17,6 +17,7 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
+import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
@@ -184,7 +185,7 @@ public class ControlPanel extends Table {
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
-          public void doCommand() { science2DModel.reset(); }
+          public void doCommand() { new LevelLoader(science2DController).load(); }
           public boolean isPossible() { return true; }
     };
     IControl resetControl = new CommandButtonControl(resetModelConfig, skin);

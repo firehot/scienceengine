@@ -44,7 +44,7 @@ public class BarMagnetActor extends Science2DActor {
         // box2d point of current touch
         getBox2DPositionFromViewPosition(newPos, newPos, getRotation());
         // Use center as origin - dont understand why this step
-        newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
+        newPos.sub(barMagnet.getWidth()/4, barMagnet.getHeight()/4);
         barMagnet.applyForce(lastTouch, newPos);
       }
 

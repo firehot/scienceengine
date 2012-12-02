@@ -40,4 +40,6 @@ public interface IScience2DStage extends IDoneCallback {
   public ProbeManager getProbeManager();
   // Create prober
   public AbstractScience2DProber createProber(String proberName, ProbeManager probeManager);
+  // Clear all actors on stage
+  public void clear();
 }

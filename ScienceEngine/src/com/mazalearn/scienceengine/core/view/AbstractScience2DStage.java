@@ -56,6 +56,12 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   }
   
   @Override
+  public void clear() {
+    getRoot().clear();
+    setControlPanel(controlPanel);
+  }
+  
+  @Override
   public Actor addVisualActor(String name) {
     Actor actor = createActor(name);
     if (actor == null) return null;
@@ -77,9 +83,9 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   protected Actor createActor(Science2DBody body) {
     IComponentType componentType = body.getComponentType();
     if (componentType == ComponentType.Dummy) {
-      Pixmap pixmap = new Pixmap(10, 10, Format.RGBA8888);
+      Pixmap pixmap = new Pixmap(8, 8, Format.RGBA8888);
       pixmap.setColor(Color.LIGHT_GRAY);
-      pixmap.fillRectangle(0, 0, 10, 10);
+      pixmap.fillRectangle(0, 0, 8, 8);
       TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
       pixmap.dispose();
       return new Science2DActor(body, textureRegion);

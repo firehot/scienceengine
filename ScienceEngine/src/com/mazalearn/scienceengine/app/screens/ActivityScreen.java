@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -37,11 +36,10 @@ public class ActivityScreen extends AbstractScreen {
     this.experimentName = experimentName;
     String fileName = LevelUtil.getLevelFilename(experimentName, ".json", level);
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
-      this.science2DController = ScienceEngine.assetManager.get(fileName);
-    } else {
-      this.science2DController = 
-          createExperimentController(experimentName, level, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+      ScienceEngine.assetManager.unload(fileName);
     }
+    this.science2DController = 
+        createExperimentController(experimentName, level, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     IScience2DStage science2DStage = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
@@ -100,7 +98,9 @@ public class ActivityScreen extends AbstractScreen {
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;
     }
+    // TODO: Move assets inside appropriate view
     ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);
+    ScienceEngine.assetManager.load("images/coppercoils-front2.png", Texture.class);
     ScienceEngine.assetManager.load("images/brush.png", Texture.class);
     
     for (ComponentType componentType: ComponentType.values()) {

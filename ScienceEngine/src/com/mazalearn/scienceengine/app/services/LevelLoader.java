@@ -48,6 +48,8 @@ public class LevelLoader {
    
   public void load() {
     rootElem = getJsonFromFile();
+    science2DStage.clear();
+    science2DModel.clear();
     loadFromJson();
   }
 
@@ -197,6 +199,7 @@ public class LevelLoader {
             y / ScienceEngine.PIXELS_PER_M, 
             rotation * MathUtils.degreesToRadians);
     Actor actor = null;
+    Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
     if (science2DBody != null) {
       actor = science2DStage.addScience2DActor(science2DBody);
     } else {

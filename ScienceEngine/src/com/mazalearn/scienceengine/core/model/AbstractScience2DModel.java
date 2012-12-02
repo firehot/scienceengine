@@ -59,6 +59,11 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   protected abstract void singleStep();
 
   @Override
+  public void clear() {
+    bodies.clear();
+  }
+  
+  @Override
   public Science2DBody addBody(String componentTypeName, 
       float x, float y, float rotation) {
     Science2DBody science2DBody = createScience2DBody(componentTypeName, 
