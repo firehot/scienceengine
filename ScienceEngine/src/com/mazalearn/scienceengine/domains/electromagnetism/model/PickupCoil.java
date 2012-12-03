@@ -85,14 +85,14 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
     Vector2 pos = new Vector2();
     PolygonShape rectangleShape = new PolygonShape();
     pos.set(0, radius);
-    rectangleShape.setAsBox(this.wireWidth/2, this.wireWidth/2, pos, 0);
-    fixtureDef.density = 1;
+    rectangleShape.setAsBox(this.wireWidth/12, this.wireWidth/12, pos, 0);
+    fixtureDef.density = 1000;
     fixtureDef.shape = rectangleShape;
     fixtureDef.filter.categoryBits = 0x0000;
     fixtureDef.filter.maskBits = 0x0000;
     this.createFixture(fixtureDef);
     pos.set(0, -radius);
-    rectangleShape.setAsBox(this.wireWidth/2, this.wireWidth/2, pos, 0);
+    rectangleShape.setAsBox(this.wireWidth/12, this.wireWidth/12, pos, 0);
     this.createFixture(fixtureDef);
     rectangleShape.dispose();
   }

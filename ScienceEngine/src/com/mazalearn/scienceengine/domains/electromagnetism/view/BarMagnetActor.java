@@ -1,9 +1,11 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,6 +22,8 @@ public class BarMagnetActor extends Science2DActor {
   private final BarMagnet barMagnet;
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
+  private Vector3 currentTouch = new Vector3();
+  private boolean drag = false;
   
   public BarMagnetActor(Science2DBody body, TextureRegion textureRegion, 
       BitmapFont font) {
@@ -34,6 +38,7 @@ public class BarMagnetActor extends Science2DActor {
     this.addListener(new ClickListener() {
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        drag = false;
         if (Mode.valueOf(barMagnet.getMode()) != Mode.Rotate) return;
         // Get negative of movement vector
         lastTouch.sub(event.getStageX(), event.getStageY());
@@ -44,34 +49,46 @@ public class BarMagnetActor extends Science2DActor {
         // box2d point of current touch
         getBox2DPositionFromViewPosition(newPos, newPos, getRotation());
         // Use center as origin - dont understand why this step
-        newPos.sub(barMagnet.getWidth()/4, barMagnet.getHeight()/4);
+        newPos.sub(barMagnet.getWidth()/2, barMagnet.getHeight()/2);
         barMagnet.applyForce(lastTouch, newPos);
+        ScienceEngine.selectParameter(Parameter.Rotate, (IScience2DStage) getStage());
       }
 
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         if (!isAllowMove()) return false;
         lastTouch.set(event.getStageX(), event.getStageY());
+        if (Mode.valueOf(barMagnet.getMode()) != Mode.Rotate) {
+          drag = true;
+        }
         return true;
-     }
+      }
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
-        if (Mode.valueOf(barMagnet.getMode()) == Mode.Free) {
-          // Get negative of movement vector
-          lastTouch.sub(event.getStageX(), event.getStageY());
-          setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
-          setPositionFromViewCoords(true);
-          ScienceEngine.selectParameter(Parameter.Move, (IScience2DStage) getStage());
-          // Recalibrate lastTouch to new coordinates
-          lastTouch.set(event.getStageX(), event.getStageY());
-        }
+        if (Mode.valueOf(barMagnet.getMode()) != Mode.Free) return;
+        // Get negative of movement vector
+        if (drag) moveToCurrent();
       }
     });
   }
 
+  private void moveToCurrent() {
+    // Screen coords of current touch
+    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    // Screen coords of current touch
+    getStage().getCamera().unproject(currentTouch);
+    // Get negative of movement vector
+    lastTouch.sub(currentTouch.x, currentTouch.y);
+    setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
+    setPositionFromViewCoords(true);
+    // Recalibrate lastTouch to new coordinates
+    lastTouch.set(currentTouch.x, currentTouch.y);
+  }
+
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
+    if (drag) moveToCurrent();
     super.draw(batch, parentAlpha);
     if (Mode.valueOf(barMagnet.getMode()) == Mode.Rotate) { // Display RPM
       drawRpm(batch, parentAlpha);

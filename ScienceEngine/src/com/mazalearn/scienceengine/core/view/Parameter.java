@@ -10,7 +10,8 @@ public enum Parameter implements IParameter {
   PauseResume,
   Select,
   Move,
-  NameOfSelectedBody;
+  NameOfSelectedBody, 
+  Rotate;
   
   private Parameter() {
   }
