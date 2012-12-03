@@ -12,6 +12,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -77,7 +78,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     // Make all actors non-movable
     for (Actor actor: this.getChildren()) {
       if (actor instanceof Science2DActor) {
-        ((Science2DActor) actor).setAllowMove(false);
+        ((Science2DActor) actor).setMovementMode(MovementMode.None.name());
       }
     }
 

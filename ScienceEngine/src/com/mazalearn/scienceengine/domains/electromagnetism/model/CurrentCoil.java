@@ -5,9 +5,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -31,8 +29,6 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   private Vector2 forceVector = new Vector2(), pos = new Vector2();
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
-  private RevoluteJointDef rotationJointDef = new RevoluteJointDef();
-
   public CurrentCoil(float x, float y, float angle) {
     super(ComponentType.CurrentCoil, x, y, angle);
     this.width = 16f;
@@ -50,10 +46,12 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   }
 
   @Override
+  public void resetInitial() {
+    super.resetInitial();
+  }
+  
+  @Override
   public void initializeConfigs() {
-    rotationJointDef.initialize(getBody(), Science2DBody.getGround(), 
-        getWorldPoint(Vector2.Zero));
-    getModel().getBox2DWorld().createJoint(rotationJointDef);
     configs.add(new AbstractModelConfig<String>(this, 
         Parameter.CommutatorType, CommutatorType.values()) {
       public String getValue() { return commutatorType.name(); }

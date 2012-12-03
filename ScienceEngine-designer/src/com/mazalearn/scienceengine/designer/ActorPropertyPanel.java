@@ -15,7 +15,7 @@ class ActorPropertyPanel extends Table {
   private TextField widthField, heightField, xField, yField, rotationField;
   private TextField originXField, originYField;
   private Label nameLabel;
-  private CheckBox allowMoveField;
+  private TextField allowMoveField;
   private CheckBox dynamicBodyField;
   public ActorPropertyPanel(Skin skin, final LevelEditor levelEditor) {
     super(skin);
@@ -31,7 +31,7 @@ class ActorPropertyPanel extends Table {
     rotationField = addLabeledProperty("Rotation");
     originXField = addLabeledProperty("Origin X");
     originYField = addLabeledProperty("Origin Y");
-    allowMoveField = addCheckBoxProperty("Allow Move");
+    allowMoveField = addLabeledProperty("Allow Move");
     dynamicBodyField = addCheckBoxProperty("Dynamic Body");
   }
 
@@ -76,7 +76,7 @@ class ActorPropertyPanel extends Table {
     actor.setOriginY(Float.parseFloat(originYField.getText()));
     if (actor instanceof Science2DActor) {
       Science2DActor science2DActor = (Science2DActor) actor;
-      science2DActor.setAllowMove(allowMoveField.isChecked());
+      science2DActor.setMovementMode(allowMoveField.getText());
       science2DActor.getBody().setType(
           dynamicBodyField.isChecked() ? BodyType.DynamicBody : BodyType.StaticBody);
     }
@@ -94,7 +94,7 @@ class ActorPropertyPanel extends Table {
     if (actor instanceof Science2DActor) {
       allowMoveField.setDisabled(false);
       Science2DActor science2DActor = (Science2DActor) actor;
-      allowMoveField.setChecked(science2DActor.isAllowMove());
+      allowMoveField.setText(science2DActor.getMovementMode());
       dynamicBodyField.setChecked(
           science2DActor.getBody().getType() == BodyType.DynamicBody);
     } else {

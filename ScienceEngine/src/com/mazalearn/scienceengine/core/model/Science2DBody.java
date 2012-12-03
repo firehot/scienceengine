@@ -12,11 +12,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 
 /**
@@ -27,6 +29,8 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
  * @author sridhar
  */
 public class Science2DBody implements IBody {
+  public enum MovementMode {Move, Rotate, None}
+
   // Must be set before using this class
   private static World box2DWorld;
   // Ground body
@@ -45,6 +49,9 @@ public class Science2DBody implements IBody {
   private boolean initialIsActive;
   private IComponentType componentType;
   private int count;
+  private MovementMode movementMode = MovementMode.Move;
+  private RevoluteJointDef rotationJointDef = new RevoluteJointDef();
+  private Joint rotationJoint;
   
   protected Science2DBody(IComponentType componentType, float x, float y, float angle) {
     this.componentType = componentType;
@@ -456,5 +463,27 @@ public class Science2DBody implements IBody {
   @Override
   public void setUserData(Object userData) {
     body.setUserData(userData);
+  }
+
+  public String getMovementMode() {
+    return movementMode.name();
+  }
+
+  public void setMovementMode(String mode) {
+    setMovementMode(MovementMode.valueOf(mode));
+  }
+
+  public void setMovementMode(MovementMode movementMode) {
+    this.movementMode = movementMode;
+    if (rotationJoint != null) {
+      getModel().getBox2DWorld().destroyJoint(rotationJoint);
+      rotationJoint = null;
+    }
+    if (this.movementMode == MovementMode.Rotate) {
+      rotationJointDef.initialize(getBody(), Science2DBody.getGround(), 
+          getWorldPoint(Vector2.Zero));
+      rotationJoint = 
+          getModel().getBox2DWorld().createJoint(rotationJointDef);
+    }
   }
 }

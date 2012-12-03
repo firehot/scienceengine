@@ -221,7 +221,7 @@ public class LevelLoader {
     if (actor instanceof Science2DActor) {
       Science2DActor science2DActor = (Science2DActor) actor;
       science2DActor.setPositionFromViewCoords(false);
-      science2DActor.setAllowMove((Boolean) nvl(component.get("move"), false));
+      science2DActor.setMovementMode((String) nvl(component.get("move"), "None"));
       if ((Boolean)nvl(component.get("bodytype"), false)) {
         science2DActor.getBody().setType(BodyType.DynamicBody);
       } else {

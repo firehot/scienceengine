@@ -120,10 +120,11 @@ public class LevelSaver {
     jsonWriter.array("components");
     for (Actor a : science2DStage.getActors()) {
       if (!a.isVisible()) continue; 
-      boolean moveAllowed = false, dynamicBody = false;
+      String movementMode = "None";
+      boolean dynamicBody = false;
       if (a instanceof Science2DActor) {
         Science2DActor science2DActor = (Science2DActor) a;
-        moveAllowed = science2DActor.isAllowMove();
+        movementMode = science2DActor.getMovementMode();
         dynamicBody = science2DActor.getBody().getType() == BodyType.DynamicBody;
       }
       jsonWriter.object()
@@ -136,7 +137,7 @@ public class LevelSaver {
           .set("height", a.getHeight())
           .set("visible", a.isVisible())
           .set("rotation", a.getRotation())
-          .set("move", moveAllowed)
+          .set("move", movementMode)
           .set("bodytype", dynamicBody)
           .pop();
     }

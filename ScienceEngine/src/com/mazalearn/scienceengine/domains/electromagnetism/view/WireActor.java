@@ -17,7 +17,6 @@ public class WireActor extends Science2DActor {
   public WireActor(Science2DBody body) {
     super(body, new TextureRegion(currentWireUp));
     this.currentWire = (Wire) body;
-    this.setAllowMove(true);
   }
   
   @Override

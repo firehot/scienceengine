@@ -39,7 +39,8 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     for (String actorName: actorNames) {
       Science2DActor actor = (Science2DActor) probeManager.findStageActor(actorName);
       if (actor != null) {
-        actor.setAllowMove(!probeMode);
+        //TODO: how to reset movement mode???
+        //actor.setMovementMode(!probeMode);
       }
     }
   }  

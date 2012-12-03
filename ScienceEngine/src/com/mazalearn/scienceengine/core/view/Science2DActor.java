@@ -7,16 +7,19 @@ package com.mazalearn.scienceengine.core.view;
  * 
  */
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
 
 /**
  * Science2DActor - Takes as model a Science2DBody which is a Box2D body
@@ -29,7 +32,8 @@ public class Science2DActor extends Actor {
   private TextureRegion textureRegion;
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
   protected Vector2 lastTouch = new Vector2();    // view coordinates
-  private boolean allowMove = false;
+  private boolean drag = false;
+  private Vector3 currentTouch = new Vector3();
 
   /**
    * Constructor.
@@ -48,20 +52,38 @@ public class Science2DActor extends Actor {
     ClickListener touchLlistener = new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        if (!allowMove) return false;
+        if (MovementMode.valueOf(getMovementMode()) == MovementMode.None) return false;
         lastTouch.set(event.getStageX(), event.getStageY());
+        if (MovementMode.valueOf(getMovementMode()) != MovementMode.Rotate) {
+          drag = true;
+        }
         return true;
       }
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
+        if (MovementMode.valueOf(getMovementMode()) != MovementMode.Move) return;
+        // Get negative of movement vector
+        if (drag) moveToCurrent();
+      }
+
+      @Override
+      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        drag = false;
+        if (MovementMode.valueOf(getMovementMode()) != MovementMode.Rotate) return;
         // Get negative of movement vector
         lastTouch.sub(event.getStageX(), event.getStageY());
-        Science2DActor.this.setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
-        setPositionFromViewCoords(true);
-        ScienceEngine.selectParameter(Parameter.Move, (IScience2DStage) getStage());
-        // Recalibrate lastTouch to new coordinates
-        lastTouch.set(event.getStageX(), event.getStageY());
+        // Scale displacement vector suitably to get a proportional force
+        lastTouch.mul(-10000);
+        // view coords of current touch
+        viewPos.set(event.getStageX(), event.getStageY());
+        // box2d point of current touch
+        getBox2DPositionFromViewPosition(viewPos, viewPos, getRotation());
+        // Use center as origin - dont understand why this step
+        viewPos.sub(getWidth() / (2 * ScienceEngine.PIXELS_PER_M), 
+            getHeight() / (2 * ScienceEngine.PIXELS_PER_M));
+        body.applyForce(lastTouch, viewPos);
+        ScienceEngine.selectParameter(Parameter.Rotate, (IScience2DStage) getStage());
       }
 
     };
@@ -77,6 +99,19 @@ public class Science2DActor extends Actor {
     this.addListener(helpListener);     
   }
   
+  private void moveToCurrent() {
+    // Screen coords of current touch
+    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    // Screen coords of current touch
+    getStage().getCamera().unproject(currentTouch);
+    // Get negative of movement vector
+    lastTouch.sub(currentTouch.x, currentTouch.y);
+    setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
+    setPositionFromViewCoords(true);
+    // Recalibrate lastTouch to new coordinates
+    lastTouch.set(currentTouch.x, currentTouch.y);
+  }
+
   public Science2DBody getBody() {
     return body;
   }
@@ -100,6 +135,7 @@ public class Science2DActor extends Actor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
+    if (drag) moveToCurrent();
     batch.draw(textureRegion, getX(), getY(), this.getOriginX(), 
         this.getOriginY(), getWidth(), getHeight(), 1, 1, getRotation());
     // debugDraw(batch);
@@ -161,11 +197,11 @@ public class Science2DActor extends Actor {
     }
   }
   
-  public boolean isAllowMove() {
-    return allowMove;
+  public String getMovementMode() {
+    return body.getMovementMode();
   }
 
-  public void setAllowMove(boolean allowMove) {
-    this.allowMove = allowMove;
+  public void setMovementMode(String movementMode) {
+    body.setMovementMode(movementMode);
   }
 }

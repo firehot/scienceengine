@@ -48,7 +48,7 @@ public class VariablesProber extends AbstractScience2DProber {
     this.addActor(configTable);
 
     final Set<String> correctVariables1 = new HashSet<String>();
-    for (String configName: new String[] {"BarMagnet Strength", "BarMagnet Mode", "PickupCoil Coil Loops"}) {
+    for (String configName: new String[] {"BarMagnet Strength", "BarMagnet MovementMode", "PickupCoil Coil Loops"}) {
       correctVariables1.add(configName);
     }
     final Set<String> correctVariables2 = new HashSet<String>();
