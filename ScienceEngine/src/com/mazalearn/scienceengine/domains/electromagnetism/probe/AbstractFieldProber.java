@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -39,8 +40,11 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     for (String actorName: actorNames) {
       Science2DActor actor = (Science2DActor) probeManager.findStageActor(actorName);
       if (actor != null) {
-        //TODO: how to reset movement mode???
-        //actor.setMovementMode(!probeMode);
+        if (probeMode) {
+          actor.setMovementMode(MovementMode.None.name());
+        } else {
+          actor.getBody().resetInitial();
+        }
       }
     }
   }  

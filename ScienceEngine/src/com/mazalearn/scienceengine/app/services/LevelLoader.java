@@ -71,7 +71,6 @@ public class LevelLoader {
   public void loadFromJson() {
     readLevelInfo(rootElem);
     readComponents((Array<?>) rootElem.get("components"));
-    readEnvironment((Array<?>) rootElem.get("environment"));
     readGroups((Array<?>) rootElem.get("groups"));
     readCircuits((Array<?>) rootElem.get("circuits"));
     
@@ -159,15 +158,10 @@ public class LevelLoader {
     }
   }
 
-  private void readEnvironment(Array<?> environmentObj) {
-    if (environmentObj == null) return;
-    
-    EnvironmentBody environment = 
-        (EnvironmentBody) science2DModel.addBody(ComponentType.Environment.name(), 0, 0, 0);
-    science2DStage.addScience2DActor(environment);
-    for (int i = 0; i < environmentObj.size; i++) {
+  private void readEnvironment(EnvironmentBody environment, Array<?> environmentParams) {
+    for (int i = 0; i < environmentParams.size; i++) {
       @SuppressWarnings("unchecked")
-      OrderedMap<String, ?> parameter = (OrderedMap<String, ?>) environmentObj.get(i);
+      OrderedMap<String, ?> parameter = (OrderedMap<String, ?>) environmentParams.get(i);
       String parameterName = (String) parameter.get("name");
       environment.addParameter(parameterName);
     }
@@ -194,22 +188,11 @@ public class LevelLoader {
     float y = (Float) nvl(component.get("y"), 0f);
     float rotation = (Float) nvl(component.get("rotation"), 0f);
     
-    Science2DBody science2DBody = 
-        science2DModel.addBody(type, x / ScienceEngine.PIXELS_PER_M, 
-            y / ScienceEngine.PIXELS_PER_M, 
-            rotation * MathUtils.degreesToRadians);
-    Actor actor = null;
-    Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
-    if (science2DBody != null) {
-      actor = science2DStage.addScience2DActor(science2DBody);
-    } else {
-      actor = science2DStage.addVisualActor(type);
-    }
+    Actor actor = findOrCreateActor(type, x, y, rotation);
     if (actor == null) {
-      if (!type.equals("ControlPanel")) return;
-      actor = science2DStage.findActor(type);
+      Gdx.app.log(ScienceEngine.LOG, "Ignoring - Could not load component: " + type);
+      return;
     }
-
     actor.setX(x);
     actor.setY(y);
     actor.setOriginX((Float) nvl(component.get("originX"), 0f));
@@ -227,7 +210,29 @@ public class LevelLoader {
       } else {
         science2DActor.getBody().setType(BodyType.StaticBody);
       }
+      if (ComponentType.Environment.name().equals(type)) {
+        readEnvironment((EnvironmentBody) science2DActor.getBody(), 
+            (Array<String>) component.get("params"));
+      }
     }
+  }
+
+  private Actor findOrCreateActor(String type, float x, float y, float rotation) {
+    Science2DBody science2DBody = 
+        science2DModel.addBody(type, x / ScienceEngine.PIXELS_PER_M, 
+            y / ScienceEngine.PIXELS_PER_M, 
+            rotation * MathUtils.degreesToRadians);
+    Actor actor = null;
+    Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
+    if (science2DBody != null) {
+      actor = science2DStage.addScience2DActor(science2DBody);
+    } else {
+      actor = science2DStage.addVisualActor(type);
+    }
+    if (actor == null && type.equals("ControlPanel")) {
+      actor = science2DStage.findActor(type);
+    }
+    return actor;
   }
 
   @SuppressWarnings("unchecked")

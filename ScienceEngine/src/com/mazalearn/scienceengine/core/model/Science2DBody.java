@@ -52,6 +52,7 @@ public class Science2DBody implements IBody {
   private MovementMode movementMode = MovementMode.Move;
   private RevoluteJointDef rotationJointDef = new RevoluteJointDef();
   private Joint rotationJoint;
+  private MovementMode initialMoveMode;
   
   protected Science2DBody(IComponentType componentType, float x, float y, float angle) {
     this.componentType = componentType;
@@ -91,6 +92,7 @@ public class Science2DBody implements IBody {
     this.initialY = getPosition().y;
     this.initialAngle = getAngle();
     this.initialIsActive = isActive();
+    this.initialMoveMode = movementMode;
   }
   
   public void resetInitial() {
@@ -98,6 +100,7 @@ public class Science2DBody implements IBody {
     this.setAngularVelocity(0);
     this.setLinearVelocity(Vector2.Zero);
     this.setActive(initialIsActive);
+    this.setMovementMode(initialMoveMode);
   }
   
   /**
@@ -473,7 +476,7 @@ public class Science2DBody implements IBody {
     setMovementMode(MovementMode.valueOf(mode));
   }
 
-  public void setMovementMode(MovementMode movementMode) {
+  private void setMovementMode(MovementMode movementMode) {
     this.movementMode = movementMode;
     if (rotationJoint != null) {
       getModel().getBox2DWorld().destroyJoint(rotationJoint);
