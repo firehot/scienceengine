@@ -3,9 +3,6 @@ package com.mazalearn.scienceengine.domains.electromagnetism;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Joint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -22,24 +19,11 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Wire;
 
 public class ElectroMagnetismModel extends AbstractScience2DModel {
-  private RevoluteJointDef coilRotationJointDef = new RevoluteJointDef();
-  private Joint coilRotationJoint;
-  private Science2DBody currentCoil;
     
   public ElectroMagnetismModel() {
     super();    
   }
 
-  @Override
-  public void prepareModel() {
-    currentCoil = findBody(ComponentType.CurrentCoil);
-    
-    for (Science2DBody body: bodies) {
-      body.initializeConfigs();
-    }
-    reset();
-  }
-  
   @Override
   protected Science2DBody createScience2DBody(String componentTypeName, 
       float x, float y, float rotation) {
@@ -78,22 +62,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     }
   }
   
-  @Override
-  public void reset() {
-    for (Science2DBody body: bodies) {
-      body.resetInitial();
-    }
-    if (coilRotationJoint == null && currentCoil != null) {
-      coilRotationJointDef.initialize(currentCoil.getBody(), Science2DBody.getGround(), 
-          currentCoil.getWorldPoint(Vector2.Zero));
-      coilRotationJoint = box2DWorld.createJoint(coilRotationJointDef);
-    }
-  }
-
-  public List<Science2DBody> getBodies() {
-    return bodies;
-  }
-
   @Override
   public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
   }

@@ -43,7 +43,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
         if (probeMode) {
           actor.setMovementMode(MovementMode.None.name());
         } else {
-          actor.getBody().resetInitial();
+          actor.getBody().reset();
         }
       }
     }
@@ -55,7 +55,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   }
   
   protected void createFieldMeterSamples(Vector2[] points, Vector2[] bFields) {
-    fieldMeter.resetInitial();
+    fieldMeter.reset();
     for (int i = 0; i < points.length; i++) {
       fieldMeter.addFieldSample(points[i].x / ScienceEngine.PIXELS_PER_M, 
           points[i].y /  ScienceEngine.PIXELS_PER_M, 

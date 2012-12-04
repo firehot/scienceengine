@@ -107,9 +107,9 @@ public class LevelSaver {
     jsonWriter.array("circuits");
     for (final List<CircuitElement> circuit : science2DModel.getCircuits()) {
       jsonWriter.array();
-      // TODO: I think we might get this wrong if there are two of same componentype in acivity
       for (final CircuitElement circuitElement: circuit) {
-        jsonWriter.value(((Science2DBody) circuitElement).getComponentTypeName());
+        Science2DBody science2DBody = (Science2DBody) circuitElement;
+        jsonWriter.value(science2DBody.name());
       }
       jsonWriter.pop();
     }

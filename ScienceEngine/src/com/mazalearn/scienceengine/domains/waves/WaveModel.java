@@ -140,6 +140,7 @@ public class WaveModel extends AbstractScience2DModel {
 
   @Override
   public void reset() {
+    super.reset();
     simulatedTime = pulseStartTime = 0;
     for (Ball b: balls) {
       b.pos.y = b.nextY = b.previousY = 0;
@@ -252,10 +253,6 @@ public class WaveModel extends AbstractScience2DModel {
       public void setValue(Float value) { setDamping(value); }
       public boolean isPossible() { return true; }
     });
-  }
-
-  @Override
-  public void prepareModel() {
   }
 
   @Override

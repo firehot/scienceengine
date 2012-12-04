@@ -185,7 +185,7 @@ public class ControlPanel extends Table {
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
-          public void doCommand() { new LevelLoader(science2DController).load(); }
+          public void doCommand() { new LevelLoader(science2DController).reload(); }
           public boolean isPossible() { return true; }
     };
     IControl resetControl = new CommandButtonControl(resetModelConfig, skin);

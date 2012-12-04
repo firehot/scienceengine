@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
@@ -39,12 +40,12 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 public class ElectroMagnetismView extends AbstractScience2DStage {
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
-  private ElectroMagnetismModel emModel;
+  private AbstractScience2DModel emModel;
   private Actor compassActor;
   private IScience2DController controller;
 
   public ElectroMagnetismView(float width, float height,
-      final ElectroMagnetismModel emModel, Skin skin, IScience2DController controller) {
+      final AbstractScience2DModel emModel, Skin skin, IScience2DController controller) {
     super(emModel, width, height, skin);
     this.emModel = emModel;
     this.controller = controller;

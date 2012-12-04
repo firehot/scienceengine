@@ -42,23 +42,16 @@ public class Science2DBody implements IBody {
   // Configs exposed by this body
   protected List<IModelConfig<?>> configs;
 
-  // Initial positions and angle
-  float initialX, initialY, initialAngle;
   // Used for temporary work
   private final Vector2 aPosition = new Vector2();
-  private boolean initialIsActive;
   private IComponentType componentType;
   private int count;
   private MovementMode movementMode = MovementMode.Move;
   private RevoluteJointDef rotationJointDef = new RevoluteJointDef();
   private Joint rotationJoint;
-  private MovementMode initialMoveMode;
   
   protected Science2DBody(IComponentType componentType, float x, float y, float angle) {
     this.componentType = componentType;
-    this.initialX = x;
-    this.initialY = y;
-    this.initialAngle = angle;
     BodyDef bodyDef = new BodyDef();
     bodyDef.position.set(x, y);
     bodyDef.angle = angle;
@@ -87,20 +80,9 @@ public class Science2DBody implements IBody {
   public void singleStep(float dt) {
   }
   
-  public void setInitial() {
-    this.initialX = getPosition().x;
-    this.initialY = getPosition().y;
-    this.initialAngle = getAngle();
-    this.initialIsActive = isActive();
-    this.initialMoveMode = movementMode;
-  }
-  
-  public void resetInitial() {
-    this.setPositionAndAngle(initialX, initialY, initialAngle);
+  public void reset() {
     this.setAngularVelocity(0);
     this.setLinearVelocity(Vector2.Zero);
-    this.setActive(initialIsActive);
-    this.setMovementMode(initialMoveMode);
   }
   
   /**
@@ -175,6 +157,27 @@ public class Science2DBody implements IBody {
     this.model = model;
   }
 
+  public String getMovementMode() {
+    return movementMode.name();
+  }
+
+  public void setMovementMode(String mode) {
+    setMovementMode(MovementMode.valueOf(mode));
+  }
+
+  private void setMovementMode(MovementMode movementMode) {
+    this.movementMode = movementMode;
+    if (rotationJoint != null) {
+      getModel().getBox2DWorld().destroyJoint(rotationJoint);
+      rotationJoint = null;
+    }
+    if (this.movementMode == MovementMode.Rotate) {
+      rotationJointDef.initialize(getBody(), Science2DBody.getGround(), 
+          getWorldPoint(Vector2.Zero));
+      rotationJoint = 
+          getModel().getBox2DWorld().createJoint(rotationJointDef);
+    }
+  }
   //////////////////////////////////////////////////////////////////////////
   ///  Static Proxy envelope for Box2D body
   //////////////////////////////////////////////////////////////////////////
@@ -466,27 +469,5 @@ public class Science2DBody implements IBody {
   @Override
   public void setUserData(Object userData) {
     body.setUserData(userData);
-  }
-
-  public String getMovementMode() {
-    return movementMode.name();
-  }
-
-  public void setMovementMode(String mode) {
-    setMovementMode(MovementMode.valueOf(mode));
-  }
-
-  private void setMovementMode(MovementMode movementMode) {
-    this.movementMode = movementMode;
-    if (rotationJoint != null) {
-      getModel().getBox2DWorld().destroyJoint(rotationJoint);
-      rotationJoint = null;
-    }
-    if (this.movementMode == MovementMode.Rotate) {
-      rotationJointDef.initialize(getBody(), Science2DBody.getGround(), 
-          getWorldPoint(Vector2.Zero));
-      rotationJoint = 
-          getModel().getBox2DWorld().createJoint(rotationJointDef);
-    }
   }
 }

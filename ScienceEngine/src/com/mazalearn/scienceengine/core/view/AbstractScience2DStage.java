@@ -56,12 +56,6 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   }
   
   @Override
-  public void clear() {
-    getRoot().clear();
-    setControlPanel(controlPanel);
-  }
-  
-  @Override
   public Actor addVisualActor(String name) {
     Actor actor = createActor(name);
     if (actor == null) return null;
@@ -94,8 +88,7 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
           new TextureRegion(new Texture("images/environment.jpg"));
       Science2DActor science2DActor = new Science2DActor(body, textureRegion);
       science2DActor.setPositionFromViewCoords(false);
-      return science2DActor;
-      
+      return science2DActor;      
     }
     return null;
   }

@@ -1,7 +1,9 @@
 package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -37,6 +39,7 @@ public class LevelLoader {
   private ControlPanel controlPanel;
   private int level;
   private OrderedMap<String, ?> rootElem;
+  private Map<String, Integer> componentTypeCount = new HashMap<String, Integer>();
 
   public LevelLoader(IScience2DController science2DController) {
     this.science2DController = science2DController;
@@ -48,8 +51,6 @@ public class LevelLoader {
    
   public void load() {
     rootElem = getJsonFromFile();
-    science2DStage.clear();
-    science2DModel.clear();
     loadFromJson();
   }
 
@@ -70,7 +71,7 @@ public class LevelLoader {
   
   public void loadFromJson() {
     readLevelInfo(rootElem);
-    readComponents((Array<?>) rootElem.get("components"));
+    readComponents((Array<?>) rootElem.get("components"), true);
     readGroups((Array<?>) rootElem.get("groups"));
     readCircuits((Array<?>) rootElem.get("circuits"));
     
@@ -79,6 +80,16 @@ public class LevelLoader {
     controlPanel.refresh();
     readConfigs((Array<?>) rootElem.get("configs"));
     readProbers((Array<?>) rootElem.get("probers"));
+  }
+  
+  public void reload() {
+    science2DModel.reset();
+    rootElem = getJsonFromFile();
+    readLevelInfo(rootElem);
+    componentTypeCount.clear();
+    readComponents((Array<?>) rootElem.get("components"), false);
+    readConfigs((Array<?>) rootElem.get("configs"));
+    controlPanel.refresh();
   }
   
   private void readLevelInfo(OrderedMap<String, ?> info) {
@@ -167,13 +178,13 @@ public class LevelLoader {
     }
   }
 
-  private void readComponents(Array<?> components) {
+  private void readComponents(Array<?> components, boolean create) {
     if (components == null) return;
     
     for (int i = 0; i < components.size; i++) {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> component = (OrderedMap<String, ?>) components.get(i);
-      readComponent(component);
+      readComponent(component, create);
     }
   }
 
@@ -181,14 +192,15 @@ public class LevelLoader {
     return val == null ? defaultVal : val;
   }
   
-  private void readComponent(OrderedMap<String, ?> component) {
+  @SuppressWarnings("unchecked")
+  private void readComponent(OrderedMap<String, ?> component, boolean create) {
     String type = (String) component.get("type");
     if (type == null) return;
     float x = (Float) nvl(component.get("x"), 0f);
     float y = (Float) nvl(component.get("y"), 0f);
     float rotation = (Float) nvl(component.get("rotation"), 0f);
     
-    Actor actor = findOrCreateActor(type, x, y, rotation);
+    Actor actor = create ? createActor(type, x, y, rotation) : findActor(type);
     if (actor == null) {
       Gdx.app.log(ScienceEngine.LOG, "Ignoring - Could not load component: " + type);
       return;
@@ -217,7 +229,7 @@ public class LevelLoader {
     }
   }
 
-  private Actor findOrCreateActor(String type, float x, float y, float rotation) {
+  private Actor createActor(String type, float x, float y, float rotation) {
     Science2DBody science2DBody = 
         science2DModel.addBody(type, x / ScienceEngine.PIXELS_PER_M, 
             y / ScienceEngine.PIXELS_PER_M, 
@@ -231,6 +243,17 @@ public class LevelLoader {
     }
     if (actor == null && type.equals("ControlPanel")) {
       actor = science2DStage.findActor(type);
+    }
+    return actor;
+  }
+
+  private Actor findActor(String type) {
+    Actor actor = science2DStage.findActor(type);
+    // If multiple actors of same type, they have number suffix 1,2,3...
+    if (actor == null) {
+      Integer count = (Integer) nvl(componentTypeCount.get(type), 0) + 1;
+      componentTypeCount.put(type, count);
+      actor = science2DStage.findActor(type + "." + count);
     }
     return actor;
   }

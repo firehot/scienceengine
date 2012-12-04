@@ -64,8 +64,8 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   }
   
   @Override
-  public void resetInitial() {
-    super.resetInitial();
+  public void reset() {
+    super.reset();
     fieldSamples.clear();
   }
   

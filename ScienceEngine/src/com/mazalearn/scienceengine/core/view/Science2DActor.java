@@ -43,7 +43,7 @@ public class Science2DActor extends Actor {
    */
   public Science2DActor(final Science2DBody body, TextureRegion textureRegion) {
     super();
-    this.setName(body.name());
+    this.setName(body.getComponentTypeName());
     this.body = body;
     this.textureRegion = textureRegion;
     // Set the sprite width and height.
@@ -192,9 +192,6 @@ public class Science2DActor extends Actor {
     }
     body.setPositionAndAngle(box2DPos, angle);
     body.setActive(isVisible());
-    if (!isUserChange) {
-      body.setInitial();
-    }
   }
   
   public String getMovementMode() {

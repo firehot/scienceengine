@@ -45,6 +45,4 @@ public interface IScience2DModel {
   public IModelConfig<?> getConfig(String configName);
   // Find a body by component type. If there are multiple, return any one.
   public Science2DBody findBody(IComponentType componentType);
-  // Clear all bodies in model
-  public void clear();
 }

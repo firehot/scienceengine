@@ -46,11 +46,6 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   }
 
   @Override
-  public void resetInitial() {
-    super.resetInitial();
-  }
-  
-  @Override
   public void initializeConfigs() {
     configs.add(new AbstractModelConfig<String>(this, 
         Parameter.CommutatorType, CommutatorType.values()) {

@@ -44,6 +44,7 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
   
   @Override
   public void reset() {
+    super.reset();
     this.simulatedTime = 0;
     distributeMoleculesHomogeneously();
     normalizeVelocities();
@@ -247,11 +248,6 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
       public void setValue(String value) { setHeatingLevel(value); }
       public boolean isPossible() { return true; }
     });
-  }
-
-  @Override
-  public void prepareModel() {
-    reset();
   }
 
   @Override

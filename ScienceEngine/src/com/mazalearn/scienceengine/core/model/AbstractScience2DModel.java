@@ -59,17 +59,14 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   protected abstract void singleStep();
 
   @Override
-  public void clear() {
-    bodies.clear();
-  }
-  
-  @Override
   public Science2DBody addBody(String componentTypeName, 
       float x, float y, float rotation) {
     Science2DBody science2DBody = createScience2DBody(componentTypeName, 
         x, y, rotation);
     if (science2DBody == null) return null;
     // Set count of bodies with same component type.
+    // If only 1 body of type, its count is 0
+    // If more than 1 body of same type, their counts are 1,2,...
     int count = 0;
     for (Science2DBody body: bodies) {
       if (body.getComponentType() == science2DBody.getComponentType()) {
@@ -217,5 +214,24 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
       return new EnvironmentBody(x, y, rotation);
     }
     return null;
+  }
+
+  @Override
+  public void reset() {
+    for (Science2DBody body: bodies) {
+      body.reset();
+    }
+  }
+
+  @Override
+  public void prepareModel() {
+    for (Science2DBody body: bodies) {
+      body.initializeConfigs();
+    }
+    reset();
+  }
+
+  public List<Science2DBody> getBodies() {
+    return bodies;
   }
 }
