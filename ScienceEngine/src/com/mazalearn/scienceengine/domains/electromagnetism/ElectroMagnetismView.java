@@ -100,7 +100,7 @@ public class ElectroMagnetismView extends AbstractScience2DStage {
     case FieldMeter:
       return new FieldMeterActor(body, textureRegion);
     case CurrentCoil:
-      return new CurrentCoilActor(body);
+      return new CurrentCoilActor(body, getFont());
     case CurrentSource:
       return new CurrentSourceActor(body, textureRegion);
     case Wire:

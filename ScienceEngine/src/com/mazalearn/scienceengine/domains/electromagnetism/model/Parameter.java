@@ -14,7 +14,9 @@ public enum Parameter implements IParameter {
   MagnetMode,
   CommutatorType,
   CoilLoops,
-  Flip;
+  Flip, 
+  RotationDataType, 
+  RotationData;
   
   private Parameter() {
   }

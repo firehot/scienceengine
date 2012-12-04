@@ -49,6 +49,9 @@ public class Science2DBody implements IBody {
   private MovementMode movementMode = MovementMode.Move;
   private RevoluteJointDef rotationJointDef = new RevoluteJointDef();
   private Joint rotationJoint;
+  // Detecting # revolutions
+  float prevAngularVelocity = 0;
+  protected float angleCovered = 0;
   
   protected Science2DBody(IComponentType componentType, float x, float y, float angle) {
     this.componentType = componentType;
@@ -78,6 +81,12 @@ public class Science2DBody implements IBody {
   }
   
   public void singleStep(float dt) {
+    angleCovered += (prevAngularVelocity + getAngularVelocity()) * dt / 2;
+    prevAngularVelocity = getAngularVelocity();
+  }
+  
+  public int getNumRevolutions() {
+    return Math.round(angleCovered / (2 * MathUtils.PI));
   }
   
   public void reset() {

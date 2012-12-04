@@ -29,6 +29,12 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   private Vector2 forceVector = new Vector2(), pos = new Vector2();
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
+  private enum RotationDataType {
+    AngularVelocity,
+    NumRevolutions;
+  }
+  private RotationDataType rotationDataType = RotationDataType.AngularVelocity;
+
   public CurrentCoil(float x, float y, float angle) {
     super(ComponentType.CurrentCoil, x, y, angle);
     this.width = 16f;
@@ -53,8 +59,27 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
       public void setValue(String value) { commutatorType = CommutatorType.valueOf(value); }
       public boolean isPossible() { return isActive(); }
     });
+    configs.add(new AbstractModelConfig<String>(this, 
+        Parameter.RotationDataType, RotationDataType.values()) {
+      public String getValue() { return rotationDataType.name(); }
+      public void setValue(String value) { 
+        rotationDataType = RotationDataType.valueOf(value);
+        angleCovered = 0;
+      }
+      public boolean isPossible() { return isActive() && MovementMode.Rotate.name().equals(getMovementMode()); }
+    });
+    configs.add(new AbstractModelConfig<Float>(this, 
+        Parameter.RotationData, -1000, 1000) { // Still risky, limits may get exceeded
+      public Float getValue() { return getRotationData(); }
+      public void setValue(Float value) {}
+      public boolean isPossible() { return false; }
+    });
   }
   
+  public Float getRotationData() {
+    return rotationDataType == RotationDataType.AngularVelocity 
+        ? getAngularVelocity() : getNumRevolutions();
+  }
   /**
    * Sets the magnitude of current in the wire. 
    * @param current the current
@@ -89,6 +114,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     forceVector.mul(getCurrent()).mul(OUTPUT_SCALE);
     forceVector.set(forceVector.y, -forceVector.x);
     applyForce(forceVector, getWorldPoint(pos.set(-width / 2, 0)));
+    super.singleStep(dt);
   }
 
   public float getWidth() {
@@ -105,12 +131,12 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
 
   @Override
   public Vector2 getT1Position() {
-    return firstTerminal.set(getPosition()).add(1.5f, 0);
+    return firstTerminal.set(getPosition()).add(2.5f, 0);
   }
 
   @Override
   public Vector2 getT2Position() {
-    return secondTerminal.set(getPosition()).add(-1.5f, 0);
+    return secondTerminal.set(getPosition()).add(-2.5f, 0);
   }
 }
 
