@@ -23,6 +23,7 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.probe.LearningProber;
 import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
 import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
@@ -226,6 +227,8 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
       return new ParameterMagnitudeProber(science2DModel, probeManager);
     } else if ("ParameterDirectionProber".equals(proberName)) {
       return new ParameterDirectionProber(science2DModel, probeManager);
+    } else if ("LearningProber".equals(proberName)) {
+      return new LearningProber(science2DModel, probeManager);
     }
     return null;
   }

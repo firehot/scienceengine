@@ -1,9 +1,12 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.probe.Hint;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
@@ -14,12 +17,12 @@ public class LightProber extends AbstractScience2DProber {
   private Image image;
   private LightbulbActor lightbulbActor;
   private ProbeManager probeManager;
-  private String[] hints = {
-      "Light intensity increases when more current is induced in the coil.",
-      "More current is induced in the coil if the magnetic field changes faster at the coil.",
-      "Magnetic field change at the coil increases when the magnet moves faster relative to the coil.",
-      "If the coil has more loops, more current will be induced.",
-      "If the magnet is stronger, more current will be induced."
+  private Hint[] hints = new Hint[] {
+      new Hint("Light intensity increases when more current is induced in the coil."),
+      new Hint("More current is induced in the coil if the magnetic field changes faster at the coil."),
+      new Hint("Magnetic field change at the coil increases when the magnet moves faster relative to the coil."),
+      new Hint("If the coil has more loops, more current will be induced."),
+      new Hint("If the magnet is stronger, more current will be induced.")
   };
   private IScience2DModel science2DModel;
   
@@ -62,8 +65,8 @@ public class LightProber extends AbstractScience2DProber {
   }
 
   @Override
-  public String[] getHints() {
-    return hints;
+  public Hint getHint() {
+    return null;
   }
 
 }

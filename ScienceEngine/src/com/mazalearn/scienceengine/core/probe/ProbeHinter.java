@@ -19,6 +19,7 @@ public class ProbeHinter extends Group {
   float increment = 1, count = 0;
   private int scientistIndex = 0;
   private boolean jumpingMode = false;
+  private String hint;
 
   static {
     SCIENTISTS.add(new Image(new Texture("images/edison.png")));
@@ -75,6 +76,8 @@ public class ProbeHinter extends Group {
       this.setVisible(false);
       return;
     }
+    if (hint == this.hint) return;
+    this.hint = hint;
     this.setVisible(true);
     Image image = SCIENTISTS.get(scientistIndex);
     image.setVisible(false);

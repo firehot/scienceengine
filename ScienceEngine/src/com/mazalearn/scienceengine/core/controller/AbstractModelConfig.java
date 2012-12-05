@@ -75,7 +75,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   public void setValue(T value) {}
   public abstract boolean isPossible();
   public boolean isAvailable() { 
-    return isPermitted && isPossible() && !ScienceEngine.isProbeMode() && body == ScienceEngine.getSelectedBody();
+    return isPermitted && isPossible() && body == ScienceEngine.getSelectedBody();
   }
   public boolean hasProbeMode() { return false; }
   public void setProbeMode() {}

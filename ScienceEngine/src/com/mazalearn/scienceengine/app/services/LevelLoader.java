@@ -18,12 +18,17 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.expr.Expr;
+import com.mazalearn.scienceengine.core.expr.Parser;
+import com.mazalearn.scienceengine.core.expr.SyntaxException;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.EnvironmentBody;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.probe.Hint;
+import com.mazalearn.scienceengine.core.probe.LearningProber;
 import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
 import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
@@ -312,6 +317,7 @@ public class LevelLoader {
     Array<?> configs = (Array<?>) proberObj.get("configs");
     if (parameter != null) {
       ((ParameterMagnitudeProber) prober).setProbeConfig((IModelConfig<Float>) parameter, type, configs);
+      return;
     }
     Array<String> depends = (Array<String>) proberObj.get("depends");
     if (depends != null) {
@@ -322,6 +328,34 @@ public class LevelLoader {
         dependConfigs.add(parameter);
       }
       ((ParameterDirectionProber) prober).setProbeConfig(dependConfigs, type, configs);
+      return;
     }
+    if (configs != null) {
+      Array<?> hintsObj = (Array<?>) proberObj.get("hints");
+      List<Hint> hints = readHints(hintsObj);
+      ((LearningProber) prober).setProbeConfig(configs, hints);
+      return;
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private List<Hint> readHints(Array<?> hintsObj) {
+    List<Hint> hints = new ArrayList<Hint>();
+    for (int i = 0; i < hintsObj.size; i++) {
+      try {
+        hints.add(readHint((OrderedMap<String, ?>) hintsObj.get(i)));
+      } catch (SyntaxException e) {
+        e.printStackTrace();
+      }
+    }
+    return hints;
+  }
+
+  private Hint readHint(OrderedMap<String, ?> hintObj) throws SyntaxException {
+    String hintText = (String) hintObj.get("hint");
+    String exprString = (String) hintObj.get("expr");
+    Parser parser = new Parser();
+    Expr expr = parser.parseString(exprString);
+    return new Hint(hintText, expr, parser.getVariables());
   }
 }

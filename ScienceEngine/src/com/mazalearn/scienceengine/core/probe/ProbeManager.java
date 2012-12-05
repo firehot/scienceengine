@@ -12,10 +12,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
-import com.mazalearn.scienceengine.core.view.Science2DActor;
 
 /**
  * Cycles through the eligible registeredProbers - probing the user with each one.
@@ -59,9 +57,11 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.addActor(successImage);
     this.addActor(failureImage);
     probeHinter = new ProbeHinter(skin);
+    // Place hinter to right of dashboard above the controls
+    probeHinter.setPosition(controlPanel.getX(), 0);
     // Place hinter to right of question mark above the controls.
-    probeHinter.setPosition(controlPanel.getX(),
-        controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 20);
+    //probeHinter.setPosition(controlPanel.getX(),
+    //    controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 20);
     this.addActor(probeHinter);
     this.setVisible(false);
   }
@@ -136,7 +136,6 @@ public class ProbeManager extends Group implements IDoneCallback {
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
       successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
-      probeHinter.setHint(null);
       doProbe();
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
@@ -144,10 +143,6 @@ public class ProbeManager extends Group implements IDoneCallback {
       deltaSuccessScore = currentProber.getSubsequentDeltaSuccessScore();
       dashboard.addScore(deltaFailureScore);
       failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
-      String[] hints = currentProber.getHints();
-      if (hints.length > 0) {
-        probeHinter.setHint(hints[MathUtils.random(hints.length - 1)]);
-      }
     }
     // Win
     if (dashboard.getScore() >= WIN_THRESHOLD) {
@@ -163,6 +158,17 @@ public class ProbeManager extends Group implements IDoneCallback {
       return;
     }
   }
+  
+  @Override
+  public void act(float dt) {
+    super.act(dt);
+    setHint();
+  }
+  
+  private void setHint() {
+    Hint hint = currentProber != null ? currentProber.getHint() : null;
+    probeHinter.setHint(hint != null ? hint.getHintText() : null);    
+  }
 
   // Prerequisite: activeProbers.size() >= 1
   private void doProbe() {
@@ -174,7 +180,6 @@ public class ProbeManager extends Group implements IDoneCallback {
     deltaSuccessScore = currentProber.getDeltaSuccessScore();
     deltaFailureScore = currentProber.getDeltaFailureScore();
     
-    currentProber.addActor(probeHinter);
     currentProber.activate(true);
     dashboard.setStatus(currentProber.getTitle());
   }

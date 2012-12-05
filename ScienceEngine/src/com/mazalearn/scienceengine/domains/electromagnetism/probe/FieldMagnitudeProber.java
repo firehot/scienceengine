@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -7,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.probe.Hint;
 import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
@@ -43,9 +46,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     }
   };
 
-  private String[] hints = {
-      "The field is stronger closer to the object generating the field",
-      "The field is stronger if the current or magnet strength is larger"
+  private Hint[] hints = new Hint[] {
+      new Hint("The field is stronger closer to the object generating the field"),
+      new Hint("The field is stronger if the current or magnet strength is larger")
   };
   
   private final Image imageCorrect, imageWrong;
@@ -123,7 +126,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   }
 
   @Override
-  public String[] getHints() {
-    return hints;
+  public Hint getHint() {
+    return null;
   }
 }

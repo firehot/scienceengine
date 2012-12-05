@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.probe.Hint;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
@@ -25,12 +27,8 @@ public class VariablesProber extends AbstractScience2DProber {
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
   private LightbulbActor lightbulbActor;
-  private String[] hints = {
-      "Light intensity increases when more current is induced in the coil.",
-      "More current is induced in the coil if the magnetic field changes faster at the coil.",
-      "Magnetic field change at the coil increases when the magnet moves faster relative to the coil.",
-      "If the coil has more loops, more current will be induced.",
-      "If the magnet is stronger, more current will be induced."
+  private Hint[] hints = new Hint[] {
+      new Hint("Light intensity increases when more current is induced in the coil.")
   };
   private Table configTable;
   private Actor modelControls;
@@ -132,8 +130,8 @@ public class VariablesProber extends AbstractScience2DProber {
   }
 
   @Override
-  public String[] getHints() {
-    return hints;
+  public Hint getHint() {
+    return null;
   }
 
   public int getDeltaSuccessScore() {

@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.probe.Hint;
 import com.mazalearn.scienceengine.core.probe.ProbeImage;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
@@ -19,10 +22,10 @@ import com.mazalearn.scienceengine.core.probe.ProbeManager;
 public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
-  private String[] hints = {
-      "The direction of the field is the direction in which a " +
-      "free North Pole would move if placed at that point.",
-      "The direction of the field is where the compass needle's North would point."
+  private Hint[] hints = new Hint[] {
+      new Hint("The direction of the field is the direction in which a " +
+      "free North Pole would move if placed at that point."),
+      new Hint("The direction of the field is where the compass needle's North would point.")
   };
   
   public FieldDirectionProber(IScience2DModel science2DModel, final ProbeManager probeManager) {
@@ -105,7 +108,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   }
 
   @Override
-  public String[] getHints() {
-    return hints;
+  public Hint getHint() {
+    return null;
   }
 }

@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.core.probe;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -21,8 +22,8 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
     None;
   }
   
-  private String[] hints = {
-      "Use Fleming's left hand rule"
+  private Hint[] hints = new Hint[] {
+      new Hint("Use Fleming's left hand rule")
   };
   
   private final Image image;
@@ -100,8 +101,8 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
   }
   
   @Override
-  public String[] getHints() {
-    return hints;
+  public Hint getHint() {
+    return null;
   }
 
   public void setProbeConfig(List<IModelConfig<?>> dependConfigs, String type, Array<?> configs) {
