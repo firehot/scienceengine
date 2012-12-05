@@ -70,6 +70,7 @@ public class LevelLoader {
   }
   
   public void loadFromJson() {
+    Gdx.app.log(ScienceEngine.LOG, "Loading from json");
     readLevelInfo(rootElem);
     readComponents((Array<?>) rootElem.get("components"), true);
     readGroups((Array<?>) rootElem.get("groups"));
@@ -78,17 +79,18 @@ public class LevelLoader {
     science2DModel.prepareModel();
     science2DStage.prepareStage();
     controlPanel.refresh();
-    readConfigs((Array<?>) rootElem.get("configs"));
+    readConfigs((Array<?>) rootElem.get("configs"), science2DModel);
     readProbers((Array<?>) rootElem.get("probers"));
   }
   
   public void reload() {
+    Gdx.app.log(ScienceEngine.LOG, "Reloading from json");
     science2DModel.reset();
     rootElem = getJsonFromFile();
     readLevelInfo(rootElem);
     componentTypeCount.clear();
     readComponents((Array<?>) rootElem.get("components"), false);
-    readConfigs((Array<?>) rootElem.get("configs"));
+    readConfigs((Array<?>) rootElem.get("configs"), science2DModel);
     controlPanel.refresh();
   }
   
@@ -103,6 +105,7 @@ public class LevelLoader {
     science2DModel.removeCircuits();
 
     if (circuits == null) return;
+    Gdx.app.log(ScienceEngine.LOG, "Loading circuits");
     
     for (int i = 0; i < circuits.size; i++) {
       @SuppressWarnings("unchecked")
@@ -112,6 +115,7 @@ public class LevelLoader {
   }
   
   private void readCircuit(Array<String> circuit) {
+    Gdx.app.log(ScienceEngine.LOG, "Loading circuit");
     CircuitElement[] circuitElements = new CircuitElement[circuit.size];
     for (int i = 0; i < circuit.size; i++) {
       String name = circuit.get(i);
@@ -128,6 +132,7 @@ public class LevelLoader {
     science2DStage.removeLocationGroups();
 
     if (groups == null) return;
+    Gdx.app.log(ScienceEngine.LOG, "Loading groups");
     
     for (int i = 0; i < groups.size; i++) {
       @SuppressWarnings("unchecked")
@@ -137,6 +142,7 @@ public class LevelLoader {
   }
   
   private void readGroup(Array<String> group) {
+    Gdx.app.log(ScienceEngine.LOG, "Loading group");
     Actor[] groupElements = new Actor[group.size];
     for (int i = 0; i < group.size; i++) {
       String name = group.get(i);
@@ -149,18 +155,25 @@ public class LevelLoader {
     science2DStage.addLocationGroup(groupElements);
   }
 
-  private void readConfigs(Array<?> configs) {
+  /**
+   * Load configs from JSON array
+   * @param configs
+   * @param science2DModel
+   */
+  public static void readConfigs(Array<?> configs, IScience2DModel science2DModel) {
     if (configs == null) return;
+    Gdx.app.log(ScienceEngine.LOG, "Loading configs");
     
     for (int i = 0; i < configs.size; i++) {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> config = (OrderedMap<String, ?>) configs.get(i);
-      readConfig(config);
+      readConfig(config, science2DModel);
     }
   }
 
   private void readProbers(Array<?> probers) {
     if (probers == null) return;
+    Gdx.app.log(ScienceEngine.LOG, "Loading probers");
     
     for (int i = 0; i < probers.size; i++) {
       @SuppressWarnings("unchecked")
@@ -170,6 +183,7 @@ public class LevelLoader {
   }
 
   private void readEnvironment(EnvironmentBody environment, Array<?> environmentParams) {
+    Gdx.app.log(ScienceEngine.LOG, "Loading environment");
     for (int i = 0; i < environmentParams.size; i++) {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> parameter = (OrderedMap<String, ?>) environmentParams.get(i);
@@ -180,7 +194,8 @@ public class LevelLoader {
 
   private void readComponents(Array<?> components, boolean create) {
     if (components == null) return;
-    
+    Gdx.app.log(ScienceEngine.LOG, "Loading components");
+   
     for (int i = 0; i < components.size; i++) {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> component = (OrderedMap<String, ?>) components.get(i);
@@ -188,13 +203,14 @@ public class LevelLoader {
     }
   }
 
-  private Object nvl(Object val, Object defaultVal) {
+  private static Object nvl(Object val, Object defaultVal) {
     return val == null ? defaultVal : val;
   }
   
   @SuppressWarnings("unchecked")
   private void readComponent(OrderedMap<String, ?> component, boolean create) {
     String type = (String) component.get("type");
+    Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
     if (type == null) return;
     float x = (Float) nvl(component.get("x"), 0f);
     float y = (Float) nvl(component.get("y"), 0f);
@@ -235,7 +251,6 @@ public class LevelLoader {
             y / ScienceEngine.PIXELS_PER_M, 
             rotation * MathUtils.degreesToRadians);
     Actor actor = null;
-    Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
     if (science2DBody != null) {
       actor = science2DStage.addScience2DActor(science2DBody);
     } else {
@@ -259,8 +274,9 @@ public class LevelLoader {
   }
 
   @SuppressWarnings("unchecked")
-  private void readConfig(OrderedMap<String, ?> configObj) {
+  private static void readConfig(OrderedMap<String, ?> configObj, IScience2DModel science2DModel) {
     String name = (String) configObj.get("name");
+    Gdx.app.log(ScienceEngine.LOG, "Loading config: " + name);
     IModelConfig<?> config = science2DModel.getConfig(name);
     if (config == null) return;
     
@@ -286,24 +302,26 @@ public class LevelLoader {
   @SuppressWarnings("unchecked")
   private void readProber(OrderedMap<String, ?> proberObj) {
     String proberName = (String) proberObj.get("name");
+    Gdx.app.log(ScienceEngine.LOG, "Loading prober: " + proberName);
     ProbeManager probeManager = science2DStage.getProbeManager();
     AbstractScience2DProber prober = science2DStage.createProber(proberName, probeManager);
     probeManager.registerProber(prober);
-    String configName = (String) proberObj.get("config");
+    String parameterName = (String) proberObj.get("parameter");
     String type = (String) proberObj.get("type");
-    IModelConfig<?> config = science2DModel.getConfig(configName);
-    if (config != null) {
-      ((ParameterMagnitudeProber) prober).setProbeConfig((IModelConfig<Float>) config, type);
+    IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
+    Array<?> configs = (Array<?>) proberObj.get("configs");
+    if (parameter != null) {
+      ((ParameterMagnitudeProber) prober).setProbeConfig((IModelConfig<Float>) parameter, type, configs);
     }
     Array<String> depends = (Array<String>) proberObj.get("depends");
     if (depends != null) {
       List<IModelConfig<?>> dependConfigs = new ArrayList<IModelConfig<?>>();
       for (int i = 0; i < depends.size; i++) {
-        configName = (String) depends.get(i);
-        config = science2DModel.getConfig(configName);
-        dependConfigs.add(config);
+        parameterName = (String) depends.get(i);
+        parameter = science2DModel.getConfig(parameterName);
+        dependConfigs.add(parameter);
       }
-      ((ParameterDirectionProber) prober).setProbeConfig(dependConfigs, type);
+      ((ParameterDirectionProber) prober).setProbeConfig(dependConfigs, type, configs);
     }
   }
 }

@@ -33,6 +33,7 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.Parameter;
 import com.mazalearn.scienceengine.core.view.StageComponent;
 
 public class ScienceEngine extends Game {
@@ -311,7 +312,7 @@ public class ScienceEngine extends Game {
   public static void selectBody(Science2DBody body, IScience2DStage stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
-    eventLog.logBodyEvent(body);
+    eventLog.logEvent(body, Parameter.Select);
     if (body == null) return;
     displayStatus(body.getComponentTypeName(), stage);
   }
@@ -319,7 +320,7 @@ public class ScienceEngine extends Game {
   public static void selectParameter(IParameter parameter, IScience2DStage stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayStatus(parameter.name(), stage);
-    eventLog.logParameterEvent(getSelectedBody(), parameter);
+    eventLog.logEvent(getSelectedBody(), parameter);
   }
 
   private static void displayStatus(String entityName, IScience2DStage stage) {

@@ -5,7 +5,9 @@ import java.util.Collections;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.DummyBody;
@@ -35,9 +37,14 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
   private ClickResult imageListener;
 
   private Type type;
+
+  private IScience2DModel science2DModel;
+
+  private Array<?> configs;
     
-  public ParameterMagnitudeProber(IScience2DModel model, ProbeManager probeManager) {
+  public ParameterMagnitudeProber(IScience2DModel science2DModel, ProbeManager probeManager) {
     super(probeManager);
+    this.science2DModel = science2DModel;
     image = new ProbeImage();
     image.setX(700 - image.getWidth()/2);
     image.setY(175 - image.getHeight()/2);
@@ -66,7 +73,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
     this.addActor(decrease);
     this.addActor(increase);
     this.addActor(dontCare);
-    dummy = (DummyBody) model.findBody(ComponentType.Dummy);
+    dummy = (DummyBody) science2DModel.findBody(ComponentType.Dummy);
   }
   
   private Image createResultImage(String path, float scale) {
@@ -87,6 +94,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
   public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
     super.reinitialize(x,  y, width, height, probeMode);
     image.setVisible(false);
+    LevelLoader.readConfigs(configs, science2DModel);
   }
   
   @Override
@@ -114,8 +122,9 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
     return hints;
   }
 
-  public void setProbeConfig(IModelConfig<Float> probeConfig, String type) {
+  public void setProbeConfig(IModelConfig<Float> probeConfig, String type, Array<?> configs) {
     this.probeConfig = probeConfig;
     this.type = Type.valueOf(type);
+    this.configs = configs;
   }
 }

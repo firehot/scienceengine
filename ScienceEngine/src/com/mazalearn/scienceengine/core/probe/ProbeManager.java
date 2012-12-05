@@ -26,6 +26,7 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
 public class ProbeManager extends Group implements IDoneCallback {
   private static final int WIN_THRESHOLD = 100;
   private static final int LOSS_THRESHOLD = -30;
+  
   int proberIndex = 0;
   AbstractScience2DProber currentProber;
   protected Dashboard dashboard;
@@ -74,14 +75,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   public void startChallenge() {
     // Reset scores
     dashboard.resetScore();
-        
-    // Make all actors non-movable
-    for (Actor actor: this.getChildren()) {
-      if (actor instanceof Science2DActor) {
-        ((Science2DActor) actor).setMovementMode(MovementMode.None.name());
-      }
-    }
-
+    
     // Collect actors to be excluded from probe points.
     // These are the visible actors.
     excludedActors.clear();

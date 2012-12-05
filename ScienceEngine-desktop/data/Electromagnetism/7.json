@@ -17,7 +17,8 @@
 {name:"CurrentSource.CurrentMax", permitted:true, value:3.0},
 {name:"CurrentSource.CurrentDirection", permitted:true, value:true},
 {name:"CurrentCoil.CommutatorType", permitted:true, value:"Connector"}],
-probers:[{name: "ParameterMagnitudeProber", config:"CurrentSource.CurrentMax", type:"Direct"},{name:"ParameterDirectionProber", type:"Spin", depends:["CurrentSource.CurrentDirection","HorseshoeMagnet.Flip"]},
-{name: "ParameterMagnitudeProber", config:"HorseshoeMagnet.MagnetStrength", type:"Direct"},
-{name: "ParameterMagnitudeProber", config:"Environment.AirPermittivity", type:"None"},
-{name: "ParameterMagnitudeProber", config:"Environment.EarthMagneticField", type:"None"}]}
+probers:[{name: "ParameterMagnitudeProber", parameter:"CurrentSource.CurrentMax", type:"Direct"},
+{name:"ParameterDirectionProber", type:"Spin", depends:["CurrentSource.CurrentDirection","HorseshoeMagnet.Flip"]},
+{name: "ParameterMagnitudeProber", parameter:"HorseshoeMagnet.MagnetStrength", type:"Direct"},
+{name: "ParameterMagnitudeProber", parameter:"Environment.AirPermittivity", type:"None"},
+{name: "ParameterMagnitudeProber", parameter:"Environment.EarthMagneticField", type:"None"}]}

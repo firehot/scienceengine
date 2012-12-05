@@ -50,7 +50,8 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
     if (probeManager == null) {
       probeManager = new ProbeManager(skin, getWidth(), getHeight(), this, controlPanel);
       this.getRoot().addActor(controlPanel); // Move control Panel to top - why?
-      this.getRoot().addActorAfter(controlPanel, probeManager);
+      // Add probeManager before controlpanel so that controls are accessible.
+      this.getRoot().addActorBefore(controlPanel, probeManager);
     }
     return probeManager;
   }

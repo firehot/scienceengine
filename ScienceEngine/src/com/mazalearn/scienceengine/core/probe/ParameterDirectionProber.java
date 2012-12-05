@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 
@@ -27,6 +29,10 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
   private final Image clockwise, antiClockwise, dontCare;
   private ClickResult imageListener;
   private List<IModelConfig<?>> dependConfigs;
+
+  private Array<?> configs;
+
+  private IScience2DModel science2DModel;
   
   private Image createResultImage(String path, float x, float y) {
     Image image = new Image(new Texture(path));
@@ -35,8 +41,9 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
     return image;
   }
     
-  public ParameterDirectionProber(IScience2DModel model, ProbeManager probeManager) {
+  public ParameterDirectionProber(IScience2DModel science2DModel, ProbeManager probeManager) {
     super(probeManager);
+    this.science2DModel = science2DModel;
     
     image = new ProbeImage();
     image.setX(probeManager.getWidth() / 2 - image.getWidth() / 2 - 50);
@@ -75,6 +82,7 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
   public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
     super.reinitialize(x,  y, width, height, probeMode);
     image.setVisible(false);
+    LevelLoader.readConfigs(configs, science2DModel);
   }
   
   @Override
@@ -96,7 +104,8 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
     return hints;
   }
 
-  public void setProbeConfig(List<IModelConfig<?>> dependConfigs, String type) {
+  public void setProbeConfig(List<IModelConfig<?>> dependConfigs, String type, Array<?> configs) {
     this.dependConfigs = dependConfigs;
+    this.configs = configs;
   }
 }
