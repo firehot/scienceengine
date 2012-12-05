@@ -39,14 +39,28 @@ class Dashboard extends Table {
     style.fontColor = Color.WHITE;
     scoreLabel = new Label("0", skin);
 
+    Label timerLabel = new Label("0", skin) {
+      float time = 300;
+      @Override
+      public void act(float delta) {
+        time -= delta;
+        this.setText(String.valueOf(Math.round(time / 60) + ":" + String.valueOf(Math.round(time % 60))));
+        if (time < 0) {
+          status.setText("Time Up");
+        }
+      }
+    };
+    
     this.add(new Label("", skin)).pad(30, 0, 0, 0);
     this.row();
     this.add("Score").left();
     this.add(scoreLabel).right().fill();
+    this.add("Time Left").right().pad(10);
+    this.add(timerLabel).right().fill();
     this.row();
     
     this.add("Challenge").pad(10, 0, 0, 10).left();
-    this.add(status).pad(10, 0, 0, 0).fill();
+    this.add(status).pad(10, 0, 0, 0).colspan(3).fill();
     this.row();
   }
   
