@@ -63,7 +63,6 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   
   public boolean isPermitted() { return isPermitted; }  
   public ConfigType getType() { return type; }
-  public Science2DBody getBody() { return body; }
   public String getName() { 
     if (body != null) {
       return body.name() + "." + parameter.name();

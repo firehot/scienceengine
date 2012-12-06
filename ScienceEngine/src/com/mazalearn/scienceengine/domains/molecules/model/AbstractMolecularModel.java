@@ -53,7 +53,7 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
   
   private void reScaleDt() {
     
-    // Set dt to be 1/10 of the average collision time
+    // Set dt to be 1/10 of the average collision timeLimit
     // If box has area A, number of particles N, 
     // Average inter particle distance is sqrt(A)/N
     // Average Velocity is sqrt(2*ke/N)

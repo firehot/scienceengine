@@ -172,7 +172,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
    * Handles ticks of the simulation clock. Calculates the induced emf using
    * Faraday's Law.
    * 
-   * @param dt - time delta
+   * @param dt - timeLimit delta
    */
   public void singleStep(float dt) {
     // Sum the B-field sample points.

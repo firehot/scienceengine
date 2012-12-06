@@ -3,10 +3,10 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.guru.ProbeManager;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
-import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 

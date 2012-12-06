@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.probe;
+package com.mazalearn.scienceengine.core.guru;
 
 
 import com.badlogic.gdx.math.MathUtils;
@@ -89,7 +89,7 @@ public abstract class AbstractScience2DProber extends Group {
     return true;
   }
 
-  public abstract Hint getHint();
+  public abstract String getHint();
 
   public int getDeltaSuccessScore() {
     return 10;

@@ -27,6 +27,7 @@ public class ToggleButtonControl implements IControl {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         property.setValue(toggleButton.isChecked());
+        syncWithModel();
       }
       
       @Override

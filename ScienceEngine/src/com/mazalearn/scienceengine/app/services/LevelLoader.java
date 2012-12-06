@@ -18,6 +18,12 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.guru.LearningProber;
+import com.mazalearn.scienceengine.core.guru.ParameterDirectionProber;
+import com.mazalearn.scienceengine.core.guru.ParameterMagnitudeProber;
+import com.mazalearn.scienceengine.core.guru.ProbeManager;
+import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
@@ -26,12 +32,6 @@ import com.mazalearn.scienceengine.core.model.EnvironmentBody;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.probe.Hint;
-import com.mazalearn.scienceengine.core.probe.LearningProber;
-import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
-import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
-import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -331,31 +331,32 @@ public class LevelLoader {
       return;
     }
     if (configs != null) {
-      Array<?> hintsObj = (Array<?>) proberObj.get("hints");
-      List<Hint> hints = readHints(hintsObj);
-      ((LearningProber) prober).setProbeConfig(configs, hints);
+      Array<?> stagesObj = (Array<?>) proberObj.get("hints");
+      List<Stage> stages = readStages(stagesObj);
+      ((LearningProber) prober).setProbeConfig(configs, stages);
       return;
     }
   }
 
   @SuppressWarnings("unchecked")
-  private List<Hint> readHints(Array<?> hintsObj) {
-    List<Hint> hints = new ArrayList<Hint>();
-    for (int i = 0; i < hintsObj.size; i++) {
+  private List<Stage> readStages(Array<?> stagesObj) {
+    List<Stage> stages = new ArrayList<Stage>();
+    for (int i = 0; i < stagesObj.size; i++) {
       try {
-        hints.add(readHint((OrderedMap<String, ?>) hintsObj.get(i)));
+        stages.add(readStage((OrderedMap<String, ?>) stagesObj.get(i)));
       } catch (SyntaxException e) {
         e.printStackTrace();
       }
     }
-    return hints;
+    return stages;
   }
 
-  private Hint readHint(OrderedMap<String, ?> hintObj) throws SyntaxException {
-    String hintText = (String) hintObj.get("hint");
-    String exprString = (String) hintObj.get("expr");
+  private Stage readStage(OrderedMap<String, ?> stageObj) throws SyntaxException {
+    String hint = (String) stageObj.get("hint");
+    String postConditionString = (String) stageObj.get("postcondition");
     Parser parser = new Parser();
-    Expr expr = parser.parseString(exprString);
-    return new Hint(hintText, expr, parser.getVariables());
+    Expr postCondition = parser.parseString(postConditionString);
+    float timeLimit = (Float) nvl(stageObj.get("timelimit"), 60);
+    return new Stage(hint, postCondition, (int) timeLimit, parser.getVariables());
   }
 }

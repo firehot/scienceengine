@@ -182,7 +182,7 @@ public abstract class AbstractScreen implements Screen {
     this.backgroundColor = backgroundColor;
   }
 
-  // Adds all assets required for this screen to reduce load time
+  // Adds all assets required for this screen to reduce load timeLimit
   public void addAssets() {
   }
 }

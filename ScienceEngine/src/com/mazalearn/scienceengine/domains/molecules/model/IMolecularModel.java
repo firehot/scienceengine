@@ -7,7 +7,7 @@ public interface IMolecularModel extends IScience2DModel {
   // Initialize the molecules configuration (currently uniform random)
   public abstract void reset();
 
-  // The physical time elapsed since beginning of simulation
+  // The physical timeLimit elapsed since beginning of simulation
   public abstract double getSimulatedTime();
 
   // Energy of the system (PE + KE)

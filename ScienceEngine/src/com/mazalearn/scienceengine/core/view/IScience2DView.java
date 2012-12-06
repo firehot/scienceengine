@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.guru.IDoneCallback;
+import com.mazalearn.scienceengine.core.guru.ProbeManager;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.probe.IDoneCallback;
-import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
 public interface IScience2DView extends IDoneCallback {
   // Pause/Resume model actions in the experiment. 

@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -10,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mazalearn.scienceengine.core.guru.ProbeImage;
+import com.mazalearn.scienceengine.core.guru.ProbeManager;
+import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.probe.Hint;
-import com.mazalearn.scienceengine.core.probe.ProbeImage;
-import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
 // doubts on direction
 // Generate A at "random" point around active elements.
@@ -22,10 +20,10 @@ import com.mazalearn.scienceengine.core.probe.ProbeManager;
 public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
-  private Hint[] hints = new Hint[] {
-      new Hint("The direction of the field is the direction in which a " +
+  private Stage[] stages = new Stage[] {
+      new Stage("The direction of the field is the direction in which a " +
       "free North Pole would move if placed at that point."),
-      new Hint("The direction of the field is where the compass needle's North would point.")
+      new Stage("The direction of the field is where the compass needle's North would point.")
   };
   
   public FieldDirectionProber(IScience2DModel science2DModel, final ProbeManager probeManager) {
@@ -108,7 +106,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   }
 
   @Override
-  public Hint getHint() {
+  public String getHint() {
     return null;
   }
 }

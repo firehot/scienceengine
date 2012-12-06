@@ -54,9 +54,9 @@ public class WaveModel extends AbstractScience2DModel {
   // width of pulse
   private float pulseWidth = 10;
 
-  // time of evolution of wave
+  // timeLimit of evolution of wave
   private int simulatedTime = 0;
-  // time of evolution of a single pulse
+  // timeLimit of evolution of a single pulse
   private int pulseStartTime = 0;
   
   public WaveModel(int numBalls) {

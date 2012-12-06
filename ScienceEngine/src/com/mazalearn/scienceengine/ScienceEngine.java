@@ -70,6 +70,8 @@ public class ScienceEngine extends Game {
 
   private static EventLog eventLog = new EventLog();
 
+  private static float time;
+
   public static final int PIXELS_PER_M = 8;
 
   public ScienceEngine(String url) {
@@ -177,7 +179,7 @@ public class ScienceEngine extends Game {
     Gdx.app.log(ScienceEngine.LOG, "Resizing engine to: " + width + " x "
         + height);
 
-    // show the starting screen when the scienceEngine is resized for the first time;
+    // show the starting screen when the scienceEngine is resized for the first timeLimit;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
       setScreen(new LoadingScreen(this, createScreen(uri)));
@@ -336,5 +338,13 @@ public class ScienceEngine extends Game {
 
   public static boolean isProbeMode() {
     return isProbeMode;
+  }
+
+  public synchronized static void addTimeElapsed(float delta) {
+    time += delta;
+  }
+  
+  public static float getTime() {
+    return time;
   }
 }

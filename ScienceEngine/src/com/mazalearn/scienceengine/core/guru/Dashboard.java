@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.probe;
+package com.mazalearn.scienceengine.core.guru;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +12,9 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 class Dashboard extends Table {
   Label status, scoreLabel;
   int score;
+  private Label timerLabel;
+  float timeLimit = 300;
+
   Dashboard(Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
@@ -39,13 +42,12 @@ class Dashboard extends Table {
     style.fontColor = Color.WHITE;
     scoreLabel = new Label("0", skin);
 
-    Label timerLabel = new Label("0", skin) {
-      float time = 300;
+    timerLabel = new Label("0", skin) {
       @Override
       public void act(float delta) {
-        time -= delta;
-        this.setText(String.valueOf(Math.round(time / 60) + ":" + String.valueOf(Math.round(time % 60))));
-        if (time < 0) {
+        timeLimit -= delta;
+        this.setText(String.valueOf(Math.round(timeLimit / 60) + ":" + String.valueOf(Math.round(timeLimit % 60))));
+        if (timeLimit < 0) {
           status.setText("Time Up");
         }
       }
@@ -82,5 +84,9 @@ class Dashboard extends Table {
 
   public void resetScore() {
     score = 0;
+  }
+  
+  public void setTimeLimit(int timeLimitSeconds) {
+    this.timeLimit = timeLimitSeconds;
   }
 }

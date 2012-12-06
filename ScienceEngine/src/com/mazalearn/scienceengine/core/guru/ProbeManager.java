@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.probe;
+package com.mazalearn.scienceengine.core.guru;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;
   private final ScoreImage successImage, failureImage;
-  private ProbeHinter probeHinter;
+  private Hinter hinter;
   private int deltaSuccessScore;
   private int deltaFailureScore;
 
@@ -56,13 +56,13 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
     this.addActor(successImage);
     this.addActor(failureImage);
-    probeHinter = new ProbeHinter(skin);
+    hinter = new Hinter(skin);
     // Place hinter to right of dashboard above the controls
-    probeHinter.setPosition(controlPanel.getX(), 0);
+    hinter.setPosition(controlPanel.getX(), 0);
     // Place hinter to right of question mark above the controls.
-    //probeHinter.setPosition(controlPanel.getX(),
+    //hinter.setPosition(controlPanel.getX(),
     //    controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 20);
-    this.addActor(probeHinter);
+    this.addActor(hinter);
     this.setVisible(false);
   }
 
@@ -166,8 +166,8 @@ public class ProbeManager extends Group implements IDoneCallback {
   }
   
   private void setHint() {
-    Hint hint = currentProber != null ? currentProber.getHint() : null;
-    probeHinter.setHint(hint != null ? hint.getHintText() : null);    
+    String hintText = currentProber != null ? currentProber.getHint() : null;
+    hinter.setHint(hintText);    
   }
 
   // Prerequisite: activeProbers.size() >= 1

@@ -1,9 +1,9 @@
 {"name":"Electromagnetism",
 "level":7,
 "description":"Creating a DC  motor by using commutator",
-"components":[{"type":"Brushes","x":330.0,"y":225.0,"originX":0.0,"originY":0.0,"width":32.0,"height":16.0,"visible":true,"rotation":0.0,"move":"None","bodytype":false},
+"components":[{"type":"Brushes","x":323.0,"y":233.0,"originX":0.0,"originY":0.0,"width":48.0,"height":16.0,"visible":true,"rotation":0.0,"move":"None","bodytype":false},
 {"type":"HorseshoeMagnet", "x":175, "y":30.8,"originX":175.0,"originY":192.0,"width":350.0,"height":256.0,"visible":true,"rotation":0,"move":"None","bodytype":false},
-{"type":"CurrentSource","x":327.6001,"y":345.59995,"originX":32.0,"originY":64.0,"width":64.0,"height":128.0,"visible":true,"rotation":0.0,"move":"None","bodytype":false},{"type":"CurrentCoil","x":282.86517,"y":226.54425,"originX":64.0,"originY":16.0,"width":128.0,"height":32.0,"visible":true,"rotation":0.0,"move":"Rotate","bodytype":true},
+{"type":"CurrentSource","x":342.6001,"y":345.59995,"originX":32.0,"originY":64.0,"width":64.0,"height":128.0,"visible":true,"rotation":0.0,"move":"None","bodytype":false},{"type":"CurrentCoil","x":282.86517,"y":226.54425,"originX":64.0,"originY":16.0,"width":128.0,"height":32.0,"visible":true,"rotation":0.0,"move":"Rotate","bodytype":true},
 {"type":"Dummy","x":370.0,"y":313.0,"originX":32.0,"originY":32.0,"width":0,"height":0,"visible":true,"rotation":0.0},
 {"type":"ControlPanel","x":709.0,"y":254.0,"originX":0.0,"originY":0.0,"width":0.0,"height":0.0,"visible":true,"rotation":0.0,"move":"None","bodytype":false},
 {"type":"Title","x":100.0,"y":460.0,"originX":0.0,"originY":0.0,"width":0.0,"height":5.0,"visible":true,"rotation":0.0,"move":"None","bodytype":false},
@@ -19,7 +19,22 @@
 {name:"CurrentCoil.CommutatorType", permitted:true, value:"Connector"}],
 probers:[
 {name: "ParameterMagnitudeProber", parameter:"CurrentSource.CurrentMax", type:"Direct"},
+{name: "LearningProber", 
+   configs:[{name: "CurrentCoil.CommutatorType", permitted: false, value:"Connector"},
+            {name: "CurrentSource.CurrentDirection", permitted: false, value: false}
+   ],
+   hints:[{hint: "Have you configured the current coil to see the number of revolutions?", 
+           expr: "CurrentCoil.RotationDataType <> 'NumRevolutions'"},
+          {hint: "Does change in magnetic field affect the rotation of the coil? Give the coil a starting push.", 
+           expr: "CurrentCoil.AngularVelocity = 0 and CurrentCoil.RotationData = 0"},
+          {hint: "When should current direction be changed to keep coil rotating in same direction?", 
+           expr: "(CurrentCoil.Angle / pi > 1.3 and CurrentCoil.Angle / pi < 1.7) or (CurrentCoil.Angle / pi > 0.3 and CurrentCoil.Angle / pi < 0.7)"},
+          {hint: "Is number of revolutions increasing?",
+           expr: "CurrentCoil.AngularVelocity > 0"}
+   ],
+   success:{name:"CurrentCoil.NumRevolutions", value:">= 10"}},
 {name:"ParameterDirectionProber", type:"Spin", depends:["CurrentSource.CurrentDirection","HorseshoeMagnet.Flip"]},
 {name: "ParameterMagnitudeProber", parameter:"HorseshoeMagnet.MagnetStrength", type:"Direct"},
 {name: "ParameterMagnitudeProber", parameter:"Environment.AirPermittivity", type:"None"},
-{name: "ParameterMagnitudeProber", parameter:"Environment.EarthMagneticField", type:"None"}]}
+{name: "ParameterMagnitudeProber", parameter:"Environment.EarthMagneticField", type:"None"}
+]}

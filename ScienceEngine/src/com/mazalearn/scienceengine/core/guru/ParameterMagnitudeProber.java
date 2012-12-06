@@ -1,6 +1,5 @@
-package com.mazalearn.scienceengine.core.probe;
+package com.mazalearn.scienceengine.core.guru;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -26,7 +25,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
     None;
   }
   
-  private Hint[] hints = new Hint[0];
+  private Stage[] stages = new Stage[0];
   
   private final Image image;
   private final Image decrease, increase, dontCare;
@@ -118,7 +117,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
   }
 
   @Override
-  public Hint getHint() {
+  public String getHint() {
     return null;
   }
 

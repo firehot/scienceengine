@@ -1,14 +1,13 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.mazalearn.scienceengine.core.model.IParameter;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public interface IModelConfig<T> {
   enum ConfigType { RANGE, LIST, COMMAND, TOGGLE, TEXT };
   
-  public Science2DBody getBody();
   public ConfigType getType();
   public String getName();
+  // Get the parameter associated with this config.
   public IParameter getParameter();
   // Is this configuration hook available with current configs?
   public boolean isAvailable();

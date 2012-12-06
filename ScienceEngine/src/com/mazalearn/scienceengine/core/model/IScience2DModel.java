@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 public interface IScience2DModel {
   // Reset model to initial conditions
   public void reset();
-  // Simulate steps of the model. delta is time since last invocation.
+  // Simulate steps of the model. delta is timeLimit since last invocation.
   public void simulateSteps(float delta);
   // Get all configs of the model
   public List<IModelConfig<?>> getAllConfigs();

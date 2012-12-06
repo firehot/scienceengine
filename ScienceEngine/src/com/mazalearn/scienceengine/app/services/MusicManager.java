@@ -9,7 +9,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 /**
  * A service that manages the background music.
  * <p>
- * Only one music may be playing at a given time.
+ * Only one music may be playing at a given timeLimit.
  */
 public class MusicManager implements Disposable {
   /**

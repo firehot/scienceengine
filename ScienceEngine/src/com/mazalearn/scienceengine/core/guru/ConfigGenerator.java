@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.probe;
+package com.mazalearn.scienceengine.core.guru;
 
 import java.util.List;
 

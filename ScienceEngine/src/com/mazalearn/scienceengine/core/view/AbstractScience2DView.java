@@ -18,15 +18,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
+import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.guru.LearningProber;
+import com.mazalearn.scienceengine.core.guru.ParameterDirectionProber;
+import com.mazalearn.scienceengine.core.guru.ParameterMagnitudeProber;
+import com.mazalearn.scienceengine.core.guru.ProbeManager;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.probe.LearningProber;
-import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
-import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
-import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
 public abstract class AbstractScience2DView extends Stage implements IScience2DView {
 
@@ -140,6 +140,8 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   
   @Override
   public void act(float delta) {
+    ScienceEngine.addTimeElapsed(delta);
+    if (isSuspended()) return;
     science2DModel.simulateSteps(delta);
     super.act(delta);
   }

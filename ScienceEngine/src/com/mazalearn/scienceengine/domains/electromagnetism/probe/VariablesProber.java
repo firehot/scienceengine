@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.guru.ProbeImage;
+import com.mazalearn.scienceengine.core.guru.ProbeManager;
+import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.probe.Hint;
-import com.mazalearn.scienceengine.core.probe.ProbeImage;
-import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 
@@ -27,8 +26,8 @@ public class VariablesProber extends AbstractScience2DProber {
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
   private LightbulbActor lightbulbActor;
-  private Hint[] hints = new Hint[] {
-      new Hint("Light intensity increases when more current is induced in the coil.")
+  private Stage[] stages = new Stage[] {
+      new Stage("Light intensity increases when more current is induced in the coil.")
   };
   private Table configTable;
   private Actor modelControls;
@@ -130,7 +129,7 @@ public class VariablesProber extends AbstractScience2DProber {
   }
 
   @Override
-  public Hint getHint() {
+  public String getHint() {
     return null;
   }
 

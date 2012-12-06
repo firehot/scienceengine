@@ -1,14 +1,12 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.core.guru.ProbeImage;
+import com.mazalearn.scienceengine.core.guru.ProbeManager;
+import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.probe.Hint;
-import com.mazalearn.scienceengine.core.probe.ProbeImage;
-import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 
 public class LightProber extends AbstractScience2DProber {
@@ -17,12 +15,12 @@ public class LightProber extends AbstractScience2DProber {
   private Image image;
   private LightbulbActor lightbulbActor;
   private ProbeManager probeManager;
-  private Hint[] hints = new Hint[] {
-      new Hint("Light intensity increases when more current is induced in the coil."),
-      new Hint("More current is induced in the coil if the magnetic field changes faster at the coil."),
-      new Hint("Magnetic field change at the coil increases when the magnet moves faster relative to the coil."),
-      new Hint("If the coil has more loops, more current will be induced."),
-      new Hint("If the magnet is stronger, more current will be induced.")
+  private Stage[] stages = new Stage[] {
+      new Stage("Light intensity increases when more current is induced in the coil."),
+      new Stage("More current is induced in the coil if the magnetic field changes faster at the coil."),
+      new Stage("Magnetic field change at the coil increases when the magnet moves faster relative to the coil."),
+      new Stage("If the coil has more loops, more current will be induced."),
+      new Stage("If the magnet is stronger, more current will be induced.")
   };
   private IScience2DModel science2DModel;
   
@@ -65,7 +63,7 @@ public class LightProber extends AbstractScience2DProber {
   }
 
   @Override
-  public Hint getHint() {
+  public String getHint() {
     return null;
   }
 

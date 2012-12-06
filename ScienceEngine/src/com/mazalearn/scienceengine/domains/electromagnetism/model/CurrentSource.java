@@ -13,7 +13,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * <p>
  * The Current source has a configurable maximum current. A client varies the
  * maximum current and frequency. The current amplitude varies over
- * time for AC. The direction of current can be changed for DC.
+ * timeLimit for AC. The direction of current can be changed for DC.
  * 
  * @author sridhar
  */
@@ -121,7 +121,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   }
 
   /*
-   * Varies the current over time, based on maxCurrent and frequency.
+   * Varies the current over timeLimit, based on maxCurrent and frequency.
    * Guaranteed to hit all peaks and zero crossings.
    */
   @Override

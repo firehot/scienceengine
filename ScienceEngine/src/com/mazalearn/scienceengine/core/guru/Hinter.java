@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.probe;
+package com.mazalearn.scienceengine.core.guru;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class ProbeHinter extends Group {
+public class Hinter extends Group {
   private static List<Image> SCIENTISTS = new ArrayList<Image>();
   private TextButton hintButton;
   float increment = 1, count = 0;
@@ -29,7 +29,7 @@ public class ProbeHinter extends Group {
     SCIENTISTS.add(new Image(new Texture("images/faraday.png")));
     SCIENTISTS.get(2).setName("Michael Faraday");
   }
-  public ProbeHinter(Skin skin) {
+  public Hinter(Skin skin) {
     
     hintButton = new TextButton("", skin);
     hintButton.setColor(Color.YELLOW);
@@ -81,7 +81,7 @@ public class ProbeHinter extends Group {
     this.setVisible(true);
     Image image = SCIENTISTS.get(scientistIndex);
     image.setVisible(false);
-    hintButton.setText("Hint: " + hint + "\n-" + image.getName());
+    hintButton.setText("Stage: " + hint + "\n-" + image.getName());
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
     hintButton.setSize(300, 100); 
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
