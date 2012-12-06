@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class CheckBoxControl implements IControl {
   private final IModelConfig<Boolean> property;
@@ -27,7 +27,7 @@ public class CheckBoxControl implements IControl {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(property.getParameter(), 
-            (IScience2DStage) checkBox.getStage());
+            (IScience2DView) checkBox.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

@@ -1,7 +1,7 @@
 // Syntax-error exception.
 // Copyright 1996 by Darius Bacon; see the file COPYING.
 
-package com.mazalearn.scienceengine.core.expr;
+package com.mazalearn.scienceengine.core.lang;
 
 /**
  * An exception indicating a problem in parsing an expression.  It can

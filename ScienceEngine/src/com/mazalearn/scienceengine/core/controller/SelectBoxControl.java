@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class SelectBoxControl implements IControl {
   private final IModelConfig<String> property;
@@ -29,7 +29,7 @@ public class SelectBoxControl implements IControl {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(property.getParameter(), 
-            (IScience2DStage) selectBox.getStage());
+            (IScience2DView) selectBox.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

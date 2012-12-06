@@ -2,28 +2,28 @@
 
 // Sample usage:
 
-// $ java com.mazalearn.scienceengine.core.expr.Example '3.14159 * x^2' 0 4 1
+// $ java com.mazalearn.scienceengine.core.lang.Example '3.14159 * x^2' 0 4 1
 // 0
 // 3.14159
 // 12.5664
 // 28.2743
 // 50.2654
 //
-// $ java com.mazalearn.scienceengine.core.expr.Example 'sin (pi/4 * x)' 0 4 1
+// $ java com.mazalearn.scienceengine.core.lang.Example 'sin (pi/4 * x)' 0 4 1
 // 0
 // 0.707107
 // 1
 // 0.707107
 // 1.22461e-16
 //
-// $ java com.mazalearn.scienceengine.core.expr.Example 'sin (pi/4 x)' 0 4 1
+// $ java com.mazalearn.scienceengine.core.lang.Example 'sin (pi/4 x)' 0 4 1
 // I don't understand your formula "sin (pi/4 x)".
 // 
 // I got as far as "sin (pi/4" and then saw "x".
 // I expected ")" at that point, instead.
 // An example of a formula I can parse is "sin (pi/4 + x)".
 
-package com.mazalearn.scienceengine.core.expr;
+package com.mazalearn.scienceengine.core.lang;
 
 /**
  * A simple example of parsing and evaluating an expression.

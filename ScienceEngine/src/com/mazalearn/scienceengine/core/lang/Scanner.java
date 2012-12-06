@@ -1,6 +1,6 @@
 // Scan lexical tokens in input strings.
 
-package com.mazalearn.scienceengine.core.expr;
+package com.mazalearn.scienceengine.core.lang;
 
 import java.util.Vector;
 

@@ -25,10 +25,10 @@ probers:[
    ],
    hints:[{hint: "Have you configured the current coil to see the number of revolutions?", 
            expr: "CurrentCoil.RotationDataType <> 'NumRevolutions'"},
-          {hint: "Does change in magnetic field affect the rotation of coil? Give the coil a slight push.", 
+          {hint: "Does change in magnetic field affect the rotation of the coil? Give the coil a starting push.", 
            expr: "CurrentCoil.AngularVelocity = 0 and CurrentCoil.RotationData = 0"},
           {hint: "When should current direction be changed to keep coil rotating in same direction?", 
-           expr: "(CurrentCoil.Angle / pi > 1.3 and CurrentCoil.Angle / pi < 1.7) or (CurrentCoil.Angle / pi > 0.3 and CurrentCoil.Angle < 0.7)"},
+           expr: "(CurrentCoil.Angle / pi > 1.3 and CurrentCoil.Angle / pi < 1.7) or (CurrentCoil.Angle / pi > 0.3 and CurrentCoil.Angle / pi < 0.7)"},
           {hint: "Is number of revolutions increasing?", 
            expr: "CurrentCoil.AngularVelocity > 0"}
    ],

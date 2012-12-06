@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.molecules.StatesOfMatterController;
@@ -40,7 +40,7 @@ public class ActivityScreen extends AbstractScreen {
     }
     this.science2DController = 
         createExperimentController(experimentName, level, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-    IScience2DStage science2DStage = science2DController.getView();
+    IScience2DView science2DView = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
     profile.setCurrentLevel(level);
@@ -49,7 +49,7 @@ public class ActivityScreen extends AbstractScreen {
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
       this.setStage(levelEditor);
     } else {
-      this.setStage((Stage) science2DStage);
+      this.setStage((Stage) science2DView);
     }
     stage.addListener(new InputListener() {
       @Override

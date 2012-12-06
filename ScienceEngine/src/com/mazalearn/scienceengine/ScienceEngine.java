@@ -32,7 +32,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Parameter;
 import com.mazalearn.scienceengine.core.view.StageComponent;
 
@@ -309,7 +309,7 @@ public class ScienceEngine extends Game {
     return selectedBody;
   }
 
-  public static void selectBody(Science2DBody body, IScience2DStage stage) {
+  public static void selectBody(Science2DBody body, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
     eventLog.logEvent(body, Parameter.Select);
@@ -317,13 +317,13 @@ public class ScienceEngine extends Game {
     displayStatus(body.getComponentTypeName(), stage);
   }
 
-  public static void selectParameter(IParameter parameter, IScience2DStage stage) {
+  public static void selectParameter(IParameter parameter, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayStatus(parameter.name(), stage);
     eventLog.logEvent(getSelectedBody(), parameter);
   }
 
-  private static void displayStatus(String entityName, IScience2DStage stage) {
+  private static void displayStatus(String entityName, IScience2DView stage) {
     Label status = (Label) stage.findActor(StageComponent.Status.name());
     String component = 
         getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";

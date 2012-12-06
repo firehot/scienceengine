@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.expr;
+package com.mazalearn.scienceengine.core.lang;
 
 /**
  * Test for bugs in the whole package.

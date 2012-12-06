@@ -13,7 +13,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
  * Cycles through the eligible registeredProbers - probing the user with each one.
@@ -31,7 +31,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   private List<AbstractScience2DProber> registeredProbers = new ArrayList<AbstractScience2DProber>();
   private List<AbstractScience2DProber> activeProbers = new ArrayList<AbstractScience2DProber>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
-  private final IScience2DStage science2DStage;
+  private final IScience2DView science2DView;
   private final ControlPanel controlPanel;
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;
@@ -41,11 +41,11 @@ public class ProbeManager extends Group implements IDoneCallback {
   private int deltaFailureScore;
 
   public ProbeManager(final Skin skin, float width, float height,
-      IScience2DStage science2DStage, ControlPanel controlPanel) {
+      IScience2DView science2DView, ControlPanel controlPanel) {
     super();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
-    this.science2DStage = science2DStage;
+    this.science2DView = science2DView;
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
     this.controlPanel = controlPanel;
@@ -80,7 +80,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     // These are the visible actors.
     excludedActors.clear();
     excludedActors.add(dashboard);
-    for (Actor actor: science2DStage.getActors()) {
+    for (Actor actor: science2DView.getActors()) {
       if (actor.isVisible() && actor != this) {
         excludedActors.add(actor);
       }
@@ -117,7 +117,7 @@ public class ProbeManager extends Group implements IDoneCallback {
 
     // Turn on access to parts of control panel
     controlPanel.enableControls(true);
-    science2DStage.done(false);
+    science2DView.done(false);
     ScienceEngine.setProbeMode(false);
     this.setVisible(false);
   }
@@ -147,13 +147,13 @@ public class ProbeManager extends Group implements IDoneCallback {
     // Win
     if (dashboard.getScore() >= WIN_THRESHOLD) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
-      science2DStage.done(true);
+      science2DView.done(true);
       this.setVisible(false);
       return;
     }
     // Loss
     if (dashboard.getScore() <= LOSS_THRESHOLD) {
-      science2DStage.done(false);
+      science2DView.done(false);
       this.setVisible(false);
       return;
     }
@@ -197,7 +197,7 @@ public class ProbeManager extends Group implements IDoneCallback {
   }
 
   public Actor findStageActor(String name) {
-    for (Actor actor: science2DStage.getActors()) {
+    for (Actor actor: science2DView.getActors()) {
       if (name.equals(actor.getName())) return actor;
     }
     return null;

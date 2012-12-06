@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
-import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
+import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
@@ -37,7 +37,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 
-public class ElectroMagnetismView extends AbstractScience2DStage {
+public class ElectroMagnetismView extends AbstractScience2DView {
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
   private AbstractScience2DModel emModel;

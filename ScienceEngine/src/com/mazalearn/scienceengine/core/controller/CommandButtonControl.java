@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
  * Utility class for science2DModel action buttons using reflection.
@@ -32,7 +32,7 @@ public class CommandButtonControl implements IControl {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(command.getParameter(), 
-            (IScience2DStage) textButton.getStage());
+            (IScience2DView) textButton.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

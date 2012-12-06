@@ -18,9 +18,9 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.expr.Expr;
-import com.mazalearn.scienceengine.core.expr.Parser;
-import com.mazalearn.scienceengine.core.expr.SyntaxException;
+import com.mazalearn.scienceengine.core.lang.Expr;
+import com.mazalearn.scienceengine.core.lang.Parser;
+import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.EnvironmentBody;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
@@ -33,13 +33,13 @@ import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
 import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
 public class LevelLoader {
     
   private IScience2DController science2DController;
-  private IScience2DStage science2DStage;
+  private IScience2DView science2DView;
   private IScience2DModel science2DModel;
   private ControlPanel controlPanel;
   private int level;
@@ -49,7 +49,7 @@ public class LevelLoader {
   public LevelLoader(IScience2DController science2DController) {
     this.science2DController = science2DController;
     this.level = science2DController.getLevel();
-    this.science2DStage = science2DController.getView();
+    this.science2DView = science2DController.getView();
     this.science2DModel = science2DController.getModel();
     this.controlPanel = science2DController.getControlPanel();
   }
@@ -82,7 +82,7 @@ public class LevelLoader {
     readCircuits((Array<?>) rootElem.get("circuits"));
     
     science2DModel.prepareModel();
-    science2DStage.prepareStage();
+    science2DView.prepareStage();
     controlPanel.refresh();
     readConfigs((Array<?>) rootElem.get("configs"), science2DModel);
     readProbers((Array<?>) rootElem.get("probers"));
@@ -102,7 +102,7 @@ public class LevelLoader {
   private void readLevelInfo(OrderedMap<String, ?> info) {
     String description = (String) nvl(info.get("description"), 
         science2DController.getName() + " : Level " + level);
-    Label title = (Label) science2DStage.findActor("Title");
+    Label title = (Label) science2DView.findActor("Title");
     title.setText(description);
   }
 
@@ -124,7 +124,7 @@ public class LevelLoader {
     CircuitElement[] circuitElements = new CircuitElement[circuit.size];
     for (int i = 0; i < circuit.size; i++) {
       String name = circuit.get(i);
-      Actor actor = science2DStage.findActor(name);
+      Actor actor = science2DView.findActor(name);
       if (actor == null) {
         throw new IllegalArgumentException("Component not found: " + name);
       }
@@ -134,7 +134,7 @@ public class LevelLoader {
   }
 
   private void readGroups(Array<?> groups) {
-    science2DStage.removeLocationGroups();
+    science2DView.removeLocationGroups();
 
     if (groups == null) return;
     Gdx.app.log(ScienceEngine.LOG, "Loading groups");
@@ -151,13 +151,13 @@ public class LevelLoader {
     Actor[] groupElements = new Actor[group.size];
     for (int i = 0; i < group.size; i++) {
       String name = group.get(i);
-      Actor actor = science2DStage.findActor(name);
+      Actor actor = science2DView.findActor(name);
       if (actor == null) {
         throw new IllegalArgumentException("Actor not found: " + name);
       }
       groupElements[i] = actor;      
     }
-    science2DStage.addLocationGroup(groupElements);
+    science2DView.addLocationGroup(groupElements);
   }
 
   /**
@@ -257,23 +257,23 @@ public class LevelLoader {
             rotation * MathUtils.degreesToRadians);
     Actor actor = null;
     if (science2DBody != null) {
-      actor = science2DStage.addScience2DActor(science2DBody);
+      actor = science2DView.addScience2DActor(science2DBody);
     } else {
-      actor = science2DStage.addVisualActor(type);
+      actor = science2DView.addVisualActor(type);
     }
     if (actor == null && type.equals("ControlPanel")) {
-      actor = science2DStage.findActor(type);
+      actor = science2DView.findActor(type);
     }
     return actor;
   }
 
   private Actor findActor(String type) {
-    Actor actor = science2DStage.findActor(type);
+    Actor actor = science2DView.findActor(type);
     // If multiple actors of same type, they have number suffix 1,2,3...
     if (actor == null) {
       Integer count = (Integer) nvl(componentTypeCount.get(type), 0) + 1;
       componentTypeCount.put(type, count);
-      actor = science2DStage.findActor(type + "." + count);
+      actor = science2DView.findActor(type + "." + count);
     }
     return actor;
   }
@@ -308,8 +308,8 @@ public class LevelLoader {
   private void readProber(OrderedMap<String, ?> proberObj) {
     String proberName = (String) proberObj.get("name");
     Gdx.app.log(ScienceEngine.LOG, "Loading prober: " + proberName);
-    ProbeManager probeManager = science2DStage.getProbeManager();
-    AbstractScience2DProber prober = science2DStage.createProber(proberName, probeManager);
+    ProbeManager probeManager = science2DView.getProbeManager();
+    AbstractScience2DProber prober = science2DView.createProber(proberName, probeManager);
     probeManager.registerProber(prober);
     String parameterName = (String) proberObj.get("parameter");
     String type = (String) proberObj.get("type");

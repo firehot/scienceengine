@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
  * Utility class for science2DModel floating point sliders using reflection.
@@ -34,7 +34,7 @@ public class SliderControl implements IControl {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(property.getParameter(), 
-            (IScience2DStage) slider.getStage());
+            (IScience2DView) slider.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

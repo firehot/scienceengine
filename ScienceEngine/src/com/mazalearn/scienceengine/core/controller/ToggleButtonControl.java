@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
  * Utility class for science2DModel action buttons using reflection.
@@ -32,7 +32,7 @@ public class ToggleButtonControl implements IControl {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(property.getParameter(), 
-            (IScience2DStage) toggleButton.getStage());
+            (IScience2DView) toggleButton.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

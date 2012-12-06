@@ -1,7 +1,7 @@
 // Variables associate values with names.
 // Copyright 1996 by Darius Bacon; see the file COPYING.
 
-package com.mazalearn.scienceengine.core.expr;
+package com.mazalearn.scienceengine.core.lang;
 
 import java.util.Hashtable;
 

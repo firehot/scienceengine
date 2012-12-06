@@ -1,6 +1,6 @@
 // Run benchmarks from the command line.
 
-package com.mazalearn.scienceengine.core.expr;
+package com.mazalearn.scienceengine.core.lang;
 
 /**
  * Time evaluating many expressions over many values.

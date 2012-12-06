@@ -28,7 +28,7 @@ import com.mazalearn.scienceengine.core.probe.ParameterDirectionProber;
 import com.mazalearn.scienceengine.core.probe.ParameterMagnitudeProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
-public abstract class AbstractScience2DStage extends Stage implements IScience2DStage {
+public abstract class AbstractScience2DView extends Stage implements IScience2DView {
 
   protected final IScience2DModel science2DModel;
   protected final Skin skin;
@@ -38,7 +38,7 @@ public abstract class AbstractScience2DStage extends Stage implements IScience2D
   private Vector2 deltaPosition = new Vector2();
   private ProbeManager probeManager;
 
-  public AbstractScience2DStage( 
+  public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin) {
     super(width, height, true);
     this.skin = skin;

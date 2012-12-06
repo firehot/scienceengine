@@ -9,7 +9,7 @@ import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.IDoneCallback;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
 
-public interface IScience2DStage extends IDoneCallback {
+public interface IScience2DView extends IDoneCallback {
   // Pause/Resume model actions in the experiment. 
   // Measurement/sensors will still work when paused
   public void suspend(boolean value);

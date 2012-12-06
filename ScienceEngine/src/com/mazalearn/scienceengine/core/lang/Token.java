@@ -1,6 +1,6 @@
 // A lexical token from an input string.
 
-package com.mazalearn.scienceengine.core.expr;
+package com.mazalearn.scienceengine.core.lang;
 
 class Token {
     public static final int TT_ERROR  = -1;

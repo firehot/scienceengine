@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
-import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
+import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirectionProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
 /**
  * States of Matter experiment View.
  */
-public class StatesOfMatterView extends AbstractScience2DStage {
+public class StatesOfMatterView extends AbstractScience2DView {
    
   private IMolecularModel molecularModel;
   private int N;

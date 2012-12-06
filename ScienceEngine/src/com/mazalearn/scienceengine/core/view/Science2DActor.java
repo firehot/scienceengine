@@ -83,7 +83,7 @@ public class Science2DActor extends Actor {
         viewPos.sub(getWidth() / (2 * ScienceEngine.PIXELS_PER_M), 
             getHeight() / (2 * ScienceEngine.PIXELS_PER_M));
         body.applyForce(lastTouch, viewPos);
-        ScienceEngine.selectParameter(Parameter.Rotate, (IScience2DStage) getStage());
+        ScienceEngine.selectParameter(Parameter.Rotate, (IScience2DView) getStage());
       }
 
     };
@@ -92,7 +92,7 @@ public class Science2DActor extends Actor {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         super.touchDown(event, localX, localY, pointer, button);
-        ScienceEngine.selectBody(body, (IScience2DStage) getStage());
+        ScienceEngine.selectBody(body, (IScience2DView) getStage());
         return false;
       }
     };
@@ -188,7 +188,7 @@ public class Science2DActor extends Actor {
     getBox2DPositionFromViewPosition(box2DPos, viewPos, getRotation());
     float angle = getRotation() * MathUtils.degreesToRadians;
     if (isUserChange) { // Change initiated by user, hence propagate
-      ((AbstractScience2DStage) getStage()).notifyLocationChangedByUser(this, box2DPos, angle);
+      ((AbstractScience2DView) getStage()).notifyLocationChangedByUser(this, box2DPos, angle);
     }
     body.setPositionAndAngle(box2DPos, angle);
     body.setActive(isVisible());

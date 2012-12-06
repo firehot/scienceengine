@@ -2,8 +2,8 @@ package com.mazalearn.scienceengine.core.probe;
 
 import java.util.Set;
 
-import com.mazalearn.scienceengine.core.expr.Expr;
-import com.mazalearn.scienceengine.core.expr.Variable;
+import com.mazalearn.scienceengine.core.lang.Expr;
+import com.mazalearn.scienceengine.core.lang.Variable;
 
 public class Hint {
   private final String hintText;

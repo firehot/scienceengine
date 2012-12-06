@@ -2,16 +2,16 @@ package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
+import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public abstract class AbstractScience2DController implements
     IScience2DController {
 
   private ControlPanel controlPanel;
   private IScience2DModel science2DModel;
-  private AbstractScience2DStage science2DView;
+  private AbstractScience2DView science2DView;
   private Skin skin;
   private String name;
   private int level;
@@ -23,7 +23,7 @@ public abstract class AbstractScience2DController implements
   }
   
   protected void initialize(IScience2DModel science2DModel, 
-      AbstractScience2DStage science2DView) {
+      AbstractScience2DView science2DView) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
     this.controlPanel = new ControlPanel(skin, this);
@@ -41,7 +41,7 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
-  public IScience2DStage getView() {
+  public IScience2DView getView() {
     return science2DView;
   }
 

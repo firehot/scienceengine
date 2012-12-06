@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
  * Utility class for science2DModel text meter
@@ -29,7 +29,7 @@ public class TextMeter implements IControl {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(property.getParameter(), 
-            (IScience2DStage) label.getStage());
+            (IScience2DView) label.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

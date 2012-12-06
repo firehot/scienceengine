@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.IScience2DStage;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
 public class LevelSaver {
@@ -27,14 +27,14 @@ public class LevelSaver {
 
   private int level;
   private IScience2DController science2DController;
-  private IScience2DStage science2DStage;
+  private IScience2DView science2DView;
   private IScience2DModel science2DModel;
 
 
   public LevelSaver(IScience2DController science2DController) {
     this.science2DController = science2DController;
     this.level = science2DController.getLevel();
-    this.science2DStage = science2DController.getView();
+    this.science2DView = science2DController.getView();
     this.science2DModel = science2DController.getModel();
   }
   
@@ -75,7 +75,7 @@ public class LevelSaver {
   private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
     jsonWriter.set("name", science2DController.getName());
     jsonWriter.set("level", level);
-    Label title = (Label) science2DStage.findActor("Title");
+    Label title = (Label) science2DView.findActor("Title");
     jsonWriter.set("description", title.getText());
   }
   
@@ -93,7 +93,7 @@ public class LevelSaver {
   
   private void writeGroups(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("groups");
-    for (final List<Actor> locationGroup : science2DStage.getLocationGroups()) {
+    for (final List<Actor> locationGroup : science2DView.getLocationGroups()) {
       jsonWriter.array();
       for (final Actor actor: locationGroup) {
           jsonWriter.value(actor.getName());
@@ -118,7 +118,7 @@ public class LevelSaver {
   
   private void writeComponents(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("components");
-    for (Actor a : science2DStage.getActors()) {
+    for (Actor a : science2DView.getActors()) {
       if (!a.isVisible()) continue; 
       String movementMode = "None";
       boolean dynamicBody = false;

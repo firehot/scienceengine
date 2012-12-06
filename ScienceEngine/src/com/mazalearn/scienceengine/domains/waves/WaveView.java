@@ -11,12 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.probe.AbstractScience2DProber;
 import com.mazalearn.scienceengine.core.probe.ProbeManager;
-import com.mazalearn.scienceengine.core.view.AbstractScience2DStage;
+import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.domains.waves.view.Boundary;
 import com.mazalearn.scienceengine.domains.waves.view.Hand;
 import com.mazalearn.scienceengine.domains.waves.view.WaveBox;
 
-public class WaveView extends AbstractScience2DStage {
+public class WaveView extends AbstractScience2DView {
 
   private Hand hand;
   private Boundary boundary;

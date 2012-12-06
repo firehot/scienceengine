@@ -8,7 +8,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig.ConfigType;
-import com.mazalearn.scienceengine.core.expr.Variable;
+import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
