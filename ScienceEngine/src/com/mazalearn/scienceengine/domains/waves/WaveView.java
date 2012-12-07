@@ -95,7 +95,7 @@ public class WaveView extends AbstractScience2DView {
   }
   
   @Override
-  public AbstractScience2DProber createProber(String name, Guru guru) {
-    return null;
+  public AbstractScience2DProber createProber(String name, Guru guru, String type) {
+    return super.createProber(name, guru, type);
   }
 }

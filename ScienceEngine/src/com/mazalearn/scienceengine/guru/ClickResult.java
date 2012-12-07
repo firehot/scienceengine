@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 class ClickResult extends ClickListener {
   private final IDoneCallback doneCallback;
-  private Image resultImage;
+  private int resultImage;
   private Image[] stateImages;
   private StateMapper stateMapper;
   
@@ -27,7 +27,7 @@ class ClickResult extends ClickListener {
     this.stateMapper = stateMapper;
   }
   
-  public void setResult(Image resultImage) {
+  public void setResult(int resultImage) {
     this.resultImage = resultImage;
   }
 
@@ -49,7 +49,7 @@ class ClickResult extends ClickListener {
   @Override
   public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
     super.touchUp(event, x, y, pointer, button);
-    boolean success = resultImage.isVisible();
+    boolean success = stateImages[resultImage].isVisible();
     for (Image image: stateImages) {
       image.setVisible(false);
     }

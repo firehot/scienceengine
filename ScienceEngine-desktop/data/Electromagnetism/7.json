@@ -40,7 +40,11 @@ plan: [{name: "Guide",
              title:"Click on ? for the parameter value and indicate direction of rotation of motor.",
              type:"Spin", 
              parameter:"HorseshoeMagnet.Flip",
-             result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"}]
+             result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
+             {name: "ParameterMagnitudeProber",
+              title:"Select decrease or increase parameter to make the motor run faster.\nSelect X if parameter does not affect motor.",
+             parameter:"CurrentSource.CurrentMax", 
+             type:"Direct"}]
    }],
 probers:[
 {name: "ParameterMagnitudeProber", parameter:"CurrentSource.CurrentMax", type:"Direct"},

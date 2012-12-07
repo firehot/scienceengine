@@ -31,8 +31,7 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
 import com.mazalearn.scienceengine.guru.Guide;
 import com.mazalearn.scienceengine.guru.Guru;
-import com.mazalearn.scienceengine.guru.ParameterDirectionProber;
-import com.mazalearn.scienceengine.guru.ParameterMagnitudeProber;
+import com.mazalearn.scienceengine.guru.ParameterProber;
 import com.mazalearn.scienceengine.guru.Stage;
 
 public class LevelLoader {
@@ -322,18 +321,18 @@ public class LevelLoader {
     Gdx.app.log(ScienceEngine.LOG, "Loading prober: " + proberName);
     String title = (String) proberObj.get("title");
     Guru guru = science2DView.getGuru();
-    AbstractScience2DProber prober = science2DView.createProber(proberName, guru);
-    String parameterName = (String) proberObj.get("parameter");
     String type = (String) proberObj.get("type");
+    AbstractScience2DProber prober = science2DView.createProber(proberName, guru, type);
+    String parameterName = (String) proberObj.get("parameter");
     IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
     Array<?> configs = (Array<?>) proberObj.get("configs");
     String resultExpr = (String) proberObj.get("result");
     if (resultExpr != null) {
-      ((ParameterDirectionProber) prober).setProbeConfig(title, parameter, resultExpr, type, configs);
+      ((ParameterProber) prober).setProbeConfig(title, parameter, resultExpr, type, configs);
       return prober;
     }
     if (parameter != null) {
-      ((ParameterMagnitudeProber) prober).setProbeConfig((IModelConfig<Float>) parameter, type, configs);
+      ((ParameterProber) prober).setProbeConfig(title, (IModelConfig<Float>) parameter, null, type, configs);
       return prober;
     }
     return prober;

@@ -39,5 +39,5 @@ public interface IScience2DView extends IDoneCallback {
   // Get probe manager for the stage
   public Guru getGuru();
   // Create prober
-  public AbstractScience2DProber createProber(String proberName, Guru guru);
+  public AbstractScience2DProber createProber(String proberName, Guru guru, String type);
 }

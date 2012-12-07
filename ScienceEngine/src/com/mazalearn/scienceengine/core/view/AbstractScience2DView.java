@@ -24,8 +24,7 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
 import com.mazalearn.scienceengine.guru.Guru;
-import com.mazalearn.scienceengine.guru.ParameterDirectionProber;
-import com.mazalearn.scienceengine.guru.ParameterMagnitudeProber;
+import com.mazalearn.scienceengine.guru.ParameterProber;
 
 public abstract class AbstractScience2DView extends Stage implements IScience2DView {
 
@@ -223,11 +222,9 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
   
   @Override
-  public AbstractScience2DProber createProber(String proberName, Guru guru) {
-    if ("ParameterMagnitudeProber".equals(proberName)) {
-      return new ParameterMagnitudeProber(science2DModel, guru);
-    } else if ("ParameterDirectionProber".equals(proberName)) {
-      return new ParameterDirectionProber(science2DModel, guru);
+  public AbstractScience2DProber createProber(String proberName, Guru guru, String type) {
+    if ("ParameterProber".equals(proberName)) {
+      return new ParameterProber(science2DModel, guru, type);
     } 
     return null;
   }

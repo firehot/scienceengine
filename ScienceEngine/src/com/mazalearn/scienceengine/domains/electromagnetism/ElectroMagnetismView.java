@@ -139,7 +139,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   };
   
   @Override
-  public AbstractScience2DProber createProber(String name, Guru guru) {
+  public AbstractScience2DProber createProber(String name, Guru guru, String type) {
     if ("FieldMagnitudeProber".equals(name)) {
       return new FieldMagnitudeProber(emModel, guru);
     } else if ("FieldDirectionProber".equals(name)) {
@@ -149,7 +149,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     } else if ("VariablesProber".equals(name)) {
       return new VariablesProber(guru, emModel, skin, findActor("ModelControls"), controlPanel);
     }
-    return super.createProber(name, guru);
+    return super.createProber(name, guru, type);
   }
   
   public void done(boolean success) {

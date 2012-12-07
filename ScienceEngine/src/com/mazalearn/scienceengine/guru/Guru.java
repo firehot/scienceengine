@@ -109,7 +109,7 @@ public class Guru extends Group implements IDoneCallback {
     // Move on to next guide - linear for now.
     guideIndex = (guideIndex + 1) % registeredGuides.size();
     currentGuide = registeredGuides.get(guideIndex);
-
+guideDone(); if (true) return;
     currentGuide.activate(true);
     dashboard.setStatus(currentGuide.getTitle());
   }
@@ -150,8 +150,8 @@ public class Guru extends Group implements IDoneCallback {
    */
   public void done(boolean success) {
     if (success) {
-      currentGuide.activate(false);
-      currentGuide.reinitialize(getX(), getY(), getWidth(), getHeight());
+      currentProber.activate(false);
+      currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
       successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
