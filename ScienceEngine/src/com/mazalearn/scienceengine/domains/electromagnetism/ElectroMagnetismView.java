@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -36,6 +34,8 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
+import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.Guru;
 
 public class ElectroMagnetismView extends AbstractScience2DView {
   private FieldMeter fieldMeter;
@@ -132,30 +132,30 @@ public class ElectroMagnetismView extends AbstractScience2DView {
       compassActor.setVisible(!challenge);
     }
     if (challenge) {
-      getProbeManager().startChallenge();
+      getGuru().startChallenge();
     } else {
-      getProbeManager().endChallenge();
+      getGuru().endChallenge();
     }
   };
   
   @Override
-  public AbstractScience2DProber createProber(String name, ProbeManager probeManager) {
+  public AbstractScience2DProber createProber(String name, Guru guru) {
     if ("FieldMagnitudeProber".equals(name)) {
-      return new FieldMagnitudeProber(emModel, probeManager);
+      return new FieldMagnitudeProber(emModel, guru);
     } else if ("FieldDirectionProber".equals(name)) {
-      return new FieldDirectionProber(emModel, probeManager);
+      return new FieldDirectionProber(emModel, guru);
     } else if ("LightProber".equals(name)) {
-      return new LightProber(emModel, probeManager);
+      return new LightProber(emModel, guru);
     } else if ("VariablesProber".equals(name)) {
-      return new VariablesProber(probeManager, emModel, skin, findActor("ModelControls"), controlPanel);
+      return new VariablesProber(guru, emModel, skin, findActor("ModelControls"), controlPanel);
     }
-    return super.createProber(name, probeManager);
+    return super.createProber(name, guru);
   }
   
   public void done(boolean success) {
     if (success) {
       // TODO: put in a proper celebration here
-      getProbeManager().setTitle("Congratulations! You move to the next Level ");
+      getGuru().setTitle("Congratulations! You move to the next Level ");
       // TODO: generalize
       ScienceEngine.getPlatformAdapter().showURL(
           "data/" + controller.getName() + "/" + controller.getLevel() + ".html");

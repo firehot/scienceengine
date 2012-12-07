@@ -5,7 +5,9 @@ import java.util.List;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 
 public abstract class AbstractMolecularModel extends AbstractScience2DModel 
     implements IMolecularModel {
@@ -255,4 +257,10 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
       float x, float y, float rotation) {
     return null;
   }
+
+  @Override
+  public IComponentType componentNameToType(String componentTypeName) {
+    return ComponentType.valueOf(componentTypeName);
+  }
+  
 }

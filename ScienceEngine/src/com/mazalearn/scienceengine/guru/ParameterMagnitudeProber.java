@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.guru;
+package com.mazalearn.scienceengine.guru;
 
 import java.util.Collections;
 
@@ -41,8 +41,8 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
 
   private Array<?> configs;
     
-  public ParameterMagnitudeProber(IScience2DModel science2DModel, ProbeManager probeManager) {
-    super(probeManager);
+  public ParameterMagnitudeProber(IScience2DModel science2DModel, Guru guru) {
+    super(guru);
     this.science2DModel = science2DModel;
     image = new ProbeImage();
     image.setX(700 - image.getWidth()/2);
@@ -57,7 +57,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
     increase = createResultImage("images/fieldarrow.png", 2);
     increase.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);
 
-    imageListener = new ClickResult(probeManager, new Image[] {decrease, increase, dontCare},
+    imageListener = new ClickResult(guru, new Image[] {decrease, increase, dontCare},
         new ClickResult.StateMapper() {
       @Override
       public int map(float x, float y) {
@@ -101,7 +101,7 @@ public class ParameterMagnitudeProber extends AbstractScience2DProber {
     if (activate) {
       float value = MathUtils.random(0f, 10f);
       dummy.setConfigParameter(probeConfig.getParameter(), value);
-      probeManager.setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
+      guru.setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
       
       switch (type) {
       case None: imageListener.setResult(dontCare); break;

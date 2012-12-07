@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.domains.waves.view.Boundary;
 import com.mazalearn.scienceengine.domains.waves.view.Hand;
 import com.mazalearn.scienceengine.domains.waves.view.WaveBox;
+import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.Guru;
 
 public class WaveView extends AbstractScience2DView {
 
@@ -95,7 +95,7 @@ public class WaveView extends AbstractScience2DView {
   }
   
   @Override
-  public AbstractScience2DProber createProber(String name, ProbeManager probeManager) {
+  public AbstractScience2DProber createProber(String name, Guru guru) {
     return null;
   }
 }

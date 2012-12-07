@@ -1,10 +1,12 @@
 package com.mazalearn.scienceengine.core.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 
 public interface IScience2DModel {
@@ -45,4 +47,8 @@ public interface IScience2DModel {
   public IModelConfig<?> getConfig(String configName);
   // Find a body by component type. If there are multiple, return any one.
   public Science2DBody findBody(IComponentType componentType);
+  // Find a body by name. If there are multiple, return any one.
+  public Science2DBody findBody(String componentTypeName);
+  // Bind current parameter values in model to the variables
+  public void bindParameterValues(Collection<Variable> variables);
 }

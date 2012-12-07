@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 
 public class WaveModel extends AbstractScience2DModel {
   // Enum used for different Boundary Conditions on end of string
@@ -261,4 +263,8 @@ public class WaveModel extends AbstractScience2DModel {
     return null;
   }
   
+  @Override
+  public IComponentType componentNameToType(String componentTypeName) {
+    return ComponentType.valueOf(componentTypeName);
+  }
 }

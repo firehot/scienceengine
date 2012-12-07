@@ -1,10 +1,9 @@
-package com.mazalearn.scienceengine.core.guru;
+package com.mazalearn.scienceengine.guru;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,20 +15,19 @@ import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
- * Cycles through the eligible registeredProbers - probing the user with each one.
+ * Cycles through the eligible registeredGuides - probing the user with each one.
  * 
  * @author sridhar
  * 
  */
-public class ProbeManager extends Group implements IDoneCallback {
+public class Guru extends Group implements IDoneCallback {
   private static final int WIN_THRESHOLD = 100;
   private static final int LOSS_THRESHOLD = -30;
   
-  int proberIndex = 0;
-  AbstractScience2DProber currentProber;
+  int guideIndex = 0;
+  Guide currentGuide;
   protected Dashboard dashboard;
-  private List<AbstractScience2DProber> registeredProbers = new ArrayList<AbstractScience2DProber>();
-  private List<AbstractScience2DProber> activeProbers = new ArrayList<AbstractScience2DProber>();
+  private List<Guide> registeredGuides = new ArrayList<Guide>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final IScience2DView science2DView;
   private final ControlPanel controlPanel;
@@ -39,8 +37,13 @@ public class ProbeManager extends Group implements IDoneCallback {
   private Hinter hinter;
   private int deltaSuccessScore;
   private int deltaFailureScore;
+  private List<AbstractScience2DProber> activeProbers;
+  private int proberIndex;
+  private AbstractScience2DProber currentProber;
+  private float windowWidth;
+  private float windowHeight;
 
-  public ProbeManager(final Skin skin, float width, float height,
+  public Guru(final Skin skin, float width, float height,
       IScience2DView science2DView, ControlPanel controlPanel) {
     super();
     this.dashboard = new Dashboard(skin);
@@ -49,6 +52,8 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
     this.controlPanel = controlPanel;
+    this.windowWidth = width;
+    this.windowHeight = height;
     this.setPosition(0, 0);
     this.setSize(width, height);
      
@@ -66,10 +71,10 @@ public class ProbeManager extends Group implements IDoneCallback {
     this.setVisible(false);
   }
 
-  public void registerProber(AbstractScience2DProber prober) {
-    registeredProbers.add(prober);
-    this.addActor(prober);
-    prober.activate(false);
+  public void registerGuide(Guide guide) {
+    registeredGuides.add(guide);
+    this.addActor(guide);
+    guide.activate(false);
   }
 
   public void startChallenge() {
@@ -85,34 +90,34 @@ public class ProbeManager extends Group implements IDoneCallback {
         excludedActors.add(actor);
       }
     }
-    // Find active registeredProbers
-    activeProbers.clear();
-    for (AbstractScience2DProber prober: registeredProbers) {
-      if (prober.isAvailable()) {
-        activeProbers.add(prober);
-      } else {
-        prober.activate(false);
-      }
-    }
     
-    if (activeProbers.size() == 0) { // No active probers available
+    if (registeredGuides.size() == 0) { // No guides available
       endChallenge();
       return;
     }
     
-    // Reinitialize active Probers
-    for (AbstractScience2DProber prober: activeProbers) {
-      prober.reinitialize(getX(), getY(), getWidth(), getHeight(), true);
+    // Reinitialize active guides
+    for (Guide guide: registeredGuides) {
+      guide.reinitialize(getX(), getY(), windowWidth, windowHeight);
     }
 
     this.setVisible(true);
-    doProbe();
+    runGuide();
+  }
+  
+  private void runGuide() {
+    // Move on to next guide - linear for now.
+    guideIndex = (guideIndex + 1) % registeredGuides.size();
+    currentGuide = registeredGuides.get(guideIndex);
+
+    currentGuide.activate(true);
+    dashboard.setStatus(currentGuide.getTitle());
   }
   
   public void endChallenge() {
     // Reinitialize current prober, if any
-    if (currentProber != null) {
-      currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+    if (currentGuide != null) {
+      currentGuide.reinitialize(getX(), getY(), windowWidth, windowHeight);
     }
 
     // Turn on access to parts of control panel
@@ -126,13 +131,27 @@ public class ProbeManager extends Group implements IDoneCallback {
     return this.excludedActors;
   }
 
+  public void guideDone() {
+    this.setSize(windowWidth,  windowHeight);
+    this.setPosition(0, 0);
+    currentGuide.activate(false);
+    soundManager.play(ScienceEngineSound.CELEBRATE);
+    dashboard.addScore(deltaSuccessScore);
+    successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
+    activeProbers = currentGuide.getProbers();
+    for (AbstractScience2DProber prober: activeProbers) {
+      prober.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
+      this.addActor(prober);
+    }
+    doProbe();
+  }
   /**
-   * IDoneCallback interface implementation
+   * IDoneCallback interface implementation - probe is completed
    */
   public void done(boolean success) {
     if (success) {
-      currentProber.activate(false);
-      currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+      currentGuide.activate(false);
+      currentGuide.reinitialize(getX(), getY(), getWidth(), getHeight());
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
       successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
@@ -140,7 +159,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
-      deltaSuccessScore = currentProber.getSubsequentDeltaSuccessScore();
+      deltaSuccessScore = currentGuide.getSubsequentDeltaSuccessScore();
       dashboard.addScore(deltaFailureScore);
       failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
     }
@@ -162,15 +181,12 @@ public class ProbeManager extends Group implements IDoneCallback {
   @Override
   public void act(float dt) {
     super.act(dt);
-    setHint();
+    if (Math.round(ScienceEngine.getTime()) % 10 != 0) return;
+    String hintText = currentGuide != null ? currentGuide.getHint() : null;
+    hinter.setHint(hintText);
   }
   
-  private void setHint() {
-    String hintText = currentProber != null ? currentProber.getHint() : null;
-    hinter.setHint(hintText);    
-  }
-
-  // Prerequisite: activeProbers.size() >= 1
+  // Prerequisite: registeredGuides.size() >= 1
   private void doProbe() {
     // Move on to next active prober
     proberIndex = (proberIndex + 1) % activeProbers.size();
@@ -196,7 +212,7 @@ public class ProbeManager extends Group implements IDoneCallback {
     dashboard.setStatus(text);
   }
 
-  public Actor findStageActor(String name) {
+  public Actor findActivityActor(String name) {
     for (Actor actor: science2DView.getActors()) {
       if (name.equals(actor.getName())) return actor;
     }

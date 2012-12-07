@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mazalearn.scienceengine.core.guru.ProbeImage;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
-import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.ProbeImage;
+import com.mazalearn.scienceengine.guru.Stage;
 
 // doubts on direction
 // Generate A at "random" point around active elements.
@@ -26,8 +26,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
       new Stage("The direction of the field is where the compass needle's North would point.")
   };
   
-  public FieldDirectionProber(IScience2DModel science2DModel, final ProbeManager probeManager) {
-    super(science2DModel, probeManager);
+  public FieldDirectionProber(IScience2DModel science2DModel, final Guru guru) {
+    super(science2DModel, guru);
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};
@@ -66,7 +66,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
             new Action() {
               @Override
               public boolean act(float delta) {
-                probeManager.done(success);
+                guru.done(success);
                 fieldMeterActor.setVisible(false);
                 userField.setVisible(false);
                 return true;
@@ -92,7 +92,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.setupProbeConfigs(science2DModel.getAllConfigs(), false);
+      guru.setupProbeConfigs(science2DModel.getAllConfigs(), false);
       generateProbePoints(points);
       getBField(points[0], bFields[0]);
       createFieldMeterSamples(points, bFields);

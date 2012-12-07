@@ -2,19 +2,19 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.guru.ProbeImage;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
-import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
+import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.ProbeImage;
+import com.mazalearn.scienceengine.guru.Stage;
 
 public class LightProber extends AbstractScience2DProber {
 
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
   private LightbulbActor lightbulbActor;
-  private ProbeManager probeManager;
+  private Guru guru;
   private Stage[] stages = new Stage[] {
       new Stage("Light intensity increases when more current is induced in the coil."),
       new Stage("More current is induced in the coil if the magnetic field changes faster at the coil."),
@@ -24,32 +24,27 @@ public class LightProber extends AbstractScience2DProber {
   };
   private IScience2DModel science2DModel;
   
-  public LightProber(IScience2DModel science2DModel, ProbeManager probeManager) {
-    super(probeManager);
-    this.probeManager = probeManager;
+  public LightProber(IScience2DModel science2DModel, Guru guru) {
+    super(guru);
+    this.guru = guru;
     this.science2DModel = science2DModel;
     image = new ProbeImage();
     this.addActor(image);
-    this.lightbulbActor = (LightbulbActor) probeManager.findStageActor("Lightbulb");
-  }
-  
-  @Override
-  public boolean isAvailable() {
-    return lightbulbActor != null && lightbulbActor.isVisible();
+    this.lightbulbActor = (LightbulbActor) guru.findActivityActor("Lightbulb");
   }
   
   @Override
   public void act(float delta) {
     super.act(delta);
     if (lightbulbActor != null && lightbulbActor.withinLightRegion(image.getX(), image.getY())) {
-      probeManager.done(true);
+      guru.done(true);
     }
   }
   
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.setupProbeConfigs(science2DModel.getAllConfigs(), true);
+      guru.setupProbeConfigs(science2DModel.getAllConfigs(), true);
       generateProbePoints(points);
       image.setX(points[0].x - image.getWidth()/2);
       image.setY(points[0].y - image.getHeight()/2);

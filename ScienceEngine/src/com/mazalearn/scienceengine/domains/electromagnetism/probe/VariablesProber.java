@@ -13,19 +13,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.guru.ProbeImage;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
-import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
+import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.ProbeImage;
+import com.mazalearn.scienceengine.guru.Stage;
 
 public class VariablesProber extends AbstractScience2DProber {
 
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
-  private LightbulbActor lightbulbActor;
   private Stage[] stages = new Stage[] {
       new Stage("Light intensity increases when more current is induced in the coil.")
   };
@@ -34,14 +32,14 @@ public class VariablesProber extends AbstractScience2DProber {
   private ControlPanel controlPanel;
   private IScience2DModel science2DModel;
   
-  public VariablesProber(final ProbeManager probeManager, final IScience2DModel science2DModel, Skin skin, 
+  public VariablesProber(final Guru guru, final IScience2DModel science2DModel, Skin skin, 
       Actor modelControls, ControlPanel controlPanel) {
-    super(probeManager);
+    super(guru);
     this.configTable = createConfigTable(science2DModel, skin);
     this.modelControls = modelControls;
     this.controlPanel = controlPanel;
     this.science2DModel = science2DModel;
-    configTable.setPosition(100, probeManager.getHeight() - 100);
+    configTable.setPosition(100, guru.getHeight() - 100);
     this.addActor(configTable);
 
     final Set<String> correctVariables1 = new HashSet<String>();
@@ -56,7 +54,7 @@ public class VariablesProber extends AbstractScience2DProber {
 
     image = new ProbeImage();
     this.addActor(image);
-    image.setPosition(650, probeManager.getHeight() - 100);
+    image.setPosition(650, guru.getHeight() - 100);
     image.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {
@@ -66,10 +64,9 @@ public class VariablesProber extends AbstractScience2DProber {
             chosenVariables.add(config.getName());
           }
         }
-        probeManager.done(correctVariables1.equals(chosenVariables) || correctVariables2.equals(chosenVariables));
+        guru.done(correctVariables1.equals(chosenVariables) || correctVariables2.equals(chosenVariables));
       }
     });
-    this.lightbulbActor = (LightbulbActor) probeManager.findStageActor("Lightbulb");
   }
   
   private Table createConfigTable(IScience2DModel science2DModel, Skin skin) {
@@ -101,11 +98,6 @@ public class VariablesProber extends AbstractScience2DProber {
     }
   }
 
-  @Override
-  public boolean isAvailable() {
-    return lightbulbActor != null && lightbulbActor.isVisible();
-  }
-  
   @Override
   public void activate(boolean activate) {
     if (activate) {

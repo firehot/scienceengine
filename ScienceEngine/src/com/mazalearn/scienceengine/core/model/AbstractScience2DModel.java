@@ -2,12 +2,14 @@ package com.mazalearn.scienceengine.core.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Consumer;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Producer;
@@ -234,4 +236,45 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   public List<Science2DBody> getBodies() {
     return bodies;
   }
+
+  @SuppressWarnings("unchecked")
+  public void bindParameterValues(Collection<Variable> variables) {
+    for (Variable v: variables) {
+      String name = v.name();
+      IModelConfig<?> config = getConfig(name);
+      if (config != null) {
+        switch (config.getType()) {
+        case RANGE: 
+          v.setValue(((IModelConfig<Float>) config).getValue()); break;
+        case LIST:
+        case TEXT:
+          v.setValue(((IModelConfig<String>) config).getValue()); break;
+        case TOGGLE:
+          boolean b = ((IModelConfig<Boolean>) config).getValue();
+          v.setValue(b ? 1 : 0);
+          break;
+        default:
+          throw new IllegalStateException("Unexpected config type in expression");
+        }
+      } else if (name.lastIndexOf(".") != -1) {
+        int pos = name.lastIndexOf(".");
+        String componentName = name.substring(0, pos);
+        String property = name.substring(pos + 1);
+        Science2DBody body = findBody(componentName);
+        if (body != null) {
+          if (property.equals("AngularVelocity")) {
+            v.setValue(body.getAngularVelocity());
+          } else if (property.equals("Angle")) {
+            v.setValue(body.getAngle());
+          }
+        }
+      }
+    }
+  }
+
+  public Science2DBody findBody(String componentName) {
+    return findBody(componentNameToType(componentName));
+  }
+
+  public abstract IComponentType componentNameToType(String componentName);
 }

@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.guru.IDoneCallback;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.IDoneCallback;
 
 public interface IScience2DView extends IDoneCallback {
   // Pause/Resume model actions in the experiment. 
@@ -37,7 +37,7 @@ public interface IScience2DView extends IDoneCallback {
   // Once all actors are created, prepare the stage
   void prepareStage();
   // Get probe manager for the stage
-  public ProbeManager getProbeManager();
+  public Guru getGuru();
   // Create prober
-  public AbstractScience2DProber createProber(String proberName, ProbeManager probeManager);
+  public AbstractScience2DProber createProber(String proberName, Guru guru);
 }

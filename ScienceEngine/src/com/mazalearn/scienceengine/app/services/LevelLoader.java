@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,14 +19,6 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.guru.LearningProber;
-import com.mazalearn.scienceengine.core.guru.ParameterDirectionProber;
-import com.mazalearn.scienceengine.core.guru.ParameterMagnitudeProber;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
-import com.mazalearn.scienceengine.core.guru.Stage;
-import com.mazalearn.scienceengine.core.lang.Expr;
-import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.EnvironmentBody;
@@ -35,6 +28,12 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.Guide;
+import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.ParameterDirectionProber;
+import com.mazalearn.scienceengine.guru.ParameterMagnitudeProber;
+import com.mazalearn.scienceengine.guru.Stage;
 
 public class LevelLoader {
     
@@ -85,7 +84,7 @@ public class LevelLoader {
     science2DView.prepareStage();
     controlPanel.refresh();
     readConfigs((Array<?>) rootElem.get("configs"), science2DModel);
-    readProbers((Array<?>) rootElem.get("probers"));
+    readPlan((Array<?>) rootElem.get("plan"));
   }
   
   public void reload() {
@@ -176,14 +175,27 @@ public class LevelLoader {
     }
   }
 
-  private void readProbers(Array<?> probers) {
-    if (probers == null) return;
+  private List<AbstractScience2DProber> readProbers(Array<?> probers) {
+    if (probers == null) return Collections.emptyList();
     Gdx.app.log(ScienceEngine.LOG, "Loading probers");
     
+    List<AbstractScience2DProber> proberList = new ArrayList<AbstractScience2DProber>();
     for (int i = 0; i < probers.size; i++) {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> prober = (OrderedMap<String, ?>) probers.get(i);
-      readProber(prober);
+      proberList.add(readProber(prober));
+    }
+    return proberList;
+  }
+
+  private void readPlan(Array<?> guides) {
+    if (guides == null) return;
+    Gdx.app.log(ScienceEngine.LOG, "Loading guides");
+    
+    for (int i = 0; i < guides.size; i++) {
+      @SuppressWarnings("unchecked")
+      OrderedMap<String, ?> guide = (OrderedMap<String, ?>) guides.get(i);
+      readGuide(guide);
     }
   }
 
@@ -305,39 +317,42 @@ public class LevelLoader {
   }
 
   @SuppressWarnings("unchecked")
-  private void readProber(OrderedMap<String, ?> proberObj) {
+  private AbstractScience2DProber readProber(OrderedMap<String, ?> proberObj) {
     String proberName = (String) proberObj.get("name");
     Gdx.app.log(ScienceEngine.LOG, "Loading prober: " + proberName);
-    ProbeManager probeManager = science2DView.getProbeManager();
-    AbstractScience2DProber prober = science2DView.createProber(proberName, probeManager);
-    probeManager.registerProber(prober);
+    String title = (String) proberObj.get("title");
+    Guru guru = science2DView.getGuru();
+    AbstractScience2DProber prober = science2DView.createProber(proberName, guru);
     String parameterName = (String) proberObj.get("parameter");
     String type = (String) proberObj.get("type");
     IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
     Array<?> configs = (Array<?>) proberObj.get("configs");
+    String resultExpr = (String) proberObj.get("result");
+    if (resultExpr != null) {
+      ((ParameterDirectionProber) prober).setProbeConfig(title, parameter, resultExpr, type, configs);
+      return prober;
+    }
     if (parameter != null) {
       ((ParameterMagnitudeProber) prober).setProbeConfig((IModelConfig<Float>) parameter, type, configs);
-      return;
+      return prober;
     }
-    Array<String> depends = (Array<String>) proberObj.get("depends");
-    if (depends != null) {
-      List<IModelConfig<?>> dependConfigs = new ArrayList<IModelConfig<?>>();
-      for (int i = 0; i < depends.size; i++) {
-        parameterName = (String) depends.get(i);
-        parameter = science2DModel.getConfig(parameterName);
-        dependConfigs.add(parameter);
-      }
-      ((ParameterDirectionProber) prober).setProbeConfig(dependConfigs, type, configs);
-      return;
-    }
-    if (configs != null) {
-      Array<?> stagesObj = (Array<?>) proberObj.get("hints");
-      List<Stage> stages = readStages(stagesObj);
-      ((LearningProber) prober).setProbeConfig(configs, stages);
-      return;
-    }
+    return prober;
   }
 
+  private void readGuide(OrderedMap<String, ?> guideObj) {
+    String goal = (String) guideObj.get("goal");
+    Gdx.app.log(ScienceEngine.LOG, "Loading guide: " + goal);
+    Guru guru = science2DView.getGuru();
+    Guide guide = new Guide(science2DModel, guru);
+    guru.registerGuide(guide);
+    Array<?> configs = (Array<?>) guideObj.get("configs");
+    String title = (String) guideObj.get("title");
+    Array<?> stagesObj = (Array<?>) guideObj.get("stages");
+    List<Stage> stages = readStages(stagesObj);
+    List<AbstractScience2DProber> probers = readProbers((Array<?>) guideObj.get("probers"));
+    ((Guide) guide).setProbeConfig(goal, title, configs, stages, probers);
+  }
+  
   @SuppressWarnings("unchecked")
   private List<Stage> readStages(Array<?> stagesObj) {
     List<Stage> stages = new ArrayList<Stage>();
@@ -353,10 +368,8 @@ public class LevelLoader {
 
   private Stage readStage(OrderedMap<String, ?> stageObj) throws SyntaxException {
     String hint = (String) stageObj.get("hint");
-    String postConditionString = (String) stageObj.get("postcondition");
-    Parser parser = new Parser();
-    Expr postCondition = parser.parseString(postConditionString);
+    String postCondition = (String) stageObj.get("postcondition");
     float timeLimit = (Float) nvl(stageObj.get("timelimit"), 60);
-    return new Stage(hint, postCondition, (int) timeLimit, parser.getVariables());
+    return new Stage(hint, postCondition, (int) timeLimit);
   }
 }

@@ -18,15 +18,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
-import com.mazalearn.scienceengine.core.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.core.guru.LearningProber;
-import com.mazalearn.scienceengine.core.guru.ParameterDirectionProber;
-import com.mazalearn.scienceengine.core.guru.ParameterMagnitudeProber;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.ParameterDirectionProber;
+import com.mazalearn.scienceengine.guru.ParameterMagnitudeProber;
 
 public abstract class AbstractScience2DView extends Stage implements IScience2DView {
 
@@ -36,7 +35,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   protected ControlPanel controlPanel;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
-  private ProbeManager probeManager;
+  private Guru guru;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin) {
@@ -47,14 +46,14 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
 
   @Override
-  public ProbeManager getProbeManager() {
-    if (probeManager == null) {
-      probeManager = new ProbeManager(skin, getWidth(), getHeight(), this, controlPanel);
+  public Guru getGuru() {
+    if (guru == null) {
+      guru = new Guru(skin, getWidth(), getHeight(), this, controlPanel);
       this.getRoot().addActor(controlPanel); // Move control Panel to top - why?
-      // Add probeManager before controlpanel so that controls are accessible.
-      this.getRoot().addActorBefore(controlPanel, probeManager);
+      // Add guru before controlpanel so that controls are accessible.
+      this.getRoot().addActorBefore(controlPanel, guru);
     }
-    return probeManager;
+    return guru;
   }
   
   @Override
@@ -224,14 +223,12 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
   
   @Override
-  public AbstractScience2DProber createProber(String proberName, ProbeManager probeManager) {
+  public AbstractScience2DProber createProber(String proberName, Guru guru) {
     if ("ParameterMagnitudeProber".equals(proberName)) {
-      return new ParameterMagnitudeProber(science2DModel, probeManager);
+      return new ParameterMagnitudeProber(science2DModel, guru);
     } else if ("ParameterDirectionProber".equals(proberName)) {
-      return new ParameterDirectionProber(science2DModel, probeManager);
-    } else if ("LearningProber".equals(proberName)) {
-      return new LearningProber(science2DModel, probeManager);
-    }
+      return new ParameterDirectionProber(science2DModel, guru);
+    } 
     return null;
   }
 

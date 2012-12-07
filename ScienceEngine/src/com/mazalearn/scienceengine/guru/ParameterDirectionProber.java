@@ -1,6 +1,8 @@
-package com.mazalearn.scienceengine.core.guru;
+package com.mazalearn.scienceengine.guru;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -8,12 +10,16 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.lang.Expr;
+import com.mazalearn.scienceengine.core.lang.Parser;
+import com.mazalearn.scienceengine.core.lang.SyntaxException;
+import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 
 // outcome = function of parameter
-// doubts on how parameter change affects magnitude of outcome
-// Generate A, B as two parameter points.
-// Is the outcome stronger at A or B?
+// doubts on how parameter change affects outcome
+// Generate a parameter point.
+// Is the outcome given by expression true?
 public class ParameterDirectionProber extends AbstractScience2DProber {
   
   enum Type {
@@ -28,11 +34,18 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
   private final Image image;
   private final Image clockwise, antiClockwise, dontCare;
   private ClickResult imageListener;
-  private List<IModelConfig<?>> dependConfigs;
 
   private Array<?> configs;
 
   private IScience2DModel science2DModel;
+
+  private String title;
+
+  private Expr resultExpr;
+
+  private Set<Variable> resultExprVariables;
+
+  private IModelConfig<?> probeConfig;
   
   private Image createResultImage(String path, float x, float y) {
     Image image = new Image(new Texture(path));
@@ -41,13 +54,13 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
     return image;
   }
     
-  public ParameterDirectionProber(IScience2DModel science2DModel, ProbeManager probeManager) {
-    super(probeManager);
+  public ParameterDirectionProber(IScience2DModel science2DModel, Guru guru) {
+    super(guru);
     this.science2DModel = science2DModel;
     
     image = new ProbeImage();
-    image.setX(probeManager.getWidth() / 2 - image.getWidth() / 2 - 50);
-    image.setY(probeManager.getHeight() / 2 - image.getHeight() / 2);
+    image.setX(guru.getWidth() / 2 - image.getWidth() / 2 - 50);
+    image.setY(guru.getHeight() / 2 - image.getHeight() / 2);
     
     clockwise = createResultImage("images/clockwise.png", 
         image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
@@ -56,7 +69,7 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
     antiClockwise = createResultImage("images/anticlockwise.png", 
         image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
 
-    imageListener = new ClickResult(probeManager, new Image[] {clockwise, antiClockwise, dontCare},
+    imageListener = new ClickResult(guru, new Image[] {clockwise, antiClockwise, dontCare},
         new ClickResult.StateMapper() {
       @Override
       public int map(float x, float y) {
@@ -75,7 +88,7 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
   
   @Override
   public String getTitle() {
-    return "Click on ? for the parameter value and indicate direction of rotation of motor.";
+    return title;
   }
   
   @Override
@@ -88,10 +101,11 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.setupProbeConfigs(dependConfigs, false);
-      boolean current = (Boolean) dependConfigs.get(0).getValue();
-      boolean magnet =  (Boolean) dependConfigs.get(1).getValue();
-      imageListener.setResult(current == magnet ? clockwise : antiClockwise);
+      List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
+      configs.add(probeConfig);
+      guru.setupProbeConfigs(configs, false);
+      science2DModel.bindParameterValues(resultExprVariables);
+      imageListener.setResult(resultExpr.fvalue() == 1 ? clockwise : antiClockwise);
       image.setVisible(true);
     } 
     ScienceEngine.setProbeMode(activate);
@@ -101,11 +115,21 @@ public class ParameterDirectionProber extends AbstractScience2DProber {
   
   @Override
   public String getHint() {
-    return null;
+    return stages[0].getHint();
   }
 
-  public void setProbeConfig(List<IModelConfig<?>> dependConfigs, String type, Array<?> configs) {
-    this.dependConfigs = dependConfigs;
+  public void setProbeConfig(String title, IModelConfig<?> probeConfig, 
+      String resultExprString, String type, Array<?> configs) {
+    this.title = title;
+    this.probeConfig = probeConfig;
+    Parser parser = new Parser();
+    try {
+      this.resultExpr = parser.parseString(resultExprString);
+    } catch (SyntaxException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
+    this.resultExprVariables = parser.getVariables();
     this.configs = configs;
   }
 }

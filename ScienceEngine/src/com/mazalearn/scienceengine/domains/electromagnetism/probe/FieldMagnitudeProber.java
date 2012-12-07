@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mazalearn.scienceengine.core.guru.IDoneCallback;
-import com.mazalearn.scienceengine.core.guru.ProbeImage;
-import com.mazalearn.scienceengine.core.guru.ProbeManager;
-import com.mazalearn.scienceengine.core.guru.Stage;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.IDoneCallback;
+import com.mazalearn.scienceengine.guru.ProbeImage;
+import com.mazalearn.scienceengine.guru.Stage;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
@@ -55,12 +55,12 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] bFields;
     
   public FieldMagnitudeProber(IScience2DModel science2DModel,
-      final ProbeManager probeManager) {
-    super(science2DModel, probeManager);
+      final Guru guru) {
+    super(science2DModel, guru);
     imageCorrect = new ProbeImage();
-    imageCorrect.addListener(new ClickResult(true, probeManager));
+    imageCorrect.addListener(new ClickResult(true, guru));
     imageWrong = new ProbeImage();
-    imageWrong.addListener(new ClickResult(false, probeManager));
+    imageWrong.addListener(new ClickResult(false, guru));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
@@ -82,7 +82,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      probeManager.setupProbeConfigs(science2DModel.getAllConfigs(), false);
+      guru.setupProbeConfigs(science2DModel.getAllConfigs(), false);
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2

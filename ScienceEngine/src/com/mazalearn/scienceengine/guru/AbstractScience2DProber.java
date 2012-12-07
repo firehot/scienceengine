@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.guru;
+package com.mazalearn.scienceengine.guru;
 
 
 import com.badlogic.gdx.math.MathUtils;
@@ -13,19 +13,17 @@ public abstract class AbstractScience2DProber extends Group {
 
   protected static final float TOLERANCE = 0.3f;
   protected static final float ZERO_TOLERANCE = 1e-4f;
-  protected final ProbeManager probeManager;
+  protected final Guru guru;
   private Vector2 localPoint = new Vector2();
 
-  public AbstractScience2DProber(ProbeManager probeManager) {
-    this.probeManager = probeManager;
+  public AbstractScience2DProber(Guru guru) {
+    this.guru = guru;
   }
   
   public void reinitialize(float x, float y, float width, float height, 
       boolean probeMode) {
-    this.setX(x);
-    this.setY(y);
-    this.setWidth(width);
-    this.setHeight(height);
+    this.setPosition(x, y);
+    this.setSize(width, height);    
   }
 
   public abstract void activate(boolean activate);
@@ -39,7 +37,7 @@ public abstract class AbstractScience2DProber extends Group {
   }
 
   private boolean isInsideExcludedActor(Vector2 stagePoint) {
-    for (Actor actor: probeManager.getExcludedActors()) {
+    for (Actor actor: guru.getExcludedActors()) {
       // Translate to local coordinates of actor
       localPoint.set(stagePoint);
       actor.stageToLocalCoordinates(localPoint);
@@ -83,10 +81,6 @@ public abstract class AbstractScience2DProber extends Group {
 
   private boolean approxEquals(float len1, float len2) {
     return Math.abs(len1 - len2) < TOLERANCE;
-  }
-
-  public boolean isAvailable() {
-    return true;
   }
 
   public abstract String getHint();

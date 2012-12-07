@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.core.guru;
+package com.mazalearn.scienceengine.guru;
 
 public interface IDoneCallback  {
   public void done(boolean success);

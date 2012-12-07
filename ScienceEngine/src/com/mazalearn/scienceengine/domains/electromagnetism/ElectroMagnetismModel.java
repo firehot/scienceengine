@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Compass;
@@ -65,4 +66,10 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
   @Override
   public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
   }
+  
+  @Override
+  public IComponentType componentNameToType(String componentTypeName) {
+    return ComponentType.valueOf(componentTypeName);
+  }
+  
 }
