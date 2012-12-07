@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.core.lang;
 
+import com.mazalearn.scienceengine.core.lang.Expr.Type;
+
 /**
  * Test for bugs in the whole package.
  */
@@ -110,9 +112,19 @@ public class RegressionTest {
         expect(1.2000000000000002,   "2*abs(x+1)-3");
         expect(2.7910571473905725,   "sqrt(9-x^2)");
         expect(2.7910571473905725,   "sqrt(9-variable.x^2)");
-        expect("a string",   "str");
+        expect("a string", "str");
+        x.setValue(true);
+        assertEquals(Type.BOOL.name(), x.type.name());
+        assertEquals("1.0", x.svalue());
 
         System.out.println("All tests passed.");
+    }
+
+    private static void assertEquals(String name1, String name2) {
+      if (!name1.equals(name2)) {
+        throw new IllegalStateException("Nomatch: " + name1 + " " + name2);
+        
+      }
     }
 
     private static void expect(double expected, String input) {

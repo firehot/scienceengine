@@ -29,7 +29,7 @@ import java.util.Vector;
     abs, acos, asin, atan, 
     ceil, cos, exp, floor, 
     log, round, sin, sqrt, 
-    tan.  Each requires one argument enclosed in parentheses.
+    tan, not.  Each requires one argument enclosed in parentheses.
 
   <P>There are also binary functions: atan2, min, max; and a ternary
   conditional function: if(test, then, else).
@@ -167,13 +167,13 @@ public class Parser {
         "abs", "acos", "asin", "atan", 
         "ceil", "cos", "exp", "floor", 
         "log", "round", "sin", "sqrt", 
-        "tan"
+        "tan", "not"
     };
     static private final int[] rators1 = {
         Expr.ABS, Expr.ACOS, Expr.ASIN, Expr.ATAN, 
         Expr.CEIL, Expr.COS, Expr.EXP, Expr.FLOOR,
         Expr.LOG, Expr.ROUND, Expr.SIN, Expr.SQRT, 
-        Expr.TAN
+        Expr.TAN, Expr.NOT
     };
         
     static private final String[] procs2 = {

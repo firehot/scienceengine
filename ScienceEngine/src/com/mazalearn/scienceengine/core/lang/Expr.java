@@ -3,6 +3,9 @@
 
 package com.mazalearn.scienceengine.core.lang;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * A mathematical expression, built out of literal numbers, variables,
  * arithmetic and relational operators, and elementary functions.  It
@@ -11,12 +14,13 @@ package com.mazalearn.scienceengine.core.lang;
  */
 public abstract class Expr {
 
-    enum Type { DOUBLE, STRING };
+    enum Type { DOUBLE, STRING, BOOL };
     protected Type type;
     /** Calculate the expression's floating point value.
      * @return the value given the current variable values */
     public abstract double fvalue();
     public abstract String svalue();
+    public abstract boolean bvalue();
 
     /** Binary operator: addition        */  public static final int ADD =  0;  
     /** Binary operator: subtraction     */  public static final int SUB =  1;
@@ -49,6 +53,7 @@ public abstract class Expr {
     /** Unary operator: sine      */       public static final int SIN   = 111;
     /** Unary operator: square root */     public static final int SQRT  = 112;
     /** Unary operator: tangent */         public static final int TAN   = 113;
+    /** Unary operator: not */             public static final int NOT   = 114;
 
     /** Make a literal expression.
      * @param v the constant value of the expression
@@ -115,6 +120,7 @@ class NumberLiteralExpr extends Expr {
     NumberLiteralExpr(double v) { this.v = v; this.type = Type.DOUBLE; }
     public double fvalue() { return v; }
     public String svalue() { return String.valueOf(fvalue()); }
+    public boolean bvalue() { return fvalue() != 0; }
 }
 
 class StringLiteralExpr extends Expr {
@@ -122,6 +128,7 @@ class StringLiteralExpr extends Expr {
   StringLiteralExpr(String v) { this.v = v; this.type = Type.STRING; }
   public double fvalue() { return Double.parseDouble(svalue()); }
   public String svalue() { return v; }
+  public boolean bvalue() { return fvalue() != 0; }
 }
 
 class UnaryExpr extends Expr {
@@ -131,7 +138,7 @@ class UnaryExpr extends Expr {
     UnaryExpr(int rator, Expr rand) { 
         this.rator = rator;
         this.rand = rand;
-        this.type = Type.DOUBLE;
+        this.type = (rator == NOT) ? Type.BOOL : Type.DOUBLE;
     }
 
     public double fvalue() {
@@ -151,6 +158,7 @@ class UnaryExpr extends Expr {
         case SIN:   return Math.sin(arg);
         case SQRT:  return Math.sqrt(arg);
         case TAN:   return Math.tan(arg);
+        case NOT:   return arg == 0 ? 1 : 0;
         default: throw new RuntimeException("BUG: bad rator");
         }
     }
@@ -158,11 +166,13 @@ class UnaryExpr extends Expr {
     public String svalue() {
       return String.valueOf(fvalue());
     }
+    public boolean bvalue() { return fvalue() != 0; }
 }
 
 class BinaryExpr extends Expr {
     int rator;
     Expr rand0, rand1;
+    static final List<Integer> BOOLEAN_OPS = Arrays.asList(new Integer[]{LT, LE, EQ, NE, GE, GT, AND, OR});
 
     BinaryExpr(int rator, Expr rand0, Expr rand1) {
         if (rand0.type != rand1.type && rand0.type != null && rand1.type != null){
@@ -172,12 +182,16 @@ class BinaryExpr extends Expr {
         this.rand0 = rand0;
         this.rand1 = rand1;
         this.type = rand0.type == null ? rand1.type : rand0.type;
+        if (BOOLEAN_OPS.contains(rator)) {
+          this.type = Type.BOOL;
+        }
     }
     
     public double fvalue() {
         if (type == Type.STRING) {
           return Double.parseDouble(svalue());
-        }
+        } 
+        
         double arg0 = rand0.fvalue();
         double arg1 = rand1.fvalue();
         switch (rator) {
@@ -204,7 +218,8 @@ class BinaryExpr extends Expr {
     public String svalue() { 
         if (type == Type.DOUBLE) {
           return String.valueOf(fvalue());
-        }
+        } 
+        
         String arg0 = rand0.svalue();
         String arg1 = rand1.svalue();
         switch (rator) {
@@ -213,6 +228,22 @@ class BinaryExpr extends Expr {
         case NE:    return arg0.equals(arg1) ? "0.0" : "1.0";
         default: throw new RuntimeException("BUG: bad rator");
         }
+    }
+    
+    public boolean bvalue() {
+      if (type == Type.BOOL) {
+        boolean b0 = rand0.bvalue();
+        boolean b1 = rand1.bvalue();
+        switch (rator) {
+          case AND:   return b0 && b1;
+          case OR:    return b0 || b1;
+        }
+      }
+      
+      if (rand0.type == Type.DOUBLE)
+        return fvalue() != 0;
+      
+      return Double.parseDouble(svalue()) != 0;
     }
 }
 
@@ -228,15 +259,29 @@ class ConditionalExpr extends Expr {
 
     public double fvalue() {
       if (type == Type.DOUBLE)
-        return test.fvalue() != 0 ? consequent.fvalue() : alternative.fvalue();
-      else
+        return test.bvalue() ? consequent.fvalue() : alternative.fvalue();
+      else if (type == Type.STRING)
         return Double.parseDouble(svalue());
+      else  
+        return bvalue() ? 1 : 0;
     }
     
     public String svalue() {
       if (type == Type.STRING)
-        return test.fvalue() != 0 ? consequent.svalue() : alternative.svalue();
-      else
+        return test.bvalue() ? consequent.svalue() : alternative.svalue();
+      else if (type == Type.DOUBLE)
         return String.valueOf(fvalue());
+      else 
+        return bvalue() ? "1.0" : "0.0";
+    }
+    
+    public boolean bvalue() {
+      if (type == Type.STRING)
+        return Double.parseDouble(test.svalue()) != 0;
+      else if (type == Type.DOUBLE)
+        return fvalue() != 0;
+      else 
+        return test.bvalue() ? consequent.bvalue() : alternative.bvalue();
+      
     }
 }

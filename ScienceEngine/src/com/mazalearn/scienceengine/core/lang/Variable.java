@@ -29,6 +29,7 @@ public class Variable extends Expr {
     private String name;
     private double fval;
     private String sval;
+    private boolean bval;
 
     /**
      * Create a new variable, with initial value 0.
@@ -45,16 +46,34 @@ public class Variable extends Expr {
     /** Get the value.
      * @return the current value */
     public double fvalue() { 
-        return fval; 
+      if (type == Type.STRING) return Double.parseDouble(sval);
+      if (type == Type.DOUBLE) return fval;
+      return bval ? 1.0 : 0;
     }
     
     /** Get the value.
      * @return the current value */
     public String svalue() {
-        type = Type.STRING;
-        return sval; 
+      if (type == Type.STRING) return sval;
+      if (type == Type.DOUBLE) return String.valueOf(fval);
+      return bval ? "1.0" : "0.0";
     }
     
+    /** Get the value.
+     * @return the current value */
+    public boolean bvalue() {
+      if (type == Type.STRING) return Double.parseDouble(sval) != 0;
+      if (type == Type.DOUBLE) return fval != 0;
+      return bval; 
+    }
+    
+    /** Set the value.
+     * @param value the new value */
+    public void setValue(boolean value) {
+        type = Type.BOOL;
+        bval = value; 
+    }
+
     /** Set the value.
      * @param value the new value */
     public void setValue(double value) {
@@ -64,7 +83,8 @@ public class Variable extends Expr {
 
     /** Set the value.
      * @param value the new value */
-    public void setValue(String value) { 
+    public void setValue(String value) {
+        type = Type.STRING;
         sval = value; 
     }
 }
