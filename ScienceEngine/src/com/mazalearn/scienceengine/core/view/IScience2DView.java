@@ -35,7 +35,7 @@ public interface IScience2DView extends IDoneCallback {
   // Add an actor with only visual behaviour and no model
   Actor addVisualActor(String name);
   // Once all actors are created, prepare the stage
-  void prepareStage();
+  void prepareView();
   // Get probe manager for the stage
   public Guru getGuru();
   // Create prober

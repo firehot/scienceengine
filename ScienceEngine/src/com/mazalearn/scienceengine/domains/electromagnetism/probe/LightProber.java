@@ -30,7 +30,7 @@ public class LightProber extends AbstractScience2DProber {
     this.science2DModel = science2DModel;
     image = new ProbeImage();
     this.addActor(image);
-    this.lightbulbActor = (LightbulbActor) guru.findActivityActor("Lightbulb");
+    this.lightbulbActor = (LightbulbActor) guru.findViewActor("Lightbulb");
   }
   
   @Override

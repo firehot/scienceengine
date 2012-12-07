@@ -59,6 +59,7 @@ public class ParameterProber extends AbstractScience2DProber {
     Image image = new Image(new Texture(path));
     image.setVisible(false);
     image.setPosition(x - image.getWidth() / 2, y - image.getHeight() / 2);
+    image.setOrigin(0, image.getHeight() / 2);
     return image;
   }
     

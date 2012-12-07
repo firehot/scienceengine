@@ -80,7 +80,7 @@ public class LevelLoader {
     readCircuits((Array<?>) rootElem.get("circuits"));
     
     science2DModel.prepareModel();
-    science2DView.prepareStage();
+    science2DView.prepareView();
     controlPanel.refresh();
     readConfigs((Array<?>) rootElem.get("configs"), science2DModel);
     readPlan((Array<?>) rootElem.get("plan"));

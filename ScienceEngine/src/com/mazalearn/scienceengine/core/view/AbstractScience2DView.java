@@ -47,7 +47,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   @Override
   public Guru getGuru() {
     if (guru == null) {
-      guru = new Guru(skin, getWidth(), getHeight(), this, controlPanel);
+      guru = new Guru(skin, getWidth(), getHeight(), this, science2DModel, controlPanel);
       this.getRoot().addActor(controlPanel); // Move control Panel to top - why?
       // Add guru before controlpanel so that controls are accessible.
       this.getRoot().addActorBefore(controlPanel, guru);
@@ -188,7 +188,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
   
   @Override
-  public void prepareStage() {
+  public void prepareView() {
     // Register help after all actors are already added so it is on top
     //Actor help = new Helper(skin, 650, getHeight()  - 90);
     //this.addActor(help);

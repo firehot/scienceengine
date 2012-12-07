@@ -36,20 +36,20 @@ plan: [{name: "Guide",
            postcondition: "CurrentCoil.RotationData >= 5",
            timelimit: 60}
    ],
-   probers:[{name:"ParameterDirectionProber",
+   probers:[{name:"ParameterProber",
              title:"Click on ? for the parameter value and indicate direction of rotation of motor.",
              type:"Spin", 
              parameter:"HorseshoeMagnet.Flip",
              result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
-             {name: "ParameterMagnitudeProber",
+             {name: "ParameterProber",
               title:"Select decrease or increase parameter to make the motor run faster.\nSelect X if parameter does not affect motor.",
              parameter:"CurrentSource.CurrentMax", 
              type:"Direct"}]
    }],
 probers:[
-{name: "ParameterMagnitudeProber", parameter:"CurrentSource.CurrentMax", type:"Direct"},
-{name:"ParameterDirectionProber", type:"Spin", depends:["CurrentSource.CurrentDirection","HorseshoeMagnet.Flip"]},
-{name: "ParameterMagnitudeProber", parameter:"HorseshoeMagnet.MagnetStrength", type:"Direct"},
-{name: "ParameterMagnitudeProber", parameter:"Environment.AirPermittivity", type:"None"},
-{name: "ParameterMagnitudeProber", parameter:"Environment.EarthMagneticField", type:"None"}
+{name: "ParameterProber", parameter:"CurrentSource.CurrentMax", type:"Direct"},
+{name:"ParameterProber", type:"Spin", depends:["CurrentSource.CurrentDirection","HorseshoeMagnet.Flip"]},
+{name: "ParameterProber", parameter:"HorseshoeMagnet.MagnetStrength", type:"Direct"},
+{name: "ParameterProber", parameter:"Environment.AirPermittivity", type:"None"},
+{name: "ParameterProber", parameter:"Environment.EarthMagneticField", type:"None"}
 ]}

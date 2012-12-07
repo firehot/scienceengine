@@ -19,7 +19,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected AbstractFieldProber(IScience2DModel science2DModel, Guru guru) {
     super(guru);
     this.science2DModel = science2DModel;
-    this.fieldMeterActor = (Science2DActor) guru.findActivityActor("FieldMeter");
+    this.fieldMeterActor = (Science2DActor) guru.findViewActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
     }
@@ -38,7 +38,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     String[] actorNames = 
         new String[] { "BarMagnet", "Wire 1", "Wire 2", "ElectroMagnet"};
     for (String actorName: actorNames) {
-      Science2DActor actor = (Science2DActor) guru.findActivityActor(actorName);
+      Science2DActor actor = (Science2DActor) guru.findViewActor(actorName);
       if (actor != null) {
         if (probeMode) {
           actor.setMovementMode(MovementMode.None.name());

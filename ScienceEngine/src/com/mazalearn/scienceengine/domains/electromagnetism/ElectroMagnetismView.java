@@ -67,13 +67,13 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   }
 
   @Override
-  public void prepareStage() {
+  public void prepareView() {
     fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
     compassActor = findActor(ComponentType.Compass.name());
     for (List<CircuitElement> circuit: emModel.getCircuits()) {
       this.addActor(new CircuitActor(circuit));
     }
-    super.prepareStage();
+    super.prepareView();
   }
   
   @Override

@@ -11,6 +11,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
@@ -42,13 +43,15 @@ public class Guru extends Group implements IDoneCallback {
   private AbstractScience2DProber currentProber;
   private float windowWidth;
   private float windowHeight;
+  private IScience2DModel science2DModel;
 
   public Guru(final Skin skin, float width, float height,
-      IScience2DView science2DView, ControlPanel controlPanel) {
+      IScience2DView science2DView, IScience2DModel science2dModel, ControlPanel controlPanel) {
     super();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
     this.science2DView = science2DView;
+    this.science2DModel = science2DModel;
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
     this.controlPanel = controlPanel;
@@ -109,7 +112,7 @@ public class Guru extends Group implements IDoneCallback {
     // Move on to next guide - linear for now.
     guideIndex = (guideIndex + 1) % registeredGuides.size();
     currentGuide = registeredGuides.get(guideIndex);
-guideDone(); if (true) return;
+//guideDone(); if (true) return;
     currentGuide.activate(true);
     dashboard.setStatus(currentGuide.getTitle());
   }
@@ -212,7 +215,7 @@ guideDone(); if (true) return;
     dashboard.setStatus(text);
   }
 
-  public Actor findActivityActor(String name) {
+  public Actor findViewActor(String name) {
     for (Actor actor: science2DView.getActors()) {
       if (name.equals(actor.getName())) return actor;
     }
