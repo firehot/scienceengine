@@ -177,7 +177,7 @@ public class ParameterProber extends AbstractScience2DProber {
     return stages[0].getHint();
   }
 
-  public void setProbeConfig(String title, IModelConfig<?> probeConfig, 
+  public void initialize(String title, IModelConfig<?> probeConfig, 
       String resultExprString, String type, Array<?> configs) {
     this.title = title;
     this.probeConfig = probeConfig;

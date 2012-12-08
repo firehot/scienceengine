@@ -38,7 +38,7 @@ public class Stage {
   public boolean isStageCompleted(IScience2DModel science2DModel) {
     if (postCondition == null) return false;  
     science2DModel.bindParameterValues(variables);
-    return postCondition.fvalue() == 1;
+    return postCondition.bvalue();
   }
 
   public long getTimeLimit() {

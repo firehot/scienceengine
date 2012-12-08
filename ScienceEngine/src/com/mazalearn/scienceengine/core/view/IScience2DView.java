@@ -5,7 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
 
@@ -39,5 +39,5 @@ public interface IScience2DView extends IDoneCallback {
   // Get probe manager for the stage
   public Guru getGuru();
   // Create prober
-  public AbstractScience2DProber createProber(String proberName, Guru guru, String type);
+  public AbstractTutor createTutor(String proberName, Guru guru, String type);
 }

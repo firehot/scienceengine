@@ -35,17 +35,17 @@ plan: [{name: "Guide",
           {hint: "Is number of revolutions increasing?",
            postcondition: "CurrentCoil.RotationData >= 5",
            timelimit: 60}
-   ],
-   probers:[{name:"ParameterProber",
+   ]},
+   {name:"ParameterProber",
              title:"Click on ? for the parameter value and indicate direction of rotation of motor.",
              type:"Spin", 
              parameter:"HorseshoeMagnet.Flip",
              result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
-             {name: "ParameterProber",
+   {name: "ParameterProber",
               title:"Select decrease or increase parameter to make the motor run faster.\nSelect X if parameter does not affect motor.",
              parameter:"CurrentSource.CurrentMax", 
-             type:"Direct"}]
-   }],
+             type:"Direct"}   
+   ],
 probers:[
 {name: "ParameterProber", parameter:"CurrentSource.CurrentMax", type:"Direct"},
 {name:"ParameterProber", type:"Spin", depends:["CurrentSource.CurrentDirection","HorseshoeMagnet.Flip"]},

@@ -231,19 +231,19 @@ class BinaryExpr extends Expr {
     }
     
     public boolean bvalue() {
-      if (type == Type.BOOL) {
-        boolean b0 = rand0.bvalue();
-        boolean b1 = rand1.bvalue();
-        switch (rator) {
-          case AND:   return b0 && b1;
-          case OR:    return b0 || b1;
-        }
-      }
-      
       if (rand0.type == Type.DOUBLE)
         return fvalue() != 0;
       
-      return Double.parseDouble(svalue()) != 0;
+      if (rand0.type == Type.STRING)
+        return Double.parseDouble(svalue()) != 0;
+      
+      boolean b0 = rand0.bvalue();
+      boolean b1 = rand1.bvalue();
+      switch (rator) {
+        case AND:   return b0 && b1;
+        case OR:    return b0 || b1;
+        default: throw new RuntimeException("BUG: bad rator");
+      }
     }
 }
 

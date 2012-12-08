@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.domains.molecules;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
@@ -26,7 +25,7 @@ public class StatesOfMatterController extends AbstractScience2DController {
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
     statesOfMatterView = 
-        new StatesOfMatterView(statesOfMatterModel, width, height, N, skin);
+        new StatesOfMatterView(statesOfMatterModel, width, height, N, skin, this);
     initialize(statesOfMatterModel, statesOfMatterView);    
     
     /*

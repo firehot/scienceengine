@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guide;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ParameterProber;
@@ -174,27 +173,15 @@ public class LevelLoader {
     }
   }
 
-  private List<AbstractScience2DProber> readProbers(Array<?> probers) {
-    if (probers == null) return Collections.emptyList();
-    Gdx.app.log(ScienceEngine.LOG, "Loading probers");
+  private void readPlan(Array<?> tutors) {
+    if (tutors == null) return;
+    Gdx.app.log(ScienceEngine.LOG, "Loading tutors");
     
-    List<AbstractScience2DProber> proberList = new ArrayList<AbstractScience2DProber>();
-    for (int i = 0; i < probers.size; i++) {
+    for (int i = 0; i < tutors.size; i++) {
       @SuppressWarnings("unchecked")
-      OrderedMap<String, ?> prober = (OrderedMap<String, ?>) probers.get(i);
-      proberList.add(readProber(prober));
-    }
-    return proberList;
-  }
-
-  private void readPlan(Array<?> guides) {
-    if (guides == null) return;
-    Gdx.app.log(ScienceEngine.LOG, "Loading guides");
-    
-    for (int i = 0; i < guides.size; i++) {
-      @SuppressWarnings("unchecked")
-      OrderedMap<String, ?> guide = (OrderedMap<String, ?>) guides.get(i);
-      readGuide(guide);
+      OrderedMap<String, ?> tutorObj = (OrderedMap<String, ?>) tutors.get(i);
+      AbstractTutor tutor = readTutor(tutorObj);
+      science2DView.getGuru().registerTutor(tutor);
     }
   }
 
@@ -315,43 +302,31 @@ public class LevelLoader {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  private AbstractScience2DProber readProber(OrderedMap<String, ?> proberObj) {
-    String proberName = (String) proberObj.get("name");
-    Gdx.app.log(ScienceEngine.LOG, "Loading prober: " + proberName);
-    String title = (String) proberObj.get("title");
+  private AbstractTutor readTutor(OrderedMap<String, ?> tutorObj) {
+    String name = (String) tutorObj.get("name");
+    Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + name);
+    String title = (String) tutorObj.get("title");
     Guru guru = science2DView.getGuru();
-    String type = (String) proberObj.get("type");
-    AbstractScience2DProber prober = science2DView.createProber(proberName, guru, type);
-    String parameterName = (String) proberObj.get("parameter");
-    IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
-    Array<?> configs = (Array<?>) proberObj.get("configs");
-    String resultExpr = (String) proberObj.get("result");
-    if (resultExpr != null) {
-      ((ParameterProber) prober).setProbeConfig(title, parameter, resultExpr, type, configs);
-      return prober;
+    String type = (String) tutorObj.get("type");
+    AbstractTutor tutor = science2DView.createTutor(name, guru, type);
+    Array<?> configs = (Array<?>) tutorObj.get("configs");
+    if (tutor instanceof ParameterProber) {
+      String parameterName = (String) tutorObj.get("parameter");
+      String resultExpr = (String) tutorObj.get("result");
+      IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
+      ((ParameterProber) tutor).initialize(title, parameter, resultExpr, type, configs);
+      return tutor;
     }
-    if (parameter != null) {
-      ((ParameterProber) prober).setProbeConfig(title, (IModelConfig<Float>) parameter, null, type, configs);
-      return prober;
+    if (tutor instanceof Guide) {
+      String goal = (String) tutorObj.get("goal");
+      Array<?> stagesObj = (Array<?>) tutorObj.get("stages");
+      List<Stage> stages = readStages(stagesObj);
+      ((Guide) tutor).initialize(goal, title, configs, stages);
+      return tutor;
     }
-    return prober;
+    return tutor;
   }
 
-  private void readGuide(OrderedMap<String, ?> guideObj) {
-    String goal = (String) guideObj.get("goal");
-    Gdx.app.log(ScienceEngine.LOG, "Loading guide: " + goal);
-    Guru guru = science2DView.getGuru();
-    Guide guide = new Guide(science2DModel, guru);
-    guru.registerGuide(guide);
-    Array<?> configs = (Array<?>) guideObj.get("configs");
-    String title = (String) guideObj.get("title");
-    Array<?> stagesObj = (Array<?>) guideObj.get("stages");
-    List<Stage> stages = readStages(stagesObj);
-    List<AbstractScience2DProber> probers = readProbers((Array<?>) guideObj.get("probers"));
-    ((Guide) guide).setProbeConfig(goal, title, configs, stages, probers);
-  }
-  
   @SuppressWarnings("unchecked")
   private List<Stage> readStages(Array<?> stagesObj) {
     List<Stage> stages = new ArrayList<Stage>();

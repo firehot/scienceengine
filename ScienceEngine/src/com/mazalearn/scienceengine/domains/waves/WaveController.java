@@ -17,7 +17,7 @@ public class WaveController extends AbstractScience2DController {
     super(NAME, level, skin);
     final WaveModel waveModel = new WaveModel(NUM_BALLS);
     final WaveView waveView = 
-        new WaveView(width, height, waveModel, skin, atlas);
+        new WaveView(width, height, waveModel, skin, atlas, this);
     initialize(waveModel, waveView);
   }
 

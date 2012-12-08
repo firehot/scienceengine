@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
-public abstract class AbstractScience2DProber extends Group {
+public abstract class AbstractScience2DProber extends AbstractTutor {
 
   protected static final float TOLERANCE = 0.3f;
   protected static final float ZERO_TOLERANCE = 1e-4f;
@@ -20,6 +20,7 @@ public abstract class AbstractScience2DProber extends Group {
     this.guru = guru;
   }
   
+  @Override
   public void reinitialize(float x, float y, float width, float height, 
       boolean probeMode) {
     this.setPosition(x, y);

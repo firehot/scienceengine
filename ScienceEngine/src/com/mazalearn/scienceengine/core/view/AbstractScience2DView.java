@@ -18,11 +18,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.AbstractTutor;
+import com.mazalearn.scienceengine.guru.Guide;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ParameterProber;
 
@@ -35,12 +37,15 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
   private Guru guru;
+  private IScience2DController controller;
 
   public AbstractScience2DView( 
-      IScience2DModel science2DModel, float width, float height, Skin skin) {
+      IScience2DModel science2DModel, float width, float height, Skin skin, 
+      IScience2DController controller) {
     super(width, height, true);
     this.skin = skin;
     this.science2DModel = science2DModel;
+    this.controller = controller;
     this.locationGroups = new ArrayList<List<Actor>>();
   }
 
@@ -106,7 +111,16 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
     return !science2DModel.isEnabled();
   }
   
-  public void done(boolean success) {}
+  public void done(boolean success) {
+    if (success) {
+      // TODO: put in a proper celebration here
+      getGuru().setTitle("Congratulations! You move to the next Level ");
+      // TODO: generalize
+      ScienceEngine.getPlatformAdapter().showURL(
+          "data/" + controller.getName() + "/" + controller.getLevel() + ".html");
+      challenge(success);
+    }
+  }
   
   public BitmapFont getFont() {
     return skin.getFont("default-font");
@@ -129,6 +143,11 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
       ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
     }
     isChallengeInProgress = challenge;
+    if (challenge) {
+      getGuru().startChallenge();
+    } else {
+      getGuru().endChallenge();
+    }
   }
     
   @Override
@@ -222,10 +241,12 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
   
   @Override
-  public AbstractScience2DProber createProber(String proberName, Guru guru, String type) {
+  public AbstractTutor createTutor(String proberName, Guru guru, String type) {
     if ("ParameterProber".equals(proberName)) {
       return new ParameterProber(science2DModel, guru, type);
-    } 
+    } else if ("Guide".equals(proberName)) {
+      return new Guide(science2DModel, guru);
+    }
     return null;
   }
 

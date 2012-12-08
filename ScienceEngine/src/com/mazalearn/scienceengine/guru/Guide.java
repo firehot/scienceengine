@@ -13,7 +13,7 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 // doubts on how parameter change affects magnitude of outcome
 // Generate A, B as two parameter points.
 // Is the outcome stronger at A or B?
-public class Guide extends Group {
+public class Guide extends AbstractTutor {
   
   private List<Stage> stages = Collections.emptyList();
   
@@ -26,8 +26,6 @@ public class Guide extends Group {
 
   private String goal;
 
-  private List<AbstractScience2DProber> probers;
-
   private Guru guru;
 
   private float guruWidth;
@@ -39,13 +37,21 @@ public class Guide extends Group {
     this.guru = guru;
   }
   
+  /* (non-Javadoc)
+   * @see com.mazalearn.scienceengine.guru.AbstractTutor#getTitle()
+   */
+  @Override
   public String getTitle() {
     return title;
   }
   
+  /* (non-Javadoc)
+   * @see com.mazalearn.scienceengine.guru.AbstractTutor#activate(boolean)
+   */
+  @Override
   public void activate(boolean activate) {
     if (activate) {
-      guru.setSize(guruWidth,  50); // ??? TODO: how to handle wrt probes ???
+      guru.setSize(guruWidth,  50);
       guru.setPosition(0, guruHeight - 50);
       currentStage = 0;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
@@ -54,7 +60,11 @@ public class Guide extends Group {
     this.setVisible(activate);
   }
 
-  public void reinitialize(float x, float y, float width, float height) {
+  /* (non-Javadoc)
+   * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(float, float, float, float)
+   */
+  @Override
+  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
     this.setPosition(x, y);
     this.setSize(0, 0);
     this.guruWidth = width;
@@ -72,13 +82,17 @@ public class Guide extends Group {
       currentStage++;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
       if (currentStage == stages.size()) {
-        guru.guideDone();
+        guru.done(true);
         break;
       }
       stage = stages.get(currentStage);
     }
   }
 
+  /* (non-Javadoc)
+   * @see com.mazalearn.scienceengine.guru.AbstractTutor#getHint()
+   */
+  @Override
   public String getHint() {
     if (currentStage < 0 || currentStage == stages.size()) return null;
     float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
@@ -90,22 +104,27 @@ public class Guide extends Group {
     return null;
   }
 
-  public List<AbstractScience2DProber> getProbers() {
-    return probers;
-  }
-  
-  public void setProbeConfig(String goal, String title, Array<?> configs, 
-      List<Stage> stages, List<AbstractScience2DProber> probers) {
+  public void initialize(String goal, String title, Array<?> configs, 
+      List<Stage> stages) {
     this.goal = goal;
     this.title = title;
     this.configs = configs;
     this.stages = stages;
-    this.probers = probers;
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.stageBeginTime = new float[stages.size() + 1];
   }
 
   public int getSubsequentDeltaSuccessScore() {
     return 5;
+  }
+
+  @Override
+  public int getDeltaSuccessScore() {
+    return 0;
+  }
+
+  @Override
+  public int getDeltaFailureScore() {
+    return 0;
   }
 }

@@ -34,7 +34,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guru;
 
 public class ElectroMagnetismView extends AbstractScience2DView {
@@ -42,13 +42,11 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   private Vector2 pos = new Vector2();
   private AbstractScience2DModel emModel;
   private Actor compassActor;
-  private IScience2DController controller;
 
   public ElectroMagnetismView(float width, float height,
       final AbstractScience2DModel emModel, Skin skin, IScience2DController controller) {
-    super(emModel, width, height, skin);
+    super(emModel, width, height, skin, controller);
     this.emModel = emModel;
-    this.controller = controller;
     
     getRoot().addListener(new ClickListener() {
       @Override
@@ -126,20 +124,15 @@ public class ElectroMagnetismView extends AbstractScience2DView {
 
     @Override
   public void challenge(boolean challenge) {
-    super.challenge(challenge);
     // Enable/Disable compass
     if (compassActor != null) {
       compassActor.setVisible(!challenge);
     }
-    if (challenge) {
-      getGuru().startChallenge();
-    } else {
-      getGuru().endChallenge();
-    }
+    super.challenge(challenge);
   };
   
   @Override
-  public AbstractScience2DProber createProber(String name, Guru guru, String type) {
+  public AbstractTutor createTutor(String name, Guru guru, String type) {
     if ("FieldMagnitudeProber".equals(name)) {
       return new FieldMagnitudeProber(emModel, guru);
     } else if ("FieldDirectionProber".equals(name)) {
@@ -149,19 +142,6 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     } else if ("VariablesProber".equals(name)) {
       return new VariablesProber(guru, emModel, skin, findActor("ModelControls"), controlPanel);
     }
-    return super.createProber(name, guru, type);
-  }
-  
-  public void done(boolean success) {
-    if (success) {
-      // TODO: put in a proper celebration here
-      getGuru().setTitle("Congratulations! You move to the next Level ");
-      // TODO: generalize
-      ScienceEngine.getPlatformAdapter().showURL(
-          "data/" + controller.getName() + "/" + controller.getLevel() + ".html");
-      challenge(false);
-    } else {
-      super.challenge(false);
-    }
+    return super.createTutor(name, guru, type);
   }
 }

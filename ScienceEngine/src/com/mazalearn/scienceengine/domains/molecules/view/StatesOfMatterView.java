@@ -2,14 +2,12 @@ package com.mazalearn.scienceengine.domains.molecules.view;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirectionProber;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.VariablesProber;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guru;
 
 /**
@@ -21,8 +19,8 @@ public class StatesOfMatterView extends AbstractScience2DView {
   private int N;
 
   public StatesOfMatterView(IMolecularModel molecularModel,
-      int width, int height, int N, Skin skin) {
-    super(molecularModel, width, height, skin);
+      int width, int height, int N, Skin skin, IScience2DController controller) {
+    super(molecularModel, width, height, skin, controller);
 
     this.N = N;
     this.molecularModel = molecularModel;
@@ -46,7 +44,7 @@ public class StatesOfMatterView extends AbstractScience2DView {
   }
   
   @Override
-  public AbstractScience2DProber createProber(String name, Guru guru, String type) {
-    return super.createProber(name, guru, type);
+  public AbstractTutor createTutor(String name, Guru guru, String type) {
+    return super.createTutor(name, guru, type);
   }  
 }

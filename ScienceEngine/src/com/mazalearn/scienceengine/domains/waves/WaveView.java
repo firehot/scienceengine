@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.domains.waves.view.Boundary;
 import com.mazalearn.scienceengine.domains.waves.view.Hand;
 import com.mazalearn.scienceengine.domains.waves.view.WaveBox;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guru;
 
 public class WaveView extends AbstractScience2DView {
@@ -30,8 +31,8 @@ public class WaveView extends AbstractScience2DView {
   private TextureRegion ballTextureBlue;
   
   public WaveView(float width, float height, final WaveModel waveModel,
-      Skin skin, TextureAtlas atlas) {
-    super(waveModel, width, height, skin);
+      Skin skin, TextureAtlas atlas, IScience2DController controller) {
+    super(waveModel, width, height, skin, controller);
     this.waveModel = waveModel;
     this.ORIGIN_X = 4;
     this.ORIGIN_Y = 10;
@@ -95,7 +96,7 @@ public class WaveView extends AbstractScience2DView {
   }
   
   @Override
-  public AbstractScience2DProber createProber(String name, Guru guru, String type) {
-    return super.createProber(name, guru, type);
+  public AbstractTutor createTutor(String name, Guru guru, String type) {
+    return super.createTutor(name, guru, type);
   }
 }

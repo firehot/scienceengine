@@ -16,7 +16,7 @@ import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
- * Cycles through the eligible registeredGuides - probing the user with each one.
+ * Cycles through the eligible registeredTutors - probing the user with each one.
  * 
  * @author sridhar
  * 
@@ -25,10 +25,10 @@ public class Guru extends Group implements IDoneCallback {
   private static final int WIN_THRESHOLD = 100;
   private static final int LOSS_THRESHOLD = -30;
   
-  int guideIndex = 0;
-  Guide currentGuide;
+  int tutorIndex = -1;
+  AbstractTutor currentTutor;
   protected Dashboard dashboard;
-  private List<Guide> registeredGuides = new ArrayList<Guide>();
+  private List<AbstractTutor> registeredTutors = new ArrayList<AbstractTutor>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final IScience2DView science2DView;
   private final ControlPanel controlPanel;
@@ -38,9 +38,6 @@ public class Guru extends Group implements IDoneCallback {
   private Hinter hinter;
   private int deltaSuccessScore;
   private int deltaFailureScore;
-  private List<AbstractScience2DProber> activeProbers;
-  private int proberIndex;
-  private AbstractScience2DProber currentProber;
   private float windowWidth;
   private float windowHeight;
   private IScience2DModel science2DModel;
@@ -74,10 +71,10 @@ public class Guru extends Group implements IDoneCallback {
     this.setVisible(false);
   }
 
-  public void registerGuide(Guide guide) {
-    registeredGuides.add(guide);
-    this.addActor(guide);
-    guide.activate(false);
+  public void registerTutor(AbstractTutor tutor) {
+    registeredTutors.add(tutor);
+    this.addActor(tutor);
+    tutor.activate(false);
   }
 
   public void startChallenge() {
@@ -94,33 +91,24 @@ public class Guru extends Group implements IDoneCallback {
       }
     }
     
-    if (registeredGuides.size() == 0) { // No guides available
+    if (registeredTutors.size() == 0) { // No guides available
       endChallenge();
       return;
     }
     
     // Reinitialize active guides
-    for (Guide guide: registeredGuides) {
-      guide.reinitialize(getX(), getY(), windowWidth, windowHeight);
+    for (AbstractTutor guide: registeredTutors) {
+      guide.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     }
 
     this.setVisible(true);
-    runGuide();
-  }
-  
-  private void runGuide() {
-    // Move on to next guide - linear for now.
-    guideIndex = (guideIndex + 1) % registeredGuides.size();
-    currentGuide = registeredGuides.get(guideIndex);
-//guideDone(); if (true) return;
-    currentGuide.activate(true);
-    dashboard.setStatus(currentGuide.getTitle());
+    runTutor();
   }
   
   public void endChallenge() {
     // Reinitialize current prober, if any
-    if (currentGuide != null) {
-      currentGuide.reinitialize(getX(), getY(), windowWidth, windowHeight);
+    if (currentTutor != null) {
+      currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, false);
     }
 
     // Turn on access to parts of control panel
@@ -134,35 +122,23 @@ public class Guru extends Group implements IDoneCallback {
     return this.excludedActors;
   }
 
-  public void guideDone() {
-    this.setSize(windowWidth,  windowHeight);
-    this.setPosition(0, 0);
-    currentGuide.activate(false);
-    soundManager.play(ScienceEngineSound.CELEBRATE);
-    dashboard.addScore(deltaSuccessScore);
-    successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
-    activeProbers = currentGuide.getProbers();
-    for (AbstractScience2DProber prober: activeProbers) {
-      prober.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
-      this.addActor(prober);
-    }
-    doProbe();
-  }
   /**
    * IDoneCallback interface implementation - probe is completed
    */
   public void done(boolean success) {
     if (success) {
-      currentProber.activate(false);
-      currentProber.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+      this.setSize(windowWidth,  windowHeight);
+      this.setPosition(0, 0);
+      currentTutor.activate(false);
+      currentTutor.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
       successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
-      doProbe();
+      runTutor();
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
-      deltaSuccessScore = currentGuide.getSubsequentDeltaSuccessScore();
+      deltaSuccessScore = currentTutor.getSubsequentDeltaSuccessScore();
       dashboard.addScore(deltaFailureScore);
       failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
     }
@@ -185,22 +161,22 @@ public class Guru extends Group implements IDoneCallback {
   public void act(float dt) {
     super.act(dt);
     if (Math.round(ScienceEngine.getTime()) % 10 != 0) return;
-    String hintText = currentGuide != null ? currentGuide.getHint() : null;
+    String hintText = currentTutor != null ? currentTutor.getHint() : null;
     hinter.setHint(hintText);
   }
   
-  // Prerequisite: registeredGuides.size() >= 1
-  private void doProbe() {
-    // Move on to next active prober
-    proberIndex = (proberIndex + 1) % activeProbers.size();
-    currentProber = activeProbers.get(proberIndex);
+  // Prerequisite: registeredTutors.size() >= 1
+  private void runTutor() {
+    // Move on to next tutor
+    tutorIndex = (tutorIndex + 1) % registeredTutors.size();
+    currentTutor = registeredTutors.get(tutorIndex);
 
     // Set up initial success and failure scores
-    deltaSuccessScore = currentProber.getDeltaSuccessScore();
-    deltaFailureScore = currentProber.getDeltaFailureScore();
+    deltaSuccessScore = currentTutor.getDeltaSuccessScore();
+    deltaFailureScore = currentTutor.getDeltaFailureScore();
     
-    currentProber.activate(true);
-    dashboard.setStatus(currentProber.getTitle());
+    currentTutor.activate(true);
+    dashboard.setStatus(currentTutor.getTitle());
   }
   
   public void setupProbeConfigs(List<IModelConfig<?>> configs, boolean enableControls) {
