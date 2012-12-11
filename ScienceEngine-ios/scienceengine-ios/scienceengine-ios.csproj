@@ -27,7 +27,7 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../../libgdx/gdx/bin/;../../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
@@ -45,7 +45,7 @@
     <MtouchUseLlvm>True</MtouchUseLlvm>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../scienceengine/src/&quot; -DCLASSPATH=&quot;../../../../gdx/bin/;../../../../backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../../backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/SuperJumperDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../../gdx/bin/;../../../../backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../../backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/SuperJumperDesktop.java&quot; -v" workingdir="${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -67,7 +67,7 @@
     <IpaPackageName />
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../../libgdx/gdx/bin/;../../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -83,7 +83,7 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../scienceengine/src/&quot; -DCLASSPATH=&quot;../../../../gdx/bin/;../../../../backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../../backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/SuperJumperDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../gdx/bin/;../../../backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/SuperJumperDesktop.java&quot; -v" workingdir="${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
@@ -119,40 +119,40 @@
       <HintPath>scienceengine.dll</HintPath>
     </Reference>
     <Reference Include="gdx">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\gdx.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\gdx.dll</HintPath>
     </Reference>
     <Reference Include="gdx-backend-ios">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\gdx-backend-ios.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\gdx-backend-ios.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Beans">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Beans.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Beans.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Charsets">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Charsets.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Charsets.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Core">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Core.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Misc">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Misc.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Misc.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Text">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Text.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Text.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Util">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Util.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.OpenJDK.Util.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Reflection">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Reflection.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Runtime">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Runtime.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Runtime.JNI">
-      <HintPath>..\..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Runtime.JNI.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Runtime.JNI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -173,365 +173,364 @@
     <Folder Include="music\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism.json">
       <Link>data\Electromagnetism.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\StatesOfMatter.json">
-      <Link>data\StatesOfMatter.json</Link> 
+    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter.json">
+      <Link>data\StatesOfMatter.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Waves.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Waves.json">
       <Link>data\Waves.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\1.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.json">
       <Link>data\Electromagnetism\1.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\2.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\2.json">
       <Link>data\Electromagnetism\2.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\3.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\3.json">
       <Link>data\Electromagnetism\3.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\4.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\4.json">
       <Link>data\Electromagnetism\4.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\5.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\5.json">
       <Link>data\Electromagnetism\5.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\6.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\6.json">
       <Link>data\Electromagnetism\6.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\7.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\7.json">
       <Link>data\Electromagnetism\7.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\8.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\8.json">
       <Link>data\Electromagnetism\8.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\9.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\9.json">
       <Link>data\Electromagnetism\9.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\StatesOfMatter\1.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\1.json">
       <Link>data\StatesOfMatter\1.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Waves\1.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Waves\1.json">
       <Link>data\Waves\1.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\bfield\BX_external_far.csv">
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_external_far.csv">
       <Link>data\bfield\BX_external_far.csv</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\bfield\BX_external_near.csv">
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_external_near.csv">
       <Link>data\bfield\BX_external_near.csv</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\bfield\BX_internal.csv">
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_internal.csv">
       <Link>data\bfield\BX_internal.csv</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\bfield\BY_external_far.csv">
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_external_far.csv">
       <Link>data\bfield\BY_external_far.csv</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\bfield\BY_external_near.csv">
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_external_near.csv">
       <Link>data\bfield\BY_external_near.csv</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\bfield\BY_internal.csv">
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_internal.csv">
       <Link>data\bfield\BY_internal.csv</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\bfield\README.txt">
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\README.txt">
       <Link>data\bfield\README.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\loading.pack">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\loading.pack">
       <Link>image-atlases\loading.pack</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\pages.atlas">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\pages.atlas">
       <Link>image-atlases\pages.atlas</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\splash.psd">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\splash.psd">
       <Link>image-atlases\splash.psd</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\coppercoils.xcf">
+    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils.xcf">
       <Link>images\coppercoils.xcf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\currentsource">
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentsource">
       <Link>images\currentsource</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\Lohit-Devanagari.ttf">
+    <Content Include="..\..\ScienceEngine-android\assets\skin\Lohit-Devanagari.ttf">
       <Link>skin\Lohit-Devanagari.ttf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\Lohit-Kannada.ttf">
+    <Content Include="..\..\ScienceEngine-android\assets\skin\Lohit-Kannada.ttf">
       <Link>skin\Lohit-Kannada.ttf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\Lohit-Tamil.ttf">
+    <Content Include="..\..\ScienceEngine-android\assets\skin\Lohit-Tamil.ttf">
       <Link>skin\Lohit-Tamil.ttf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\Roboto-Regular.ttf">
+    <Content Include="..\..\ScienceEngine-android\assets\skin\Roboto-Regular.ttf">
       <Link>skin\Roboto-Regular.ttf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\arial-15.fnt">
-      <Link>skin\default.fnt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\uiskin.atlas">
+    <Content Include="..\..\ScienceEngine-android\assets\skin\uiskin.atlas">
       <Link>skin\uiskin.atlas</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\uiskin.json">
+    <Content Include="..\..\ScienceEngine-android\assets\skin\uiskin.json">
       <Link>skin\uiskin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\sound\celebrate.mp3">
+    <Content Include="..\..\ScienceEngine-android\assets\sound\celebrate.mp3">
       <Link>sound\celebrate.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\sound\click.wav">
+    <Content Include="..\..\ScienceEngine-android\assets\sound\click.wav">
       <Link>sound\click.wav</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\sound\failure.mp3">
+    <Content Include="..\..\ScienceEngine-android\assets\sound\failure.mp3">
       <Link>sound\failure.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\sound\success.mp3">
+    <Content Include="..\..\ScienceEngine-android\assets\sound\success.mp3">
       <Link>sound\success.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\music\level.ogg">
+    <Content Include="..\..\ScienceEngine-android\assets\music\level.ogg">
       <Link>music\level.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\music\menu.ogg">
+    <Content Include="..\..\ScienceEngine-android\assets\music\menu.ogg">
       <Link>music\menu.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\1.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.png">
       <Link>data\Electromagnetism\1.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\2.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\2.png">
       <Link>data\Electromagnetism\2.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\3.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\3.png">
       <Link>data\Electromagnetism\3.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\4.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\4.png">
       <Link>data\Electromagnetism\4.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\5.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\5.png">
       <Link>data\Electromagnetism\5.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\6.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\6.png">
       <Link>data\Electromagnetism\6.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\7.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\7.png">
       <Link>data\Electromagnetism\7.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\8.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\8.png">
       <Link>data\Electromagnetism\8.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Electromagnetism\9.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\9.png">
       <Link>data\Electromagnetism\9.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\StatesOfMatter\1.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\1.png">
       <Link>data\StatesOfMatter\1.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\data\Waves\1.png">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Waves\1.png">
       <Link>data\Waves\1.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\hand-pointer.png">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\hand-pointer.png">
       <Link>image-atlases\hand-pointer.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\hand-pointer1.png">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\hand-pointer1.png">
       <Link>image-atlases\hand-pointer1.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\loading.png">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\loading.png">
       <Link>image-atlases\loading.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\pages.png">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\pages.png">
       <Link>image-atlases\pages.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\scienceengine.jpg">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\scienceengine.jpg">
       <Link>image-atlases\scienceengine.jpg</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\image-atlases\splash.jpg">
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\splash.jpg">
       <Link>image-atlases\splash.jpg</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\ampere.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\ampere.png">
       <Link>images\ampere.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\anticlockwise.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\anticlockwise.png">
       <Link>images\anticlockwise.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\arrow.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\arrow.png">
       <Link>images\arrow.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\barmagnet.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\barmagnet.png">
       <Link>images\barmagnet.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\bose.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\bose.png">
       <Link>images\bose.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\browser.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\browser.png">
       <Link>images\browser.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\brush.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\brush.png">
       <Link>images\brush.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\clockwise.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\clockwise.png">
       <Link>images\clockwise.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\compass.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\compass.png">
       <Link>images\compass.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\coppercoils-back.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils-back.png">
       <Link>images\coppercoils-back.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\coppercoils-front1.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils-front1.png">
       <Link>images\coppercoils-front1.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\coppercoils-front2.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils-front2.png">
       <Link>images\coppercoils-front2.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\coppercoils.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils.png">
       <Link>images\coppercoils.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\cross.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\cross.png">
       <Link>images\cross.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\current.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\current.png">
       <Link>images\current.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\currentcoil_accommutator.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoil_accommutator.png">
       <Link>images\currentcoil_accommutator.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\currentcoil_dccommutator.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoil_dccommutator.png">
       <Link>images\currentcoil_dccommutator.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\currentcoil_nocommutator.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoil_nocommutator.png">
       <Link>images\currentcoil_nocommutator.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\currentsource.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentsource.png">
       <Link>images\currentsource.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\currentwire-down.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentwire-down.png">
       <Link>images\currentwire-down.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\currentwire-up.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentwire-up.png">
       <Link>images\currentwire-up.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\cvraman.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\cvraman.png">
       <Link>images\cvraman.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\edison.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\edison.png">
       <Link>images\edison.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\einstein.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\einstein.png">
       <Link>images\einstein.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\electromagnet-base.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnet-base.png">
       <Link>images\electromagnet-base.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\electromagnet-coil.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnet-coil.png">
       <Link>images\electromagnet-coil.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\electromagnet.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnet.png">
       <Link>images\electromagnet.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\environment.jpg">
+    <Content Include="..\..\ScienceEngine-android\assets\images\environment.jpg">
       <Link>images\environment.jpg</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\faraday.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\faraday.png">
       <Link>images\faraday.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\fieldarrow-yellow.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\fieldarrow-yellow.png">
       <Link>images\fieldarrow-yellow.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\fieldarrow.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\fieldarrow.png">
       <Link>images\fieldarrow.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\fire-texture.jpg">
+    <Content Include="..\..\ScienceEngine-android\assets\images\fire-texture.jpg">
       <Link>images\fire-texture.jpg</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\galileo.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\galileo.png">
       <Link>images\galileo.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\galvani.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\galvani.png">
       <Link>images\galvani.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\greenballoon.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\greenballoon.png">
       <Link>images\greenballoon.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\help.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\help.png">
       <Link>images\help.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\horseshoemagnet.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\horseshoemagnet.png">
       <Link>images\horseshoemagnet.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\iceberg.jpg">
+    <Content Include="..\..\ScienceEngine-android\assets\images\iceberg.jpg">
       <Link>images\iceberg.jpg</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\lightbulb.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\lightbulb.png">
       <Link>images\lightbulb.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\mariecurie.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\mariecurie.png">
       <Link>images\mariecurie.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\newton.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\newton.png">
       <Link>images\newton.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\oersted.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\oersted.png">
       <Link>images\oersted.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\pivot.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\pivot.png">
       <Link>images\pivot.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\questionmark.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\questionmark.png">
       <Link>images\questionmark.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\questionmark1.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\questionmark1.png">
       <Link>images\questionmark1.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\rectangle_coil.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\rectangle_coil.png">
       <Link>images\rectangle_coil.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\redballoon.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\redballoon.png">
       <Link>images\redballoon.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\simplemagnet.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\simplemagnet.png">
       <Link>images\simplemagnet.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\images\videoplay.png">
+    <Content Include="..\..\ScienceEngine-android\assets\images\videoplay.png">
       <Link>images\videoplay.png</Link>
     </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\arial-15.png">
-      <Link>skin\default.png</Link>
-    </Content>
-    <Content Include="..\..\..\ScienceEngine-android\assets\skin\uiskin.png">
+    <Content Include="..\..\ScienceEngine-android\assets\skin\uiskin.png">
       <Link>skin\uiskin.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-15.png">
+      <Link>skin\arial-15.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-15.fnt">
+      <Link>skin\arial-15.fnt</Link>
     </Content>
   </ItemGroup>
 </Project>
