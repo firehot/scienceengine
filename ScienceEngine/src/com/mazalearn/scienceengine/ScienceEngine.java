@@ -117,17 +117,12 @@ public class ScienceEngine extends Game {
   }
   
   public void browseURL(String url){
-    if (platformAdapter != null) {
-      platformAdapter.browseURL(url);
-    }
+    getPlatformAdapter().browseURL(url);
   }
 
 
   public boolean playVideo(File file) {
-    if (platformAdapter != null) {
-      return platformAdapter.playVideo(file);
-    }
-    return false;
+    return getPlatformAdapter().playVideo(file);
   }
   // Game-related methods
   
@@ -307,7 +302,7 @@ public class ScienceEngine extends Game {
   }
 
   public static IMessage getMsg() {
-    return platformAdapter.getMsg();
+    return getPlatformAdapter().getMsg();
   }
 
   public static Science2DBody getSelectedBody() {

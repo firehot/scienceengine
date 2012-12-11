@@ -75,7 +75,6 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
 
   @Override
   public BitmapFont getFont(int pointSize) {
-    // TODO: Use better font
     FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
     Skin  skin = new Skin(skinFile);
     skin.add("en", skin.getFont("default-font"));
