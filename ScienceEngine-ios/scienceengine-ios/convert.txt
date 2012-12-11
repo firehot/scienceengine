@@ -1,0 +1,1 @@
+ant -f convert.xml compile convert -DSRC="../../../ScienceEngine/src/" -DCLASSPATH="../../../../libgdx/gdx/bin/;../../../../libgdx/backends/gdx-backend-lwjgl/bin" -DIN="-r:../../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class"  -DOUT="scienceengine.dll" -DEXCLUDE="**/ScienceEngineDesktop.java" -v
