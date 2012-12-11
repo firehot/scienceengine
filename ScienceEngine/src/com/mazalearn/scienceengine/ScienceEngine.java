@@ -15,8 +15,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
-import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
+import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.AsyncLevelLoader;
@@ -29,7 +29,6 @@ import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
@@ -56,13 +55,13 @@ public class ScienceEngine extends Game {
   private static MusicManager musicManager;
   private static SoundManager soundManager;
   private static PlatformAdapter platformAdapter;
+  public static AssetManager assetManager;
   private static Skin skin;
 
   private String uri;
 
   private TextureAtlas atlas;
 
-  public static AssetManager assetManager;
 
   private static Science2DBody selectedBody;
 
@@ -344,6 +343,10 @@ public class ScienceEngine extends Game {
     return isProbeMode;
   }
 
+  /**
+   * Keep track of actual time spent in application when it is active
+   * @param delta
+   */
   public synchronized static void addTimeElapsed(float delta) {
     time += delta;
   }
