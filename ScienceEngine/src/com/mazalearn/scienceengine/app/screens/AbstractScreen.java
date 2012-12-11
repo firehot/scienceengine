@@ -20,11 +20,8 @@ import com.mazalearn.scienceengine.app.services.IMessage;
  * The base class for all scienceEngine screens.
  */
 public abstract class AbstractScreen implements Screen {
-  // the fixed viewport dimensions (ratio: 1.6)
   public static final int VIEWPORT_WIDTH = 800,
       VIEWPORT_HEIGHT = 480;
-  public static final int MENU_VIEWPORT_WIDTH = 800,
-      MENU_VIEWPORT_HEIGHT = 480;
 
   protected final ScienceEngine scienceEngine;
   protected Stage stage;
@@ -43,9 +40,7 @@ public abstract class AbstractScreen implements Screen {
   
   public AbstractScreen(ScienceEngine game) {
     this.scienceEngine = game;
-    int width = (isExperimentScreen() ? VIEWPORT_WIDTH : MENU_VIEWPORT_WIDTH);
-    int height = (isExperimentScreen() ? VIEWPORT_HEIGHT : MENU_VIEWPORT_HEIGHT);
-    this.stage = new Stage(width, height, false);
+    this.stage = new Stage(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, false);
     stage.addListener(new InputListener() {
       @Override
       public boolean keyDown(InputEvent event, int keycode) {
@@ -73,10 +68,6 @@ public abstract class AbstractScreen implements Screen {
     return getClass().getName();
   }
 
-  protected boolean isExperimentScreen() {
-    return false;
-  }
-  
   // Go back one screen in static navigation hierarchy
   protected abstract void goBack();
 

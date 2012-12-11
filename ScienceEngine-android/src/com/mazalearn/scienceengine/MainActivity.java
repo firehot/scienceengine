@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;

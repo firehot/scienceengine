@@ -159,7 +159,6 @@
     <None Include="Info.plist" />
     <None Include="libgdx.a" />
     <None Include="libikvm-natives.a" />
-    <None Include="libfreetype.a" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -179,7 +178,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\ScienceEngine-android\assets\data\StatesOfMatter.json">
-      <Link>data\StatesOfMatter.json</Link>
+      <Link>data\StatesOfMatter.json</Link> 
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\ScienceEngine-android\assets\data\Waves.json">
@@ -292,6 +291,10 @@
     </Content>
     <Content Include="..\..\..\ScienceEngine-android\assets\skin\Roboto-Regular.ttf">
       <Link>skin\Roboto-Regular.ttf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\ScienceEngine-android\assets\skin\arial-15.fnt">
+      <Link>skin\default.fnt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\ScienceEngine-android\assets\skin\uiskin.atlas">
@@ -523,6 +526,9 @@
     </Content>
     <Content Include="..\..\..\ScienceEngine-android\assets\images\videoplay.png">
       <Link>images\videoplay.png</Link>
+    </Content>
+    <Content Include="..\..\..\ScienceEngine-android\assets\skin\arial-15.png">
+      <Link>skin\default.png</Link>
     </Content>
     <Content Include="..\..\..\ScienceEngine-android\assets\skin\uiskin.png">
       <Link>skin\uiskin.png</Link>

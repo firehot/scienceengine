@@ -58,7 +58,7 @@ public class SplashScreen extends AbstractScreen {
 
     Label label = new Label("Touch to Enter", scienceEngine.getSkin());
     label.setFontScale(2f);
-    label.setPosition(MENU_VIEWPORT_WIDTH / 2, MENU_VIEWPORT_HEIGHT / 2);
+    label.setPosition(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT / 2);
     label.addAction(
         Actions.forever(
             Actions.sequence(
