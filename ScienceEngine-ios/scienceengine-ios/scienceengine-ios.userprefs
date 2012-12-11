@@ -1,12 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/Main.cs">
-    <Files>
-      <File FileName="scienceengine-ios/Main.cs" Line="31" Column="1" />
-      <File FileName="../../../libgdx/gdx/src/com/badlogic/gdx/graphics/g2d/TextureAtlas.java" Line="97" Column="1" />
-      <File FileName="../../ScienceEngine/src/com/mazalearn/scienceengine/ScienceEngine.java" Line="97" Column="44" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint enabled="false" file="/Users/sridhar/Documents/workspace/libgdx/gdx/src/com/badlogic/gdx/assets/AssetManager.java" line="420" />
