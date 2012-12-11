@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ProbeImage;
-import com.mazalearn.scienceengine.guru.Stage;
+import com.mazalearn.scienceengine.guru.Subgoal;
 
 // doubts on direction
 // Generate A at "random" point around active elements.
@@ -20,10 +20,10 @@ import com.mazalearn.scienceengine.guru.Stage;
 public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
-  private Stage[] stages = new Stage[] {
-      new Stage("The direction of the field is the direction in which a " +
+  private Subgoal[] subgoals = new Subgoal[] {
+      new Subgoal("The direction of the field is the direction in which a " +
       "free North Pole would move if placed at that point."),
-      new Stage("The direction of the field is where the compass needle's North would point.")
+      new Subgoal("The direction of the field is where the compass needle's North would point.")
   };
   
   public FieldDirectionProber(IScience2DModel science2DModel, final Guru guru) {

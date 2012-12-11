@@ -23,7 +23,7 @@ plan: [{name: "Guide",
    configs:[{name: "CurrentCoil.CommutatorType", permitted: false, value:"Connector"},
             {name: "CurrentSource.CurrentDirection", permitted: false, value: false}
    ],
-   stages:[{hint: "Have you configured the current coil to see the number of revolutions?", 
+   subgoals:[{hint: "Have you configured the current coil to see the number of revolutions?", 
            postcondition: "CurrentCoil.RotationDataType = 'NumRevolutions'",
            timelimit: 30},
           {hint: "Does change in magnetic field affect the rotation of the coil? Give the coil a starting push.", 

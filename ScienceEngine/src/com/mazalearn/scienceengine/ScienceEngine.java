@@ -97,7 +97,7 @@ public class ScienceEngine extends Game {
   public Skin getSkin() {
     if (skin == null) {
       FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
-      skin = new Skin(skinFile);
+      skin = new Skin(skinFile, new TextureAtlas(Gdx.files.internal("skin/uiskin.atlas")));
       skin.add("en", skin.getFont("default-font"));
       getMsg().setLanguage(skin, "en");
    }
@@ -170,6 +170,7 @@ public class ScienceEngine extends Game {
       fpsLogger = new FPSLogger();
     //}
     
+    resize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
     SCIENCE_ENGINE = this;
   }
 
@@ -300,6 +301,9 @@ public class ScienceEngine extends Game {
   }
 
   public static PlatformAdapter getPlatformAdapter() {
+    if (platformAdapter == null) {
+      platformAdapter = new AbstractPlatformAdapter();
+    }
     return platformAdapter;  
   }
 

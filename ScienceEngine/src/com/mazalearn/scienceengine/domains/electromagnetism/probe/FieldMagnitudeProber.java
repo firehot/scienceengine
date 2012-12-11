@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
 import com.mazalearn.scienceengine.guru.ProbeImage;
-import com.mazalearn.scienceengine.guru.Stage;
+import com.mazalearn.scienceengine.guru.Subgoal;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
@@ -44,9 +44,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     }
   };
 
-  private Stage[] stages = new Stage[] {
-      new Stage("The field is stronger closer to the object generating the field"),
-      new Stage("The field is stronger if the current or magnet strength is larger")
+  private Subgoal[] subgoals = new Subgoal[] {
+      new Subgoal("The field is stronger closer to the object generating the field"),
+      new Subgoal("The field is stronger if the current or magnet strength is larger")
   };
   
   private final Image imageCorrect, imageWrong;

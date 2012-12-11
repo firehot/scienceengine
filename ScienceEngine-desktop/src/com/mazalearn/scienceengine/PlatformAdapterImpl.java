@@ -10,11 +10,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 
-class PlatformAdapterImpl implements PlatformAdapter {
+class PlatformAdapterImpl extends AbstractPlatformAdapter {
   
   IMessage messages;
   

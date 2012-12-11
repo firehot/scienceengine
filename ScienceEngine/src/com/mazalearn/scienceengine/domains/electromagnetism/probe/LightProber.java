@@ -7,7 +7,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ProbeImage;
-import com.mazalearn.scienceengine.guru.Stage;
+import com.mazalearn.scienceengine.guru.Subgoal;
 
 public class LightProber extends AbstractScience2DProber {
 
@@ -15,12 +15,12 @@ public class LightProber extends AbstractScience2DProber {
   private Image image;
   private LightbulbActor lightbulbActor;
   private Guru guru;
-  private Stage[] stages = new Stage[] {
-      new Stage("Light intensity increases when more current is induced in the coil."),
-      new Stage("More current is induced in the coil if the magnetic field changes faster at the coil."),
-      new Stage("Magnetic field change at the coil increases when the magnet moves faster relative to the coil."),
-      new Stage("If the coil has more loops, more current will be induced."),
-      new Stage("If the magnet is stronger, more current will be induced.")
+  private Subgoal[] subgoals = new Subgoal[] {
+      new Subgoal("Light intensity increases when more current is induced in the coil."),
+      new Subgoal("More current is induced in the coil if the magnetic field changes faster at the coil."),
+      new Subgoal("Magnetic field change at the coil increases when the magnet moves faster relative to the coil."),
+      new Subgoal("If the coil has more loops, more current will be induced."),
+      new Subgoal("If the magnet is stronger, more current will be induced.")
   };
   private IScience2DModel science2DModel;
   

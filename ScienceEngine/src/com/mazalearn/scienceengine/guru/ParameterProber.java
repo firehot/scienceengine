@@ -33,8 +33,8 @@ public class ParameterProber extends AbstractScience2DProber {
     None;
   }
   
-  private Stage[] stages = new Stage[] {
-      new Stage("Use Fleming's left hand rule")
+  private Subgoal[] subgoals = new Subgoal[] {
+      new Subgoal("Use Fleming's left hand rule")
   };
   
   protected Type type;
@@ -174,7 +174,7 @@ public class ParameterProber extends AbstractScience2DProber {
   
   @Override
   public String getHint() {
-    return stages[0].getHint();
+    return subgoals[0].getHint();
   }
 
   public void initialize(String title, IModelConfig<?> probeConfig, 

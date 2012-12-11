@@ -31,7 +31,7 @@ import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guide;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ParameterProber;
-import com.mazalearn.scienceengine.guru.Stage;
+import com.mazalearn.scienceengine.guru.Subgoal;
 
 public class LevelLoader {
     
@@ -319,31 +319,31 @@ public class LevelLoader {
     }
     if (tutor instanceof Guide) {
       String goal = (String) tutorObj.get("goal");
-      Array<?> stagesObj = (Array<?>) tutorObj.get("stages");
-      List<Stage> stages = readStages(stagesObj);
-      ((Guide) tutor).initialize(goal, title, configs, stages);
+      Array<?> subgoalsObj = (Array<?>) tutorObj.get("subgoals");
+      List<Subgoal> subgoals = readSubgoals(subgoalsObj);
+      ((Guide) tutor).initialize(goal, title, configs, subgoals);
       return tutor;
     }
     return tutor;
   }
 
   @SuppressWarnings("unchecked")
-  private List<Stage> readStages(Array<?> stagesObj) {
-    List<Stage> stages = new ArrayList<Stage>();
-    for (int i = 0; i < stagesObj.size; i++) {
+  private List<Subgoal> readSubgoals(Array<?> subgoalsObj) {
+    List<Subgoal> subgoals = new ArrayList<Subgoal>();
+    for (int i = 0; i < subgoalsObj.size; i++) {
       try {
-        stages.add(readStage((OrderedMap<String, ?>) stagesObj.get(i)));
+        subgoals.add(readSubgoal((OrderedMap<String, ?>) subgoalsObj.get(i)));
       } catch (SyntaxException e) {
         e.printStackTrace();
       }
     }
-    return stages;
+    return subgoals;
   }
 
-  private Stage readStage(OrderedMap<String, ?> stageObj) throws SyntaxException {
-    String hint = (String) stageObj.get("hint");
-    String postCondition = (String) stageObj.get("postcondition");
-    float timeLimit = (Float) nvl(stageObj.get("timelimit"), 60);
-    return new Stage(hint, postCondition, (int) timeLimit);
+  private Subgoal readSubgoal(OrderedMap<String, ?> subgoalObj) throws SyntaxException {
+    String hint = (String) subgoalObj.get("hint");
+    String postCondition = (String) subgoalObj.get("postcondition");
+    float timeLimit = (Float) nvl(subgoalObj.get("timelimit"), 60);
+    return new Subgoal(hint, postCondition, (int) timeLimit);
   }
 }

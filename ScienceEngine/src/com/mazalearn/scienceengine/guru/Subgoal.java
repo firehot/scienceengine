@@ -8,17 +8,17 @@ import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 
-public class Stage {
+public class Subgoal {
   private final String hint;
   private final Expr postCondition;
   private Collection<Variable> variables;
   private int timeLimit;
 
-  public Stage(String hintText) {
+  public Subgoal(String hintText) {
     this(hintText, "1", 60);
   }
   
-  public Stage(String hint, String postConditionString, int timeLimit) {
+  public Subgoal(String hint, String postConditionString, int timeLimit) {
     this.hint = hint;
     Parser parser = new Parser();
     try {

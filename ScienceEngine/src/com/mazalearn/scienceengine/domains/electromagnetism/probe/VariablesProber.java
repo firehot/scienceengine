@@ -18,14 +18,14 @@ import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ProbeImage;
-import com.mazalearn.scienceengine.guru.Stage;
+import com.mazalearn.scienceengine.guru.Subgoal;
 
 public class VariablesProber extends AbstractScience2DProber {
 
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
-  private Stage[] stages = new Stage[] {
-      new Stage("Light intensity increases when more current is induced in the coil.")
+  private Subgoal[] subgoals = new Subgoal[] {
+      new Subgoal("Light intensity increases when more current is induced in the coil.")
   };
   private Table configTable;
   private Actor modelControls;

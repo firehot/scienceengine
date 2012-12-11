@@ -81,7 +81,7 @@ public class Hinter extends Group {
     this.setVisible(true);
     Image image = SCIENTISTS.get(scientistIndex);
     image.setVisible(false);
-    hintButton.setText("Stage: " + hint + "\n-" + image.getName());
+    hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
     hintButton.setSize(300, 100); 
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);

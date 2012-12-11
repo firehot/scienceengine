@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 // Is the outcome stronger at A or B?
 public class Guide extends AbstractTutor {
   
-  private List<Stage> stages = Collections.emptyList();
+  private List<Subgoal> subgoals = Collections.emptyList();
   
   private String title;
   private IScience2DModel science2DModel;
@@ -76,16 +76,16 @@ public class Guide extends AbstractTutor {
   public void act(float delta) {
     super.act(delta);
     if (Math.round(ScienceEngine.getTime()) % 10 != 0) return;
-    if (currentStage < 0 || currentStage == stages.size()) return;
-    Stage stage = stages.get(currentStage);
-    while (stage.isStageCompleted(science2DModel)) {
+    if (currentStage < 0 || currentStage == subgoals.size()) return;
+    Subgoal subgoal = subgoals.get(currentStage);
+    while (subgoal.isStageCompleted(science2DModel)) {
       currentStage++;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
-      if (currentStage == stages.size()) {
+      if (currentStage == subgoals.size()) {
         guru.done(true);
         break;
       }
-      stage = stages.get(currentStage);
+      subgoal = subgoals.get(currentStage);
     }
   }
 
@@ -94,24 +94,24 @@ public class Guide extends AbstractTutor {
    */
   @Override
   public String getHint() {
-    if (currentStage < 0 || currentStage == stages.size()) return null;
+    if (currentStage < 0 || currentStage == subgoals.size()) return null;
     float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
-    Stage stage = stages.get(currentStage);
-    if (timeElapsed > stage.getTimeLimit()) {
-      return stage.getHint();
+    Subgoal subgoal = subgoals.get(currentStage);
+    if (timeElapsed > subgoal.getTimeLimit()) {
+      return subgoal.getHint();
     }
     
     return null;
   }
 
   public void initialize(String goal, String title, Array<?> configs, 
-      List<Stage> stages) {
+      List<Subgoal> subgoals) {
     this.goal = goal;
     this.title = title;
     this.configs = configs;
-    this.stages = stages;
+    this.subgoals = subgoals;
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
-    this.stageBeginTime = new float[stages.size() + 1];
+    this.stageBeginTime = new float[subgoals.size() + 1];
   }
 
   public int getSubsequentDeltaSuccessScore() {
