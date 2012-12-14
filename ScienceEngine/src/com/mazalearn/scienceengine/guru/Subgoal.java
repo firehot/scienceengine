@@ -13,12 +13,14 @@ public class Subgoal {
   private final Expr postCondition;
   private Collection<Variable> variables;
   private int timeLimit;
+  private String when;
+  private boolean progress;
 
   public Subgoal(String hintText) {
-    this(hintText, "1", 60);
+    this(hintText, null, "1", 60);
   }
   
-  public Subgoal(String hint, String postConditionString, int timeLimit) {
+  public Subgoal(String hint, String when, String postConditionString, int timeLimit) {
     this.hint = hint;
     Parser parser = new Parser();
     try {
@@ -28,11 +30,19 @@ public class Subgoal {
       throw new RuntimeException(e);
     }
     this.variables = parser.getVariables();
+    this.when = when;
     this.timeLimit = timeLimit;
   }
 
-  public String getHint() {
-    return hint;
+  public String getHint(float timeElapsed) {
+    if (timeElapsed > timeLimit && !progress) {
+      return hint;
+    }
+    return null;
+  }
+  
+  public String getWhen() {
+    return when;
   }
 
   public boolean isStageCompleted(IScience2DModel science2DModel) {
@@ -43,5 +53,9 @@ public class Subgoal {
 
   public long getTimeLimit() {
     return timeLimit;
+  }
+
+  public void checkProgress(IScience2DModel science2DModel) {
+    this.progress = isStageCompleted(science2DModel);
   }
 }

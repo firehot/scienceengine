@@ -117,6 +117,8 @@ public class DomainHomeScreen extends AbstractScreen {
     }
     experimentLevels.row();
     
+    Texture overlayLock = new Texture("images/lock.png");
+    boolean lock = false;
     for (int i = 0; i < levels.size; i++) {
       final int iLevel = i + 1;
       String filename = LevelUtil.getLevelFilename(experimentName, ".png", iLevel);
@@ -126,7 +128,9 @@ public class DomainHomeScreen extends AbstractScreen {
       } else {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
-      Image experimentThumb = new Image(new Texture(pixmap));
+      Image experimentThumb = 
+          lock ? new OverlayImage(new Texture(pixmap), overlayLock) 
+               : new Image(new Texture(pixmap));
       experimentThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {

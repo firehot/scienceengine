@@ -16,5 +16,5 @@ public abstract class AbstractTutor extends Group implements ITutor{
 
   public abstract int getDeltaFailureScore();
 
-  public abstract int getSubsequentDeltaSuccessScore();
+  public abstract void checkProgress();
 }

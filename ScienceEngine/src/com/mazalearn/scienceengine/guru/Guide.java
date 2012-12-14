@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.guru;
 import java.util.Collections;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.LevelLoader;
@@ -97,13 +96,16 @@ public class Guide extends AbstractTutor {
     if (currentStage < 0 || currentStage == subgoals.size()) return null;
     float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
     Subgoal subgoal = subgoals.get(currentStage);
-    if (timeElapsed > subgoal.getTimeLimit()) {
-      return subgoal.getHint();
-    }
-    
-    return null;
+    return subgoal.getHint(timeElapsed);
   }
 
+  @Override
+  public void checkProgress() {
+    if (currentStage < 0 || currentStage == subgoals.size()) return;
+    Subgoal subgoal = subgoals.get(currentStage);
+    subgoal.checkProgress(science2DModel);
+  }
+  
   public void initialize(String goal, String title, Array<?> configs, 
       List<Subgoal> subgoals) {
     this.goal = goal;
@@ -127,4 +129,5 @@ public class Guide extends AbstractTutor {
   public int getDeltaFailureScore() {
     return 0;
   }
+
 }

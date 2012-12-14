@@ -13,7 +13,7 @@ public class Main {
 		cfg.height = 480;
 		
 		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "");
-		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
+		//scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
     new LwjglApplication(scienceEngine, cfg) {
       @Override
       public void exit() {

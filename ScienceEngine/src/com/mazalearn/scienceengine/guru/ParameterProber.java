@@ -174,9 +174,13 @@ public class ParameterProber extends AbstractScience2DProber {
   
   @Override
   public String getHint() {
-    return subgoals[0].getHint();
+    return subgoals[0].getHint(0);
   }
 
+  @Override
+  public void checkProgress() {
+  }
+  
   public void initialize(String title, IModelConfig<?> probeConfig, 
       String resultExprString, String type, Array<?> configs) {
     this.title = title;

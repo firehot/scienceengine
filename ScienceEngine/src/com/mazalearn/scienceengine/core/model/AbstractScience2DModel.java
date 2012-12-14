@@ -250,8 +250,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
         case TEXT:
           v.setValue(((IModelConfig<String>) config).getValue()); break;
         case TOGGLE:
-          boolean b = ((IModelConfig<Boolean>) config).getValue();
-          v.setValue(b ? 1 : 0);
+          v.setValue(((IModelConfig<Boolean>) config).getValue());
           break;
         default:
           throw new IllegalStateException("Unexpected config type in expression");

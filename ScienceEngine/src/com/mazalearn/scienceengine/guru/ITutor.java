@@ -10,4 +10,10 @@ public interface ITutor {
 
   public abstract String getHint();
 
+  public abstract int getDeltaSuccessScore();
+
+  public abstract int getDeltaFailureScore();
+
+  public abstract void checkProgress();
+
 }

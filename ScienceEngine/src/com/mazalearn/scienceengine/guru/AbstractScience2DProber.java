@@ -4,7 +4,6 @@ package com.mazalearn.scienceengine.guru;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
@@ -84,17 +83,20 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
     return Math.abs(len1 - len2) < TOLERANCE;
   }
 
+  @Override
   public abstract String getHint();
 
+  @Override
   public int getDeltaSuccessScore() {
     return 10;
   }
   
-  public int getSubsequentDeltaSuccessScore() {
-    return 5;
-  }
-  
+  @Override
   public int getDeltaFailureScore() {
     return -5;
+  }
+  
+  @Override
+  public void checkProgress() {
   }
 }

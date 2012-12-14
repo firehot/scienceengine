@@ -26,9 +26,9 @@ public class Guru extends Group implements IDoneCallback {
   private static final int LOSS_THRESHOLD = -30;
   
   int tutorIndex = -1;
-  AbstractTutor currentTutor;
+  ITutor currentTutor;
   protected Dashboard dashboard;
-  private List<AbstractTutor> registeredTutors = new ArrayList<AbstractTutor>();
+  private List<ITutor> registeredTutors = new ArrayList<ITutor>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final IScience2DView science2DView;
   private final ControlPanel controlPanel;
@@ -97,7 +97,7 @@ public class Guru extends Group implements IDoneCallback {
     }
     
     // Reinitialize active guides
-    for (AbstractTutor guide: registeredTutors) {
+    for (ITutor guide: registeredTutors) {
       guide.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     }
 
@@ -138,7 +138,7 @@ public class Guru extends Group implements IDoneCallback {
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
-      deltaSuccessScore = currentTutor.getSubsequentDeltaSuccessScore();
+      deltaSuccessScore = -deltaFailureScore;
       dashboard.addScore(deltaFailureScore);
       failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
     }
@@ -196,5 +196,10 @@ public class Guru extends Group implements IDoneCallback {
       if (name.equals(actor.getName())) return actor;
     }
     return null;
+  }
+
+  public void checkProgress() {
+    if (currentTutor == null) return;
+    currentTutor.checkProgress();
   }
 }

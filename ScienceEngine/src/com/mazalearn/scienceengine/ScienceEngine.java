@@ -309,14 +309,25 @@ public class ScienceEngine extends Game {
     return selectedBody;
   }
 
+  /**
+   * Body got selected. Record this event and display status.
+   * @param body - not null
+   * @param stage
+   */
   public static void selectBody(Science2DBody body, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
     eventLog.logEvent(body, Parameter.Select);
     if (body == null) return;
+    stage.getGuru().checkProgress();
     displayStatus(body.getComponentTypeName(), stage);
   }
 
+  /**
+   * Parameter got selected by user. Record this event and display status
+   * @param parameter
+   * @param stage
+   */
   public static void selectParameter(IParameter parameter, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayStatus(parameter.name(), stage);

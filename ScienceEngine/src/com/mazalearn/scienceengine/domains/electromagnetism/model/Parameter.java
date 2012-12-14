@@ -16,7 +16,8 @@ public enum Parameter implements IParameter {
   CoilLoops,
   Flip, 
   RotationDataType, 
-  RotationData;
+  RotationData, 
+  Count;
   
   private Parameter() {
   }

@@ -342,8 +342,9 @@ public class LevelLoader {
 
   private Subgoal readSubgoal(OrderedMap<String, ?> subgoalObj) throws SyntaxException {
     String hint = (String) subgoalObj.get("hint");
+    String when = (String) subgoalObj.get("when");
     String postCondition = (String) subgoalObj.get("postcondition");
     float timeLimit = (Float) nvl(subgoalObj.get("timelimit"), 60);
-    return new Subgoal(hint, postCondition, (int) timeLimit);
+    return new Subgoal(hint, when, postCondition, (int) timeLimit);
   }
 }

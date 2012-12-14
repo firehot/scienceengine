@@ -125,14 +125,12 @@ public class VariablesProber extends AbstractScience2DProber {
     return null;
   }
 
+  @Override
   public int getDeltaSuccessScore() {
     return 1000;
   }
   
-  public int getSubsequentDeltaSuccessScore() {
-    return 1000;
-  }
-  
+  @Override
   public int getDeltaFailureScore() {
     return -10;
   }
