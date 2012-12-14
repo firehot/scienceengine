@@ -54,6 +54,7 @@ public abstract class Expr {
     /** Unary operator: square root */     public static final int SQRT  = 112;
     /** Unary operator: tangent */         public static final int TAN   = 113;
     /** Unary operator: not */             public static final int NOT   = 114;
+    /** Unary function: Injected */        public static final int FUNCTION = 115;
 
     /** Make a literal expression.
      * @param v the constant value of the expression
@@ -108,6 +109,10 @@ public abstract class Expr {
             return test.fvalue() != 0 ? consequent : alternative;
         else
             return cond;
+    }
+    public static Expr makeFunction(int rator, IFunction function, Expr rand) {
+      Expr app = new FunctionExpr(rator, function, rand);
+      return app;
     }
 }
 
@@ -245,6 +250,31 @@ class BinaryExpr extends Expr {
         default: throw new RuntimeException("BUG: bad rator");
       }
     }
+}
+
+class FunctionExpr extends Expr {
+  int rator;
+  Variable rand;
+  IFunction function;
+
+  FunctionExpr(int rator, IFunction function, Expr rand) { 
+      this.rator = rator;
+      this.function = function;
+      if (!(rand instanceof Variable)) {
+        throw new IllegalArgumentException("Function argument must be a variable");
+      }
+      this.rand = (Variable) rand;
+      this.type = Type.DOUBLE;
+  }
+
+  public double fvalue() {
+      return function.eval(rand.name());
+  }
+  
+  public String svalue() {
+    return String.valueOf(fvalue());
+  }
+  public boolean bvalue() { return fvalue() != 0; }
 }
 
 class ConditionalExpr extends Expr {
