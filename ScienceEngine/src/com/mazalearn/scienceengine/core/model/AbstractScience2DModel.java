@@ -265,6 +265,8 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
             v.setValue(body.getAngularVelocity());
           } else if (property.equals("Angle")) {
             v.setValue(body.getAngle());
+          } else if (property.equals("NumRevolutions")) {
+            v.setValue(body.getNumRevolutions());
           }
         }
       }

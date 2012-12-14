@@ -96,7 +96,8 @@ public class WaveView extends AbstractScience2DView {
   }
   
   @Override
-  public AbstractTutor createTutor(String name, Guru guru, String type) {
-    return super.createTutor(name, guru, type);
+  public AbstractTutor createTutor(String name, Guru guru, String type,
+      int deltaSuccessScore, int deltaFailureScore) {
+    return super.createTutor(name, guru, type, deltaSuccessScore, deltaFailureScore);
   }
 }

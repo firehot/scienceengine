@@ -1,8 +1,11 @@
 package com.mazalearn.scienceengine.guru;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Array;
 
 public abstract class AbstractTutor extends Group implements ITutor{
+
+  protected Array<?> components;
 
   public abstract String getTitle();
 
@@ -17,4 +20,9 @@ public abstract class AbstractTutor extends Group implements ITutor{
   public abstract int getDeltaFailureScore();
 
   public abstract void checkProgress();
+
+  @Override
+  public void initializeComponents(Array<?> components) {
+    this.components = components;
+  }
 }

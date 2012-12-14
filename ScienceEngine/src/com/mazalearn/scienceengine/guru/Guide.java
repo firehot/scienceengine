@@ -30,10 +30,18 @@ public class Guide extends AbstractTutor {
   private float guruWidth;
 
   private float guruHeight;
+
+  private int deltaSuccessScore;
+
+  private int deltaFailureScore;
     
-  public Guide(IScience2DModel science2DModel, Guru guru) {
+  public Guide(IScience2DModel science2DModel, Guru guru, int deltaSuccessScore, 
+      int deltaFailureScore) {
+    super();
     this.science2DModel = science2DModel;
     this.guru = guru;
+    this.deltaSuccessScore = deltaSuccessScore;
+    this.deltaFailureScore = deltaFailureScore;
   }
   
   /* (non-Javadoc)
@@ -68,13 +76,14 @@ public class Guide extends AbstractTutor {
     this.setSize(0, 0);
     this.guruWidth = width;
     this.guruHeight = height;
+    // TODO: LevelLoader.readComponents(components, science2DModel, false);
     LevelLoader.readConfigs(configs, science2DModel);
   }
   
   @Override
   public void act(float delta) {
     super.act(delta);
-    if (Math.round(ScienceEngine.getTime()) % 10 != 0) return;
+    if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     if (currentStage < 0 || currentStage == subgoals.size()) return;
     Subgoal subgoal = subgoals.get(currentStage);
     while (subgoal.isStageCompleted(science2DModel)) {
@@ -116,18 +125,14 @@ public class Guide extends AbstractTutor {
     this.stageBeginTime = new float[subgoals.size() + 1];
   }
 
-  public int getSubsequentDeltaSuccessScore() {
-    return 5;
-  }
-
   @Override
   public int getDeltaSuccessScore() {
-    return 0;
+    return deltaSuccessScore;
   }
 
   @Override
   public int getDeltaFailureScore() {
-    return 0;
+    return deltaFailureScore;
   }
 
 }

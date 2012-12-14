@@ -1,27 +1,25 @@
 package com.mazalearn.scienceengine.core.lang;
 
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.IParameter;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class Event {
-  private Science2DBody body;
-  IParameter parameter;
+  private String object;
+  private String action;
   // Time of execution of science engine
   private float time;
   
-  public Event(Science2DBody body, IParameter parameter) {
-    this.body = body;
-    this.parameter = parameter;
+  public Event(String object, String action) {
+    this.object = object;
+    this.action = action;
     this.time = ScienceEngine.getTime();
   }
 
-  public Science2DBody getBody() {
-    return body;
+  public String getObject() {
+    return object;
   }
 
-  public IParameter getParameter() {
-    return parameter;
+  public String getAction() {
+    return action;
   }
 
   public float getTime() {

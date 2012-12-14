@@ -236,10 +236,10 @@ class BinaryExpr extends Expr {
     }
     
     public boolean bvalue() {
-      if (rand0.type == Type.DOUBLE)
+      if (rand0.type == Type.DOUBLE || rand1.type == Type.DOUBLE)
         return fvalue() != 0;
       
-      if (rand0.type == Type.STRING)
+      if (rand0.type == Type.STRING || rand1.type == Type.STRING)
         return Double.parseDouble(svalue()) != 0;
       
       boolean b0 = rand0.bvalue();

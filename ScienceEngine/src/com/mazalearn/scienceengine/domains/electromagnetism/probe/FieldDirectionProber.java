@@ -26,8 +26,9 @@ public class FieldDirectionProber extends AbstractFieldProber {
       new Subgoal("The direction of the field is where the compass needle's North would point.")
   };
   
-  public FieldDirectionProber(IScience2DModel science2DModel, final Guru guru) {
-    super(science2DModel, guru);
+  public FieldDirectionProber(IScience2DModel science2DModel, final Guru guru,
+      int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, guru, deltaSuccessScore, deltaFailureScore);
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};

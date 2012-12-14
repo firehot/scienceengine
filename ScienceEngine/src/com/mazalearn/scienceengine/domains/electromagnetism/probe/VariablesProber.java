@@ -33,8 +33,8 @@ public class VariablesProber extends AbstractScience2DProber {
   private IScience2DModel science2DModel;
   
   public VariablesProber(final Guru guru, final IScience2DModel science2DModel, Skin skin, 
-      Actor modelControls, ControlPanel controlPanel) {
-    super(guru);
+      Actor modelControls, ControlPanel controlPanel, int deltaSuccessScore, int deltaFailureScore) {
+    super(guru, deltaSuccessScore, deltaFailureScore);
     this.configTable = createConfigTable(science2DModel, skin);
     this.modelControls = modelControls;
     this.controlPanel = controlPanel;
@@ -123,15 +123,5 @@ public class VariablesProber extends AbstractScience2DProber {
   @Override
   public String getHint() {
     return null;
-  }
-
-  @Override
-  public int getDeltaSuccessScore() {
-    return 1000;
-  }
-  
-  @Override
-  public int getDeltaFailureScore() {
-    return -10;
   }
 }

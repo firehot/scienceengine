@@ -125,23 +125,24 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     @Override
   public void challenge(boolean challenge) {
     // Enable/Disable compass
-    if (compassActor != null) {
-      compassActor.setVisible(!challenge);
-    }
+//    if (compassActor != null) {
+//      compassActor.setVisible(!challenge);
+//    }
     super.challenge(challenge);
   };
   
   @Override
-  public AbstractTutor createTutor(String name, Guru guru, String type) {
+  public AbstractTutor createTutor(String name, Guru guru, String type, 
+      int deltaSuccessScore, int deltaFailureScore) {
     if ("FieldMagnitudeProber".equals(name)) {
-      return new FieldMagnitudeProber(emModel, guru);
+      return new FieldMagnitudeProber(emModel, guru, deltaSuccessScore, deltaFailureScore);
     } else if ("FieldDirectionProber".equals(name)) {
-      return new FieldDirectionProber(emModel, guru);
+      return new FieldDirectionProber(emModel, guru, deltaSuccessScore, deltaFailureScore);
     } else if ("LightProber".equals(name)) {
-      return new LightProber(emModel, guru);
+      return new LightProber(emModel, guru, deltaSuccessScore, deltaFailureScore);
     } else if ("VariablesProber".equals(name)) {
-      return new VariablesProber(guru, emModel, skin, findActor("ModelControls"), controlPanel);
+      return new VariablesProber(guru, emModel, skin, findActor("ModelControls"), controlPanel, deltaSuccessScore, deltaFailureScore);
     }
-    return super.createTutor(name, guru, type);
+    return super.createTutor(name, guru, type, deltaSuccessScore, deltaFailureScore);
   }
 }

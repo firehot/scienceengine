@@ -55,8 +55,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] bFields;
     
   public FieldMagnitudeProber(IScience2DModel science2DModel,
-      final Guru guru) {
-    super(science2DModel, guru);
+      final Guru guru, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, guru, deltaSuccessScore, deltaFailureScore);
     imageCorrect = new ProbeImage();
     imageCorrect.addListener(new ClickResult(true, guru));
     imageWrong = new ProbeImage();
@@ -69,7 +69,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   
   @Override
   public String getTitle() {
-    return "Click where the magnetic field is stronger";
+    return "Touch the ? where the magnetic field is stronger";
   }
   
   @Override

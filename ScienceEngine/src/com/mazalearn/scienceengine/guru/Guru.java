@@ -22,8 +22,8 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
  * 
  */
 public class Guru extends Group implements IDoneCallback {
-  private static final int WIN_THRESHOLD = 100;
-  private static final int LOSS_THRESHOLD = -30;
+  private static final int WIN_THRESHOLD = 10000;
+  private static final int LOSS_THRESHOLD = -300;
   
   int tutorIndex = -1;
   ITutor currentTutor;
@@ -98,7 +98,7 @@ public class Guru extends Group implements IDoneCallback {
     
     // Reinitialize active guides
     for (ITutor guide: registeredTutors) {
-      guide.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
+//      guide.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     }
 
     this.setVisible(true);
@@ -134,13 +134,12 @@ public class Guru extends Group implements IDoneCallback {
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
       successImage.show(getWidth()/2, getHeight()/2, deltaSuccessScore);
-      runTutor();
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
-      deltaSuccessScore = -deltaFailureScore;
-      dashboard.addScore(deltaFailureScore);
-      failureImage.show(getWidth()/2, getHeight()/2, deltaFailureScore);
+      deltaSuccessScore = deltaFailureScore;
+      dashboard.addScore(-deltaFailureScore);
+      failureImage.show(getWidth()/2, getHeight()/2, -deltaFailureScore);
     }
     // Win
     if (dashboard.getScore() >= WIN_THRESHOLD) {
@@ -155,6 +154,8 @@ public class Guru extends Group implements IDoneCallback {
       this.setVisible(false);
       return;
     }
+    if (success)
+      runTutor();
   }
   
   @Override
@@ -175,6 +176,7 @@ public class Guru extends Group implements IDoneCallback {
     deltaSuccessScore = currentTutor.getDeltaSuccessScore();
     deltaFailureScore = currentTutor.getDeltaFailureScore();
     
+    currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     currentTutor.activate(true);
     dashboard.setStatus(currentTutor.getTitle());
   }

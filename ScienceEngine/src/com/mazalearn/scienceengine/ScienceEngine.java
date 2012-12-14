@@ -317,8 +317,8 @@ public class ScienceEngine extends Game {
   public static void selectBody(Science2DBody body, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
-    eventLog.logEvent(body, Parameter.Select);
     if (body == null) return;
+    eventLog.logEvent(body.name(), Parameter.Select.name());
     stage.getGuru().checkProgress();
     displayStatus(body.getComponentTypeName(), stage);
   }
@@ -331,7 +331,12 @@ public class ScienceEngine extends Game {
   public static void selectParameter(IParameter parameter, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayStatus(parameter.name(), stage);
-    eventLog.logEvent(getSelectedBody(), parameter);
+    if (getSelectedBody() == null) return;
+    eventLog.logEvent(getSelectedBody().name(), parameter.name());
+  }
+  
+  public static EventLog getEventLog() {
+    return eventLog;
   }
 
   private static void displayStatus(String entityName, IScience2DView stage) {

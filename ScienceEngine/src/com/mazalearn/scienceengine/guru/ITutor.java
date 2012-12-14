@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.guru;
 
+import com.badlogic.gdx.utils.Array;
+
 public interface ITutor {
 
   public abstract String getTitle();
@@ -15,5 +17,7 @@ public interface ITutor {
   public abstract int getDeltaFailureScore();
 
   public abstract void checkProgress();
+
+  void initializeComponents(Array<?> components);
 
 }

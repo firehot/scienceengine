@@ -4,20 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mazalearn.scienceengine.core.lang.Event;
-import com.mazalearn.scienceengine.core.model.IParameter;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class EventLog {
   List<Event> events = new ArrayList<Event>();
   private boolean suppressDuplicates = true;
   private Event lastEvent;
   
-  public void logEvent(Science2DBody body, IParameter parameter) {
+  public void logEvent(String object, String action) {
     if (suppressDuplicates && lastEvent != null && 
-        lastEvent.getBody() == body && lastEvent.getParameter() == parameter) {
+        lastEvent.getObject().equals(object) && lastEvent.getAction().equals(action)) {
       return;
     }
-    Event event = new Event(body, parameter);
+    Event event = new Event(object, action);
     events.add(event);
+  }
+
+  public float eval(String function, String name) {
+    int pos = name.lastIndexOf(".");
+    String object = name.substring(0, pos);
+    String action = name.substring(pos + 1);
+    if ("Count".equals(function)) {
+      int count = 0;
+      // Go in reverse order and stop on end of current subgoal
+      for (int i = events.size() - 1; i >= 0; i--) {
+        Event e = events.get(i);
+        if (e.getObject().equals(object) && e.getAction().equals(action)) {
+          count++;
+        }
+      }
+      return count;
+    }
+    return 0;
   }
 }

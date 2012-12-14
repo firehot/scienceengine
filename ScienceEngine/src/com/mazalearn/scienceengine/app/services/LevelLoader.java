@@ -308,7 +308,10 @@ public class LevelLoader {
     String title = (String) tutorObj.get("title");
     Guru guru = science2DView.getGuru();
     String type = (String) tutorObj.get("type");
-    AbstractTutor tutor = science2DView.createTutor(name, guru, type);
+    float deltaSuccessScore = (Float) nvl(tutorObj.get("success"), 100.0f);
+    float deltaFailureScore = (Float) nvl(tutorObj.get("falure"), 50.0f);
+    AbstractTutor tutor = science2DView.createTutor(name, guru, type, 
+        (int) deltaSuccessScore, (int) deltaFailureScore);
     Array<?> configs = (Array<?>) tutorObj.get("configs");
     if (tutor instanceof ParameterProber) {
       String parameterName = (String) tutorObj.get("parameter");
@@ -324,12 +327,14 @@ public class LevelLoader {
       ((Guide) tutor).initialize(goal, title, configs, subgoals);
       return tutor;
     }
+    tutor.initializeComponents((Array<?>) tutorObj.get("components"));
     return tutor;
   }
 
   @SuppressWarnings("unchecked")
   private List<Subgoal> readSubgoals(Array<?> subgoalsObj) {
     List<Subgoal> subgoals = new ArrayList<Subgoal>();
+    if (subgoalsObj == null) return subgoals;
     for (int i = 0; i < subgoalsObj.size; i++) {
       try {
         subgoals.add(readSubgoal((OrderedMap<String, ?>) subgoalsObj.get(i)));
@@ -344,7 +349,7 @@ public class LevelLoader {
     String hint = (String) subgoalObj.get("hint");
     String when = (String) subgoalObj.get("when");
     String postCondition = (String) subgoalObj.get("postcondition");
-    float timeLimit = (Float) nvl(subgoalObj.get("timelimit"), 60);
-    return new Subgoal(hint, when, postCondition, (int) timeLimit);
+    float success = (Float) nvl(subgoalObj.get("success"), 100.0f);
+    return new Subgoal(hint, when, postCondition, (int) success);
   }
 }

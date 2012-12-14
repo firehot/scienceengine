@@ -71,8 +71,9 @@ public class ParameterProber extends AbstractScience2DProber {
     return image;
   }
     
-  public ParameterProber(IScience2DModel science2DModel, Guru guru, String type) {
-    super(guru);
+  public ParameterProber(IScience2DModel science2DModel, Guru guru, String type,
+      int deltaSuccessScore, int deltaFailureScore) {
+    super(guru, deltaSuccessScore, deltaFailureScore);
     this.science2DModel = science2DModel;
     this.image = new ProbeImage();
     this.type = Type.valueOf(type);

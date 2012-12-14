@@ -24,8 +24,9 @@ public class LightProber extends AbstractScience2DProber {
   };
   private IScience2DModel science2DModel;
   
-  public LightProber(IScience2DModel science2DModel, Guru guru) {
-    super(guru);
+  public LightProber(IScience2DModel science2DModel, Guru guru, 
+      int deltaSuccessScore, int deltaFailureScore) {
+    super(guru, deltaSuccessScore, deltaFailureScore);
     this.guru = guru;
     this.science2DModel = science2DModel;
     image = new ProbeImage();
