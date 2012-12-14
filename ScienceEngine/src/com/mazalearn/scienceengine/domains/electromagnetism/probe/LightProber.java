@@ -63,4 +63,9 @@ public class LightProber extends AbstractScience2DProber {
     return null;
   }
 
+
+  @Override
+  public boolean isCompleted() {
+    return true;
+  }  
 }

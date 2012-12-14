@@ -25,6 +25,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
       "free North Pole would move if placed at that point."),
       new Subgoal("The direction of the field is where the compass needle's North would point.")
   };
+  private int netSuccesses;
   
   public FieldDirectionProber(IScience2DModel science2DModel, final Guru guru,
       int deltaSuccessScore, int deltaFailureScore) {
@@ -63,6 +64,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         final boolean success = Math.abs(userField.getRotation() - bFields[0].angle()) < TOLERANCE * 100;
         fieldMeterActor.setVisible(true);
+        netSuccesses += success ? 1 : -1;
         userField.addAction(Actions.sequence(Actions.delay(2f),
             new Action() {
               @Override
@@ -110,4 +112,11 @@ public class FieldDirectionProber extends AbstractFieldProber {
   public String getHint() {
     return null;
   }
+
+  @Override
+  public boolean isCompleted() {
+    return netSuccesses >= 10;
+  }
+
+  
 }

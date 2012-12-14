@@ -197,4 +197,10 @@ public class ParameterProber extends AbstractScience2DProber {
     }
     this.resultExprVariables = parser.getVariables();
   }
+
+  @Override
+  public boolean isCompleted() {
+    return true;
+  }
+
 }

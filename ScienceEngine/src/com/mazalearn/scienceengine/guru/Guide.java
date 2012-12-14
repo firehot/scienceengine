@@ -135,4 +135,9 @@ public class Guide extends AbstractTutor {
     return deltaFailureScore;
   }
 
+  @Override
+  public boolean isCompleted() {
+    return currentStage == subgoals.size();
+  }
+
 }

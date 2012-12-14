@@ -124,4 +124,10 @@ public class VariablesProber extends AbstractScience2DProber {
   public String getHint() {
     return null;
   }
+
+  @Override
+  public boolean isCompleted() {
+    return true;
+  }
+
 }

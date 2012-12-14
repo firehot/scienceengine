@@ -6,4 +6,46 @@ components:[
 {"type":"ControlPanel","x":703.0,"y":255.0,"originX":0.0,"originY":0.0,"width":0.0,"height":0.0,"visible":true,"rotation":0.0}],
 configs:[{name:"BarMagnet.MagnetMode",permitted:false,value:"Move"},
 {name:"BarMagnet.MagnetStrength",permitted:true,value:3000.0}],
-probers:[{name: "FieldMagnitudeProber"}, {name:"FieldDirectionProber"}]}
+plan:[{name: "Guide", 
+       goal: "Can you make the compass go through one complete rotation?",
+       title: "Can you make the compass go through one complete rotation?",
+       postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+       success: 1000,
+       timelimit: 120,
+       components:[{type:"Compass", visible: "true"}],
+       subgoals: [
+         {hint: "What happens to the compass when it moves around the magnet?",
+         postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+         success: 1000
+         }],
+       },
+       {name: "Guide",
+       goal: "Can you map out the magnetic field around the magnet?",
+       title: "Can you map out the magnetic field around the magnet?",
+       postcondition: "FieldMeter.Count >= 15",
+       success: 500,
+       timelimit: 180,
+       subgoals: [
+         {hint: "What happens to the field when magnet is rotated?",
+         postcondition: "FieldMeter.Count >= 15 and Count(BarMagnet.MagnetRotation) >= 5",
+         success: 500
+         },
+         {hint: "What happens to the field when magnet strength is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(BarMagnet.MagnetStrength) >= 5",
+         success: 500
+         }
+       ]},       
+       {name: "FieldMagnitudeProber",
+        title: "Touch the ? where the field is stronger",
+        timelimit: 10,
+        success: 100,
+        failure: 50
+        }, 
+        {name:"FieldDirectionProber",
+        title: "Touch ? and Drag in the direction of the field",
+        timelimit: 10,
+        success: 100,
+        failure: 50
+        }
+  ]
+}

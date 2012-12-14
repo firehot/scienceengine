@@ -37,6 +37,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
                 public boolean act(float delta) {
                   fieldMeterActor.setVisible(false);
                   doneCallback.done(success);
+                  netSuccesses += success ? 1 : -1;
                   return true;
                 }
               })
@@ -53,6 +54,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   // Temporary vectors
   private Vector2[] points;
   private Vector2[] bFields;
+
+  private int netSuccesses;
     
   public FieldMagnitudeProber(IScience2DModel science2DModel,
       final Guru guru, int deltaSuccessScore, int deltaFailureScore) {
@@ -127,4 +130,10 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   public String getHint() {
     return null;
   }
+
+  @Override
+  public boolean isCompleted() {
+    return netSuccesses >= 10;
+  }
+
 }

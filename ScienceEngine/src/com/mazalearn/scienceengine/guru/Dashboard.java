@@ -48,7 +48,7 @@ class Dashboard extends Table {
         timeLimit -= delta;
         this.setText(String.valueOf(Math.round(timeLimit / 60) + ":" + String.valueOf(Math.round(timeLimit % 60))));
         if (timeLimit < 0) {
-          status.setText("Time Up");
+          // TODO: status.setText("Time Up");
         }
       }
     };

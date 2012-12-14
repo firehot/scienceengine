@@ -15,4 +15,58 @@
 {"name":"CurrentSource.1.CurrentFrequency","permitted":true,"value":1.0},
 {"name":"CurrentSource.1.CurrentMax","permitted":true,"value":5.0},
 {"name":"CurrentSource.1.CurrentDirection","permitted":true,"value":true}],
-"probers":[{"name": "FieldMagnitudeProber"}, {"name":"FieldDirectionProber"}]}
+plan:[{name: "Guide", 
+       goal: "Can you make the compass go through one complete rotation?",
+       title: "Can you make the compass go through one complete rotation?",
+       postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+       success: 1000,
+       timelimit: 120,
+       components:[{type:"Compass", visible: "true"}],
+       subgoals: [
+         {hint: "What happens to the compass when it moves around the wire?",
+         postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+         success: 1000
+         }],
+       },
+       {name: "Guide",
+       goal: "Can you map out the magnetic field around the wire?",
+       title: "Can you map out the magnetic field around the wire?",
+       postcondition: "FieldMeter.Count >= 15",
+       success: 500,
+       timelimit: 180,
+       subgoals: [
+         {hint: "What happens to the field when current in wire1 is DC and current max is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentMax) >= 5",
+         success: 200
+         },
+         {hint: "What happens to the field when current in wire1 is DC and current direction is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentDirection) >= 2",
+         success: 200
+         },
+         {hint: "What happens to the field when current in wire1 is AC and current max is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentMax) >= 5",
+         success: 200
+         },
+         {hint: "What happens to the field when current in wire1 is AC and current frequency is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
+         success: 200
+         },
+         {hint: "What happens to the field when current in wire2 is AC and current Max is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
+         success: 200
+         }
+       ]},       
+       {name: "FieldMagnitudeProber",
+        title: "Touch the ? where the field is stronger",
+        timelimit: 10,
+        success: 100,
+        failure: 50
+        }, 
+        {name:"FieldDirectionProber",
+        title: "Touch ? and Drag in the direction of the field",
+        timelimit: 10,
+        success: 100,
+        failure: 50
+        }
+  ]
+}
