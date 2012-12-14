@@ -35,24 +35,24 @@ plan:[{name: "Guide",
        success: 500,
        timelimit: 180,
        subgoals: [
-         {hint: "What happens to the field when current in wire1 is DC and current max is changed?",
+         {hint: "What happens to the field when current in Wire1 is DC and current max is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentMax) >= 5",
          success: 200
          },
-         {hint: "What happens to the field when current in wire1 is DC and current direction is changed?",
+         {hint: "What happens to the field when current in Wire1 is DC and current direction is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentDirection) >= 2",
          success: 200
          },
-         {hint: "What happens to the field when current in wire1 is AC and current max is changed?",
+         {hint: "What happens to the field when current in Wire1 is AC and current max is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentMax) >= 5",
          success: 200
          },
-         {hint: "What happens to the field when current in wire1 is AC and current frequency is changed?",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
+         {hint: "What happens to the field when current in Wire1 is AC and current frequency is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.2.CurrentFrequency) >= 2",
          success: 200
          },
-         {hint: "What happens to the field when current in wire2 is AC and current Max is changed?",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
+         {hint: "What happens to the field when current in Wire2 is AC and current Max is changed?",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.2.CurrentMax) >= 5",
          success: 200
          }
        ]},       
