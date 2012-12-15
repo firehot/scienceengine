@@ -6,16 +6,18 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.Parameter;
 
 /**
  * Cycles through the eligible registeredTutors - probing the user with each one.
@@ -64,22 +66,24 @@ public class Guru extends Group implements IDoneCallback {
     ((Stage)science2DView).addActor(successImage);
     ((Stage)science2DView).addActor(failureImage);
     hinter = new Hinter(skin);
-    // Place hinter to right of dashboard above the controls
-    hinter.setPosition(controlPanel.getX(), 0);
     // Place hinter to right of question mark above the controls.
     //hinter.setPosition(controlPanel.getX(),
     //    controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 20);
-    this.addActor(hinter);
     this.setVisible(false);
   }
 
   public void registerTutor(AbstractTutor tutor) {
     registeredTutors.add(tutor);
     this.addActor(tutor);
+    // Move hinter to top
+    this.addActor(hinter);
     tutor.activate(false);
   }
 
   public void startChallenge() {
+    // Reset eventlog
+    ScienceEngine.getEventLog().logEvent(ComponentType.Environment.name(), 
+        Parameter.Challenge.name());
     // Reset scores
     dashboard.resetScore();
     
@@ -141,7 +145,7 @@ public class Guru extends Group implements IDoneCallback {
           AbstractScreen.VIEWPORT_HEIGHT/2, -deltaFailureScore);
     }
     // Win
-    if (dashboard.getScore() >= WIN_THRESHOLD) {
+    if (dashboard.getScore() >= WIN_THRESHOLD || tutorIndex >= registeredTutors.size()) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
       science2DView.done(true);
       this.setVisible(false);
@@ -161,9 +165,12 @@ public class Guru extends Group implements IDoneCallback {
   @Override
   public void act(float dt) {
     super.act(dt);
-    if (Math.round(ScienceEngine.getTime()) % 10 != 0) return;
-    String hintText = currentTutor != null ? currentTutor.getHint() : null;
-    hinter.setHint(hintText);
+    if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
+    if (currentTutor != null) {
+      // Place hinter to right of dashboard above the controls
+      hinter.setPosition(controlPanel.getX(), windowHeight - getY() - 50);
+      hinter.setHint(currentTutor.getHint());
+    }
   }
   
   // Prerequisite: registeredTutors.size() >= 1

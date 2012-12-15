@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ProbeImage;
-import com.mazalearn.scienceengine.guru.Subgoal;
 
 // doubts on direction
 // Generate A at "random" point around active elements.
@@ -20,13 +20,12 @@ import com.mazalearn.scienceengine.guru.Subgoal;
 public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
-  private Subgoal[] subgoals = new Subgoal[] {
-      new Subgoal("The direction of the field is the direction in which a " +
-      "free North Pole would move if placed at that point."),
-      new Subgoal("The direction of the field is where the compass needle's North would point.")
+  private String[] hints = new String[] {
+      "The direction of the field is the direction in which a " +
+      "free North Pole would move if placed at that point.",
+      "The direction of the field is where the compass needle's North would point."
   };
-  private int netSuccesses;
-  
+  private String hint;
   public FieldDirectionProber(IScience2DModel science2DModel, final Guru guru,
       int deltaSuccessScore, int deltaFailureScore) {
     super(science2DModel, guru, deltaSuccessScore, deltaFailureScore);
@@ -104,18 +103,14 @@ public class FieldDirectionProber extends AbstractFieldProber {
       bFields[0].nor();
       image.setVisible(true);
       fieldMeterActor.setVisible(false);
+      hint = hints[MathUtils.random(0,1)];
     }
     this.setVisible(activate);
   }
 
   @Override
   public String getHint() {
-    return null;
-  }
-
-  @Override
-  public boolean isCompleted() {
-    return netSuccesses >= 10;
+    return hint;
   }
 
   

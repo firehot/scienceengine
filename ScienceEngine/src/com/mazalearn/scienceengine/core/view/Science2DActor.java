@@ -110,6 +110,7 @@ public class Science2DActor extends Actor {
     setPositionFromViewCoords(true);
     // Recalibrate lastTouch to new coordinates
     lastTouch.set(currentTouch.x, currentTouch.y);
+    ScienceEngine.selectParameter(Parameter.Move, (IScience2DView) getStage());
   }
 
   public Science2DBody getBody() {

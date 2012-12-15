@@ -6,8 +6,10 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -38,7 +40,15 @@ public class Hinter extends Group {
     hintButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         hintButton.setVisible(false);
-        SCIENTISTS.get(scientistIndex).setVisible(false);      }
+        SCIENTISTS.get(scientistIndex).setVisible(false);
+        Hinter.this.addAction(Actions.delay(30, new Action() {
+          @Override
+          public boolean act(float delta) {
+            hint = null;
+            return true;
+          }          
+        }));
+      }
     });
     
     for (final Image image: SCIENTISTS) {

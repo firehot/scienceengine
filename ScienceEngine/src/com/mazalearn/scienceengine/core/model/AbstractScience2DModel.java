@@ -273,8 +273,13 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     }
   }
 
-  public Science2DBody findBody(String componentName) {
-    return findBody(componentNameToType(componentName));
+  public Science2DBody findBody(String name) {
+    for (Science2DBody body: bodies) {
+      if (body.name().equals(name)) {
+        return body;
+      }
+    }
+    return null;
   }
 
   public abstract IComponentType componentNameToType(String componentName);

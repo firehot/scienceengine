@@ -118,7 +118,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
       // TODO: generalize
       ScienceEngine.getPlatformAdapter().showURL(
           "data/" + controller.getName() + "/" + controller.getLevel() + ".html");
-      challenge(success);
+      challenge(false);
     }
   }
   

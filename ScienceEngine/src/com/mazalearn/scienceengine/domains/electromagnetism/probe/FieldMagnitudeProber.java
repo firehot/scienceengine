@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,7 +11,6 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
 import com.mazalearn.scienceengine.guru.ProbeImage;
-import com.mazalearn.scienceengine.guru.Subgoal;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet
@@ -45,9 +45,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     }
   };
 
-  private Subgoal[] subgoals = new Subgoal[] {
-      new Subgoal("The field is stronger closer to the object generating the field"),
-      new Subgoal("The field is stronger if the current or magnet strength is larger")
+  private String[] hints = new String[] {
+      "The field is stronger closer to the object generating the field",
+      "The field is stronger if the current or magnet strength is larger"
   };
   
   private final Image imageCorrect, imageWrong;
@@ -55,8 +55,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] points;
   private Vector2[] bFields;
 
-  private int netSuccesses;
-    
+  private String hint;
+
   public FieldMagnitudeProber(IScience2DModel science2DModel,
       final Guru guru, int deltaSuccessScore, int deltaFailureScore) {
     super(science2DModel, guru, deltaSuccessScore, deltaFailureScore);
@@ -109,6 +109,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
       imageWrong.setVisible(true);
       imageCorrect.setVisible(true);
       fieldMeterActor.setVisible(false);
+      hint = hints[MathUtils.random(0,1)];
     }
     this.setVisible(activate);
   }
@@ -128,12 +129,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
 
   @Override
   public String getHint() {
-    return null;
-  }
-
-  @Override
-  public boolean isCompleted() {
-    return netSuccesses >= 10;
+    return hint;
   }
 
 }

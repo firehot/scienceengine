@@ -26,9 +26,13 @@ plan:[{name: "Guide",
        goal: "Can you map out the magnetic field around the wire?",
        title: "Can you map out the magnetic field around the wire?",
        postcondition: "FieldMeter.Count >= 15",
-       success: 500,
+       success: 1000,
        timelimit: 180,
        subgoals: [
+         {hint: "What happens to the field when the wire is moved?",
+         postcondition: "FieldMeter.Count >= 15 and Count(Wire.Move) >= 5",
+         success: 200
+         },
          {hint: "What happens to the field when current is DC and current max is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentMax) >= 5",
          success: 250

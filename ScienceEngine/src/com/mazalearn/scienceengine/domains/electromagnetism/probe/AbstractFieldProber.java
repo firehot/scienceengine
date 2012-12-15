@@ -15,6 +15,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected final IScience2DModel science2DModel;
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
+  protected int netSuccesses;
  
   protected AbstractFieldProber(IScience2DModel science2DModel, Guru guru, 
       int deltaSuccessScore, int deltaFailureScore) {
@@ -63,5 +64,10 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected void getBField(Vector2 viewPos, Vector2 bField) {
     modelPos.set(viewPos).mul(1f / ScienceEngine.PIXELS_PER_M);
     science2DModel.getBField(modelPos, bField /* output */);
+  }
+
+  @Override
+  public boolean isCompleted() {
+    return netSuccesses >= 10;
   }
 }
