@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -66,9 +65,6 @@ public class Guru extends Group implements IDoneCallback {
     ((Stage)science2DView).addActor(successImage);
     ((Stage)science2DView).addActor(failureImage);
     hinter = new Hinter(skin);
-    // Place hinter to right of question mark above the controls.
-    //hinter.setPosition(controlPanel.getX(),
-    //    controlPanel.getY() + controlPanel.getPrefHeight() / 2 + 20);
     this.setVisible(false);
   }
 
@@ -81,7 +77,7 @@ public class Guru extends Group implements IDoneCallback {
   }
 
   public void startChallenge() {
-    // Reset eventlog
+    // Mark start of challenge in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Environment.name(), 
         Parameter.Challenge.name());
     // Reset scores
@@ -134,15 +130,13 @@ public class Guru extends Group implements IDoneCallback {
       currentTutor.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
-      successImage.show(AbstractScreen.VIEWPORT_WIDTH/2, 
-          AbstractScreen.VIEWPORT_HEIGHT/2, deltaSuccessScore);
+      successImage.show(deltaSuccessScore);
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
       deltaSuccessScore = deltaFailureScore;
       dashboard.addScore(-deltaFailureScore);
-      failureImage.show(AbstractScreen.VIEWPORT_WIDTH/2, 
-          AbstractScreen.VIEWPORT_HEIGHT/2, -deltaFailureScore);
+      failureImage.show(-deltaFailureScore);
     }
     // Win
     if (dashboard.getScore() >= WIN_THRESHOLD || tutorIndex >= registeredTutors.size()) {
@@ -185,8 +179,8 @@ public class Guru extends Group implements IDoneCallback {
       currentTutor = registeredTutors.get(tutorIndex);
     }
     // Set up initial success and failure scores
-    deltaSuccessScore = currentTutor.getDeltaSuccessScore();
-    deltaFailureScore = currentTutor.getDeltaFailureScore();
+    deltaSuccessScore = currentTutor.getSuccessScore();
+    deltaFailureScore = currentTutor.getFailureScore();
     
     currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     currentTutor.activate(true);

@@ -14,13 +14,10 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   protected static final float ZERO_TOLERANCE = 1e-4f;
   protected final Guru guru;
   private Vector2 localPoint = new Vector2();
-  private int deltaFailureScore;
-  private int deltaSuccessScore;
 
   public AbstractScience2DProber(Guru guru, int deltaSuccessScore, int deltaFailureScore) {
+    super(deltaSuccessScore, deltaFailureScore);
     this.guru = guru;
-    this.deltaSuccessScore = deltaSuccessScore;
-    this.deltaFailureScore = deltaFailureScore;
   }
   
   @Override
@@ -85,22 +82,5 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
 
   private boolean approxEquals(float len1, float len2) {
     return Math.abs(len1 - len2) < TOLERANCE;
-  }
-
-  @Override
-  public abstract String getHint();
-
-  @Override
-  public int getDeltaSuccessScore() {
-    return deltaSuccessScore;
-  }
-  
-  @Override
-  public int getDeltaFailureScore() {
-    return deltaFailureScore;
-  }
-  
-  @Override
-  public void checkProgress() {
   }
 }

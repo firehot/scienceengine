@@ -12,9 +12,9 @@ public interface ITutor {
 
   public String getHint();
 
-  public int getDeltaSuccessScore();
+  public int getSuccessScore();
 
-  public int getDeltaFailureScore();
+  public int getFailureScore();
 
   public void checkProgress();
 

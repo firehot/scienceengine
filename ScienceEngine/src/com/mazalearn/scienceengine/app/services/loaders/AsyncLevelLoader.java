@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.services;
+package com.mazalearn.scienceengine.app.services.loaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;

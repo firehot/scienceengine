@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.LevelLoader;
+import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
@@ -147,7 +147,7 @@ public class ParameterProber extends AbstractScience2DProber {
   public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
     super.reinitialize(x,  y, width, height, probeMode);
     image.setVisible(false);
-    LevelLoader.readConfigs(configs, science2DModel);
+    ConfigLoader.loadConfigs(configs, science2DModel);
   }
   
   @Override

@@ -6,6 +6,13 @@ import com.badlogic.gdx.utils.Array;
 public abstract class AbstractTutor extends Group implements ITutor{
 
   protected Array<?> components;
+  private int deltaFailureScore;
+  private int deltaSuccessScore;
+
+  public AbstractTutor(int deltaSuccessScore, int deltaFailureScore) {
+    this.deltaSuccessScore = deltaSuccessScore;
+    this.deltaFailureScore = deltaFailureScore;
+  }
 
   @Override
   public abstract String getTitle();
@@ -20,14 +27,18 @@ public abstract class AbstractTutor extends Group implements ITutor{
   public abstract String getHint();
 
   @Override
-  public abstract int getDeltaSuccessScore();
-
+  public int getSuccessScore() {
+    return deltaSuccessScore;
+  }
+  
   @Override
-  public abstract int getDeltaFailureScore();
-
+  public int getFailureScore() {
+    return deltaFailureScore;
+  }
+  
   @Override
-  public abstract void checkProgress();
-
+  public void checkProgress() {
+  }
   @Override
   public void initializeComponents(Array<?> components) {
     this.components = components;

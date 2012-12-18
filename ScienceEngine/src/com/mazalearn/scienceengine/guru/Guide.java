@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.LevelLoader;
+import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 
 // outcome = function of parameter
@@ -30,18 +30,12 @@ public class Guide extends AbstractTutor {
   private float guruWidth;
 
   private float guruHeight;
-
-  private int deltaSuccessScore;
-
-  private int deltaFailureScore;
     
   public Guide(IScience2DModel science2DModel, Guru guru, int deltaSuccessScore, 
       int deltaFailureScore) {
-    super();
+    super(deltaSuccessScore, deltaFailureScore);
     this.science2DModel = science2DModel;
     this.guru = guru;
-    this.deltaSuccessScore = deltaSuccessScore;
-    this.deltaFailureScore = deltaFailureScore;
   }
   
   /* (non-Javadoc)
@@ -77,7 +71,7 @@ public class Guide extends AbstractTutor {
     this.guruWidth = width;
     this.guruHeight = height;
     // TODO: LevelLoader.readComponents(components, science2DModel, false);
-    LevelLoader.readConfigs(configs, science2DModel);
+    ConfigLoader.loadConfigs(configs, science2DModel);
   }
   
   @Override
@@ -123,16 +117,6 @@ public class Guide extends AbstractTutor {
     this.subgoals = subgoals;
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.stageBeginTime = new float[subgoals.size() + 1];
-  }
-
-  @Override
-  public int getDeltaSuccessScore() {
-    return deltaSuccessScore;
-  }
-
-  @Override
-  public int getDeltaFailureScore() {
-    return deltaFailureScore;
   }
 
   @Override
