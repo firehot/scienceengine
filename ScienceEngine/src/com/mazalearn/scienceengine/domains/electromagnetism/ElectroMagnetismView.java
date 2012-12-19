@@ -35,7 +35,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Guru;
 
 public class ElectroMagnetismView extends AbstractScience2DView {
   private FieldMeter fieldMeter;
@@ -132,17 +131,17 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   };
   
   @Override
-  public AbstractTutor createTutor(String name, Guru guru, String type, 
+  public AbstractTutor createTutor(String name, String type, 
       int deltaSuccessScore, int deltaFailureScore) {
     if ("FieldMagnitudeProber".equals(name)) {
-      return new FieldMagnitudeProber(emModel, guru, deltaSuccessScore, deltaFailureScore);
+      return new FieldMagnitudeProber(emModel, this, deltaSuccessScore, deltaFailureScore);
     } else if ("FieldDirectionProber".equals(name)) {
-      return new FieldDirectionProber(emModel, guru, deltaSuccessScore, deltaFailureScore);
+      return new FieldDirectionProber(emModel, this, deltaSuccessScore, deltaFailureScore);
     } else if ("LightProber".equals(name)) {
-      return new LightProber(emModel, guru, deltaSuccessScore, deltaFailureScore);
+      return new LightProber(emModel, this, deltaSuccessScore, deltaFailureScore);
     } else if ("VariablesProber".equals(name)) {
-      return new VariablesProber(guru, emModel, skin, findActor("ModelControls"), controlPanel, deltaSuccessScore, deltaFailureScore);
+      return new VariablesProber(emModel, this, skin, findActor("ModelControls"), controlPanel, deltaSuccessScore, deltaFailureScore);
     }
-    return super.createTutor(name, guru, type, deltaSuccessScore, deltaFailureScore);
+    return super.createTutor(name, type, deltaSuccessScore, deltaFailureScore);
   }
 }

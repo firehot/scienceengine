@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 // outcome = function of parameter
 // doubts on how parameter change affects magnitude of outcome
@@ -17,25 +17,19 @@ public class Guide extends AbstractTutor {
   private List<Subgoal> subgoals = Collections.emptyList();
   
   private String title;
-  private IScience2DModel science2DModel;
-  private Array<?> configs;
-
   private float[] stageBeginTime;
   private int currentStage = -1;
 
   private String goal;
 
-  private Guru guru;
 
   private float guruWidth;
 
   private float guruHeight;
     
-  public Guide(IScience2DModel science2DModel, Guru guru, int deltaSuccessScore, 
-      int deltaFailureScore) {
-    super(deltaSuccessScore, deltaFailureScore);
-    this.science2DModel = science2DModel;
-    this.guru = guru;
+  public Guide(IScience2DModel science2DModel, IScience2DView science2DView,
+      int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
   }
   
   /* (non-Javadoc)
@@ -52,9 +46,10 @@ public class Guide extends AbstractTutor {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      guru.setSize(guruWidth,  50);
-      guru.setPosition(0, guruHeight - 50);
+      science2DView.getGuru().setSize(guruWidth,  50);
+      science2DView.getGuru().setPosition(0, guruHeight - 50);
       currentStage = 0;
+      subgoals.get(0).reinitialize(0, guruHeight - 50, 0, 0, true);
       stageBeginTime[currentStage] = ScienceEngine.getTime();
     } 
     ScienceEngine.setProbeMode(activate);
@@ -66,12 +61,9 @@ public class Guide extends AbstractTutor {
    */
   @Override
   public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
-    this.setPosition(x, y);
-    this.setSize(0, 0);
+    super.reinitialize(x, y, 0, 0, probeMode);
     this.guruWidth = width;
     this.guruHeight = height;
-    // TODO: LevelLoader.readComponents(components, science2DModel, false);
-    ConfigLoader.loadConfigs(configs, science2DModel);
   }
   
   @Override
@@ -80,14 +72,15 @@ public class Guide extends AbstractTutor {
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     if (currentStage < 0 || currentStage == subgoals.size()) return;
     Subgoal subgoal = subgoals.get(currentStage);
-    while (subgoal.isStageCompleted(science2DModel)) {
+    while (subgoal.isCompleted()) {
       currentStage++;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
       if (currentStage == subgoals.size()) {
-        guru.done(true);
+        science2DView.getGuru().done(true);
         break;
       }
       subgoal = subgoals.get(currentStage);
+      subgoal.reinitialize(0, guruHeight - 50, 0, 0, true);
     }
   }
 
@@ -99,21 +92,21 @@ public class Guide extends AbstractTutor {
     if (currentStage < 0 || currentStage == subgoals.size()) return null;
     float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
     Subgoal subgoal = subgoals.get(currentStage);
-    return subgoal.getHint(timeElapsed);
+    return subgoal.getHint();
   }
 
   @Override
   public void checkProgress() {
     if (currentStage < 0 || currentStage == subgoals.size()) return;
     Subgoal subgoal = subgoals.get(currentStage);
-    subgoal.checkProgress(science2DModel);
+    subgoal.checkProgress();
   }
   
-  public void initialize(String goal, String title, Array<?> configs, 
-      List<Subgoal> subgoals) {
+  public void initialize(String goal, String title, Array<?> components,
+      Array<?> configs, List<Subgoal> subgoals) {
+    super.initialize(components, configs);
     this.goal = goal;
     this.title = title;
-    this.configs = configs;
     this.subgoals = subgoals;
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.stageBeginTime = new float[subgoals.size() + 1];

@@ -46,7 +46,8 @@ public class Guru extends Group implements IDoneCallback {
   private IScience2DModel science2DModel;
 
   public Guru(final Skin skin, float width, float height,
-      IScience2DView science2DView, IScience2DModel science2dModel, ControlPanel controlPanel) {
+      IScience2DView science2DView, IScience2DModel science2dModel, 
+      ControlPanel controlPanel) {
     super();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
@@ -197,13 +198,6 @@ public class Guru extends Group implements IDoneCallback {
 
   public void setTitle(String text) {
     dashboard.setStatus(text);
-  }
-
-  public Actor findViewActor(String name) {
-    for (Actor actor: science2DView.getActors()) {
-      if (name.equals(actor.getName())) return actor;
-    }
-    return null;
   }
 
   public void checkProgress() {

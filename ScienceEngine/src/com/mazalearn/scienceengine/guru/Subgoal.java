@@ -11,21 +11,20 @@ import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
-public class Subgoal {
-  private final String hint;
+public class Subgoal extends AbstractTutor {
+  private final String title;
   private final Expr postCondition;
   private Collection<Variable> variables;
-  private int deltaSuccessScore;
   private String when;
   private boolean progress;
 
-  public Subgoal(String hintText) {
-    this(hintText, null, "1", 60);
-  }
-  
-  public Subgoal(String hint, String when, String postConditionString, int deltaSuccessScore) {
-    this.hint = hint;
+  public Subgoal(IScience2DModel science2DModel, IScience2DView science2DView,
+      String title, String when, String postConditionString,
+      int deltaSuccessScore) {
+    super(science2DModel, science2DView, deltaSuccessScore, 0);
+    this.title = title;
     Parser parser = new Parser();
     Map<String, IFunction> functions = new HashMap<String, IFunction>();
     functions.put("Count", new IFunction() {
@@ -42,12 +41,11 @@ public class Subgoal {
     }
     this.variables = parser.getVariables();
     this.when = when;
-    this.deltaSuccessScore = deltaSuccessScore;
   }
 
-  public String getHint(float timeElapsed) {
+  public String getHint() {
     if (!progress) {
-      return hint;
+      return title;
     }
     return null;
   }
@@ -56,17 +54,24 @@ public class Subgoal {
     return when;
   }
 
-  public boolean isStageCompleted(IScience2DModel science2DModel) {
+  public boolean isCompleted() {
     if (postCondition == null) return false;  
     science2DModel.bindParameterValues(variables);
     return postCondition.bvalue();
   }
 
-  public long getDeltaSuccessScore() {
-    return deltaSuccessScore;
+  public void checkProgress() {
+    this.progress = isCompleted();
   }
 
-  public void checkProgress(IScience2DModel science2DModel) {
-    this.progress = isStageCompleted(science2DModel);
+  @Override
+  public String getTitle() {
+    return title;
+  }
+
+  @Override
+  public void activate(boolean activate) {
+    // TODO Auto-generated method stub
+    
   }
 }

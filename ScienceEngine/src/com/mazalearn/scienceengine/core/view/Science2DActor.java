@@ -52,38 +52,44 @@ public class Science2DActor extends Actor {
     ClickListener touchLlistener = new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        if (MovementMode.valueOf(getMovementMode()) == MovementMode.None) return false;
-        lastTouch.set(event.getStageX(), event.getStageY());
-        if (MovementMode.valueOf(getMovementMode()) != MovementMode.Rotate) {
-          drag = true;
+        switch(MovementMode.valueOf(getMovementMode())) {
+        case None: return false;
+        case Move: drag = true; // fall thru
+        case Rotate: lastTouch.set(event.getStageX(), event.getStageY());
         }
         return true;
       }
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
-        if (MovementMode.valueOf(getMovementMode()) != MovementMode.Move) return;
         // Get negative of movement vector
         if (drag) moveToCurrent();
       }
 
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        drag = false;
-        if (MovementMode.valueOf(getMovementMode()) != MovementMode.Rotate) return;
-        // Get negative of movement vector
-        lastTouch.sub(event.getStageX(), event.getStageY());
-        // Scale displacement vector suitably to get a proportional force
-        lastTouch.mul(-10000);
-        // view coords of current touch
-        viewPos.set(event.getStageX(), event.getStageY());
-        // box2d point of current touch
-        getBox2DPositionFromViewPosition(viewPos, viewPos, getRotation());
-        // Use center as origin - dont understand why this step
-        viewPos.sub(getWidth() / (2 * ScienceEngine.PIXELS_PER_M), 
-            getHeight() / (2 * ScienceEngine.PIXELS_PER_M));
-        body.applyForce(lastTouch, viewPos);
-        ScienceEngine.selectParameter(Parameter.Rotate, (IScience2DView) getStage());
+        switch(MovementMode.valueOf(getMovementMode())) {
+        case None: return;
+        case Move: 
+          drag = false;
+          ScienceEngine.selectParameter(Parameter.Move, (IScience2DView) getStage());
+          return;
+        case Rotate:
+          // Get negative of movement vector
+          lastTouch.sub(event.getStageX(), event.getStageY());
+          // Scale displacement vector suitably to get a proportional force
+          lastTouch.mul(-10000);
+          // view coords of current touch
+          viewPos.set(event.getStageX(), event.getStageY());
+          // box2d point of current touch
+          getBox2DPositionFromViewPosition(viewPos, viewPos, getRotation());
+          // Use center as origin - dont understand why this step
+          viewPos.sub(getWidth() / (2 * ScienceEngine.PIXELS_PER_M), 
+              getHeight() / (2 * ScienceEngine.PIXELS_PER_M));
+          body.applyForce(lastTouch, viewPos);
+          ScienceEngine.selectParameter(Parameter.Rotate, (IScience2DView) getStage());
+          return;
+        }
       }
 
     };
@@ -110,7 +116,6 @@ public class Science2DActor extends Actor {
     setPositionFromViewCoords(true);
     // Recalibrate lastTouch to new coordinates
     lastTouch.set(currentTouch.x, currentTouch.y);
-    ScienceEngine.selectParameter(Parameter.Move, (IScience2DView) getStage());
   }
 
   public Science2DBody getBody() {

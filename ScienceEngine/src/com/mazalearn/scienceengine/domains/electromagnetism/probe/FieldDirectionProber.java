@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
 // doubts on direction
@@ -26,9 +26,10 @@ public class FieldDirectionProber extends AbstractFieldProber {
       "The direction of the field is where the compass needle's North would point."
   };
   private String hint;
-  public FieldDirectionProber(IScience2DModel science2DModel, final Guru guru,
+  public FieldDirectionProber(IScience2DModel science2DModel, 
+      final IScience2DView science2DView,
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, guru, deltaSuccessScore, deltaFailureScore);
+    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};
@@ -68,7 +69,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
             new Action() {
               @Override
               public boolean act(float delta) {
-                guru.done(success);
+                science2DView.getGuru().done(success);
                 fieldMeterActor.setVisible(false);
                 userField.setVisible(false);
                 return true;
@@ -94,7 +95,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      guru.setupProbeConfigs(science2DModel.getAllConfigs(), false);
+      science2DView.getGuru().setupProbeConfigs(science2DModel.getAllConfigs(), false);
       generateProbePoints(points);
       getBField(points[0], bFields[0]);
       createFieldMeterSamples(points, bFields);

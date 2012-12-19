@@ -5,23 +5,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.guru.Guru;
 
 public abstract class AbstractFieldProber extends AbstractScience2DProber {
   private final Vector2 modelPos = new Vector2();
-  protected final IScience2DModel science2DModel;
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
   protected int netSuccesses;
  
-  protected AbstractFieldProber(IScience2DModel science2DModel, Guru guru, 
+  protected AbstractFieldProber(IScience2DModel science2DModel, IScience2DView science2DView, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(guru, deltaSuccessScore, deltaFailureScore);
-    this.science2DModel = science2DModel;
-    this.fieldMeterActor = (Science2DActor) guru.findViewActor("FieldMeter");
+    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+    this.fieldMeterActor = (Science2DActor) science2DView.findActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
     }
@@ -40,7 +38,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     String[] actorNames = 
         new String[] { "BarMagnet", "Wire 1", "Wire 2", "ElectroMagnet"};
     for (String actorName: actorNames) {
-      Science2DActor actor = (Science2DActor) guru.findViewActor(actorName);
+      Science2DActor actor = (Science2DActor) science2DView.findActor(actorName);
       if (actor != null) {
         if (probeMode) {
           actor.setMovementMode(MovementMode.None.name());

@@ -2,14 +2,24 @@ package com.mazalearn.scienceengine.guru;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.app.services.loaders.ComponentLoader;
+import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public abstract class AbstractTutor extends Group implements ITutor{
 
   protected Array<?> components;
+  protected Array<?> configs;
   private int deltaFailureScore;
   private int deltaSuccessScore;
+  protected final IScience2DModel science2DModel;
+  protected final IScience2DView science2DView;
 
-  public AbstractTutor(int deltaSuccessScore, int deltaFailureScore) {
+  public AbstractTutor(IScience2DModel science2DModel, IScience2DView science2DView,
+      int deltaSuccessScore, int deltaFailureScore) {
+    this.science2DModel = science2DModel;
+    this.science2DView = science2DView;
     this.deltaSuccessScore = deltaSuccessScore;
     this.deltaFailureScore = deltaFailureScore;
   }
@@ -21,7 +31,12 @@ public abstract class AbstractTutor extends Group implements ITutor{
   public abstract void activate(boolean activate);
 
   @Override
-  public abstract void reinitialize(float x, float y, float width, float height, boolean probeMode);
+  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
+    this.setPosition(x, y);
+    this.setSize(width, height);
+    new ComponentLoader(science2DModel, science2DView).loadComponents(components, false);
+    ConfigLoader.loadConfigs(configs, science2DModel);
+  }
 
   @Override
   public abstract String getHint();
@@ -39,9 +54,11 @@ public abstract class AbstractTutor extends Group implements ITutor{
   @Override
   public void checkProgress() {
   }
+  
   @Override
-  public void initializeComponents(Array<?> components) {
+  public void initialize(Array<?> components, Array<?> configs) {
     this.components = components;
+    this.configs = configs;
   }
   
   @Override

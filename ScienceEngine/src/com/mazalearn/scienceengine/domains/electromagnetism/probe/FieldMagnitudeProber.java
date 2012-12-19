@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
@@ -58,12 +58,12 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private String hint;
 
   public FieldMagnitudeProber(IScience2DModel science2DModel,
-      final Guru guru, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, guru, deltaSuccessScore, deltaFailureScore);
+      final IScience2DView science2DView, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
     imageCorrect = new ProbeImage();
-    imageCorrect.addListener(new ClickResult(true, guru));
+    imageCorrect.addListener(new ClickResult(true, science2DView.getGuru()));
     imageWrong = new ProbeImage();
-    imageWrong.addListener(new ClickResult(false, guru));
+    imageWrong.addListener(new ClickResult(false, science2DView.getGuru()));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
@@ -85,7 +85,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      guru.setupProbeConfigs(science2DModel.getAllConfigs(), false);
+      science2DView.getGuru().setupProbeConfigs(science2DModel.getAllConfigs(), false);
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2

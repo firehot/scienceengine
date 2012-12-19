@@ -15,33 +15,32 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ProbeImage;
-import com.mazalearn.scienceengine.guru.Subgoal;
 
 public class VariablesProber extends AbstractScience2DProber {
 
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
-  private Subgoal[] subgoals = new Subgoal[] {
-      new Subgoal("Light intensity increases when more current is induced in the coil.")
+  private String[] hints = new String[] {
+      "Light intensity increases when more current is induced in the coil."
   };
   private Table configTable;
   private Actor modelControls;
   private ControlPanel controlPanel;
-  private IScience2DModel science2DModel;
   
-  public VariablesProber(final Guru guru, final IScience2DModel science2DModel, Skin skin, 
+  public VariablesProber(final IScience2DModel science2DModel, final IScience2DView science2DView,
+      Skin skin, 
       Actor modelControls, ControlPanel controlPanel, int deltaSuccessScore, int deltaFailureScore) {
-    super(guru, deltaSuccessScore, deltaFailureScore);
+    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
     this.configTable = createConfigTable(science2DModel, skin);
     this.modelControls = modelControls;
     this.controlPanel = controlPanel;
-    this.science2DModel = science2DModel;
-    configTable.setPosition(100, guru.getHeight() - 100);
+    configTable.setPosition(100, science2DView.getGuru().getHeight() - 100);
     this.addActor(configTable);
 
+    // TODO: a lot of hardcoding here - need to abstract better.
     final Set<String> correctVariables1 = new HashSet<String>();
     for (String configName: new String[] {"BarMagnet Strength", "BarMagnet MovementMode", "PickupCoil Coil Loops"}) {
       correctVariables1.add(configName);
@@ -54,7 +53,7 @@ public class VariablesProber extends AbstractScience2DProber {
 
     image = new ProbeImage();
     this.addActor(image);
-    image.setPosition(650, guru.getHeight() - 100);
+    image.setPosition(650, science2DView.getGuru().getHeight() - 100);
     image.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {
@@ -64,7 +63,7 @@ public class VariablesProber extends AbstractScience2DProber {
             chosenVariables.add(config.getName());
           }
         }
-        guru.done(correctVariables1.equals(chosenVariables) || correctVariables2.equals(chosenVariables));
+        science2DView.getGuru().done(correctVariables1.equals(chosenVariables) || correctVariables2.equals(chosenVariables));
       }
     });
   }
@@ -122,7 +121,7 @@ public class VariablesProber extends AbstractScience2DProber {
 
   @Override
   public String getHint() {
-    return null;
+    return hints[0];
   }
 
   @Override

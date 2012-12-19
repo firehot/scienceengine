@@ -15,7 +15,6 @@ import com.mazalearn.scienceengine.domains.waves.view.Boundary;
 import com.mazalearn.scienceengine.domains.waves.view.Hand;
 import com.mazalearn.scienceengine.domains.waves.view.WaveBox;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Guru;
 
 public class WaveView extends AbstractScience2DView {
 
@@ -96,8 +95,8 @@ public class WaveView extends AbstractScience2DView {
   }
   
   @Override
-  public AbstractTutor createTutor(String name, Guru guru, String type,
+  public AbstractTutor createTutor(String name, String type,
       int deltaSuccessScore, int deltaFailureScore) {
-    return super.createTutor(name, guru, type, deltaSuccessScore, deltaFailureScore);
+    return super.createTutor(name, type, deltaSuccessScore, deltaFailureScore);
   }
 }

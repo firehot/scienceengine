@@ -18,7 +18,7 @@ public interface ITutor {
 
   public void checkProgress();
 
-  public void initializeComponents(Array<?> components);
+  public void initialize(Array<?> components, Array<?> configs);
 
   public boolean isCompleted();
 

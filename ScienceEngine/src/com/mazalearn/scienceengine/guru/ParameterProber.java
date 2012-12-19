@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
@@ -19,6 +18,7 @@ import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.DummyBody;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 // outcome = function of parameter
 // doubts on how parameter change affects outcome
@@ -33,17 +33,13 @@ public class ParameterProber extends AbstractScience2DProber {
     None;
   }
   
-  private Subgoal[] subgoals = new Subgoal[] {
-      new Subgoal("Use Fleming's left hand rule")
+  private String[] hints = new String[] {
+      "Use Fleming's left hand rule"
   };
   
   protected Type type;
   protected Image image;
   protected ClickResult imageListener;
-
-  protected Array<?> configs;
-
-  private IScience2DModel science2DModel;
 
   protected String title;
 
@@ -71,12 +67,12 @@ public class ParameterProber extends AbstractScience2DProber {
     return image;
   }
     
-  public ParameterProber(IScience2DModel science2DModel, Guru guru, String type,
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(guru, deltaSuccessScore, deltaFailureScore);
-    this.science2DModel = science2DModel;
+  public ParameterProber(IScience2DModel science2DModel, IScience2DView science2DView,
+      String type, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
     this.image = new ProbeImage();
     this.type = Type.valueOf(type);
+    Guru guru = science2DView.getGuru();
     if (this.type == Type.Spin) {   
       image.setX(guru.getWidth() / 2 - image.getWidth() / 2 - 50);
       image.setY(guru.getHeight() / 2 - image.getHeight() / 2);
@@ -147,7 +143,6 @@ public class ParameterProber extends AbstractScience2DProber {
   public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
     super.reinitialize(x,  y, width, height, probeMode);
     image.setVisible(false);
-    ConfigLoader.loadConfigs(configs, science2DModel);
   }
   
   @Override
@@ -156,13 +151,13 @@ public class ParameterProber extends AbstractScience2DProber {
       if (type == Type.Spin) {
         List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
         configs.add(probeConfig);
-        guru.setupProbeConfigs(configs, false);
+        science2DView.getGuru().setupProbeConfigs(configs, false);
         science2DModel.bindParameterValues(resultExprVariables);
         imageListener.setResult(resultExpr.fvalue() == 1 ? 0 : 1);
       } else {
         float value = MathUtils.random(0f, 10f);
         dummy.setConfigParameter(probeConfig.getParameter(), value);
-        guru.setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
+        science2DView.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
       }
     } else {
       dummy.setConfigParameter(null, 0);
@@ -175,7 +170,7 @@ public class ParameterProber extends AbstractScience2DProber {
   
   @Override
   public String getHint() {
-    return subgoals[0].getHint(0);
+    return hints[0];
   }
 
   @Override
@@ -183,7 +178,9 @@ public class ParameterProber extends AbstractScience2DProber {
   }
   
   public void initialize(String title, IModelConfig<?> probeConfig, 
-      String resultExprString, String type, Array<?> configs) {
+      String resultExprString, String type, Array<?> components, 
+      Array<?> configs) {
+    super.initialize(components, configs);
     this.title = title;
     this.probeConfig = probeConfig;
     this.configs = configs;

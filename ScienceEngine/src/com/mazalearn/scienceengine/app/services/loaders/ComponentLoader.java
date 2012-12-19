@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
-class ComponentLoader {
+public class ComponentLoader {
 
   private IScience2DModel science2DModel;
   private IScience2DView science2DView;
@@ -44,7 +44,9 @@ class ComponentLoader {
   public void loadComponents(Array<?> components, boolean create) {
     if (components == null)
       return;
-    componentTypeCount.clear();
+    if (create) {
+      componentTypeCount.clear();
+    }
     Gdx.app.log(ScienceEngine.LOG, "Loading components");
 
     for (int i = 0; i < components.size; i++) {
@@ -71,19 +73,28 @@ class ComponentLoader {
           + type);
       return;
     }
-    actor.setX(x);
-    actor.setY(y);
-    actor.setOriginX((Float) LevelLoader.nvl(component.get("originX"), 0f));
-    actor.setOriginY((Float) LevelLoader.nvl(component.get("originY"), 0f));
-    actor.setWidth((Float) LevelLoader.nvl(component.get("width"), 20f));
-    actor.setHeight((Float) LevelLoader.nvl(component.get("height"), 20f));
-    actor.setVisible((Boolean) LevelLoader.nvl(component.get("visible"), true));
-    actor.setRotation(rotation);
+    if (component.get("x") != null)
+      actor.setX(x);
+    if (component.get("y") != null)
+      actor.setY(y);
+    if (component.get("originX") != null)
+      actor.setOriginX((Float) component.get("originX"));
+    if (component.get("originY") != null)
+      actor.setOriginY((Float) component.get("originY"));
+    if (component.get("width") != null)
+      actor.setWidth((Float) component.get("width"));
+    if (component.get("height") != null)
+      actor.setHeight((Float) component.get("height"));
+    if (component.get("visible") != null)
+      actor.setVisible((Boolean) component.get("visible"));
+    if (component.get("rotation") != null)
+      actor.setRotation(rotation);
     if (actor instanceof Science2DActor) {
       Science2DActor science2DActor = (Science2DActor) actor;
       science2DActor.setPositionFromViewCoords(false);
-      science2DActor.setMovementMode((String) LevelLoader.nvl(
-          component.get("move"), "None"));
+      if (component.get("move") != null)
+        science2DActor.setMovementMode((String) LevelLoader.nvl(
+            component.get("move"), "None"));
       if ((Boolean) LevelLoader.nvl(component.get("bodytype"), false)) {
         science2DActor.getBody().setType(BodyType.DynamicBody);
       } else {
@@ -97,15 +108,13 @@ class ComponentLoader {
   }
 
   private Actor createActor(String type, float x, float y, float rotation) {
-    Science2DBody science2DBody = science2DModel.addBody(type, x
-        / ScienceEngine.PIXELS_PER_M, y / ScienceEngine.PIXELS_PER_M, rotation
-        * MathUtils.degreesToRadians);
-    Actor actor = null;
-    if (science2DBody != null) {
-      actor = science2DView.addScience2DActor(science2DBody);
-    } else {
-      actor = science2DView.addVisualActor(type);
-    }
+    Science2DBody science2DBody = 
+        science2DModel.addBody(type, x / ScienceEngine.PIXELS_PER_M, 
+            y / ScienceEngine.PIXELS_PER_M, 
+            rotation * MathUtils.degreesToRadians);
+    Actor actor = (science2DBody != null) 
+        ? science2DView.addScience2DActor(science2DBody)
+        : science2DView.addVisualActor(type);
     if (actor == null && type.equals("ControlPanel")) {
       actor = science2DView.findActor(type);
     }
