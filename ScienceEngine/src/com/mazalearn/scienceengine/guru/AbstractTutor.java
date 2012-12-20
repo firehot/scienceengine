@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.guru;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -18,6 +19,7 @@ public abstract class AbstractTutor extends Group implements ITutor{
   private int deltaSuccessScore;
   protected final IScience2DModel science2DModel;
   protected final IScience2DView science2DView;
+  protected String[] hints;
 
   public AbstractTutor(IScience2DModel science2DModel, IScience2DView science2DView,
       int deltaSuccessScore, int deltaFailureScore) {
@@ -28,7 +30,7 @@ public abstract class AbstractTutor extends Group implements ITutor{
   }
 
   @Override
-  public abstract String getTitle();
+  public abstract String getGoal();
 
   @Override
   public abstract void activate(boolean activate);
@@ -39,13 +41,17 @@ public abstract class AbstractTutor extends Group implements ITutor{
     this.setSize(width, height);
     new ComponentLoader(science2DModel, science2DView).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DModel);
-    // Mark start of challenge in event log
+    // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());
   }
 
   @Override
-  public abstract String getHint();
+  public String getHint() {
+    if (hints.length == 0) return null;
+    return hints[MathUtils.random(0, hints.length - 1)];
+  }
+
 
   @Override
   public int getSuccessScore() {

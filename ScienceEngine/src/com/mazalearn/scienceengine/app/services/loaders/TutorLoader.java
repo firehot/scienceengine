@@ -30,7 +30,7 @@ class TutorLoader {
   public AbstractTutor loadTutor(OrderedMap<String, ?> tutorObj) {
     String name = (String) tutorObj.get("name");
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + name);
-    String title = (String) tutorObj.get("title");
+    String goal = (String) tutorObj.get("goal");
     String type = (String) tutorObj.get("type");
     float deltaSuccessScore = (Float) LevelLoader.nvl(tutorObj.get("success"),
         100.0f);
@@ -43,16 +43,20 @@ class TutorLoader {
     if (tutor instanceof ParameterProber) {
       String parameterName = (String) tutorObj.get("parameter");
       String resultExpr = (String) tutorObj.get("result");
+      Array<?> hintObj = (Array<?>) tutorObj.get("hints");
+      String[] hints = new String[hintObj.toArray().length];
+      for (int i = 0; i < hints.length; i++) {
+        hints[i] = (String) hintObj.get(i);
+      }
       IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
-      ((ParameterProber) tutor).initialize(title, parameter, resultExpr, type,
-          components, configs);
+      ((ParameterProber) tutor).initialize(goal, parameter, resultExpr, type,
+          components, configs, hints);
       return tutor;
     }
     if (tutor instanceof Guide) {
-      String goal = (String) tutorObj.get("goal");
       Array<?> subgoalsObj = (Array<?>) tutorObj.get("subgoals");
       List<Subgoal> subgoals = loadSubgoals(subgoalsObj);
-      ((Guide) tutor).initialize(goal, title, components, configs, subgoals);
+      ((Guide) tutor).initialize(goal, components, configs, subgoals);
       return tutor;
     }
     tutor.initialize(components, configs);
@@ -76,11 +80,11 @@ class TutorLoader {
 
   private Subgoal loadSubgoal(OrderedMap<String, ?> subgoalObj)
       throws SyntaxException {
-    String hint = (String) subgoalObj.get("hint");
+    String goal = (String) subgoalObj.get("goal");
     String when = (String) subgoalObj.get("when");
     String postCondition = (String) subgoalObj.get("postcondition");
     float success = (Float) LevelLoader.nvl(subgoalObj.get("success"), 100.0f);
-    Subgoal subgoal = new Subgoal(science2DModel, science2DView, hint, when, postCondition, (int) success);
+    Subgoal subgoal = new Subgoal(science2DModel, science2DView, goal, when, postCondition, (int) success);
     Array<?> components = (Array<?>) subgoalObj.get("components");
     Array<?> configs = (Array<?>) subgoalObj.get("configs");
     subgoal.initialize(components, configs);

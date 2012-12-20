@@ -134,6 +134,7 @@ public class Guru extends Group implements IDoneCallback {
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
       successImage.show(deltaSuccessScore);
+      hinter.clearHint();
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
@@ -166,7 +167,9 @@ public class Guru extends Group implements IDoneCallback {
     if (currentTutor != null) {
       // Place hinter to right of dashboard above the controls
       hinter.setPosition(controlPanel.getX(), windowHeight - getY() - 50);
-      hinter.setHint(currentTutor.getHint());
+      if (!hinter.hasHint()) {
+        hinter.setHint(currentTutor.getHint());
+      }
     }
   }
   
@@ -187,7 +190,7 @@ public class Guru extends Group implements IDoneCallback {
     currentTutor = registeredTutors.get(tutorIndex);
     currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     currentTutor.activate(true);
-    dashboard.setStatus(currentTutor.getTitle());
+    dashboard.setStatus(currentTutor.getGoal());
     // Set up initial success and failure scores
     deltaSuccessScore = currentTutor.getSuccessScore();
     deltaFailureScore = currentTutor.getFailureScore();

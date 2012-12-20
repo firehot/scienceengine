@@ -11,12 +11,11 @@ configs:[
 {name:"CurrentSource.CurrentDirection",permitted:true,value:true}],
 plan:[{name: "Guide", 
        goal: "Can you make the compass go through one complete rotation?",
-       title: "Can you make the compass go through one complete rotation?",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
        timelimit: 120,
        subgoals: [
-         {hint: "What happens to the compass when it moves around the wire?",
+         {goal: "What happens to the compass when it moves around the wire?",
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          components:[{type:"Compass", visible: true}],
          success: 1000
@@ -24,45 +23,44 @@ plan:[{name: "Guide",
        },
        {name: "Guide",
        goal: "Can you map out the magnetic field around the wire?",
-       title: "Can you map out the magnetic field around the wire?",
        postcondition: "FieldMeter.Count >= 15",
-       success: 1000,
+       success: 200,
        timelimit: 180,
        subgoals: [
-         {hint: "What happens to the field when the wire is moved?",
+         {goal: "What happens to the field when the wire is moved?",
          postcondition: "FieldMeter.Count >= 15 and Count(Wire.Move) >= 5",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
-         {hint: "What happens to the field when current is DC and current max is changed?",
+         {goal: "What happens to the field when current is DC and current max is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentMax) >= 5",
          components:[{type:"Compass", visible: false}],
-         success: 250
+         success: 200
          },
-         {hint: "What happens to the field when current is DC and current direction is changed?",
+         {goal: "What happens to the field when current is DC and current direction is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentDirection) >= 2",
          components:[{type:"Compass", visible: false}],
-         success: 250
+         success: 200
          },
-         {hint: "What happens to the field when current is AC and current max is changed?",
+         {goal: "What happens to the field when current is AC and current max is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentMax) >= 5",
          components:[{type:"Compass", visible: false}],
-         success: 250
+         success: 200
          },
-         {hint: "What happens to the field when current is AC and current frequency is changed?",
+         {goal: "What happens to the field when current is AC and current frequency is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
          components:[{type:"Compass", visible: false}],
-         success: 250
+         success: 200
          }
        ]},       
        {name: "FieldMagnitudeProber",
-        title: "Touch the ? where the field is stronger",
+        goal: "Touch the ? where the field is stronger",
         timelimit: 10,
         success: 100,
         failure: 50
         }, 
         {name:"FieldDirectionProber",
-        title: "Touch ? and Drag in the direction of the field",
+        goal: "Touch ? and Drag in the direction of the field",
         timelimit: 10,
         success: 100,
         failure: 50

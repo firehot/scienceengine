@@ -16,15 +16,11 @@ public class Guide extends AbstractTutor {
   
   private List<Subgoal> subgoals = Collections.emptyList();
   
-  private String title;
+  private String goal;
   private float[] stageBeginTime;
   private int currentStage = -1;
 
-  private String goal;
-
-
   private float guruWidth;
-
   private float guruHeight;
     
   public Guide(IScience2DModel science2DModel, IScience2DView science2DView,
@@ -36,8 +32,8 @@ public class Guide extends AbstractTutor {
    * @see com.mazalearn.scienceengine.guru.AbstractTutor#getTitle()
    */
   @Override
-  public String getTitle() {
-    return title;
+  public String getGoal() {
+    return goal;
   }
   
   /* (non-Javadoc)
@@ -94,7 +90,7 @@ public class Guide extends AbstractTutor {
     if (currentStage < 0 || currentStage == subgoals.size()) return null;
     float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
     Subgoal subgoal = subgoals.get(currentStage);
-    return subgoal.getHint();
+    return subgoal.getGoal();
   }
 
   @Override
@@ -104,11 +100,10 @@ public class Guide extends AbstractTutor {
     subgoal.checkProgress();
   }
   
-  public void initialize(String goal, String title, Array<?> components,
+  public void initialize(String goal, Array<?> components,
       Array<?> configs, List<Subgoal> subgoals) {
     super.initialize(components, configs);
     this.goal = goal;
-    this.title = title;
     this.subgoals = subgoals;
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.stageBeginTime = new float[subgoals.size() + 1];

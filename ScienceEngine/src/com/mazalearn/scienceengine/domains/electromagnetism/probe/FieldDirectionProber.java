@@ -20,16 +20,16 @@ import com.mazalearn.scienceengine.guru.ProbeImage;
 public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
-  private String[] hints = new String[] {
-      "The direction of the field is the direction in which a " +
-      "free North Pole would move if placed at that point.",
-      "The direction of the field is where the compass needle's North would point."
-  };
-  private String hint;
+
   public FieldDirectionProber(IScience2DModel science2DModel, 
       final IScience2DView science2DView,
       int deltaSuccessScore, int deltaFailureScore) {
     super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+    this.hints = new String[] {
+        "The direction of the field is the direction in which a " +
+        "free North Pole would move if placed at that point.",
+        "The direction of the field is where the compass needle's North would point."
+    };
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};
@@ -82,7 +82,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   }
   
   @Override
-  public String getTitle() {
+  public String getGoal() {
     return "Click and drag in direction of magnetic field";
   }
   
@@ -104,15 +104,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
       bFields[0].nor();
       image.setVisible(true);
       fieldMeterActor.setVisible(false);
-      hint = hints[MathUtils.random(0,1)];
     }
     this.setVisible(activate);
   }
 
-  @Override
-  public String getHint() {
-    return hint;
-  }
-
-  
 }

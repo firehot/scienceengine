@@ -23,7 +23,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   
   public abstract void activate(boolean activate);
 
-  public abstract String getTitle();
+  public abstract String getGoal();
 
   private boolean areTooClose(Vector2[] points) {
     if (points.length < 2) return false;

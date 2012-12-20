@@ -52,15 +52,9 @@ public class LightProber extends AbstractScience2DProber {
   }
 
   @Override
-  public String getTitle() {
+  public String getGoal() {
     return "Make the light reach the blinking point.";
   }
-
-  @Override
-  public String getHint() {
-    return hints[MathUtils.random(0, hints.length - 1)];
-  }
-
 
   @Override
   public boolean isCompleted() {

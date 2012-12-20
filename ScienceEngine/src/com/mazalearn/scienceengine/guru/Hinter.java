@@ -45,7 +45,7 @@ public class Hinter extends Group {
         Hinter.this.addAction(Actions.delay(30, new Action() {
           @Override
           public boolean act(float delta) {
-            hint = null;
+            clearHint();
             return true;
           }          
         }));
@@ -105,6 +105,14 @@ public class Hinter extends Group {
     hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     image.setVisible(true);
     image.setY(0);
+  }
+
+  public boolean hasHint() {
+    return hint != null;
+  }
+  
+  public void clearHint() {
+    this.hint = null;
   }
 
 }

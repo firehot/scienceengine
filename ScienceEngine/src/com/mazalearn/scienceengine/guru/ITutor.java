@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Array;
 
 public interface ITutor {
 
-  public String getTitle();
+  public String getGoal();
 
   public void activate(boolean activate);
 

@@ -33,15 +33,12 @@ public class ParameterProber extends AbstractScience2DProber {
     None;
   }
   
-  private String[] hints = new String[] {
-//      "Use Fleming's left hand rule"
-  };
   
   protected Type type;
   protected Image image;
   protected ClickResult imageListener;
 
-  protected String title;
+  protected String goal;
 
   private Expr resultExpr;
 
@@ -135,8 +132,8 @@ public class ParameterProber extends AbstractScience2DProber {
   }
   
   @Override
-  public String getTitle() {
-    return title;
+  public String getGoal() {
+    return goal;
   }
   
   @Override
@@ -169,21 +166,17 @@ public class ParameterProber extends AbstractScience2DProber {
   }
   
   @Override
-  public String getHint() {
-    return hints[0];
-  }
-
-  @Override
   public void checkProgress() {
   }
   
-  public void initialize(String title, IModelConfig<?> probeConfig, 
+  public void initialize(String goal, IModelConfig<?> probeConfig, 
       String resultExprString, String type, Array<?> components, 
-      Array<?> configs) {
+      Array<?> configs, String[] hints) {
     super.initialize(components, configs);
-    this.title = title;
+    this.goal = goal;
     this.probeConfig = probeConfig;
     this.configs = configs;
+    this.hints = hints;
     if (resultExprString == null) return;
     Parser parser = new Parser();
     try {

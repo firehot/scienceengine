@@ -45,21 +45,19 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     }
   };
 
-  private String[] hints = new String[] {
-      "The field is stronger closer to the object generating the field",
-      "The field is stronger if the current or magnet strength is larger"
-  };
-  
   private final Image imageCorrect, imageWrong;
   // Temporary vectors
   private Vector2[] points;
   private Vector2[] bFields;
 
-  private String hint;
-
   public FieldMagnitudeProber(IScience2DModel science2DModel,
       final IScience2DView science2DView, int deltaSuccessScore, int deltaFailureScore) {
     super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+    this.hints = new String[] {
+        "The field is stronger closer to the object generating the field",
+        "The field is stronger if the current or magnet strength is larger"
+    };
+    
     imageCorrect = new ProbeImage();
     imageCorrect.addListener(new ClickResult(true, science2DView.getGuru()));
     imageWrong = new ProbeImage();
@@ -71,7 +69,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   }
   
   @Override
-  public String getTitle() {
+  public String getGoal() {
     return "Touch the ? where the magnetic field is stronger";
   }
   
@@ -109,7 +107,6 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
       imageWrong.setVisible(true);
       imageCorrect.setVisible(true);
       fieldMeterActor.setVisible(false);
-      hint = hints[MathUtils.random(0,1)];
     }
     this.setVisible(activate);
   }
@@ -126,10 +123,4 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     if (haveSimilarMagnitudes(bFields[0].len(), bFields[1].len())) return false;
     return true;
   }
-
-  @Override
-  public String getHint() {
-    return hint;
-  }
-
 }

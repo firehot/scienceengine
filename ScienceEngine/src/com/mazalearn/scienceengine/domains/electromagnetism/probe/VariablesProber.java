@@ -23,9 +23,6 @@ public class VariablesProber extends AbstractScience2DProber {
 
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
-  private String[] hints = new String[] {
-      "Light intensity increases when more current is induced in the coil."
-  };
   private Table configTable;
   private Actor modelControls;
   private ControlPanel controlPanel;
@@ -115,13 +112,8 @@ public class VariablesProber extends AbstractScience2DProber {
   }
 
   @Override
-  public String getTitle() {
+  public String getGoal() {
     return "Identify variables affecting induced current. Click ? when sure.";
-  }
-
-  @Override
-  public String getHint() {
-    return hints[0];
   }
 
   @Override
