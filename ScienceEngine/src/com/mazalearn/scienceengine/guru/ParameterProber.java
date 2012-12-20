@@ -34,7 +34,7 @@ public class ParameterProber extends AbstractScience2DProber {
   }
   
   private String[] hints = new String[] {
-      "Use Fleming's left hand rule"
+//      "Use Fleming's left hand rule"
   };
   
   protected Type type;

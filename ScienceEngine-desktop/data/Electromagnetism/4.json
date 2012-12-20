@@ -32,14 +32,20 @@ plan: [{name: "Guide",
            postcondition: "Count(BarMagnet.MagnetStrength) > 3 and Max(PickupCoil.Current) > 2",
            success: 250}
    ]},
-   {name:"ParameterProber",
-             title:"Click on ? for the parameter value and indicate direction of rotation of motor.",
-             type:"Spin", 
-             parameter:"HorseshoeMagnet.Flip",
-             result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
    {name: "ParameterProber",
-              title:"Select decrease or increase parameter to make the motor run faster.\nSelect X if parameter does not affect motor.",
-             parameter:"CurrentSource.CurrentMax", 
-             type:"Direct"}   
-   ]
+              title:"Select decrease or increase parameter to increase current induced.\nSelect X if parameter does not affect current.",
+              hint:"If magnet strength is increased, will induced current increase?",
+             parameter:"BarMagnet.MagnetStrength", 
+             type:"Direct"}, 
+   {name: "ParameterProber",
+              title:"Select decrease or increase parameter to increase current induced.\nSelect X if parameter does not affect current.",
+              hint:"If number of coils increases, will induced current increase?",
+             parameter:"PickupCoil.CoilLoops", 
+             type:"Direct"},     
+   {name: "ParameterProber",
+              title:"Select decrease or increase parameter to increase current induced.\nSelect X if parameter does not affect current.",
+             hint:"If earth's magnetic field increases, will induced current increase?",
+             parameter:"Environment.EarthMagneticField", 
+             type:"None"}  ]
+ 
 }

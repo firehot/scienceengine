@@ -1,5 +1,3 @@
-// Copyright 2002-2011, University of Colorado
-
 package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -33,12 +31,6 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
 
   private float current;
 
-  private float prevNeedleAngle;
-
-  /**
-   * 
-   * @param pickupCoilModel - voltmeter is connected to this pickup coil
-   */
   public Ammeter(float x, float y, float angle) {
     super(ComponentType.Ammeter, x, y, angle);
     needleAngle = 0;
@@ -50,18 +42,13 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
    * @param needleAngle - the angle, in radians
    */
   protected void setNeedleAngle(float needleAngle) {
-    this.needleAngle = 
-        Clamp.clamp(-MAX_NEEDLE_ANGLE, needleAngle, +MAX_NEEDLE_ANGLE);
-    // Smoothing ratio
-    
-    this.needleAngle = (this.needleAngle + (SMOOTH - 1) * prevNeedleAngle) / SMOOTH;
-    prevNeedleAngle = this.needleAngle;
+    needleAngle = Clamp.clamp(-MAX_NEEDLE_ANGLE, needleAngle, +MAX_NEEDLE_ANGLE);
+    // Smoothe out the needle angle using hysteresis   
+    this.needleAngle = (needleAngle + (SMOOTH - 1) * this.needleAngle) / SMOOTH;
   }
 
   /**
-   * Gets the needle's deflectin angle.
-   * 
-   * @return the angle, in radians
+   * @return needle deflection angle, in radians
    */
   public float getNeedleAngle() {
     return needleAngle;
@@ -80,7 +67,7 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
 
     // Absolute amplitude below the threshold is effectively zero.
     if (Math.abs(amplitude) < CURRENT_AMPLITUDE_THRESHOLD) {
-      amplitude = 0;
+      return 0;
     }
 
     // Determine the needle deflection angle.
