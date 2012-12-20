@@ -2,10 +2,13 @@ package com.mazalearn.scienceengine.guru;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.loaders.ComponentLoader;
 import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
+import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.Parameter;
 
 public abstract class AbstractTutor extends Group implements ITutor{
 
@@ -36,6 +39,9 @@ public abstract class AbstractTutor extends Group implements ITutor{
     this.setSize(width, height);
     new ComponentLoader(science2DModel, science2DView).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DModel);
+    // Mark start of challenge in event log
+    ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
+        Parameter.Tutor.name());
   }
 
   @Override

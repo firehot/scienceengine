@@ -32,6 +32,16 @@ public class Subgoal extends AbstractTutor {
         return ScienceEngine.getEventLog().eval("Count", name);
       } 
     });
+    functions.put("Min", new IFunction() {
+      public float eval(String name) { 
+        return ScienceEngine.getEventLog().eval("Min", name);
+      } 
+    });
+    functions.put("Max", new IFunction() {
+      public float eval(String name) { 
+        return ScienceEngine.getEventLog().eval("Max", name);
+      } 
+    });
     parser.allowFunctions(functions);
     try {
       this.postCondition = parser.parseString(postConditionString);

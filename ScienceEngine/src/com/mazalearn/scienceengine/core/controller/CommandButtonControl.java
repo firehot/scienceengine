@@ -31,7 +31,8 @@ public class CommandButtonControl implements IControl {
       
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(command.getParameter(), 
+        ScienceEngine.selectParameter(command.getParameter(),
+            (String) command.getValue(),
             (IScience2DView) textButton.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

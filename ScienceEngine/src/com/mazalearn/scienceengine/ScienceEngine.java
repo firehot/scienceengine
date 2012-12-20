@@ -328,11 +328,20 @@ public class ScienceEngine extends Game {
    * @param parameter
    * @param stage
    */
-  public static void selectParameter(IParameter parameter, IScience2DView stage) {
+  public static void selectParameter(IParameter parameter, float value, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayStatus(parameter.name(), stage);
     if (getSelectedBody() == null) return;
-    eventLog.logEvent(getSelectedBody().name(), parameter.name());
+    stage.getGuru().checkProgress();
+    eventLog.logEvent(getSelectedBody().name(), parameter.name(), value);
+  }
+  
+  public static void selectParameter(IParameter parameter, boolean value, IScience2DView stage) {
+    selectParameter(parameter, value ? 1.0f : 0.0f, stage);
+  }
+  
+  public static void selectParameter(IParameter parameter, String value, IScience2DView stage) {
+    selectParameter(parameter, 0.0f, stage);
   }
   
   public static EventLog getEventLog() {
@@ -340,6 +349,7 @@ public class ScienceEngine extends Game {
   }
 
   private static void displayStatus(String entityName, IScience2DView stage) {
+    if (stage == null) return;
     Label status = (Label) stage.findActor(StageComponent.Status.name());
     String component = 
         getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";

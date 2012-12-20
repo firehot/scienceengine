@@ -15,10 +15,10 @@ plan:[{name: "Guide",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
        timelimit: 120,
-       components:[{type:"Compass", visible: "true"}],
        subgoals: [
          {hint: "What happens to the compass when it moves around the wire?",
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+         components:[{type:"Compass", visible: true}],
          success: 1000
          }],
        },
@@ -31,22 +31,27 @@ plan:[{name: "Guide",
        subgoals: [
          {hint: "What happens to the field when the wire is moved?",
          postcondition: "FieldMeter.Count >= 15 and Count(Wire.Move) >= 5",
+         components:[{type:"Compass", visible: false}],
          success: 200
          },
          {hint: "What happens to the field when current is DC and current max is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentMax) >= 5",
+         components:[{type:"Compass", visible: false}],
          success: 250
          },
          {hint: "What happens to the field when current is DC and current direction is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentDirection) >= 2",
+         components:[{type:"Compass", visible: false}],
          success: 250
          },
          {hint: "What happens to the field when current is AC and current max is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentMax) >= 5",
+         components:[{type:"Compass", visible: false}],
          success: 250
          },
          {hint: "What happens to the field when current is AC and current frequency is changed?",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
+         components:[{type:"Compass", visible: false}],
          success: 250
          }
        ]},       

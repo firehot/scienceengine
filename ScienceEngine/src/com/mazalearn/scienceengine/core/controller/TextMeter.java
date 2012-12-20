@@ -28,7 +28,8 @@ public class TextMeter implements IControl {
     label.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getParameter(), 
+        ScienceEngine.selectParameter(property.getParameter(),
+            (String) property.getValue(),
             (IScience2DView) label.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

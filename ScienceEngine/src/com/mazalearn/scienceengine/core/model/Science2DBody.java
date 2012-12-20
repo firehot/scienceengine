@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Parameter;
 
 /**
  * Science2DBody has basic attributes for an element in an EM Field.
@@ -488,5 +489,14 @@ public class Science2DBody implements IBody {
   @Override
   public void setUserData(Object userData) {
     body.setUserData(userData);
+  }
+
+  public IModelConfig<?> findConfig(Parameter parameter) {
+    for (IModelConfig<?> config: getConfigs()) {
+      if (config.getParameter().equals(parameter)) {
+        return config;
+      }
+    }
+    return null;
   }
 }

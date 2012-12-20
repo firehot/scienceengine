@@ -23,22 +23,27 @@ plan:[{name: "Guide",
        goal: "Can you draw the magnetic field around the magnet?",
        title: "Understand the magnetic field around the magnet",
        postcondition: "FieldMeter.Count >= 10",
-       success: 500,
+       success: 1000,
        timelimit: 180,
        subgoals: [
-         {hint: "What happens to the field when magnet is moved?",
+        {hint: "Click in many places around the magnet to see the field.",
+         postcondition: "FieldMeter.Count >= 10",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         },
+          {hint: "What happens to the field when magnet is moved?",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 5",
-         success: 500,
+         success: 250,
          components:[{type:"Compass", visible: false}]
          },
          {hint: "What happens to the field when magnet is rotated?",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetRotation) >= 5",
-         success: 500,
+         success: 250,
          components:[{type:"Compass", visible: false}]
          },
          {hint: "What happens to the field when magnet strength is changed?",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetStrength) >= 5",
-         success: 500,
+         success: 250,
          components:[{type:"Compass", visible: false}]
          }
        ]},       

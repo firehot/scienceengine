@@ -24,12 +24,13 @@ public class Hinter extends Group {
   private String hint;
 
   static {
-    SCIENTISTS.add(new Image(new Texture("images/edison.png")));
-    SCIENTISTS.get(0).setName("Thomas Alva Edison");
-    SCIENTISTS.add(new Image(new Texture("images/oersted.png")));
-    SCIENTISTS.get(1).setName("Hans Christian Oersted");
-    SCIENTISTS.add(new Image(new Texture("images/faraday.png")));
-    SCIENTISTS.get(2).setName("Michael Faraday");
+    Image image;
+    SCIENTISTS.add(image = new Image(new Texture("images/edison.png")));
+    image.setName("Thomas Alva Edison");
+    SCIENTISTS.add(image = new Image(new Texture("images/oersted.png")));
+    image.setName("Hans Christian Oersted");
+    SCIENTISTS.add(image = new Image(new Texture("images/faraday.png")));
+    image.setName("Michael Faraday");
   }
   public Hinter(Skin skin) {
     
@@ -37,7 +38,7 @@ public class Hinter extends Group {
     hintButton.setColor(Color.YELLOW);
     hintButton.getLabel().setWrap(true);
     
-    hintButton.addListener(new ClickListener() {
+    final ClickListener buttonClickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         hintButton.setVisible(false);
         SCIENTISTS.get(scientistIndex).setVisible(false);
@@ -49,20 +50,25 @@ public class Hinter extends Group {
           }          
         }));
       }
-    });
+    };
+    hintButton.addListener(buttonClickListener);
     
+    ClickListener imageClickListener = new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        if (jumpingMode) {
+          jumpingMode = false;
+          hintButton.setVisible(true);
+          hintButton.setPosition(-hintButton.getWidth(), -50);
+        } else {
+          buttonClickListener.clicked(null, 0, 0);
+        }
+      }
+    };
     for (final Image image: SCIENTISTS) {
       image.setSize(42, 42);
       this.addActor(image);
       image.setVisible(false);
-      image.addListener(new ClickListener() {
-        public void clicked (InputEvent event, float x, float y) {
-          jumpingMode = false;
-          hintButton.setVisible(true);
-          hintButton.setPosition(image.getX() - hintButton.getWidth(), 
-              image.getY() - 50);
-        }
-      });    
+      image.addListener(imageClickListener);    
     }
     
     this.addActor(hintButton);
@@ -91,12 +97,12 @@ public class Hinter extends Group {
     this.setVisible(true);
     Image image = SCIENTISTS.get(scientistIndex);
     image.setVisible(false);
-    hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
     hintButton.setSize(300, 100); 
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
     jumpingMode = true;
     image = SCIENTISTS.get(scientistIndex);
+    hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     image.setVisible(true);
     image.setY(0);
   }

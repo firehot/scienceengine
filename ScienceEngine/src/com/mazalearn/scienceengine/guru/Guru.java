@@ -79,7 +79,7 @@ public class Guru extends Group implements IDoneCallback {
 
   public void startChallenge() {
     // Mark start of challenge in event log
-    ScienceEngine.getEventLog().logEvent(ComponentType.Environment.name(), 
+    ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Challenge.name());
     // Reset scores
     dashboard.resetScore();
@@ -125,10 +125,12 @@ public class Guru extends Group implements IDoneCallback {
    */
   public void done(boolean success) {
     if (success) {
-      this.setSize(windowWidth,  windowHeight);
-      this.setPosition(0, 0);
-      currentTutor.activate(false);
-      currentTutor.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+      if (currentTutor.isCompleted()) {
+        this.setSize(windowWidth,  windowHeight);
+        this.setPosition(0, 0);
+        currentTutor.activate(false);
+        currentTutor.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+      }
       soundManager.play(ScienceEngineSound.SUCCESS);
       dashboard.addScore(deltaSuccessScore);
       successImage.show(deltaSuccessScore);
@@ -170,22 +172,25 @@ public class Guru extends Group implements IDoneCallback {
   
   // Prerequisite: registeredTutors.size() >= 1
   private void runTutor() {
-    if (currentTutor == null || currentTutor.isCompleted()) {
-      // Move on to next tutor
-      tutorIndex++;
-      if (tutorIndex == registeredTutors.size()) {
-        done(true);
-        return;
-      }
-      currentTutor = registeredTutors.get(tutorIndex);
+    // If a valid tutor is already running, let it continue
+    if (currentTutor != null && !currentTutor.isCompleted()) {
+      currentTutor.activate(true);
+      return;
     }
-    // Set up initial success and failure scores
-    deltaSuccessScore = currentTutor.getSuccessScore();
-    deltaFailureScore = currentTutor.getFailureScore();
     
+    // Move on to next tutor
+    tutorIndex++;
+    if (tutorIndex == registeredTutors.size()) {
+      done(true);
+      return;
+    }
+    currentTutor = registeredTutors.get(tutorIndex);
     currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     currentTutor.activate(true);
     dashboard.setStatus(currentTutor.getTitle());
+    // Set up initial success and failure scores
+    deltaSuccessScore = currentTutor.getSuccessScore();
+    deltaFailureScore = currentTutor.getFailureScore();
   }
   
   public void setupProbeConfigs(List<IModelConfig<?>> configs, boolean enableControls) {

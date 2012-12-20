@@ -12,7 +12,7 @@ public enum ComponentType implements IComponentType {
   FieldMeter("images/arrow.png"),
   PickupCoil("images/coppercoils-front1.png"),
   Wire("images/currentwire-up.png"),
-  Voltmeter(""), 
+  Ammeter("images/ammeter.png"), 
   HorseshoeMagnet("images/horseshoemagnet.png"),
   CurrentCoil("images/currentcoil_nocommutator.png");
   

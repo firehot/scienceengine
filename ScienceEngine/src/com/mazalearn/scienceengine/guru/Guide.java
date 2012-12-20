@@ -48,8 +48,6 @@ public class Guide extends AbstractTutor {
     if (activate) {
       science2DView.getGuru().setSize(guruWidth,  50);
       science2DView.getGuru().setPosition(0, guruHeight - 50);
-      currentStage = 0;
-      subgoals.get(0).reinitialize(0, guruHeight - 50, 0, 0, true);
       stageBeginTime[currentStage] = ScienceEngine.getTime();
     } 
     ScienceEngine.setProbeMode(activate);
@@ -64,6 +62,10 @@ public class Guide extends AbstractTutor {
     super.reinitialize(x, y, 0, 0, probeMode);
     this.guruWidth = width;
     this.guruHeight = height;
+    if (probeMode) {
+      currentStage = 0;
+      subgoals.get(0).reinitialize(0, guruHeight - 50, 0, 0, true);
+    }
   }
   
   @Override
@@ -75,8 +77,8 @@ public class Guide extends AbstractTutor {
     while (subgoal.isCompleted()) {
       currentStage++;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
+      science2DView.getGuru().done(true);
       if (currentStage == subgoals.size()) {
-        science2DView.getGuru().done(true);
         break;
       }
       subgoal = subgoals.get(currentStage);

@@ -32,7 +32,8 @@ public class ToggleButtonControl implements IControl {
       
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getParameter(), 
+        ScienceEngine.selectParameter(property.getParameter(),
+            property.getValue(),
             (IScience2DView) toggleButton.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

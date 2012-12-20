@@ -153,7 +153,7 @@ public class ParameterProber extends AbstractScience2DProber {
         configs.add(probeConfig);
         science2DView.getGuru().setupProbeConfigs(configs, false);
         science2DModel.bindParameterValues(resultExprVariables);
-        imageListener.setResult(resultExpr.fvalue() == 1 ? 0 : 1);
+        imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
       } else {
         float value = MathUtils.random(0f, 10f);
         dummy.setConfigParameter(probeConfig.getParameter(), value);

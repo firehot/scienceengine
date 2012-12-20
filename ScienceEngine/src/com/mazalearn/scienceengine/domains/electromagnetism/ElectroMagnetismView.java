@@ -25,6 +25,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirection
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.LightProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.VariablesProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.AmmeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CircuitActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentCoilActor;
@@ -40,7 +41,6 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
   private AbstractScience2DModel emModel;
-  private Actor compassActor;
 
   public ElectroMagnetismView(float width, float height,
       final AbstractScience2DModel emModel, Skin skin, IScience2DController controller) {
@@ -66,7 +66,6 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   @Override
   public void prepareView() {
     fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
-    compassActor = findActor(ComponentType.Compass.name());
     for (List<CircuitElement> circuit: emModel.getCircuits()) {
       this.addActor(new CircuitActor(circuit));
     }
@@ -88,6 +87,8 @@ public class ElectroMagnetismView extends AbstractScience2DView {
         new TextureRegion(ScienceEngine.assetManager.get(textureFilename, Texture.class));
     
     switch (componentType) {
+    case Ammeter:
+      return new AmmeterActor(body, textureRegion);
     case BarMagnet:
       return new BarMagnetActor(body, textureRegion, getFont());
     case Lightbulb:

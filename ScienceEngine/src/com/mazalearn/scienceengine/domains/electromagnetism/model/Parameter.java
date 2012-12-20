@@ -17,7 +17,8 @@ public enum Parameter implements IParameter {
   Flip, 
   RotationDataType, 
   RotationData, 
-  Count;
+  Count, 
+  Current;
   
   private Parameter() {
   }

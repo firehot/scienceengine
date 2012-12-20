@@ -72,7 +72,7 @@ public class Science2DActor extends Actor {
         case None: return;
         case Move: 
           drag = false;
-          ScienceEngine.selectParameter(Parameter.Move, (IScience2DView) getStage());
+          ScienceEngine.selectParameter(Parameter.Move, 0f, (IScience2DView) getStage());
           return;
         case Rotate:
           // Get negative of movement vector
@@ -87,7 +87,7 @@ public class Science2DActor extends Actor {
           viewPos.sub(getWidth() / (2 * ScienceEngine.PIXELS_PER_M), 
               getHeight() / (2 * ScienceEngine.PIXELS_PER_M));
           body.applyForce(lastTouch, viewPos);
-          ScienceEngine.selectParameter(Parameter.Rotate, (IScience2DView) getStage());
+          ScienceEngine.selectParameter(Parameter.Rotate, lastTouch.len(), (IScience2DView) getStage());
           return;
         }
       }
