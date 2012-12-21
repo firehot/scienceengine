@@ -3,8 +3,8 @@ package com.mazalearn.scienceengine.domains.waves.view;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mazalearn.scienceengine.domains.waves.WaveView;
 import com.mazalearn.scienceengine.domains.waves.WaveModel.Ball;
+import com.mazalearn.scienceengine.domains.waves.WaveView;
 
 public class WaveBox extends Actor {
 

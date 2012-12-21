@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.mazalearn.scienceengine.app.services.Function.Aggregator;
 import com.mazalearn.scienceengine.core.lang.Event;
-import com.mazalearn.scienceengine.core.lang.IFunction;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 

@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.molecules.model;
 
-import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class LJMolecularModel extends AbstractMolecularModel {
   // Assumptions
