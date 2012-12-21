@@ -28,7 +28,7 @@ public class SelectBoxControl implements IControl {
     selectBox.addListener(new ClickListener() {   
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getParameter(),
+        ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
             property.getValue(),
             (IScience2DView) selectBox.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
