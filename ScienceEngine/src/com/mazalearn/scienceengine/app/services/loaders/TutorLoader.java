@@ -28,15 +28,15 @@ class TutorLoader {
   }
 
   public AbstractTutor loadTutor(OrderedMap<String, ?> tutorObj) {
-    String name = (String) tutorObj.get("name");
-    Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + name);
-    String goal = (String) tutorObj.get("goal");
     String type = (String) tutorObj.get("type");
+    Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type);
+    String goal = (String) tutorObj.get("goal");
+    String resultType = (String) tutorObj.get("resultType");
     float deltaSuccessScore = (Float) LevelLoader.nvl(tutorObj.get("success"),
         100.0f);
     float deltaFailureScore = (Float) LevelLoader.nvl(tutorObj.get("falure"),
         50.0f);
-    AbstractTutor tutor = science2DView.createTutor(name, type,
+    AbstractTutor tutor = science2DView.createTutor(type, goal, resultType,
         (int) deltaSuccessScore, (int) deltaFailureScore);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
@@ -49,7 +49,7 @@ class TutorLoader {
         hints[i] = (String) hintObj.get(i);
       }
       IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
-      ((ParameterProber) tutor).initialize(goal, parameter, resultExpr, type,
+      ((ParameterProber) tutor).initialize(goal, parameter, resultExpr, resultType,
           components, configs, hints);
       return tutor;
     }

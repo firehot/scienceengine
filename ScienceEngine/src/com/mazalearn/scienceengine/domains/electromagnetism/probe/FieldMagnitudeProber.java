@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -50,9 +49,10 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] points;
   private Vector2[] bFields;
 
-  public FieldMagnitudeProber(IScience2DModel science2DModel,
-      final IScience2DView science2DView, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+  public FieldMagnitudeProber(IScience2DModel science2DModel, 
+      final IScience2DView science2DView,
+      String goal, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "The field is stronger closer to the object generating the field",
         "The field is stronger if the current or magnet strength is larger"
@@ -66,11 +66,6 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
     this.addActor(imageWrong);
-  }
-  
-  @Override
-  public String getGoal() {
-    return "Touch the ? where the magnetic field is stronger";
   }
   
   @Override

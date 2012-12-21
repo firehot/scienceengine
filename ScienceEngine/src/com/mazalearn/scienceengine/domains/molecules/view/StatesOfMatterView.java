@@ -7,7 +7,6 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
 
 /**
  * States of Matter experiment View.
@@ -41,9 +40,4 @@ public class StatesOfMatterView extends AbstractScience2DView {
     }
     return null;
   }
-  
-  @Override
-  public AbstractTutor createTutor(String name, String type, int deltaSuccessScore, int deltaFailureScore) {
-    return super.createTutor(name, type, deltaSuccessScore, deltaFailureScore);
-  }  
 }

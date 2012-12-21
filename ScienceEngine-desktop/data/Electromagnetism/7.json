@@ -17,7 +17,7 @@ configs:[
 {name:"CurrentSource.CurrentMax", permitted:true, value:3.0},
 {name:"CurrentSource.CurrentDirection", permitted:true, value:true},
 {name:"CurrentCoil.CommutatorType", permitted:true, value:"Connector"}],
-plan: [{name: "Guide",
+plan: [{type: "Guide",
    goal: "Direction of magnetic field affects direction of rotation of coil",
    title: "Can you make number of revolutions of the motor +5 by configuring only the magnet?",
    timelimit: 300,
@@ -34,20 +34,14 @@ plan: [{name: "Guide",
           {hint: "Is number of revolutions increasing?",
            postcondition: "CurrentCoil.RotationData >= 5"}
    ]},
-   {name:"ParameterProber",
+   {type:"ParameterProber",
              title:"Click on ? for the parameter value and indicate direction of rotation of motor.",
-             type:"Spin", 
+             resultType:"Spin", 
              parameter:"HorseshoeMagnet.Flip",
              result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
-   {name: "ParameterProber",
+   {type: "ParameterProber",
               title:"Select decrease or increase parameter to make the motor run faster.\nSelect X if parameter does not affect motor.",
              parameter:"CurrentSource.CurrentMax", 
-             type:"Direct"}   
+             resultType:"Direct"}   
    ],
-probers:[
-{name: "ParameterProber", parameter:"CurrentSource.CurrentMax", type:"Direct"},
-{name:"ParameterProber", type:"Spin", depends:["CurrentSource.CurrentDirection","HorseshoeMagnet.Flip"]},
-{name: "ParameterProber", parameter:"HorseshoeMagnet.MagnetStrength", type:"Direct"},
-{name: "ParameterProber", parameter:"Environment.AirPermittivity", type:"None"},
-{name: "ParameterProber", parameter:"Environment.EarthMagneticField", type:"None"}
-]}
+}

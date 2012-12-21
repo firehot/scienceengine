@@ -24,8 +24,8 @@ public class Guide extends AbstractTutor {
   private float guruHeight;
     
   public Guide(IScience2DModel science2DModel, IScience2DView science2DView,
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+      String goal, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
   }
   
   /* (non-Javadoc)

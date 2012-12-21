@@ -20,17 +20,21 @@ public abstract class AbstractTutor extends Group implements ITutor{
   protected final IScience2DModel science2DModel;
   protected final IScience2DView science2DView;
   protected String[] hints;
+  private String goal;
 
   public AbstractTutor(IScience2DModel science2DModel, IScience2DView science2DView,
-      int deltaSuccessScore, int deltaFailureScore) {
+      String goal, int deltaSuccessScore, int deltaFailureScore) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
+    this.goal = goal;
     this.deltaSuccessScore = deltaSuccessScore;
     this.deltaFailureScore = deltaFailureScore;
   }
 
   @Override
-  public abstract String getGoal();
+  public String getGoal() {
+    return goal;
+  }
 
   @Override
   public abstract void activate(boolean activate);

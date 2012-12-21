@@ -27,10 +27,10 @@ public class VariablesProber extends AbstractScience2DProber {
   private Actor modelControls;
   private ControlPanel controlPanel;
   
-  public VariablesProber(final IScience2DModel science2DModel, final IScience2DView science2DView,
-      Skin skin, 
+  public VariablesProber(final IScience2DModel science2DModel, 
+      final IScience2DView science2DView, String goal, Skin skin, 
       Actor modelControls, ControlPanel controlPanel, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
     this.configTable = createConfigTable(science2DModel, skin);
     this.modelControls = modelControls;
     this.controlPanel = controlPanel;
@@ -109,11 +109,6 @@ public class VariablesProber extends AbstractScience2DProber {
     if (modelControls != null) {
       modelControls.setVisible(activate);
     }
-  }
-
-  @Override
-  public String getGoal() {
-    return "Identify variables affecting induced current. Click ? when sure.";
   }
 
   @Override

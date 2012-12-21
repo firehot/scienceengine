@@ -26,7 +26,7 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 // Is the outcome given by expression true?
 public class ParameterProber extends AbstractScience2DProber {
   
-  enum Type {
+  enum ResultType {
     Spin,
     Direct,
     Inverse,
@@ -34,7 +34,7 @@ public class ParameterProber extends AbstractScience2DProber {
   }
   
   
-  protected Type type;
+  protected ResultType resultType;
   protected Image image;
   protected ClickResult imageListener;
 
@@ -65,12 +65,12 @@ public class ParameterProber extends AbstractScience2DProber {
   }
     
   public ParameterProber(IScience2DModel science2DModel, IScience2DView science2DView,
-      String type, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+      String goal, String resultType, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
     this.image = new ProbeImage();
-    this.type = Type.valueOf(type);
+    this.resultType = ResultType.valueOf(resultType);
     Guru guru = science2DView.getGuru();
-    if (this.type == Type.Spin) {   
+    if (this.resultType == ResultType.Spin) {   
       image.setX(guru.getWidth() / 2 - image.getWidth() / 2 - 50);
       image.setY(guru.getHeight() / 2 - image.getHeight() / 2);
       
@@ -116,7 +116,7 @@ public class ParameterProber extends AbstractScience2DProber {
         }
       });
 
-      switch (this.type) {
+      switch (this.resultType) {
         case None: imageListener.setResult(2); break;
         case Direct: imageListener.setResult(1); break;
         case Inverse: imageListener.setResult(0); break;
@@ -132,11 +132,6 @@ public class ParameterProber extends AbstractScience2DProber {
   }
   
   @Override
-  public String getGoal() {
-    return goal;
-  }
-  
-  @Override
   public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
     super.reinitialize(x,  y, width, height, probeMode);
     image.setVisible(false);
@@ -145,7 +140,7 @@ public class ParameterProber extends AbstractScience2DProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      if (type == Type.Spin) {
+      if (resultType == ResultType.Spin) {
         List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
         configs.add(probeConfig);
         science2DView.getGuru().setupProbeConfigs(configs, false);

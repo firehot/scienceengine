@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -14,19 +13,19 @@ public class LightProber extends AbstractScience2DProber {
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
   private LightbulbActor lightbulbActor;
-  private String[] hints = new String[] {
-      "Light intensity increases when more current is induced in the coil.",
-      "More current is induced in the coil if the magnetic field changes faster at the coil.",
-      "Magnetic field change at the coil increases when the magnet moves faster relative to the coil.",
-      "If the coil has more loops, more current will be induced.",
-      "If the magnet is stronger, more current will be induced."
-  };
   private IScience2DModel science2DModel;
   
   public LightProber(IScience2DModel science2DModel, IScience2DView science2DView, 
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+      String goal, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
     this.science2DModel = science2DModel;
+    this.hints = new String[] {
+        "Light intensity increases when more current is induced in the coil.",
+        "More current is induced in the coil if the magnetic field changes faster at the coil.",
+        "Magnetic field change at the coil increases when the magnet moves faster relative to the coil.",
+        "If the coil has more loops, more current will be induced.",
+        "If the magnet is stronger, more current will be induced."
+    };
     image = new ProbeImage();
     this.addActor(image);
     this.lightbulbActor = (LightbulbActor) science2DView.findActor("Lightbulb");
@@ -49,11 +48,6 @@ public class LightProber extends AbstractScience2DProber {
       image.setY(points[0].y - image.getHeight()/2);
     }
     this.setVisible(activate);
-  }
-
-  @Override
-  public String getGoal() {
-    return "Make the light reach the blinking point.";
   }
 
   @Override

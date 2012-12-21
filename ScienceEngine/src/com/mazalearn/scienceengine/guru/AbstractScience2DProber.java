@@ -17,13 +17,11 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   private Vector2 localPoint = new Vector2();
 
   public AbstractScience2DProber(IScience2DModel science2DModel, IScience2DView science2DView,
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+      String goal, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
   }
   
   public abstract void activate(boolean activate);
-
-  public abstract String getGoal();
 
   private boolean areTooClose(Vector2[] points) {
     if (points.length < 2) return false;

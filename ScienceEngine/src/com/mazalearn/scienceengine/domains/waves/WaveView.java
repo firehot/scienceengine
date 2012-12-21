@@ -14,7 +14,6 @@ import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.domains.waves.view.Boundary;
 import com.mazalearn.scienceengine.domains.waves.view.Hand;
 import com.mazalearn.scienceengine.domains.waves.view.WaveBox;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
 
 public class WaveView extends AbstractScience2DView {
 
@@ -92,11 +91,5 @@ public class WaveView extends AbstractScience2DView {
     boundary.setWaveBox(waveBox);
     this.setBallDiameter(waveBox.getBallDiameter());
     super.prepareView();
-  }
-  
-  @Override
-  public AbstractTutor createTutor(String name, String type,
-      int deltaSuccessScore, int deltaFailureScore) {
-    return super.createTutor(name, type, deltaSuccessScore, deltaFailureScore);
   }
 }

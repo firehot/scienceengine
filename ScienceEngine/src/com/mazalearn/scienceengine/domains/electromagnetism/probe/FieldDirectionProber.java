@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,8 +22,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
 
   public FieldDirectionProber(IScience2DModel science2DModel, 
       final IScience2DView science2DView,
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, deltaFailureScore);
+      String goal, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "The direction of the field is the direction in which a " +
         "free North Pole would move if placed at that point.",
@@ -79,11 +78,6 @@ public class FieldDirectionProber extends AbstractFieldProber {
     });
     this.addActor(image);
     this.addActor(userField);
-  }
-  
-  @Override
-  public String getGoal() {
-    return "Click and drag in direction of magnetic field";
   }
   
   @Override

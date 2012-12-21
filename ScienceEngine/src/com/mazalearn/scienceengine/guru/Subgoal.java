@@ -14,17 +14,15 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class Subgoal extends AbstractTutor {
-  private final String goal;
   private final Expr postCondition;
   private Collection<Variable> variables;
   private String when;
   private boolean progress;
 
   public Subgoal(IScience2DModel science2DModel, IScience2DView science2DView,
-      String title, String when, String postConditionString,
+      String goal, String when, String postConditionString,
       int deltaSuccessScore) {
-    super(science2DModel, science2DView, deltaSuccessScore, 0);
-    this.goal = title;
+    super(science2DModel, science2DView, goal, deltaSuccessScore, 0);
     Parser parser = new Parser();
     Map<String, IFunction> functions = new HashMap<String, IFunction>();
     functions.put("Count", new IFunction() {
@@ -70,7 +68,7 @@ public class Subgoal extends AbstractTutor {
   @Override
   public String getGoal() {
     if (!progress) {
-      return goal;
+      return super.getGoal();
     }
     return null;
   }

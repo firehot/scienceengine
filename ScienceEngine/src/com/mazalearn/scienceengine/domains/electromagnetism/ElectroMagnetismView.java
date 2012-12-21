@@ -132,17 +132,18 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   };
   
   @Override
-  public AbstractTutor createTutor(String name, String type, 
+  public AbstractTutor createTutor(String type, String goal, String resultType, 
       int deltaSuccessScore, int deltaFailureScore) {
-    if ("FieldMagnitudeProber".equals(name)) {
-      return new FieldMagnitudeProber(emModel, this, deltaSuccessScore, deltaFailureScore);
-    } else if ("FieldDirectionProber".equals(name)) {
-      return new FieldDirectionProber(emModel, this, deltaSuccessScore, deltaFailureScore);
-    } else if ("LightProber".equals(name)) {
-      return new LightProber(emModel, this, deltaSuccessScore, deltaFailureScore);
-    } else if ("VariablesProber".equals(name)) {
-      return new VariablesProber(emModel, this, skin, findActor("ModelControls"), controlPanel, deltaSuccessScore, deltaFailureScore);
+    if ("FieldMagnitudeProber".equals(type)) {
+      return new FieldMagnitudeProber(emModel, this, goal, deltaSuccessScore, deltaFailureScore);
+    } else if ("FieldDirectionProber".equals(type)) {
+      return new FieldDirectionProber(emModel, this, goal, deltaSuccessScore, deltaFailureScore);
+    } else if ("LightProber".equals(type)) {
+      return new LightProber(emModel, this, goal, deltaSuccessScore, deltaFailureScore);
+    } else if ("VariablesProber".equals(type)) {
+      return new VariablesProber(emModel, this, goal, skin, findActor("ModelControls"), 
+          controlPanel, deltaSuccessScore, deltaFailureScore);
     }
-    return super.createTutor(name, type, deltaSuccessScore, deltaFailureScore);
+    return super.createTutor(type, goal, resultType, deltaSuccessScore, deltaFailureScore);
   }
 }
