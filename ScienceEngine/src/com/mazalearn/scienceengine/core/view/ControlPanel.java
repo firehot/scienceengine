@@ -28,7 +28,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.controller.ToggleButtonControl;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.model.Parameter;
 
 public class ControlPanel extends Table {
   private final IScience2DController science2DController;
@@ -92,19 +92,6 @@ public class ControlPanel extends Table {
       modelControlPanel.add(environment);
       modelControlPanel.row();
     }    
-    AbstractModelConfig<String> selectedBodyConfig = 
-        new AbstractModelConfig<String>(null,
-            Parameter.NameOfSelectedBody, "") { //$NON-NLS-1$ //$NON-NLS-2$
-          public String getValue() { 
-            Science2DBody body = ScienceEngine.getSelectedBody();
-            return body != null ? body.getComponentType().toString() : "";
-          }
-          public boolean isPossible() { return true; }
-          public boolean isAvailable() { return true; }
-    };
-    
-    this.controllers.add(Controller.createController(selectedBodyConfig, modelControlPanel, skin));
-    modelControlPanel.row();
     // Register all model controllers
     for (IModelConfig modelConfig: science2DModel.getAllConfigs()) {
       this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));

@@ -99,6 +99,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   
   @Override
   public void initializeConfigs() {
+    super.initializeConfigs();
     configs.add(new AbstractModelConfig<Float>(this, 
         Parameter.CoilLoops, 1f, 4f) {
       public Float getValue() { return getNumberOfLoops(); }

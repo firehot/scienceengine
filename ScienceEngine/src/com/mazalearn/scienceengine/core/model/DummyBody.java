@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.core.model;
 
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.core.view.Parameter;
 
 public class DummyBody extends Science2DBody {
   

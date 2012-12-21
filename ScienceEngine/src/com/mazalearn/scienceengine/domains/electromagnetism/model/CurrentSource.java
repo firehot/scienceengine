@@ -59,6 +59,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
 
   @Override
   public void initializeConfigs() {
+    super.initializeConfigs();
     configs.add(new AbstractModelConfig<String>(this, 
         Parameter.CurrentType, CurrentType.values()) {
       public String getValue() { return getCurrentType(); }

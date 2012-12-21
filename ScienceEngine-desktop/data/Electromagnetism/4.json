@@ -27,7 +27,7 @@ plan: [{type: "Guide",
            {goal: "Does change in Earth's magnetic field affect the induced current?",
            postcondition: "Count(Environment.EarthMagneticField) >= 3 and Max(PickupCoil.Current) > 1.5",
            success: 250},
-           {goal: "Does change in magnet strength affect the light?",
+           {goal: "Does change in magnet strength affect the induced current?",
            postcondition: "Count(BarMagnet.MagnetStrength) > 3 and Max(PickupCoil.Current) > 2",
            success: 250}
    ]},

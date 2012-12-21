@@ -19,8 +19,9 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Parameter;
 
 /**
  * Science2DBody has basic attributes for an element in an EM Field.
@@ -76,6 +77,14 @@ public class Science2DBody implements IBody {
   }
 
   public void initializeConfigs() {
+    configs.add( 
+        new AbstractModelConfig<String>(this, Parameter.NameOfSelectedBody, "") { //$NON-NLS-1$ //$NON-NLS-2$
+          @Override public String getValue() { return componentType.toString();}
+          @Override public boolean isPossible() { return true; }
+          @Override public void doCommand() {
+            ScienceEngine.pin(Science2DBody.this, !ScienceEngine.isPinned(Science2DBody.this));
+          }
+    });
   }
 
   public List<IModelConfig<?>> getConfigs() {

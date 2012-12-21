@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.mazalearn.scienceengine.core.lang.Event;
 import com.mazalearn.scienceengine.core.model.ComponentType;
-import com.mazalearn.scienceengine.core.view.Parameter;
+import com.mazalearn.scienceengine.core.model.Parameter;
 
 public class EventLog {
   List<Event> events = new ArrayList<Event>();

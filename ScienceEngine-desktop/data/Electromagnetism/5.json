@@ -12,4 +12,58 @@ configs:[
 {name:"CurrentSource.CurrentMax",permitted:true,value:5.0},
 {name:"CurrentSource.CurrentDirection",permitted:true,value:true},
 {name:"ElectroMagnet.CoilLoops",permitted:true,value:1.0}],
-probers:[{name: "FieldMagnitudeProber"}, {name:"FieldDirectionProber"}]}
+plan:[{type: "Guide", 
+       goal: "Can you make the compass go through one complete rotation?",
+       postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+       success: 1000,
+       timelimit: 120,
+       subgoals: [
+         {goal: "What happens to the compass when it moves around the electromagnet?",
+         postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+         success: 1000,
+         components:[{type:"Compass", visible: true}]
+         }],
+       },
+       {type: "Guide",
+       goal: "Understand the magnetic field around the electromagnet",
+       postcondition: "FieldMeter.Count >= 10",
+       success: 250,
+       timelimit: 180,
+       subgoals: [
+        {goal: "Click in many places around the electromagnet to see the field.",
+         postcondition: "FieldMeter.Count >= 10",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         },
+          {goal: "What happens to the field when electromagnet is moved?",
+         postcondition: "FieldMeter.Count >= 10 and Count(ElectroMagnet.Move) >= 5",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         },
+         {goal: "What happens to the field when current direction is changed?",
+         postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentDirection) >= 2",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         },
+         {goal: "What happens to the field when current strength is changed?",
+         postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentMax) >= 5",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         }
+       ]},       
+       {type: "FieldMagnitudeProber",
+        goal: "Touch the ? where the magnetic field is stronger",
+        timelimit: 10,
+        success: 100,
+        failure: 50,
+        components:[{type:"Compass", visible: false}]
+        }, 
+        {type:"FieldDirectionProber",
+        goal: "Touch ? and Drag in the direction of the magnetic field",
+        timelimit: 10,
+        success: 100,
+        failure: 50,
+        components:[{type:"Compass", visible: false}]
+        }
+  ]
+}

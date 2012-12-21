@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.mazalearn.scienceengine.core.model.IParameter;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public interface IModelConfig<T> {
   enum ConfigType { RANGE, LIST, COMMAND, TOGGLE, TEXT };
@@ -35,4 +36,6 @@ public interface IModelConfig<T> {
   public boolean hasProbeMode();
   // Set probe mode - has to support if it has a probe mode
   public void setProbeMode();
+  // Body for which this config is applicable
+  public Science2DBody getBody();
 }

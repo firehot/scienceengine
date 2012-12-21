@@ -2,7 +2,9 @@ package com.mazalearn.scienceengine;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -30,9 +32,9 @@ import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IParameter;
+import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
-import com.mazalearn.scienceengine.core.view.Parameter;
 import com.mazalearn.scienceengine.core.view.StageComponent;
 
 public class ScienceEngine extends Game {
@@ -70,6 +72,8 @@ public class ScienceEngine extends Game {
   private static EventLog eventLog = new EventLog();
 
   private static float time;
+
+  private static Set<Science2DBody> pinnedBodies = new HashSet<Science2DBody>();
 
   public static final int PIXELS_PER_M = 8;
 
@@ -374,5 +378,17 @@ public class ScienceEngine extends Game {
   
   public static float getTime() {
     return time;
+  }
+
+  public static boolean isPinned(Science2DBody body) {
+    return pinnedBodies.contains(body);
+  }
+  
+  public static void pin(Science2DBody body, boolean pin) {
+    if (pin) {
+      pinnedBodies.add(body);
+    } else {
+      pinnedBodies.remove(body);
+    }
   }
 }

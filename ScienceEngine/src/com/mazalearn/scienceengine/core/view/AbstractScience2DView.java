@@ -241,8 +241,8 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
   
   @Override
-  public AbstractTutor createTutor(String type, String resultType,
-      String goal, int deltaSuccessScore, int deltaFailureScore) {
+  public AbstractTutor createTutor(String type, String goal,
+      String resultType, int deltaSuccessScore, int deltaFailureScore) {
     if ("ParameterProber".equals(type)) {
       return new ParameterProber(science2DModel, this, goal, resultType, deltaSuccessScore, deltaFailureScore);
     } else if ("Guide".equals(type)) {

@@ -131,6 +131,7 @@ public class BarMagnet extends AbstractMagnet {
 
   @Override
   public void initializeConfigs() {
+    super.initializeConfigs();
     configs.add(new AbstractModelConfig<Float>(this, 
         Parameter.MagnetStrength, 0f, 10000f) {
       public Float getValue() { return getStrength(); }

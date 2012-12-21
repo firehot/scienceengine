@@ -1,10 +1,9 @@
-package com.mazalearn.scienceengine.core.view;
+package com.mazalearn.scienceengine.core.model;
 
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.IComponentType;
-import com.mazalearn.scienceengine.core.model.IParameter;
 
 public enum Parameter implements IParameter {
+  Self,
   Reset,
   Challenge,
   PauseResume,
