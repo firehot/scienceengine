@@ -261,7 +261,7 @@ class FunctionExpr extends Expr {
       this.rator = rator;
       this.function = function;
       if (!(rand instanceof Variable)) {
-        throw new IllegalArgumentException("Function argument must be a variable");
+        throw new IllegalArgumentException("Aggregator argument must be a variable");
       }
       this.rand = (Variable) rand;
       this.type = Type.DOUBLE;

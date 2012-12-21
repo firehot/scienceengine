@@ -123,7 +123,7 @@ public class RegressionTest {
         assertEquals(Type.BOOL.name(), x.type.name());
         assertEquals("1.0", x.svalue());
 
-        // Function injection
+        // Aggregator injection
         Map<String, IFunction> functions = new HashMap<String, IFunction>();
         functions.put("Count", new IFunction() { public float eval(String name) { return -10;} });
         parser.allowFunctions(functions);

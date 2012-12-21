@@ -157,7 +157,6 @@ public class ParameterProber extends AbstractScience2DProber {
     image.setVisible(activate);
     ScienceEngine.setProbeMode(activate);
     ScienceEngine.selectBody(null, null);
-    ScienceEngine.pin(probeConfig.getBody(), activate);
     this.setVisible(activate);
   }
   

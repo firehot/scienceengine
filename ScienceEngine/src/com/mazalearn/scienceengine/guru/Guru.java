@@ -100,6 +100,7 @@ public class Guru extends Group implements IDoneCallback {
     }
     
     this.setVisible(true);
+    tutorIndex = -1;
     runTutor();
   }
   
@@ -114,6 +115,8 @@ public class Guru extends Group implements IDoneCallback {
     science2DView.done(false);
     ScienceEngine.setProbeMode(false);
     this.setVisible(false);
+    // Clear event log
+    ScienceEngine.getEventLog().clear();
   }
   
   public List<Actor> getExcludedActors() {

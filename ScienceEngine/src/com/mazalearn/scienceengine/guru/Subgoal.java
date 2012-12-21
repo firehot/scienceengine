@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.Function;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.IFunction;
 import com.mazalearn.scienceengine.core.lang.Parser;
@@ -25,21 +26,9 @@ public class Subgoal extends AbstractTutor {
     super(science2DModel, science2DView, goal, deltaSuccessScore, 0);
     Parser parser = new Parser();
     Map<String, IFunction> functions = new HashMap<String, IFunction>();
-    functions.put("Count", new IFunction() {
-      public float eval(String name) { 
-        return ScienceEngine.getEventLog().eval("Count", name);
-      } 
-    });
-    functions.put("Min", new IFunction() {
-      public float eval(String name) { 
-        return ScienceEngine.getEventLog().eval("Min", name);
-      } 
-    });
-    functions.put("Max", new IFunction() {
-      public float eval(String name) { 
-        return ScienceEngine.getEventLog().eval("Max", name);
-      } 
-    });
+    functions.put("Count", Function.Count); 
+    functions.put("Min", Function.Min);
+    functions.put("Max", Function.Max);
     parser.allowFunctions(functions);
     try {
       this.postCondition = parser.parseString(postConditionString);
