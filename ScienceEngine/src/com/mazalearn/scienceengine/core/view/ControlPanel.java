@@ -84,10 +84,12 @@ public class ControlPanel extends Table {
   @SuppressWarnings("rawtypes")
   protected void registerModelConfigs(Table modelControlPanel) {
     this.controllers.clear();
-    modelControlPanel.clear();
-    // Register Environment into ControlPanel
+    // Find environment BEFORE clearing, since environment itself is a part
+    // of modelcontrolpanel during reset.
     Science2DActor environment = 
         (Science2DActor) science2DView.findActor(ComponentType.Environment.name());
+    modelControlPanel.clear();
+    // Register Environment into ControlPanel
     if (environment != null) {
       modelControlPanel.add(environment);
       modelControlPanel.row();

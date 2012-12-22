@@ -7,7 +7,7 @@ components:[{type:"Brushes",x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,h
 {type:"Dummy",x:370.0,y:313.0,originX:32.0,originY:32.0,width:0,height:0,visible:true,rotation:0.0},
 {type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"Title",x:100.0,y:460.0,originX:0.0,originY:0.0,width:0.0,height:5.0,visible:true,rotation:0.0,move:"None",bodytype:false},
-{type: "Environment", params:[{name:"AirPermittivity"},{name:"RoomTemperature"},{name:"EarthMagneticField"}]}], 
+{type: "Environment", move: "None", params:[{name:"AirPermittivity"},{name:"RoomTemperature"},{name:"EarthMagneticField"}]}], 
 circuits:[["CurrentSource","CurrentCoil"]],
 configs:[
 {name:"Magnet Mode", permitted:false, value:"Free"},
