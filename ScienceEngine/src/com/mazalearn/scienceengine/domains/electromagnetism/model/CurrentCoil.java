@@ -81,6 +81,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     return rotationDataType == RotationDataType.AngularVelocity 
         ? getAngularVelocity() : getNumRevolutions();
   }
+  
   /**
    * Sets the magnitude of current in the wire. 
    * @param current the current

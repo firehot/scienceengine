@@ -42,7 +42,7 @@ public class Hinter extends Group {
       public void clicked (InputEvent event, float x, float y) {
         hintButton.setVisible(false);
         SCIENTISTS.get(scientistIndex).setVisible(false);
-        Hinter.this.addAction(Actions.delay(30, new Action() {
+        Hinter.this.addAction(Actions.delay(20, new Action() {
           @Override
           public boolean act(float delta) {
             clearHint();
@@ -105,6 +105,8 @@ public class Hinter extends Group {
     hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     image.setVisible(true);
     image.setY(0);
+    hintButton.setVisible(true);
+    hintButton.setPosition(-hintButton.getWidth(), -50);
   }
 
   public boolean hasHint() {

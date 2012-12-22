@@ -44,7 +44,7 @@ class TutorLoader {
       String parameterName = (String) tutorObj.get("parameter");
       String resultExpr = (String) tutorObj.get("result");
       Array<?> hintObj = (Array<?>) tutorObj.get("hints");
-      String[] hints = new String[hintObj.toArray().length];
+      String[] hints = hintObj == null ? new String[]{} : new String[hintObj.toArray().length];
       for (int i = 0; i < hints.length; i++) {
         hints[i] = (String) hintObj.get(i);
       }

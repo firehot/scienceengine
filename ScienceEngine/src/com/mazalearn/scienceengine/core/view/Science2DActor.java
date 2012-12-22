@@ -79,7 +79,7 @@ public class Science2DActor extends Actor {
           // Get negative of movement vector
           lastTouch.sub(event.getStageX(), event.getStageY());
           // Scale displacement vector suitably to get a proportional force
-          lastTouch.mul(-10000);
+          lastTouch.mul(getRotationForceScaler());
           // view coords of current touch
           viewPos.set(event.getStageX(), event.getStageY());
           // box2d point of current touch
@@ -207,5 +207,9 @@ public class Science2DActor extends Actor {
 
   public void setMovementMode(String movementMode) {
     body.setMovementMode(movementMode);
+  }
+
+  protected int getRotationForceScaler() {
+    return -10000;
   }
 }

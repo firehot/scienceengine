@@ -247,6 +247,8 @@ class BinaryExpr extends Expr {
       switch (rator) {
         case AND:   return b0 && b1;
         case OR:    return b0 || b1;
+        case EQ:    return b0 == b1;
+        case NE:    return b0 != b1;
         default: throw new RuntimeException("BUG: bad rator");
       }
     }

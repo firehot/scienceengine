@@ -24,8 +24,9 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 // doubts on how parameter change affects outcome
 // Generate a parameter point.
 // Is the outcome given by expression true?
-public class ParameterProber extends AbstractScience2DProber {
+public class ParameterProber extends AbstractScience2DProber implements IDoneCallback {
   
+  protected int netSuccesses;
   enum ResultType {
     Spin,
     Direct,
@@ -47,6 +48,7 @@ public class ParameterProber extends AbstractScience2DProber {
   protected IModelConfig<?> probeConfig;
 
   protected DummyBody dummy;
+  private Guru guru;
   
   private Image createResultImage(String path, float x, float y) {
     Image image = new Image(new Texture(path));
@@ -63,6 +65,11 @@ public class ParameterProber extends AbstractScience2DProber {
     image.setOrigin(0, image.getHeight() / 2);
     return image;
   }
+  
+  public void done(boolean success) {
+    netSuccesses += success ? 1 : -1;
+    guru.done(success);
+  }
     
   public ParameterProber(IScience2DModel science2DModel, IScience2DView science2DView,
       String goal, String resultType, int deltaSuccessScore, int deltaFailureScore) {
@@ -70,6 +77,7 @@ public class ParameterProber extends AbstractScience2DProber {
     this.image = new ProbeImage();
     this.resultType = ResultType.valueOf(resultType);
     Guru guru = science2DView.getGuru();
+    this.guru = guru;
     if (this.resultType == ResultType.Spin) {   
       image.setX(guru.getWidth() / 2 - image.getWidth() / 2 - 50);
       image.setY(guru.getHeight() / 2 - image.getHeight() / 2);
@@ -81,7 +89,7 @@ public class ParameterProber extends AbstractScience2DProber {
       Image antiClockwise = createResultImage("images/anticlockwise.png", 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
   
-      imageListener = new ClickResult(guru, new Image[] {clockwise, antiClockwise, dontCare},
+      imageListener = new ClickResult(this, new Image[] {clockwise, antiClockwise, dontCare},
           new ClickResult.StateMapper() {
         @Override
         public int map(float x, float y) {
@@ -106,7 +114,7 @@ public class ParameterProber extends AbstractScience2DProber {
       Image increase = createResultImage("images/fieldarrow.png", 2);
       increase.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);
 
-      imageListener = new ClickResult(guru, new Image[] {decrease, increase, dontCare},
+      imageListener = new ClickResult(this, new Image[] {decrease, increase, dontCare},
           new ClickResult.StateMapper() {
         @Override
         public int map(float x, float y) {
@@ -185,7 +193,7 @@ public class ParameterProber extends AbstractScience2DProber {
 
   @Override
   public boolean isCompleted() {
-    return true;
+    return netSuccesses >= 2;
   }
 
 }
