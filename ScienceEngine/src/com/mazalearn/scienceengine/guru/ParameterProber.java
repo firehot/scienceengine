@@ -7,6 +7,9 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -78,6 +81,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     this.resultType = ResultType.valueOf(resultType);
     Guru guru = science2DView.getGuru();
     this.guru = guru;
+    Group root = ((Stage)science2DView).getRoot();
+    Actor controlPanel = root.findActor("ControlPanel");
     if (this.resultType == ResultType.Spin) {   
       image.setX(guru.getWidth() / 2 - image.getWidth() / 2 - 50);
       image.setY(guru.getHeight() / 2 - image.getHeight() / 2);
@@ -129,13 +134,13 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
         case Direct: imageListener.setResult(1); break;
         case Inverse: imageListener.setResult(0); break;
       }
-      this.addActor(decrease);
-      this.addActor(increase);
-      this.addActor(dontCare);      
+      root.addActorAfter(controlPanel, decrease);
+      root.addActorAfter(controlPanel, increase);
+      root.addActorAfter(controlPanel, dontCare);      
     }
 
     dummy = (DummyBody) science2DModel.findBody(ComponentType.Dummy);
-    this.addActor(image);
+    root.addActorAfter(controlPanel, image);
     image.addListener(imageListener);   
   }
   
