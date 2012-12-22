@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
@@ -29,22 +30,23 @@ public class VariablesProber extends AbstractScience2DProber {
   
   public VariablesProber(final IScience2DModel science2DModel, 
       final IScience2DView science2DView, String goal, Skin skin, 
-      Actor modelControls, ControlPanel controlPanel, int deltaSuccessScore, int deltaFailureScore) {
+      Actor modelControls, ControlPanel controlPanel, int deltaSuccessScore,
+      int deltaFailureScore) {
     super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
     this.configTable = createConfigTable(science2DModel, skin);
     this.modelControls = modelControls;
     this.controlPanel = controlPanel;
-    configTable.setPosition(100, science2DView.getGuru().getHeight() - 100);
+    configTable.setPosition(150, science2DView.getGuru().getHeight() - 100);
     this.addActor(configTable);
 
     // TODO: a lot of hardcoding here - need to abstract better.
     final Set<String> correctVariables1 = new HashSet<String>();
-    for (String configName: new String[] {"BarMagnet Strength", "BarMagnet MovementMode", "PickupCoil Coil Loops"}) {
+    for (String configName: new String[] {"BarMagnet.MagnetStrength", "BarMagnet.MagnetRotation", "PickupCoil.CoilLoops"}) {
       correctVariables1.add(configName);
     }
     final Set<String> correctVariables2 = new HashSet<String>();
-    for (String configName: new String[] {"PickupCoil Coil Loops",
-        "ElectroMagnet Coil Loops", "CurrentSource Max", "CurrentSource Type"}) {
+    for (String configName: new String[] {"PickupCoil.CoilLoops",
+        "ElectroMagnet.CoilLoops", "CurrentSource.CurrentMax", "CurrentSource.Type"}) {
       correctVariables2.add(configName);
     }
 
@@ -60,7 +62,8 @@ public class VariablesProber extends AbstractScience2DProber {
             chosenVariables.add(config.getName());
           }
         }
-        science2DView.getGuru().done(correctVariables1.equals(chosenVariables) || correctVariables2.equals(chosenVariables));
+        science2DView.getGuru().done(correctVariables1.equals(chosenVariables) || 
+            correctVariables2.equals(chosenVariables));
       }
     });
   }
@@ -78,7 +81,7 @@ public class VariablesProber extends AbstractScience2DProber {
     configTable.add("Choose Variables");
     configTable.row();
     for (final IModelConfig<?> config: science2DModel.getAllConfigs()) {
-      if (config.isPossible()) {
+      if (config.isPossible() && config.getParameter() != Parameter.NameOfSelectedBody && config.getBody() != null) {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
         configTable.add(configCheckbox).left();
         configCheckbox.setChecked(false);

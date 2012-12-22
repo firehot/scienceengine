@@ -52,7 +52,7 @@ public abstract class AbstractTutor extends Group implements ITutor{
 
   @Override
   public String getHint() {
-    if (hints.length == 0) return null;
+    if (hints == null || hints.length == 0) return null;
     return hints[MathUtils.random(0, hints.length - 1)];
   }
 

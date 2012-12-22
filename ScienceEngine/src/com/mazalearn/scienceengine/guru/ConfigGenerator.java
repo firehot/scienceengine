@@ -39,6 +39,9 @@ public class ConfigGenerator {
         boolean doCommand = MathUtils.randomBoolean();
         if (doCommand) commandConfig.doCommand();
         break;
+      case TEXT:
+        // Ignore - this is a meter
+        break;
       default:
         throw new IllegalArgumentException("Unknown config type: " + config);
       }
