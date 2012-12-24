@@ -23,12 +23,13 @@ public class Controller {
     cellTable.setWidget(control.isAvailable() ? this.table : null);
   }
 
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  @SuppressWarnings({ "rawtypes" })
   public static Controller createController(IModelConfig property, 
       Table controlTable, Skin skin) {
     return createController(property, controlTable, skin, "default");
   }
   
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public static Controller createController(IModelConfig property, 
         Table controlTable, Skin skin, String styleName) {
     Table table = new Table(skin);
