@@ -27,8 +27,10 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.controller.ToggleButtonControl;
 import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Parameter;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class ControlPanel extends Table {
   private final IScience2DController science2DController;
@@ -81,22 +83,33 @@ public class ControlPanel extends Table {
     registerModelConfigs(modelControlPanel);
   }
   
+  private IParameter asParameter(final Science2DBody body) {
+    return new IParameter() {
+      @Override
+      public String name() {
+        return body.getComponentTypeName();
+      }      
+    };
+  }
+  
   @SuppressWarnings("rawtypes")
   protected void registerModelConfigs(Table modelControlPanel) {
     this.controllers.clear();
-    // Find environment BEFORE clearing, since environment itself is a part
-    // of modelcontrolpanel during reset.
-    Science2DActor environment = 
-        (Science2DActor) science2DView.findActor(ComponentType.Environment.name());
     modelControlPanel.clear();
-    // Register Environment into ControlPanel
-    if (environment != null) {
-      modelControlPanel.add(environment);
-      modelControlPanel.row();
-    }    
     // Register all model controllers
-    for (IModelConfig modelConfig: science2DModel.getAllConfigs()) {
-      this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+    for (final Science2DBody body: science2DModel.getBodies()) {
+      if (!body.isActive() || body.getComponentType() == ComponentType.Dummy) continue;
+      IModelConfig<?> bodyConfig = new AbstractModelConfig(body, asParameter(body)) {
+        @Override public boolean isPossible() { return body.isActive(); }      
+        @Override public boolean isAvailable() { return isPossible(); }
+        @Override public void doCommand() {
+          ScienceEngine.pin(body, !ScienceEngine.isPinned(body));
+        }
+      };
+      this.controllers.add(Controller.createController(bodyConfig, modelControlPanel, skin, "body"));
+      for (IModelConfig modelConfig: body.getConfigs()) {
+        this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+      }
     }
   }
 

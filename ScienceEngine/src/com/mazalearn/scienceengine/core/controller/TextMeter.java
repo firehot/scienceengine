@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
@@ -26,7 +27,7 @@ public class TextMeter implements IControl {
   private Image pinup;
   
   @SuppressWarnings("rawtypes")
-  public TextMeter(final IModelConfig property, final Skin skin) {
+  public TextMeter(final IModelConfig property, final Skin skin, String styleName) {
     this.table = new Table(skin);
     table.setName(property.getParameter().name());
     this.label = new Label(property.getParameter().name(), skin);
@@ -36,9 +37,11 @@ public class TextMeter implements IControl {
     label.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
-            (String) property.getValue(),
-            (IScience2DView) label.getStage());
+        if (ScienceEngine.getSelectedBody() == property.getBody()) {
+          ScienceEngine.selectBody(null, null);
+        } else {
+          ScienceEngine.selectBody(property.getBody(), (IScience2DView) label.getStage());
+        }
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });
@@ -46,18 +49,27 @@ public class TextMeter implements IControl {
     pinup = new Image(new Texture("images/pinup.png"));
     pinflat.setVisible(!pinned);
     pinup.setVisible(pinned);
-    table.addListener(new ClickListener() {
+    ClickListener listener = new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         property.doCommand();
         pinned = !pinned;
         pinflat.setVisible(!pinned);
         pinup.setVisible(pinned);
+        ScienceEngine.selectBody(property.getBody(), (IScience2DView) label.getStage());
+        ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
+            (String) property.getValue(),
+            (IScience2DView) label.getStage());
       }
-    });
-    table.add(label);
-    table.add(pinflat);
-    table.add(pinup);
+    };
+    pinup.addListener(listener);
+    pinflat.addListener(listener);
+    table.add(label).left().fillX().expandX();
+    table.add(pinflat).width(16).right();
+    table.add(pinup).width(16).right();
+    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+      table.debug();
+    }
   }
   
   public Actor getActor() {

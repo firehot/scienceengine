@@ -17,7 +17,8 @@ configs:[
 {name:"CurrentSource.CurrentMax", permitted:true, value:3.0},
 {name:"CurrentSource.CurrentDirection", permitted:true, value:true},
 {name:"CurrentCoil.CommutatorType", permitted:true, value:"Connector"}],
-plan: [{type: "Guide",
+plan: [
+  {type: "Guide",
    goal: "Can you make number of revolutions of the motor +5 by configuring only the magnet?",
    success:200,
    timelimit: 300,

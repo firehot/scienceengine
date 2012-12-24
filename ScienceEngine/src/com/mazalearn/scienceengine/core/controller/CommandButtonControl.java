@@ -18,9 +18,13 @@ public class CommandButtonControl implements IControl {
   
   protected final TextButton textButton;
   
-  @SuppressWarnings("rawtypes")
   public CommandButtonControl(final IModelConfig command, final Skin skin) {
-    this.textButton = new TextButton(command.getParameter().name(), skin);
+    this(command, skin, "default");
+  }
+
+  @SuppressWarnings("rawtypes")
+  public CommandButtonControl(final IModelConfig command, final Skin skin, String styleName) {
+    this.textButton = new TextButton(command.getParameter().name(), skin, styleName);
     this.command = command;
     textButton.setName(command.getName());
     textButton.addListener(new ClickListener() {

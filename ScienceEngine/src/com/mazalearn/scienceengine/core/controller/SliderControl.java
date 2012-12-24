@@ -17,7 +17,7 @@ public class SliderControl implements IControl {
   private final IModelConfig<Float> property;
   private final Slider slider;
   
-  public SliderControl(final IModelConfig<Float> property, Skin skin) {
+  public SliderControl(final IModelConfig<Float> property, Skin skin, String styleName) {
     this.slider = new Slider(property.getLow(), property.getHigh(), 
         (property.getHigh() - property.getLow())/10, false, skin);
     this.property = property;

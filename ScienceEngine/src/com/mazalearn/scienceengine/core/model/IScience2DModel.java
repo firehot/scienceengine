@@ -51,4 +51,6 @@ public interface IScience2DModel {
   public Science2DBody findBody(String componentTypeName);
   // Bind current parameter values in model to the variables
   public void bindParameterValues(Collection<Variable> variables);
+  // List of bodies in the model
+  public List<Science2DBody> getBodies();
 }

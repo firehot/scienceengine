@@ -81,16 +81,12 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   // Factory method for creating science2D actors
   protected Actor createActor(Science2DBody body) {
     IComponentType componentType = body.getComponentType();
-    if (componentType == ComponentType.Dummy) {
+    if (componentType == ComponentType.Dummy || componentType == ComponentType.Environment) {
       Pixmap pixmap = new Pixmap(8, 8, Format.RGBA8888);
       pixmap.setColor(Color.LIGHT_GRAY);
       pixmap.fillRectangle(0, 0, 8, 8);
       TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
       pixmap.dispose();
-      return new Science2DActor(body, textureRegion);
-    } else if (componentType == ComponentType.Environment) {
-      TextureRegion textureRegion = 
-          new TextureRegion(new Texture("images/environment.jpg"));
       Science2DActor science2DActor = new Science2DActor(body, textureRegion);
       science2DActor.setPositionFromViewCoords(false);
       return science2DActor;      

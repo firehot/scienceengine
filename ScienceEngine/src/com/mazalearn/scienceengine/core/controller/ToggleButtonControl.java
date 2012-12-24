@@ -19,8 +19,12 @@ public class ToggleButtonControl implements IControl {
   protected final TextButton toggleButton;
   
   public ToggleButtonControl(final IModelConfig<Boolean> property, final Skin skin) {
+    this(property, skin, "toggle");
+  }
+  
+  public ToggleButtonControl(final IModelConfig<Boolean> property, final Skin skin, String styleName) {
     this.toggleButton = new TextButton(property.getParameter().name(), 
-        skin.get("toggle", TextButtonStyle.class));
+        skin.get(styleName, TextButtonStyle.class));
     this.property = property;
     toggleButton.setName(property.getName()); 
     toggleButton.addListener(new ClickListener() {
