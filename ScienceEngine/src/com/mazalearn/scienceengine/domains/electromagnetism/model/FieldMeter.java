@@ -95,6 +95,11 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   public void setBField(Vector2 bField) {
     fieldVector.set(bField);
   }
+  
+  @Override
+  public boolean allowsConfiguration() {
+    return false;
+  }
 
   @Override
   public void notifyFieldChange() {

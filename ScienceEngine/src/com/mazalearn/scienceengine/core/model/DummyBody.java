@@ -39,6 +39,11 @@ public class DummyBody extends Science2DBody {
     configs.add(probeConfig);
   }
   
+  @Override
+  public boolean allowsConfiguration() {
+    return false;
+  }
+
   public void setConfigParameter(IParameter parameter, float value) {
     if (parameter == null) {
       parameter = Parameter.Select;

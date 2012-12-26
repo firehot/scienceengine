@@ -197,6 +197,19 @@ public class Science2DBody implements IBody {
     }
   }
   
+  public IModelConfig<?> findConfig(Parameter parameter) {
+    for (IModelConfig<?> config: getConfigs()) {
+      if (config.getParameter().equals(parameter)) {
+        return config;
+      }
+    }
+    return null;
+  }
+
+  public boolean allowsConfiguration() {
+    return true;
+  }
+  
   //////////////////////////////////////////////////////////////////////////
   ///  Static Proxy envelope for Box2D body
   //////////////////////////////////////////////////////////////////////////
@@ -488,14 +501,5 @@ public class Science2DBody implements IBody {
   @Override
   public void setUserData(Object userData) {
     body.setUserData(userData);
-  }
-
-  public IModelConfig<?> findConfig(Parameter parameter) {
-    for (IModelConfig<?> config: getConfigs()) {
-      if (config.getParameter().equals(parameter)) {
-        return config;
-      }
-    }
-    return null;
   }
 }

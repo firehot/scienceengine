@@ -51,6 +51,7 @@ public class Guru extends Group implements IDoneCallback {
     super();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
+    dashboard.setPosition(0, 0);
     this.science2DView = science2DView;
     this.science2DModel = science2DModel;
     this.soundManager = ScienceEngine.getSoundManager();

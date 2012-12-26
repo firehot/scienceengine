@@ -60,7 +60,7 @@ public class Guide extends AbstractTutor {
     this.guruHeight = height;
     if (probeMode) {
       currentStage = 0;
-      subgoals.get(0).reinitialize(0, guruHeight - 50, 0, 0, true);
+      subgoals.get(0).reinitialize(0, guruHeight - 100, 0, 0, true);
     }
   }
   

@@ -12,11 +12,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
+import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
@@ -53,7 +60,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   public Guru getGuru() {
     if (guru == null) {
       guru = new Guru(skin, getWidth(), getHeight(), this, science2DModel, controlPanel);
-      this.getRoot().addActor(controlPanel); // Move control Panel to top - why?
+      this.getRoot().addActor(controlPanel); // Move view control Panel to top - why?
       // Add guru before controlpanel so that controls are accessible.
       this.getRoot().addActorBefore(controlPanel, guru);
     }
@@ -211,8 +218,11 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
 
   public void setControlPanel(ControlPanel controlPanel) {
     this.controlPanel = controlPanel;
-    // Register control panel
+    // Register control panels
     this.addActor(controlPanel);
+    // register the back button
+    this.addActor(createBackButton());
+    
     // Register stage components
     for (StageComponent stageComponent: StageComponent.values()) {
       Label component = new Label("", skin);
@@ -234,6 +244,33 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
       Label status = (Label) findActor(StageComponent.Status.name());
       status.setText("Demo only. Best experienced on Android Tablet");
     }
+  }
+
+  private Actor createBackButton() {
+    final TextButton backButton = 
+        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), skin); //$NON-NLS-1$
+    backButton.setPosition(5, getHeight() - 30);
+    backButton.setWidth(80);
+    backButton.addListener(new ClickListener() {
+      public void clicked(InputEvent event, float x, float y) {
+        AbstractScience2DView.this.challenge(false);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        ScienceEngine.getProfileManager().retrieveProfile().setCurrentLevel(0);
+        AbstractScreen screen = new DomainHomeScreen(ScienceEngine.SCIENCE_ENGINE, controller.getName());
+        ScienceEngine.SCIENCE_ENGINE.setScreen(
+            new LoadingScreen(ScienceEngine.SCIENCE_ENGINE, screen));
+      }
+      
+      @Override
+      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+        super.touchDown(event, localX, localY, pointer, button);
+        IScience2DView stage = (IScience2DView) backButton.getStage();
+        Label status = (Label) stage.findActor(StageComponent.Status.name());
+        status.setText(ScienceEngine.getMsg().getString("Help.Back"));
+        return true;
+      }
+    });
+    return backButton;
   }
   
   @Override
