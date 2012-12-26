@@ -98,7 +98,7 @@ public class Hinter extends Group {
     Image image = SCIENTISTS.get(scientistIndex);
     image.setVisible(false);
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
-    hintButton.setSize(300, 100); 
+    hintButton.setSize(500, 50); 
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
     jumpingMode = true;
     image = SCIENTISTS.get(scientistIndex);

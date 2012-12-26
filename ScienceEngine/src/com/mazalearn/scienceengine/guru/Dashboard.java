@@ -23,7 +23,7 @@ class Dashboard extends Table {
     }
     this.setFillParent(false);
     this.center();
-    goal = new TextButton("Challenge", skin) {
+    goal = new TextButton("Goal", skin) {
       private float increment = 0.01f;
       private float alpha = 1;
       @Override
@@ -45,22 +45,25 @@ class Dashboard extends Table {
       @Override
       public void act(float delta) {
         timeLimit -= delta;
-        this.setText(String.valueOf(Math.round(timeLimit / 60) + ":" + String.valueOf(Math.round(timeLimit % 60))));
+        this.setText(String.format("%2d:%02d", Math.round(timeLimit / 60), Math.round(timeLimit % 60)));
         if (timeLimit < 0) {
           // TODO: goal.setText("Time Up");
         }
       }
     };
     
-    this.add("Score").left();
-    this.add(scoreLabel).right().fill();
-    this.add("Time Left").right().pad(10);
-    this.add(timerLabel).right().fill();
-    this.row();
-    
-    this.add("Goal").pad(10, 0, 0, 10).left();
-    this.add(goal).pad(10, 0, 0, 0).colspan(3).fill();
-    this.row();
+    Table t = new Table(skin);
+    t.add("Timer");
+    t.row();
+    t.add(timerLabel).width(40).fill().right();
+    this.add(t).left();
+    this.add(goal).pad(10).width(430).fill();
+    goal.getLabel().setWrap(true);
+    t = new Table(skin);
+    t.add("Score");
+    t.row();
+    t.add(scoreLabel).width(40).fill().center();
+    this.add(t).right();
   }
   
   public void addScore(int deltaScore) {
