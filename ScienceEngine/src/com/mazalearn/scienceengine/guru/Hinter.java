@@ -58,7 +58,7 @@ public class Hinter extends Group {
         if (jumpingMode) {
           jumpingMode = false;
           hintButton.setVisible(true);
-          hintButton.setPosition(-hintButton.getWidth(), -50);
+          hintButton.setPosition(-hintButton.getWidth() - 100, -50);
         } else {
           buttonClickListener.clicked(null, 0, 0);
         }
@@ -68,7 +68,7 @@ public class Hinter extends Group {
       image.setSize(42, 42);
       this.addActor(image);
       image.setVisible(false);
-      image.addListener(imageClickListener);    
+      image.addListener(imageClickListener);
     }
     
     this.addActor(hintButton);
@@ -98,15 +98,15 @@ public class Hinter extends Group {
     Image image = SCIENTISTS.get(scientistIndex);
     image.setVisible(false);
     // TODO: BUG in libgdx for wrapped labels ??? hence setting height
-    hintButton.setSize(500, 50); 
+    hintButton.setSize(400, 50); 
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
-    jumpingMode = true;
+    jumpingMode = false; // TODO: very irritating
     image = SCIENTISTS.get(scientistIndex);
     hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     image.setVisible(true);
     image.setY(0);
     hintButton.setVisible(true);
-    hintButton.setPosition(-hintButton.getWidth(), -50);
+    hintButton.setPosition(-hintButton.getWidth() - 100, -50);
   }
 
   public boolean hasHint() {

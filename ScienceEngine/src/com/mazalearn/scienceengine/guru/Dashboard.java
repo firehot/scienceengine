@@ -24,7 +24,7 @@ class Dashboard extends Table {
     this.setFillParent(false);
     this.center();
     goal = new TextButton("Goal", skin) {
-      private float increment = 0.01f;
+      private float increment = 0f; // TODO: 0.01f;
       private float alpha = 1;
       @Override
       public void draw(SpriteBatch batch, float parentAlpha) {
