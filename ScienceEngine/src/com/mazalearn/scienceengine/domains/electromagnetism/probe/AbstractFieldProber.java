@@ -66,7 +66,12 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   }
 
   @Override
-  public boolean isCompleted() {
+  public boolean hasSucceeded() {
     return netSuccesses >= 10;
+  }
+
+  @Override
+  public boolean hasFailed() {
+    return false; // Allow learner to keep trying forever
   }
 }

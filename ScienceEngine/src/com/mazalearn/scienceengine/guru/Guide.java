@@ -61,7 +61,7 @@ public class Guide extends AbstractTutor {
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     if (currentStage < 0 || currentStage == subgoals.size()) return;
     Subgoal subgoal = subgoals.get(currentStage);
-    while (subgoal.isCompleted()) {
+    while (subgoal.hasSucceeded()) {
       currentStage++;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
       science2DView.getGuru().done(true);
@@ -98,8 +98,13 @@ public class Guide extends AbstractTutor {
   }
 
   @Override
-  public boolean isCompleted() {
+  public boolean hasSucceeded() {
     return currentStage == subgoals.size();
+  }
+
+  @Override
+  public boolean hasFailed() {
+    return false; // Allow learner to keep trying forever
   }
 
 }

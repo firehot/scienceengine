@@ -131,7 +131,7 @@ public class Guru extends Group implements IDoneCallback {
    */
   public void done(boolean success) {
     if (success) {
-      if (currentTutor.isCompleted()) {
+      if (currentTutor.hasSucceeded()) {
         this.setSize(windowWidth,  windowHeight);
         this.setPosition(0, 0);
         currentTutor.activate(false);
@@ -156,7 +156,7 @@ public class Guru extends Group implements IDoneCallback {
       return;
     }
     // Loss
-    if (dashboard.getScore() <= LOSS_THRESHOLD) {
+    if (dashboard.getScore() <= LOSS_THRESHOLD || currentTutor.hasFailed()) {
       science2DView.done(false);
       this.setVisible(false);
       return;
@@ -182,7 +182,7 @@ public class Guru extends Group implements IDoneCallback {
   // Prerequisite: registeredTutors.size() >= 1
   private void runTutor() {
     // If a valid tutor is already running, let it continue
-    if (currentTutor != null && !currentTutor.isCompleted()) {
+    if (currentTutor != null && !currentTutor.hasSucceeded()) {
       currentTutor.activate(true);
       return;
     }

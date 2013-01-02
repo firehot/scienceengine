@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.electromagnetism.probe;
+package com.mazalearn.scienceengine.guru;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,6 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
 
 public class Abstractor extends AbstractTutor {
 
@@ -33,6 +32,8 @@ public class Abstractor extends AbstractTutor {
   private float guruHeight;
   private Skin skin;
   private Set<String> correctParameters;
+  private Image[] life = new Image[3];
+  private int numLivesLeft = 3;
   
   public Abstractor(final IScience2DModel science2DModel, 
       final IScience2DView science2DView, String goal, 
@@ -59,6 +60,10 @@ public class Abstractor extends AbstractTutor {
       createConfigTable(science2DModel, skin);
     }
     configTable.setVisible(true);
+    numLivesLeft = 3;
+    for (int i = 0; i < 3; i++) {
+      life[i].getColor().a = 1f;
+    }
   }
   
   private void createConfigTable(IScience2DModel science2DModel, Skin skin) {
@@ -66,7 +71,8 @@ public class Abstractor extends AbstractTutor {
     configTable.setName("Configs");
     configTable.setPosition(150, -125);
     this.addActor(configTable);
-    final Image cart = new Image(new Texture("images/shoppingcart.png"));
+    Texture shoppingCartTexture = new Texture("images/shoppingcart.png");
+    final Image cart = new Image(shoppingCartTexture);
     cart.setSize(50, 50);
     cart.setPosition(40, -40);
     cart.addListener(new ClickListener() {
@@ -95,11 +101,17 @@ public class Abstractor extends AbstractTutor {
     }
     Collections.shuffle(checkBoxList);
     for (CheckBox checkBox: checkBoxList) {
-      configTable.add(checkBox).left();
+      configTable.add(checkBox).left().colspan(4);
       configTable.row();      
     }
     // Shuffle rows
+    for (int i = 0; i < 3; i++) {
+      life[i] = new Image(shoppingCartTexture);
+      life[i].setSize(25, 25);
+      configTable.add(life[i]).width(25);
+    }
     configTable.add(createDoneButton(skin)).fill();
+    configTable.row();
   }
 
   private TextButton createDoneButton(Skin skin) {
@@ -116,7 +128,11 @@ public class Abstractor extends AbstractTutor {
             chosenParameters.add(checkBox.getName());
           }
         }
-        science2DView.getGuru().done(correctParameters.equals(chosenParameters));
+        boolean success = correctParameters.equals(chosenParameters);
+        if (!success) {
+          life[--numLivesLeft].getColor().a = 0.3f;
+        }
+        science2DView.getGuru().done(success);
       }
     });
     return doneButton;
@@ -133,8 +149,13 @@ public class Abstractor extends AbstractTutor {
   }
 
   @Override
-  public boolean isCompleted() {
+  public boolean hasSucceeded() {
     return true;
+  }
+
+  @Override
+  public boolean hasFailed() {
+    return numLivesLeft <= 0;
   }
 
   public void initialize(String[] parameters) {

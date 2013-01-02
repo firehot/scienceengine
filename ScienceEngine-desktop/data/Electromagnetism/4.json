@@ -12,14 +12,11 @@ circuits:[["PickupCoil","Ammeter", "Lightbulb"]],
 configs:[{name:"BarMagnet.MagnetMode",permitted:true,value:"Move"},
 {name:"BarMagnet.MagnetStrength",permitted:true,value:10000.0}],
 plan: [
-       {type: "Abstractor", 
-        goal:"Select those variables in the shopping cart which affect the magnitude of induced EMF",
-        configs: [{name: "BarMagnet.MagnetMode", permitted: false, value:"Rotate"},
-                  {name: "BarMagnet.RotationAngle", permitted: false, value:0}
-                 ],
-        parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],
-        success: 5000
-        },
+   {type: "ParameterProber",
+             goal:"Select decrease or increase parameter to increase current induced.\nSelect X if parameter does not affect current.",
+             hints:["If magnet strength is increased, will induced current increase?"],
+             parameter:"BarMagnet.MagnetStrength", 
+             resultType:"Direct"}, 
        {type: "Guide",
    goal: "Explore how induced current changes with change of different parameters.",
    success: 200,
@@ -35,7 +32,7 @@ plan: [
            when: "PickupCoil.Move",
            postcondition: "Count(PickupCoil.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1",
            success: 250},
-           {goal: "Does change in number of coils affect the induced current?",
+           {goal: "Does change in number of coil loops affect the induced current?",
            postcondition: "Count(PickupCoil.CoilLoops) > 3 and Max(PickupCoil.Current) >= 1.5",
            success: 250},
            {goal: "Does change in Earth's magnetic field affect the induced current?",
@@ -59,6 +56,15 @@ plan: [
              goal:"Select decrease or increase parameter to increase current induced.\nSelect X if parameter does not affect current.",
              hints:["If earth's magnetic field increases, will induced current increase?"],
              parameter:"Environment.EarthMagneticField", 
-             resultType:"None"}  ]
+             resultType:"None"},
+   {type: "Abstractor", 
+        goal:"Select those variables in the shopping cart which affect the magnitude of induced EMF. You have 3 tries.",
+        configs: [{name: "BarMagnet.MagnetMode", permitted: false, value:"Rotate"},
+                  {name: "BarMagnet.RotationAngle", permitted: false, value:0}
+                 ],
+        parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],
+        success: 5000
+        }
+   ]
  
 }

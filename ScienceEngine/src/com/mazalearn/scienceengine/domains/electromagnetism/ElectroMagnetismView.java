@@ -25,7 +25,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirectionProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.LightProber;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.Abstractor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.AmmeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CircuitActor;
@@ -37,6 +36,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
+import com.mazalearn.scienceengine.guru.Abstractor;
 
 public class ElectroMagnetismView extends AbstractScience2DView {
   private FieldMeter fieldMeter;

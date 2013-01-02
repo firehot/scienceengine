@@ -45,14 +45,20 @@ public class Subgoal extends AbstractTutor {
     return when;
   }
 
-  public boolean isCompleted() {
+  public boolean hasSucceeded() {
     if (postCondition == null) return false;  
     science2DModel.bindParameterValues(variables);
     return postCondition.bvalue();
   }
 
+
+  @Override
+  public boolean hasFailed() {
+    return false; // Allow learner to keep trying forever
+  }
+
   public void checkProgress() {
-    this.progress = isCompleted();
+    this.progress = hasSucceeded();
   }
 
   @Override

@@ -17,6 +17,10 @@ public interface ITutor {
 
   public void checkProgress();
 
-  public boolean isCompleted();
+  // Has successfully completed all stages
+  public boolean hasSucceeded();
+
+  // Will not be able to successfully complete all stages
+  public boolean hasFailed();
 
 }

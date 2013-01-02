@@ -75,5 +75,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public abstract boolean isCompleted();
+  public abstract boolean hasSucceeded();
+
+  @Override
+  public abstract boolean hasFailed();
 }

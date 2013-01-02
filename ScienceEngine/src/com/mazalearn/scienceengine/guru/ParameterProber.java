@@ -192,8 +192,14 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   }
 
   @Override
-  public boolean isCompleted() {
+  public boolean hasSucceeded() {
     return netSuccesses >= 2;
+  }
+
+
+  @Override
+  public boolean hasFailed() {
+    return false; // Allow learner to keep trying forever
   }
 
 }
