@@ -35,7 +35,7 @@ plan:[{type: "Guide",
          components:[{type:"Compass", visible: false}]
          },
          {goal: "What happens to the field when magnet is rotated?",
-         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetRotation) >= 5",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.RotationAngle) >= 5",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },

@@ -38,11 +38,9 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   }
   
   
-  protected ResultType resultType;
-  protected Image image;
-  protected ClickResult imageListener;
-
-  protected String goal;
+  private ResultType resultType;
+  private Image image;
+  private ClickResult imageListener;
 
   private Expr resultExpr;
 
@@ -75,14 +73,65 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   }
     
   public ParameterProber(IScience2DModel science2DModel, IScience2DView science2DView,
-      String goal, String resultType, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
+      String goal, Array<?> components, Array<?> configs, 
+      int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.image = new ProbeImage();
-    this.resultType = ResultType.valueOf(resultType);
     Guru guru = science2DView.getGuru();
     this.guru = guru;
+
+    dummy = (DummyBody) science2DModel.findBody(ComponentType.Dummy);
+  }
+  
+  @Override
+  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
+    super.reinitialize(x,  y, width, height, probeMode);
+    image.setVisible(false);
+  }
+  
+  @Override
+  public void activate(boolean activate) {
+    if (activate) {
+      if (resultType == ResultType.Spin) {
+        List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
+        configs.add(probeConfig);
+        science2DView.getGuru().setupProbeConfigs(configs, false);
+        science2DModel.bindParameterValues(resultExprVariables);
+        imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
+      } else {
+        float value = MathUtils.random(0f, 10f);
+        dummy.setConfigParameter(probeConfig.getParameter(), value);
+        science2DView.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
+      }
+    } else {
+      dummy.setConfigParameter(null, 0);
+    }
+    image.setVisible(activate);
+    ScienceEngine.setProbeMode(activate);
+    ScienceEngine.selectBody(null, null);
+    this.setVisible(activate);
+  }
+  
+  @Override
+  public void checkProgress() {
+  }
+  
+  public void initialize(IModelConfig<?> probeConfig, 
+      String resultExprString, String resultType, String[] hints) {
+    this.probeConfig = probeConfig;
+    this.hints = hints;
+    if (resultExprString == null) return;
+    Parser parser = new Parser();
+    try {
+      this.resultExpr = parser.parseString(resultExprString);
+    } catch (SyntaxException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
+    this.resultExprVariables = parser.getVariables();
     Group root = ((Stage)science2DView).getRoot();
     Actor controlPanel = root.findActor("ControlPanel");
+    this.resultType = ResultType.valueOf(resultType);
     if (this.resultType == ResultType.Spin) {   
       image.setX(guru.getWidth() / 2 - image.getWidth() / 2 - 50);
       image.setY(guru.getHeight() / 2 - image.getHeight() / 2);
@@ -138,62 +187,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       root.addActorAfter(controlPanel, increase);
       root.addActorAfter(controlPanel, dontCare);      
     }
-
-    dummy = (DummyBody) science2DModel.findBody(ComponentType.Dummy);
     root.addActorAfter(controlPanel, image);
     image.addListener(imageListener);   
-  }
-  
-  @Override
-  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
-    super.reinitialize(x,  y, width, height, probeMode);
-    image.setVisible(false);
-  }
-  
-  @Override
-  public void activate(boolean activate) {
-    if (activate) {
-      if (resultType == ResultType.Spin) {
-        List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
-        configs.add(probeConfig);
-        science2DView.getGuru().setupProbeConfigs(configs, false);
-        science2DModel.bindParameterValues(resultExprVariables);
-        imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
-      } else {
-        float value = MathUtils.random(0f, 10f);
-        dummy.setConfigParameter(probeConfig.getParameter(), value);
-        science2DView.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
-      }
-    } else {
-      dummy.setConfigParameter(null, 0);
-    }
-    image.setVisible(activate);
-    ScienceEngine.setProbeMode(activate);
-    ScienceEngine.selectBody(null, null);
-    this.setVisible(activate);
-  }
-  
-  @Override
-  public void checkProgress() {
-  }
-  
-  public void initialize(String goal, IModelConfig<?> probeConfig, 
-      String resultExprString, String type, Array<?> components, 
-      Array<?> configs, String[] hints) {
-    super.initialize(components, configs);
-    this.goal = goal;
-    this.probeConfig = probeConfig;
-    this.configs = configs;
-    this.hints = hints;
-    if (resultExprString == null) return;
-    Parser parser = new Parser();
-    try {
-      this.resultExpr = parser.parseString(resultExprString);
-    } catch (SyntaxException e) {
-      e.printStackTrace();
-      throw new RuntimeException(e);
-    }
-    this.resultExprVariables = parser.getVariables();
   }
 
   @Override

@@ -118,6 +118,8 @@ public class Guru extends Group implements IDoneCallback {
     this.setVisible(false);
     // Clear event log
     ScienceEngine.getEventLog().clear();
+    // Reload the level.
+    // controlPanel.reload();
   }
   
   public List<Actor> getExcludedActors() {

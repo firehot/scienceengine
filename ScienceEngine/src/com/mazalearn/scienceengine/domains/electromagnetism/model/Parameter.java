@@ -7,10 +7,10 @@ import com.mazalearn.scienceengine.core.model.IParameter;
 public enum Parameter implements IParameter {
   CurrentType,
   CurrentFrequency,
-  CurrentMax,
+  MaxCurrent,
   CurrentDirection,
   MagnetStrength,
-  MagnetRotation,
+  RotationAngle,
   MagnetMode,
   CommutatorType,
   CoilLoops,
@@ -18,7 +18,8 @@ public enum Parameter implements IParameter {
   RotationDataType, 
   RotationData, 
   Count, 
-  Current;
+  Current, 
+  RotationVelocity;
   
   private Parameter() {
   }

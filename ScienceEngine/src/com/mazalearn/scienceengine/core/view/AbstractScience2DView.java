@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
@@ -218,7 +219,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
 
   public void setControlPanel(ControlPanel controlPanel) {
     this.controlPanel = controlPanel;
-    // Register control panels
+    // Register control panel
     this.addActor(controlPanel);
     // register the back button
     this.addActor(createBackButton());
@@ -275,11 +276,11 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   
   @Override
   public AbstractTutor createTutor(String type, String goal,
-      String resultType, int deltaSuccessScore, int deltaFailureScore) {
+      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
     if ("ParameterProber".equals(type)) {
-      return new ParameterProber(science2DModel, this, goal, resultType, deltaSuccessScore, deltaFailureScore);
+      return new ParameterProber(science2DModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("Guide".equals(type)) {
-      return new Guide(science2DModel, this, goal, deltaSuccessScore, deltaFailureScore);
+      return new Guide(science2DModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     }
     return null;
   }

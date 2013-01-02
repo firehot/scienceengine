@@ -15,6 +15,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 /**
  * A simple options screen.
@@ -40,20 +41,23 @@ public class OptionsScreen extends AbstractScreen {
     table.columnDefaults(0).padRight(20);
     table.add(getMsg().getString("ScienceEngine.Options")).colspan(3); //$NON-NLS-1$
 
-    // Create locale selection box
-    final SelectBox languageSelect = 
-        new SelectBox(new String[] { "en", "ka", "hi"}, getSkin());
-    languageSelect.setSelection(getMsg().getLanguage());
-    languageSelect.addListener(new ChangeListener() {
-      @Override
-      public void changed(ChangeEvent event, Actor actor) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        getMsg().setLanguage(getSkin(), languageSelect.getSelection());
-      }
-    });
-    table.row();
-    table.add(getMsg().getString("ScienceEngine.Language")); // $NON-NLS-1$
-    table.add(languageSelect).colspan(2).left();
+    // Create locale selection box if Desktop or Android
+    Platform platform = ScienceEngine.getPlatformAdapter().getPlatform();
+    if (platform == Platform.Android || platform == Platform.Desktop) {
+      final SelectBox languageSelect = 
+          new SelectBox(new String[] { "en", "ka", "hi"}, getSkin());
+      languageSelect.setSelection(getMsg().getLanguage());
+      languageSelect.addListener(new ChangeListener() {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+          getMsg().setLanguage(getSkin(), languageSelect.getSelection());
+        }
+      });
+      table.row();
+      table.add(getMsg().getString("ScienceEngine.Language")); // $NON-NLS-1$
+      table.add(languageSelect).colspan(2).left();
+    }
     
     // create the labels widgets
     final CheckBox soundEffectsCheckbox = new CheckBox("", getSkin()); //$NON-NLS-1$

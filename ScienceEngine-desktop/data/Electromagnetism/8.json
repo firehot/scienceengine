@@ -8,6 +8,6 @@ circuits:[["CurrentSource","CurrentCoil"]],
 configs:[{name:"Magnet Mode",permitted:false,value:"Free"},
 {name:"CurrentSource.CurrentType",permitted:false,value:"AC"},
 {name:"CurrentSource.CurrentFrequency",permitted:true,value:1.0},
-{name:"CurrentSource.CurrentMax",permitted:true,value:5.0},
+{name:"CurrentSource.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.CurrentDirection",permitted:false,value:true},
 {name:"CurrentCoil.CommutatorType",permitted:true,value:"Connector"}]}

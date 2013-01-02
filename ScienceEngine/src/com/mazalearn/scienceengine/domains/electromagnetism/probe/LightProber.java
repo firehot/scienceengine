@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
@@ -16,8 +17,8 @@ public class LightProber extends AbstractScience2DProber {
   private IScience2DModel science2DModel;
   
   public LightProber(IScience2DModel science2DModel, IScience2DView science2DView, 
-      String goal, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
+      String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.science2DModel = science2DModel;
     this.hints = new String[] {
         "Light intensity increases when more current is induced in the coil.",

@@ -19,7 +19,9 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Parameter;
 
 /**
  * Science2DBody has basic attributes for an element in an EM Field.
@@ -75,6 +77,12 @@ public class Science2DBody implements IBody {
   }
 
   public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<Float>(this, 
+        Parameter.RotationVelocity, -10, 10) {
+      public Float getValue() { return getAngularVelocity(); }
+      public void setValue(Float value) { setAngularVelocity(value); }
+      public boolean isPossible() { return isActive() &&  MovementMode.Rotate.name().equals(getMovementMode()); }
+    });
   }
 
   public List<IModelConfig<?>> getConfigs() {

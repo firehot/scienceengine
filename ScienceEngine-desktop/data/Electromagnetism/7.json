@@ -14,7 +14,7 @@ configs:[
 {name:"HorseshoeMagnet.MagnetStrength", permitted:true, value:20},
 {name:"CurrentSource.CurrentType", permitted:false, value:"DC"},
 {name:"CurrentSource.Frequency", permitted:true, value:1.0},
-{name:"CurrentSource.CurrentMax", permitted:true, value:3.0},
+{name:"CurrentSource.MaxCurrent", permitted:true, value:3.0},
 {name:"CurrentSource.CurrentDirection", permitted:true, value:true},
 {name:"CurrentCoil.CommutatorType", permitted:true, value:"Connector"}],
 plan: [
@@ -64,7 +64,7 @@ plan: [
              goal:"Select decrease or increase parameter to make the motor run faster.\nSelect X if parameter does not affect motor.",
              success: 100,
              failure: 50,
-             parameter:"CurrentSource.CurrentMax", 
+             parameter:"CurrentSource.MaxCurrent", 
              resultType:"Direct"},
    {type:"ParameterProber",
              goal:"Click on ? and select correct direction of rotation of motor.",

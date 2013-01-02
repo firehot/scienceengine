@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
 import com.mazalearn.scienceengine.core.controller.IControl;
@@ -85,7 +84,7 @@ public class ViewControls extends Table implements IControl {
     // Add reset functionality for the experiment
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
-          public void doCommand() { new LevelLoader(science2DController).reload(); }
+          public void doCommand() { science2DController.reload(); }
           public boolean isPossible() { return true; }
     };
     resetControl = new CommandButtonControl(resetModelConfig, skin);

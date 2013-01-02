@@ -29,12 +29,14 @@ import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
  * 
  */
 public class Science2DActor extends Actor {
+  protected static final float TOLERANCE = 0.1f;
   private Science2DBody body;
   private TextureRegion textureRegion;
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
   protected Vector2 lastTouch = new Vector2();    // view coordinates
   private boolean drag = false;
   private Vector3 currentTouch = new Vector3();
+  private float moveDistance;
 
   /**
    * Constructor.
@@ -55,7 +57,7 @@ public class Science2DActor extends Actor {
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         switch(MovementMode.valueOf(getMovementMode())) {
         case None: return false;
-        case Move: drag = true; // fall thru
+        case Move: moveDistance = 0; drag = true; // fall thru
         case Rotate: lastTouch.set(event.getStageX(), event.getStageY());
         }
         return true;
@@ -73,12 +75,14 @@ public class Science2DActor extends Actor {
         case None: return;
         case Move: 
           drag = false;
-          ScienceEngine.selectParameter(body, Parameter.Move, 0f, (IScience2DView) getStage());
+          if (moveDistance > TOLERANCE) {
+            ScienceEngine.selectParameter(body, Parameter.Move, 0f, (IScience2DView) getStage());
+          }
           return;
         case Rotate:
           // Get negative of movement vector
           lastTouch.sub(event.getStageX(), event.getStageY());
-          // Scale displacement vector suitably to get a proportional force
+          // Scale moveDistance vector suitably to get a proportional force
           lastTouch.mul(getRotationForceScaler());
           // view coords of current touch
           viewPos.set(event.getStageX(), event.getStageY());
@@ -88,7 +92,9 @@ public class Science2DActor extends Actor {
           viewPos.sub(getWidth() / (2 * ScienceEngine.PIXELS_PER_M), 
               getHeight() / (2 * ScienceEngine.PIXELS_PER_M));
           body.applyForce(lastTouch, viewPos);
-          ScienceEngine.selectParameter(body, Parameter.Rotate, lastTouch.len(), (IScience2DView) getStage());
+          if (lastTouch.len() > TOLERANCE) {
+            ScienceEngine.selectParameter(body, Parameter.Rotate, lastTouch.len(), (IScience2DView) getStage());
+          }
           return;
         }
       }
@@ -113,6 +119,7 @@ public class Science2DActor extends Actor {
     getStage().getCamera().unproject(currentTouch);
     // Get negative of movement vector
     lastTouch.sub(currentTouch.x, currentTouch.y);
+    moveDistance += lastTouch.len();
     setPosition(getX() - lastTouch.x, getY() - lastTouch.y);
     setPositionFromViewCoords(true);
     // Recalibrate lastTouch to new coordinates

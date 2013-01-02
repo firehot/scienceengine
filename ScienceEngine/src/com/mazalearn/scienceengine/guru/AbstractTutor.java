@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
-public abstract class AbstractTutor extends Group implements ITutor{
+public abstract class AbstractTutor extends Group implements ITutor {
 
   protected Array<?> components;
   protected Array<?> configs;
@@ -23,10 +23,13 @@ public abstract class AbstractTutor extends Group implements ITutor{
   private String goal;
 
   public AbstractTutor(IScience2DModel science2DModel, IScience2DView science2DView,
-      String goal, int deltaSuccessScore, int deltaFailureScore) {
+      String goal, Array<?> components, Array<?> configs, 
+      int deltaSuccessScore, int deltaFailureScore) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
     this.goal = goal;
+    this.components = components;
+    this.configs = configs;
     this.deltaSuccessScore = deltaSuccessScore;
     this.deltaFailureScore = deltaFailureScore;
   }
@@ -69,12 +72,6 @@ public abstract class AbstractTutor extends Group implements ITutor{
   
   @Override
   public void checkProgress() {
-  }
-  
-  @Override
-  public void initialize(Array<?> components, Array<?> configs) {
-    this.components = components;
-    this.configs = configs;
   }
   
   @Override

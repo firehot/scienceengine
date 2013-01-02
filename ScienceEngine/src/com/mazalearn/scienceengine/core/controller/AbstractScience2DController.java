@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
@@ -53,5 +54,10 @@ public abstract class AbstractScience2DController implements
   @Override
   public ControlPanel getControlPanel() {
     return controlPanel;
+  }
+  
+  @Override
+  public void reload() {
+    new LevelLoader(this).reload();
   }
 }

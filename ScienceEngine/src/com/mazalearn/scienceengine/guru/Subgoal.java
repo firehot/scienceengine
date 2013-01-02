@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.services.Function;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.IFunction;
@@ -20,9 +21,10 @@ public class Subgoal extends AbstractTutor {
   private boolean progress;
 
   public Subgoal(IScience2DModel science2DModel, IScience2DView science2DView,
-      String goal, String when, String postConditionString,
+      String goal, Array<?> components, Array<?> configs,
+      String when, String postConditionString,
       int deltaSuccessScore) {
-    super(science2DModel, science2DView, goal, deltaSuccessScore, 0);
+    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, 0);
     Parser parser = new Parser();
     Map<String, IFunction> functions = new HashMap<String, IFunction>();
     for (Function function: Function.values()) {

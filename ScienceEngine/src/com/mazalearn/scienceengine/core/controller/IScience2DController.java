@@ -10,4 +10,8 @@ public interface IScience2DController {
   public ControlPanel getControlPanel();
   public String getName();
   int getLevel();
+  /**
+   * Reloads the level, reinitializing all components and configurations
+   */
+  void reload();
 }

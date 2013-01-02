@@ -77,7 +77,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
     });
     
     configs.add(new AbstractModelConfig<Float>(this, 
-        Parameter.CurrentMax, 0f, DEFAULT_MAX_CURRENT) {
+        Parameter.MaxCurrent, 0f, DEFAULT_MAX_CURRENT) {
       public Float getValue() { return getMaxCurrent(); }
       public void setValue(Float value) { setMaxCurrent(value); }
       public boolean isPossible() { return isActive(); }

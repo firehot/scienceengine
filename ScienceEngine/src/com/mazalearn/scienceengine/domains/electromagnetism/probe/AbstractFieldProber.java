@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
@@ -17,8 +18,8 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected int netSuccesses;
  
   protected AbstractFieldProber(IScience2DModel science2DModel, IScience2DView science2DView, 
-      String goal, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
+      String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.fieldMeterActor = (Science2DActor) science2DView.findActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();

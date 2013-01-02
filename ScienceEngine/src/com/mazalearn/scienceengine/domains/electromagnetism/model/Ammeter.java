@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -19,7 +20,7 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
   // The needle deflection range is this much on either side of the zero point.
   private static final float MAX_NEEDLE_ANGLE = MathUtils.degreesToRadians * 90;
 
-  private static final float MAX_CURRENT = 3;
+  private float maxCurrent = 3;
 
   private static final int SMOOTH = 4;
 
@@ -36,6 +37,17 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
     needleAngle = 0;
   }
 
+  @Override
+  public void initializeConfigs() {
+    super.initializeConfigs();
+    configs.add(new AbstractModelConfig<Float>(this, 
+        Parameter.MaxCurrent, 1f, 20f) {
+      public Float getValue() { return getMaxCurrent(); }
+      public void setValue(Float value) { setMaxCurrent(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+  }
+  
   /**
    * Sets the needle's deflection angle.
    * 
@@ -63,7 +75,7 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
   private float computeNeedleAngle() {
 
     // Use amplitude of the current source as our signal.
-    float amplitude = current / MAX_CURRENT;
+    float amplitude = current / getMaxCurrent();
 
     // Absolute amplitude below the threshold is effectively zero.
     if (Math.abs(amplitude) < CURRENT_AMPLITUDE_THRESHOLD) {
@@ -95,5 +107,13 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
   @Override
   public void setCurrent(float current) {
     this.current = current;
+  }
+
+  public float getMaxCurrent() {
+    return maxCurrent;
+  }
+
+  public void setMaxCurrent(float maxCurrent) {
+    this.maxCurrent = maxCurrent;
   }
 }

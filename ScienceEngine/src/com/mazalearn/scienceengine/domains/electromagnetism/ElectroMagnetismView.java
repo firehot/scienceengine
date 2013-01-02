@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
@@ -24,7 +25,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirectionProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.LightProber;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.VariablesProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.probe.Abstractor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.AmmeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CircuitActor;
@@ -132,18 +133,18 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   };
   
   @Override
-  public AbstractTutor createTutor(String type, String goal, String resultType, 
-      int deltaSuccessScore, int deltaFailureScore) {
+  public AbstractTutor createTutor(String type, String goal, 
+      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
     if ("FieldMagnitudeProber".equals(type)) {
-      return new FieldMagnitudeProber(emModel, this, goal, deltaSuccessScore, deltaFailureScore);
+      return new FieldMagnitudeProber(emModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("FieldDirectionProber".equals(type)) {
-      return new FieldDirectionProber(emModel, this, goal, deltaSuccessScore, deltaFailureScore);
+      return new FieldDirectionProber(emModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("LightProber".equals(type)) {
-      return new LightProber(emModel, this, goal, deltaSuccessScore, deltaFailureScore);
-    } else if ("VariablesProber".equals(type)) {
-      return new VariablesProber(emModel, this, goal, skin, findActor("ModelControls"), 
+      return new LightProber(emModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    } else if ("Abstractor".equals(type)) {
+      return new Abstractor(emModel, this, goal, components, configs, skin, 
           controlPanel, deltaSuccessScore, deltaFailureScore);
     }
-    return super.createTutor(type, goal, resultType, deltaSuccessScore, deltaFailureScore);
+    return super.createTutor(type, goal, components, configs, deltaSuccessScore, deltaFailureScore);
   }
 }

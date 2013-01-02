@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.guru;
 
-import com.badlogic.gdx.utils.Array;
 
 public interface ITutor {
 
@@ -17,8 +16,6 @@ public interface ITutor {
   public int getFailureScore();
 
   public void checkProgress();
-
-  public void initialize(Array<?> components, Array<?> configs);
 
   public boolean isCompleted();
 

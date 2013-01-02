@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
@@ -51,8 +52,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
 
   public FieldMagnitudeProber(IScience2DModel science2DModel, 
       final IScience2DView science2DView,
-      String goal, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, deltaSuccessScore, deltaFailureScore);
+      String goal, Array<?> components, Array<?> configs, 
+      int deltaSuccessScore, int deltaFailureScore) {
+    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "The field is stronger closer to the object generating the field",
         "The field is stronger if the current or magnet strength is larger"
