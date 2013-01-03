@@ -29,6 +29,7 @@ public class ControlPanel extends Table {
   private Table modelControlPanel;
   private TextButton title;
   private IScience2DController science2DController;
+  private Controller viewController;
   
   public ControlPanel(IScience2DController science2DController, String experimentName, Skin skin) {
     super(skin);
@@ -38,6 +39,7 @@ public class ControlPanel extends Table {
     this.science2DModel = science2DController.getModel();
     this.experimentName = experimentName;
     this.defaults().fill();
+    createViewControlPanel(this);
     this.modelControlPanel = createModelControlPanel(skin);
     this.add(modelControlPanel);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
@@ -75,6 +77,24 @@ public class ControlPanel extends Table {
   protected void registerModelConfigs(Table modelControlPanel) {
     this.controllers.clear();
     modelControlPanel.clear();
+    // Register all model controllers
+    for (final Science2DBody body: science2DModel.getBodies()) {
+      if (body.isActive() && body.allowsConfiguration()) {
+        IModelConfig<?> bodyConfig = new AbstractModelConfig<Boolean>(body, asParameter(body), false) {
+          @Override public boolean isPossible() { return body.isActive(); }      
+          @Override public boolean isAvailable() { return isPossible() && !ScienceEngine.isProbeMode(); }
+          @Override public Boolean getValue() { return ScienceEngine.isPinned(body); }
+          @Override public void setValue(Boolean value) { ScienceEngine.pin(body, value); }
+        };
+        this.controllers.add(Controller.createController(bodyConfig, modelControlPanel, skin, "body"));
+      }
+      for (IModelConfig modelConfig: body.getConfigs()) {
+        this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+      }
+    }
+  }
+
+  private void createViewControlPanel(Table parentPanel) {
     final ViewControls viewControls = new ViewControls(science2DController, skin);
     // Register experiment name
     this.title = new TextButton(experimentName, 
@@ -87,25 +107,10 @@ public class ControlPanel extends Table {
         viewControls.setAvailable(!viewControls.isAvailable());
       }
     });
-    modelControlPanel.add(title);
-    modelControlPanel.row();
-    Controller c = Controller.createController(viewControls, modelControlPanel, skin);
-    this.controllers.add(c);
-    modelControlPanel.row();
-    // Register all model controllers
-    for (final Science2DBody body: science2DModel.getBodies()) {
-      if (!body.isActive() || !body.allowsConfiguration()) continue;
-      IModelConfig<?> bodyConfig = new AbstractModelConfig<Boolean>(body, asParameter(body), false) {
-        @Override public boolean isPossible() { return body.isActive(); }      
-        @Override public boolean isAvailable() { return isPossible(); }
-        @Override public Boolean getValue() { return ScienceEngine.isPinned(body); }
-        @Override public void setValue(Boolean value) { ScienceEngine.pin(body, value); }
-      };
-      this.controllers.add(Controller.createController(bodyConfig, modelControlPanel, skin, "body"));
-      for (IModelConfig modelConfig: body.getConfigs()) {
-        this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
-      }
-    }
+    parentPanel.add(title);
+    parentPanel.row();
+    viewController = Controller.createController(viewControls, parentPanel, skin);
+    parentPanel.row();
   }
 
   public Actor getTitle() {
@@ -124,6 +129,7 @@ public class ControlPanel extends Table {
     for (Controller controller: controllers) {
        controller.validate();
      }
+    viewController.validate();
   }
   
   public void enableControls(boolean enable) {

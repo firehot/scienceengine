@@ -95,7 +95,7 @@ public class Guru extends Group implements IDoneCallback {
       }
     }
     
-    if (registeredTutors.size() == 0) { // No guides available
+    if (registeredTutors.size() == 0) { // No tutors available
       endChallenge();
       return;
     }
@@ -111,15 +111,11 @@ public class Guru extends Group implements IDoneCallback {
       currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, false);
     }
 
-    // Turn on access to parts of control panel
-    controlPanel.enableControls(true);
     science2DView.done(false);
     ScienceEngine.setProbeMode(false);
     this.setVisible(false);
     // Clear event log
     ScienceEngine.getEventLog().clear();
-    // Reload the level.
-    // controlPanel.reload();
   }
   
   public List<Actor> getExcludedActors() {

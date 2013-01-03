@@ -61,7 +61,10 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   public Guru getGuru() {
     if (guru == null) {
       guru = new Guru(skin, getWidth(), getHeight(), this, science2DModel, controlPanel);
-      this.getRoot().addActor(controlPanel); // Move view control Panel to top - why?
+      // Move control Panel to top - so it will be above others
+      this.getRoot().addActor(controlPanel);
+      // Move back button to top also - so it will be accessible
+      this.getRoot().addActor(this.getRoot().findActor("BackButton"));
       // Add guru before controlpanel so that controls are accessible.
       this.getRoot().addActorBefore(controlPanel, guru);
     }
@@ -204,8 +207,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
         //groupActor.setOriginY(originY);
         //groupActor.setRotation(groupActor.getRotation() + (deltaAngle * MathUtils.radiansToDegrees));
         // For translation
-        groupActor.setX(groupActor.getX() + deltaX);
-        groupActor.setY(groupActor.getY() + deltaY);
+        groupActor.setPosition(groupActor.getX() + deltaX, groupActor.getY() + deltaY);
         if (groupActor instanceof Science2DActor) {
           ((Science2DActor) groupActor).setPositionFromViewCoords(false);
         }
@@ -253,6 +255,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   private Actor createBackButton() {
     final TextButton backButton = 
         new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), skin); //$NON-NLS-1$
+    backButton.setName("BackButton");
     backButton.setPosition(5, getHeight() - 30);
     backButton.setWidth(80);
     backButton.addListener(new ClickListener() {

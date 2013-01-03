@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.core.model.Parameter;
 
 public class ViewControls extends Table implements IControl {
   private static final int VIEW_BUTTON_HEIGHT = 30;
-  private static final int VIEW_BUTTON_WIDTH = 100;
+  private static final int VIEW_BUTTON_WIDTH = 110;
   private final IScience2DView science2DView;
   private IControl suspendControl;
   private IControl challengeControl;
@@ -45,7 +45,7 @@ public class ViewControls extends Table implements IControl {
         .fill()
         .height(VIEW_BUTTON_HEIGHT)
         .width(VIEW_BUTTON_WIDTH)
-        .pad(0, 0, 0, 0);
+        .pad(0);
     // Add challenge/learn functionality
     AbstractModelConfig<Boolean> challengeModelConfig = 
         new AbstractModelConfig<Boolean>(null, 
@@ -90,11 +90,10 @@ public class ViewControls extends Table implements IControl {
     resetControl = new CommandButtonControl(resetModelConfig, skin);
     
     viewControls.row();
-    viewControls.add(resetControl.getActor());
+    viewControls.add(resetControl.getActor()).width(VIEW_BUTTON_WIDTH / 2);
+    viewControls.add(suspendControl.getActor()).width(VIEW_BUTTON_WIDTH / 2);
     viewControls.row();
-    viewControls.add(suspendControl.getActor());
-    viewControls.row();
-    viewControls.add(challengeControl.getActor());
+    viewControls.add(challengeControl.getActor()).colspan(2);
     viewControls.row();
     
     return viewControls;
