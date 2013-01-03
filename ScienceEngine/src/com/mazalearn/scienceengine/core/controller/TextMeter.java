@@ -16,10 +16,11 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 public class TextMeter implements IControl {
   @SuppressWarnings("rawtypes")
   private final IModelConfig property;
-  private final Label label;
-   
+  
+  protected final Label label;
+  
   @SuppressWarnings("rawtypes")
-  public TextMeter(final IModelConfig property, final Skin skin, String styleName) {
+  public TextMeter(final IModelConfig property, final Skin skin) {
     this.label = new Label(property.getParameter().name(), skin);
     label.setColor(Color.YELLOW);
     this.property = property;
@@ -27,8 +28,8 @@ public class TextMeter implements IControl {
     label.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getBody(), property.getParameter(), 
-            (Float) property.getValue(), (IScience2DView) label.getStage());
+        ScienceEngine.selectParameter(property.getParameter(), 
+            (IScience2DView) label.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }
     });

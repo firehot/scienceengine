@@ -1,9 +1,21 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/WebViewController.cs">
     <Files>
-      <File FileName="scienceengine-ios/Main.cs" Line="8" Column="11" />
+      <File FileName="scienceengine-ios/Main.cs" Line="16" Column="17" />
+      <File FileName="../../../../Downloads/Loading_Local_Content_(WebView)/WebViewController.cs" Line="1" Column="1" />
+      <File FileName="../../../../Downloads/Loading_Local_Content_(WebView)/AppDelegate.cs" Line="38" Column="1" />
+      <File FileName="scienceengine-ios/WebViewController.cs" Line="10" Column="42" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="scienceengine-ios" expanded="True">
+            <Node name="Main.cs" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>

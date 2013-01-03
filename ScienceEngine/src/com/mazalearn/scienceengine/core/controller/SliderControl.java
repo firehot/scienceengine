@@ -17,7 +17,7 @@ public class SliderControl implements IControl {
   private final IModelConfig<Float> property;
   private final Slider slider;
   
-  public SliderControl(final IModelConfig<Float> property, Skin skin, String styleName) {
+  public SliderControl(final IModelConfig<Float> property, Skin skin) {
     this.slider = new Slider(property.getLow(), property.getHigh(), 
         (property.getHigh() - property.getLow())/10, false, skin);
     this.property = property;
@@ -33,8 +33,7 @@ public class SliderControl implements IControl {
     slider.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
-            property.getValue(),
+        ScienceEngine.selectParameter(property.getParameter(), 
             (IScience2DView) slider.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

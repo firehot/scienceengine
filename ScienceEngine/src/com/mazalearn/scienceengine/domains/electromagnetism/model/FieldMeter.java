@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -56,15 +55,6 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
     circleShape.dispose();
   }
   
-  public void initializeConfigs() {
-    configs.add(new AbstractModelConfig<Float>(this, 
-        Parameter.Count, 0f, 1000f) {
-      public Float getValue() { return (float) fieldSamples.size(); }
-      public void setValue(Float value) { /* Ignore */ }
-      public boolean isPossible() { return false; }
-    });
-  }
-
   @Override
   public void setPositionAndAngle(Vector2 position, float angle) {
     super.setPositionAndAngle(position, angle);
@@ -94,11 +84,6 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   @Override
   public void setBField(Vector2 bField) {
     fieldVector.set(bField);
-  }
-  
-  @Override
-  public boolean allowsConfiguration() {
-    return false;
   }
 
   @Override

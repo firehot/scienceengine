@@ -23,15 +23,9 @@ public class Controller {
     cellTable.setWidget(control.isAvailable() ? this.table : null);
   }
 
-  @SuppressWarnings({ "rawtypes" })
-  public static Controller createController(IModelConfig property, 
-      Table controlTable, Skin skin) {
-    return createController(property, controlTable, skin, "default");
-  }
-  
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public static Controller createController(IModelConfig property, 
-        Table controlTable, Skin skin, String styleName) {
+      Table controlTable, Skin skin) {
     Table table = new Table(skin);
     table.setName(property.getName());
     table.defaults().fill().expand();
@@ -39,7 +33,7 @@ public class Controller {
     
     switch(property.getType()) {
       case TOGGLE: 
-        control = new ToggleButtonControl(property, skin, styleName);
+        control = new ToggleButtonControl(property, skin);
         table.add(control.getActor());
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
@@ -47,7 +41,7 @@ public class Controller {
         Label name = new Label(property.getParameter().name(), skin);
         table.add(name);
         table.row();
-        control = new SliderControl(property, skin, styleName);
+        control = new SliderControl(property, skin);
         Actor slider = control.getActor();
         table.add(slider);
         for (EventListener l: slider.getListeners()) {
@@ -55,29 +49,17 @@ public class Controller {
         }
         break;
       case LIST:
-        control = new SelectBoxControl(property, skin, styleName);
+        control = new SelectBoxControl(property, skin);
         table.add(control.getActor());
         break;
       case COMMAND:
-        control = new CommandButtonControl(property, skin, styleName);
+        control = new CommandButtonControl(property, skin);
         table.add(control.getActor());
         break;
       case TEXT:
-        control = new TextMeter(property, skin, styleName);
+        control = new TextMeter(property, skin);
         table.add(control.getActor());
     }
-    Controller c = new Controller(controlTable.add(table), control);
-    controlTable.row();
-    return c;
-  }
-
-  @SuppressWarnings("unchecked")
-  public static Controller createController(IControl control,
-      Table controlTable, Skin skin) {
-    Table table = new Table(skin);
-    table.setName("test");
-    table.defaults().fill().expand();
-    table.add(control.getActor());
     Controller c = new Controller(controlTable.add(table), control);
     controlTable.row();
     return c;

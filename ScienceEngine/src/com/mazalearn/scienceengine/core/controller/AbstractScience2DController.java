@@ -27,7 +27,7 @@ public abstract class AbstractScience2DController implements
       AbstractScience2DView science2DView) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
-    this.controlPanel = new ControlPanel(this, this.getName(), skin);
+    this.controlPanel = new ControlPanel(skin, this);
     science2DView.setControlPanel(this.controlPanel);
   }
   

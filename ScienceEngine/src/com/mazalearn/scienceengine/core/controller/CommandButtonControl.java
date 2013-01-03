@@ -20,12 +20,7 @@ public class CommandButtonControl implements IControl {
   
   @SuppressWarnings("rawtypes")
   public CommandButtonControl(final IModelConfig command, final Skin skin) {
-    this(command, skin, "default");
-  }
-
-  @SuppressWarnings("rawtypes")
-  public CommandButtonControl(final IModelConfig command, final Skin skin, String styleName) {
-    this.textButton = new TextButton(command.getParameter().name(), skin, styleName);
+    this.textButton = new TextButton(command.getParameter().name(), skin);
     this.command = command;
     textButton.setName(command.getName());
     textButton.addListener(new ClickListener() {
@@ -36,8 +31,7 @@ public class CommandButtonControl implements IControl {
       
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(command.getBody(), command.getParameter(),
-            (String) command.getValue(),
+        ScienceEngine.selectParameter(command.getParameter(), 
             (IScience2DView) textButton.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

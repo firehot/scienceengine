@@ -3,15 +3,14 @@ package com.mazalearn.scienceengine.guru;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
 class Dashboard extends Table {
-  TextButton goal;
-  Label scoreLabel;
+  Label status, scoreLabel;
   int score;
   private Label timerLabel;
   float timeLimit = 300;
@@ -22,9 +21,11 @@ class Dashboard extends Table {
       debug();
     }
     this.setFillParent(false);
-    this.center();
-    goal = new TextButton("Goal", skin) {
-      private float increment = 0f; // TODO: 0.01f;
+    this.top().center();
+    LabelStyle style = skin.get(LabelStyle.class);
+    style.fontColor = Color.YELLOW;
+    status = new Label("Challenge", style) {
+      private float increment = 0.01f;
       private float alpha = 1;
       @Override
       public void draw(SpriteBatch batch, float parentAlpha) {
@@ -38,32 +39,31 @@ class Dashboard extends Table {
         }
       }      
     };
-    goal.setColor(Color.YELLOW);
+    style.fontColor = Color.WHITE;
     scoreLabel = new Label("0", skin);
 
     timerLabel = new Label("0", skin) {
       @Override
       public void act(float delta) {
         timeLimit -= delta;
-        this.setText(String.format("%2d:%02d", Math.round(timeLimit / 60), Math.round(timeLimit % 60)));
+        this.setText(String.valueOf(Math.round(timeLimit / 60) + ":" + String.valueOf(Math.round(timeLimit % 60))));
         if (timeLimit < 0) {
-          // TODO: goal.setText("Time Up");
+          status.setText("Time Up");
         }
       }
     };
     
-    Table t = new Table(skin);
-    t.add("Timer");
-    t.row();
-    t.add(timerLabel).width(40).fill().right();
-    this.add(t).left();
-    this.add(goal).pad(10).width(430).fill();
-    goal.getLabel().setWrap(true);
-    t = new Table(skin);
-    t.add("Score");
-    t.row();
-    t.add(scoreLabel).width(40).fill().center();
-    this.add(t).right();
+    this.add(new Label("", skin)).pad(30, 0, 0, 0);
+    this.row();
+    this.add("Score").left();
+    this.add(scoreLabel).right().fill();
+    this.add("Time Left").right().pad(10);
+    this.add(timerLabel).right().fill();
+    this.row();
+    
+    this.add("Challenge").pad(10, 0, 0, 10).left();
+    this.add(status).pad(10, 0, 0, 0).colspan(3).fill();
+    this.row();
   }
   
   public void addScore(int deltaScore) {
@@ -75,7 +75,7 @@ class Dashboard extends Table {
     // For a table, x and y are at center, top of table - not at bottom left
     this.setY(getParent().getHeight() - getPrefHeight() / 2);
     this.setX(getParent().getWidth()/2);
-    goal.setText(text);
+    status.setText(text);
   }
 
   public int getScore() {

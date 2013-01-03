@@ -41,7 +41,6 @@ public class Compass extends Science2DBody {
     getModel().getBField(getPosition(), fieldVector /* output */);
     float angle = fieldVector.angle() * MathUtils.degreesToRadians;
     setPositionAndAngle(getPosition(), angle);
-    super.singleStep(dt);
   }
   
   public float getBField() {

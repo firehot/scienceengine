@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.guru;
 
-
 public interface ITutor {
 
   public String getGoal();

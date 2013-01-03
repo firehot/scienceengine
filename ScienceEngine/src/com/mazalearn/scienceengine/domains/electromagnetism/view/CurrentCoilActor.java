@@ -28,12 +28,6 @@ public class CurrentCoilActor extends Science2DActor {
     this.font = font;
   }
   
-
-  @Override
-  protected int getRotationForceScaler() {
-    return -100;
-  }
-  
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     // Flip if negative current so that +, - on coil are correctly shown

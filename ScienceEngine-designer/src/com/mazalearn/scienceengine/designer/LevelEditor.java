@@ -6,11 +6,8 @@ import java.util.Locale;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -31,8 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
-import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
-import com.mazalearn.scienceengine.app.utils.LevelUtil;
+import com.mazalearn.scienceengine.app.services.LevelLoader;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -52,7 +48,6 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
  */
 public class LevelEditor extends Stage {
   private final AbstractScreen screen;
-  private static final float THUMBNAIL_SCALE = 7.5f;
 
   private final OrthographicCamera orthographicCamera;
   enum Mode {
@@ -95,7 +90,7 @@ public class LevelEditor extends Stage {
    */
   public LevelEditor(IScience2DController controller, AbstractScreen screen) {
     super(((Stage)controller.getView()).getWidth(), 
-        ((Stage)controller.getView()).getHeight(), 
+        ((Stage) controller.getView()).getHeight(), 
         false, 
         ((Stage)controller.getView()).getSpriteBatch());
     this.science2DController = controller;
@@ -170,6 +165,9 @@ public class LevelEditor extends Stage {
     button.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
+        // Render screen - then we will save level and its screen together
+        screen.clearScreen(Color.BLACK);
+        originalStage.draw();
         try {
           LevelSaver levelSaver = new LevelSaver(science2DController);
           levelSaver.save();
@@ -177,20 +175,6 @@ public class LevelEditor extends Stage {
         } catch (IOException ex) {
           System.err.println("[LevelEditor] Error happened while writing level file");
         }
-      }      
-    });
-    menu.add(button).pad(10);
-    button = new TextButton("Thumbnail", skin);
-    button.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        // Render screen - then we will save its screen
-        controlPanel.refresh();
-        controlPanel.act(0);
-        screen.clearScreen(Color.BLACK);
-        originalStage.draw();
-        saveLevelThumbnail(science2DController.getLevel());
-        System.out.println("[LevelEditor] Thumbnail successfully saved!");
       }      
     });
     menu.add(button).pad(10);
@@ -222,21 +206,6 @@ public class LevelEditor extends Stage {
     return menu;
   }
 
-  /**
-   * Take screenshot, convert to a thumbnail and save to the level file as png.
-   */
-  private void saveLevelThumbnail(int level) {
-    FileHandle screenFile = 
-        LevelUtil.getLevelFile(science2DController.getName(), ".png", level);
-    screenFile = Gdx.files.external(screenFile.path());
-    Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
-        Gdx.graphics.getHeight(), true);
-    Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, THUMBNAIL_SCALE);
-    PixmapIO.writePNG(screenFile, thumbnail);
-    screenShot.dispose();
-    thumbnail.dispose();
-  }
-  
   private Actor createComponentsPanel(final Stage stage, final Skin skin, 
       final Table configTable) {
     Table componentsTable= new Table(skin);
@@ -295,7 +264,9 @@ public class LevelEditor extends Stage {
   }
 
   /**
-   * Enables the editor.
+   * Enables the editor. Creates all required resources and replace the current
+   * InputProcessor by its own. Just remove this call from your code once you're
+   * happy with the result. Any other call can stay without any side-effect.
    */
   private void enableEditor() {
     originalCameraZoom = orthographicCamera.zoom;
@@ -544,7 +515,7 @@ public class LevelEditor extends Stage {
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
     if (actor == controlPanel) {
-      // Bounding box only for goal cell
+      // Bounding box only for status cell
       Actor title = controlPanel.getTitle();
       shapeRenderer.rect(actor.getX() - controlPanel.getPrefWidth()/2, 
           actor.getY() + controlPanel.getPrefHeight()/2 - title.getHeight(), 

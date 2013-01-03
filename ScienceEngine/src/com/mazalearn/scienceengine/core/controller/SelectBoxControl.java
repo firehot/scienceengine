@@ -13,7 +13,7 @@ public class SelectBoxControl implements IControl {
   private final IModelConfig<String> property;
   private final SelectBox selectBox;
 
-  public SelectBoxControl(final IModelConfig<String> property, Skin skin, String styleName) {
+  public SelectBoxControl(final IModelConfig<String> property, Skin skin) {
     this.selectBox = new SelectBox (getItems(property), skin);
     this.property = property;
     syncWithModel();
@@ -28,8 +28,7 @@ public class SelectBoxControl implements IControl {
     selectBox.addListener(new ClickListener() {   
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
-            property.getValue(),
+        ScienceEngine.selectParameter(property.getParameter(), 
             (IScience2DView) selectBox.getStage());
         return super.touchDown(event, localX, localY, pointer, button);
       }

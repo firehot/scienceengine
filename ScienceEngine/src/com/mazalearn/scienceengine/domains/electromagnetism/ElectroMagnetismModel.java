@@ -7,7 +7,6 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Ammeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
@@ -38,7 +37,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     }
     
     switch(componentType) {
-    case Ammeter: return new Ammeter(x, y, rotation);
     case FieldMeter: return new FieldMeter(x, y, rotation);
     case BarMagnet: return new BarMagnet(x, y, rotation);
     case HorseshoeMagnet: return new HorseshoeMagnet(x, y, rotation);

@@ -59,7 +59,6 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
 
   @Override
   public void initializeConfigs() {
-    super.initializeConfigs();
     configs.add(new AbstractModelConfig<String>(this, 
         Parameter.CurrentType, CurrentType.values()) {
       public String getValue() { return getCurrentType(); }
@@ -83,13 +82,6 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
       public boolean isPossible() { return isActive(); }
     });
     
-    configs.add(new AbstractModelConfig<Float>(this, 
-        Parameter.Current, -DEFAULT_MAX_CURRENT, DEFAULT_MAX_CURRENT) {
-      public Float getValue() { return getCurrent(); }
-      public void setValue(Float value) { setCurrent(value); }
-      public boolean isPossible() { return false; /* meter */}
-    });
-
     configs.add(new AbstractModelConfig<Boolean>(this, 
         Parameter.CurrentDirection, false) {
       public void setValue(Boolean value) { setNegativeCurrent(value); }

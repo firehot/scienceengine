@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -21,6 +23,8 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
 
 public class LevelSaver {
   
+  private static final float THUMBNAIL_SCALE = 7.5f;
+
   private int level;
   private IScience2DController science2DController;
   private IScience2DView science2DView;
@@ -50,8 +54,24 @@ public class LevelSaver {
  
     jsonWriter.flush();
     jsonWriter.close();
+    saveLevelThumbnail();
   }
 
+  /**
+   * Take screenshot, convert to a thumbnail and save to the level file as png.
+   */
+  private void saveLevelThumbnail() {
+    FileHandle screenFile = 
+        LevelUtil.getLevelFile(science2DController.getName(), ".png", level);
+    screenFile = Gdx.files.external(screenFile.path());
+    Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
+        Gdx.graphics.getHeight(), true);
+    Pixmap thumbnail = ScreenUtils.createThumbnail(screenShot, THUMBNAIL_SCALE);
+    PixmapIO.writePNG(screenFile, thumbnail);
+    screenShot.dispose();
+    thumbnail.dispose();
+  }
+  
   private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
     jsonWriter.set("name", science2DController.getName());
     jsonWriter.set("level", level);
