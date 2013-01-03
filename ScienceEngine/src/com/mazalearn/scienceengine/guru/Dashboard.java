@@ -57,7 +57,7 @@ class Dashboard extends Table {
     t.row();
     t.add(timerLabel).width(40).fill().right();
     this.add(t).left();
-    this.add(goal).pad(10).width(430).fill();
+    this.add(goal).pad(0, 10, 0, 10).width(430).fill();
     goal.getLabel().setWrap(true);
     t = new Table(skin);
     t.add("Score");

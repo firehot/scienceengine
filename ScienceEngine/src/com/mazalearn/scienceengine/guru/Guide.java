@@ -37,7 +37,7 @@ public class Guide extends AbstractTutor {
       science2DView.getGuru().setPosition(0, guruHeight - 50);
       stageBeginTime[currentStage] = ScienceEngine.getTime();
     } 
-    ScienceEngine.setProbeMode(activate);
+    ScienceEngine.setProbeMode(false);
     this.setVisible(activate);
   }
 

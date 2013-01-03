@@ -105,10 +105,12 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       }
     } else {
       dummy.setConfigParameter(null, 0);
+      science2DView.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     }
     image.setVisible(activate);
     ScienceEngine.setProbeMode(activate);
-    ScienceEngine.selectBody(null, null);
+    ScienceEngine.selectBody(dummy, science2DView);
+    // Turn on access to disabled parts of control panel
     this.setVisible(activate);
   }
   
@@ -120,15 +122,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       String resultExprString, String resultType, String[] hints) {
     this.probeConfig = probeConfig;
     this.hints = hints;
-    if (resultExprString == null) return;
-    Parser parser = new Parser();
-    try {
-      this.resultExpr = parser.parseString(resultExprString);
-    } catch (SyntaxException e) {
-      e.printStackTrace();
-      throw new RuntimeException(e);
-    }
-    this.resultExprVariables = parser.getVariables();
+
     Group root = ((Stage)science2DView).getRoot();
     Actor controlPanel = root.findActor("ControlPanel");
     this.resultType = ResultType.valueOf(resultType);
@@ -189,11 +183,22 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     }
     root.addActorAfter(controlPanel, image);
     image.addListener(imageListener);   
+
+    if (resultExprString == null) return;
+    Parser parser = new Parser();
+    try {
+      this.resultExpr = parser.parseString(resultExprString);
+    } catch (SyntaxException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
+    this.resultExprVariables = parser.getVariables();
+    
   }
 
   @Override
   public boolean hasSucceeded() {
-    return netSuccesses >= 2;
+    return netSuccesses >= 1;
   }
 
 
