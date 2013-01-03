@@ -54,6 +54,7 @@ public class Science2DBody implements IBody {
   // Detecting # revolutions
   float prevAngularVelocity = 0;
   protected float angleCovered = 0;
+  private float prevAngle;
   
   protected Science2DBody(IComponentType componentType, float x, float y, float angle) {
     this.componentType = componentType;
@@ -89,12 +90,20 @@ public class Science2DBody implements IBody {
   }
   
   public void singleStep(float dt) {
-    angleCovered += (prevAngularVelocity + getAngularVelocity()) * dt / 2;
-    prevAngularVelocity = getAngularVelocity();
+    float delta = body.getAngle() - prevAngle;
+    // Cover discontinuity of 0 being equal to 2*pi
+    if (delta > MathUtils.PI){
+      delta -= 2 * MathUtils.PI;
+    } else if (delta < -MathUtils.PI){
+      delta += 2 * MathUtils.PI;
+    }
+    angleCovered += delta;
+    prevAngle = body.getAngle();
   }
   
   public int getNumRevolutions() {
-    return Math.round(angleCovered / (2 * MathUtils.PI));
+    float numRevs = angleCovered / (2 * MathUtils.PI);
+    return (int) (numRevs < 0 ? Math.ceil(numRevs) : Math.floor(numRevs));
   }
   
   public void reset() {
@@ -194,6 +203,19 @@ public class Science2DBody implements IBody {
       rotationJoint = 
           getModel().getBox2DWorld().createJoint(rotationJointDef);
     }
+  }
+  
+  public IModelConfig<?> findConfig(Parameter parameter) {
+    for (IModelConfig<?> config: getConfigs()) {
+      if (config.getParameter().equals(parameter)) {
+        return config;
+      }
+    }
+    return null;
+  }
+
+  public boolean allowsConfiguration() {
+    return true;
   }
   
   //////////////////////////////////////////////////////////////////////////

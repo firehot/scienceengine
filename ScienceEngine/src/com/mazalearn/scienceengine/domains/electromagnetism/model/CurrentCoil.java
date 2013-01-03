@@ -53,6 +53,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
 
   @Override
   public void initializeConfigs() {
+    super.initializeConfigs();
     configs.add(new AbstractModelConfig<String>(this, 
         Parameter.CommutatorType, CommutatorType.values()) {
       public String getValue() { return commutatorType.name(); }
@@ -80,6 +81,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     return rotationDataType == RotationDataType.AngularVelocity 
         ? getAngularVelocity() : getNumRevolutions();
   }
+  
   /**
    * Sets the magnitude of current in the wire. 
    * @param current the current

@@ -8,11 +8,13 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Consumer;
 import com.mazalearn.scienceengine.core.model.IMagneticField.Producer;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Parameter;
 
 public abstract class AbstractScience2DModel implements IScience2DModel {
 
@@ -164,6 +166,10 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   // sinks after the source in the circuit get positive current.
   public void notifyCurrentChange(ICurrent.Source currentSource) {
     float current = -currentSource.getCurrent();
+    if (currentSource instanceof Science2DBody) {
+      ScienceEngine.getEventLog().logEvent(((Science2DBody) currentSource).name(), 
+          Parameter.Current.name(), -current);
+    }
     for (List<CircuitElement> circuit: circuits) {
       if (!circuit.contains(currentSource)) continue;
       // Components before currentSource in circuit get negative current
@@ -250,8 +256,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
         case TEXT:
           v.setValue(((IModelConfig<String>) config).getValue()); break;
         case TOGGLE:
-          boolean b = ((IModelConfig<Boolean>) config).getValue();
-          v.setValue(b ? 1 : 0);
+          v.setValue(((IModelConfig<Boolean>) config).getValue());
           break;
         default:
           throw new IllegalStateException("Unexpected config type in expression");
@@ -266,14 +271,21 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
             v.setValue(body.getAngularVelocity());
           } else if (property.equals("Angle")) {
             v.setValue(body.getAngle());
+          } else if (property.equals("NumRevolutions")) {
+            v.setValue(body.getNumRevolutions());
           }
         }
       }
     }
   }
 
-  public Science2DBody findBody(String componentName) {
-    return findBody(componentNameToType(componentName));
+  public Science2DBody findBody(String name) {
+    for (Science2DBody body: bodies) {
+      if (body.name().equals(name)) {
+        return body;
+      }
+    }
+    return null;
   }
 
   public abstract IComponentType componentNameToType(String componentName);

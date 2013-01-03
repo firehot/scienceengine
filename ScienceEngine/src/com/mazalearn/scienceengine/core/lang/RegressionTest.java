@@ -1,13 +1,19 @@
 package com.mazalearn.scienceengine.core.lang;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mazalearn.scienceengine.core.lang.Expr.Type;
 
 /**
  * Test for bugs in the whole package.
  */
 public class RegressionTest {
+  
+    private static Parser parser;
 
     public static void main(String[] args) {
+        parser = new Parser();
         Variable.make("pi").setValue(Math.PI);
 
         expect(9, "3^2");
@@ -117,6 +123,12 @@ public class RegressionTest {
         assertEquals(Type.BOOL.name(), x.type.name());
         assertEquals("1.0", x.svalue());
 
+        // Aggregator injection
+        Map<String, IFunction> functions = new HashMap<String, IFunction>();
+        functions.put("Count", new IFunction() { public float eval(String name) { return -10;} });
+        parser.allowFunctions(functions);
+        expect(-10, "Count(x)");
+        
         System.out.println("All tests passed.");
     }
 
@@ -130,7 +142,7 @@ public class RegressionTest {
     private static void expect(double expected, String input) {
         Expr expr;
         try {
-            expr = Parser.parse(input); 
+            expr = parser.parseString(input); 
         } catch (SyntaxException e) {
             throw new Error(e.explain());
         }
@@ -146,7 +158,7 @@ public class RegressionTest {
     private static void expect(String expected, String input) {
       Expr expr;
       try {
-          expr = Parser.parse(input); 
+          expr = parser.parseString(input); 
       } catch (SyntaxException e) {
           throw new Error(e.explain());
       }

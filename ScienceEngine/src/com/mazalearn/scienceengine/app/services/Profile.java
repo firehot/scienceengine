@@ -89,4 +89,8 @@ public class Profile implements Serializable {
     String s = properties.get("experiment");
     return s == null ? "" : s;
   }
+
+  public boolean getLocked(int iLevel) {
+    return false;
+  }
 }

@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.core.model;
 
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.core.view.Parameter;
 
 public class DummyBody extends Science2DBody {
   
@@ -40,6 +39,11 @@ public class DummyBody extends Science2DBody {
     configs.add(probeConfig);
   }
   
+  @Override
+  public boolean allowsConfiguration() {
+    return false;
+  }
+
   public void setConfigParameter(IParameter parameter, float value) {
     if (parameter == null) {
       parameter = Parameter.Select;

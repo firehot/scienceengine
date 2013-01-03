@@ -4,7 +4,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 
 public enum ComponentType implements IComponentType {
   Dummy,
-  Environment;
+  Environment,
+  Global;
   
   public String toString() {
     return ScienceEngine.getMsg().getString("Name." + name());

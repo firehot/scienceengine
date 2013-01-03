@@ -1,9 +1,63 @@
-{"name":"Electromagnetism","level":1,"description":"Magnetic Field of a Bar Magnet",
+{name:"Electromagnetism",level:1,description:"Magnetic Field of a Bar Magnet",
 components:[
-{"type":"BarMagnet","x":186.99762,"y":208.00957,"originX":128.0,"originY":32.0,"width":256.0,"height":64.0,"visible":true,"rotation":0.0, "move": "Move"},
-{"type":"FieldMeter","x":281.0,"y":130.0,"originX":8.5,"originY":4.25,"width":17.0,"height":8.5,"visible":true,"rotation":0.0},
-{"type":"Compass","x":25.952377,"y":340.19043,"originX":32.0,"originY":8.0,"width":64.0,"height":16.0,"visible":true,"rotation":0.0, "move": "Move"},
-{"type":"ControlPanel","x":703.0,"y":255.0,"originX":0.0,"originY":0.0,"width":0.0,"height":0.0,"visible":true,"rotation":0.0}],
+{type:"BarMagnet",x:186.99762,y:208.00957,originX:128.0,originY:32.0,width:256.0,height:64.0,visible:true,rotation:0.0, move: "Move"},
+{type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0},
+{type:"Compass",x:25.952377,y:340.19043,originX:32.0,originY:8.0,width:64.0,height:16.0,visible:true,rotation:0.0, move: "Move"},
+{type:"ControlPanel",x:703.0,y:255.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0}],
 configs:[{name:"BarMagnet.MagnetMode",permitted:false,value:"Move"},
 {name:"BarMagnet.MagnetStrength",permitted:true,value:3000.0}],
-probers:[{name: "FieldMagnitudeProber"}, {name:"FieldDirectionProber"}]}
+plan:[{type: "Guide", 
+       goal: "Can you make the compass go through one complete rotation?",
+       postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+       success: 1000,
+       timelimit: 120,
+       subgoals: [
+         {goal: "What happens to the compass when it moves around the magnet?",
+         postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+         success: 1000,
+         components:[{type:"Compass", visible: true}]
+         }],
+       },
+       {type: "Guide",
+       goal: "Understand the magnetic field around the magnet",
+       postcondition: "FieldMeter.Count >= 10",
+       success: 250,
+       timelimit: 180,
+       subgoals: [
+        {goal: "Click in many places around the magnet to see the field.",
+         postcondition: "FieldMeter.Count >= 10",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         },
+          {goal: "What happens to the field when magnet is moved?",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 5",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         },
+         {goal: "What happens to the field when magnet is rotated?",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetRotation) >= 5",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         },
+         {goal: "What happens to the field when magnet strength is changed?",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetStrength) >= 5",
+         success: 250,
+         components:[{type:"Compass", visible: false}]
+         }
+       ]},       
+       {type: "FieldMagnitudeProber",
+        goal: "Touch the ? where the magnetic field is stronger",
+        timelimit: 10,
+        success: 100,
+        failure: 50,
+        components:[{type:"Compass", visible: false}]
+        }, 
+        {type:"FieldDirectionProber",
+        goal: "Touch ? and Drag in the direction of the magnetic field",
+        timelimit: 10,
+        success: 100,
+        failure: 50,
+        components:[{type:"Compass", visible: false}]
+        }
+  ]
+}

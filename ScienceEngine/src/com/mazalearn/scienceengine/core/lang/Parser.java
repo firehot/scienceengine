@@ -3,8 +3,10 @@
 
 package com.mazalearn.scienceengine.core.lang;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -57,12 +59,18 @@ public class Parser {
      * If null, any variable is allowed. */
     private Hashtable<Variable, Variable> allowedVariables = null;
 
+    private Map<String, IFunction> functions = Collections.emptyMap();
+
     /** Return the expression denoted by the input string.
     *
     *       @param input the unparsed expression
     *      @exception SyntaxException if the input is unparsable */
    static Expr parse(String input) throws SyntaxException {
        return new Parser().parseString(input);
+   }
+   
+   public void allowFunctions(Map<String, IFunction> functions) {
+     this.functions = functions;
    }
 
     /** Adjust the set of allowed variables: create it (if not yet
@@ -164,12 +172,14 @@ public class Parser {
     }
 
     static private final String[] procs1 = {
+        "_function_", // Injected function
         "abs", "acos", "asin", "atan", 
         "ceil", "cos", "exp", "floor", 
         "log", "round", "sin", "sqrt", 
         "tan", "not"
     };
     static private final int[] rators1 = {
+        Expr.FUNCTION, // Injected function
         Expr.ABS, Expr.ACOS, Expr.ASIN, Expr.ATAN, 
         Expr.CEIL, Expr.COS, Expr.EXP, Expr.FLOOR,
         Expr.LOG, Expr.ROUND, Expr.SIN, Expr.SQRT, 
@@ -204,6 +214,15 @@ public class Parser {
                     expect(')');
                     return Expr.makeApp1(rators1[i], rand);
                 }
+            // Injected functions
+            IFunction function = functions.get(token.sval);
+            if (function != null) {
+              nextToken();
+              expect('(');
+              Expr rand = parseExpr(0);
+              expect(')');
+              return Expr.makeFunction(rators1[0], function, rand);
+            }
 
             for (int i = 0; i < procs2.length; ++i)
                 if (procs2[i].equals(token.sval)) {

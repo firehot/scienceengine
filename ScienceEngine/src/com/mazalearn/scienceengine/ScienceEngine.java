@@ -2,7 +2,9 @@ package com.mazalearn.scienceengine;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -19,7 +21,6 @@ import com.mazalearn.scienceengine.app.screens.ActivityScreen;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
-import com.mazalearn.scienceengine.app.services.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
@@ -27,12 +28,13 @@ import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IParameter;
+import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
-import com.mazalearn.scienceengine.core.view.Parameter;
 import com.mazalearn.scienceengine.core.view.StageComponent;
 
 public class ScienceEngine extends Game {
@@ -70,6 +72,8 @@ public class ScienceEngine extends Game {
   private static EventLog eventLog = new EventLog();
 
   private static float time;
+
+  private static Set<Science2DBody> pinnedBodies = new HashSet<Science2DBody>();
 
   public static final int PIXELS_PER_M = 8;
 
@@ -309,21 +313,47 @@ public class ScienceEngine extends Game {
     return selectedBody;
   }
 
+  /**
+   * Body got selected. Record this event and display status.
+   * @param body - not null
+   * @param stage
+   */
   public static void selectBody(Science2DBody body, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
-    eventLog.logEvent(body, Parameter.Select);
     if (body == null) return;
+    eventLog.logEvent(body.name(), Parameter.Select.name());
+    stage.getGuru().checkProgress();
     displayStatus(body.getComponentTypeName(), stage);
   }
 
-  public static void selectParameter(IParameter parameter, IScience2DView stage) {
+  /**
+   * Parameter got selected by user. Record this event and display status
+   * @param parameter
+   * @param stage
+   */
+  public static void selectParameter(Science2DBody body, IParameter parameter, float value, IScience2DView stage) {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayStatus(parameter.name(), stage);
-    eventLog.logEvent(getSelectedBody(), parameter);
+    if (body == null) return;
+    stage.getGuru().checkProgress();
+    eventLog.logEvent(body.name(), parameter.name(), value);
+  }
+  
+  public static void selectParameter(Science2DBody body, IParameter parameter, boolean value, IScience2DView stage) {
+    selectParameter(body, parameter, value ? 1.0f : 0.0f, stage);
+  }
+  
+  public static void selectParameter(Science2DBody body, IParameter parameter, String value, IScience2DView stage) {
+    selectParameter(body, parameter, 0.0f, stage);
+  }
+  
+  public static EventLog getEventLog() {
+    return eventLog;
   }
 
   private static void displayStatus(String entityName, IScience2DView stage) {
+    if (stage == null) return;
     Label status = (Label) stage.findActor(StageComponent.Status.name());
     String component = 
         getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";
@@ -348,5 +378,17 @@ public class ScienceEngine extends Game {
   
   public static float getTime() {
     return time;
+  }
+
+  public static boolean isPinned(Science2DBody body) {
+    return pinnedBodies.contains(body);
+  }
+  
+  public static void pin(Science2DBody body, boolean pin) {
+    if (pin) {
+      pinnedBodies.add(body);
+    } else {
+      pinnedBodies.remove(body);
+    }
   }
 }

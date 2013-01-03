@@ -37,6 +37,7 @@ public class EnvironmentBody extends Science2DBody {
 
   @Override
   public void initializeConfigs() {
+    super.initializeConfigs();
     configs.addAll(environmentConfigs);
   }
   
