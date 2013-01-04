@@ -159,6 +159,27 @@
     <None Include="Info.plist" />
     <None Include="libgdx.a" />
     <None Include="libikvm-natives.a" />
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.html">
+      <Link>data\Electromagnetism\1.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\2.html">
+      <Link>data\Electromagnetism\2.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\3.html">
+      <Link>data\Electromagnetism\3.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\4.html">
+      <Link>data\Electromagnetism\4.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\5.html">
+      <Link>data\Electromagnetism\5.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\6.html">
+      <Link>data\Electromagnetism\6.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\7.html">
+      <Link>data\Electromagnetism\7.html</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -532,6 +553,9 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\skin\arial-15.fnt">
       <Link>skin\arial-15.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoilsheet.png">
+      <Link>images\currentcoilsheet.png</Link>
     </Content>
   </ItemGroup>
 </Project>

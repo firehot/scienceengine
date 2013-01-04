@@ -1,5 +1,7 @@
 using System;
 using System.Drawing;
+using System.IO;
+
 using MonoTouch.UIKit;
 using MonoTouch.Foundation;
 
@@ -10,7 +12,7 @@ namespace scienceengineios {
 	public class WebViewController : UIViewController {
 		UIWebView webView;
 		UIToolbar navBar;
-		String url;
+		NSUrlRequest urlRequest;
 		UIBarButtonItem [] items;
 		UIWindow mainWindow;
 
@@ -18,42 +20,46 @@ namespace scienceengineios {
 			this.mainWindow = mainWindow;
 		}
 		
-		public override void ViewDidLoad () {
+		public override void ViewDidLoad ()
+		{
 			base.ViewDidLoad ();
 			navBar = new UIToolbar ();
-			navBar.Frame = new RectangleF (0, View.Frame.Height-40, View.Frame.Width, 40);
+			navBar.Frame = new RectangleF (0, View.Frame.Height - 40, View.Frame.Width, 40);
 			navBar.TintColor = UIColor.DarkGray;			
 			
 			items = new UIBarButtonItem [] {
-				new UIBarButtonItem ("Back", UIBarButtonItemStyle.Bordered, (o, e) => { webView.GoBack (); }),
-				new UIBarButtonItem ("Forward", UIBarButtonItemStyle.Bordered, (o, e) => { webView.GoForward (); }),
+				new UIBarButtonItem ("Back", UIBarButtonItemStyle.Bordered, (o, e) => {
+				webView.GoBack (); }),
+				new UIBarButtonItem ("Forward", UIBarButtonItemStyle.Bordered, (o, e) => {
+				webView.GoForward (); }),
 				new UIBarButtonItem (UIBarButtonSystemItem.FlexibleSpace, null),
-				new UIBarButtonItem (UIBarButtonSystemItem.Refresh, (o, e) => { webView.Reload (); }),
+				new UIBarButtonItem (UIBarButtonSystemItem.Refresh, (o, e) => {
+				webView.Reload (); }),
 				new UIBarButtonItem (UIBarButtonSystemItem.Stop, (o, e) => { 
-					webView.StopLoading ();
-					mainWindow.MakeKeyAndVisible();
-				})
+				webView.StopLoading ();
+				mainWindow.MakeKeyAndVisible ();
+			})
 			};
 			navBar.Items = items;
 			
 			webView = new UIWebView ();
-			webView.Frame = new RectangleF (0, 0, View.Frame.Width, View.Frame.Height-40);
+			webView.Frame = new RectangleF (0, 0, View.Frame.Width, View.Frame.Height - 40);
 			
 			webView.LoadStarted += delegate {
 				UIApplication.SharedApplication.NetworkActivityIndicatorVisible = true;
-				navBar.Items[0].Enabled = webView.CanGoBack;
-				navBar.Items[1].Enabled = webView.CanGoForward;
+				navBar.Items [0].Enabled = webView.CanGoBack;
+				navBar.Items [1].Enabled = webView.CanGoForward;
 			};
 			webView.LoadFinished += delegate {
 				UIApplication.SharedApplication.NetworkActivityIndicatorVisible = false;
-				navBar.Items[0].Enabled = webView.CanGoBack;
-				navBar.Items[1].Enabled = webView.CanGoForward;
+				navBar.Items [0].Enabled = webView.CanGoBack;
+				navBar.Items [1].Enabled = webView.CanGoForward;
 			};
 			
 			webView.ScalesPageToFit = true;
 			webView.SizeToFit ();
-			webView.LoadRequest (new NSUrlRequest(new NSUrl(url)));
-			
+			load (urlRequest);
+
 			navBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin;
 			webView.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
 			
@@ -61,12 +67,11 @@ namespace scienceengineios {
 			View.AddSubview (navBar);
 		}
 
-		public void load (String url)
-		{
+		public void load (NSUrlRequest urlRequest) {
 			if (webView != null) {
-				webView.LoadRequest (new NSUrlRequest (new NSUrl (url)));
+				webView.LoadRequest (urlRequest);
 			}
-			this.url = url;
+			this.urlRequest = urlRequest;
 		}
 		
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation) {

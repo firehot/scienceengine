@@ -19,12 +19,17 @@ namespace scienceengineios
 			this.window = window;
 			this.webViewController = webViewController;
 		}
-		public override void browseURL (string url) {
-			string contentDirectoryPath = Path.Combine (NSBundle.MainBundle.BundlePath, "Content/");
-			webViewController.load(url);
-		//	webView.ScalesPageToFit = true;
-			// make the window visible
+
+		public override void browseURL (string url)
+		{
+			webViewController.load (new NSUrlRequest(new NSUrl(url)));
 			window.MakeKeyAndVisible ();
+		}
+
+		public override void showInternalURL(string url) {
+			string localHtmlUrl = Path.Combine (NSBundle.MainBundle.BundlePath, url);
+			webViewController.load (new NSUrlRequest(new NSUrl(localHtmlUrl, false)));
+			window.MakeKeyAndVisible();
 		}
 	}
 
@@ -44,11 +49,6 @@ namespace scienceengineios
 
 				// create a new window instance based on the screen size
 				webViewWindow = new UIWindow (UIScreen.MainScreen.Bounds);
-				/*UIWebView webView = new UIWebView(UIScreen.MainScreen.Bounds);
-				window.AddSubview(webView);
-				scienceEngine.setPlatformAdapter (new IosPlatformAdapter(window, webView));
-
-				return result;*/
 				webViewController = new WebViewController(app.KeyWindow);
 				
 				navigationController = new UINavigationController();
