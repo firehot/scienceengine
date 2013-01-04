@@ -42,10 +42,9 @@
     <MtouchLink>None</MtouchLink>
     <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
     <MtouchI18n>west</MtouchI18n>
-    <MtouchUseLlvm>True</MtouchUseLlvm>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../../gdx/bin/;../../../../backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../../backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/SuperJumperDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -83,7 +82,7 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../gdx/bin/;../../../backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/SuperJumperDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
@@ -99,6 +98,11 @@
     <ConsolePause>False</ConsolePause>
     <BuildIpa>True</BuildIpa>
     <CodesignKey>iPhone Distribution</CodesignKey>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+      </CustomCommands>
+    </CustomCommands>
     <MtouchI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
@@ -108,6 +112,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+      </CustomCommands>
+    </CustomCommands>
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
@@ -179,6 +188,12 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\7.html">
       <Link>data\Electromagnetism\7.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\lock.png">
+      <Link>images\lock.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\ammeter.png">
+      <Link>images\ammeter.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
