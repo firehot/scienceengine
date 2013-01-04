@@ -14,11 +14,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 
-public class PlatformAdapterImpl implements PlatformAdapter {
+public class PlatformAdapterImpl extends AbstractPlatformAdapter {
   private IMessage messages;
   private AndroidApplication application;
   
@@ -40,17 +39,28 @@ public class PlatformAdapterImpl implements PlatformAdapter {
     return messages;
   }
   
+  @Override
   public void browseURL(String url) {
     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     application.startActivity(myIntent);
   }
 
-  public void showURL(String url) {
+  @Override
+  public void showExternalURL(String url) {
+    showFileUri(url, Environment.getExternalStorageDirectory().toString());
+  }
+
+  private void showFileUri(String url, String directory) {
     Intent myIntent = 
         new Intent("com.mazalearn.scienceengine.intent.action.WebViewActivity");
     myIntent.setData( 
-        Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/" + url));
+        Uri.parse("file://" + directory + "/" + url));
     application.startActivity(myIntent);
+  }
+
+  @Override
+  public void showInternalURL(String url) {
+    showFileUri(url, "android_asset");
   }
 
   @Override

@@ -41,15 +41,6 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
 	}
 
   @Override
-  public void showURL(String url) {
-    FileHandle file = Gdx.files.external(url);
-    if (file.exists()) {
-      String path = file.file().getAbsolutePath();
-      browseURL("file:///" + path.replace("\\", "/"));
-    }
-  }
-
-  @Override
   public boolean playVideo(File file) {
     if(java.awt.Desktop.isDesktopSupported() ) {
       java.awt.Desktop desktop = java.awt.Desktop.getDesktop();

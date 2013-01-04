@@ -22,7 +22,7 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   }
 
   @Override
-  public void showURL(String url) {
+  public void showExternalURL(String url) {
     browseURL(url);
   }
 

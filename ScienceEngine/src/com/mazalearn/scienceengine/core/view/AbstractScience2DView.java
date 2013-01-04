@@ -123,7 +123,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
       // TODO: put in a proper celebration here
       getGuru().setTitle("Congratulations! You move to the next Level ");
       // TODO: generalize
-      ScienceEngine.getPlatformAdapter().showURL(
+      ScienceEngine.getPlatformAdapter().showInternalURL(
           "data/" + controller.getName() + "/" + controller.getLevel() + ".html");
       challenge(false);
     } else {

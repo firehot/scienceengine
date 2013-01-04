@@ -22,12 +22,20 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
   }
 
   @Override
-  public void showURL(String uri) {
-    FileHandle file = Gdx.files.external(uri);
+  public void showExternalURL(String uri) {
+    showFileUri(Gdx.files.external(uri));
+  }
+
+  private void showFileUri(FileHandle file) {
     if (file.exists()) {
       String path = file.file().getAbsolutePath();
       browseURL("file:///" + path.replace("\\", "/"));
     }
+  }
+
+  @Override
+  public void showInternalURL(String uri) {
+    showFileUri(Gdx.files.internal(uri));
   }
 
   @Override

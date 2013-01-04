@@ -17,7 +17,10 @@ public interface PlatformAdapter {
   public void browseURL(String url);
   
   // Show url in captive browser
-  public void showURL(String uri);
+  public void showExternalURL(String uri);
+
+  // Show url in captive browser
+  public void showInternalURL(String uri);
 
   // Plays video corresponding to file. Returns true iff successful
   public boolean playVideo(File file);
