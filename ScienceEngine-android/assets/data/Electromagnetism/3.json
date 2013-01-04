@@ -9,11 +9,11 @@ circuits:[["CurrentSource.1","Wire.1"],["CurrentSource.2","Wire.2"]],
 configs:[
 {name:"CurrentSource.2.CurrentType",permitted:true,value:"DC"},
 {name:"CurrentSource.2.CurrentFrequency",permitted:true,value:1.0},
-{name:"CurrentSource.2.CurrentMax",permitted:true,value:5.0},
+{name:"CurrentSource.2.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.2.CurrentDirection",permitted:true,value:true},
 {name:"CurrentSource.1.CurrentType",permitted:true,value:"DC"},
 {name:"CurrentSource.1.CurrentFrequency",permitted:true,value:1.0},
-{name:"CurrentSource.1.CurrentMax",permitted:true,value:5.0},
+{name:"CurrentSource.1.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.1.CurrentDirection",permitted:true,value:true}],
 plan:[{type: "Guide", 
        goal: "Can you make the compass go through one complete rotation?",
@@ -39,7 +39,7 @@ plan:[{type: "Guide",
          success: 200
          },
          {goal: "What happens to the field when current in Wire1 is DC and current max is changed?",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentMax) >= 5",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.MaxCurrent) >= 5",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
@@ -49,7 +49,7 @@ plan:[{type: "Guide",
          success: 200
          },
          {goal: "What happens to the field when current in Wire1 is AC and current max is changed?",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.CurrentMax) >= 5",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.1.MaxCurrent) >= 5",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
@@ -59,7 +59,7 @@ plan:[{type: "Guide",
          success: 200
          },
          {goal: "What happens to the field when current in Wire2 is AC and current Max is changed?",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.2.CurrentMax) >= 5",
+         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.2.MaxCurrent) >= 5",
          components:[{type:"Compass", visible: false}],
          success: 200
          }

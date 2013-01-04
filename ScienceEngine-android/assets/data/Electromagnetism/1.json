@@ -6,7 +6,8 @@ components:[
 {type:"ControlPanel",x:703.0,y:255.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0}],
 configs:[{name:"BarMagnet.MagnetMode",permitted:false,value:"Move"},
 {name:"BarMagnet.MagnetStrength",permitted:true,value:3000.0}],
-plan:[{type: "Guide", 
+plan:[
+      {type: "Guide", 
        goal: "Can you make the compass go through one complete rotation?",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
@@ -35,7 +36,7 @@ plan:[{type: "Guide",
          components:[{type:"Compass", visible: false}]
          },
          {goal: "What happens to the field when magnet is rotated?",
-         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetRotation) >= 5",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.RotationAngle) >= 5",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },

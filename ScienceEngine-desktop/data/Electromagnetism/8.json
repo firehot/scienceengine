@@ -10,4 +10,6 @@ configs:[{name:"Magnet Mode",permitted:false,value:"Free"},
 {name:"CurrentSource.CurrentFrequency",permitted:true,value:1.0},
 {name:"CurrentSource.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.CurrentDirection",permitted:false,value:true},
-{name:"CurrentCoil.CommutatorType",permitted:true,value:"Connector"}]}
+{name:"CurrentCoil.CommutatorType",permitted:true,value:"Connector"},
+{name:"CurrentCoil.RotationVelocity", permitted:false, value:2}
+]}
