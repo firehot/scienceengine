@@ -19,6 +19,7 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   
   @Override
   public Platform getPlatform() {
+    // return Gdx.app.getType();
     return Platform.Desktop;
   }
   
