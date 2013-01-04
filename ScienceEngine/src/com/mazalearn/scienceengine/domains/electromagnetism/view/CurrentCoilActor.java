@@ -71,8 +71,9 @@ public class CurrentCoilActor extends Science2DActor {
     }
     int frameIndex = (int) Math.floor(((rotation + 360) % 360 ) / 10);
     TextureRegion frame = rotationFrames[frameIndex];
-    batch.draw(frame, (currentCoil.getPosition().x - currentCoil.getWidth() / 2 + 1) * ScienceEngine.PIXELS_PER_M, 
-        (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 1.5f) * ScienceEngine.PIXELS_PER_M); 
+    batch.draw(frame, (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 1) * ScienceEngine.PIXELS_PER_M, 
+        (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 2.5f) * ScienceEngine.PIXELS_PER_M,
+        0, 0, getWidth()*1.2f, getWidth()*1.2f, 1, 1, 0); 
 
     int rotation2 = rotationAngles[frameIndex];
     batch.draw(textureRegion, getX(), getY(), this.getOriginX(), 
