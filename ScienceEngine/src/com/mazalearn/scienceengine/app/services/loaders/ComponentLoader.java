@@ -92,9 +92,11 @@ public class ComponentLoader {
     if (actor instanceof Science2DActor) {
       Science2DActor science2DActor = (Science2DActor) actor;
       science2DActor.setPositionFromViewCoords(false);
-      if (component.get("move") != null)
-        science2DActor.setMovementMode((String) LevelLoader.nvl(
-            component.get("move"), "None"));
+      if (component.get("move") != null) {
+        science2DActor.setMovementMode((String) component.get("move"));
+      }
+      if (component.get("extra") != null)
+        science2DActor.getBody().setExtra((String) component.get("extra"));
       if ((Boolean) LevelLoader.nvl(component.get("bodytype"), false)) {
         science2DActor.getBody().setType(BodyType.DynamicBody);
       } else {

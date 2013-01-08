@@ -1,8 +1,11 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -21,8 +24,7 @@ public class CurrentCoilActor extends Science2DActor {
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
    
-  private static final int FRAME_COLS = 36;
-  private static final int FRAME_ROWS = 1;
+  private static final int NUM_FRAMES = 36;
   // To synchronize the coil commutator with blender animation.
   private int[] rotationAngles = new int[] { 0, 1, 7, 15, 28, 40, 55, 65, 80,
       90, 100, 110, 120, 135, 145, 155, 165, 174, 180, 187, 195, 203, 215, 225,
@@ -34,17 +36,16 @@ public class CurrentCoilActor extends Science2DActor {
     super(body, commutatorNone);
     this.currentCoil = (CurrentCoil) body;
     this.font = font;
-
-    Texture rotationSheet = new Texture("images/currentcoilsheet.png");
-    TextureRegion[][] tmp = TextureRegion.split(rotationSheet,
-        rotationSheet.getWidth() / FRAME_COLS, rotationSheet.getHeight()
-            / FRAME_ROWS);
-    rotationFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-    int index = 0;
-    for (int i = 0; i < FRAME_ROWS; i++) {
-      for (int j = 0; j < FRAME_COLS; j++) {
-        rotationFrames[index++] = tmp[i][j];
-      }
+/**
+ * in directory electromangetism
+ * java -cp c:\Users\sridhar\gdx-tools.jar;c:\Users\sridhar\git\scienceengi
+ne\ScienceEngine\libs\gdx.jar com.badlogic.gdx.tools.imagepacker.TexturePacker2
+currentcoil
+ */
+    rotationFrames = new TextureRegion[NUM_FRAMES];
+    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/electromagnetism/currentcoil/pack.atlas"));
+    for (int i = 0; i < NUM_FRAMES; i++) {
+      rotationFrames[i] = atlas.findRegion(String.format("%03d0", i));
     }
   }
 
@@ -73,7 +74,7 @@ public class CurrentCoilActor extends Science2DActor {
     TextureRegion frame = rotationFrames[frameIndex];
     batch.draw(frame, (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 1) * ScienceEngine.PIXELS_PER_M, 
         (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 2.5f) * ScienceEngine.PIXELS_PER_M,
-        0, 0, getWidth()*1.2f, getWidth()*1.2f, 1, 1, 0); 
+        frame.getRegionWidth()/2, frame.getRegionHeight()/2, getWidth()*1.2f, getWidth()*1.2f, 1, 1, 0); 
 
     int rotation2 = rotationAngles[frameIndex];
     batch.draw(textureRegion, getX(), getY(), this.getOriginX(), 

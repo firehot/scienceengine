@@ -68,8 +68,12 @@ public class ControlPanel extends Table {
     return new IParameter() {
       @Override
       public String name() {
-        return body.getComponentTypeName();
-      }      
+        return body.name();
+      }
+      @Override
+      public String toString() {
+        return body.toString();
+      }
     };
   }
   

@@ -357,6 +357,9 @@ public class ScienceEngine extends Game {
     Label status = (Label) stage.findActor(StageComponent.Status.name());
     String component = 
         getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";
+    if (entityName.contains(".")) {
+      entityName = entityName.substring(0, entityName.indexOf("."));
+    }
     status.setText( component + getMsg().getString("Help." + entityName));
   }
 

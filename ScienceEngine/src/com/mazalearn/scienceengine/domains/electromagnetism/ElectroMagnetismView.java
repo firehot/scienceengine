@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
@@ -30,6 +32,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CircuitActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentSourceActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ElectromagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
@@ -48,7 +51,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     super(emModel, width, height, skin, controller);
     this.emModel = emModel;
     
-    getRoot().addListener(new ClickListener() {
+    getRoot().addListener(new ClickListener() {   
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         super.touchUp(event, x, y, pointer, button);
@@ -60,12 +63,13 @@ public class ElectroMagnetismView extends AbstractScience2DView {
             fieldMeter.setPositionAndAngle(pos, 0);
           }
         }
-      }       
+      }
     });
   }
 
   @Override
   public void prepareView() {
+    // TODO: FieldMeter should manage its own clicks - make it larger and in the background above root
     fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
     for (List<CircuitElement> circuit: emModel.getCircuits()) {
       this.addActor(new CircuitActor(circuit));
@@ -106,6 +110,8 @@ public class ElectroMagnetismView extends AbstractScience2DView {
       return new WireActor(body);
     case ElectroMagnet:
       return new ElectromagnetActor(body, textureRegion);
+    case Drawing:
+      return new DrawingActor(body, textureRegion, getFont());
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);
@@ -120,18 +126,17 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     if (type.equals("Brushes")) {
       return new Image(ScienceEngine.assetManager.get("images/brush.png", Texture.class));
     }
+    if (type.equals("Engine")) {
+      Image engine = new Image(ScienceEngine.assetManager.get("images/engine.png", Texture.class));
+      engine.addAction(Actions.repeat(-1, 
+          Actions.sequence(
+              Actions.moveBy(AbstractScreen.VIEWPORT_WIDTH, 0, 5), 
+              Actions.moveBy(-AbstractScreen.VIEWPORT_WIDTH,0))));
+      return engine;
+    }
     return null;
   }
 
-    @Override
-  public void challenge(boolean challenge) {
-    // Enable/Disable compass
-//    if (compassActor != null) {
-//      compassActor.setVisible(!challenge);
-//    }
-    super.challenge(challenge);
-  };
-  
   @Override
   public AbstractTutor createTutor(String type, String goal, 
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {

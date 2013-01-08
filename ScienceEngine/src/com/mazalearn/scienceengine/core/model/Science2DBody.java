@@ -47,7 +47,10 @@ public class Science2DBody implements IBody {
   // Used for temporary work
   private final Vector2 aPosition = new Vector2();
   private IComponentType componentType;
+  // count of this body among bodies of same type - starts from 1
   private int count;
+  // Body type specific initialization information
+  private String extra;
   private MovementMode movementMode = MovementMode.Move;
   private RevoluteJointDef rotationJointDef = new RevoluteJointDef();
   private Joint rotationJoint;
@@ -218,6 +221,13 @@ public class Science2DBody implements IBody {
     return true;
   }
   
+  public String getExtra() {
+    return extra;
+  }
+
+  public void setExtra(String extra) {
+    this.extra = extra;
+  }
   //////////////////////////////////////////////////////////////////////////
   ///  Static Proxy envelope for Box2D body
   //////////////////////////////////////////////////////////////////////////

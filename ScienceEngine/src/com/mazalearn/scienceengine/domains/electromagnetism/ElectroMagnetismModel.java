@@ -13,6 +13,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.HorseshoeMagnet;
@@ -49,6 +50,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case Wire: return new Wire(x, y, rotation);
     case CurrentCoil: return new CurrentCoil(x, y, rotation);
     case Compass: return new Compass(x, y, rotation);
+    case Drawing: return new Drawing(x, y, rotation);
     }
     return null;
   }

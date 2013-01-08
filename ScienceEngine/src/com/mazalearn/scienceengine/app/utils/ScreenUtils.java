@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.designer;
+package com.mazalearn.scienceengine.app.utils;
 
 import java.nio.ByteBuffer;
 
@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.mazalearn.scienceengine.app.utils.LevelUtil;
 
 public class ScreenUtils {
 

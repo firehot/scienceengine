@@ -14,7 +14,8 @@ public enum ComponentType implements IComponentType {
   Wire("images/currentwire-up.png"),
   Ammeter("images/ammeter.png"), 
   HorseshoeMagnet("images/horseshoemagnet.png"),
-  CurrentCoil("images/currentcoil_nocommutator.png");
+  CurrentCoil("images/currentcoil_nocommutator.png"), 
+  Drawing("images/draw.png");
   
   private String textureFilename;
   
