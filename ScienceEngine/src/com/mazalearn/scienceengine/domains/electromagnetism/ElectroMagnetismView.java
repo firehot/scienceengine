@@ -7,13 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
@@ -37,6 +35,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.ElectromagnetAc
 import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrain;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
@@ -126,13 +125,8 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     if (type.equals("Brushes")) {
       return new Image(ScienceEngine.assetManager.get("images/brush.png", Texture.class));
     }
-    if (type.equals("Engine")) {
-      Image engine = new Image(ScienceEngine.assetManager.get("images/engine.png", Texture.class));
-      engine.addAction(Actions.repeat(-1, 
-          Actions.sequence(
-              Actions.moveBy(AbstractScreen.VIEWPORT_WIDTH, 0, 5), 
-              Actions.moveBy(-AbstractScreen.VIEWPORT_WIDTH,0))));
-      return engine;
+    if (type.equals("Train")) {
+      return new ScienceTrain(this);
     }
     return null;
   }

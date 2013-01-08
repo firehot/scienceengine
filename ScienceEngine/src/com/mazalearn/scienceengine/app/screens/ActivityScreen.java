@@ -103,6 +103,7 @@ public class ActivityScreen extends AbstractScreen {
     ScienceEngine.assetManager.load("images/coppercoils-front2.png", Texture.class);
     ScienceEngine.assetManager.load("images/brush.png", Texture.class);
     ScienceEngine.assetManager.load("images/engine.png", Texture.class);
+    ScienceEngine.assetManager.load("images/wheel.png", Texture.class);
     
     for (ComponentType componentType: ComponentType.values()) {
       String textureFilename = componentType.getTextureFilename();
