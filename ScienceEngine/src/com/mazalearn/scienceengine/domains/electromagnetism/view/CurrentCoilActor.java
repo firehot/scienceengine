@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -45,7 +44,8 @@ currentcoil
     rotationFrames = new TextureRegion[NUM_FRAMES];
     TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/electromagnetism/currentcoil/pack.atlas"));
     for (int i = 0; i < NUM_FRAMES; i++) {
-      rotationFrames[i] = atlas.findRegion(String.format("%03d0", i));
+      String num = String.valueOf(i);
+      rotationFrames[i] = atlas.findRegion("000".substring(0, 3 - num.length()) + num + '0');
     }
   }
 

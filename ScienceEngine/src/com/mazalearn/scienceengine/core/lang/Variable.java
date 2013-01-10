@@ -3,14 +3,14 @@
 
 package com.mazalearn.scienceengine.core.lang;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * A variable is a simple expression with a name (like "x") and a
  * settable value.
  */
 public class Variable extends Expr {
-    private static Hashtable<String, Variable> variables = new Hashtable<String, Variable>();
+    private static HashMap<String, Variable> variables = new HashMap<String, Variable>();
     
     /**
      * Return a unique variable named `name'.  There can be only one

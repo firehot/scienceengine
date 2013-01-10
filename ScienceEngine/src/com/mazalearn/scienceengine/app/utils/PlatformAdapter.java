@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.app.utils;
 
 import java.io.File;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
@@ -36,5 +37,8 @@ public interface PlatformAdapter {
   public Platform getPlatform();
 
   public BitmapFont getFont(int pointSize);
+
+  public Pixmap getScreenshot(int x, int y, int width, int height,
+      float scale);
 }
 

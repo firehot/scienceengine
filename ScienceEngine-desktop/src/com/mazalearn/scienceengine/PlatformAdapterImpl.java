@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +13,7 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
+import com.mazalearn.scienceengine.designer.ScreenUtils;
 
 class PlatformAdapterImpl extends AbstractPlatformAdapter {
   
@@ -91,5 +93,10 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     BitmapFont font = generator.generateFont(pointSize, characters.toString(), false);
     generator.dispose();
     return font;
+  }
+
+  @Override
+  public Pixmap getScreenshot(int x, int y, int width, int height, float scale) {
+    return ScreenUtils.getScreenshot(x, y, width, height, scale);
   }
 }

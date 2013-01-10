@@ -1,12 +1,13 @@
-{name:"Electromagnetism",level:7,description:"Creating a DC  motor by using commutator",components:[{type:"Brushes",x:330.0,y:225.0,originX:0.0,originY:0.0,width:32.0,height:16.0,visible:true,rotation:0.0,move:false,bodytype:false},
-{type:"HorseshoeMagnet",x:114,y:50.8,originX:235.0,originY:192.0,width:470.0,height:256.0,visible:true,rotation:0,move:false,bodytype:false},
-{type:"CurrentSource",x:327.6001,y:345.59995,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:false,bodytype:false},{type:"CurrentCoil",x:282.86517,y:226.54425,originX:64.0,originY:8.0,width:128.0,height:16.0,visible:true,rotation:0.0,move:true,bodytype:true},
-{type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:false,bodytype:false},
-{type:"Title",x:100.0,y:460.0,originX:0.0,originY:0.0,width:0.0,height:5.0,visible:true,rotation:0.0,move:false,bodytype:false}],
-circuits:[["CurrentSource","CurrentCoil"]],
-configs:[
-{name:"CurrentSource.CurrentType",permitted:false,value:"DC"},
-{name:"CurrentSource.Frequency",permitted:true,value:1.0},
-{name:"CurrentSource.CurrentMax",permitted:true,value:5.0},
-{name:"CurrentSource.CurrentDirection",permitted:true,value:true},
-{name:"CurrentCoil.CommutatorType",permitted:false,value:"Commutator"}]}
+{name:"Electromagnetism",level:9,description:"Catch the Science Train and share",
+components:[
+{type:"Drawing",x:50.0,y:138,originX:170.0,originY:100.0,width:512.0,height:256.0,
+                visible:true,rotation:0.0,move:"None",bodytype:false,extra:"Coach"},
+{type:"Drawing",x:120.0,y:10,originX:40.0,originY:40.0,width:128.0,height:128.0,
+                visible:true,rotation:0.0,move:"None",bodytype:true,extra:"Wheel"},
+{type:"Drawing",x:340.0,y:10,originX:40.0,originY:40.0,width:128.0,height:128.0,
+                visible:true,rotation:0.0,move:"None",bodytype:true,extra:"Wheel"},
+{type:"Train",x:0.0,y:420,originX:150.0,originY:75.0,width:200.0,height:40.0,
+                visible:true,rotation:0.0,move:"None",bodytype:false},
+{type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false},
+],
+}

@@ -12,6 +12,7 @@ class Token {
     public static final int TT_GE     = -7;
     public static final int TT_STRING = -8;
 
+    @SuppressWarnings("deprecation")
     public Token(int ttype, double nval, String input, int start, int end) {
         this.ttype = ttype;
         this.sval = input.substring(start, end);
@@ -20,7 +21,7 @@ class Token {
         
         int count = 0;
         for (int i = start-1; 0 <= i; --i) {
-            if (!Character.isWhitespace(input.charAt(i)))
+            if (!Character.isSpace(input.charAt(i)))
                 break;
             ++count;
         }
@@ -28,7 +29,7 @@ class Token {
 
         count = 0;
         for (int i = end; i < input.length(); ++i) {
-            if (!Character.isWhitespace(input.charAt(i)))
+            if (!Character.isSpace(input.charAt(i)))
                 break;
             ++count;
         }

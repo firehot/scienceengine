@@ -12,7 +12,7 @@ import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
-public class AbstractPlatformAdapter implements PlatformAdapter {
+public abstract class AbstractPlatformAdapter implements PlatformAdapter {
 
   private static final float DEFAULT_FONT_SIZE = 15f;
   private IMessage message;

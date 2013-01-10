@@ -299,9 +299,6 @@ public class ScienceEngine extends Game {
   }
 
   public static PlatformAdapter getPlatformAdapter() {
-    if (platformAdapter == null) {
-      platformAdapter = new AbstractPlatformAdapter();
-    }
     return platformAdapter;  
   }
 

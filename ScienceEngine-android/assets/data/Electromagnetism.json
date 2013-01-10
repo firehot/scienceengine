@@ -22,7 +22,10 @@
   },
   {"name": "AC Motor - A coil carrying Alternating Current in a magnetic field rotates to create a motor",
    "description": "Experiment with how a motor can be created by passing alternating current through a wire placed in a magnetic field. The frequency has to be matched to rate of rotation to sustain the spin."
-  }
+  },
+  {"name": "Catch the Science Train - Attach your own coach with Magneto light and share",
+   "description": "The Science Train is leaving the station...Create your own coach with wheels. Design how the magneto lighting will work on this coach using your knowledge of electromagnetism. Attach this coach to the Science Train and share with friends. See how your friends have made their coaches."
+  },
 ],
 "Resources": [
 {"type": "video",

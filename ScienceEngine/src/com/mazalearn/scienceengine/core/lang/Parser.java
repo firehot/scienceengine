@@ -4,8 +4,8 @@
 package com.mazalearn.scienceengine.core.lang;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -57,7 +57,7 @@ public class Parser {
     
     /** Set of Variable's that are allowed to appear in input expressions. 
      * If null, any variable is allowed. */
-    private Hashtable<Variable, Variable> allowedVariables = null;
+    private HashMap<Variable, Variable> allowedVariables = null;
 
     private Map<String, IFunction> functions = Collections.emptyMap();
 
@@ -81,7 +81,7 @@ public class Parser {
      * @param optVariable the variable to be allowed, or null */
     public void allow(Variable optVariable) {
         if (null == allowedVariables) {
-            allowedVariables = new Hashtable<Variable, Variable>();
+            allowedVariables = new HashMap<Variable, Variable>();
             allowedVariables.put(pi, pi);
         }
         if (null != optVariable)

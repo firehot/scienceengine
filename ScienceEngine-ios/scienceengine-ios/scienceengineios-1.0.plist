@@ -23,13 +23,13 @@
                    <key>kind</key>
                    <string>display-image</string>
                    <key>url</key>
-                   <string>http://www.mazalearn.com/icon_57×57.png</string>
+                   <string>http://www.mazalearn.com/distribution/icon_57×57.png</string>
                </dict>
                <dict>
                    <key>kind</key>
                    <string>full-size-image</string>
                    <key>url</key>
-                   <string>http://www.mazalearn.com/iTunesArtwork</string>
+                   <string>http://www.mazalearn.com/distribution/artwork_512x512.png</string>
                </dict>
            </array>
            <key>metadata</key>

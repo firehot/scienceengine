@@ -68,6 +68,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
 
   @Override
   public void prepareView() {
+    // TODO: prepareActor should be called for all actors
     // TODO: FieldMeter should manage its own clicks - make it larger and in the background above root
     fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
     for (List<CircuitElement> circuit: emModel.getCircuits()) {

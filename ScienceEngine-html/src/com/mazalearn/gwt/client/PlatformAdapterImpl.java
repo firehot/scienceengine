@@ -2,6 +2,8 @@ package com.mazalearn.gwt.client;
 
 import java.io.File;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
 import com.mazalearn.scienceengine.app.services.IMessage;
@@ -34,8 +36,13 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   @Override
   public IMessage getMsg() {
     if (messages == null) {
-      this.messages = new GwtMessages(Platform.Desktop);
+      this.messages = new GwtMessages(Platform.GWT);
     }
     return messages;
   }
+  @Override
+  public Pixmap getScreenshot(int x, int y, int width, int height, float scale) {
+    return new Pixmap(width, height, Format.RGBA8888);
+  }
+
 }

@@ -34,13 +34,24 @@ public class Drawing extends Science2DBody {
   }
   
   public void addPointSequence() {
+    // Not useful to have a sequence of 0 or 1 points
+    if (points.size() > 1 && points.get(points.size() - 1).size() <= 1) {
+      points.get(points.size() - 1).clear();
+      return;
+    }
     points.add(new ArrayList<Vector2>());
   }
+  
   public void addPoint(float x, float y) {
     points.get(points.size() - 1).add(new Vector2(x, y));
   }
 
   public List<List<Vector2>> getPointSequences() {
     return points;
+  }
+  
+  @Override
+  public boolean allowsConfiguration() {
+    return false;
   }
 }

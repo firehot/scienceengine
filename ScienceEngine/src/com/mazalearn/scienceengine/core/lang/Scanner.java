@@ -80,8 +80,9 @@ class Scanner {
         return (Token) tokens.elementAt(index);
     }
 
+    @SuppressWarnings("deprecation")
     private int scanToken(int i) {
-        while (i < s.length() && Character.isWhitespace(s.charAt(i)))
+        while (i < s.length() && Character.isSpace(s.charAt(i)))
             ++i;
 
         if (i == s.length()) {

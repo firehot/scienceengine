@@ -45,7 +45,8 @@ class Dashboard extends Table {
       @Override
       public void act(float delta) {
         timeLimit -= delta;
-        this.setText(String.format("%2d:%02d", Math.round(timeLimit / 60), Math.round(timeLimit % 60)));
+        String seconds = String.valueOf(Math.round(timeLimit % 60));
+        this.setText(Math.round(timeLimit / 60) + ":" + "0".substring(0, 2 - seconds.length()) + seconds);
         if (timeLimit < 0) {
           // TODO: goal.setText("Time Up");
         }
