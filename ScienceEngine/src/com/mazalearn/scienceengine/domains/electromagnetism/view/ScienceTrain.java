@@ -66,7 +66,6 @@ public class ScienceTrain extends Group {
   }
   
   public void draw(SpriteBatch batch, float parentAlpha) {
-    DrawingActor wheel1Drawing = (DrawingActor) science2DView.findActor("Drawing.2");
     DrawingActor coachDrawing = (DrawingActor) science2DView.findActor("Drawing.1");
     if (coachDrawing != null && coachDrawing.getImage() != coach) {
       coach = coachDrawing.getImage();
@@ -74,6 +73,7 @@ public class ScienceTrain extends Group {
       coach.setPosition(-coach.getWidth() - 20, -20);
       addActor(coach);
     }
+    DrawingActor wheel1Drawing = (DrawingActor) science2DView.findActor("Drawing.2");
     if (wheel1Drawing != null && wheel1Drawing.getImage() != wheel1) {
       wheel1 = wheel1Drawing.getImage();
       wheel1.setSize(32, 32);
