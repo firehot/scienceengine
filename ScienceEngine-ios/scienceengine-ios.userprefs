@@ -1,15 +1,13 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Ad-Hoc|iPhone" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/WebViewController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/Main.cs">
     <Files>
       <File FileName="scienceengine-ios/WebViewController.cs" Line="77" Column="18" />
-      <File FileName="scienceengine-ios/Main.cs" Line="56" Column="5" />
+      <File FileName="scienceengine-ios/Main.cs" Line="13" Column="27" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="scienceengine-ios" expanded="True" selected="True" />
-        </State>
+        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>

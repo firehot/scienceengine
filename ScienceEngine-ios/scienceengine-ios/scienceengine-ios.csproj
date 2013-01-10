@@ -27,7 +27,7 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
@@ -44,7 +44,7 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -64,7 +64,7 @@
     <IpaPackageName />
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <BuildIpa>True</BuildIpa>
@@ -81,7 +81,7 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
@@ -99,7 +99,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <MtouchI18n />
@@ -117,7 +117,7 @@
     <ConsolePause>False</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../../ScienceEngine/src/&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/ScienceEngineDesktop.java&quot; -v" workingdir="${ProjectDir}" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <CodesignKey>iPhone Distribution</CodesignKey>
@@ -217,6 +217,24 @@
     <Content Include="icon_57x57.png" />
     <Content Include="icon_72x72.png" />
     <None Include="scienceengineios-1.0.plist" />
+    <Content Include="..\..\ScienceEngine-android\assets\images\engine.png">
+      <Link>images\engine.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\shoppingcart.png">
+      <Link>images\shoppingcart.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\wheel.png">
+      <Link>images\wheel.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnetism\currentcoil\pack.atlas">
+      <Link>images\electromagnetism\currentcoil\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnetism\currentcoil\pack.png">
+      <Link>images\electromagnetism\currentcoil\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\draw.png">
+      <Link>images\draw.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
