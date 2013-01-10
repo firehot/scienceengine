@@ -7,8 +7,9 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
 using com.badlogic.gdx.backends.ios;
+using com.badlogic.gdx.graphics;
 using com.mazalearn.scienceengine;
-
+using com.mazalearn.scienceengine.designer;
 namespace scienceengineios
 {		
 	public class IosPlatformAdapter : AbstractPlatformAdapter {
@@ -30,6 +31,11 @@ namespace scienceengineios
 			string localHtmlUrl = Path.Combine (NSBundle.MainBundle.BundlePath, url);
 			webViewController.load (new NSUrlRequest(new NSUrl(localHtmlUrl, false)));
 			window.MakeKeyAndVisible();
+		}
+
+		public override Pixmap getScreenshot (int x, int y, int w, int h, float scale)
+		{
+			return ScreenUtils.getScreenshot(x, y, w, h, scale);
 		}
 	}
 

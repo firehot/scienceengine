@@ -11,9 +11,12 @@
 	<target name="compile">
 		<delete dir="target"/>
 		<mkdir dir="target"/>
-		<javac srcdir="${SRC}" debug="on" destdir="target" classpath="${CLASSPATH}">
+		<javac debug="off" destdir="target" classpath="${CLASSPATH}">
+			<src path="${SRC}/ScienceEngine/src/" />
+      <src path="${SRC}/ScienceEngine-designer/src/" />
 			<include name="**/*.java"/>
 			<exclude name="${EXCLUDE}"/>
+			<exclude name="**/Messages.java"/>
 		</javac>
 	</target>
 

@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -12,7 +13,7 @@ import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
-public abstract class AbstractPlatformAdapter implements PlatformAdapter {
+public class AbstractPlatformAdapter implements PlatformAdapter {
 
   private static final float DEFAULT_FONT_SIZE = 15f;
   private IMessage message;
@@ -90,6 +91,11 @@ public abstract class AbstractPlatformAdapter implements PlatformAdapter {
     BitmapFont font = skin.getFont("default-font");
     font.setScale(pointSize / DEFAULT_FONT_SIZE);
     return font;
+  }
+
+  @Override
+  public Pixmap getScreenshot(int x, int y, int width, int height, float scale) {
+	return null;
   }
 
 }
