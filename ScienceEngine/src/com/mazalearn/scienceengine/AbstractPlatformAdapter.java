@@ -53,26 +53,7 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
   @Override
   public IMessage getMsg() {
     if (message == null) {
-      message = new IMessage() {
-        @Override
-        public String getString(String msg) {
-          int pos = msg.indexOf(".");
-          return msg.substring(pos + 1);
-        }
-
-        @Override
-        public String getLanguage() {
-          return "en";
-        }
-
-        @Override
-        public void setLanguage(Skin skin, String language) {
-        }
-
-        @Override
-        public void setFont(Skin skin) {
-        }
-      };
+      message = new BasicMessages();
     }
     return message;
   }
