@@ -5,6 +5,7 @@ import java.io.File;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -17,10 +18,10 @@ public interface PlatformAdapter {
   // Show url in any browser
   public void browseURL(String url);
   
-  // Show url in captive browser
+  // Show internet url in captive browser
   public void showExternalURL(String uri);
 
-  // Show url in captive browser
+  // Show local filesystem url in captive browser
   public void showInternalURL(String uri);
 
   // Plays video corresponding to file. Returns true iff successful
@@ -36,9 +37,14 @@ public interface PlatformAdapter {
   // return platform for this adapter
   public Platform getPlatform();
 
-  public BitmapFont getFont(int pointSize);
+  // Scale font: Possible to do better with Freetype on some platforms
+  public BitmapFont getScaledFont(int pointSize);
 
-  public Pixmap getScreenshot(int x, int y, int width, int height,
-      float scale);
+  // New font load not possible without Freetype support.
+  public BitmapFont loadFont(Skin skin, String language);
+
+  public void getBytes(Pixmap pixmap, byte[] lines);
+
+  public void setBytes(Pixmap pixmap, byte[] lines);
 }
 

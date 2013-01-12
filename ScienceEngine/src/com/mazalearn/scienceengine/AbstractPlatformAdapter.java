@@ -83,7 +83,7 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
   }
 
   @Override
-  public BitmapFont getFont(int pointSize) {
+  public BitmapFont getScaledFont(int pointSize) {
     FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
     Skin  skin = new Skin(skinFile);
     skin.add("en", skin.getFont("default-font"));
@@ -94,8 +94,18 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
   }
 
   @Override
-  public Pixmap getScreenshot(int x, int y, int width, int height, float scale) {
-	return null;
+  public BitmapFont loadFont(Skin skin, String language) {
+    return skin.getFont("en");
+  }
+
+  @Override
+  public void getBytes(Pixmap pixmap, byte[] lines) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  @Override
+  public void setBytes(Pixmap pixmap, byte[] lines) {
+    throw new UnsupportedOperationException("Not implemented");
   }
 
 }

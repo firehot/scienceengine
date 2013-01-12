@@ -75,7 +75,7 @@ public abstract class AbstractScreen implements Screen {
 
   public BitmapFont getSmallFont() {
     if (font == null) {
-      font = ScienceEngine.getPlatformAdapter().getFont(10);
+      font = ScienceEngine.getPlatformAdapter().getScaledFont(10);
     }
     return font;
   }

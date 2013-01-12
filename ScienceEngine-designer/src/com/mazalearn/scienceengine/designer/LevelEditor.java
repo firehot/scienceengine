@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -230,7 +231,7 @@ public class LevelEditor extends Stage {
         LevelUtil.getLevelFile(science2DController.getName(), ".png", level);
     screenFile = Gdx.files.external(screenFile.path());
     Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
-        Gdx.graphics.getHeight(), THUMBNAIL_SCALE);
+        Gdx.graphics.getHeight(), THUMBNAIL_SCALE, originalStage, false);
     PixmapIO.writePNG(screenFile, screenShot);
     screenShot.dispose();
   }

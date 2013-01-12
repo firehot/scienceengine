@@ -1,9 +1,9 @@
 package com.mazalearn.gwt.client;
 
 import java.io.File;
+import java.nio.Buffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
 import com.mazalearn.scienceengine.app.services.IMessage;
@@ -40,9 +40,19 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     }
     return messages;
   }
+
   @Override
-  public Pixmap getScreenshot(int x, int y, int width, int height, float scale) {
-    return new Pixmap(width, height, Format.RGBA8888);
+  public void getBytes(Pixmap pixmap, byte[] lines) {
+    Buffer pixels = pixmap.getPixels();
+    pixels.clear();
+//    pixels.get(lines);
   }
 
+  @Override
+  public void setBytes(Pixmap pixmap, byte[] lines) {
+    Buffer pixels = pixmap.getPixels();
+    pixels.clear();
+    // pixels.put(lines);
+    pixels.clear();   
+  }
 }

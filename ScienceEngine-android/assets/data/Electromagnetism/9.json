@@ -1,11 +1,7 @@
 {name:"Electromagnetism",level:9,description:"Catch the Science Train and share",
 components:[
-{type:"Drawing",x:50.0,y:138,originX:170.0,originY:100.0,width:512.0,height:256.0,
+{type:"Drawing",x:50.0,y:40,originX:170.0,originY:100.0,width:512.0,height:256.0,
                 visible:true,rotation:0.0,move:"None",bodytype:false,extra:"Coach"},
-{type:"Drawing",x:120.0,y:10,originX:40.0,originY:40.0,width:128.0,height:128.0,
-                visible:true,rotation:0.0,move:"None",bodytype:true,extra:"Wheel"},
-{type:"Drawing",x:340.0,y:10,originX:40.0,originY:40.0,width:128.0,height:128.0,
-                visible:true,rotation:0.0,move:"None",bodytype:true,extra:"Wheel"},
 {type:"Train",x:0.0,y:420,originX:150.0,originY:75.0,width:200.0,height:40.0,
                 visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false},

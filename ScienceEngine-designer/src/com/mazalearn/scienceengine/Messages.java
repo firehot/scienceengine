@@ -3,12 +3,7 @@ package com.mazalearn.scienceengine;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
-import com.badlogic.gdx.graphics.g2d.FreeTypeComplexFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
@@ -19,8 +14,6 @@ import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 public class Messages implements IMessage {
-  private static final String HINDI_TTF = "Lohit-Devanagari.ttf"; // "aksharhindi.ttf";
-  private static final String KANNADA_TTF = "Lohit-Kannada.ttf"; // "aksharkannada.ttf";
   private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.data.Messages"; //$NON-NLS-1$
 
   private Locale locale = new Locale("en");
@@ -58,7 +51,7 @@ public class Messages implements IMessage {
     try {
       font = skin.getFont(language);
     } catch (GdxRuntimeException e) { // font not found
-      font = loadFont(skin, language);
+      font = ScienceEngine.getPlatformAdapter().loadFont(skin, language);
     }
     skin.add(language, font);
   
@@ -75,35 +68,4 @@ public class Messages implements IMessage {
     skin.add("default-font", font);
   }
 
-  private BitmapFont loadFont(Skin skin, String language) {
-    BitmapFont font;
-    String fontFileName = null;
-    char beginChar = 0, endChar = 0;
-    if (language.equals("ka")) {
-      fontFileName = KANNADA_TTF; // unicode: 0C80-0CFF
-      beginChar = '\u0c80'; endChar = '\u0cff';
-    } else if (language.equals("hi")) {
-      fontFileName =  HINDI_TTF; // unicode: 0900-097F
-      beginChar = '\u0900'; endChar = '\u097f';
-    }
-    BitmapFontCache.setFallbackFont(skin.getFont("en"));
-    FileHandle fontFileHandle = Gdx.files.internal("skin/" + fontFileName);
-    if (platform == Platform.Android || platform == Platform.AndroidEmulator) {
-      BitmapFontCache.setComplexScriptLayout(language, fontFileName);
-      FreeTypeComplexFontGenerator generator = 
-          new FreeTypeComplexFontGenerator(fontFileHandle);
-      font = generator.generateFont(16, false);
-      generator.dispose();
-    } else {
-      FreeTypeFontGenerator generator = 
-          new FreeTypeFontGenerator(fontFileHandle);
-      StringBuilder characters = new StringBuilder();
-      for (char c = beginChar; c <= endChar; c++) {
-        characters.append(c);
-      }
-      font = generator.generateFont(16, characters.toString(), false);
-      generator.dispose();      
-    }
-    return font;
-  }
 }
