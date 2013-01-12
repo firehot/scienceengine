@@ -20,6 +20,7 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
 
   @Override
   public void browseURL(String url) {
+    Gdx.net.openURI(url);
   }
 
   @Override
@@ -60,6 +61,7 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
 
   @Override
   public Platform getPlatform() {
+    // TODO: use constructor instead
     return Platform.IOS;
   }
 

@@ -34,14 +34,6 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   }
 
   @Override
-  public IMessage getMsg() {
-    if (messages == null) {
-      this.messages = new GwtMessages(Platform.GWT);
-    }
-    return messages;
-  }
-
-  @Override
   public void getBytes(Pixmap pixmap, byte[] lines) {
     Buffer pixels = pixmap.getPixels();
     pixels.clear();
