@@ -15,9 +15,6 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class ScienceTrain extends Group {
-  /**
-   * 
-   */
   private final IScience2DView science2DView;
   private static final int NUM_ENGINE_WHEELS = 4;
   Actor coach;

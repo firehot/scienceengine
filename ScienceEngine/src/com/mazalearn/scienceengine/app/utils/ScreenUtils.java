@@ -23,10 +23,12 @@ public class ScreenUtils {
    * @param height - height
    * @param scale - how much to scale down - should be < 1.
    * @param stage 
+   * @param powerOf2 TODO
    * @return screenshot as a pixmap
    */
   public static Pixmap getScreenshot(float x, float y, float width, 
-      float height, float scale, Stage stage, boolean makeBlackTransparent) {
+      float height, float scale, Stage stage, boolean makeBlackTransparent, 
+      boolean powerOf2) {
     // World coords of actor bottom left
     currentTouch.set(x, y, 0);
     // Screen coords of actor bottom left
@@ -44,11 +46,11 @@ public class ScreenUtils {
     Pixmap screenShot = new Pixmap(sw, sh, Format.RGBA8888);
     Buffer pixels = screenShot.getPixels();
     Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixels);
-    // Scaling should create a power of 2 texture for android
-    Pixmap scaledPic = new Pixmap(LevelUtil.powerOf2Ceiling(sw / scale),
-        LevelUtil.powerOf2Ceiling(sh / scale), Format.RGBA8888);
-    scaledPic.drawPixmap(screenShot, 0, 0, sw, sh, 
-        0, 0, scaledPic.getWidth(), scaledPic.getHeight());
+    // Scaling should create a power of 2 texture for android, if requested
+    int w = powerOf2 ? LevelUtil.powerOf2Ceiling(sw / scale) : Math.round(sw / scale);
+    int h = powerOf2 ? LevelUtil.powerOf2Ceiling(sh / scale) : Math.round(sh / scale);
+    Pixmap scaledPic = new Pixmap(w, h, Format.RGBA8888);
+    scaledPic.drawPixmap(screenShot, 0, 0, sw, sh, 0, 0, w, h);
     screenShot.dispose();
     flipY(scaledPic);
     if (makeBlackTransparent) {

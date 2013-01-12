@@ -26,7 +26,7 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
 
 public class DrawingActor extends Science2DActor {
-  private static final int LINE_WIDTH = 5;
+  private static final int LINE_WIDTH = 4;
   private static final float SCALE = 4f;
   private static final int WHEEL_DIA = 23;
   private static final float DRAWING_WHEEL_DIA = SCALE * (WHEEL_DIA + 2);
@@ -41,11 +41,8 @@ public class DrawingActor extends Science2DActor {
   private ShapeRenderer shapeRenderer;
   private BitmapFont font;
   private Texture coachTexture;
-  private boolean hasChangedSinceSnapshot = true; // Force an initial coachTexture
+  private boolean hasChangedSinceSnapshot = true; // Force an initial snapshot
   private Pixmap snapshot;
-  private Image coachBody;
-  private Image wheel1;
-  private Image wheel2;
   private Group coach;
   private Image composite;
     
@@ -59,24 +56,21 @@ public class DrawingActor extends Science2DActor {
     this.coachTexture = new Texture(snapshot);
     
     this.coach = new Group();
-    this.coachBody = new Image(new TextureRegion(coachTexture, 0, 0, COACH_WIDTH, COACH_HEIGHT));
-    //coachBody.setSize(COACH_WIDTH, COACH_HEIGHT);
+    Image coachBody = new Image(new TextureRegion(coachTexture, 0, 0, COACH_WIDTH, COACH_HEIGHT));
     coachBody.setPosition(0, 0);
     
-    this.wheel1 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, 0, WHEEL_DIA, WHEEL_DIA));
-    //wheel1.setSize(WHEEL_DIA, WHEEL_DIA);
+    Image wheel1 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, 0, WHEEL_DIA, WHEEL_DIA));
     wheel1.setPosition(WHEEL_OFFSET, 0);
     wheel1.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
     wheel1.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
     
-    this.wheel2 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, WHEEL_DIA, WHEEL_DIA, WHEEL_DIA));
-    //wheel2.setSize(WHEEL_DIA, WHEEL_DIA);
+    Image wheel2 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, WHEEL_DIA, WHEEL_DIA, WHEEL_DIA));
     wheel2.setPosition(COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA, 0);
     wheel2.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
     wheel2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
     
     this.composite = new Image(new TextureRegion(coachTexture));
-    composite.setPosition(-COACH_WIDTH - 50, 0);
+    composite.setPosition(-COACH_WIDTH - 30, 0);
     
     coach.setSize(COACH_WIDTH, COACH_HEIGHT);
     coach.addActor(coachBody);
@@ -112,18 +106,21 @@ public class DrawingActor extends Science2DActor {
   
   public void takeSnapshot() {
     Pixmap screenShot = ScreenUtils.getScreenshot(
-        getX(), getY(), getWidth(), getHeight(), SCALE, getStage(), true);
+        getX(), getY(), DRAWING_COACH_WIDTH, DRAWING_COACH_HEIGHT, 
+        SCALE, getStage(), true, false);
     Blending b = Pixmap.getBlending();
     Pixmap.setBlending(Blending.None);
-    snapshot.drawPixmap(screenShot, 
-        0, 0, COACH_WIDTH, COACH_HEIGHT, 
-        0, 0, COACH_WIDTH, COACH_HEIGHT);
+    snapshot.drawPixmap(screenShot, 0, 0);
+//        0, 0, COACH_WIDTH, COACH_HEIGHT, 
+//        0, 0, COACH_WIDTH, COACH_HEIGHT);
+    
     // Blank out the wheels in the coachBody
     snapshot.setColor(0);
-    snapshot.fillRectangle(WHEEL_OFFSET-1, COACH_HEIGHT - WHEEL_DIA - 1, 
-        WHEEL_DIA + 2, WHEEL_DIA + 2);
+    snapshot.fillRectangle(WHEEL_OFFSET - 1, COACH_HEIGHT - WHEEL_DIA - 3, 
+        WHEEL_DIA + 3, WHEEL_DIA + 3);
     snapshot.fillRectangle(COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA - 1, 
-        COACH_HEIGHT - WHEEL_DIA - 1, WHEEL_DIA + 2, WHEEL_DIA + 2);
+        COACH_HEIGHT - WHEEL_DIA - 3, WHEEL_DIA + 3, WHEEL_DIA + 3);
+    // Draw wheels on side
     snapshot.drawPixmap(screenShot, 
         WHEEL_OFFSET, COACH_HEIGHT - WHEEL_DIA - 1, WHEEL_DIA, WHEEL_DIA, 
         COACH_WIDTH, 0, WHEEL_DIA, WHEEL_DIA);
@@ -164,10 +161,11 @@ public class DrawingActor extends Science2DActor {
     shapeRenderer.rect(DRAWING_COACH_WIDTH - DRAWING_WHEEL_OFFSET - DRAWING_WHEEL_DIA, 0, 
         DRAWING_WHEEL_DIA, DRAWING_WHEEL_DIA);
     
-    // Draw outline of allowed area for drawing
+    // Draw coach area
     shapeRenderer.rect(0, 0, DRAWING_COACH_WIDTH, DRAWING_COACH_HEIGHT);
     shapeRenderer.end();
 
+    // Draw user's drawing
     shapeRenderer.begin(ShapeType.FilledRectangle);
     for (List<Vector2> pointSequence: pointSequences) {
       if (pointSequence.size() < 1) continue;

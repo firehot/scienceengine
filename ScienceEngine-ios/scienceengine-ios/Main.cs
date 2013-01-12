@@ -10,6 +10,7 @@ using com.badlogic.gdx.backends.ios;
 using com.badlogic.gdx.graphics;
 using com.mazalearn.scienceengine;
 using com.mazalearn.scienceengine.designer;
+
 namespace scienceengineios
 {		
 	public class IosPlatformAdapter : AbstractPlatformAdapter {
@@ -33,10 +34,17 @@ namespace scienceengineios
 			window.MakeKeyAndVisible();
 		}
 
-		public override Pixmap getScreenshot (int x, int y, int w, int h, float scale)
-		{
-			return ScreenUtils.getScreenshot(x, y, w, h, scale);
-		}
+    public override void getBytes(Pixmap pixmap, byte[] lines) {
+      ByteBuffer pixels = pixmap.getPixels();
+      pixels.get(lines);
+    }
+  
+    public override void setBytes(Pixmap pixmap, byte[] lines) {
+      ByteBuffer pixels = pixmap.getPixels();
+      pixels.clear();
+      pixels.put(lines);
+      pixels.clear();   
+    }
 	}
 
 	public class Application
