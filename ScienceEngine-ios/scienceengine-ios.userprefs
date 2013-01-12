@@ -2,12 +2,14 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
   <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/Main.cs">
     <Files>
-      <File FileName="scienceengine-ios/WebViewController.cs" Line="77" Column="18" />
-      <File FileName="scienceengine-ios/Main.cs" Line="13" Column="27" />
+      <File FileName="scienceengine-ios/Main.cs" Line="97" Column="25" />
+      <File FileName="scienceengine-ios/Info.plist" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State />
+        <State expanded="True" selected="True">
+          <Node name="scienceengine-ios" expanded="True" />
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
@@ -20,4 +22,8 @@
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.scienceengine-ios>
+    <IPhoneSimulatorTarget-Release_27CiPhoneSimulator Device="IPad" SdkVersion="6.0" />
+    <IPhoneSimulatorTarget-Debug_27CiPhoneSimulator Device="IPad" SdkVersion="6.0" />
+  </MonoDevelop.Ide.ItemProperties.scienceengine-ios>
 </Properties>

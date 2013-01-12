@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using java.nio;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
@@ -10,12 +11,15 @@ using com.badlogic.gdx.backends.ios;
 using com.badlogic.gdx.graphics;
 using com.mazalearn.scienceengine;
 using com.mazalearn.scienceengine.designer;
+using com.mazalearn.scienceengine.app.services;
+using com.mazalearn.scienceengine.app.utils;
 
 namespace scienceengineios
 {		
 	public class IosPlatformAdapter : AbstractPlatformAdapter {
 		UIWindow window;
 		WebViewController webViewController;
+		IMessage messages;
 
 		public IosPlatformAdapter (UIWindow window, WebViewController webViewController): base( ) {
 			this.window = window;
@@ -34,17 +38,17 @@ namespace scienceengineios
 			window.MakeKeyAndVisible();
 		}
 
-    public override void getBytes(Pixmap pixmap, byte[] lines) {
-      ByteBuffer pixels = pixmap.getPixels();
-      pixels.get(lines);
-    }
-  
-    public override void setBytes(Pixmap pixmap, byte[] lines) {
-      ByteBuffer pixels = pixmap.getPixels();
-      pixels.clear();
-      pixels.put(lines);
-      pixels.clear();   
-    }
+	    public override void getBytes(Pixmap pixmap, byte[] lines) {
+	      ByteBuffer pixels = pixmap.getPixels();
+	      pixels.get(lines);
+	    }
+	  
+	    public override void setBytes(Pixmap pixmap, byte[] lines) {
+	      ByteBuffer pixels = pixmap.getPixels();
+	      pixels.clear();
+	      pixels.put(lines);
+	      pixels.clear();   
+	    }
 	}
 
 	public class Application

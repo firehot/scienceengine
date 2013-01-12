@@ -16,7 +16,6 @@
       <src path="${SRC}/ScienceEngine-designer/src/" />
 			<include name="**/*.java"/>
 			<exclude name="${EXCLUDE}"/>
-			<exclude name="**/Messages.java"/>
 		</javac>
 	</target>
 
