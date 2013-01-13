@@ -30,6 +30,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Parameter;
@@ -300,7 +301,7 @@ public class ScienceEngine extends Game {
 
   public static PlatformAdapter getPlatformAdapter() {
 	if (platformAdapter == null) {
-		platformAdapter = new AbstractPlatformAdapter();
+		platformAdapter = new AbstractPlatformAdapter(Platform.IOS);
 	}
     return platformAdapter;  
   }

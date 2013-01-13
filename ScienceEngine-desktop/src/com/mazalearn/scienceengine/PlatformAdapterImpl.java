@@ -2,29 +2,26 @@ package com.mazalearn.scienceengine;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.designer.LevelEditor;
 
-class PlatformAdapterImpl extends AbstractPlatformAdapter {
+class PlatformAdapterImpl extends NonWebPlatformAdapter {
   
-  IMessage messages;
-  
-  @Override
-  public Platform getPlatform() {
-    // return Gdx.app.getType();
-    return Platform.Desktop;
+  public PlatformAdapterImpl(Platform platform) {
+    super(platform);
+  }
+
+  public IMessage getMsg() {
+    if (messages == null) {
+      messages = new Messages(getPlatform());
+    }
+    return messages;
   }
   
   @Override
@@ -68,21 +65,6 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     return false;
   }
 
-
-  @Override
-  public Stage createLevelEditor(IScience2DController science2DController,
-      AbstractScreen screen) {
-    return new LevelEditor(science2DController, screen);
-  }
-  
-  @Override
-  public IMessage getMsg() {
-    if (messages == null) {
-      this.messages = new Messages(Platform.Desktop);
-    }
-    return messages;
-  }
-
   @Override
   public BitmapFont getScaledFont(int pointSize) {
     FileHandle fontFileHandle = Gdx.files.internal("skin/Roboto-Regular.ttf");
@@ -123,19 +105,5 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     generator.dispose();      
 
     return font;
-  }
-  
-  @Override
-  public void getBytes(Pixmap pixmap, byte[] lines) {
-    ByteBuffer pixels = pixmap.getPixels();
-    pixels.get(lines);
-  }
-
-  @Override
-  public void setBytes(Pixmap pixmap, byte[] lines) {
-    ByteBuffer pixels = pixmap.getPixels();
-    pixels.clear();
-    pixels.put(lines);
-    pixels.clear();   
-  }
+  }  
 }

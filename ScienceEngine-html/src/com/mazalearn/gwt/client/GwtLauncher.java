@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 public class GwtLauncher extends GwtApplication {
 @Override
@@ -19,7 +20,7 @@ public class GwtLauncher extends GwtApplication {
 	public ApplicationListener getApplicationListener () {
 	  String href = Window.Location.getHref().replace("/scienceengine#", "");
     ScienceEngine scienceEngine = new ScienceEngine(href);
-		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl());
+		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.GWT));
 		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     return scienceEngine;
 	}

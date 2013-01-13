@@ -16,8 +16,13 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 public class AbstractPlatformAdapter implements PlatformAdapter {
 
   private static final float DEFAULT_FONT_SIZE = 15f;
-  private IMessage message;
+  protected IMessage messages;
+  private Platform platform;
 
+  public AbstractPlatformAdapter(Platform platform) {
+    this.platform = platform;
+  }
+  
   @Override
   public void browseURL(String url) {
     Gdx.net.openURI(url);
@@ -53,16 +58,15 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
 
   @Override
   public IMessage getMsg() {
-    if (message == null) {
-      message = new BasicMessages();
+    if (messages == null) {
+      messages = new BasicMessages();
     }
-    return message;
+    return messages;
   }
 
   @Override
   public Platform getPlatform() {
-    // TODO: use constructor instead
-    return Platform.IOS;
+    return platform;
   }
 
   @Override
@@ -91,4 +95,8 @@ public class AbstractPlatformAdapter implements PlatformAdapter {
     throw new UnsupportedOperationException("Not implemented");
   }
 
+  @Override
+  public byte[] getPngBytes(Pixmap snapshot) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
 }

@@ -1,22 +1,17 @@
 package com.mazalearn.gwt.client;
 
-import java.io.File;
 import java.nio.Buffer;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
-import com.mazalearn.scienceengine.app.services.IMessage;
 
 class PlatformAdapterImpl extends AbstractPlatformAdapter {
   
-  IMessage messages;
-  
-  @Override
-  public Platform getPlatform() {
-    return Platform.GWT;
+  public PlatformAdapterImpl(Platform platform) {
+    super(platform);
   }
-  
+
   @Override
   public void browseURL(String url) {
     Window.open(url, "_blank", "");
@@ -25,11 +20,6 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   @Override
   public void showExternalURL(String url) {
     browseURL(url);
-  }
-
-  @Override
-  public boolean playVideo(File file) {
-    return false;
   }
 
   @Override

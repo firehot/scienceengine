@@ -191,7 +191,6 @@ public class LevelEditor extends Stage {
         screen.clearScreen(Color.BLACK);
         originalStage.draw();
         saveLevelThumbnail(science2DController.getLevel());
-        System.out.println("[LevelEditor] Thumbnail successfully saved!");
       }      
     });
     menu.add(button).pad(10);
@@ -237,6 +236,8 @@ public class LevelEditor extends Stage {
         LevelUtil.powerOf2Ceiling(height / THUMBNAIL_SCALE), originalStage, false);
     PixmapIO.writePNG(screenFile, screenShot);
     screenShot.dispose();
+    System.out.println("[LevelEditor] Thumbnail successfully saved!" +
+      screenFile.file().getAbsolutePath());
   }
   
   private Actor createComponentsPanel(final Stage stage, final Skin skin, 

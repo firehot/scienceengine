@@ -44,7 +44,6 @@ public class DrawingActor extends Science2DActor {
   private boolean hasChangedSinceSnapshot = true; // Force an initial snapshot
   private Pixmap snapshot;
   private Group coach;
-  private Image composite;
     
   public DrawingActor(Science2DBody body, TextureRegion textureRegion, BitmapFont font) {
     super(body, textureRegion);
@@ -69,14 +68,10 @@ public class DrawingActor extends Science2DActor {
     wheel2.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
     wheel2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
     
-    this.composite = new Image(new TextureRegion(coachTexture));
-    composite.setPosition(-COACH_WIDTH - 30, 0);
-    
     coach.setSize(COACH_WIDTH, COACH_HEIGHT);
     coach.addActor(coachBody);
     coach.addActor(wheel1);
     coach.addActor(wheel2);
-    coach.addActor(composite);
     
     this.removeListener(getListeners().get(0));
     this.addListener(new ClickListener() {
@@ -111,8 +106,6 @@ public class DrawingActor extends Science2DActor {
     Blending b = Pixmap.getBlending();
     Pixmap.setBlending(Blending.None);
     snapshot.drawPixmap(screenShot, 0, 0);
-//        0, 0, COACH_WIDTH, COACH_HEIGHT, 
-//        0, 0, COACH_WIDTH, COACH_HEIGHT);
     
     // Blank out the wheels in the coachBody
     snapshot.setColor(0);
@@ -187,5 +180,9 @@ public class DrawingActor extends Science2DActor {
 
   public Actor getCoach() {
     return coach;
+  }
+  
+  public byte[] getDrawingPng() {
+    return ScienceEngine.getPlatformAdapter().getPngBytes(snapshot);
   }
 }

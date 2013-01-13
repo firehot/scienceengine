@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,36 +9,24 @@ import android.os.Environment;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.FreeTypeComplexFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.designer.LevelEditor;
 
 public class PlatformAdapterImpl extends AbstractPlatformAdapter {
-  private IMessage messages;
   private AndroidApplication application;
   
-  public PlatformAdapterImpl(AndroidApplication application) {
+  public PlatformAdapterImpl(AndroidApplication application, Platform platform) {
+    super(platform);
     this.application = application;
   }
 
-  @Override
-  public Platform getPlatform() {
-    return android.os.Build.FINGERPRINT.contains("generic") 
-        ? Platform.AndroidEmulator : Platform.Android;
-  }
-  
   public IMessage getMsg() {
     if (messages == null) {
-      messages = new Messages(android.os.Build.FINGERPRINT.contains("generic") 
-          ? Platform.AndroidEmulator : Platform.Android);
+      messages = new Messages(getPlatform());
     }
     return messages;
   }
@@ -79,12 +66,6 @@ public class PlatformAdapterImpl extends AbstractPlatformAdapter {
   }
 
   @Override
-  public Stage createLevelEditor(IScience2DController science2DController,
-      AbstractScreen screen) {
-    return new LevelEditor(science2DController, screen);
-  }
-
-  @Override
   public BitmapFont getScaledFont(int pointSize) {
     FileHandle fontFileHandle = Gdx.files.internal("skin/Roboto-Regular.ttf");
     StringBuilder characters = new StringBuilder();
@@ -118,19 +99,5 @@ public class PlatformAdapterImpl extends AbstractPlatformAdapter {
     font = generator.generateFont(16, false);
     generator.dispose();
     return font;
-  }
-  
-  @Override
-  public void getBytes(Pixmap pixmap, byte[] lines) {
-    ByteBuffer pixels = pixmap.getPixels();
-    pixels.get(lines);
-  }
-
-  @Override
-  public void setBytes(Pixmap pixmap, byte[] lines) {
-    ByteBuffer pixels = pixmap.getPixels();
-    pixels.clear();
-    pixels.put(lines);
-    pixels.clear();   
   }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 public class MainActivity extends AndroidApplication {
 
@@ -28,7 +29,10 @@ public class MainActivity extends AndroidApplication {
     } else {
       scienceEngine = new ScienceEngine("");
     }
-    PlatformAdapterImpl platformAdapter = new PlatformAdapterImpl(this);
+    Platform platform = android.os.Build.FINGERPRINT.contains("generic") 
+        ? Platform.AndroidEmulator : Platform.Android;
+
+    PlatformAdapterImpl platformAdapter = new PlatformAdapterImpl(this, platform);
     scienceEngine.setPlatformAdapter(platformAdapter);
     initialize(scienceEngine, cfg);
   }
