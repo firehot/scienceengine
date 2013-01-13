@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.data.GwtMessages;
 
 class PlatformAdapterImpl extends AbstractPlatformAdapter {
   

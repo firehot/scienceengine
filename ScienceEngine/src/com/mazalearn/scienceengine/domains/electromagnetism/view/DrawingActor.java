@@ -107,7 +107,7 @@ public class DrawingActor extends Science2DActor {
   public void takeSnapshot() {
     Pixmap screenShot = ScreenUtils.getScreenshot(
         getX(), getY(), DRAWING_COACH_WIDTH, DRAWING_COACH_HEIGHT, 
-        SCALE, getStage(), true, false);
+        COACH_WIDTH, COACH_HEIGHT, getStage(), true);
     Blending b = Pixmap.getBlending();
     Pixmap.setBlending(Blending.None);
     snapshot.drawPixmap(screenShot, 0, 0);

@@ -230,8 +230,11 @@ public class LevelEditor extends Stage {
     FileHandle screenFile = 
         LevelUtil.getLevelFile(science2DController.getName(), ".png", level);
     screenFile = Gdx.files.external(screenFile.path());
-    Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, Gdx.graphics.getWidth(), 
-        Gdx.graphics.getHeight(), THUMBNAIL_SCALE, originalStage, false, true);
+    int width = Gdx.graphics.getWidth();
+    int height = Gdx.graphics.getHeight();
+    Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, width, 
+        height, LevelUtil.powerOf2Ceiling(width / THUMBNAIL_SCALE), 
+        LevelUtil.powerOf2Ceiling(height / THUMBNAIL_SCALE), originalStage, false);
     PixmapIO.writePNG(screenFile, screenShot);
     screenShot.dispose();
   }
