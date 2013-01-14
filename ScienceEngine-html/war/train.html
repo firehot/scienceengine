@@ -46,29 +46,25 @@
 
   @-moz-keyframes spinwheel {
     from,to  {                                                    }
-    16%      { -moz-transform: rotateY(-90deg);
+    25%      { -webkit-transform: rotateZ(90deg);
              }
-    33%      { -moz-transform: rotateY(-90deg) rotateZ(90deg);
+    50%      { -webkit-transform: rotateZ(180deg);
              }
-    50%      { -moz-transform: rotateY(180deg) rotateZ(90deg);
+    75%      { -webkit-transform: rotateZ(270deg);
              }
-    66%      { -moz-transform: rotateY(90deg) rotateX(90deg);
-             }
-    83%      { -moz-transform: rotateX(90deg);
+    100%      { -webkit-transform: rotateZ(360deg);
              }
   }
 
   @-ms-keyframes spinwheel {
     from,to  {                                                    }
-    16%      { -ms-transform: rotateY(-90deg);
+    25%      { -webkit-transform: rotateZ(90deg);
              }
-    33%      { -ms-transform: rotateY(-90deg) rotateZ(90deg);
+    50%      { -webkit-transform: rotateZ(180deg);
              }
-    50%      { -ms-transform: rotateY(180deg) rotateZ(90deg);
+    75%      { -webkit-transform: rotateZ(270deg);
              }
-    66%      { -ms-transform: rotateY(90deg) rotateX(90deg);
-             }
-    83%      { -ms-transform: rotateX(90deg);
+    100%      { -webkit-transform: rotateZ(360deg);
              }
   }
 
@@ -83,16 +79,16 @@
     -moz-animation-name: spinwheel;
     -moz-animation-timing-function: ease-in-out;
     -moz-animation-iteration-count: infinite;
-    -moz-animation-duration: 22s;
+    -moz-animation-duration: 1s;
     -moz-transform-style: preserve-3d;
-    -moz-transform-origin: 60px 60px 0;
+    -moz-transform-origin: 11px 11px 0;
     
     -ms-animation-name: spinwheel;
     -ms-animation-timing-function: ease-in-out;
     -ms-animation-iteration-count: infinite;
-    -ms-animation-duration: 22s;
+    -ms-animation-duration: 1s;
     -ms-transform-style: preserve-3d;
-    -ms-transform-origin: 60px 60px 0;
+    -ms-transform-origin: 11px 11px 0;
   }
  
   .wheel2 {
@@ -106,16 +102,16 @@
     -moz-animation-name: spinwheel;
     -moz-animation-timing-function: ease-in-out;
     -moz-animation-iteration-count: infinite;
-    -moz-animation-duration: 22s;
+    -moz-animation-duration: 1s;
     -moz-transform-style: preserve-3d;
-    -moz-transform-origin: 60px 60px 0;
+    -moz-transform-origin: 11px 11px 0;
     
     -ms-animation-name: spinwheel;
     -ms-animation-timing-function: ease-in-out;
     -ms-animation-iteration-count: infinite;
-    -ms-animation-duration: 22s;
+    -ms-animation-duration: 1s;
     -ms-transform-style: preserve-3d;
-    -ms-transform-origin: 60px 60px 0;
+    -ms-transform-origin: 11px 11px 0;
   }
   .enginewheel {
     -webkit-animation-name: spinwheel;
@@ -128,16 +124,16 @@
     -moz-animation-name: spinwheel;
     -moz-animation-timing-function: ease-in-out;
     -moz-animation-iteration-count: infinite;
-    -moz-animation-duration: 22s;
+    -moz-animation-duration: 1s;
     -moz-transform-style: preserve-3d;
-    -moz-transform-origin: 60px 60px 0;
+    -moz-transform-origin: 10px 10px 0;
     
     -ms-animation-name: spinwheel;
     -ms-animation-timing-function: ease-in-out;
     -ms-animation-iteration-count: infinite;
-    -ms-animation-duration: 22s;
+    -ms-animation-duration: 1s;
     -ms-transform-style: preserve-3d;
-    -ms-transform-origin: 60px 60px 0;
+    -ms-transform-origin: 10px 10px 0;
   }
  
 div.hidden {visibility:hidden;}
@@ -146,7 +142,8 @@ div.hidden {visibility:hidden;}
 </head>
 <body style="background-color: black">
 <h1 align="center" style="color:white">Catch the Science Train</h1>
-<div style="position: absolute;left: 165px; top: 150px;" id="ss">
+<div style="position: absolute;left: 165px; top: 150px;" id="train">
+ <!-- The engine and its wheels -->
  <div style="position: absolute; left: 100px; top:10px" >
      <img src="/assets/images/engine.png" width=100 style="position: absolute; left: 230px;">
      <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 230px" class="enginewheel">
@@ -154,6 +151,7 @@ div.hidden {visibility:hidden;}
      <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 270px" class="enginewheel">
      <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 290px" class="enginewheel">
   </div>
+  <!-- a hardcoded sample coach -->
  <div style="position: absolute; left:220px;" >
      <canvas class="coachbody"></canvas>
       <canvas class="wheel1"></canvas>
@@ -189,8 +187,8 @@ div.hidden {visibility:hidden;}
     </script>
 <script>
 function moveCar() {
-  var d = document.getElementById("ss");
-  d.style.left = parseInt(d.style.left) + 3 + "px";
+  var train = document.getElementById("train");
+  train.style.left = parseInt(train.style.left) + 3 + "px";
 }
 
 setInterval(moveCar, 100);

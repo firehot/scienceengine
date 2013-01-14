@@ -36,6 +36,7 @@ i:data/Electromagnetism/8.png
 t:data/Electromagnetism/9.json
 i:data/Electromagnetism/9.png
 t:data/Electromagnetism.json
+b:data/Messages.properties
 d:data/StatesOfMatter
 t:data/StatesOfMatter/1.json
 i:data/StatesOfMatter/1.png
