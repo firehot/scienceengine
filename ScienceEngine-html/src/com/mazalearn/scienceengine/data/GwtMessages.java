@@ -5,16 +5,13 @@ import java.util.MissingResourceException;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.google.gwt.core.client.GWT;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
 
 public class GwtMessages implements IMessage {
 
   private String language;
-  private Platform platform;
   private Messages messages;
 
-  public GwtMessages(Platform platform) {
-    this.platform = platform;
+  public GwtMessages() {
     this.messages = (Messages) GWT.create(Messages.class);
   }
   

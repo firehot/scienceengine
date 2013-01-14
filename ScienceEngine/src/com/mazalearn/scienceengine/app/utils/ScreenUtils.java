@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -46,14 +47,14 @@ public class ScreenUtils {
     Pixmap screenShot = new Pixmap(sw, sh, Format.RGBA8888);
     Buffer pixels = screenShot.getPixels();
     Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixels);
-    // Scaling should create a power of 2 texture for android, if requested
+    Pixmap.setFilter(Filter.NearestNeighbour);
     Pixmap scaledPic = new Pixmap(newWidth, newHeight, Format.RGBA8888);
     scaledPic.drawPixmap(screenShot, 0, 0, sw, sh, 0, 0, newWidth, newHeight);
     screenShot.dispose();
-    flipY(scaledPic);
     if (makeBlackTransparent) {
       makeBlackTransparent(scaledPic);
     }
+    flipY(scaledPic);
     Gdx.app.log(ScienceEngine.LOG, "Screenshot: " + newWidth + " x " + newHeight);
     return scaledPic;
   }
@@ -85,7 +86,6 @@ public class ScreenUtils {
     // Make black color transparent
     int w = pixmap.getWidth();
     int h = pixmap.getHeight();
-    pixmap.setColor(0);
     Blending b = Pixmap.getBlending();
     Pixmap.setBlending(Blending.None);
     int c1rgba8888 = Color.rgba8888(Color.BLACK);

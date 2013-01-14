@@ -111,7 +111,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     case ElectroMagnet:
       return new ElectromagnetActor(body, textureRegion);
     case Drawing:
-      return new DrawingActor(body, textureRegion, getFont());
+      return new DrawingActor(body, textureRegion, getFont(), skin);
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);

@@ -16,12 +16,12 @@ using com.mazalearn.scienceengine.app.utils;
 
 namespace scienceengineios
 {		
-	public class IosPlatformAdapter : AbstractPlatformAdapter {
+	public class IosPlatformAdapter : NonWebPlatformAdapter {
 		UIWindow window;
 		WebViewController webViewController;
 		IMessage messages;
 
-		public IosPlatformAdapter (UIWindow window, WebViewController webViewController): base( ) {
+		public IosPlatformAdapter (UIWindow window, WebViewController webViewController): base(Platform.IOS) {
 			this.window = window;
 			this.webViewController = webViewController;
 		}
@@ -37,18 +37,6 @@ namespace scienceengineios
 			webViewController.load (new NSUrlRequest(new NSUrl(localHtmlUrl, false)));
 			window.MakeKeyAndVisible();
 		}
-
-	    public override void getBytes(Pixmap pixmap, byte[] lines) {
-	      ByteBuffer pixels = pixmap.getPixels();
-	      pixels.get(lines);
-	    }
-	  
-	    public override void setBytes(Pixmap pixmap, byte[] lines) {
-	      ByteBuffer pixels = pixmap.getPixels();
-	      pixels.clear();
-	      pixels.put(lines);
-	      pixels.clear();   
-	    }
 	}
 
 	public class Application

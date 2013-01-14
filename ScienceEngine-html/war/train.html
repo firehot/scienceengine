@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Catch the Science Train</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<style type="text/css">
+
+  .coachbody {
+    position: absolute;
+    left:0px;
+    top: 0px;
+    width: 105px;
+    height: 64px;
+    background:url("/userimage?User=sridhar.sundaram@gmail.com") 0px 0;
+  }
+
+  .wheel1 {
+    position: absolute;
+    left:20px;
+    top: 44px;
+    width: 23px;
+    height: 23px;
+    background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px 0;
+  }
+
+  .wheel2 {
+    position: absolute;
+    left:62px;
+    top: 44px;
+    width: 23px;
+    height: 23px;
+    background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px -23px;
+  }
+
+  @-webkit-keyframes spinwheel {
+    from,to  {                                                    }
+    25%      { -webkit-transform: rotateZ(90deg);
+             }
+    50%      { -webkit-transform: rotateZ(180deg);
+             }
+    75%      { -webkit-transform: rotateZ(270deg);
+             }
+    100%      { -webkit-transform: rotateZ(360deg);
+             }
+  }
+
+  @-moz-keyframes spinwheel {
+    from,to  {                                                    }
+    16%      { -moz-transform: rotateY(-90deg);
+             }
+    33%      { -moz-transform: rotateY(-90deg) rotateZ(90deg);
+             }
+    50%      { -moz-transform: rotateY(180deg) rotateZ(90deg);
+             }
+    66%      { -moz-transform: rotateY(90deg) rotateX(90deg);
+             }
+    83%      { -moz-transform: rotateX(90deg);
+             }
+  }
+
+  @-ms-keyframes spinwheel {
+    from,to  {                                                    }
+    16%      { -ms-transform: rotateY(-90deg);
+             }
+    33%      { -ms-transform: rotateY(-90deg) rotateZ(90deg);
+             }
+    50%      { -ms-transform: rotateY(180deg) rotateZ(90deg);
+             }
+    66%      { -ms-transform: rotateY(90deg) rotateX(90deg);
+             }
+    83%      { -ms-transform: rotateX(90deg);
+             }
+  }
+
+  .wheel1 {
+    -webkit-animation-name: spinwheel;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 1s;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform-origin: 11px 11px 0;
+    
+    -moz-animation-name: spinwheel;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-duration: 22s;
+    -moz-transform-style: preserve-3d;
+    -moz-transform-origin: 60px 60px 0;
+    
+    -ms-animation-name: spinwheel;
+    -ms-animation-timing-function: ease-in-out;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-duration: 22s;
+    -ms-transform-style: preserve-3d;
+    -ms-transform-origin: 60px 60px 0;
+  }
+ 
+  .wheel2 {
+    -webkit-animation-name: spinwheel;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 1s;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform-origin: 11px 11px 0;
+    
+    -moz-animation-name: spinwheel;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-duration: 22s;
+    -moz-transform-style: preserve-3d;
+    -moz-transform-origin: 60px 60px 0;
+    
+    -ms-animation-name: spinwheel;
+    -ms-animation-timing-function: ease-in-out;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-duration: 22s;
+    -ms-transform-style: preserve-3d;
+    -ms-transform-origin: 60px 60px 0;
+  }
+  .enginewheel {
+    -webkit-animation-name: spinwheel;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 1s;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform-origin: 10px 10px 0;
+    
+    -moz-animation-name: spinwheel;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-duration: 22s;
+    -moz-transform-style: preserve-3d;
+    -moz-transform-origin: 60px 60px 0;
+    
+    -ms-animation-name: spinwheel;
+    -ms-animation-timing-function: ease-in-out;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-duration: 22s;
+    -ms-transform-style: preserve-3d;
+    -ms-transform-origin: 60px 60px 0;
+  }
+ 
+div.hidden {visibility:hidden;}
+
+</style>
+</head>
+<body style="background-color: black">
+<h1 align="center" style="color:white">Catch the Science Train</h1>
+<div style="position: absolute;left: 165px; top: 150px;" id="ss">
+ <div style="position: absolute; left: 100px; top:10px" >
+     <img src="/assets/images/engine.png" width=100 style="position: absolute; left: 230px;">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 230px" class="enginewheel">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 250px" class="enginewheel">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 270px" class="enginewheel">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 290px" class="enginewheel">
+  </div>
+ <div style="position: absolute; left:220px;" >
+     <canvas class="coachbody"></canvas>
+      <canvas class="wheel1"></canvas>
+      <canvas class="wheel2"></canvas>
+  </div>
+</div>
+<hr style="position:absolute; top:215px" width=1400>
+    <div id="cssanimationsupport">
+    </div>
+    <script src="javascript/modernizr-latest.js"></script>
+    <script src="javascript/transitionsHelper.js"></script>
+    <script src="javascript/animationsHelper.js"></script>
+    <script src="javascript/jsfallback-master.js"></script>
+    <script>
+        var supportElement = document.getElementById("cssanimationsupport");
+        // Checking if CSS3 animations is supported
+        if (!Modernizr.cssanimations) {
+            // checking if getElementsByClassName is supported
+            if (document.getElementsByClassName) {
+                // if so, we can use our JS fallback library
+                supportElement.innerHTML = "CSS3 Animations <strong>are not supported</strong> by your browser, using fallback. Please use Chrome, Firefox or IE10.";
+                LoadJSAnimationsFallback();
+            }
+            else {
+                supportElement.innerHTML = "CSS3 Animations <strong>are not supported</strong> by your browser. Please use Chrome, Firefox or IE10";
+            }
+        }
+        else {
+            // if CSS3 animation is supported, we have nothing to do. 
+            // The *master.css stylesheets will be automatically applied & used.
+            supportElement.innerHTML = "";
+        }
+    </script>
+<script>
+function moveCar() {
+  var d = document.getElementById("ss");
+  d.style.left = parseInt(d.style.left) + 3 + "px";
+}
+
+setInterval(moveCar, 100);
+</script>
+</body>
+</html>

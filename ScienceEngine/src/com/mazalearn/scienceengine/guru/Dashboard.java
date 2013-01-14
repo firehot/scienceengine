@@ -14,7 +14,7 @@ class Dashboard extends Table {
   Label scoreLabel;
   int score;
   private Label timerLabel;
-  float timeLimit = 300;
+  float timeLeft = 300;
 
   Dashboard(Skin skin) {
     super(skin);
@@ -44,11 +44,12 @@ class Dashboard extends Table {
     timerLabel = new Label("0", skin) {
       @Override
       public void act(float delta) {
-        timeLimit -= delta;
-        String seconds = String.valueOf(Math.round(timeLimit % 60));
-        this.setText(Math.round(timeLimit / 60) + ":" + "0".substring(0, 2 - seconds.length()) + seconds);
-        if (timeLimit < 0) {
+        timeLeft -= delta;
+        String seconds = String.valueOf(Math.round(timeLeft % 60));
+        if (timeLeft < 0) {
           // TODO: goal.setText("Time Up");
+        } else {
+          this.setText(Math.round(timeLeft / 60) + ":" + "0".substring(0, 2 - seconds.length()) + seconds);
         }
       }
     };
@@ -88,6 +89,6 @@ class Dashboard extends Table {
   }
   
   public void setTimeLimit(int timeLimitSeconds) {
-    this.timeLimit = timeLimitSeconds;
+    this.timeLeft = timeLimitSeconds;
   }
 }
