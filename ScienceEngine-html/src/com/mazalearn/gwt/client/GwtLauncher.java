@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 public class GwtLauncher extends GwtApplication {
 @Override

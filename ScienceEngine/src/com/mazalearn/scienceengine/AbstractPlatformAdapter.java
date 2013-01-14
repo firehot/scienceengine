@@ -10,10 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
-public class AbstractPlatformAdapter implements PlatformAdapter {
+public class AbstractPlatformAdapter implements IPlatformAdapter {
 
   private static final float DEFAULT_FONT_SIZE = 15f;
   protected IMessage messages;

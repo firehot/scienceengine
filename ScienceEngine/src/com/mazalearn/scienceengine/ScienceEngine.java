@@ -29,8 +29,8 @@ import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Parameter;
@@ -57,7 +57,7 @@ public class ScienceEngine extends Game {
   private static ProfileManager profileManager;
   private static MusicManager musicManager;
   private static SoundManager soundManager;
-  private static PlatformAdapter platformAdapter;
+  private static IPlatformAdapter platformAdapter;
   public static AssetManager assetManager;
   private static Skin skin;
 
@@ -115,9 +115,9 @@ public class ScienceEngine extends Game {
     return atlas;
   }
 
-  // PlatformAdapter interface
+  // IPlatformAdapter interface
   
-  public void setPlatformAdapter(PlatformAdapter platformAdapter) {
+  public void setPlatformAdapter(IPlatformAdapter platformAdapter) {
     ScienceEngine.platformAdapter = platformAdapter;
   }
   
@@ -299,7 +299,7 @@ public class ScienceEngine extends Game {
         + screen.getClass().getName());
   }
 
-  public static PlatformAdapter getPlatformAdapter() {
+  public static IPlatformAdapter getPlatformAdapter() {
 	if (platformAdapter == null) {
 		platformAdapter = new AbstractPlatformAdapter(Platform.IOS);
 	}

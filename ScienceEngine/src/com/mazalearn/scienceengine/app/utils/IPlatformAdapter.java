@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
-public interface PlatformAdapter {
+public interface IPlatformAdapter {
 
   // Platform - required for utf-8/iso-8859 in characters
   enum Platform { Desktop, Android, AndroidEmulator, GWT, IOS};

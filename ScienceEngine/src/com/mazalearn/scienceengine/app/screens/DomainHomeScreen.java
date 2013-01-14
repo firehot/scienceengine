@@ -23,8 +23,8 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter.Platform;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 /**
  * Experiment Home screen - shows all levels for that experiment.
@@ -50,7 +50,7 @@ public class DomainHomeScreen extends AbstractScreen {
     smallLabelStyle = new LabelStyle(getSmallFont(), Color.WHITE);
     profile = ScienceEngine.getProfileManager().retrieveProfile();
     profile.setExperiment(experimentName);
-    if (ScienceEngine.getPlatformAdapter().getPlatform() != PlatformAdapter.Platform.GWT) {
+    if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
     }

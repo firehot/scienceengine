@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.utils.PlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
 /**
  * @author Mats Svensson
@@ -31,7 +31,7 @@ public class LoadingScreen extends AbstractScreen {
   public LoadingScreen(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
     super(scienceEngine);
     this.nextScreen = nextScreen;
-    if (ScienceEngine.getPlatformAdapter().getPlatform() != PlatformAdapter.Platform.GWT) {
+    if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(true);
     }
     // Tell the assetManager to load assets for the loading screen
