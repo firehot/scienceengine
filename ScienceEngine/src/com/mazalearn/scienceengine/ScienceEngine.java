@@ -25,6 +25,7 @@ import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -394,5 +395,22 @@ public class ScienceEngine extends Game {
     } else {
       pinnedBodies.remove(body);
     }
+  }
+
+  public static String getUserEmail() {
+    Profile profile = profileManager.retrieveProfile();
+    return profile.getUserEmail();
+  }
+
+  public static String getUserName() {
+    Profile profile = profileManager.retrieveProfile();
+    return profile.getUserName();
+  }
+
+  public static String getHostPort() {
+    if (ScienceEngine.DEV_MODE == DevMode.PRODUCTION) {
+      return "www.mazalearn.com:80";
+    }
+    return "localhost:8888";
   }
 }

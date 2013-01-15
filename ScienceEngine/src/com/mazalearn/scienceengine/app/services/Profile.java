@@ -93,4 +93,22 @@ public class Profile implements Serializable {
   public boolean getLocked(int iLevel) {
     return false;
   }
+
+  public void setName(String name) {
+    properties.put("name", name);
+  }
+
+  public void setEmail(String email) {
+    properties.put("email", email);
+  }
+
+  public String getUserName() {
+    String s = properties.get("name");
+    return s == null ? "" : s;
+  }
+
+  public String getUserEmail() {
+    String s = properties.get("email");
+    return s == null ? "" : s;
+  }
 }

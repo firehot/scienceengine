@@ -1,6 +1,8 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -50,7 +53,7 @@ public class DrawingActor extends Science2DActor {
   private Group coach;
     
   public DrawingActor(Science2DBody body, TextureRegion textureRegion, 
-      BitmapFont font, Skin skin) {
+      String userName, String userEmail, BitmapFont font, Skin skin) {
     super(body, textureRegion);
     this.drawing = (Drawing) body;
     this.font = font;
@@ -60,6 +63,10 @@ public class DrawingActor extends Science2DActor {
     this.coachTexture = new Texture(snapshot);
     
     this.coach = new Group();
+    Label userLabel = new Label(userName, skin);
+    userLabel.setPosition(0, COACH_HEIGHT);
+    
+    coach.addActor(userLabel);
     Image coachBody = new Image(new TextureRegion(coachTexture, 0, 0, COACH_WIDTH, COACH_HEIGHT));
     coach.setSize(COACH_WIDTH, COACH_HEIGHT);
     coachBody.setPosition(0, 0);
@@ -75,12 +82,14 @@ public class DrawingActor extends Science2DActor {
     wheel2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
     
     Button done = new TextButton("Done", skin);
-    done.setPosition(-20, -20);
+    done.setPosition(100, -30);
+    final Map<String, String> postParams = new HashMap<String, String>();
+    postParams.put("User", userEmail);
+    postParams.put("UserName", userName);
     done.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {
-        // HttpResult httpResult = Gdx.net.httpPost("localhost:8888/upload", "applicatn/octet-stream", getDrawingPng());
-        Net.httpPost("/upload", "application/octet-stream", getDrawingPng());
+        Net.httpPost("/upload", "application/octet-stream", postParams, getDrawingPng());
       }      
     });
     coach.addActor(done);

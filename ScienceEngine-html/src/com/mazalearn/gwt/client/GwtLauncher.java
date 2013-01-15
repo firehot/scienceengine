@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 public class GwtLauncher extends GwtApplication {
-@Override
+  @Override
 	public GwtApplicationConfiguration getConfig () {
 		GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(800,480);
 		return cfg;

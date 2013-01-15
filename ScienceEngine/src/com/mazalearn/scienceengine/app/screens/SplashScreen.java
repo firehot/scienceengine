@@ -6,12 +6,17 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.Profile;
+import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
@@ -19,6 +24,10 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
  * Shows a splash image and moves on to the next screen.
  */
 public class SplashScreen extends AbstractScreen {
+
+  private Dialog loginDialog;
+  private Label touchToEnter;
+  private Profile profile;
 
   private final class SplashImage extends Image {
 
@@ -36,7 +45,7 @@ public class SplashScreen extends AbstractScreen {
       this.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
+          loginDialog.show(stage);
         }      
       });      
     }
@@ -44,6 +53,8 @@ public class SplashScreen extends AbstractScreen {
 
   public SplashScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
+    ProfileManager profileManager = ScienceEngine.getProfileManager();
+    profile = profileManager.retrieveProfile();
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(true);
     }
@@ -55,11 +66,11 @@ public class SplashScreen extends AbstractScreen {
 
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
-
-    Label label = new Label("Touch to Enter", scienceEngine.getSkin());
-    label.setFontScale(2f);
-    label.setPosition(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT / 2);
-    label.addAction(
+    
+    touchToEnter = new Label("Touch to Enter", scienceEngine.getSkin());
+    touchToEnter.setFontScale(2f);
+    touchToEnter.setPosition(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT / 2);
+    touchToEnter.addAction(
         Actions.forever(
             Actions.sequence(
                 Actions.fadeIn(1f), 
@@ -69,6 +80,8 @@ public class SplashScreen extends AbstractScreen {
     // retrieve the splash image's region from the atlas
     AtlasRegion splashRegion = getAtlas().findRegion(
         "splash-screen/splash-image"); //$NON-NLS-1$
+
+    loginDialog = createLoginDialog(scienceEngine.getSkin());
 
     // We create the splash image actor; its size is set when the
     // resize() method gets called
@@ -83,8 +96,63 @@ public class SplashScreen extends AbstractScreen {
         scienceEngine.setScreen(new OptionsScreen(scienceEngine));
       }      
     });
-    stage.addActor(label);
+    stage.addActor(touchToEnter);
     stage.addActor(options);
+  }
+
+  private Dialog createLoginDialog(Skin skin) {
+    final Dialog dialog = new Dialog("", skin);
+    dialog.setSize(400, 150);
+    dialog.setPosition(AbstractScreen.VIEWPORT_WIDTH / 2, 100);
+    dialog.setBackground(null);
+
+    dialog.getContentTable().add(new Label("Name: ", skin));
+    final TextField name = new TextField(profile.getUserName(), skin);
+    dialog.getContentTable().add(name);
+    dialog.getContentTable().row();
+    dialog.getContentTable().add(new Label("Email: ", skin));
+    final TextField email = new TextField(profile.getUserEmail(), skin);
+    email.setWidth(200);
+    dialog.getContentTable().add(email).width(200);
+    dialog.getContentTable().row();
+    Label emailUseNote = new Label("Activation link will be sent to this email address", skin);
+    emailUseNote.setFontScale(0.9f);
+    dialog.getContentTable().add(emailUseNote).colspan(2);
+    dialog.getContentTable().row();
+
+    TextButton loginButton = new TextButton("Login", skin);
+    dialog.getContentTable().add(loginButton).colspan(2).center();
+    loginButton.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        profile.setName(name.getText());
+        profile.setEmail(email.getText());
+        ScienceEngine.getProfileManager().persist();
+        
+        // Primitive validation
+        if (!name.getText().matches("[a-zA-Z ]{2,30}") || !email.getText().contains("@")) {
+          if (!name.getText().matches("[a-zA-Z ]{2,30}")) {
+            name.setColor(Color.RED);
+            name.addAction(Actions.repeat(-1, Actions.sequence(Actions.fadeOut(1), Actions.fadeIn(1))));
+          } else {
+            name.setColor(1, 1, 1, 1);
+            name.clearActions();
+          }
+          if (!email.getText().contains("@")) {
+            email.setColor(Color.RED);
+            email.addAction(Actions.repeat(-1, Actions.sequence(Actions.fadeOut(1), Actions.fadeIn(1))));
+          } else {
+            email.setColor(1, 1, 1, 1);
+            email.clearActions();
+          }
+          return;
+        }
+        dialog.hide();
+        scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
+      }      
+    });      
+    
+    return dialog;
   }
 
   @Override

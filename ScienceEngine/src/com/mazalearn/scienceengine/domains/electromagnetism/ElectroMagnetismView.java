@@ -43,12 +43,10 @@ import com.mazalearn.scienceengine.guru.Abstractor;
 public class ElectroMagnetismView extends AbstractScience2DView {
   private FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
-  private AbstractScience2DModel emModel;
 
   public ElectroMagnetismView(float width, float height,
       final AbstractScience2DModel emModel, Skin skin, IScience2DController controller) {
     super(emModel, width, height, skin, controller);
-    this.emModel = emModel;
     
     getRoot().addListener(new ClickListener() {   
       @Override
@@ -70,8 +68,8 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   public void prepareView() {
     // TODO: prepareActor should be called for all actors
     // TODO: FieldMeter should manage its own clicks - make it larger and in the background above root
-    fieldMeter = (FieldMeter) emModel.findBody(ComponentType.FieldMeter);
-    for (List<CircuitElement> circuit: emModel.getCircuits()) {
+    fieldMeter = (FieldMeter) science2DModel.findBody(ComponentType.FieldMeter);
+    for (List<CircuitElement> circuit: science2DModel.getCircuits()) {
       this.addActor(new CircuitActor(circuit));
     }
     super.prepareView();
@@ -111,7 +109,8 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     case ElectroMagnet:
       return new ElectromagnetActor(body, textureRegion);
     case Drawing:
-      return new DrawingActor(body, textureRegion, getFont(), skin);
+      return new DrawingActor(body, textureRegion, ScienceEngine.getUserName(),
+          ScienceEngine.getUserEmail(), getFont(), skin);
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);
@@ -136,13 +135,13 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   public AbstractTutor createTutor(String type, String goal, 
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
     if ("FieldMagnitudeProber".equals(type)) {
-      return new FieldMagnitudeProber(emModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new FieldMagnitudeProber(science2DModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("FieldDirectionProber".equals(type)) {
-      return new FieldDirectionProber(emModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new FieldDirectionProber(science2DModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("LightProber".equals(type)) {
-      return new LightProber(emModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new LightProber(science2DModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("Abstractor".equals(type)) {
-      return new Abstractor(emModel, this, goal, components, configs, skin, 
+      return new Abstractor(science2DModel, this, goal, components, configs, skin, 
           controlPanel, deltaSuccessScore, deltaFailureScore);
     }
     return super.createTutor(type, goal, components, configs, deltaSuccessScore, deltaFailureScore);

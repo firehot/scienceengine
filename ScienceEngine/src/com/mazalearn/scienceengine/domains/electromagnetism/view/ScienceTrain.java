@@ -68,11 +68,11 @@ public class ScienceTrain extends Group {
       coachDrawing.takeSnapshot();
       if (coach == null) {
         coach = coachDrawing.getCoach();
-        coach.setPosition(-50 - coach.getWidth(), -20);
+        coach.setPosition(-30 - coach.getWidth(), -20);
         addActor(coach);
       }
     }
     super.draw(batch, parentAlpha);
-    drawLight(batch);
+    // drawLight(batch);
   }
 }

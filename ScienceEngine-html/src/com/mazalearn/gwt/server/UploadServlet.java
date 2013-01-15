@@ -3,7 +3,6 @@ package com.mazalearn.gwt.server;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,15 +27,17 @@ public class UploadServlet extends HttpServlet {
     System.out.println("Received post: " + request.getContentLength());
     response.getWriter().append("Post received");
     String userEmail = request.getHeader("User");
+    String userName = request.getHeader("UserName");
     System.out.println("User: " + userEmail);
-    BufferedInputStream dis = new BufferedInputStream(request.getInputStream());
+    BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
     byte[] pngImage = new byte[request.getContentLength()];
-    dis.read(pngImage);
-    saveUserImage(userEmail, pngImage);
-    dis.close();
+    bis.read(pngImage);
+    saveUserImage(userEmail, userName, pngImage);
+    bis.close();
   }
 
-  public void saveUserImage(String userEmail, byte[] pngImage) throws IllegalStateException {
+  public void saveUserImage(String userEmail, String userName, byte[] pngImage) 
+      throws IllegalStateException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
     Entity entity;
@@ -44,6 +45,7 @@ public class UploadServlet extends HttpServlet {
       entity = ds.get(key);
     } catch (EntityNotFoundException e) {
       entity = new Entity(User.class.getSimpleName(), userEmail);
+      entity.setProperty("name", userName);
       ds.put(entity);
     }
     entity.setProperty(COACH_IMAGE, new Blob(pngImage));

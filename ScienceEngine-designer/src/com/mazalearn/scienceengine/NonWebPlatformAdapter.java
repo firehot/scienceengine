@@ -1,15 +1,16 @@
 package com.mazalearn.scienceengine;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
+import com.mazalearn.scienceengine.designer.PngWriter;
 
 public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   
@@ -39,8 +40,11 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   
   @Override
   public byte[] getPngBytes(Pixmap snapshot) {
-    FileHandle file = Gdx.files.local("tmp");
-    PixmapIO.writePNG(file, snapshot);    
-    return file.readBytes();
+    ScreenUtils.makeBlackTransparent(snapshot);
+    try {
+      return PngWriter.generateImage(snapshot);
+    } catch (IOException e) {
+      throw new GdxRuntimeException(e);
+    }
   }
 }

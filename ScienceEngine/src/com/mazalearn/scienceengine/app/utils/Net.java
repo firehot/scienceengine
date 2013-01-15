@@ -1,10 +1,8 @@
 package com.mazalearn.scienceengine.app.utils;
 
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.URLEncoder;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
@@ -14,15 +12,20 @@ import com.mazalearn.scienceengine.ScienceEngine;
 
 public class Net {
 
-  public static void httpPost(String path, String contentType, byte[] data) {
-    Socket socket = Gdx.net.newClientSocket(Protocol.TCP, "localhost", 8888, null);
+  public static void httpPost(String path, String contentType, Map<String, String> params, byte[] data) {
+    String hostPort = ScienceEngine.getHostPort();
+    String host = hostPort.substring(0, hostPort.indexOf(":"));
+    int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
+    Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
     try {
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
       wr.writeBytes("POST " + path + " HTTP/1.0\r\n");
       wr.writeBytes("Content-Length: " + data.length + "\r\n");
       wr.writeBytes("Content-Type: " + contentType + "\r\n");
-      wr.writeBytes("User: " + "sridhar.sundaram@gmail.com" + "\r\n");
+      for (Map.Entry<String, String> entry: params.entrySet()) {
+        wr.writeBytes(entry.getKey() + ": " + entry.getValue() + "\r\n");
+      }
       wr.writeBytes("\r\n");
       //URLEncoder.encode()
       wr.write(data, 0, data.length);
