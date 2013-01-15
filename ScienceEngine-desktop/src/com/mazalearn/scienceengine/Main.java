@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 public class Main {
@@ -15,6 +16,7 @@ public class Main {
 		
 		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "");
 		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.Desktop));
+		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     new LwjglApplication(scienceEngine, cfg) {
       @Override
       public void exit() {

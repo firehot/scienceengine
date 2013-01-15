@@ -21,6 +21,7 @@ public class Net {
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
       wr.writeBytes("POST " + path + " HTTP/1.0\r\n");
+      wr.writeBytes("Host: " + host + "\r\n");
       wr.writeBytes("Content-Length: " + data.length + "\r\n");
       wr.writeBytes("Content-Type: " + contentType + "\r\n");
       for (Map.Entry<String, String> entry: params.entrySet()) {
