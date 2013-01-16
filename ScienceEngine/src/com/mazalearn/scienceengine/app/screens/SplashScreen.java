@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -45,7 +47,23 @@ public class SplashScreen extends AbstractScreen {
       this.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          loginDialog.show(stage);
+          // Onscreen keyboard not showing in IOS - this is a workaround.
+          if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
+            Gdx.input.getTextInput(new TextInputListener() {
+              @Override
+              public void input(String email) {
+                profile.setUserName(email.substring(0, email.indexOf("@")));
+                profile.setUserEmail(email);
+                ScienceEngine.getProfileManager().persist();
+                scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
+              }
+              
+              @Override
+              public void canceled() {}
+            }, "Enter email address", profile.getUserEmail());
+          } else {
+            loginDialog.show(stage);
+          }
         }      
       });      
     }
@@ -104,7 +122,7 @@ public class SplashScreen extends AbstractScreen {
     final Dialog dialog = new Dialog("", skin);
     dialog.setSize(400, 150);
     dialog.setPosition(AbstractScreen.VIEWPORT_WIDTH / 2, 100);
-    dialog.setBackground(null);
+    dialog.setBackground((Drawable) null);
 
     dialog.getContentTable().add(new Label("Name: ", skin));
     final TextField name = new TextField(profile.getUserName(), skin);
@@ -125,8 +143,8 @@ public class SplashScreen extends AbstractScreen {
     loginButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        profile.setName(name.getText());
-        profile.setEmail(email.getText());
+        profile.setUserName(name.getText());
+        profile.setUserEmail(email.getText());
         ScienceEngine.getProfileManager().persist();
         
         // Primitive validation

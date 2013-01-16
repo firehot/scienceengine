@@ -94,11 +94,11 @@ public class Profile implements Serializable {
     return false;
   }
 
-  public void setName(String name) {
+  public void setUserName(String name) {
     properties.put("name", name);
   }
 
-  public void setEmail(String email) {
+  public void setUserEmail(String email) {
     properties.put("email", email);
   }
 
