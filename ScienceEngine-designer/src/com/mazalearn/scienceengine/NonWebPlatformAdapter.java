@@ -31,7 +31,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
 
   @Override
-  public void setBytes(Pixmap pixmap, byte[] lines) {
+  public void putBytes(Pixmap pixmap, byte[] lines) {
     ByteBuffer pixels = pixmap.getPixels();
     pixels.clear();
     pixels.put(lines);

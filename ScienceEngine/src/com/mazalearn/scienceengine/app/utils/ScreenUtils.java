@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.utils;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -46,7 +47,18 @@ public class ScreenUtils {
   
     Pixmap screenShot = new Pixmap(sw, sh, Format.RGBA8888);
     Buffer pixels = screenShot.getPixels();
-    Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixels);
+    // Following workaround for GWT
+    if (!(pixels instanceof ByteBuffer)) {
+      int w = screenShot.getWidth();
+      int h = screenShot.getHeight();
+      final int numBytes = w * h * 4;
+      ByteBuffer p = ByteBuffer.allocate(numBytes);
+      ScienceEngine.getPlatformAdapter().getBytes(screenShot, p.array());
+      Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, p);
+      ScienceEngine.getPlatformAdapter().putBytes(screenShot, p.array());
+    } else {
+      Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixels);
+    }
     Pixmap.setFilter(Filter.NearestNeighbour);
     Pixmap scaledPic = new Pixmap(newWidth, newHeight, Format.RGBA8888);
     scaledPic.drawPixmap(screenShot, 0, 0, sw, sh, 0, 0, newWidth, newHeight);
@@ -69,7 +81,7 @@ public class ScreenUtils {
     for (int i = 0; i < (h + 1)/ 2; i++) {
       swapLines(lines, i, h - i -1, numBytesPerLine);
     }
-    ScienceEngine.getPlatformAdapter().setBytes(pixmap, lines);
+    ScienceEngine.getPlatformAdapter().putBytes(pixmap, lines);
   }
   
   private static void swapLines(byte[] lines, int line1, int line2, int numBytesPerLine) {

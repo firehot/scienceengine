@@ -91,7 +91,7 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   }
 
   @Override
-  public void setBytes(Pixmap pixmap, byte[] lines) {
+  public void putBytes(Pixmap pixmap, byte[] lines) {
     throw new UnsupportedOperationException("Not implemented");
   }
 

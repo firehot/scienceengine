@@ -7,7 +7,6 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 public class Net {
@@ -17,6 +16,10 @@ public class Net {
     String host = hostPort.substring(0, hostPort.indexOf(":"));
     int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
     Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
+    if (socket == null) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + "/" + path);
+      return;
+    }
     try {
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
@@ -38,7 +41,8 @@ public class Net {
       Gdx.app.log(ScienceEngine.LOG, "Response " + new String(response));
       wr.close();
     } catch (IOException e) {
-      throw new GdxRuntimeException(e);
+      Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
+      e.printStackTrace();
     }
   }
 }

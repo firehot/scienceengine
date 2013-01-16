@@ -45,7 +45,7 @@ public interface IPlatformAdapter {
 
   public void getBytes(Pixmap pixmap, byte[] lines);
 
-  public void setBytes(Pixmap pixmap, byte[] lines);
+  public void putBytes(Pixmap pixmap, byte[] lines);
 
   public byte[] getPngBytes(Pixmap snapshot);
 }
