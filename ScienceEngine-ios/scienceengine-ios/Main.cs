@@ -19,9 +19,8 @@ namespace scienceengineios
 	public class IosPlatformAdapter : NonWebPlatformAdapter {
 		UIWindow window;
 		WebViewController webViewController;
-		IMessage messages;
 
-		public IosPlatformAdapter (UIWindow window, WebViewController webViewController): base(Platform.IOS) {
+		public IosPlatformAdapter (UIWindow window, WebViewController webViewController): base(IPlatformAdapter.Platform.IOS) {
 			this.window = window;
 			this.webViewController = webViewController;
 		}
@@ -68,6 +67,7 @@ namespace scienceengineios
 			}
 			internal static ScienceEngine getScienceEngine () {
 				scienceEngine = new ScienceEngine ("");
+				ScienceEngine.DEV_MODE = ScienceEngine.DevMode.PRODUCTION;
 				return scienceEngine;
 			}
 			internal static IOSApplicationConfiguration getConfig() {
@@ -75,6 +75,7 @@ namespace scienceengineios
 				config.orientationLandscape = true;
 				config.orientationPortrait = false;
 				config.useAccelerometer = false;
+				config.useObjectAL = false;
 				return config;
 			}
 		}

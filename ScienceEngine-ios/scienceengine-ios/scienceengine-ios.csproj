@@ -166,6 +166,9 @@
     <Reference Include="IKVM.Runtime.JNI">
       <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Runtime.JNI.dll</HintPath>
     </Reference>
+    <Reference Include="libObjectAL">
+      <HintPath>libObjectAL.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -234,6 +237,9 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\images\draw.png">
       <Link>images\draw.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Messages.properties">
+      <Link>data\Messages.properties</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
