@@ -30,10 +30,8 @@ public interface IScience2DView extends IDoneCallback {
   public void addLocationGroup(Actor[] actors);
   // Remove all location groups
   public void removeLocationGroups();
-  // Add an actor with science model behind
-  Actor addScience2DActor(Science2DBody science2DBody);
-  // Add an actor with only visual behaviour and no model
-  Actor addVisualActor(String name);
+  // Add an actor of body type, actor viewtype with science model backing it
+  Actor addScience2DActor(String type, String viewType, Science2DBody science2DBody);
   // Once all actors are created, prepare the stage
   void prepareView();
   // Get probe manager for the stage

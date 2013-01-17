@@ -51,12 +51,14 @@ public class DrawingActor extends Science2DActor {
   private boolean hasChangedSinceSnapshot = true; // Force an initial snapshot
   private Pixmap snapshot;
   private Group coach;
+  private String viewSpec;
     
   public DrawingActor(Science2DBody body, TextureRegion textureRegion, 
-      BitmapFont font, Skin skin) {
+      String name, BitmapFont font, Skin skin) {
     super(body, textureRegion);
     this.drawing = (Drawing) body;
     this.font = font;
+    this.viewSpec = name;
     this.shapeRenderer = new ShapeRenderer();
     // snapshot will contain image of coach + 2 wheels
     this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
@@ -159,7 +161,7 @@ public class DrawingActor extends Science2DActor {
   public void draw(SpriteBatch batch, float parentAlpha) {
     List<List<Vector2>> pointSequences = drawing.getPointSequences();
     if (pointSequences.size() < 1) {
-      font.draw(batch, drawing.getExtra(), getX() + 20, getY() + 20);
+      font.draw(batch, viewSpec, getX() + 20, getY() + 20);
     }
     batch.end();
     drawCoachAndWheelAreas(pointSequences);

@@ -65,12 +65,7 @@ public class WaveView extends AbstractScience2DView {
   }
 
   @Override
-  protected Actor createActor(Science2DBody body) {
-    return null;
-  }
-
-  @Override
-  protected Actor createActor(String type) {
+  protected Actor createActor(String type, String viewSpec, Science2DBody body) {
     if (type.equals("WaveBox")) {
       return new WaveBox(ballTextureRed, ballTextureBlue, 
           waveModel.balls, ORIGIN_X, ORIGIN_Y, this);

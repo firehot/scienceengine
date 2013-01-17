@@ -50,8 +50,10 @@ public class Science2DActor extends Actor {
     this.body = body;
     this.textureRegion = textureRegion;
     // Set the sprite width and height.
-    this.setSize(textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
-    this.setOrigin(getWidth() / 2, getHeight() / 2);
+    if (textureRegion != null) {
+      this.setSize(textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
+      this.setOrigin(getWidth() / 2, getHeight() / 2);
+    }
     ClickListener touchLlistener = new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {

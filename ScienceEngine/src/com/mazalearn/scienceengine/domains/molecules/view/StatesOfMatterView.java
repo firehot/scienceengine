@@ -25,12 +25,7 @@ public class StatesOfMatterView extends AbstractScience2DView {
   }
 
   @Override
-  protected Actor createActor(Science2DBody body) {
-    return null;
-  }
-
-  @Override
-  protected Actor createActor(String type) {
+  protected Actor createActor(String type, String viewSpec, Science2DBody body) {
     int boxWidth = 20;
     int boxHeight = 20;
     if (type.equals("MoleculeBox")) {

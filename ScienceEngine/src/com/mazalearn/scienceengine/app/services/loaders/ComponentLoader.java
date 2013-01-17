@@ -60,6 +60,7 @@ public class ComponentLoader {
   @SuppressWarnings("unchecked")
   private void loadComponent(OrderedMap<String, ?> component, boolean create) {
     String type = (String) component.get("type");
+    String viewSpec = (String) component.get("viewspec");
     Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
     if (type == null)
       return;
@@ -67,7 +68,7 @@ public class ComponentLoader {
     float y = (Float) LevelLoader.nvl(component.get("y"), 0f);
     float rotation = (Float) LevelLoader.nvl(component.get("rotation"), 0f);
 
-    Actor actor = create ? createActor(type, x, y, rotation) : findActor(type);
+    Actor actor = create ? createActor(type, viewSpec, x, y, rotation) : findActor(type);
     if (actor == null) {
       Gdx.app.log(ScienceEngine.LOG, "Ignoring - Could not load component: "
           + type);
@@ -95,8 +96,6 @@ public class ComponentLoader {
       if (component.get("move") != null) {
         science2DActor.setMovementMode((String) component.get("move"));
       }
-      if (component.get("extra") != null)
-        science2DActor.getBody().setExtra((String) component.get("extra"));
       if ((Boolean) LevelLoader.nvl(component.get("bodytype"), false)) {
         science2DActor.getBody().setType(BodyType.DynamicBody);
       } else {
@@ -109,14 +108,12 @@ public class ComponentLoader {
     }
   }
 
-  private Actor createActor(String type, float x, float y, float rotation) {
+  private Actor createActor(String type, String viewType, float x, float y, float rotation) {
     Science2DBody science2DBody = 
         science2DModel.addBody(type, x / ScienceEngine.PIXELS_PER_M, 
             y / ScienceEngine.PIXELS_PER_M, 
             rotation * MathUtils.degreesToRadians);
-    Actor actor = (science2DBody != null) 
-        ? science2DView.addScience2DActor(science2DBody)
-        : science2DView.addVisualActor(type);
+    Actor actor = science2DView.addScience2DActor(type, viewType, science2DBody);
     if (actor == null && type.equals("ControlPanel")) {
       actor = science2DView.findActor(type);
     }

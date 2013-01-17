@@ -221,13 +221,6 @@ public class Science2DBody implements IBody {
     return true;
   }
   
-  public String getExtra() {
-    return extra;
-  }
-
-  public void setExtra(String extra) {
-    this.extra = extra;
-  }
   //////////////////////////////////////////////////////////////////////////
   ///  Static Proxy envelope for Box2D body
   //////////////////////////////////////////////////////////////////////////

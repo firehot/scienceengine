@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -76,11 +75,12 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   }
   
   @Override
-  protected Actor createActor(Science2DBody body) {
-    ComponentType componentType = ComponentType.valueOf(body.getComponentType());
-    
-    if (componentType == null) {
-      return super.createActor(body);
+  protected Actor createActor(String type, String viewSpec, Science2DBody body) {
+    ComponentType componentType;
+    try {
+      componentType = ComponentType.valueOf(type);
+    } catch(IllegalArgumentException e) {
+      return super.createActor(type, viewSpec, body);
     }
     
     String textureFilename = componentType.getTextureFilename();
@@ -109,27 +109,15 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     case ElectroMagnet:
       return new ElectromagnetActor(body, textureRegion);
     case Drawing:
-      return new DrawingActor(body, textureRegion, getFont(), skin);
+      return new DrawingActor(body, textureRegion, viewSpec, getFont(), skin);
+    case Train:
+      return new ScienceTrain(this);
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);
     }
   }
   
-  @Override
-  protected Actor createActor(String type) {
-    if (type.equals("CoilsBack")) {
-      return new Image(ScienceEngine.assetManager.get("images/coppercoils-back.png", Texture.class));
-    }
-    if (type.equals("Brushes")) {
-      return new Image(ScienceEngine.assetManager.get("images/brush.png", Texture.class));
-    }
-    if (type.equals("Train")) {
-      return new ScienceTrain(this);
-    }
-    return null;
-  }
-
   @Override
   public AbstractTutor createTutor(String type, String goal, 
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {

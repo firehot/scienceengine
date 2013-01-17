@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -72,17 +73,8 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
   
   @Override
-  public Actor addVisualActor(String name) {
-    Actor actor = createActor(name);
-    if (actor == null) return null;
-    actor.setName(name);
-    this.addActor(actor);
-    return actor;
-  }
-
-  @Override
-  public Actor addScience2DActor(Science2DBody body) {
-    Actor actor = createActor(body);
+  public Actor addScience2DActor(String type, String viewSpec, Science2DBody body) {
+    Actor actor = createActor(type, viewSpec, body);
     if (actor == null) return null;
     
     this.addActor(actor);
@@ -90,8 +82,14 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   }
   
   // Factory method for creating science2D actors
-  protected Actor createActor(Science2DBody body) {
-    IComponentType componentType = body.getComponentType();
+  protected Actor createActor(String type, String viewSpec, Science2DBody body) {
+    IComponentType componentType;
+    try {
+      componentType = ComponentType.valueOf(type);
+    } catch(IllegalArgumentException e) {
+      return null;
+    }
+    
     if (componentType == ComponentType.Dummy || componentType == ComponentType.Environment) {
       Pixmap pixmap = new Pixmap(8, 8, Format.RGBA8888);
       pixmap.setColor(Color.LIGHT_GRAY);
@@ -101,12 +99,13 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
       Science2DActor science2DActor = new Science2DActor(body, textureRegion);
       science2DActor.setPositionFromViewCoords(false);
       return science2DActor;      
+    } else if (componentType == ComponentType.Image) {
+      Actor actor = new Image(ScienceEngine.assetManager.get(viewSpec, Texture.class));
+      actor.setName(viewSpec);
+      return actor;
     }
     return null;
   }
-  
-  // Factory method for creating visual actors
-  protected abstract Actor createActor(String type);
   
   @Override
   public void suspend(boolean suspend) {
