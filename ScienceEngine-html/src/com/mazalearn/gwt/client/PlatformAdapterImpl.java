@@ -43,9 +43,15 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     int k = 0;
     for (int j = 0; j < pixmap.getHeight(); j++) {
       for (int i = 0; i < pixmap.getWidth(); i++) {
-        int pixel = (lines[k] << 24) | (lines[k+1] << 16) | (lines[k+2] << 8) | (lines[k+3]);
+        int pixel = (int) lines[k++] & 0xFF;
+        pixel <<= 8;
+        pixel |= (int) lines[k++] & 0xFF;
+        pixel <<= 8;
+        pixel |= (int) lines[k++] & 0xFF;
+        pixel <<= 8;
+        pixel |= (int) lines[k++] & 0xFF;
+        // TODO: Bug in Gwt PixMap - setColor uses format ARGB instead of RGBA
         pixmap.drawPixel(i, j, pixel);
-        k += 4;
       }
     }
   }

@@ -49,13 +49,10 @@ public class ScreenUtils {
     Buffer pixels = screenShot.getPixels();
     // Following workaround for GWT
     if (!(pixels instanceof ByteBuffer)) {
-      int w = screenShot.getWidth();
-      int h = screenShot.getHeight();
-      final int numBytes = w * h * 4;
-      ByteBuffer p = ByteBuffer.allocate(numBytes);
-      ScienceEngine.getPlatformAdapter().getBytes(screenShot, p.array());
-      Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, p);
-      ScienceEngine.getPlatformAdapter().putBytes(screenShot, p.array());
+      byte[] bytes = new byte[sw * sh * 4];
+      Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, 
+          ByteBuffer.wrap(bytes));
+      ScienceEngine.getPlatformAdapter().putBytes(screenShot, bytes);
     } else {
       Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixels);
     }
@@ -64,7 +61,7 @@ public class ScreenUtils {
     scaledPic.drawPixmap(screenShot, 0, 0, sw, sh, 0, 0, newWidth, newHeight);
     screenShot.dispose();
     if (makeBlackTransparent) {
-      makeBlackTransparent(scaledPic);
+      removeBlackAndYellow(scaledPic);
     }
     flipY(scaledPic);
     Gdx.app.log(ScienceEngine.LOG, "Screenshot: " + newWidth + " x " + newHeight);
@@ -94,17 +91,18 @@ public class ScreenUtils {
     }
   }
 
-  public static void makeBlackTransparent(Pixmap pixmap) {
+  private static void removeBlackAndYellow(Pixmap pixmap) {
     // Make black color transparent
     int w = pixmap.getWidth();
     int h = pixmap.getHeight();
     Blending b = Pixmap.getBlending();
     Pixmap.setBlending(Blending.None);
     int c1rgba8888 = Color.rgba8888(Color.BLACK);
+    int c2rgba8888 = Color.rgba8888(Color.YELLOW);
     for (int i = 0; i < w; i++) {
       for (int j = 0; j < h; j++) {
         int pixel = pixmap.getPixel(i, j);
-        if (pixel == c1rgba8888) {
+        if (pixel == c1rgba8888 || pixel == c2rgba8888) {
           pixmap.drawPixel(i, j, 0);
         }
       }

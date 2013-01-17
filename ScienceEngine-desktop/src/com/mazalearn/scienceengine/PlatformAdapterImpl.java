@@ -105,5 +105,5 @@ class PlatformAdapterImpl extends NonWebPlatformAdapter {
     generator.dispose();      
 
     return font;
-  }  
+  }
 }

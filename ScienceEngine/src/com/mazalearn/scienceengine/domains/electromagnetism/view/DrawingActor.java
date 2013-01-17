@@ -53,7 +53,7 @@ public class DrawingActor extends Science2DActor {
   private Group coach;
     
   public DrawingActor(Science2DBody body, TextureRegion textureRegion, 
-      String userName, String userEmail, BitmapFont font, Skin skin) {
+      BitmapFont font, Skin skin) {
     super(body, textureRegion);
     this.drawing = (Drawing) body;
     this.font = font;
@@ -63,7 +63,7 @@ public class DrawingActor extends Science2DActor {
     this.coachTexture = new Texture(snapshot);
     
     this.coach = new Group();
-    Label userLabel = new Label(userName, skin);
+    Label userLabel = new Label(ScienceEngine.getUserName(), skin);
     userLabel.setPosition(0, COACH_HEIGHT);
     
     coach.addActor(userLabel);
@@ -84,8 +84,8 @@ public class DrawingActor extends Science2DActor {
     Button done = new TextButton("Done", skin);
     done.setPosition(100, -30);
     final Map<String, String> postParams = new HashMap<String, String>();
-    postParams.put("User", userEmail);
-    postParams.put("UserName", userName);
+    postParams.put("User", ScienceEngine.getUserEmail());
+    postParams.put("UserName", ScienceEngine.getUserName());
     done.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {
@@ -171,7 +171,7 @@ public class DrawingActor extends Science2DActor {
     shapeRenderer.identity();
     shapeRenderer.translate(getX(), getY(), 0);
     shapeRenderer.begin(ShapeType.Rectangle);
-    shapeRenderer.setColor(Color.WHITE);
+    shapeRenderer.setColor(Color.YELLOW);
     
     // Draw wheel areas
     shapeRenderer.rect(DRAWING_WHEEL_OFFSET, 0, DRAWING_WHEEL_DIA, DRAWING_WHEEL_DIA);
@@ -183,6 +183,7 @@ public class DrawingActor extends Science2DActor {
     shapeRenderer.end();
 
     // Draw user's drawing
+    shapeRenderer.setColor(Color.WHITE);
     shapeRenderer.begin(ShapeType.FilledRectangle);
     for (List<Vector2> pointSequence: pointSequences) {
       if (pointSequence.size() < 1) continue;
