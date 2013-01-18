@@ -32,8 +32,8 @@ public class LevelLoader {
     this.science2DView = science2DController.getView();
     this.science2DModel = science2DController.getModel();
     this.controlPanel = science2DController.getControlPanel();
-    componentLoader = new ComponentLoader(science2DModel, science2DView);
-    tutorLoader = new TutorLoader(science2DModel, science2DView);
+    componentLoader = new ComponentLoader(science2DController);
+    tutorLoader = new TutorLoader(science2DController);
   }
    
   public void load() {
@@ -95,7 +95,7 @@ public class LevelLoader {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> tutorObj = (OrderedMap<String, ?>) tutors.get(i);
       AbstractTutor tutor = tutorLoader.loadTutor(tutorObj);
-      science2DView.getGuru().registerTutor(tutor);
+      science2DController.getGuru().registerTutor(tutor);
     }
   }
 

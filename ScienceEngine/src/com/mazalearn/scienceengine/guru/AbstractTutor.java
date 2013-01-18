@@ -6,10 +6,9 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.loaders.ComponentLoader;
 import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Parameter;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public abstract class AbstractTutor extends Group implements ITutor {
 
@@ -17,16 +16,14 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected Array<?> configs;
   private int deltaFailureScore;
   private int deltaSuccessScore;
-  protected final IScience2DModel science2DModel;
-  protected final IScience2DView science2DView;
   protected String[] hints;
   private String goal;
+  protected IScience2DController science2DController;
 
-  public AbstractTutor(IScience2DModel science2DModel, IScience2DView science2DView,
+  public AbstractTutor(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    this.science2DModel = science2DModel;
-    this.science2DView = science2DView;
+    this.science2DController = science2DController;
     this.goal = goal;
     this.components = components;
     this.configs = configs;
@@ -46,8 +43,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
     this.setPosition(x, y);
     this.setSize(width, height);
-    new ComponentLoader(science2DModel, science2DView).loadComponents(components, false);
-    ConfigLoader.loadConfigs(configs, science2DModel);
+    new ComponentLoader(science2DController).loadComponents(components, false);
+    ConfigLoader.loadConfigs(configs, science2DController.getModel());
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());

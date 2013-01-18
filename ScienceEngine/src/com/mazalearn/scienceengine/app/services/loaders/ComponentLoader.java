@@ -4,29 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.EnvironmentBody;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
 public class ComponentLoader {
 
-  private IScience2DModel science2DModel;
-  private IScience2DView science2DView;
   private Map<String, Integer> componentTypeCount = new HashMap<String, Integer>();
+  private IScience2DController science2DController;
 
-  public ComponentLoader(IScience2DModel science2DModel,
-      IScience2DView science2DView) {
-    this.science2DModel = science2DModel;
-    this.science2DView = science2DView;
+  public ComponentLoader(IScience2DController science2DController) {
+    this.science2DController = science2DController;
   }
 
   private void loadEnvironment(EnvironmentBody environment,
@@ -68,7 +62,7 @@ public class ComponentLoader {
     float y = (Float) LevelLoader.nvl(component.get("y"), 0f);
     float rotation = (Float) LevelLoader.nvl(component.get("rotation"), 0f);
 
-    Actor actor = create ? createActor(type, viewSpec, x, y, rotation) : findActor(type);
+    Actor actor = create ? science2DController.addScience2DActor(type, viewSpec, x, y, rotation) : findActor(type);
     if (actor == null) {
       Gdx.app.log(ScienceEngine.LOG, "Ignoring - Could not load component: "
           + type);
@@ -108,26 +102,14 @@ public class ComponentLoader {
     }
   }
 
-  private Actor createActor(String type, String viewType, float x, float y, float rotation) {
-    Science2DBody science2DBody = 
-        science2DModel.addBody(type, x / ScienceEngine.PIXELS_PER_M, 
-            y / ScienceEngine.PIXELS_PER_M, 
-            rotation * MathUtils.degreesToRadians);
-    Actor actor = science2DView.addScience2DActor(type, viewType, science2DBody);
-    if (actor == null && type.equals("ControlPanel")) {
-      actor = science2DView.findActor(type);
-    }
-    return actor;
-  }
-
   private Actor findActor(String type) {
-    Actor actor = science2DView.findActor(type);
+    Actor actor = science2DController.getView().findActor(type);
     // If multiple actors of same type, they have number suffix 1,2,3...
     if (actor == null) {
       Integer count = (Integer) LevelLoader
           .nvl(componentTypeCount.get(type), 0) + 1;
       componentTypeCount.put(type, count);
-      actor = science2DView.findActor(type + "." + count);
+      actor = science2DController.getView().findActor(type + "." + count);
     }
     return actor;
   }

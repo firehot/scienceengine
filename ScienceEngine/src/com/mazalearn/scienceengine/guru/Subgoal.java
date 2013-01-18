@@ -6,13 +6,12 @@ import java.util.Map;
 
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.services.Function;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.IFunction;
 import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class Subgoal extends AbstractTutor {
   private final Expr postCondition;
@@ -20,11 +19,11 @@ public class Subgoal extends AbstractTutor {
   private String when;
   private boolean progress;
 
-  public Subgoal(IScience2DModel science2DModel, IScience2DView science2DView,
+  public Subgoal(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs,
       String when, String postConditionString,
       int deltaSuccessScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, 0);
+    super(science2DController, goal, components, configs, deltaSuccessScore, 0);
     Parser parser = new Parser();
     Map<String, IFunction> functions = new HashMap<String, IFunction>();
     for (Function function: Function.values()) {
@@ -47,7 +46,7 @@ public class Subgoal extends AbstractTutor {
 
   public boolean hasSucceeded() {
     if (postCondition == null) return false;  
-    science2DModel.bindParameterValues(variables);
+    science2DController.getModel().bindParameterValues(variables);
     return postCondition.bvalue();
   }
 

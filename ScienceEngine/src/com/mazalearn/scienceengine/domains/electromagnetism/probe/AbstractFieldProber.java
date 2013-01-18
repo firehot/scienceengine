@@ -4,9 +4,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
@@ -17,10 +16,10 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected Science2DActor fieldMeterActor;
   protected int netSuccesses;
  
-  protected AbstractFieldProber(IScience2DModel science2DModel, IScience2DView science2DView, 
+  protected AbstractFieldProber(IScience2DController science2DController, 
       String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
-    this.fieldMeterActor = (Science2DActor) science2DView.findActor("FieldMeter");
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    this.fieldMeterActor = (Science2DActor) science2DController.getView().findActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
     }
@@ -39,7 +38,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     String[] actorNames = 
         new String[] { "BarMagnet", "Wire 1", "Wire 2", "ElectroMagnet"};
     for (String actorName: actorNames) {
-      Science2DActor actor = (Science2DActor) science2DView.findActor(actorName);
+      Science2DActor actor = (Science2DActor) science2DController.getView().findActor(actorName);
       if (actor != null) {
         if (probeMode) {
           actor.setMovementMode(MovementMode.None.name());
@@ -62,7 +61,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   
   protected void getBField(Vector2 viewPos, Vector2 bField) {
     modelPos.set(viewPos).mul(1f / ScienceEngine.PIXELS_PER_M);
-    science2DModel.getBField(modelPos, bField /* output */);
+    science2DController.getModel().getBField(modelPos, bField /* output */);
   }
 
   @Override

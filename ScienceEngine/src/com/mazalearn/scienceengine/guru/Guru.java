@@ -12,11 +12,10 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
  * Cycles through the eligible registeredTutors - probing the user with each one.
@@ -33,7 +32,6 @@ public class Guru extends Group implements IDoneCallback {
   protected Dashboard dashboard;
   private List<ITutor> registeredTutors = new ArrayList<ITutor>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
-  private final IScience2DView science2DView;
   private final ControlPanel controlPanel;
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;
@@ -43,17 +41,16 @@ public class Guru extends Group implements IDoneCallback {
   private int deltaFailureScore;
   private float windowWidth;
   private float windowHeight;
-  private IScience2DModel science2DModel;
-
+  private IScience2DController science2DController;
+  
   public Guru(final Skin skin, float width, float height,
-      IScience2DView science2DView, IScience2DModel science2dModel, 
+      IScience2DController science2DController, 
       ControlPanel controlPanel) {
     super();
+    this.science2DController = science2DController;
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
     dashboard.setPosition(0, 0);
-    this.science2DView = science2DView;
-    this.science2DModel = science2DModel;
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
     this.controlPanel = controlPanel;
@@ -64,8 +61,8 @@ public class Guru extends Group implements IDoneCallback {
      
     this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
-    ((Stage)science2DView).addActor(successImage);
-    ((Stage)science2DView).addActor(failureImage);
+    ((Stage)science2DController.getView()).addActor(successImage);
+    ((Stage)science2DController.getView()).addActor(failureImage);
     hinter = new Hinter(skin);
     this.setVisible(false);
   }
@@ -89,7 +86,7 @@ public class Guru extends Group implements IDoneCallback {
     // These are the visible actors.
     excludedActors.clear();
     excludedActors.add(dashboard);
-    for (Actor actor: science2DView.getActors()) {
+    for (Actor actor: science2DController.getView().getActors()) {
       if (actor.isVisible() && actor != this) {
         excludedActors.add(actor);
       }
@@ -111,7 +108,7 @@ public class Guru extends Group implements IDoneCallback {
       currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, false);
     }
 
-    science2DView.done(false);
+    science2DController.getView().done(false);
     ScienceEngine.setProbeMode(false);
     this.setVisible(false);
     // Clear event log
@@ -147,13 +144,13 @@ public class Guru extends Group implements IDoneCallback {
     // Win
     if (dashboard.getScore() >= WIN_THRESHOLD || tutorIndex >= registeredTutors.size()) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
-      science2DView.done(true);
+      science2DController.getView().done(true);
       this.setVisible(false);
       return;
     }
     // Loss
     if (dashboard.getScore() <= LOSS_THRESHOLD || currentTutor.hasFailed()) {
-      science2DView.done(false);
+      science2DController.getView().done(false);
       this.setVisible(false);
       return;
     }

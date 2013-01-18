@@ -8,9 +8,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
 import com.mazalearn.scienceengine.guru.Guide;
@@ -19,13 +18,10 @@ import com.mazalearn.scienceengine.guru.Subgoal;
 
 class TutorLoader {
 
-  private IScience2DView science2DView;
-  private IScience2DModel science2DModel;
+  private IScience2DController science2DController;
 
-  public TutorLoader(IScience2DModel science2DModel,
-      IScience2DView science2DView) {
-    this.science2DModel = science2DModel;
-    this.science2DView = science2DView;
+  public TutorLoader(IScience2DController science2DController) {
+    this.science2DController = science2DController;
   }
 
   public AbstractTutor loadTutor(OrderedMap<String, ?> tutorObj) {
@@ -38,7 +34,7 @@ class TutorLoader {
         50.0f);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
-    AbstractTutor tutor = science2DView.createTutor(type, goal,
+    AbstractTutor tutor = science2DController.createTutor(type, goal,
         components, configs, (int) deltaSuccessScore, (int) deltaFailureScore);
     if (tutor instanceof ParameterProber) {
       String resultType = (String) tutorObj.get("resultType");
@@ -49,7 +45,7 @@ class TutorLoader {
       for (int i = 0; i < hints.length; i++) {
         hints[i] = (String) hintObj.get(i);
       }
-      IModelConfig<?> parameter = science2DModel.getConfig(parameterName);
+      IModelConfig<?> parameter = science2DController.getModel().getConfig(parameterName);
       ((ParameterProber) tutor).initialize(parameter, resultExpr, resultType, hints);
       return tutor;
     }
@@ -93,7 +89,7 @@ class TutorLoader {
     float success = (Float) LevelLoader.nvl(subgoalObj.get("success"), 100.0f);
     Array<?> components = (Array<?>) subgoalObj.get("components");
     Array<?> configs = (Array<?>) subgoalObj.get("configs");
-    Subgoal subgoal = new Subgoal(science2DModel, science2DView, goal, 
+    Subgoal subgoal = new Subgoal(science2DController, goal, 
         components, configs, when, postCondition, (int) success);
     return subgoal;
   }

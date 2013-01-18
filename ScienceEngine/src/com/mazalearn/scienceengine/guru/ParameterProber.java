@@ -14,14 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.DummyBody;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 // outcome = function of parameter
 // doubts on how parameter change affects outcome
@@ -49,7 +48,6 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   protected IModelConfig<?> probeConfig;
 
   protected DummyBody dummy;
-  private Guru guru;
   
   private Image createResultImage(String path, float x, float y) {
     Image image = new Image(new Texture(path));
@@ -69,18 +67,16 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   
   public void done(boolean success) {
     netSuccesses += success ? 1 : -1;
-    guru.done(success);
+    science2DController.getGuru().done(success);
   }
     
-  public ParameterProber(IScience2DModel science2DModel, IScience2DView science2DView,
+  public ParameterProber(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.image = new ProbeImage();
-    Guru guru = science2DView.getGuru();
-    this.guru = guru;
-
-    dummy = (DummyBody) science2DModel.findBody(ComponentType.Dummy);
+    
+    dummy = (DummyBody) science2DController.getModel().findBody(ComponentType.Dummy);
   }
   
   @Override
@@ -95,21 +91,21 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       if (resultType == ResultType.Spin) {
         List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
         configs.add(probeConfig);
-        science2DView.getGuru().setupProbeConfigs(configs, false);
-        science2DModel.bindParameterValues(resultExprVariables);
+        science2DController.getGuru().setupProbeConfigs(configs, false);
+        science2DController.getModel().bindParameterValues(resultExprVariables);
         imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
       } else {
         float value = MathUtils.random(0f, 10f);
         dummy.setConfigParameter(probeConfig.getParameter(), value);
-        science2DView.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
+        science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
       }
     } else {
       dummy.setConfigParameter(null, 0);
-      science2DView.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
+      science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     }
     image.setVisible(activate);
     ScienceEngine.setProbeMode(activate);
-    ScienceEngine.selectBody(dummy, science2DView);
+    ScienceEngine.selectBody(dummy, science2DController.getView());
     // Turn on access to disabled parts of control panel
     this.setVisible(activate);
   }
@@ -123,12 +119,12 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     this.probeConfig = probeConfig;
     this.hints = hints;
 
-    Group root = ((Stage)science2DView).getRoot();
+    Group root = ((Stage)science2DController.getView()).getRoot();
     Actor controlPanel = root.findActor("ControlPanel");
     this.resultType = ResultType.valueOf(resultType);
     if (this.resultType == ResultType.Spin) {   
-      image.setX(guru.getWidth() / 2 - image.getWidth() / 2 - 50);
-      image.setY(guru.getHeight() / 2 - image.getHeight() / 2);
+      image.setX(science2DController.getGuru().getWidth() / 2 - image.getWidth() / 2 - 50);
+      image.setY(science2DController.getGuru().getHeight() / 2 - image.getHeight() / 2);
       
       Image clockwise = createResultImage("images/clockwise.png", 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);

@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
 
 public interface IScience2DView extends IDoneCallback {
@@ -30,13 +27,8 @@ public interface IScience2DView extends IDoneCallback {
   public void addLocationGroup(Actor[] actors);
   // Remove all location groups
   public void removeLocationGroups();
-  // Add an actor of body type, actor viewtype with science model backing it
-  Actor addScience2DActor(String type, String viewType, Science2DBody science2DBody);
   // Once all actors are created, prepare the stage
   void prepareView();
-  // Get probe manager for the stage
-  public Guru getGuru();
-  // Create prober
-  public AbstractTutor createTutor(String type, String goal, Array<?> components,
-      Array<?> configs, int success, int failure);
+  // Check progress of guru
+  void checkGuruProgress();
 }

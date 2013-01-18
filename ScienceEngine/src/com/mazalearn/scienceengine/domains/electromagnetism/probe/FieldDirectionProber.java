@@ -9,8 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
 // doubts on direction
@@ -21,11 +20,10 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
   private Vector2[] points, bFields;
 
-  public FieldDirectionProber(IScience2DModel science2DModel, 
-      final IScience2DView science2DView,
+  public FieldDirectionProber(final IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "The direction of the field is the direction in which a " +
         "free North Pole would move if placed at that point.",
@@ -70,7 +68,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
             new Action() {
               @Override
               public boolean act(float delta) {
-                science2DView.getGuru().done(success);
+                science2DController.getGuru().done(success);
                 fieldMeterActor.setVisible(false);
                 userField.setVisible(false);
                 return true;
@@ -91,7 +89,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      science2DView.getGuru().setupProbeConfigs(science2DModel.getAllConfigs(), false);
+      science2DController.getGuru().setupProbeConfigs(
+          science2DController.getModel().getAllConfigs(), false);
       generateProbePoints(points);
       getBField(points[0], bFields[0]);
       createFieldMeterSamples(points, bFields);

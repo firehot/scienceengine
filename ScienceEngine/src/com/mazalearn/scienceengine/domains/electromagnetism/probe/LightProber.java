@@ -3,8 +3,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
 import com.mazalearn.scienceengine.guru.ProbeImage;
@@ -14,12 +13,10 @@ public class LightProber extends AbstractScience2DProber {
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Image image;
   private LightbulbActor lightbulbActor;
-  private IScience2DModel science2DModel;
   
-  public LightProber(IScience2DModel science2DModel, IScience2DView science2DView, 
+  public LightProber(IScience2DController science2DController, 
       String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
-    this.science2DModel = science2DModel;
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "Light intensity increases when more current is induced in the coil.",
         "More current is induced in the coil if the magnetic field changes faster at the coil.",
@@ -29,21 +26,22 @@ public class LightProber extends AbstractScience2DProber {
     };
     image = new ProbeImage();
     this.addActor(image);
-    this.lightbulbActor = (LightbulbActor) science2DView.findActor("Lightbulb");
+    this.lightbulbActor = (LightbulbActor) science2DController.getView().findActor("Lightbulb");
   }
   
   @Override
   public void act(float delta) {
     super.act(delta);
     if (lightbulbActor != null && lightbulbActor.withinLightRegion(image.getX(), image.getY())) {
-      science2DView.getGuru().done(true);
+      science2DController.getGuru().done(true);
     }
   }
   
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      science2DView.getGuru().setupProbeConfigs(science2DModel.getAllConfigs(), true);
+      science2DController.getGuru().setupProbeConfigs(
+          science2DController.getModel().getAllConfigs(), true);
       generateProbePoints(points);
       image.setX(points[0].x - image.getWidth()/2);
       image.setY(points[0].y - image.getHeight()/2);

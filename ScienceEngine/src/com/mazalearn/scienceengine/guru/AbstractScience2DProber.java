@@ -8,8 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public abstract class AbstractScience2DProber extends AbstractTutor {
 
@@ -17,10 +16,10 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   protected static final float ZERO_TOLERANCE = 1e-4f;
   private Vector2 localPoint = new Vector2();
 
-  public AbstractScience2DProber(IScience2DModel science2DModel, IScience2DView science2DView,
+  public AbstractScience2DProber(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs,
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
   }
   
   public abstract void activate(boolean activate);
@@ -32,7 +31,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   }
 
   private boolean isInsideExcludedActor(Vector2 stagePoint) {
-    for (Actor actor: science2DView.getGuru().getExcludedActors()) {
+    for (Actor actor: science2DController.getGuru().getExcludedActors()) {
       // Translate to local coordinates of actor
       localPoint.set(stagePoint);
       actor.stageToLocalCoordinates(localPoint);

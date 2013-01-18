@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
 
-final class MoleculeBox extends Actor {
+public class MoleculeBox extends Actor {
   /**
    * 
    */

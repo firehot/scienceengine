@@ -19,9 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class Abstractor extends AbstractTutor {
 
@@ -35,12 +35,11 @@ public class Abstractor extends AbstractTutor {
   private Image[] life = new Image[3];
   private int numLivesLeft = 3;
   
-  public Abstractor(final IScience2DModel science2DModel, 
-      final IScience2DView science2DView, String goal, 
+  public Abstractor(final IScience2DController science2DController, String goal, 
       Array<?> components, Array<?> configs, Skin skin, 
       ControlPanel controlPanel, int deltaSuccessScore,
       int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.skin = skin;
     this.controlPanel = controlPanel;
 
@@ -57,7 +56,7 @@ public class Abstractor extends AbstractTutor {
     this.setPosition(0, 0);
     
     if (configTable == null) {
-      createConfigTable(science2DModel, skin);
+      createConfigTable(science2DController.getModel(), skin);
     }
     configTable.setVisible(true);
     numLivesLeft = 3;
@@ -141,7 +140,7 @@ public class Abstractor extends AbstractTutor {
         if (!success) {
           life[--numLivesLeft].getColor().a = 0.3f;
         }
-        science2DView.getGuru().done(success);
+        science2DController.getGuru().done(success);
       }
     });
     return doneButton;
@@ -150,8 +149,8 @@ public class Abstractor extends AbstractTutor {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      science2DView.getGuru().setSize(guruWidth,  50);
-      science2DView.getGuru().setPosition(0, guruHeight - 50);
+      science2DController.getGuru().setSize(guruWidth,  50);
+      science2DController.getGuru().setPosition(0, guruHeight - 50);
       controlPanel.refresh();
     }
     this.setVisible(activate);

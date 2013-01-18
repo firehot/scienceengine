@@ -4,22 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
@@ -28,16 +21,9 @@ import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.model.ComponentType;
-import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Guide;
-import com.mazalearn.scienceengine.guru.Guru;
-import com.mazalearn.scienceengine.guru.ParameterProber;
 
-public abstract class AbstractScience2DView extends Stage implements IScience2DView {
+public class AbstractScience2DView extends Stage implements IScience2DView {
 
   protected final IScience2DModel science2DModel;
   protected final Skin skin;
@@ -45,8 +31,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   protected ControlPanel controlPanel;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
-  private Guru guru;
-  private IScience2DController controller;
+  private IScience2DController science2DController;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -54,59 +39,10 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
     super(width, height, true);
     this.skin = skin;
     this.science2DModel = science2DModel;
-    this.controller = controller;
+    this.science2DController = controller;
     this.locationGroups = new ArrayList<List<Actor>>();
   }
 
-  @Override
-  public Guru getGuru() {
-    if (guru == null) {
-      guru = new Guru(skin, getWidth(), getHeight(), this, science2DModel, controlPanel);
-      // Move control Panel to top - so it will be above others
-      this.getRoot().addActor(controlPanel);
-      // Move back button to top also - so it will be accessible
-      this.getRoot().addActor(this.getRoot().findActor("BackButton"));
-      // Add guru before controlpanel so that controls are accessible.
-      this.getRoot().addActorBefore(controlPanel, guru);
-    }
-    return guru;
-  }
-  
-  @Override
-  public Actor addScience2DActor(String type, String viewSpec, Science2DBody body) {
-    Actor actor = createActor(type, viewSpec, body);
-    if (actor == null) return null;
-    
-    this.addActor(actor);
-    return actor;
-  }
-  
-  // Factory method for creating science2D actors
-  protected Actor createActor(String type, String viewSpec, Science2DBody body) {
-    IComponentType componentType;
-    try {
-      componentType = ComponentType.valueOf(type);
-    } catch(IllegalArgumentException e) {
-      return null;
-    }
-    
-    if (componentType == ComponentType.Dummy || componentType == ComponentType.Environment) {
-      Pixmap pixmap = new Pixmap(8, 8, Format.RGBA8888);
-      pixmap.setColor(Color.LIGHT_GRAY);
-      pixmap.fillRectangle(0, 0, 8, 8);
-      TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
-      pixmap.dispose();
-      Science2DActor science2DActor = new Science2DActor(body, textureRegion);
-      science2DActor.setPositionFromViewCoords(false);
-      return science2DActor;      
-    } else if (componentType == ComponentType.Image) {
-      Actor actor = new Image(ScienceEngine.assetManager.get(viewSpec, Texture.class));
-      actor.setName(viewSpec);
-      return actor;
-    }
-    return null;
-  }
-  
   @Override
   public void suspend(boolean suspend) {
     science2DModel.enable(!suspend);
@@ -120,10 +56,10 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
   public void done(boolean success) {
     if (success) {
       // TODO: put in a proper celebration here
-      getGuru().setTitle("Congratulations! You move to the next Level ");
+      science2DController.getGuru().setTitle("Congratulations! You move to the next Level ");
       // TODO: generalize
       ScienceEngine.getPlatformAdapter().showInternalURL(
-          "data/" + controller.getName() + "/" + controller.getLevel() + ".html");
+          "data/" + science2DController.getName() + "/" + science2DController.getLevel() + ".html");
       challenge(false);
     } else {
       // TODO: lack of symmetry here - cleanup required
@@ -153,9 +89,9 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
     }
     isChallengeInProgress = challenge;
     if (challenge) {
-      getGuru().startChallenge();
+      science2DController.getGuru().startChallenge();
     } else {
-      getGuru().endChallenge();
+      science2DController.getGuru().endChallenge();
     }
   }
     
@@ -262,7 +198,7 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
         AbstractScience2DView.this.challenge(false);
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.getProfileManager().retrieveProfile().setCurrentLevel(0);
-        AbstractScreen screen = new DomainHomeScreen(ScienceEngine.SCIENCE_ENGINE, controller.getName());
+        AbstractScreen screen = new DomainHomeScreen(ScienceEngine.SCIENCE_ENGINE, science2DController.getName());
         ScienceEngine.SCIENCE_ENGINE.setScreen(
             new LoadingScreen(ScienceEngine.SCIENCE_ENGINE, screen));
       }
@@ -278,16 +214,10 @@ public abstract class AbstractScience2DView extends Stage implements IScience2DV
     });
     return backButton;
   }
-  
-  @Override
-  public AbstractTutor createTutor(String type, String goal,
-      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
-    if ("ParameterProber".equals(type)) {
-      return new ParameterProber(science2DModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
-    } else if ("Guide".equals(type)) {
-      return new Guide(science2DModel, this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
-    }
-    return null;
-  }
 
+  @Override
+  public void checkGuruProgress() {
+    science2DController.getGuru().checkProgress();
+  }
+  
 }

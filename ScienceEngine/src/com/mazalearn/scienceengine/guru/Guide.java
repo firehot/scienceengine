@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 // outcome = function of parameter
 // doubts on how parameter change affects magnitude of outcome
@@ -22,9 +21,9 @@ public class Guide extends AbstractTutor {
   private float guruWidth;
   private float guruHeight;
     
-  public Guide(IScience2DModel science2DModel, IScience2DView science2DView,
+  public Guide(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
   }
   
   /* (non-Javadoc)
@@ -33,8 +32,8 @@ public class Guide extends AbstractTutor {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      science2DView.getGuru().setSize(guruWidth,  50);
-      science2DView.getGuru().setPosition(0, guruHeight - 50);
+      science2DController.getGuru().setSize(guruWidth,  50);
+      science2DController.getGuru().setPosition(0, guruHeight - 50);
       stageBeginTime[currentStage] = ScienceEngine.getTime();
     } 
     ScienceEngine.setProbeMode(false);
@@ -64,7 +63,7 @@ public class Guide extends AbstractTutor {
     while (subgoal.hasSucceeded()) {
       currentStage++;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
-      science2DView.getGuru().done(true);
+      science2DController.getGuru().done(true);
       if (currentStage == subgoals.size()) {
         break;
       }
@@ -79,7 +78,7 @@ public class Guide extends AbstractTutor {
   @Override
   public String getHint() {
     if (currentStage < 0 || currentStage == subgoals.size()) return null;
-    float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
+    // float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
     Subgoal subgoal = subgoals.get(currentStage);
     return subgoal.getGoal();
   }

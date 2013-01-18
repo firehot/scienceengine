@@ -7,8 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
@@ -50,20 +49,19 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] points;
   private Vector2[] bFields;
 
-  public FieldMagnitudeProber(IScience2DModel science2DModel, 
-      final IScience2DView science2DView,
+  public FieldMagnitudeProber(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DModel, science2DView, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "The field is stronger closer to the object generating the field",
         "The field is stronger if the current or magnet strength is larger"
     };
     
     imageCorrect = new ProbeImage();
-    imageCorrect.addListener(new ClickResult(true, science2DView.getGuru()));
+    imageCorrect.addListener(new ClickResult(true, science2DController.getGuru()));
     imageWrong = new ProbeImage();
-    imageWrong.addListener(new ClickResult(false, science2DView.getGuru()));
+    imageWrong.addListener(new ClickResult(false, science2DController.getGuru()));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
@@ -80,7 +78,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      science2DView.getGuru().setupProbeConfigs(science2DModel.getAllConfigs(), false);
+      science2DController.getGuru().setupProbeConfigs(
+          science2DController.getModel().getAllConfigs(), false);
       // Generate two random points P1, P2 in unit circle.
       // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
       // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2

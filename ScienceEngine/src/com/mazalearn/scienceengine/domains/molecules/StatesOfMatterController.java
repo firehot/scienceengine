@@ -1,10 +1,14 @@
 package com.mazalearn.scienceengine.domains.molecules;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.ColorPanel;
 import com.mazalearn.scienceengine.core.view.ControlPanel;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
 import com.mazalearn.scienceengine.domains.molecules.model.LJMolecularModel;
+import com.mazalearn.scienceengine.domains.molecules.view.MoleculeBox;
 import com.mazalearn.scienceengine.domains.molecules.view.StatesOfMatterView;
 
 /**
@@ -70,5 +74,18 @@ public class StatesOfMatterController extends AbstractScience2DController {
       }
     });
     return toggleButton;*/
+  }
+
+  @Override
+  protected Actor createActor(String type, String viewSpec, Science2DBody body) {
+    int boxWidth = 20;
+    int boxHeight = 20;
+    if (type.equals("MoleculeBox")) {
+      return new MoleculeBox(statesOfMatterModel, N, boxWidth, boxHeight, 
+          science2DView.getFont());
+    } else if (type.equals("ColorPanel")) {
+      return new ColorPanel(type);
+    }
+    return null;
   }
 }
