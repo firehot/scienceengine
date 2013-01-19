@@ -51,6 +51,7 @@ public class EnvironmentBody extends Science2DBody {
       public void setValue(Float value) { parameters.set(index, value); }
       public boolean isPossible() { return true; }
     };
+    parameterConfig.setPermitted(true);
     environmentConfigs.add(parameterConfig);
   }
 }

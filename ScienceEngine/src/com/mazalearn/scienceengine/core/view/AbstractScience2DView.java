@@ -155,6 +155,11 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     // Register help after all actors are already added so it is on top
     //Actor help = new Helper(skin, 650, getHeight()  - 90);
     //this.addActor(help);
+    for (Actor actor: this.getActors()) {
+      if (actor instanceof Science2DActor) {
+        ((Science2DActor) actor).prepareActor();
+      }
+    }
   }
 
   public void setControlPanel(ControlPanel controlPanel) {

@@ -11,7 +11,9 @@ components:[
 {type:"Title",x:100.0,y:460.0,originX:0.0,originY:0.0,width:0.0,height:5.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type: "Environment", move: "None", params:[{name:"AirPermittivity"},{name:"RoomTemperature"},{name:"EarthMagneticField"}]}], 
 circuits:[["CurrentSource","CurrentCoil"]],
-configs:[{name:"Magnet Mode",permitted:false,value:"Free"},
+configs:[
+{name:"HorseshoeMagnet.MagnetStrength", permitted:true, value:20},
+{name:"HorseshoeMagnet.Flip", permitted:true},
 {name:"CurrentSource.CurrentType",permitted:false,value:"AC"},
 {name:"CurrentSource.CurrentFrequency",permitted:true,value:1.0},
 {name:"CurrentSource.MaxCurrent",permitted:true,value:5.0},

@@ -36,7 +36,6 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   
   @Override
   public void prepareView() {
-    // TODO: prepareActor should be called for all actors
     // TODO: Make below part of scripting language
     dynamo = (Dynamo) science2DModel.findBody(ComponentType.Dynamo);
     magnet = (Magnet) science2DModel.findBody(ComponentType.Magnet);

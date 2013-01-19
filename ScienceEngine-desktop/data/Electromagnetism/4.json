@@ -9,8 +9,13 @@ components:[{type:"Image",viewspec:"images/coppercoils-back.png", x:300.0,y:64.0
 {type:"ControlPanel",x:702.0,y:242.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0}],
 groups:[["PickupCoil","Lightbulb", "images/coppercoils-back.png", "Ammeter"]],
 circuits:[["PickupCoil","Ammeter", "Lightbulb"]],
-configs:[{name:"BarMagnet.MagnetMode",permitted:true,value:"Move"},
-{name:"BarMagnet.MagnetStrength",permitted:true,value:10000.0}],
+configs:[
+{name:"BarMagnet.MagnetMode",permitted:true,value:"Move"},
+{name:"BarMagnet.MagnetStrength",permitted:true,value:10000.0},
+{name:"BarMagnet.RotationAngle",permitted:true},
+{name:"PickupCoil.CoilLoops",permitted:true},
+{name:"Ammeter.MaxCurrent",permitted:true},
+],
 plan: [
        {type: "Guide",
         goal: "Explore how induced current changes with change of different parameters.",

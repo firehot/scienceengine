@@ -222,4 +222,7 @@ public class Science2DActor extends Actor {
   protected int getRotationForceScaler() {
     return -10000;
   }
+
+  public void prepareActor() {
+  }
 }

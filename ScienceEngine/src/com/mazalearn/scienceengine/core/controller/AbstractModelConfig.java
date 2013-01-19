@@ -53,7 +53,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     this.low = low;
     this.high = high;
     this.values = values;
-    this.isPermitted = true;
+    this.isPermitted = false;
   }
   
   @Override
