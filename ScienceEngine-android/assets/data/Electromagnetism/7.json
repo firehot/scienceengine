@@ -2,7 +2,7 @@
 level:7,
 description:"Creating a DC  motor by using commutator",
 components:[
-{type:"Brushes",x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},
+{type:"Image",viewspec:"images/brush.png", x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"HorseshoeMagnet", x:175, y:30.8,originX:175.0,originY:192.0,width:350.0,height:256.0,visible:true,rotation:0,move:"None",bodytype:false},
 {type:"CurrentSource",x:342.6001,y:345.59995,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"CurrentCoil",x:282.86517,y:226.54425,originX:64.0,originY:16.0,width:128.0,height:32.0,visible:true,rotation:0.0,move:"Rotate",bodytype:true},
@@ -12,8 +12,8 @@ components:[
 {type: "Environment", move: "None", params:[{name:"AirPermittivity"},{name:"RoomTemperature"},{name:"EarthMagneticField"}]}], 
 circuits:[["CurrentSource","CurrentCoil"]],
 configs:[
-{name:"Magnet Mode", permitted:false, value:"Free"},
 {name:"HorseshoeMagnet.MagnetStrength", permitted:true, value:20},
+{name:"HorseshoeMagnet.Flip", permitted:true},
 {name:"CurrentSource.CurrentType", permitted:false, value:"DC"},
 {name:"CurrentSource.Frequency", permitted:true, value:1.0},
 {name:"CurrentSource.MaxCurrent", permitted:true, value:3.0},

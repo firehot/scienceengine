@@ -13,6 +13,12 @@ components:[
 ],
 configs:[
 {name:"Dynamo.RotationVelocity", permitted:false, value:-4},
+{name:"Dynamo.AreaOrientation", permitted:true},
+{name:"Dynamo.Width", permitted:true},
+{name:"Dynamo.CoilLoops", permitted:true},
+{name:"Magnet.MagnetStrength", permitted:true},
+{name:"Magnet.MagnetType", permitted:true},
+{name:"Lightbulb.Color", permitted:true},
 ],
 circuits:[["Lightbulb","Dynamo"]],
 }
