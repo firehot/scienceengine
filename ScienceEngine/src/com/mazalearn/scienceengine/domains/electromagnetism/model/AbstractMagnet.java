@@ -119,6 +119,10 @@ public abstract class AbstractMagnet extends Science2DBody
     this.height = height;
   }
 
+  protected void scaleSize(float scale) {
+    this.height *= scale;
+    this.width *= scale;
+  }
   /**
    * Gets the physical width of the magnet.
    * 

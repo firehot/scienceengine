@@ -28,7 +28,8 @@ public class ScienceTrain extends Group {
         Actions.sequence(
             Actions.moveBy(AbstractScreen.VIEWPORT_WIDTH, 0, 20), 
             Actions.moveBy(-AbstractScreen.VIEWPORT_WIDTH,0))));
-*/    addActor(engine);
+*/    
+    addActor(engine);
     engine.setSize(180, 35);
     // Add wheels to the engine
     for (int i = 0; i < NUM_ENGINE_WHEELS; i++) {

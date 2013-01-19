@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
@@ -47,8 +48,10 @@ public class SplashScreen extends AbstractScreen {
       this.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          // Onscreen keyboard not showing in IOS - this is a workaround.
-          if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
+          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+            scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
+          } else if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
+            // Onscreen keyboard not showing in IOS - this is a workaround.
             Gdx.input.getTextInput(new TextInputListener() {
               @Override
               public void input(String email) {

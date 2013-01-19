@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.core.view;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
@@ -31,4 +32,6 @@ public interface IScience2DView extends IDoneCallback {
   void prepareView();
   // Check progress of guru
   void checkGuruProgress();
+  // return font for this view
+  public BitmapFont getFont();
 }

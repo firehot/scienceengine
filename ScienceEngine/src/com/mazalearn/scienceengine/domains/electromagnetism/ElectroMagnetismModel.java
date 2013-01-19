@@ -14,10 +14,12 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Dynamo;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.HorseshoeMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Wire;
 
@@ -41,6 +43,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     switch(componentType) {
     case Ammeter: return new Ammeter(x, y, rotation);
     case FieldMeter: return new FieldMeter(x, y, rotation);
+    case Magnet: return new Magnet(x, y, rotation);
     case BarMagnet: return new BarMagnet(x, y, rotation);
     case HorseshoeMagnet: return new HorseshoeMagnet(x, y, rotation);
     case CurrentSource: return new CurrentSource(x, y, rotation);
@@ -48,6 +51,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case PickupCoil: return new PickupCoil(x, y, rotation, 2E7f);
     case Lightbulb: return new Lightbulb(x, y, rotation);
     case Wire: return new Wire(x, y, rotation);
+    case Dynamo: return new Dynamo(x, y, rotation);
     case CurrentCoil: return new CurrentCoil(x, y, rotation);
     case Compass: return new Compass(x, y, rotation);
     case Drawing: return new Drawing(x, y, rotation);

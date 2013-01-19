@@ -134,6 +134,7 @@ public class Science2DActor extends Actor {
   
   @Override
   public void act(float delta) {
+    // TODO: Adjust height, width, originx, originy of actor based on body - see MagnetActor, DynamoActor
     getViewPositionFromBox2DPosition(viewPos);
     this.setX(viewPos.x);
     this.setY(viewPos.y);

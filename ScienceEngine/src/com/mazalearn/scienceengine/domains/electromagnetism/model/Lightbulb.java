@@ -2,9 +2,11 @@
 
 package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -25,6 +27,16 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
+  public enum BulbColor {
+    Yellow(Color.YELLOW), Red(Color.RED), Blue(Color.BLUE), Green(Color.GREEN);
+    
+    private Color color;
+    
+    private BulbColor(Color color) {
+      this.color = color;
+    }
+  }
+  BulbColor bulbColor = BulbColor.Yellow;
   /**
    * Sole constructor.
    * 
@@ -45,6 +57,29 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
     circleShape.dispose();
   }
 
+  @Override
+  public void initializeConfigs() {
+    super.initializeConfigs();
+    configs.add(new AbstractModelConfig<String>(this, 
+        Parameter.Color, BulbColor.values()) {
+      public String getValue() { return getBulbColor(); }
+      public void setValue(String value) { setBulbColor(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+  }
+  
+  public String getBulbColor() {
+    return bulbColor.name();
+  }
+  
+  public void setBulbColor(String pColor) {
+    this.bulbColor = BulbColor.valueOf(pColor);
+  }
+  
+  public Color getColor() {
+    return bulbColor.color;
+  }
+  
   /**
    * Gets the intensity of the light. Fully off is 0.0, fully on is 1.0.
    * 

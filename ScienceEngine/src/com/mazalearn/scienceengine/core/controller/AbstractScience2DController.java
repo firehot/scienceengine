@@ -2,8 +2,8 @@ package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.core.model.ComponentType;
-import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
@@ -31,7 +30,7 @@ public abstract class AbstractScience2DController implements
 
   protected ControlPanel controlPanel;
   protected IScience2DModel science2DModel;
-  protected AbstractScience2DView science2DView;
+  protected IScience2DView science2DView;
   protected Skin skin;
   private String name;
   private int level;
@@ -84,7 +83,7 @@ public abstract class AbstractScience2DController implements
   @Override
   public Guru getGuru() {
     if (guru == null) {
-      Stage stage = (Stage) getView();
+      Stage stage = (Stage) science2DView;
       guru = new Guru(skin, stage.getWidth(), stage.getHeight(), this, controlPanel);
       // Move control Panel to top - so it will be above others
       stage.getRoot().addActor(controlPanel);
@@ -103,25 +102,29 @@ public abstract class AbstractScience2DController implements
             y / ScienceEngine.PIXELS_PER_M, 
             rotation * MathUtils.degreesToRadians);
     Actor actor = createActor(type, viewSpec, science2DBody);
+    
     if (actor == null && type.equals("ControlPanel")) {
-      actor = getView().findActor(type);
+      return getView().findActor(type);
     }
     if (actor == null) return null;
     
-    science2DView.addActor(actor);
+    Stage stage = (Stage) science2DView;
+    stage.addActor(actor);
     return actor;
   }
   
   // Factory method for creating science2D actors
   protected Actor createActor(String type, String viewSpec, Science2DBody body) {
-    IComponentType componentType;
+    ComponentType componentType;
     try {
       componentType = ComponentType.valueOf(type);
     } catch(IllegalArgumentException e) {
       return null;
     }
     
-    if (componentType == ComponentType.Dummy || componentType == ComponentType.Environment) {
+    switch (componentType) {
+    case Dummy:
+    case Environment:
       Pixmap pixmap = new Pixmap(8, 8, Format.RGBA8888);
       pixmap.setColor(Color.LIGHT_GRAY);
       pixmap.fillRectangle(0, 0, 8, 8);
@@ -130,7 +133,7 @@ public abstract class AbstractScience2DController implements
       Science2DActor science2DActor = new Science2DActor(body, textureRegion);
       science2DActor.setPositionFromViewCoords(false);
       return science2DActor;      
-    } else if (componentType == ComponentType.Image) {
+    case Image:
       Actor actor = new Image(ScienceEngine.assetManager.get(viewSpec, Texture.class));
       actor.setName(viewSpec);
       return actor;

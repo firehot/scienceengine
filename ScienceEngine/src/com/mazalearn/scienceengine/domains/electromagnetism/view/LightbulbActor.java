@@ -19,7 +19,7 @@ public class LightbulbActor extends Science2DActor {
   public LightbulbActor(Lightbulb lightbulb, TextureRegion textureRegion) {
     super(lightbulb, textureRegion);
     this.lightbulb = lightbulb;
-    lightTexture = createLightTexture(Color.YELLOW);
+    lightTexture = createLightTexture(Color.WHITE);
   }
 
   @Override
@@ -30,7 +30,8 @@ public class LightbulbActor extends Science2DActor {
     int diameter = Math.round(intensity * scale);
     lightRadius = diameter / 2;
     Color c = batch.getColor();
-    batch.setColor(1, 1, 1, 0.5f + intensity * 0.5f);
+    Color light = lightbulb.getColor();
+    batch.setColor(light.r, light.g, light.b, 0.5f + intensity * 0.5f);
     batch.draw(lightTexture, getX() + getOriginX() - lightRadius, 
         getY() + getOriginY() - lightRadius, diameter, diameter);
     batch.setColor(c);

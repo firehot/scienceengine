@@ -19,7 +19,12 @@ public enum Parameter implements IParameter {
   RotationData, 
   Count, 
   Current, 
-  RotationVelocity;
+  RotationVelocity, 
+  MagnetType, 
+  Cost, 
+  AreaOrientation, 
+  Width, 
+  Color;
   
   private Parameter() {
   }

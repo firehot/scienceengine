@@ -2,8 +2,17 @@
 components:[
 {type:"Drawing",x:30.0,y:40,originX:170.0,originY:100.0,width:420.0,height:256.0,
                 visible:true,rotation:0.0,move:"None",bodytype:false,viewspec:"Coach"},
+{type:"Lightbulb",x:215.0,y:313.0,originX:32.0,originY:32.0,width:64.0,height:64.0,visible:true,rotation:0.0},
+{type:"Magnet",x:215.0,y:200,originX:32.0,originY:8.0,width:64.0,height:16.0,
+                visible:true,rotation:0.0,move:"None"},
+{type:"Dynamo",x:197.0,y:160,originX:50.0,originY:50.0,width:100.0,height:100.0,
+                visible:true,rotation:0.0,move:"Rotate",bodytype:true},
 {type:"Train",x:620.0,y:80,originX:150.0,originY:75.0,width:200.0,height:40.0,
-                visible:true,rotation:0.0,move:"None",bodytype:false},
+                visible:true,rotation:0.0,move:"None"},
 {type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 ],
+configs:[
+{name:"Dynamo.RotationVelocity", permitted:false, value:-4},
+],
+circuits:[["Lightbulb","Dynamo"]],
 }

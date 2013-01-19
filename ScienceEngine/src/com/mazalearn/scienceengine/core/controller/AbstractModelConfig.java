@@ -12,7 +12,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   protected IParameter parameter;
   private boolean isPermitted;
 
-  private final float low, high;    // Range
+  private float low, high;    // Range
   @SuppressWarnings("rawtypes")
   private Enum[] values;            // List
   
@@ -83,6 +83,10 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   //  For Range type only
   @Override public float getLow() { return low;}
   @Override public float getHigh() { return high;}
+  public void setRange(float low, float high) {
+    this.low = low;
+    this.high = high;
+  }
   
   // For Command type only
   @Override public void doCommand() {}
