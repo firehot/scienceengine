@@ -1,9 +1,10 @@
 {name:"Electromagnetism",level:5,description:"Magnetic Field of an ElectroMagnet",
 components:[
+{type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0,move:"None"},
 {type:"CurrentSource",x:389.0,y:181.0,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None"},
 {type:"ElectroMagnet",x:356.57684,y:162.42311,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"Move"},
 {type:"Compass",x:26.983902,y:337.06427,originX:32.0,originY:8.0,width:64.0,height:16.0,visible:true,rotation:0.0,move:"Move"},
-{type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0,move:"None"},{type:"ControlPanel",x:703.0,y:255.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None"}],
+{type:"ControlPanel",x:703.0,y:255.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None"}],
 groups:[["ElectroMagnet","CurrentSource"]],
 circuits:[["CurrentSource","ElectroMagnet"]],
 configs:[

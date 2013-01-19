@@ -6,8 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter.FieldSample;
@@ -19,6 +24,24 @@ public class FieldMeterActor extends Science2DActor {
   public FieldMeterActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
+    this.removeListener(getListeners().get(0));
+    this.addListener(new ClickListener() {   
+      @Override
+      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        super.touchUp(event, x, y, pointer, button);
+        ScienceEngine.selectBody(fieldMeter, (IScience2DView) getStage());
+        // Move field sampler here and convert to model coords
+        pos.set(event.getStageX(), event.getStageY()).mul(1f / ScienceEngine.PIXELS_PER_M);
+        fieldMeter.setPositionAndAngle(pos, 0);
+      }
+    });
+  }
+  
+  @Override
+  public Actor hit (float x, float y, boolean touchable) {
+    if (touchable && this.getTouchable() != Touchable.enabled) return null;
+    // If nothing else hits, and fieldmeter is present, it shows a hit.
+    return this;
   }
 
   @Override

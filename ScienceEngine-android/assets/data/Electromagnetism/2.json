@@ -1,4 +1,6 @@
-{name:"Electromagnetism",level:2,description:"Magnetic Field of a Current carrying Infinite Wire",components:[{type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0,move:"None",bodytype:false},
+{name:"Electromagnetism",level:2,description:"Magnetic Field of a Current carrying Infinite Wire",
+components:[
+{type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"CurrentSource",x:528.20804,y:187.61603,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"Wire",x:291.60007,y:229.20001,originX:0.0,originY:0.0,width:22.0,height:22.0,visible:true,rotation:0.0,move:"Move",bodytype:false},
 {type:"Compass",x:35.96727,y:341.13092,originX:32.0,originY:8.0,width:64.0,height:16.0,visible:true,rotation:0.0,move:"Move",bodytype:false},
