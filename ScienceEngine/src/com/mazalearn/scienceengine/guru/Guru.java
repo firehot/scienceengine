@@ -189,7 +189,7 @@ public class Guru extends Group implements IDoneCallback {
     currentTutor = registeredTutors.get(tutorIndex);
     currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
     currentTutor.activate(true);
-    dashboard.setStatus(currentTutor.getGoal());
+    dashboard.setGoal(currentTutor.getGoal());
     // Set up initial success and failure scores
     deltaSuccessScore = currentTutor.getSuccessScore();
     deltaFailureScore = currentTutor.getFailureScore();
@@ -203,8 +203,8 @@ public class Guru extends Group implements IDoneCallback {
     controlPanel.enableControls(enableControls);
   }
 
-  public void setTitle(String text) {
-    dashboard.setStatus(text);
+  public void setGoal(String text) {
+    dashboard.setGoal(text);
   }
 
   public void checkProgress() {

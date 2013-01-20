@@ -81,7 +81,7 @@ public class Profile implements Serializable {
     json.writeValue("highScores", highScores);
   }
 
-  public void setExperiment(String name) {
+  public void setDomain(String name) {
     properties.put("experiment", name);
   }
 

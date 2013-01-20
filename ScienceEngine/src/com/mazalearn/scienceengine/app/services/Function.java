@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.app.services;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.lang.IFunction;
 
+// Currently all functions take exactly one argument and produce float result
 public enum Function implements IFunction {
   Min(new Aggregator() {
     float min;

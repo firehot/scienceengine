@@ -1,5 +1,8 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,19 +11,31 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.utils.Net;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain.State;
 
-public class ScienceTrain extends Group {
+public class ScienceTrainActor extends Group {
   private final IScience2DView science2DView;
   private static final int NUM_ENGINE_WHEELS = 4;
   Actor coach;
   private TextureRegion lightTexture;
+  private ScienceTrain train;
 
-  public ScienceTrain(IScience2DView science2DView) {
+  public ScienceTrainActor(Science2DBody body, IScience2DView science2DView, Skin skin) {
     super();
+    this.train = (ScienceTrain) body;
+    body.setActive(true);
     this.science2DView = science2DView;
     lightTexture = createLightTexture(Color.YELLOW);
     Image engine = new Image(ScienceEngine.assetManager.get("images/engine.png", Texture.class));
@@ -74,6 +89,16 @@ public class ScienceTrain extends Group {
       }
     }
     super.draw(batch, parentAlpha);
-    // drawLight(batch);
+    if (train.getState().equals(State.Light.name())) {
+      drawLight(batch);
+    }
+  }
+
+  private void uploadToServer() {
+    DrawingActor coach = (DrawingActor) science2DView.findActor("Drawing");
+    Map<String, String> postParams = new HashMap<String, String>();
+    postParams.put("User", ScienceEngine.getUserEmail());
+    postParams.put("UserName", ScienceEngine.getUserName());
+    Net.httpPost("/upload", "application/octet-stream", postParams, coach.getDrawingPng());
   }
 }

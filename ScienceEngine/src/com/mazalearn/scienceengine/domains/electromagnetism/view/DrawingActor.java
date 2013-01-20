@@ -1,8 +1,6 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -19,14 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.utils.Net;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -83,18 +78,6 @@ public class DrawingActor extends Science2DActor {
     wheel2.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
     wheel2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
     
-    Button done = new TextButton("Done", skin);
-    done.setPosition(100, -30);
-    final Map<String, String> postParams = new HashMap<String, String>();
-    postParams.put("User", ScienceEngine.getUserEmail());
-    postParams.put("UserName", ScienceEngine.getUserName());
-    done.addListener(new ClickListener() {
-      @Override
-      public void clicked (InputEvent event, float x, float y) {
-        Net.httpPost("/upload", "application/octet-stream", postParams, getDrawingPng());
-      }      
-    });
-    coach.addActor(done);
     coach.addActor(coachBody);
     coach.addActor(wheel1);
     coach.addActor(wheel2);

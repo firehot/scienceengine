@@ -36,12 +36,15 @@ public class CircuitActor extends Actor {
     for (int i = 1; i < circuit.size(); i++) {
       CircuitElement prev = circuit.get(i - 1);
       CircuitElement curr = circuit.get(i);
+      if (!prev.isActive() || !curr.isActive()) continue;
       //draw a line from prev body to this one
       drawConnection(prev.getT2Position(), curr.getT1Position());
     }
     CircuitElement prev = circuit.get(circuit.size() - 1);
     CircuitElement curr = circuit.get(0);
-    drawConnection(prev.getT2Position(), curr.getT1Position());
+    if (prev.isActive() && curr.isActive()) {
+      drawConnection(prev.getT2Position(), curr.getT1Position());
+    }
     shapeRenderer.end();
     batch.begin();
   }

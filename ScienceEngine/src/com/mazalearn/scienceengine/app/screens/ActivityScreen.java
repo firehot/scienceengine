@@ -2,18 +2,24 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
-import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
@@ -28,22 +34,24 @@ public class ActivityScreen extends AbstractScreen {
 
   private IScience2DController science2DController;
   private Profile profile;
-  private String experimentName;
+  private String domain;
+  private String activityName;
+  private String activityDescription;
 
-  public ActivityScreen(ScienceEngine scienceEngine, 
-      int level, String experimentName) {
+  public ActivityScreen(ScienceEngine scienceEngine, String domain, int activityLevel) {
     super(scienceEngine, null);
-    this.experimentName = experimentName;
-    String fileName = LevelUtil.getLevelFilename(experimentName, ".json", level);
+    this.domain = domain;
+    readDomainActivityInfo(activityLevel);
+    String fileName = LevelUtil.getLevelFilename(domain, ".json", activityLevel);
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       ScienceEngine.assetManager.unload(fileName);
     }
     this.science2DController = 
-        createExperimentController(experimentName, level, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        createExperimentController(domain, activityLevel, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     IScience2DView science2DView = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
-    profile.setCurrentLevel(level);
+    profile.setCurrentLevel(activityLevel);
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
@@ -69,13 +77,46 @@ public class ActivityScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
+    createIntroductionDialog().show(stage);
+  }
+  
+  private Dialog createIntroductionDialog() {
+    Dialog dialog = new Dialog(activityName, getSkin());
+    dialog.setSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+    
+    Label label = new Label(activityDescription, getSkin());
+    //label.setColor(Color.WHITE);
+    label.setWidth(400);
+    label.setWrap(true);
+    dialog.getContentTable().add(label).width(400);
+    dialog.button("OK", null);
+    return dialog;
+  }
+  
+  // TODO: duplicate of this method is in DomainHomeScreen also - combine
+  @SuppressWarnings("unchecked")
+  private void readDomainActivityInfo(int level) {
+    FileHandle file;
+    String fileName = "data/" + domain + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
+    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
+    file = Gdx.files.internal(fileName);
+    if (file == null) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not open file: " + fileName); //$NON-NLS-1$
+    }
+    String fileContents = file.readString();
+    OrderedMap<String, ?> rootElem = 
+        (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
+    Array<?> levels = (Array<?>) rootElem.get("Levels"); //$NON-NLS-1$
+    OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(level - 1);
+    this.activityName = (String) levelInfo.get("name"); //$NON-NLS-1$
+    this.activityDescription = (String) levelInfo.get("description"); //$NON-NLS-1$
   }
   
   @Override
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     DomainHomeScreen domainHomeScreen = 
-        new DomainHomeScreen(scienceEngine, experimentName);
+        new DomainHomeScreen(scienceEngine, domain);
     scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));
     profile.setCurrentLevel(0);
   }

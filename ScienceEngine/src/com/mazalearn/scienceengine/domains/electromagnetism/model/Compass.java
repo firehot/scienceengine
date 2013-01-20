@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -24,7 +23,6 @@ public class Compass extends Science2DBody {
    */
   public Compass(float x, float y, float angle) {
     super(ComponentType.Compass, x, y, angle);
-    getBody().setType(BodyType.StaticBody);
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
     circleShape.setRadius(0);

@@ -49,8 +49,7 @@ public class Guide extends AbstractTutor {
     this.guruWidth = width;
     this.guruHeight = height;
     if (probeMode) {
-      currentStage = 0;
-      subgoals.get(0).reinitialize(0, guruHeight - 100, 0, 0, true);
+      activateStage(0);
     }
   }
   
@@ -61,15 +60,23 @@ public class Guide extends AbstractTutor {
     if (currentStage < 0 || currentStage == subgoals.size()) return;
     Subgoal subgoal = subgoals.get(currentStage);
     while (subgoal.hasSucceeded()) {
+      subgoal.activate(false);
       currentStage++;
       stageBeginTime[currentStage] = ScienceEngine.getTime();
       science2DController.getGuru().done(true);
       if (currentStage == subgoals.size()) {
         break;
       }
-      subgoal = subgoals.get(currentStage);
-      subgoal.reinitialize(0, guruHeight - 50, 0, 0, true);
+      subgoal = activateStage(currentStage);
     }
+  }
+
+  private Subgoal activateStage(int currentStage) {
+    this.currentStage = currentStage;
+    Subgoal subgoal = subgoals.get(currentStage);
+    subgoal.reinitialize(0, guruHeight - 50, 0, 0, true);
+    subgoal.activate(true);
+    return subgoal;
   }
 
   /* (non-Javadoc)
@@ -92,6 +99,10 @@ public class Guide extends AbstractTutor {
   
   public void initialize(List<Subgoal> subgoals) {
     this.subgoals = subgoals;
+    for (Subgoal subgoal: subgoals) {
+      addActor(subgoal);
+      subgoal.activate(false);
+    }
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.stageBeginTime = new float[subgoals.size() + 1];
   }

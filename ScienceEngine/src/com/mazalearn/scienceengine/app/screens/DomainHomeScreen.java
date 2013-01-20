@@ -27,7 +27,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 /**
- * Experiment Home screen - shows all levels for that experiment.
+ * Activity Home screen - shows all activity levels for that domain.
  */
 public class DomainHomeScreen extends AbstractScreen {
 
@@ -35,21 +35,21 @@ public class DomainHomeScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 200;
   private static final int THUMBNAIL_HEIGHT = 150;
   private static final int INFO_HEIGHT = 50;
-  private Image[] experimentThumbs;
+  private Image[] activityThumbs;
   private Array<?> levels;
   private Array<?> resources;
   private LabelStyle smallLabelStyle;
   private Profile profile;
-  private String experimentName;
-
-  public DomainHomeScreen(ScienceEngine scienceEngine, String experimentName) {
+  private String domain;
+  
+  public DomainHomeScreen(ScienceEngine scienceEngine, String domain) {
     super(scienceEngine);
-    this.experimentName = experimentName;
+    this.domain = domain;
     setBackgroundColor(Color.DARK_GRAY);
-    readExperimentInfo();
+    readDomainActivityInfo();
     smallLabelStyle = new LabelStyle(getSmallFont(), Color.WHITE);
     profile = ScienceEngine.getProfileManager().retrieveProfile();
-    profile.setExperiment(experimentName);
+    profile.setDomain(domain);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -58,7 +58,7 @@ public class DomainHomeScreen extends AbstractScreen {
 
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    profile.setExperiment("");
+    profile.setDomain("");
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
       scienceEngine.setScreen(new SplashScreen(scienceEngine));
     } else {
@@ -70,20 +70,20 @@ public class DomainHomeScreen extends AbstractScreen {
   public void show() {
     super.show();
     if (profile.getCurrentLevel() != 0) {
-      gotoExperimentLevel(profile.getCurrentLevel());
+      gotoActivityLevel(profile.getCurrentLevel());
       return;
     }
     
     Table table = super.getTable();
     
     table.defaults().fill().center().padLeft(30);
-    table.add(getMsg().getString("ScienceEngine." + experimentName) +
+    table.add(getMsg().getString("ScienceEngine." + domain) +
         "- " + getMsg().getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     
-    table.add(createExperimentLevelPane()).fill();    
+    table.add(createActivityLevelPane()).fill();    
     table.row();
-    table.add(getMsg().getString("ScienceEngine." + experimentName) + "- " + 
+    table.add(getMsg().getString("ScienceEngine." + domain) + "- " + 
         getMsg().getString("ScienceEngine.ResourcesOnTheInternet")).colspan(100); //$NON-NLS-1$ //$NON-NLS-2$
     table.row();
     table.add(createResourcePane()).fill();
@@ -103,44 +103,45 @@ public class DomainHomeScreen extends AbstractScreen {
   }
 
   @SuppressWarnings("unchecked")
-  private Actor createExperimentLevelPane() {
-    Table experimentLevels = new Table(getSkin());
-    experimentLevels.setName("Experiment Levels");
-    ScrollPane experimentLevelPane = new ScrollPane(experimentLevels, getSkin());
-    experimentThumbs = new Image[levels.size];
+  private Actor createActivityLevelPane() {
+    Table activityLevels = new Table(getSkin());
+    activityLevels.setName("Activity Levels");
+    ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin());
+    activityThumbs = new Image[levels.size];
     
     for (int i = 0; i < levels.size; i++) {
       OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
-      Label label = new Label((String) levelInfo.get("name"), smallLabelStyle); //$NON-NLS-1$
+      String activityName = (String) levelInfo.get("name");
+      Label label = new Label(activityName, smallLabelStyle); //$NON-NLS-1$
       label.setWrap(true);
-      experimentLevels.add(label).width(THUMBNAIL_WIDTH).left().top().pad(5);
+      activityLevels.add(label).width(THUMBNAIL_WIDTH).left().top().pad(5);
     }
-    experimentLevels.row();
+    activityLevels.row();
     
     Texture overlayLock = new Texture("images/lock.png");
     boolean lock = false;
     for (int i = 0; i < levels.size; i++) {
       final int iLevel = i + 1;
-      String filename = LevelUtil.getLevelFilename(experimentName, ".png", iLevel);
+      String filename = LevelUtil.getLevelFilename(domain, ".png", iLevel);
       Pixmap pixmap;
       if (ScienceEngine.assetManager.isLoaded(filename)) {
         pixmap = ScienceEngine.assetManager.get(filename, Pixmap.class);
       } else {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
-      Image experimentThumb = 
+      Image activityThumb = 
           lock ? new OverlayImage(new Texture(pixmap), overlayLock) 
                : new Image(new Texture(pixmap));
-      experimentThumb.addListener(new ClickListener() {
+      activityThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          gotoExperimentLevel(iLevel);
+          gotoActivityLevel(iLevel);
         }
       });
-      experimentThumbs[i] = experimentThumb;
-      experimentLevels.add(experimentThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
+      activityThumbs[i] = activityThumb;
+      activityLevels.add(activityThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
     }
-    experimentLevels.row();
+    activityLevels.row();
 
     for (int i = 0; i < levels.size; i++) {
       OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
@@ -150,11 +151,11 @@ public class DomainHomeScreen extends AbstractScreen {
       ScrollPane scrollPane = new ScrollPane(label, getSkin());
       scrollPane.setScrollingDisabled(true, false);
       scrollPane.setFlickScroll(false);
-      experimentLevels.add(scrollPane).width(THUMBNAIL_WIDTH).height(INFO_HEIGHT).left().pad(5);
+      activityLevels.add(scrollPane).width(THUMBNAIL_WIDTH).height(INFO_HEIGHT).left().pad(5);
     }
-    experimentLevels.row();
-    experimentLevelPane.setScrollingDisabled(false, true);
-    return experimentLevelPane;
+    activityLevels.row();
+    activityLevelPane.setScrollingDisabled(false, true);
+    return activityLevelPane;
   }
 
   @SuppressWarnings("unchecked")
@@ -255,18 +256,18 @@ public class DomainHomeScreen extends AbstractScreen {
   }
 
 
-  private void gotoExperimentLevel(final int iLevel) {
+  private void gotoActivityLevel(final int iLevel) {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    AbstractScreen experimentLevelScreen = 
-        new ActivityScreen(scienceEngine, iLevel, experimentName);
+    AbstractScreen activityLevelScreen = 
+        new ActivityScreen(scienceEngine, domain, iLevel);
     // Set loading screen
-    scienceEngine.setScreen(new LoadingScreen(scienceEngine, experimentLevelScreen));
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, activityLevelScreen));
   }
   
   @SuppressWarnings("unchecked")
-  public void readExperimentInfo() {
+  public void readDomainActivityInfo() {
     FileHandle file;
-    String fileName = "data/" + experimentName + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
+    String fileName = "data/" + domain + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
     file = Gdx.files.internal(fileName);
     if (file == null) {
@@ -282,7 +283,7 @@ public class DomainHomeScreen extends AbstractScreen {
   @Override
   public void addAssets() {
     for (int i = 0; i < levels.size; i++) {
-      String filename = LevelUtil.getLevelFilename(experimentName, ".png", i + 1);
+      String filename = LevelUtil.getLevelFilename(domain, ".png", i + 1);
       ScienceEngine.assetManager.load(filename, Pixmap.class);
     }
   }

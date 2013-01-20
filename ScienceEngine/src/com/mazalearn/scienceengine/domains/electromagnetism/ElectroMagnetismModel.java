@@ -21,6 +21,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.HorseshoeMagne
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Wire;
 
 public class ElectroMagnetismModel extends AbstractScience2DModel {
@@ -55,6 +56,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case CurrentCoil: return new CurrentCoil(x, y, rotation);
     case Compass: return new Compass(x, y, rotation);
     case Drawing: return new Drawing(x, y, rotation);
+    case ScienceTrain: return new ScienceTrain(x, y, rotation);
     }
     return null;
   }

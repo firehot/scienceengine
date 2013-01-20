@@ -56,7 +56,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   public void done(boolean success) {
     if (success) {
       // TODO: put in a proper celebration here
-      science2DController.getGuru().setTitle("Congratulations! You move to the next Level ");
+      science2DController.getGuru().setGoal("Congratulations! You move to the next Level ");
       // TODO: generalize
       ScienceEngine.getPlatformAdapter().showInternalURL(
           "data/" + science2DController.getName() + "/" + science2DController.getLevel() + ".html");

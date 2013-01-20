@@ -91,7 +91,7 @@ public class Magnet extends AbstractMagnet {
   public void setStrength(float strength) {
     // Actually, should be volume - but we will use area for 2D
     // Strength depends on volume of magnetic material, 
-    // Change width, height appropriately using area instead of volume
+    // Change width, height appropriately - using area instead of volume
     float scale = (float) Math.sqrt(strength / magnetType.getStrength(CANONICAL_AREA));
     if (scale * CANONICAL_WIDTH > maxWidth) {
       // set width to maxWidth and set strength to max possible.

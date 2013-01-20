@@ -76,6 +76,11 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
+  public Skin getSkin() {
+    return skin;
+  }
+  
+  @Override
   public void reload() {
     new LevelLoader(this).reload();
   }

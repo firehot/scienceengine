@@ -73,7 +73,7 @@ class Dashboard extends Table {
     scoreLabel.setText(String.valueOf(score));
   }
   
-  public void setStatus(String text) {
+  public void setGoal(String text) {
     // For a table, x and y are at center, top of table - not at bottom left
     this.setY(getParent().getHeight() - getPrefHeight() / 2);
     this.setX(getParent().getWidth()/2);

@@ -29,7 +29,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrain;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
@@ -89,8 +89,8 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new DynamoActor(body, textureRegion);
     case Magnet:
       return new MagnetActor(body, textureRegion);
-    case Train:
-      return new ScienceTrain(science2DView);
+    case ScienceTrain:
+      return new ScienceTrainActor(body, science2DView, skin);
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);

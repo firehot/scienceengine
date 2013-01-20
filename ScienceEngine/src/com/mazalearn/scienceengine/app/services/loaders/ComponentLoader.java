@@ -56,8 +56,8 @@ public class ComponentLoader {
     String type = (String) component.get("type");
     String viewSpec = (String) component.get("viewspec");
     Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
-    if (type == null)
-      return;
+    if (type == null) return;
+    
     float x = (Float) LevelLoader.nvl(component.get("x"), 0f);
     float y = (Float) LevelLoader.nvl(component.get("y"), 0f);
     float rotation = (Float) LevelLoader.nvl(component.get("rotation"), 0f);

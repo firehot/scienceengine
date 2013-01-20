@@ -213,8 +213,8 @@ public class ScienceEngine extends Game {
       int i = 3;
       if (pathSegments.length > i && isSupportedSubject(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
-      if (pathSegments.length > i && findSupportedTopic(pathSegments[i]) != null) {
-        String experimentName = findSupportedTopic(pathSegments[i]);
+      if (pathSegments.length > i && findSupportedDomain(pathSegments[i]) != null) {
+        String domain = findSupportedDomain(pathSegments[i]);
         Integer iLevel = null;
         if (query != null) {
           String[] queryParts = query.toLowerCase().split("&");
@@ -223,9 +223,10 @@ public class ScienceEngine extends Game {
           }
         }
         if (iLevel == null) {
-          return new DomainHomeScreen(this, experimentName);
+          return new DomainHomeScreen(this, domain);
         }
-        return new ActivityScreen(this, iLevel, experimentName);
+        // TODO: below 3rd arg should be domain ilevel-1 activity name, description.
+        return new ActivityScreen(this, domain, iLevel);
       }
     }
     return new SplashScreen(this);
@@ -243,7 +244,7 @@ public class ScienceEngine extends Game {
     return boards.contains(token);
   }
   
-  private String findSupportedTopic(String token) {
+  private String findSupportedDomain(String token) {
     String[] topics = new String[] {"Electromagnetism", "Waves", "StatesOfMatter"};
     for (String topic: topics) {
       if (topic.toLowerCase().equals(token)) return topic;

@@ -102,6 +102,7 @@ public class Hinter extends Group {
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
     jumpingMode = false; // TODO: very irritating
     image = SCIENTISTS.get(scientistIndex);
+    // TODO: move hintbutton into dashboard
     hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     image.setVisible(true);
     image.setY(0);

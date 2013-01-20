@@ -7,6 +7,7 @@ public interface ICurrent {
   public interface CircuitElement {
     public Vector2 getT1Position();
     public Vector2 getT2Position();
+    public boolean isActive();
   }
   
   // Current sinks

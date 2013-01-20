@@ -16,7 +16,7 @@ public enum ComponentType implements IComponentType {
   HorseshoeMagnet("images/horseshoemagnet.png"),
   CurrentCoil("images/currentcoil_nocommutator.png"), 
   Drawing("images/draw.png"), 
-  Train("images/engine.png"), 
+  ScienceTrain("images/engine.png"), 
   Dynamo("images/copperwire.png"), 
   Magnet("images/neodymium.png");
   

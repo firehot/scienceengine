@@ -45,6 +45,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.setSize(width, height);
     new ComponentLoader(science2DController).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DController.getModel());
+    science2DController.getControlPanel().refresh();
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());
