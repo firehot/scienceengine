@@ -59,7 +59,9 @@ public class Parser {
      * If null, any variable is allowed. */
     private HashMap<Variable, Variable> allowedVariables = null;
 
-    private Map<String, IFunction> functions = Collections.emptyMap();
+    private Map<String, IFunction.A0> functions0 = Collections.emptyMap();
+    private Map<String, IFunction.A1> functions1 = Collections.emptyMap();
+    private Map<String, IFunction.A2> functions2 = Collections.emptyMap();
 
     /** Return the expression denoted by the input string.
     *
@@ -69,8 +71,11 @@ public class Parser {
        return new Parser().parseString(input);
    }
    
-   public void allowFunctions(Map<String, IFunction> functions) {
-     this.functions = functions;
+   public void allowFunctions(Map<String, IFunction.A0> functions0, 
+       Map<String, IFunction.A1> functions1, Map<String, IFunction.A2> functions2) {
+     this.functions0 = functions0;
+     this.functions1 = functions1;
+     this.functions2 = functions2;
    }
 
     /** Adjust the set of allowed variables: create it (if not yet
@@ -206,6 +211,14 @@ public class Parser {
           return lit;
         }
         case Token.TT_WORD: {
+            // Injected function arity 0
+            IFunction.A0 function = functions0.get(token.sval);
+            if (function != null) {
+              nextToken();
+              expect('(');
+              expect(')');
+              return Expr.makeFunction(rators1[0], function);
+            }
             for (int i = 0; i < procs1.length; ++i)
                 if (procs1[i].equals(token.sval)) {
                     nextToken();
@@ -214,14 +227,14 @@ public class Parser {
                     expect(')');
                     return Expr.makeApp1(rators1[i], rand);
                 }
-            // Injected functions
-            IFunction function = functions.get(token.sval);
-            if (function != null) {
+            // Injected function arity 1
+            IFunction.A1 function1 = functions1.get(token.sval);
+            if (function1 != null) {
               nextToken();
               expect('(');
               Expr rand = parseExpr(0);
               expect(')');
-              return Expr.makeFunction(rators1[0], function, rand);
+              return Expr.makeFunction(rators1[0], function1, rand);
             }
 
             for (int i = 0; i < procs2.length; ++i)
@@ -235,6 +248,17 @@ public class Parser {
                     return Expr.makeApp2(rators2[i], rand1, rand2);
                 }
 
+            // Injected function arity 2
+            IFunction.A2 function2 = functions2.get(token.sval);
+            if (function2 != null) {
+              nextToken();
+              expect('(');
+              Expr rand0 = parseExpr(0);
+              expect(',');
+              Expr rand1 = parseExpr(0);
+              expect(')');
+              return Expr.makeFunction(rators1[0], function2, rand0, rand1);
+            }
             if (token.sval.equals("if")) {
                 nextToken();
                 expect('(');

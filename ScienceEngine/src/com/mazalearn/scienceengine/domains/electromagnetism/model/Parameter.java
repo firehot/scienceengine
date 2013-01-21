@@ -24,8 +24,7 @@ public enum Parameter implements IParameter {
   Cost, 
   AreaOrientation, 
   Width, 
-  Color, 
-  State;
+  Color;
   
   private Parameter() {
   }

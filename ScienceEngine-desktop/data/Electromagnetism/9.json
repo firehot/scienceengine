@@ -26,6 +26,7 @@ plan: [
    goal: "Catch the Science Train - Light up your own coach",
    success:200,
    timelimit: 300,
+   successactions: "Upload()",
    subgoals:[
          {goal: "Draw your coach and wheels in the outlined space.\nTouch Next when you are done.", 
             components:[{type: "Drawing", visible:true}],

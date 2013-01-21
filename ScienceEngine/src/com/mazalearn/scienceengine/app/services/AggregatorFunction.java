@@ -4,7 +4,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.lang.IFunction;
 
 // Currently all functions take exactly one argument and produce float result
-public enum Function implements IFunction {
+public enum AggregatorFunction implements IFunction.A1 {
   Min(new Aggregator() {
     float min;
     public void init() { min = 0; }
@@ -32,7 +32,7 @@ public enum Function implements IFunction {
   
   private Aggregator aggregator;
 
-  private Function(Aggregator aggregator) {
+  private AggregatorFunction(Aggregator aggregator) {
     this.aggregator = aggregator;
   }
   

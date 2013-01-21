@@ -25,19 +25,19 @@ public class ControlPanel extends Table {
   private final IScience2DModel science2DModel;
   private final Skin skin;
   private List<Controller> controllers = new ArrayList<Controller>();
-  private String experimentName;
+  private String domain;
   private Table modelControlPanel;
   private TextButton title;
   private IScience2DController science2DController;
   private Controller viewController;
   
-  public ControlPanel(IScience2DController science2DController, String experimentName, Skin skin) {
+  public ControlPanel(IScience2DController science2DController, String domain, Skin skin) {
     super(skin);
     this.skin = skin;
     this.setName("ControlPanel");
     this.science2DController = science2DController;
     this.science2DModel = science2DController.getModel();
-    this.experimentName = experimentName;
+    this.domain = domain;
     this.defaults().fill();
     createViewControlPanel(this);
     this.modelControlPanel = createModelControlPanel(skin);
@@ -101,9 +101,9 @@ public class ControlPanel extends Table {
   private void createViewControlPanel(Table parentPanel) {
     final ViewControls viewControls = new ViewControls(science2DController, skin);
     // Register experiment name
-    this.title = new TextButton(experimentName, 
+    this.title = new TextButton(domain, 
         skin.get("body", TextButtonStyle.class));
-    title.setName(experimentName); 
+    title.setName(domain); 
     title.setChecked(viewControls.isAvailable());
     title.addListener(new ClickListener() {
       @Override

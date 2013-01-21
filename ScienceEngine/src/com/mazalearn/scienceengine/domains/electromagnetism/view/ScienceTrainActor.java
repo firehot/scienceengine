@@ -1,8 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,30 +12,25 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.utils.Net;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 
 public class ScienceTrainActor extends Group {
   private final IScience2DView science2DView;
   private static final int NUM_ENGINE_WHEELS = 4;
   Actor coach;
   private TextureRegion lightTexture;
-  private ScienceTrain train;
+  private boolean drawLight;
 
   public ScienceTrainActor(Science2DBody body, IScience2DView science2DView, Skin skin) {
     super();
-    this.train = (ScienceTrain) body;
+    setName(ComponentType.ScienceTrain.name());
     body.setActive(true);
     this.science2DView = science2DView;
     lightTexture = createLightTexture(Color.YELLOW);
     Image engine = new Image(ScienceEngine.assetManager.get("images/engine.png", Texture.class));
-/*    addAction(Actions.repeat(-1, 
-        Actions.sequence(
-            Actions.moveBy(AbstractScreen.VIEWPORT_WIDTH, 0, 20), 
-            Actions.moveBy(-AbstractScreen.VIEWPORT_WIDTH,0))));
-*/    
     addActor(engine);
     engine.setSize(180, 35);
     // Add wheels to the engine
@@ -62,13 +54,13 @@ public class ScienceTrainActor extends Group {
   }
   
   private void drawLight(SpriteBatch batch) {
-    float intensity = MathUtils.sinDeg(45);
+    float intensity = MathUtils.sinDeg(getX());
     float diameter = 32 * intensity;
     float lightRadius = diameter / 2;
     Color c = batch.getColor();
     batch.setColor(1, 1, 1, 0.5f + intensity * 0.25f);
-    batch.draw(lightTexture, getX() - 20 - lightRadius, 
-        getY() + 35 - lightRadius, diameter, diameter);
+    batch.draw(lightTexture, getX() - 40 - lightRadius, 
+        getY() + 15 - lightRadius, diameter, diameter);
     batch.setColor(c);
   }
   
@@ -84,16 +76,21 @@ public class ScienceTrainActor extends Group {
       }
     }
     super.draw(batch, parentAlpha);
-    if (false) { // TODO: when to show light?
+    if (drawLight) {
       drawLight(batch);
     }
   }
 
-  private void uploadToServer() {
-    DrawingActor coach = (DrawingActor) science2DView.findActor("Drawing");
-    Map<String, String> postParams = new HashMap<String, String>();
-    postParams.put("User", ScienceEngine.getUserEmail());
-    postParams.put("UserName", ScienceEngine.getUserName());
-    Net.httpPost("/upload", "application/octet-stream", postParams, coach.getDrawingPng());
+  public void setDrawLight(boolean drawLight) {
+    this.drawLight = drawLight;
+    if (drawLight) {
+      setPosition(0, getY());
+      addAction(Actions.repeat(-1, 
+        Actions.sequence(
+            Actions.moveBy(AbstractScreen.VIEWPORT_WIDTH, 0, 20), 
+            Actions.moveBy(-AbstractScreen.VIEWPORT_WIDTH,0))));
+    } else {
+      this.clearActions();
+    }    
   }
 }

@@ -123,11 +123,18 @@ public class RegressionTest {
         assertEquals(Type.BOOL.name(), x.type.name());
         assertEquals("1.0", x.svalue());
 
-        // Aggregator injection
-        Map<String, IFunction> functions = new HashMap<String, IFunction>();
-        functions.put("Count", new IFunction() { public float eval(String name) { return -10;} });
-        parser.allowFunctions(functions);
-        expect(-10, "Count(x)");
+        // Function injection
+        Map<String, IFunction.A0> functions0 = new HashMap<String, IFunction.A0>();
+        functions0.put("Count0", new IFunction.A0() { public float eval() { return -10;} });
+        Map<String, IFunction.A1> functions1 = new HashMap<String, IFunction.A1>();
+        functions1.put("Count1", new IFunction.A1() { public float eval(String name) { return -20;} });
+        Map<String, IFunction.A2> functions2 = new HashMap<String, IFunction.A2>();
+        functions2.put("Count2", new IFunction.A2() { public float eval(String name0, String name1) { return -30;} });
+        parser.allowFunctions(functions0, functions1, functions2);
+
+        expect(-10, "Count0()");
+        expect(-20, "Count1(x)");
+        expect(-30, "Count2(x,x)");
         
         System.out.println("All tests passed.");
     }

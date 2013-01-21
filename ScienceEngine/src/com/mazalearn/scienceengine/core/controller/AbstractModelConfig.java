@@ -15,37 +15,43 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   private float low, high;    // Range
   @SuppressWarnings("rawtypes")
   private Enum[] values;            // List
+  private String name;        // Name of command - for command type only
+  
+  // Alternative Command type constructor used in views
+  public AbstractModelConfig(String name) {
+    this(ConfigType.COMMAND, null, null, false, 0, 0, null, name);
+  }
   
   // Command type constructor
   public AbstractModelConfig(Science2DBody body, IParameter parameter) {
-    this(ConfigType.COMMAND, body, parameter, false, 0, 0, null);
+    this(ConfigType.COMMAND, body, parameter, false, 0, 0, null, null);
   }
   
   // Text type constructor
   public AbstractModelConfig(Science2DBody body, IParameter parameter, String text) {
-    this(ConfigType.TEXT, body, parameter, false, 0, 0, null);
+    this(ConfigType.TEXT, body, parameter, false, 0, 0, null, null);
   }
   
   // Toggle type constructor
   public AbstractModelConfig(Science2DBody body, IParameter parameter, boolean on) {
-    this(ConfigType.TOGGLE, body, parameter, on, 0, 0, null);
+    this(ConfigType.TOGGLE, body, parameter, on, 0, 0, null, null);
   }
   
   // Range type constructor
   public AbstractModelConfig(Science2DBody body, IParameter parameter, float low, float high) {
-    this(ConfigType.RANGE, body, parameter, false, low, high, null);
+    this(ConfigType.RANGE, body, parameter, false, low, high, null, null);
   }
   
   // List type constructor
   @SuppressWarnings("rawtypes")
   public AbstractModelConfig(Science2DBody body, IParameter parameter, Enum[] values) {
-    this(ConfigType.LIST, body, parameter, false, 0, 0, values);
+    this(ConfigType.LIST, body, parameter, false, 0, 0, values, null);
   }
   
   // Canonical constructor - only used internally
   @SuppressWarnings("rawtypes")
   private AbstractModelConfig(ConfigType type, Science2DBody body, IParameter parameter, 
-      boolean on, float low, float high, Enum[] values) {
+      boolean on, float low, float high, Enum[] values, String name) {
     this.type = type;
     this.body = body;
     this.parameter = parameter;
@@ -54,6 +60,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     this.high = high;
     this.values = values;
     this.isPermitted = false;
+    this.name = name;
   }
   
   @Override
@@ -67,7 +74,10 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     if (body != null) {
       return body.name() + "." + parameter.name();
     }
-    return parameter.name();
+    if (parameter != null) {
+      return parameter.name();
+    }
+    return name;
   }
   @Override public Science2DBody getBody() { return body; }
   @Override public IParameter getParameter() { return parameter; }

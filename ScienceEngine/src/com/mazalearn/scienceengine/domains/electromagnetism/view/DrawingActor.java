@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -45,9 +44,46 @@ public class DrawingActor extends Science2DActor {
   private Texture coachTexture;
   private boolean hasChangedSinceSnapshot = true; // Force an initial snapshot
   private Pixmap snapshot;
-  private Group coach;
+  private Coach coach;
   private String viewSpec;
+  
+  public static class Coach extends Group {
+    private Label userCurrentLabel;
     
+    private Coach(Texture coachTexture, Skin skin) {
+      super();
+      Label userLabel = new Label(ScienceEngine.getUserName(), skin);
+      userLabel.setPosition(0, COACH_HEIGHT);
+      
+      userCurrentLabel = new Label("", skin);
+      userCurrentLabel.setPosition(COACH_WIDTH / 2, COACH_HEIGHT);
+      
+      Image coachBody = new Image(new TextureRegion(coachTexture, 0, 0, COACH_WIDTH, COACH_HEIGHT));
+      this.setSize(COACH_WIDTH, COACH_HEIGHT);
+      coachBody.setPosition(0, 0);
+      
+      Image wheel1 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, 0, WHEEL_DIA, WHEEL_DIA));
+      wheel1.setPosition(WHEEL_OFFSET, 0);
+      wheel1.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
+      wheel1.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
+      
+      Image wheel2 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, WHEEL_DIA, WHEEL_DIA, WHEEL_DIA));
+      wheel2.setPosition(COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA, 0);
+      wheel2.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
+      wheel2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
+      
+      this.addActor(userLabel);
+      this.addActor(userCurrentLabel);
+      this.addActor(coachBody);
+      this.addActor(wheel1);
+      this.addActor(wheel2);
+    }
+    
+    public void setCurrent(float current) {
+      userCurrentLabel.setText(String.valueOf(current));
+    }
+  }
+  
   public DrawingActor(Science2DBody body, TextureRegion textureRegion, 
       String name, BitmapFont font, Skin skin) {
     super(body, textureRegion);
@@ -59,29 +95,7 @@ public class DrawingActor extends Science2DActor {
     this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
     this.coachTexture = new Texture(snapshot);
     
-    this.coach = new Group();
-    Label userLabel = new Label(ScienceEngine.getUserName(), skin);
-    userLabel.setPosition(0, COACH_HEIGHT);
-    
-    coach.addActor(userLabel);
-    Image coachBody = new Image(new TextureRegion(coachTexture, 0, 0, COACH_WIDTH, COACH_HEIGHT));
-    coach.setSize(COACH_WIDTH, COACH_HEIGHT);
-    coachBody.setPosition(0, 0);
-    
-    Image wheel1 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, 0, WHEEL_DIA, WHEEL_DIA));
-    wheel1.setPosition(WHEEL_OFFSET, 0);
-    wheel1.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
-    wheel1.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
-    
-    Image wheel2 = new Image(new TextureRegion(coachTexture, COACH_WIDTH, WHEEL_DIA, WHEEL_DIA, WHEEL_DIA));
-    wheel2.setPosition(COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA, 0);
-    wheel2.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
-    wheel2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
-    
-    coach.addActor(coachBody);
-    coach.addActor(wheel1);
-    coach.addActor(wheel2);
-    
+    this.coach = new Coach(coachTexture, skin);
     this.removeListener(getListeners().get(0));
     this.addListener(new ClickListener() {
       @Override
@@ -188,7 +202,7 @@ public class DrawingActor extends Science2DActor {
     shapeRenderer.end();
   }
 
-  public Actor getCoach() {
+  public Coach getCoach() {
     return coach;
   }
   

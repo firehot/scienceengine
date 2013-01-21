@@ -57,7 +57,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     return !science2DModel.isEnabled();
   }
   
-  public List<IModelConfig<?>> getAllConfigs() {
+  @Override
+  public List<IModelConfig<?>> getCommands() {
     if (viewCommands == null) {
       viewCommands = new ArrayList<IModelConfig<?>>();
       initializeCommands(viewCommands);

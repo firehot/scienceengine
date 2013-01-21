@@ -37,6 +37,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
 
   @Override
+  public void doSuccessActions() {
+  }
+
+  @Override
   public abstract void activate(boolean activate);
 
   @Override

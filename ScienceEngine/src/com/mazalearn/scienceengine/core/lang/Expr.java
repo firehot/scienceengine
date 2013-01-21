@@ -110,8 +110,16 @@ public abstract class Expr {
         else
             return cond;
     }
-    public static Expr makeFunction(int rator, IFunction function, Expr rand) {
+    public static Expr makeFunction(int rator, IFunction.A0 function) {
+      Expr app = new FunctionExpr(rator, function);
+      return app;
+    }
+    public static Expr makeFunction(int rator, IFunction.A1 function, Expr rand) {
       Expr app = new FunctionExpr(rator, function, rand);
+      return app;
+    }
+    public static Expr makeFunction(int rator, IFunction.A2 function, Expr rand0, Expr rand1) {
+      Expr app = new FunctionExpr(rator, function, rand0, rand1);
       return app;
     }
 }
@@ -255,22 +263,50 @@ class BinaryExpr extends Expr {
 }
 
 class FunctionExpr extends Expr {
+  int arity;
   int rator;
-  Variable rand;
-  IFunction function;
+  Variable rand0, rand1;
+  IFunction.A0 function0;
+  IFunction.A1 function1;
+  IFunction.A2 function2;
 
-  FunctionExpr(int rator, IFunction function, Expr rand) { 
+  FunctionExpr(int rator, IFunction.A0 function) {
+    this.arity = 0;
+    this.rator = rator;
+    this.function0 = function;
+    this.type = Type.DOUBLE;
+  }
+  
+  FunctionExpr(int rator, IFunction.A1 function, Expr rand) {
+      this.arity = 1;
       this.rator = rator;
-      this.function = function;
+      this.function1 = function;
       if (!(rand instanceof Variable)) {
-        throw new IllegalArgumentException("Aggregator argument must be a variable");
+        throw new IllegalArgumentException("AggregatorFunction argument must be a variable");
       }
-      this.rand = (Variable) rand;
+      this.rand0 = (Variable) rand;
+      this.type = Type.DOUBLE;
+  }
+
+  FunctionExpr(int rator, IFunction.A2 function, Expr rand0, Expr rand1) {
+      this.arity = 2;
+      this.rator = rator;
+      this.function2 = function;
+      if (!(rand0 instanceof Variable) || !(rand1 instanceof Variable)) {
+        throw new IllegalArgumentException("AggregatorFunction arguments must be variables");
+      }
+      this.rand0 = (Variable) rand0;
+      this.rand1 = (Variable) rand1;
       this.type = Type.DOUBLE;
   }
 
   public double fvalue() {
-      return function.eval(rand.name());
+    switch (arity) {
+    case 0: return function0.eval();
+    case 1: return function1.eval(rand0.name());
+    case 2: return function2.eval(rand0.name(), rand1.name());
+    }
+    return 0;
   }
   
   public String svalue() {

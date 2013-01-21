@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.app.services.Function;
+import com.mazalearn.scienceengine.app.services.AggregatorFunction;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.IFunction;
@@ -67,17 +67,19 @@ public class Subgoal extends AbstractTutor {
 
   private Parser createParser() {
     Parser parser = new Parser();
-    Map<String, IFunction> functions = new HashMap<String, IFunction>();
-    for (Function function: Function.values()) {
-      functions.put(function.name(), function);
+    Map<String, IFunction.A0> functions0 = new HashMap<String, IFunction.A0>();
+    Map<String, IFunction.A1> functions1 = new HashMap<String, IFunction.A1>();
+    Map<String, IFunction.A2> functions2 = new HashMap<String, IFunction.A2>();
+    for (AggregatorFunction aggregatorFunction: AggregatorFunction.values()) {
+      functions1.put(aggregatorFunction.name(), aggregatorFunction);
     }
-    functions.put("UserInput", new IFunction() {
+    functions1.put("UserInput", new IFunction.A1() {
       @Override
       public float eval(String parameter) {
         return isUserNext ? 1 : 0;
       }     
     });
-    parser.allowFunctions(functions);
+    parser.allowFunctions(functions0, functions1, functions2);
     return parser;
   }
 

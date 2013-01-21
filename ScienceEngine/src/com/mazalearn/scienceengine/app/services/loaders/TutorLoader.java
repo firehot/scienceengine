@@ -52,7 +52,8 @@ class TutorLoader {
     if (tutor instanceof Guide) {
       Array<?> subgoalsObj = (Array<?>) tutorObj.get("subgoals");
       List<Subgoal> subgoals = loadSubgoals(subgoalsObj);
-      ((Guide) tutor).initialize(subgoals);
+      String successActions = (String) tutorObj.get("successactions");
+      ((Guide) tutor).initialize(subgoals, successActions);
       return tutor;
     }
     if (tutor instanceof Abstractor) {

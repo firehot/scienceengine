@@ -27,6 +27,7 @@ public class Dynamo extends Science2DBody implements ICurrent.Source {
   private AreaOrientation areaOrientation = AreaOrientation.ParallelToRotation;
   private int numberOfLoops = 1;
   private float minWidth = 16f;
+  private float maxCurrent;
 
   public enum AreaOrientation {
     ParallelToRotation, PerpendicularToRotation
@@ -75,11 +76,13 @@ public class Dynamo extends Science2DBody implements ICurrent.Source {
   public void setMagnetFlux(float magnetFlux) {
     float current = 0;
     if (areaOrientation == AreaOrientation.ParallelToRotation) {
-      current = SCALE_OUTPUT * magnetFlux * numberOfLoops; 
+      current = maxCurrent = SCALE_OUTPUT * magnetFlux * numberOfLoops; 
     } else {
       float area = getWidth() * getHeight();
       float angle = getBody().getAngle();
-      current = SCALE_OUTPUT * magnetFlux * area; 
+      current = SCALE_OUTPUT * magnetFlux * area;
+      // Approximation of maxCurrent for simplicity
+      maxCurrent = current * numberOfLoops;
       float scale = 1;
       for (int i = 0; i < numberOfLoops; i++) {
         scale += MathUtils.sin(angle);
@@ -103,11 +106,19 @@ public class Dynamo extends Science2DBody implements ICurrent.Source {
   }
   
   /**
-   * Gets the current in the wire
+   * Gets the current in the dynamo coil
    * @return the current
    */
   public float getCurrent() {
     return current;
+  }
+
+  /**
+   * Gets the peak current in the dynamo coil
+   * @return the max current
+   */
+  public float getMaxCurrent() {
+    return maxCurrent;
   }
 
   public float getWidth() {

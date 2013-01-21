@@ -12,6 +12,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 
 public class CircuitActor extends Actor {
+  public static final String COMPONENT_TYPE = "CircuitElement";
   private static final int WIRE_WIDTH = 4;
   private final List<CircuitElement> circuit;
   private ShapeRenderer shapeRenderer;
@@ -22,7 +23,7 @@ public class CircuitActor extends Actor {
     super();
     this.circuit = circuit;
     this.shapeRenderer = new ShapeRenderer();
-    this.setName("CircuitElement");
+    this.setName(COMPONENT_TYPE);
   }
   
   @Override

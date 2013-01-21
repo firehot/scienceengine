@@ -21,6 +21,8 @@ import com.google.appengine.api.users.User;
 public class UploadServlet extends HttpServlet {
 
   private static final String COACH_IMAGE = "coach";
+  private static final String CURRENT = "current";
+  private static final String COLOR = "color";
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -28,15 +30,18 @@ public class UploadServlet extends HttpServlet {
     response.getWriter().append("Post received");
     String userEmail = request.getHeader("User");
     String userName = request.getHeader("UserName");
-    System.out.println("User: " + userEmail);
+    String current = request.getHeader("Current");
+    String color = request.getHeader("color");
+    System.out.println("User: " + userEmail + " current: " + current + " color:" + color);
     BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
     byte[] pngImage = new byte[request.getContentLength()];
     bis.read(pngImage);
-    saveUserImage(userEmail, userName, pngImage);
+    saveUserImage(userEmail, userName, pngImage, current, color);
     bis.close();
   }
 
-  public void saveUserImage(String userEmail, String userName, byte[] pngImage) 
+  public void saveUserImage(String userEmail, String userName, byte[] pngImage, 
+      String current, String color) 
       throws IllegalStateException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
@@ -49,6 +54,8 @@ public class UploadServlet extends HttpServlet {
       ds.put(entity);
     }
     entity.setProperty(COACH_IMAGE, new Blob(pngImage));
+    entity.setProperty(CURRENT, Float.parseFloat(current));
+    entity.setProperty(COLOR, color);
     ds.put(entity);
     System.out.println("User " + userEmail + " saved image");
   }

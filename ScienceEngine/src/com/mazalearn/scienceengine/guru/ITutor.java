@@ -23,4 +23,7 @@ public interface ITutor {
   // Will not be able to successfully complete all stages
   public boolean hasFailed();
 
+  // When tutor is successful, execute these actions
+  void doSuccessActions();
+
 }
