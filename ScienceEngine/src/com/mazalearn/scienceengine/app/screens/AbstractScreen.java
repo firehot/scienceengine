@@ -66,7 +66,7 @@ public abstract class AbstractScreen implements Screen {
 
   protected Actor createBackButton() {
     final TextButton backButton = 
-        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin()); //$NON-NLS-1$
+        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin(), "body"); //$NON-NLS-1$
     backButton.setName("BackButton");
     backButton.setPosition(5, VIEWPORT_HEIGHT - 30);
     backButton.setWidth(80);
