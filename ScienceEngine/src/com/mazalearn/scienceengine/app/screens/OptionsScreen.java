@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -118,17 +117,6 @@ public class OptionsScreen extends AbstractScreen {
     table.add(getMsg().getString("ScienceEngine.Volume")); //$NON-NLS-1$
     table.add(volumeSlider);
     table.add(volumeValue).width(40);
-
-    // register the back button
-    TextButton backButton = new TextButton(getMsg().getString("ScienceEngine.BackToMain"), getSkin()); //$NON-NLS-1$
-    backButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        goBack();
-      }
-    });
-    table.row();
-    table.add(backButton).size(250, 60).colspan(3);
   }
 
   /**

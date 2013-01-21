@@ -7,14 +7,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
 /**
  * The base class for all scienceEngine screens.
@@ -57,10 +61,27 @@ public abstract class AbstractScreen implements Screen {
         return super.keyDown(event, keycode);
       }      
     });
+    stage.addActor(createBackButton());
+  }
+
+  protected Actor createBackButton() {
+    final TextButton backButton = 
+        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin()); //$NON-NLS-1$
+    backButton.setName("BackButton");
+    backButton.setPosition(5, VIEWPORT_HEIGHT - 30);
+    backButton.setWidth(80);
+    backButton.addListener(new ClickListener() {
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        goBack();
+      }      
+    });
+    return backButton;
   }
 
   public void setStage(Stage stage) {
     this.stage = stage;
+    stage.addActor(createBackButton());
     Gdx.input.setInputProcessor(stage);    
   }
 

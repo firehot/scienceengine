@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -22,9 +21,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
-import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 
 /**
  * Activity Home screen - shows all activity levels for that domain.
@@ -59,11 +57,7 @@ public class DomainHomeScreen extends AbstractScreen {
   protected void goBack() {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     profile.setDomain("");
-    if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
-      scienceEngine.setScreen(new SplashScreen(scienceEngine));
-    } else {
-      scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
-    }
+    scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
   }
   
   @Override
@@ -88,18 +82,6 @@ public class DomainHomeScreen extends AbstractScreen {
     table.row();
     table.add(createResourcePane()).fill();
     table.row();
-    
-    // register the back button
-    TextButton backButton = 
-        new TextButton(getMsg().getString("ScienceEngine.BackToActivities"), getSkin()); //$NON-NLS-1$
-    backButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        goBack();
-      }
-    });
-    table.row();
-    table.add(backButton).fill().colspan(100).pad(10, 20, 10, 20);
   }
 
   @SuppressWarnings("unchecked")

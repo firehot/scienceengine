@@ -40,7 +40,7 @@ public class WaveView extends AbstractScience2DView {
 
   @Override
   public void prepareView() {
-    waveBox = (WaveBox) findActor("WaveBox");
+    waveBox = (WaveBox) findActor("Wavebox");
     hand = (Hand) findActor("Hand");
     boundary = (Boundary) findActor("Boundary");
     boundary.setWaveBox(waveBox);

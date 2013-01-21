@@ -1,10 +1,7 @@
 package com.mazalearn.scienceengine.app.screens;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -45,17 +42,6 @@ public class HighScoresScreen extends AbstractScreen {
     table.row();
     table.add("Episode 3");
     table.add(episode3HighScore);
-
-    // register the back button
-    TextButton backButton = new TextButton("Back to main menu", getSkin());
-    backButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        goBack();
-      }
-    });
-    table.row();
-    table.add(backButton).size(250, 60).colspan(2);
   }
   
   @Override

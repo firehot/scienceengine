@@ -7,14 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.domains.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.domains.waves.WaveController;
@@ -55,16 +54,6 @@ public class ChooseDomainScreen extends AbstractScreen {
     // create the domains Table
     table.add(createDomainsSelector());    
     table.row();
-
-    // register the back button
-    TextButton backButton = new TextButton(getMsg().getString("ScienceEngine.BackToMain"), getSkin()); //$NON-NLS-1$
-    backButton.addListener(new ClickListener() {
-      public void clicked(InputEvent event, float x, float y) {
-        goBack();
-      }
-    });
-    table.row();
-    table.add(backButton).colspan(10);
   }
 
   public Actor createDomainsSelector() {

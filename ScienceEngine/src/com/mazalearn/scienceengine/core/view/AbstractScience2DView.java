@@ -183,7 +183,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     // Register control panel
     this.addActor(controlPanel);
     // register the back button
-    this.addActor(createBackButton());
+    //this.addActor(createBackButton());
     
     // Register stage components
     for (StageComponent stageComponent: StageComponent.values()) {

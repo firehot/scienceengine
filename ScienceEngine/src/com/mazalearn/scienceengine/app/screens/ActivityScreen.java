@@ -58,6 +58,7 @@ public class ActivityScreen extends AbstractScreen {
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
+      ((Stage) science2DView).addActor(createBackButton());
       this.setStage(levelEditor);
     } else {
       this.setStage((Stage) science2DView);
