@@ -82,11 +82,11 @@ public class Profile implements Serializable {
   }
 
   public void setDomain(String name) {
-    properties.put("experiment", name);
+    properties.put("domain", name);
   }
 
   public String getDomain() {
-    String s = properties.get("experiment");
+    String s = properties.get("domain");
     return s == null ? "" : s;
   }
 

@@ -100,9 +100,8 @@ public class ControlPanel extends Table {
 
   private void createViewControlPanel(Table parentPanel) {
     final ViewControls viewControls = new ViewControls(science2DController, skin);
-    // Register experiment name
-    this.title = new TextButton(domain, 
-        skin.get("body", TextButtonStyle.class));
+    // Register domain
+    this.title = new TextButton(domain, skin.get("body", TextButtonStyle.class));
     title.setName(domain); 
     title.setChecked(viewControls.isAvailable());
     title.addListener(new ClickListener() {

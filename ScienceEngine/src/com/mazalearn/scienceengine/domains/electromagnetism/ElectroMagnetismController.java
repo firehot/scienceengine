@@ -35,7 +35,7 @@ import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
 
 /**
- * Electromagnetism Experiment
+ * Electromagnetism Domain
  */
 public class ElectroMagnetismController extends AbstractScience2DController {
   

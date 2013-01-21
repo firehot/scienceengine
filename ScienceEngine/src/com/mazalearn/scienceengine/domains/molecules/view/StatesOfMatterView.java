@@ -6,7 +6,7 @@ import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
 
 /**
- * States of Matter experiment View.
+ * States of Matter domain View.
  */
 public class StatesOfMatterView extends AbstractScience2DView {
    

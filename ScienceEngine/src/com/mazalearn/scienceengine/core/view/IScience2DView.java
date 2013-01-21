@@ -9,7 +9,7 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
 
 public interface IScience2DView extends IDoneCallback {
-  // Pause/Resume model actions in the experiment. 
+  // Pause/Resume model actions in the activity. 
   // Measurement/sensors will still work when paused
   public void suspend(boolean value);
   // Is the model paused?

@@ -65,7 +65,7 @@ public class ViewControls extends Table implements IControl {
       }
     };
     
-    // Add pause/resume functionality for the experiment
+    // Add pause/resume functionality for the activity
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
         new AbstractModelConfig<Boolean>(null, Parameter.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { science2DView.suspend(value); }
@@ -81,7 +81,7 @@ public class ViewControls extends Table implements IControl {
       }
     };
 
-    // Add reset functionality for the experiment
+    // Add reset functionality for the activity
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
           public void doCommand() { science2DController.reload(); }

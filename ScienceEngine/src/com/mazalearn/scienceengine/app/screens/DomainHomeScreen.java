@@ -91,7 +91,7 @@ public class DomainHomeScreen extends AbstractScreen {
     
     // register the back button
     TextButton backButton = 
-        new TextButton(getMsg().getString("ScienceEngine.BackToExperiments"), getSkin()); //$NON-NLS-1$
+        new TextButton(getMsg().getString("ScienceEngine.BackToActivities"), getSkin()); //$NON-NLS-1$
     backButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

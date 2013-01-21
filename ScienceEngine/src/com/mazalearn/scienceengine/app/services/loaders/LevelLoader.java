@@ -44,9 +44,9 @@ public class LevelLoader {
   @SuppressWarnings("unchecked")
   public OrderedMap<String, ?> getJsonFromFile() {
     Gdx.app.log(ScienceEngine.LOG, "Opening level json file");
-    String experimentName = science2DController.getDomain();
+    String domain = science2DController.getDomain();
     int level = science2DController.getLevel();
-    FileHandle file = LevelUtil.getLevelFile(experimentName, ".json", level);
+    FileHandle file = LevelUtil.getLevelFile(domain, ".json", level);
     if (file == null) {
       Gdx.app.log(ScienceEngine.LOG, "Could not open level json file");
       return null;
