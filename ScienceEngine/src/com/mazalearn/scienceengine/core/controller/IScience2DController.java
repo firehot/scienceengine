@@ -13,7 +13,7 @@ public interface IScience2DController {
   public IScience2DView getView();
   public IScience2DModel getModel();
   public ControlPanel getControlPanel();
-  public String getName();
+  public String getDomain();
   int getLevel();
   /**
    * Reloads the level, reinitializing all components and configurations

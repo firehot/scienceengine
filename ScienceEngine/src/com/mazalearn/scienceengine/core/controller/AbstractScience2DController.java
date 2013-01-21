@@ -32,12 +32,12 @@ public abstract class AbstractScience2DController implements
   protected IScience2DModel science2DModel;
   protected IScience2DView science2DView;
   protected Skin skin;
-  private String name;
+  private String domain;
   private int level;
   private Guru guru;
 
-  protected AbstractScience2DController(String name, int level, Skin skin) {
-    this.name = name;
+  protected AbstractScience2DController(String domain, int level, Skin skin) {
+    this.domain = domain;
     this.level = level;
     this.skin = skin;
   }
@@ -46,13 +46,13 @@ public abstract class AbstractScience2DController implements
       AbstractScience2DView science2DView) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
-    this.controlPanel = new ControlPanel(this, this.getName(), skin);
+    this.controlPanel = new ControlPanel(this, this.getDomain(), skin);
     science2DView.setControlPanel(this.controlPanel);
   }
   
   @Override
-  public String getName() {
-    return name;
+  public String getDomain() {
+    return domain;
   }
   
   @Override

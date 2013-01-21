@@ -91,9 +91,7 @@ public class ComponentLoader {
       }
       if ((Boolean) LevelLoader.nvl(component.get("bodytype"), false)) {
         science2DActor.getBody().setType(BodyType.DynamicBody);
-      } else {
-        science2DActor.getBody().setType(BodyType.StaticBody);
-      }
+      } 
       if (ComponentType.Environment.name().equals(type)) {
         loadEnvironment((EnvironmentBody) science2DActor.getBody(),
             (Array<String>) component.get("params"));

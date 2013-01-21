@@ -120,7 +120,7 @@ public class LevelEditor extends Stage {
     Table titleTable = new Table(screen.getSkin());
     titleTable.setName("Title");
     titleTable.defaults().fill();
-    titleTable.add(science2DController.getName()).pad(10);
+    titleTable.add(science2DController.getDomain()).pad(10);
     final SelectBox level = 
         new SelectBox(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, 
             screen.getSkin());
@@ -227,7 +227,7 @@ public class LevelEditor extends Stage {
    */
   private void saveLevelThumbnail(int level) {
     FileHandle screenFile = 
-        LevelUtil.getLevelFile(science2DController.getName(), ".png", level);
+        LevelUtil.getLevelFile(science2DController.getDomain(), ".png", level);
     screenFile = Gdx.files.external(screenFile.path());
     int width = Gdx.graphics.getWidth();
     int height = Gdx.graphics.getHeight();

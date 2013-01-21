@@ -11,19 +11,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.Net;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain.State;
 
 public class ScienceTrainActor extends Group {
   private final IScience2DView science2DView;
@@ -89,7 +84,7 @@ public class ScienceTrainActor extends Group {
       }
     }
     super.draw(batch, parentAlpha);
-    if (train.getState().equals(State.Light.name())) {
+    if (false) { // TODO: when to show light?
       drawLight(batch);
     }
   }

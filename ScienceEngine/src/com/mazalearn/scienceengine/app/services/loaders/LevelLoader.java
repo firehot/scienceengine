@@ -44,7 +44,7 @@ public class LevelLoader {
   @SuppressWarnings("unchecked")
   public OrderedMap<String, ?> getJsonFromFile() {
     Gdx.app.log(ScienceEngine.LOG, "Opening level json file");
-    String experimentName = science2DController.getName();
+    String experimentName = science2DController.getDomain();
     int level = science2DController.getLevel();
     FileHandle file = LevelUtil.getLevelFile(experimentName, ".json", level);
     if (file == null) {
@@ -82,7 +82,7 @@ public class LevelLoader {
   
   private void readLevelInfo(OrderedMap<String, ?> info) {
     String description = (String) nvl(info.get("description"), 
-        science2DController.getName() + " : Level " + level);
+        science2DController.getDomain() + " : Level " + level);
     Label title = (Label) science2DView.findActor("Title");
     title.setText(description);
   }

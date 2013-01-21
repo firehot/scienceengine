@@ -85,7 +85,7 @@ public class Profile implements Serializable {
     properties.put("experiment", name);
   }
 
-  public String getExperiment() {
+  public String getDomain() {
     String s = properties.get("experiment");
     return s == null ? "" : s;
   }

@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.core.view;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,6 +21,7 @@ import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
+import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 
@@ -32,6 +34,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
   private IScience2DController science2DController;
+  // Commands at view level - possibly affecting multiple actors
+  private List<IModelConfig<?>> viewCommands;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -53,13 +57,24 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     return !science2DModel.isEnabled();
   }
   
+  public List<IModelConfig<?>> getAllConfigs() {
+    if (viewCommands == null) {
+      viewCommands = new ArrayList<IModelConfig<?>>();
+      initializeCommands(viewCommands);
+    }
+    return Collections.unmodifiableList(viewCommands);
+  }
+  
+  public void initializeCommands(List<IModelConfig<?>> viewCommands) {    
+  }
+  
   public void done(boolean success) {
     if (success) {
       // TODO: put in a proper celebration here
       science2DController.getGuru().setGoal("Congratulations! You move to the next Level ");
       // TODO: generalize
       ScienceEngine.getPlatformAdapter().showInternalURL(
-          "data/" + science2DController.getName() + "/" + science2DController.getLevel() + ".html");
+          "data/" + science2DController.getDomain() + "/" + science2DController.getLevel() + ".html");
       challenge(false);
     } else {
       // TODO: lack of symmetry here - cleanup required
@@ -203,7 +218,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         AbstractScience2DView.this.challenge(false);
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.getProfileManager().retrieveProfile().setCurrentLevel(0);
-        AbstractScreen screen = new DomainHomeScreen(ScienceEngine.SCIENCE_ENGINE, science2DController.getName());
+        AbstractScreen screen = new DomainHomeScreen(ScienceEngine.SCIENCE_ENGINE, science2DController.getDomain());
         ScienceEngine.SCIENCE_ENGINE.setScreen(
             new LoadingScreen(ScienceEngine.SCIENCE_ENGINE, screen));
       }

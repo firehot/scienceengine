@@ -58,7 +58,7 @@ public class Subgoal extends AbstractTutor {
           isUserNext = true;
         }      
       });
-      next.setPosition(620, -470);
+      next.setPosition(570, -510);
       addActor(next);
     }
     

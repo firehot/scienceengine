@@ -36,7 +36,7 @@ public class LevelSaver {
   
   public void save() throws IOException {
     FileHandle file = 
-        LevelUtil.getLevelFile(science2DController.getName(), ".json", level);
+        LevelUtil.getLevelFile(science2DController.getDomain(), ".json", level);
     file = Gdx.files.external(file.path());
     FileWriter writer = new FileWriter(file.file());
     JsonWriter jsonWriter = new JsonWriter(writer);
@@ -53,7 +53,7 @@ public class LevelSaver {
   }
 
   private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
-    jsonWriter.set("name", science2DController.getName());
+    jsonWriter.set("name", science2DController.getDomain());
     jsonWriter.set("level", level);
     Label title = (Label) science2DView.findActor("Title");
     jsonWriter.set("description", title.getText());

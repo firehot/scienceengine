@@ -4,7 +4,7 @@ import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public interface IModelConfig<T> {
-  enum ConfigType { RANGE, LIST, COMMAND, TOGGLE, TEXT };
+  public enum ConfigType { RANGE, LIST, COMMAND, TOGGLE, TEXT };
   
   public ConfigType getType();
   public String getName();

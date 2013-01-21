@@ -39,10 +39,10 @@ import com.mazalearn.scienceengine.guru.Abstractor;
  */
 public class ElectroMagnetismController extends AbstractScience2DController {
   
-  public static final String NAME = "Electromagnetism";
+  public static final String DOMAIN = "Electromagnetism";
 
   public ElectroMagnetismController(int level, int width, int height, Skin skin) {
-    super(NAME, level, skin);
+    super(DOMAIN, level, skin);
     AbstractScience2DModel emModel = new ElectroMagnetismModel();
     AbstractScience2DView emView = 
         new ElectroMagnetismView(width, height, emModel, skin, this);

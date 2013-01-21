@@ -9,9 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -28,7 +31,7 @@ import com.mazalearn.scienceengine.domains.molecules.StatesOfMatterController;
 import com.mazalearn.scienceengine.domains.waves.WaveController;
 
 /**
- * Experiment screen corresponding to one level of the experiment.
+ * Activity screen corresponding to one level.
  */
 public class ActivityScreen extends AbstractScreen {
 
@@ -47,7 +50,7 @@ public class ActivityScreen extends AbstractScreen {
       ScienceEngine.assetManager.unload(fileName);
     }
     this.science2DController = 
-        createExperimentController(domain, activityLevel, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        createDomainController(domain, activityLevel, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     IScience2DView science2DView = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
@@ -80,15 +83,44 @@ public class ActivityScreen extends AbstractScreen {
     createIntroductionDialog().show(stage);
   }
   
+  // TODO: dialog should look better.
   private Dialog createIntroductionDialog() {
     Dialog dialog = new Dialog(activityName, getSkin());
     dialog.setSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
     
-    Label label = new Label(activityDescription, getSkin());
-    //label.setColor(Color.WHITE);
-    label.setWidth(400);
-    label.setWrap(true);
-    dialog.getContentTable().add(label).width(400);
+    Label description = new Label(activityDescription, getSkin());
+    description.setWidth(400);
+    description.setWrap(true);
+    
+    String navigationInstructions = getMsg().getString("Instructions.Navigation");
+    final Label navigation = new Label(navigationInstructions, getSkin());
+    navigation.setWidth(400);
+    navigation.setWrap(true);
+    navigation.setVisible(false);
+
+    TextButton navigationButton = new TextButton("Instructions", getSkin());
+
+    dialog.getContentTable().add(description).width(400).pad(10);
+    dialog.getContentTable().row();
+    dialog.getContentTable().add(navigationButton).left();
+    dialog.getContentTable().row();
+    @SuppressWarnings("unchecked")
+    final Cell<Label> navCell = (Cell<Label>) dialog.getContentTable().add(navigation).width(400).pad(10);
+    dialog.getContentTable().setHeight(400);
+    dialog.getContentTable().row();
+
+    navigationButton.addListener(new ClickListener() {
+      @Override 
+      public void clicked (InputEvent event, float x, float y) {
+        if (navigation.isVisible()) {
+          navCell.setWidget(null);
+        } else {
+          navCell.setWidget(navigation);
+        }
+        navigation.setVisible(!navigation.isVisible());
+      }
+    });
+
     dialog.button("OK", null);
     return dialog;
   }
@@ -121,13 +153,13 @@ public class ActivityScreen extends AbstractScreen {
     profile.setCurrentLevel(0);
   }
   
-  public IScience2DController createExperimentController(
-      String experimentName, int level, int width, int height) {
-    if (experimentName.equalsIgnoreCase(StatesOfMatterController.NAME)) {
+  public IScience2DController createDomainController(
+      String domain, int level, int width, int height) {
+    if (domain.equalsIgnoreCase(StatesOfMatterController.DOMAIN)) {
       return new StatesOfMatterController(level, width, height, getSkin());
-    } else if (experimentName.equalsIgnoreCase(WaveController.NAME)) {
+    } else if (domain.equalsIgnoreCase(WaveController.DOMAIN)) {
       return  new WaveController(level, width, height, getAtlas(), getSkin());
-    } else if (experimentName.equalsIgnoreCase(ElectroMagnetismController.NAME)) {
+    } else if (domain.equalsIgnoreCase(ElectroMagnetismController.DOMAIN)) {
       return new ElectroMagnetismController(level, width, height, getSkin());
     }
     return null;
@@ -135,7 +167,7 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
-    String fileName = LevelUtil.getLevelFilename(science2DController.getName(), ".json", science2DController.getLevel());
+    String fileName = LevelUtil.getLevelFilename(science2DController.getDomain(), ".json", science2DController.getLevel());
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;
     }

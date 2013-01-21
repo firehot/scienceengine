@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.domains.molecules.view.StatesOfMatterView;
  * States of Matter science2DModel
  */
 public class StatesOfMatterController extends AbstractScience2DController {
-  public static final String NAME = "StatesOfMatter";
+  public static final String DOMAIN = "StatesOfMatter";
   private static final int N = 25; // Number of molecules
   private static final int BOX_HEIGHT = 20;
   private static final int BOX_WIDTH = 20;
@@ -25,7 +25,7 @@ public class StatesOfMatterController extends AbstractScience2DController {
   ControlPanel controlPanel;
   
   public StatesOfMatterController(int level, int width, int height, Skin skin) {
-    super(NAME, level, skin);
+    super(DOMAIN, level, skin);
     statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
     statesOfMatterModel.reset();
     statesOfMatterView = 

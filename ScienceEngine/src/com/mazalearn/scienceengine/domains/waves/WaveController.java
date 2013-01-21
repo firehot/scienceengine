@@ -20,7 +20,7 @@ import com.mazalearn.scienceengine.domains.waves.view.WaveBox;
  */
 public class WaveController extends AbstractScience2DController {
   
-  public static final String NAME = "Waves";
+  public static final String DOMAIN = "Waves";
   private static final int NUM_BALLS = 40;
   private static final float ORIGIN_Y = 10;
   private static final float ORIGIN_X = 4;
@@ -30,7 +30,7 @@ public class WaveController extends AbstractScience2DController {
   private WaveView waveView;
 
   public WaveController(int level, int width, int height, TextureAtlas atlas, Skin skin) {
-    super(NAME, level, skin);
+    super(DOMAIN, level, skin);
     this.waveModel = new WaveModel(NUM_BALLS);;
     waveView = new WaveView(width, height, waveModel, skin, atlas, this);
     initialize(waveModel, waveView);

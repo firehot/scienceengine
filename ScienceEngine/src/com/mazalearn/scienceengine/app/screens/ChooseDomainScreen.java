@@ -37,8 +37,8 @@ public class ChooseDomainScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    if (!profile.getExperiment().equals("")) {
-      gotoExperimentHome(profile.getExperiment());
+    if (!profile.getDomain().equals("")) {
+      gotoDomainHome(profile.getDomain());
       return;
     }
     setBackgroundColor(Color.DARK_GRAY);
@@ -52,8 +52,8 @@ public class ChooseDomainScreen extends AbstractScreen {
     table.add(getMsg().getString("ScienceEngine.ScienceEngine")).colspan(10).spaceBottom(20); //$NON-NLS-1$
     table.row();
 
-    // create the experiments Table
-    table.add(createExperimentsSelector());    
+    // create the domains Table
+    table.add(createDomainsSelector());    
     table.row();
 
     // register the back button
@@ -67,31 +67,31 @@ public class ChooseDomainScreen extends AbstractScreen {
     table.add(backButton).colspan(10);
   }
 
-  public Actor createExperimentsSelector() {
+  public Actor createDomainsSelector() {
     Table table = new Table(getSkin());
-    table.setName("Experiment Selector");
+    table.setName("Domain Selector");
     ScrollPane flickScrollPane = new ScrollPane(table, getSkin());
     table.setFillParent(false);
     table.defaults().fill();
-    final String[] experimentNames = 
-        new String[] {StatesOfMatterController.NAME, 
-                      WaveController.NAME, 
-                      ElectroMagnetismController.NAME};
-    for (final String experimentName: experimentNames) {
-      Image experimentThumb = 
-          new Image(LevelUtil.getLevelThumbnail(experimentName, 1));
-      experimentThumb.addListener(new ClickListener() {
+    final String[] domains = 
+        new String[] {StatesOfMatterController.DOMAIN, 
+                      WaveController.DOMAIN, 
+                      ElectroMagnetismController.DOMAIN};
+    for (final String domain: domains) {
+      Image domainThumb = 
+          new Image(LevelUtil.getLevelThumbnail(domain, 1));
+      domainThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          gotoExperimentHome(experimentName);
+          gotoDomainHome(domain);
         }
 
       });
       Table levelTable = new Table(getSkin());
       levelTable.setName("Level");
-      levelTable.add(experimentName);
+      levelTable.add(domain);
       levelTable.row();
-      levelTable.add(experimentThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
+      levelTable.add(domainThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
       table.add(levelTable).pad(5);
     }
     return flickScrollPane;
@@ -103,10 +103,10 @@ public class ChooseDomainScreen extends AbstractScreen {
     scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   
-  private void gotoExperimentHome(final String experimentName) {
-    Gdx.app.log(ScienceEngine.LOG, "Starting " + experimentName); //$NON-NLS-1$
+  private void gotoDomainHome(final String domain) {
+    Gdx.app.log(ScienceEngine.LOG, "Starting " + domain); //$NON-NLS-1$
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    AbstractScreen experimentHomeScreen = new DomainHomeScreen(scienceEngine, experimentName);
-    scienceEngine.setScreen(new LoadingScreen(scienceEngine, experimentHomeScreen));
+    AbstractScreen domainHomeScreen = new DomainHomeScreen(scienceEngine, domain);
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));
   }
 }
