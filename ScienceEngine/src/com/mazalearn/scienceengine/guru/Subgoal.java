@@ -23,7 +23,7 @@ public class Subgoal extends AbstractTutor {
   private Collection<Variable> variables;
   private String when;
   private boolean progress;
-  private boolean isUserNext;
+  private boolean isUserNext = true;
   
   public Subgoal(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs,
