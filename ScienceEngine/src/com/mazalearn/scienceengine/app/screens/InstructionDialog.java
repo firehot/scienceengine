@@ -1,27 +1,27 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.tablelayout.Cell;
 
-public class IntroductionDialog extends Dialog {
-  private AbstractScreen screen;
+public class InstructionDialog extends Dialog {
   
-  public IntroductionDialog(final AbstractScreen screen, String title, 
-      String contents, String instructions) {
-    super(title, screen.getSkin());
-    this.screen = screen;
-
-    Skin skin = screen.getSkin();
-    setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
-    setBackground((Drawable) null);
-    screen.setBackgroundColor(Color.GRAY);
+  public InstructionDialog(final Stage stage, Skin skin, String title, 
+      String contents, String instructions, String buttonText) {
+    super("\n\n" + title, skin);
+    
+    setBackground(createBackground());
     
     Label description = new Label("\n\n" + contents, skin);
     description.setWidth(400);
@@ -54,15 +54,22 @@ public class IntroductionDialog extends Dialog {
           navigationButton.setText("Instructions <<");
         }
         hide();
-        show(screen.getStage());
+        show(stage);
       }
     });
 
-    button("OK", null);
+    Button b = new TextButton(buttonText, skin);
+    this.getButtonTable().add(b).width(200);
   }
 
-  @Override
-  protected void result(Object obj) {
-    screen.setBackgroundColor(Color.BLACK);
+  private static TextureRegionDrawable createBackground() {
+    Pixmap pixmap = new Pixmap(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT, 
+        Pixmap.Format.RGBA8888);
+    Color c = Color.LIGHT_GRAY;
+    pixmap.setColor(c.r, c.g, c.b, 0.6f);
+    pixmap.fillRectangle(0, 0, AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+    TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
+    pixmap.dispose();
+    return new TextureRegionDrawable(textureRegion);
   }
 }

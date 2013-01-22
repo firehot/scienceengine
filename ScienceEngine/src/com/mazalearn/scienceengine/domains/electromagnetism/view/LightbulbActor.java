@@ -32,6 +32,7 @@ public class LightbulbActor extends Science2DActor {
     super.draw(batch, parentAlpha);
   }
 
+  // Package protected, also used by DrawingActor.Coach
   // Draw a circle of light with radius and alpha proportional to intensity
   static void drawLight(SpriteBatch batch, float intensity, float diameter, 
       Color color, float x, float y) {
@@ -42,7 +43,6 @@ public class LightbulbActor extends Science2DActor {
     batch.setColor(c);
   }
 
-  // Package protected, also used by DrawingActor.Coach
   private static TextureRegion createLightTexture() {
     Pixmap pixmap = new Pixmap(256, 256 , Pixmap.Format.RGBA8888);
     pixmap.setColor(Color.WHITE);

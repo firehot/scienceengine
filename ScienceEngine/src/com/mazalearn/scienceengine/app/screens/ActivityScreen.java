@@ -77,8 +77,8 @@ public class ActivityScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    Dialog dialog = new IntroductionDialog(this, activityName, activityDescription, 
-        getMsg().getString("Instructions.Navigation"));
+    Dialog dialog = new InstructionDialog(getStage(), getSkin(), activityName, activityDescription, 
+        getMsg().getString("Level.Instructions"), "Start");
     dialog.show(stage);
   }
   

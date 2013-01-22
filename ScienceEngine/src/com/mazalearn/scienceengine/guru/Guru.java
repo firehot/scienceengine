@@ -23,10 +23,7 @@ import com.mazalearn.scienceengine.core.view.ControlPanel;
  * @author sridhar
  * 
  */
-public class Guru extends Group implements IDoneCallback {
-  private static final int WIN_THRESHOLD = 4000;
-  private static final int LOSS_THRESHOLD = -1000;
-  
+public class Guru extends Group implements IDoneCallback {  
   int tutorIndex = -1;
   ITutor currentTutor;
   protected Dashboard dashboard;
@@ -124,39 +121,39 @@ public class Guru extends Group implements IDoneCallback {
    */
   public void done(boolean success) {
     if (success) {
+      soundManager.play(ScienceEngineSound.SUCCESS);
+      dashboard.addScore(deltaSuccessScore);
+      successImage.show(deltaSuccessScore);
+      hinter.clearHint();
+      
       if (currentTutor.hasSucceeded()) {
         this.setSize(windowWidth,  windowHeight);
         this.setPosition(0, 0);
         currentTutor.doSuccessActions();
         currentTutor.activate(false);
         currentTutor.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+        
+        // Success and no more tutors == WIN
+        if (tutorIndex >= registeredTutors.size() - 1) {
+          soundManager.play(ScienceEngineSound.CELEBRATE);
+          science2DController.getView().done(true);
+          this.setVisible(false);
+          return;
+        }
       }
-      soundManager.play(ScienceEngineSound.SUCCESS);
-      dashboard.addScore(deltaSuccessScore);
-      successImage.show(deltaSuccessScore);
-      hinter.clearHint();
+      runTutor();
     } else {
       soundManager.play(ScienceEngineSound.FAILURE);
       // Equate success and failure scores so that 0 progress after second try
       deltaSuccessScore = deltaFailureScore;
       dashboard.addScore(-deltaFailureScore);
       failureImage.show(-deltaFailureScore);
-    }
-    // Win and no more tutors
-    if (currentTutor.hasSucceeded() && tutorIndex >= registeredTutors.size() - 1) {
-      soundManager.play(ScienceEngineSound.CELEBRATE);
-      science2DController.getView().done(true);
-      this.setVisible(false);
-      return;
-    }
-    // Loss
-    if (dashboard.getScore() <= LOSS_THRESHOLD || currentTutor.hasFailed()) {
-      science2DController.getView().done(false);
-      this.setVisible(false);
-      return;
-    }
-    if (success) {
-      runTutor();
+      // Loss
+      if (currentTutor.hasFailed()) {
+        science2DController.getView().done(false);
+        this.setVisible(false);
+        return;
+      }
     }
   }
   

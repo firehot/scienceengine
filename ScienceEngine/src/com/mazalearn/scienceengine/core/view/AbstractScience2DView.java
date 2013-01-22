@@ -8,18 +8,13 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
-import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
-import com.mazalearn.scienceengine.app.screens.LoadingScreen;
+import com.mazalearn.scienceengine.app.screens.InstructionDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -73,13 +68,20 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     if (success) {
       // TODO: put in a proper celebration here
       science2DController.getGuru().setGoal("Congratulations! You move to the next Level ");
-      // TODO: generalize
       ScienceEngine.getPlatformAdapter().showInternalURL(
           "data/" + science2DController.getDomain() + "/" + science2DController.getLevel() + ".html");
       challenge(false);
+      Dialog dialog = new InstructionDialog(this, skin, science2DController.getDomain(), 
+          ScienceEngine.getMsg().getString("Level.Success"), 
+          ScienceEngine.getMsg().getString("Level.Instructions"), "OK");
+      dialog.show(this);      
     } else {
       // TODO: lack of symmetry here - cleanup required
       isChallengeInProgress = false;      
+      Dialog dialog = new InstructionDialog(this, skin, science2DController.getDomain(), 
+          ScienceEngine.getMsg().getString("Level.Failure"), 
+          ScienceEngine.getMsg().getString("Level.Instructions"), "OK");
+      dialog.show(this);      
     }
   }
   
@@ -182,8 +184,6 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     this.controlPanel = controlPanel;
     // Register control panel
     this.addActor(controlPanel);
-    // register the back button
-    //this.addActor(createBackButton());
     
     // Register stage components
     for (StageComponent stageComponent: StageComponent.values()) {
@@ -204,36 +204,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     // If GWT, make status a disclaimer about experiencing on Android Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
       Label status = (Label) findActor(StageComponent.Status.name());
-      status.setText("Demo only. Best experienced on Android Tablet");
+      status.setText("Demo only. Best experienced on Android/iPad Tablets.");
     }
-  }
-
-  private Actor createBackButton() {
-    final TextButton backButton = 
-        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), skin); //$NON-NLS-1$
-    backButton.setName("BackButton");
-    backButton.setPosition(5, getHeight() - 30);
-    backButton.setWidth(80);
-    backButton.addListener(new ClickListener() {
-      public void clicked(InputEvent event, float x, float y) {
-        AbstractScience2DView.this.challenge(false);
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        ScienceEngine.getProfileManager().retrieveProfile().setCurrentLevel(0);
-        AbstractScreen screen = new DomainHomeScreen(ScienceEngine.SCIENCE_ENGINE, science2DController.getDomain());
-        ScienceEngine.SCIENCE_ENGINE.setScreen(
-            new LoadingScreen(ScienceEngine.SCIENCE_ENGINE, screen));
-      }
-      
-      @Override
-      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        super.touchDown(event, localX, localY, pointer, button);
-        IScience2DView stage = (IScience2DView) backButton.getStage();
-        Label status = (Label) stage.findActor(StageComponent.Status.name());
-        status.setText(ScienceEngine.getMsg().getString("Help.Back"));
-        return true;
-      }
-    });
-    return backButton;
   }
 
   @Override
