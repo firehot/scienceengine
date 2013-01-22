@@ -51,10 +51,11 @@ public class Subgoal extends AbstractTutor {
     // Create a button NEXT at right place along with listener to set isUserNext.
     if (!isUserNext) {
       // TODO: Move next button to dashboard next to Hint button
-      Button next = new TextButton("Next", science2DController.getSkin());
+      final Button next = new TextButton("Next", science2DController.getSkin());
       next.setColor(Color.YELLOW);
       next.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
+          next.setVisible(false);
           isUserNext = true;
         }      
       });

@@ -8,13 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -81,49 +77,9 @@ public class ActivityScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    createIntroductionDialog().show(stage);
-  }
-  
-  // TODO: dialog should look better.
-  private Dialog createIntroductionDialog() {
-    Dialog dialog = new Dialog(activityName, getSkin());
-    dialog.setSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-    
-    Label description = new Label(activityDescription, getSkin());
-    description.setWidth(400);
-    description.setWrap(true);
-    
-    String navigationInstructions = getMsg().getString("Instructions.Navigation");
-    final Label navigation = new Label(navigationInstructions, getSkin());
-    navigation.setWidth(400);
-    navigation.setWrap(true);
-    navigation.setVisible(false);
-
-    TextButton navigationButton = new TextButton("Instructions", getSkin());
-
-    dialog.getContentTable().add(description).width(400).pad(10);
-    dialog.getContentTable().row();
-    dialog.getContentTable().add(navigationButton).left();
-    dialog.getContentTable().row();
-    @SuppressWarnings("unchecked")
-    final Cell<Label> navCell = (Cell<Label>) dialog.getContentTable().add(navigation).width(400).pad(10);
-    dialog.getContentTable().setHeight(400);
-    dialog.getContentTable().row();
-
-    navigationButton.addListener(new ClickListener() {
-      @Override 
-      public void clicked (InputEvent event, float x, float y) {
-        if (navigation.isVisible()) {
-          navCell.setWidget(null);
-        } else {
-          navCell.setWidget(navigation);
-        }
-        navigation.setVisible(!navigation.isVisible());
-      }
-    });
-
-    dialog.button("OK", null);
-    return dialog;
+    Dialog dialog = new IntroductionDialog(this, activityName, activityDescription, 
+        getMsg().getString("Instructions.Navigation"));
+    dialog.show(stage);
   }
   
   // TODO: duplicate of this method is in DomainHomeScreen also - combine

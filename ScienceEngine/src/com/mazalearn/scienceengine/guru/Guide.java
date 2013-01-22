@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.AggregatorFunction;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
@@ -17,10 +16,6 @@ import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
 
-// outcome = function of parameter
-// doubts on how parameter change affects magnitude of outcome
-// Generate A, B as two parameter points.
-// Is the outcome stronger at A or B?
 public class Guide extends AbstractTutor {
   
   private List<Subgoal> subgoals = Collections.emptyList();

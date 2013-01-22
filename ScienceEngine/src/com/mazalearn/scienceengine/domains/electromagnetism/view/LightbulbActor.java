@@ -12,35 +12,40 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 
 public class LightbulbActor extends Science2DActor {
   private final Lightbulb lightbulb;
-  private TextureRegion lightTexture;
+  private static TextureRegion LIGHT_TEXTURE = createLightTexture();
   private float lightRadius;
   private Vector2 point = new Vector2();
 
   public LightbulbActor(Lightbulb lightbulb, TextureRegion textureRegion) {
     super(lightbulb, textureRegion);
     this.lightbulb = lightbulb;
-    lightTexture = createLightTexture(Color.WHITE);
   }
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     float intensity = Math.abs(lightbulb.getIntensity());
-    // Draw a circle of yellow light with radius and alpha proportional to intensity
     int scale = Gdx.graphics.getFramesPerSecond() < 10 ? 512 : 128;
-    int diameter = Math.round(intensity * scale);
+    float diameter = scale * intensity;
+    drawLight(batch, intensity, diameter, lightbulb.getColor(),
+        getX() + getOriginX(), getY() + getOriginY());
     lightRadius = diameter / 2;
-    Color c = batch.getColor();
-    Color light = lightbulb.getColor();
-    batch.setColor(light.r, light.g, light.b, 0.5f + intensity * 0.5f);
-    batch.draw(lightTexture, getX() + getOriginX() - lightRadius, 
-        getY() + getOriginY() - lightRadius, diameter, diameter);
-    batch.setColor(c);
     super.draw(batch, parentAlpha);
   }
 
-  private TextureRegion createLightTexture(Color color) {
+  // Draw a circle of light with radius and alpha proportional to intensity
+  static void drawLight(SpriteBatch batch, float intensity, float diameter, 
+      Color color, float x, float y) {
+    int radius = Math.round(diameter / 2);
+    Color c = batch.getColor();
+    batch.setColor(color.r, color.g, color.b, 0.5f + intensity * 0.5f);
+    batch.draw(LIGHT_TEXTURE, x - radius, y - radius, diameter, diameter);
+    batch.setColor(c);
+  }
+
+  // Package protected, also used by DrawingActor.Coach
+  private static TextureRegion createLightTexture() {
     Pixmap pixmap = new Pixmap(256, 256 , Pixmap.Format.RGBA8888);
-    pixmap.setColor(color);
+    pixmap.setColor(Color.WHITE);
     pixmap.fillCircle(256/2, 256/2, 256/2);
     TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
     pixmap.dispose();

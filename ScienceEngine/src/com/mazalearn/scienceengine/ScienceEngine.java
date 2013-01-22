@@ -327,7 +327,7 @@ public class ScienceEngine extends Game {
     if (body == null) return;
     eventLog.logEvent(body.name(), Parameter.Select.name());
     science2DView.checkGuruProgress();
-    displayStatus(body.getComponentTypeName(), science2DView);
+    displayEntityStatus(body.getComponentTypeName(), science2DView);
   }
 
   /**
@@ -337,7 +337,7 @@ public class ScienceEngine extends Game {
    */
   public static void selectParameter(Science2DBody body, IParameter parameter, float value, IScience2DView science2DView) {
     getSoundManager().play(ScienceEngineSound.CLICK);
-    displayStatus(parameter.name(), science2DView);
+    displayEntityStatus(parameter.name(), science2DView);
     if (body == null) return;
     science2DView.checkGuruProgress();
     eventLog.logEvent(body.name(), parameter.name(), value);
@@ -355,15 +355,20 @@ public class ScienceEngine extends Game {
     return eventLog;
   }
 
-  private static void displayStatus(String entityName, IScience2DView stage) {
+  private static void displayEntityStatus(String entityName, IScience2DView stage) {
     if (stage == null) return;
-    Label status = (Label) stage.findActor(StageComponent.Status.name());
     String component = 
         getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";
     if (entityName.contains(".")) {
       entityName = entityName.substring(0, entityName.indexOf("."));
     }
-    status.setText( component + getMsg().getString("Help." + entityName));
+    String message = component + getMsg().getString("Help." + entityName);
+    displayStatusMessage(stage, message);
+  }
+
+  public static void displayStatusMessage(IScience2DView stage, String message) {
+    Label status = (Label) stage.findActor(StageComponent.Status.name());
+    status.setText(message);
   }
 
   public static void setProbeMode(boolean probeMode) {

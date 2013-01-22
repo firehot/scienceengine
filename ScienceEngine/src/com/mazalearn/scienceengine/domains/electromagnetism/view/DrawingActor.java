@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -49,14 +50,13 @@ public class DrawingActor extends Science2DActor {
   
   public static class Coach extends Group {
     private Label userCurrentLabel;
+    private Color lightColor = Color.YELLOW;
+    private float lightIntensity = 0;
     
     private Coach(Texture coachTexture, Skin skin) {
       super();
-      Label userLabel = new Label(ScienceEngine.getUserName(), skin);
-      userLabel.setPosition(0, COACH_HEIGHT);
-      
-      userCurrentLabel = new Label("", skin);
-      userCurrentLabel.setPosition(COACH_WIDTH / 2, COACH_HEIGHT);
+      userCurrentLabel = new Label(ScienceEngine.getUserName(), skin);
+      userCurrentLabel.setPosition(0, COACH_HEIGHT);
       
       Image coachBody = new Image(new TextureRegion(coachTexture, 0, 0, COACH_WIDTH, COACH_HEIGHT));
       this.setSize(COACH_WIDTH, COACH_HEIGHT);
@@ -72,15 +72,26 @@ public class DrawingActor extends Science2DActor {
       wheel2.setOrigin(WHEEL_DIA/2, WHEEL_DIA/2);
       wheel2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
       
-      this.addActor(userLabel);
       this.addActor(userCurrentLabel);
       this.addActor(coachBody);
       this.addActor(wheel1);
       this.addActor(wheel2);
     }
     
-    public void setCurrent(float current) {
-      userCurrentLabel.setText(String.valueOf(current));
+    public void setLight(float intensity, Color color) {
+      userCurrentLabel.setText(userCurrentLabel.getText() + "  " + String.valueOf(intensity));
+      this.lightColor = color;
+      this.lightIntensity = intensity;
+    }
+
+    @Override
+    public void draw(SpriteBatch batch, float parentAlpha) {
+      super.draw(batch, parentAlpha);
+      if (lightIntensity != 0) {
+        float intensity = lightIntensity * MathUtils.sinDeg(getParent().getX());
+        LightbulbActor.drawLight(batch, intensity, 32 * intensity, lightColor, 
+            getX() + COACH_WIDTH / 2, getY() + COACH_HEIGHT / 2);
+      }      
     }
   }
   

@@ -132,6 +132,15 @@ public class Science2DActor extends Actor {
     return body;
   }
   
+  /**
+   * Science2DActor is visible iff its associated Science2DBody is active.
+   */
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+    getBody().setActive(visible);
+  }
+  
   @Override
   public void act(float delta) {
     // TODO: Adjust height, width, originx, originy of actor based on body - see MagnetActor, DynamoActor

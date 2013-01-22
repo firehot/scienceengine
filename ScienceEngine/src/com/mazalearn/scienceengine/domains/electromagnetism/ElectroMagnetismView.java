@@ -8,6 +8,7 @@ import java.util.Map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.Net;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
@@ -69,15 +70,27 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   }
   
   private void uploadToServer() {
-    DrawingActor coach = (DrawingActor) findActor("Drawing");
-    Map<String, String> postParams = new HashMap<String, String>();
     float current = Math.round(dynamo.getMaxCurrent());
     Color color = lightbulb.getColor();
+
+    // Set light to display on coach drawing
+    DrawingActor drawingActor = (DrawingActor) findActor(ComponentType.Drawing.name());
+    drawingActor.getCoach().setLight(current, lightbulb.getColor());
+    
+    // Post drawing, color and current to server
+    Map<String, String> postParams = new HashMap<String, String>();
     postParams.put("User", ScienceEngine.getUserEmail());
     postParams.put("UserName", ScienceEngine.getUserName());
     postParams.put("Current", String.valueOf(current));
     postParams.put("Color", color.toString());
-    Net.httpPost("/upload", "application/octet-stream", postParams, coach.getDrawingPng());
+    try {
+      Net.httpPost("/upload", "application/octet-stream", postParams, drawingActor.getDrawingPng());
+      ScienceEngine.displayStatusMessage(this, "Uploaded to MazaLearn - See www.mazalearn.com/train.html");
+    } catch(GdxRuntimeException e) {
+      e.printStackTrace();
+      ScienceEngine.displayStatusMessage(this, "Network Problem: Failed to upload to MazaLearn");
+    }
+    
     // Show only the main actors - ScienceTrain and control related
     List<String> actorsToBeHidden = 
         Arrays.asList(new String[]{ComponentType.Dynamo.name(),  ComponentType.Magnet.name(), 
@@ -88,12 +101,8 @@ public class ElectroMagnetismView extends AbstractScience2DView {
       if (actorsToBeHidden.contains(name)) {
         actor.setVisible(false);
       }
-      if (ComponentType.Drawing.name().equals(name)) {
-        DrawingActor d = (DrawingActor) actor;
-        d.getCoach().setCurrent(current);
-      }
       if (ComponentType.ScienceTrain.name().equals(name)) {
-        ((ScienceTrainActor) actor).setDrawLight(true);
+        ((ScienceTrainActor) actor).animate();
       }
     }
   }

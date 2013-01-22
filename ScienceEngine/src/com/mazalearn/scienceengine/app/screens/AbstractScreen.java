@@ -85,6 +85,10 @@ public abstract class AbstractScreen implements Screen {
     Gdx.input.setInputProcessor(stage);    
   }
 
+  public Stage getStage() {
+    return stage;
+  }
+  
   protected String getName() {
     return getClass().getName();
   }
@@ -197,4 +201,5 @@ public abstract class AbstractScreen implements Screen {
   // Adds all assets required for this screen to reduce load timeLimit
   public void addAssets() {
   }
+
 }

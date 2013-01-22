@@ -142,8 +142,8 @@ public class Guru extends Group implements IDoneCallback {
       dashboard.addScore(-deltaFailureScore);
       failureImage.show(-deltaFailureScore);
     }
-    // Win
-    if (dashboard.getScore() >= WIN_THRESHOLD || tutorIndex >= registeredTutors.size()) {
+    // Win and no more tutors
+    if (currentTutor.hasSucceeded() && tutorIndex >= registeredTutors.size() - 1) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
       science2DController.getView().done(true);
       this.setVisible(false);
