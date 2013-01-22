@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -36,12 +37,9 @@ public class Guru extends Group implements IDoneCallback {
   private Hinter hinter;
   private int deltaSuccessScore;
   private int deltaFailureScore;
-  private float windowWidth;
-  private float windowHeight;
   private IScience2DController science2DController;
   
-  public Guru(final Skin skin, float width, float height,
-      IScience2DController science2DController, 
+  public Guru(final Skin skin, IScience2DController science2DController, 
       ControlPanel controlPanel) {
     super();
     this.science2DController = science2DController;
@@ -51,10 +49,8 @@ public class Guru extends Group implements IDoneCallback {
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
     this.controlPanel = controlPanel;
-    this.windowWidth = width;
-    this.windowHeight = height;
     this.setPosition(0, 0);
-    this.setSize(width, height);
+    this.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
      
     this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
@@ -102,7 +98,8 @@ public class Guru extends Group implements IDoneCallback {
   public void endChallenge() {
     // Reinitialize current prober, if any
     if (currentTutor != null) {
-      currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, false);
+      currentTutor.reinitialize(getX(), getY(), AbstractScreen.VIEWPORT_WIDTH, 
+          AbstractScreen.VIEWPORT_HEIGHT, false);
     }
 
     science2DController.getView().done(false);
@@ -127,7 +124,7 @@ public class Guru extends Group implements IDoneCallback {
       hinter.clearHint();
       
       if (currentTutor.hasSucceeded()) {
-        this.setSize(windowWidth,  windowHeight);
+        this.setSize(AbstractScreen.VIEWPORT_WIDTH,  AbstractScreen.VIEWPORT_HEIGHT);
         this.setPosition(0, 0);
         currentTutor.doSuccessActions();
         currentTutor.activate(false);
@@ -163,7 +160,7 @@ public class Guru extends Group implements IDoneCallback {
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     if (currentTutor != null) {
       // Place hinter to right of dashboard above the controls
-      hinter.setPosition(controlPanel.getX(), windowHeight - getY() - 50);
+      hinter.setPosition(controlPanel.getX(), AbstractScreen.VIEWPORT_HEIGHT - getY() - 50);
       if (!hinter.hasHint()) {
         hinter.setHint(currentTutor.getHint());
       }
@@ -185,7 +182,8 @@ public class Guru extends Group implements IDoneCallback {
       return;
     }
     currentTutor = registeredTutors.get(tutorIndex);
-    currentTutor.reinitialize(getX(), getY(), windowWidth, windowHeight, true);
+    currentTutor.reinitialize(getX(), getY(), AbstractScreen.VIEWPORT_WIDTH, 
+        AbstractScreen.VIEWPORT_HEIGHT, true);
     currentTutor.activate(true);
     dashboard.setGoal(currentTutor.getGoal());
     // Set up initial success and failure scores

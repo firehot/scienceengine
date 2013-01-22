@@ -89,7 +89,7 @@ public abstract class AbstractScience2DController implements
   public Guru getGuru() {
     if (guru == null) {
       Stage stage = (Stage) science2DView;
-      guru = new Guru(skin, stage.getWidth(), stage.getHeight(), this, controlPanel);
+      guru = new Guru(skin, this, controlPanel);
       // Move control Panel to top - so it will be above others
       stage.getRoot().addActor(controlPanel);
       // Move back button to top also - so it will be accessible
