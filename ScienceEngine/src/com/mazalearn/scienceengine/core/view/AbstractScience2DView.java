@@ -65,6 +65,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
   
   public void done(boolean success) {
+    if (!isChallengeInProgress) return;
+    
     if (success) {
       // TODO: put in a proper celebration here
       science2DController.getGuru().setGoal("Congratulations! You move to the next Level ");

@@ -20,6 +20,7 @@ import com.google.appengine.api.users.User;
 @SuppressWarnings("serial")
 public class UploadServlet extends HttpServlet {
 
+  private static final String NAME = "name";
   private static final String COACH_IMAGE = "coach";
   private static final String CURRENT = "current";
   private static final String COLOR = "color";
@@ -50,9 +51,9 @@ public class UploadServlet extends HttpServlet {
       entity = ds.get(key);
     } catch (EntityNotFoundException e) {
       entity = new Entity(User.class.getSimpleName(), userEmail);
-      entity.setProperty("name", userName);
       ds.put(entity);
     }
+    entity.setProperty(NAME, userName);
     entity.setProperty(COACH_IMAGE, new Blob(pngImage));
     entity.setProperty(CURRENT, Float.parseFloat(current));
     entity.setProperty(COLOR, color);

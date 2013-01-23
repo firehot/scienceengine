@@ -55,6 +55,11 @@
     <servlet-class>com.mazalearn.gwt.server.UserImageServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>UserCoachesServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.UserCoachesServlet</servlet-class>
+  </servlet>
+
   <filter-mapping>
     <filter-name>UserFilter</filter-name>
     <url-pattern>/science/*</url-pattern>
@@ -78,6 +83,10 @@
   <servlet-mapping>
     <servlet-name>UserImageServlet</servlet-name>
     <url-pattern>/userimage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UserCoachesServlet</servlet-name>
+    <url-pattern>/usercoaches</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SystemServiceServlet</servlet-name>

@@ -144,9 +144,16 @@ div.hidden {visibility:hidden;}
 
 </style>
 </head>
-<body style="background-color: black">
+<body style="background-color: black" onload="requestCoaches();">
 <h1 align="center" style="color:white">Catch the Science Train</h1>
 
+  <!-- template coach - this should come in over json; GAP is 130px between coaches -->
+ <div id="template" class="coach" style="display:none; position: absolute; top: 150px;" color="{{color}}" current="{{current}}">
+     <div class="text" style="position: absolute; top: -30px;">{{current}}<br>{{name}}</div>
+     <canvas class="coachbody" style="background:url(/userimage?User={{id}}) 0px 0;"></canvas>
+      <canvas class="wheel1" style="background:url(/userimage?User={{id}}) -105px 0;"></canvas>
+      <canvas class="wheel2" style="background:url(/userimage?User={{id}}) -105px -23px;"></canvas>
+  </div>
 
 
 <div style="position: absolute;left: 0px; top: 150px;" id="train">
@@ -158,108 +165,6 @@ div.hidden {visibility:hidden;}
      <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 40px" class="enginewheel">
      <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 60px" class="enginewheel">
   </div>
-  
-  
-  
-  <!-- a hardcoded sample coach - this should come in over json; GAP is 130px between coaches -->
- <div class="coach" title="I loved the idea" style="position: absolute; top: 150px;" color="rgba(50,100,50,0.1)" light="9.4">
-     <div class="text" style="position: absolute; top: -30px;">9.4<br>sridhar</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px -23px;'></canvas>
-  </div>
-
-  <!-- a hardcoded sample coach - this should come in over json; GAP is 130px between coaches -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(50,100,50,0.1)" light="9.4">
-     <div class="text" style="position: absolute; top: -30px;">9.4<br>sridhar</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px -23px;'></canvas>
-  </div>
-
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-
-
-<!---------------------------------------------->
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-  <!-- a hardcoded sample coach - this should come in over json -->
- <div class="coach" style="position: absolute; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
-     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
-     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
-      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
-      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
-  </div>
-
-<!---------------------------------------------->
-
 </div>
 
 
@@ -310,9 +215,9 @@ div.hidden {visibility:hidden;}
       var context = canvas.getContext('2d');
       var centerX = canvas.width / 2;
       var centerY = canvas.height / 2;
-      var light = coach.getAttribute("light");
-      var intensity =  light * light;
-      var sine = Math.abs(Math.sin(coachPos * light));
+      var current = coach.getAttribute("current");
+      var intensity =  current * current;
+      var sine = Math.abs(Math.sin(coachPos * current / 9));
       
       context.beginPath();
       context.arc(centerX, centerY, sine * intensity, 0, 2 * Math.PI, false);
@@ -323,11 +228,23 @@ div.hidden {visibility:hidden;}
       context.stroke();
       context.closePath();
     }
-}
+  }
 
+  function getXMLHttpRequestObject() {
+    var xmlHttpRequest = null;
+    if (window.XMLHttpRequest) {
+        xmlHttpRequest = new XMLHttpRequest();
+    } else if (window.ActiveXObject) { // Older IE.
+        xmlHttpRequest = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    return xmlHttpRequest;
+  }
+  
+  var xmlHttpRequest = getXMLHttpRequestObject();
   var train = document.getElementById("train");
   var engine = document.getElementById("engine");
   var trainPos = 0;
+  var template;
   
   function moveTrain() {
     var coaches = train.getElementsByClassName('coach');
@@ -344,7 +261,35 @@ div.hidden {visibility:hidden;}
     }
     drawLight(coaches, trainPos);
   }
-
+  
+  function loadCoaches() {
+    var DONE = 4, OK = 200;
+    if (xmlHttpRequest.readyState == DONE && xmlHttpRequest.status == OK) {
+      coaches = JSON.parse(xmlHttpRequest.responseText);
+      for (var i = 0; i < coaches.length; i++) {
+        var coachStr = template;
+        var coach = coaches[i];
+        for (var property in coach) {
+          coachStr = coachStr.replace(new RegExp('{{' + property + '}}',"g"), coach[property]);
+        }
+        var div = document.createElement('div');
+        div.innerHTML = coachStr;
+        for (var j = div.childNodes.length - 1; j >= 0; j--) {
+          var child = div.childNodes[j];
+          train.appendChild(child);
+        }
+      }
+    }
+  }
+  
+  function requestCoaches() {
+    xmlHttpRequest.open("GET", "/usercoaches", true);
+    xmlHttpRequest.onreadystatechange = loadCoaches;
+    xmlHttpRequest.send(null);
+    var d = document.getElementById("template");
+    template = d.outerHTML;
+  }
+  
   setInterval(moveTrain, 100);
 </script>
 </body>
