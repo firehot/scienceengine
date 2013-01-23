@@ -82,7 +82,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     postParams.put("User", ScienceEngine.getUserEmail());
     postParams.put("UserName", ScienceEngine.getUserName());
     postParams.put("Current", String.valueOf(current));
-    postParams.put("Color", color.toString());
+    postParams.put("Color", rgba(color));
     try {
       Net.httpPost("/upload", "application/octet-stream", postParams, drawingActor.getDrawingPng());
       ScienceEngine.displayStatusMessage(this, "Uploaded to MazaLearn - See www.mazalearn.com/train.html");
@@ -105,6 +105,11 @@ public class ElectroMagnetismView extends AbstractScience2DView {
         ((ScienceTrainActor) actor).animate();
       }
     }
+  }
+
+  private String rgba(Color color) {
+    return "rgba(" + (int) (color.r * 255) + "," + (int)(color.g * 255) + "," +
+        (int)(color.b * 255) + ", 0.5)";
   }
 
 }
