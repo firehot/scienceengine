@@ -22,7 +22,6 @@ public class InstructionDialog extends Dialog {
     super("\n\n" + title, skin);
     
     setBackground(createBackground());
-    this.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
     
     Label description = new Label("\n\n" + contents, skin);
     description.setWidth(400);
@@ -68,7 +67,8 @@ public class InstructionDialog extends Dialog {
     Color c = Color.LIGHT_GRAY;
     pixmap.setColor(c.r, c.g, c.b, 0.6f);
     pixmap.fillRectangle(0, 0, 512, 256);
-    TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
+    TextureRegion textureRegion = new TextureRegion(new Texture(pixmap), 
+        AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
     pixmap.dispose();
     return new TextureRegionDrawable(textureRegion);
   }
