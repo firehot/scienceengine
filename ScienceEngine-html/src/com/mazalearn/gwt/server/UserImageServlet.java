@@ -31,7 +31,9 @@ public class UserImageServlet extends HttpServlet {
     response.setHeader("ContentType", "image/png");
     BufferedOutputStream dis = new BufferedOutputStream(response.getOutputStream());
     Blob userImage = getUserImage(userEmail);
-    dis.write(userImage.getBytes());
+    if (userImage != null) {
+      dis.write(userImage.getBytes());
+    }
     dis.close();
   }
 

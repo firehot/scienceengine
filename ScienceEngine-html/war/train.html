@@ -7,7 +7,7 @@
 
   .text {
     color: white;
-    width: 100px;
+    width: 200px;
     letter-spacing: 2px;
     font:15px arial,sans-serif;
   }
@@ -149,25 +149,33 @@ div.hidden {visibility:hidden;}
 
 
 
-<div style="position: absolute;left: 165px; top: 150px;" id="train">
+<div style="position: absolute;left: 0px; top: 150px;" id="train">
  <!-- The engine and its wheels -->
- <div style="position: absolute; left: 100px; top:155px" >
-     <img src="/assets/images/engine.png" width=100 style="position: absolute; left: 230px;">
-     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 230px" class="enginewheel">
-     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 250px" class="enginewheel">
-     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 270px" class="enginewheel">
-     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 290px" class="enginewheel">
+ <div style="position: absolute; left: 0px; top:155px" >
+     <img src="/assets/images/engine.png" width=100 style="position: absolute; left: 0px;">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 0px" class="enginewheel">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 20px" class="enginewheel">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 40px" class="enginewheel">
+     <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 60px" class="enginewheel">
   </div>
   
   
   
-  <!-- a hardcoded sample coach -->
- <div id="sridharcoach" style="position: absolute; left:220px; top: 150px;" color="rgba(50,100,50,0.1)">
-     <div class="text" style="position: absolute; top: -30px;">sridhar 9.4</div>
+  <!-- a hardcoded sample coach - this should come in over json; GAP is 130px between coaches -->
+ <div class="coach" style="position: absolute; left:-130px; top: 150px;" color="rgba(50,100,50,0.1)" light="9.4">
+     <div class="text" style="position: absolute; top: -30px;">9.4<br>sridhar</div>
      <canvas class="coachbody" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") 0px 0;' ></canvas>
       <canvas class="wheel1" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px 0;'></canvas>
       <canvas class="wheel2" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px -23px;'></canvas>
-  </canvas>
+  </div>
+
+  <!-- a hardcoded sample coach - this should come in over json -->
+ <div class="coach" style="position: absolute; left:-260px; top: 150px;" color="rgba(150,100,150,0.5)" light="10.5">
+     <div class="text" style="position: absolute; top: -30px;">10.5<br>sundaram</div>
+     <canvas class="coachbody" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") 0px 0;' ></canvas>
+      <canvas class="wheel1" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px 0;'></canvas>
+      <canvas class="wheel2" style='background:url("/userimage?User=sridharsundaram@mazalearn.com") -105px -23px;'></canvas>
+  </div>
 </div>
 
 
@@ -200,29 +208,37 @@ div.hidden {visibility:hidden;}
         }
     </script>
 <script>
-function drawLight(pos) {
-      var canvasMain = document.getElementById('sridharcoach');
-      var canvas = canvasMain.getElementsByTagName('canvas')[0];
+  var GAP = 130;
+  
+  function drawLight(coaches, pos) {
+    for (var i = 0; i < coaches.length; i++) {
+      var coach = coaches[i];
+      var canvas = coach.getElementsByTagName('canvas')[0];
       var context = canvas.getContext('2d');
       var centerX = canvas.width / 2;
       var centerY = canvas.height / 2;
-      var radius = Math.abs(Math.sin(pos))*100;
-
+      var light = coach.getAttribute("light");
+      var intensity =  light * light;
+      var sine = Math.abs(Math.sin((pos + i * GAP) * light));
+      
       context.beginPath();
-      context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      context.fillStyle = canvasMain.getAttribute('color');
+      context.arc(centerX, centerY, sine * intensity, 0, 2 * Math.PI, false);
+      context.fillStyle = coach.getAttribute('color');
       context.fill();
       context.lineWidth = 10;
       context.strokeStyle = '#003300';
       context.stroke();
       context.closePath();
+    }
 }
+
 function moveCar() {
   var train = document.getElementById("train");
   var pos = parseInt(train.style.left);
-  if (pos > 1000) pos = -200;
+  var coaches = train.getElementsByClassName('coach');
+  if (pos > 1200 + GAP * coaches.length) pos = 0;
   train.style.left = pos + 3 + "px";
-  drawLight(pos);
+  drawLight(coaches, pos);
 }
 
 setInterval(moveCar, 100);
