@@ -5,6 +5,13 @@
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 <style type="text/css">
 
+  .text {
+    color: white;
+    width: 100px;
+    letter-spacing: 2px;
+    font:15px arial,sans-serif;
+  }
+  
   .coachbody {
     position: absolute;
     left:0px;
@@ -144,7 +151,7 @@ div.hidden {visibility:hidden;}
 
 <div style="position: absolute;left: 165px; top: 150px;" id="train">
  <!-- The engine and its wheels -->
- <div style="position: absolute; left: 100px; top:10px" >
+ <div style="position: absolute; left: 100px; top:155px" >
      <img src="/assets/images/engine.png" width=100 style="position: absolute; left: 230px;">
      <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 230px" class="enginewheel">
      <img src="/assets/images/wheel.png" width=20 style="position: absolute; top: 40px; left: 250px" class="enginewheel">
@@ -155,16 +162,17 @@ div.hidden {visibility:hidden;}
   
   
   <!-- a hardcoded sample coach -->
- <div style="position: absolute; left:220px;" >
-     <canvas id="coachbody" class="coachbody" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") 0px 0;'></canvas>
+ <div id="sridharcoach" style="position: absolute; left:220px; top: 150px;" color="rgba(50,100,50,0.1)">
+     <div class="text" style="position: absolute; top: -30px;">sridhar 9.4</div>
+     <canvas class="coachbody" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") 0px 0;' ></canvas>
       <canvas class="wheel1" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px 0;'></canvas>
       <canvas class="wheel2" style='background:url("/userimage?User=sridhar.sundaram@gmail.com") -105px -23px;'></canvas>
-  </div>
+  </canvas>
 </div>
 
 
 
-<hr style="position:absolute; top:215px" width=1400>
+<hr style="position:fixed; top:355px; left:0px;" width=1400>
     <div id="cssanimationsupport">
     </div>
     <script src="javascript/modernizr-latest.js"></script>
@@ -193,7 +201,8 @@ div.hidden {visibility:hidden;}
     </script>
 <script>
 function drawLight(pos) {
-      var canvas = document.getElementById('coachbody');
+      var canvasMain = document.getElementById('sridharcoach');
+      var canvas = canvasMain.getElementsByTagName('canvas')[0];
       var context = canvas.getContext('2d');
       var centerX = canvas.width / 2;
       var centerY = canvas.height / 2;
@@ -201,7 +210,7 @@ function drawLight(pos) {
 
       context.beginPath();
       context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      context.fillStyle = "rgba(50,100,50,0.1)";
+      context.fillStyle = canvasMain.getAttribute('color');
       context.fill();
       context.lineWidth = 10;
       context.strokeStyle = '#003300';
@@ -211,7 +220,7 @@ function drawLight(pos) {
 function moveCar() {
   var train = document.getElementById("train");
   var pos = parseInt(train.style.left);
-  if (pos > 1000) pos = 0;
+  if (pos > 1000) pos = -200;
   train.style.left = pos + 3 + "px";
   drawLight(pos);
 }
