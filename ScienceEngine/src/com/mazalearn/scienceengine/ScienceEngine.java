@@ -225,7 +225,7 @@ public class ScienceEngine extends Game {
         if (iLevel == null) {
           return new DomainHomeScreen(this, domain);
         }
-        // TODO: below 3rd arg should be domain ilevel-1 activity name, description.
+        
         return new ActivityScreen(this, domain, iLevel);
       }
     }

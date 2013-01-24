@@ -23,8 +23,8 @@ public class ScreenUtils {
    * @param y - beginning y coordinate
    * @param width - width
    * @param height - height
-   * @param newWidth TODO
-   * @param newHeight TODO
+   * @param newWidth - width of new image
+   * @param newHeight - height of new image
    * @param stage 
    * @return screenshot as a pixmap
    */

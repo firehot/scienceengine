@@ -25,7 +25,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 
 /**
- * Activity Home screen - shows all activity levels for that domain.
+ * Activity Home screen - shows all activity numLevels for that domain.
  */
 public class DomainHomeScreen extends AbstractScreen {
 
@@ -34,7 +34,7 @@ public class DomainHomeScreen extends AbstractScreen {
   private static final int THUMBNAIL_HEIGHT = 150;
   private static final int INFO_HEIGHT = 50;
   private Image[] activityThumbs;
-  private Array<?> levels;
+  private int numLevels;
   private Array<?> resources;
   private LabelStyle smallLabelStyle;
   private Profile profile;
@@ -84,16 +84,14 @@ public class DomainHomeScreen extends AbstractScreen {
     table.row();
   }
 
-  @SuppressWarnings("unchecked")
   private Actor createActivityLevelPane() {
     Table activityLevels = new Table(getSkin());
     activityLevels.setName("Activity Levels");
     ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin());
-    activityThumbs = new Image[levels.size];
+    activityThumbs = new Image[numLevels];
     
-    for (int i = 0; i < levels.size; i++) {
-      OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
-      String activityName = (String) levelInfo.get("name");
+    for (int level = 1; level <= numLevels; level++) {
+      String activityName = getMsg().getString(domain + "." + level + ".Name");
       Label label = new Label(activityName, smallLabelStyle); //$NON-NLS-1$
       label.setWrap(true);
       activityLevels.add(label).width(THUMBNAIL_WIDTH).left().top().pad(5);
@@ -102,9 +100,8 @@ public class DomainHomeScreen extends AbstractScreen {
     
     Texture overlayLock = new Texture("images/lock.png");
     boolean lock = false;
-    for (int i = 0; i < levels.size; i++) {
-      final int iLevel = i + 1;
-      String filename = LevelUtil.getLevelFilename(domain, ".png", iLevel);
+    for (int level = 1; level <= numLevels; level++) {
+      String filename = LevelUtil.getLevelFilename(domain, ".png", level);
       Pixmap pixmap;
       if (ScienceEngine.assetManager.isLoaded(filename)) {
         pixmap = ScienceEngine.assetManager.get(filename, Pixmap.class);
@@ -114,21 +111,21 @@ public class DomainHomeScreen extends AbstractScreen {
       Image activityThumb = 
           lock ? new OverlayImage(new Texture(pixmap), overlayLock) 
                : new Image(new Texture(pixmap));
+      final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           gotoActivityLevel(iLevel);
         }
       });
-      activityThumbs[i] = activityThumb;
+      activityThumbs[level - 1] = activityThumb;
       activityLevels.add(activityThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
     }
     activityLevels.row();
 
-    for (int i = 0; i < levels.size; i++) {
-      OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(i);
-      String description = (String) levelInfo.get("description"); //$NON-NLS-1$
-      Label label = new Label(description, smallLabelStyle);
+    for (int level = 1; level <= numLevels; level++) {
+      String activityDescription = getMsg().getString(domain + "." + level + ".Description");
+      Label label = new Label(activityDescription, smallLabelStyle);
       label.setWrap(true);
       ScrollPane scrollPane = new ScrollPane(label, getSkin());
       scrollPane.setScrollingDisabled(true, false);
@@ -258,14 +255,14 @@ public class DomainHomeScreen extends AbstractScreen {
     String fileContents = file.readString();
     OrderedMap<String, ?> rootElem = 
         (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
-    this.levels = (Array<?>) rootElem.get("Levels"); //$NON-NLS-1$
+    this.numLevels = Math.round((Float) rootElem.get("Levels")); //$NON-NLS-1$
     this.resources = (Array<?>) rootElem.get("Resources");   //$NON-NLS-1$
   }
   
   @Override
   public void addAssets() {
-    for (int i = 0; i < levels.size; i++) {
-      String filename = LevelUtil.getLevelFilename(domain, ".png", i + 1);
+    for (int level = 1; level <= numLevels; level++) {
+      String filename = LevelUtil.getLevelFilename(domain, ".png", level);
       ScienceEngine.assetManager.load(filename, Pixmap.class);
     }
   }

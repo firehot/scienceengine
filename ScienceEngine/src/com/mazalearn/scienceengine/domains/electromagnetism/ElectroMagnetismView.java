@@ -26,6 +26,13 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 
 public class ElectroMagnetismView extends AbstractScience2DView {
+  private static final String USER_EMAIL = "useremail";
+  private static final String USER_NAME = "username";
+  private static final String COACH_IMAGE = "coach";
+  private static final String CURRENT = "current";
+  private static final String COLOR = "color";
+  private static final String PLATFORM = "platform";
+
   private Dynamo dynamo;
   private Magnet magnet;
   private Lightbulb lightbulb;
@@ -79,10 +86,11 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     
     // Post drawing, color and current to server
     Map<String, String> postParams = new HashMap<String, String>();
-    postParams.put("User", ScienceEngine.getUserEmail());
-    postParams.put("UserName", ScienceEngine.getUserName());
-    postParams.put("Current", String.valueOf(current));
-    postParams.put("Color", rgba(color));
+    postParams.put(USER_EMAIL, ScienceEngine.getUserEmail());
+    postParams.put(USER_NAME, ScienceEngine.getUserName());
+    postParams.put(CURRENT, String.valueOf(current));
+    postParams.put(COLOR, rgba(color));
+    postParams.put(PLATFORM, ScienceEngine.getPlatformAdapter().getPlatform().name());
     try {
       Net.httpPost("/upload", "application/octet-stream", postParams, drawingActor.getDrawingPng());
       ScienceEngine.displayStatusMessage(this, "Uploaded to MazaLearn - See www.mazalearn.com/train.html");

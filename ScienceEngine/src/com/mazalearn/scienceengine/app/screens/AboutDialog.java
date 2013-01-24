@@ -14,8 +14,6 @@ public class AboutDialog extends Dialog {
   public AboutDialog(Skin skin) {
     super("About", skin);
     
-    getContentTable().debug();
-    //setBackground(createBackground());
     Image image = new Image(new Texture("image-atlases/splash.jpg"));
     getContentTable().add(image).width(100).height(80).center();
     getContentTable().row();

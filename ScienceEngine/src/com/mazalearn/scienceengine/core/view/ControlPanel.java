@@ -59,11 +59,6 @@ public class ControlPanel extends Table {
     registerModelConfigs(modelControlPanel);
   }
   
-  public void reload() { // TODO: remove - not being used
-    science2DController.reload();
-    refresh();
-  }
-  
   private IParameter asParameter(final Science2DBody body) {
     return new IParameter() {
       @Override

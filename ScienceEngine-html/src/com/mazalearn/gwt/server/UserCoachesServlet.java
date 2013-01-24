@@ -19,10 +19,6 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 @SuppressWarnings("serial")
 public class UserCoachesServlet extends HttpServlet {
 
-  private static final String NAME = "name";
-  private static final String COLOR = "color";
-  private static final String CURRENT = "current";
-
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     System.out.println("UserCoaches");
@@ -35,7 +31,7 @@ public class UserCoachesServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Filter colorPresentFilter =
-      new FilterPredicate(COLOR, FilterOperator.NOT_EQUAL, null);
+      new FilterPredicate(UploadServlet.COLOR, FilterOperator.NOT_EQUAL, null);
 
     // Use class Query to assemble a query
     Query q = new Query("User").setFilter(colorPresentFilter);
@@ -47,19 +43,19 @@ public class UserCoachesServlet extends HttpServlet {
     String jsonStr = "[";
     boolean firstCoach = true;
     for (Entity user : pq.asIterable()) {
-      String color = (String) user.getProperty(COLOR);
-      String name = (String) user.getProperty(NAME);
-      String current = String.format("%2.2f", (Double) user.getProperty(CURRENT));
-      String id = user.getKey().getName();
+      String color = (String) user.getProperty(UploadServlet.COLOR);
+      String userName = (String) user.getProperty(UploadServlet.USER_NAME);
+      String current = String.format("%2.2f", (Double) user.getProperty(UploadServlet.CURRENT));
+      String userEmail = user.getKey().getName();
       if (!firstCoach) {
         jsonStr += ",";
       }
       firstCoach = false;
       jsonStr += "{";
-      jsonStr += "\"id\":\"" + id + "\"";
-      jsonStr += ",\"color\":\"#" + color.substring(0, 6) + "\"";
-      jsonStr += ",\"name\":\"" + name + "\"";
-      jsonStr += ",\"current\":" + current;
+      jsonStr += "\"" + UploadServlet.USER_EMAIL + "\":\"" + userEmail + "\"";
+      jsonStr += ",\"" + UploadServlet.COLOR + "\":\"" + color + "\"";
+      jsonStr += ",\"" + UploadServlet.USER_NAME + "\":\"" + userName + "\"";
+      jsonStr += ",\"" + UploadServlet.CURRENT + "\":" + current;
       jsonStr += "}\n";
     }
     

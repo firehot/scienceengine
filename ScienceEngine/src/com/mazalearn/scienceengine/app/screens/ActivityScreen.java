@@ -2,15 +2,11 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -40,7 +36,8 @@ public class ActivityScreen extends AbstractScreen {
   public ActivityScreen(ScienceEngine scienceEngine, String domain, int activityLevel) {
     super(scienceEngine, null);
     this.domain = domain;
-    readDomainActivityInfo(activityLevel);
+    this.activityName = getMsg().getString(domain + "." + activityLevel + ".Name");
+    this.activityDescription = getMsg().getString(domain + "." + activityLevel + ".Description");
     String fileName = LevelUtil.getLevelFilename(domain, ".json", activityLevel);
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       ScienceEngine.assetManager.unload(fileName);
@@ -80,25 +77,6 @@ public class ActivityScreen extends AbstractScreen {
     Dialog dialog = new InstructionDialog(getStage(), getSkin(), activityName, activityDescription, 
         getMsg().getString("Level.Instructions"), "Start");
     dialog.show(stage);
-  }
-  
-  // TODO: Move level description, name into messages.properties
-  @SuppressWarnings("unchecked")
-  private void readDomainActivityInfo(int level) {
-    FileHandle file;
-    String fileName = "data/" + domain + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
-    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
-    file = Gdx.files.internal(fileName);
-    if (file == null) {
-      Gdx.app.error(ScienceEngine.LOG, "Could not open file: " + fileName); //$NON-NLS-1$
-    }
-    String fileContents = file.readString();
-    OrderedMap<String, ?> rootElem = 
-        (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
-    Array<?> levels = (Array<?>) rootElem.get("Levels"); //$NON-NLS-1$
-    OrderedMap<String, ?> levelInfo = (OrderedMap<String, ?>) levels.get(level - 1);
-    this.activityName = (String) levelInfo.get("name"); //$NON-NLS-1$
-    this.activityDescription = (String) levelInfo.get("description"); //$NON-NLS-1$
   }
   
   @Override

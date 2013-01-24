@@ -37,7 +37,6 @@ public class GwtMessages implements IMessage {
 
   @Override
   public void setFont(Skin skin) {
-    // TODO Auto-generated method stub
-    
+    // Ignore for now - do not know how to do.    
   }
 }

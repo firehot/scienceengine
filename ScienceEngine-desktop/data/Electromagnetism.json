@@ -1,32 +1,4 @@
-{"Levels": [
-  {"name": "Magnetic Field around a Bar Magnet",
-   "description": "A Bar Magnet has a magnetic field around it. Explore using a compass and understand how the magnetic field can be visualized as lines of force. Explore the effect of polarity and strength of the magnet on the magnetic field."
-  },
-  {"name": "Magnetic Field around an infinite current carrying wire",
-   "description": "An infinite wire carrying current produces a magnetic field around itself. Explore using a compass and see the lines of force of the magnetic field. Change the current direction and magnitude to see how the field changes."
-  },
-  {"name": "Magnetic Field with 2 infinite current wires",
-   "description": "Move the two wires around, change their current direction and magnitudes to see how the magnetic field is affected"
-  },
-  {"name": "Magnetic Field around an Electromagnet",
-   "description": "A coil of wire carrying current is an electromagnet. It produces a magnetic field around it. The strength and direction of the magnetic field are affected by the current strength and direction."
-  },
-  {"name": "Dynamo - Induction of current by relative motion of a bar magnet and a coil of wire",
-   "description": "Experiment with how current is induced in a coil of wire when the bar magnet is rotated or moved in its vicinity. Understand how the current induced changes with the polarity, strength of the bar magnet."
-  },
-  {"name": "Dynamo - Induction of current by relative motion of an electromagnet and a coil of wire",
-   "description": "Experiment with how current is induced in a coil of wire when the electromagnet is rotated or moved in its vicinity. Understand how the current induced changes with the polarity, strength of the electromagnet."
-  },
-  {"name": "DC Motor - A current carrying coil in a magnetic field rotates to create a motor",
-   "description": "Experiment with how a motor is created by passing current through a wire placed in a magnetic field. How a commutator works with Direct Current."
-  },
-  {"name": "AC Motor - A coil carrying Alternating Current in a magnetic field rotates to create a motor",
-   "description": "Experiment with how a motor can be created by passing alternating current through a wire placed in a magnetic field. The frequency has to be matched to rate of rotation to sustain the spin."
-  },
-  {"name": "Catch the Science Train - Create your own coach and light it up",
-   "description": "Design your own coach to attach to the Science Train. This coach will be uploaded to the website so that your friends can see it. Design a dynamo by choosing the magnet, the coil for the dynamo and the light bulb to light up your coach."
-  }
-],
+{"Levels": 9,
 "Resources": [
 {"type": "video",
  "duration": "2:03",
