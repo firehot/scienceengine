@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.InstructionDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
@@ -192,11 +193,11 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       Label component = new Label("", skin);
       float x = stageComponent.getX();
       if (x < 0) {
-        x = getWidth() - x;
+        x = AbstractScreen.VIEWPORT_WIDTH + x;
       }
       float y = stageComponent.getY();
       if (y < 0) {
-        y = getHeight() - y;
+        y = AbstractScreen.VIEWPORT_HEIGHT + y;
       }
       component.setPosition(x, y);
       component.setName(stageComponent.name());

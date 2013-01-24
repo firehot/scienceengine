@@ -68,7 +68,7 @@ public abstract class AbstractScreen implements Screen {
     final TextButton backButton = 
         new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin(), "body"); //$NON-NLS-1$
     backButton.setName("BackButton");
-    backButton.setPosition(5, VIEWPORT_HEIGHT - 30);
+    backButton.setPosition(5, VIEWPORT_HEIGHT - 50);
     backButton.setWidth(80);
     backButton.addListener(new ClickListener() {
       public void clicked(InputEvent event, float x, float y) {

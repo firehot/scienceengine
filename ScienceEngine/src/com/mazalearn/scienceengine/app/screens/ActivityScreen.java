@@ -82,7 +82,7 @@ public class ActivityScreen extends AbstractScreen {
     dialog.show(stage);
   }
   
-  // TODO: duplicate of this method is in DomainHomeScreen also - combine
+  // TODO: Move level description, name into messages.properties
   @SuppressWarnings("unchecked")
   private void readDomainActivityInfo(int level) {
     FileHandle file;
@@ -90,7 +90,7 @@ public class ActivityScreen extends AbstractScreen {
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
     file = Gdx.files.internal(fileName);
     if (file == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not open file: " + fileName); //$NON-NLS-1$
+      Gdx.app.error(ScienceEngine.LOG, "Could not open file: " + fileName); //$NON-NLS-1$
     }
     String fileContents = file.readString();
     OrderedMap<String, ?> rootElem = 
