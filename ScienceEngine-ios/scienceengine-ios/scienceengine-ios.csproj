@@ -68,6 +68,7 @@
       </CustomCommands>
     </CustomCommands>
     <BuildIpa>True</BuildIpa>
+    <MtouchDebug>True</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -87,6 +88,7 @@
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchExtraArgs>-cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
     <MtouchUseSGen>True</MtouchUseSGen>
+    <MtouchDebug>True</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -96,7 +98,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <BuildIpa>True</BuildIpa>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignKey>iPhone Distribution: Sridhar Sundaram</CodesignKey>
     <CustomCommands>
       <CustomCommands>
         <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
@@ -107,6 +109,8 @@
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchExtraArgs>-cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
     <additionalargs>-v -v -v</additionalargs>
+    <CodesignProvision>F8943087-71ED-4C4A-BF28-50442146F704</CodesignProvision>
+    <MtouchDebug>True</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -167,13 +171,13 @@
       <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\IKVM.Runtime.JNI.dll</HintPath>
     </Reference>
     <Reference Include="libObjectAL">
-      <HintPath>libObjectAL.dll</HintPath>
+      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\objectal\libObjectAL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="libgdx.a" />
     <None Include="libikvm-natives.a" />
+    <None Include="libgdx.a" />
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.html">
       <Link>data\Electromagnetism\1.html</Link>
     </Content>
@@ -240,6 +244,33 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Messages.properties">
       <Link>data\Messages.properties</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\ferrite.png">
+      <Link>images\ferrite.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\neodymium.png">
+      <Link>images\neodymium.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\smco.png">
+      <Link>images\smco.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\copperwire.png">
+      <Link>images\copperwire.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\click.mp3">
+      <Link>sound\click.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\8.html">
+      <Link>data\Electromagnetism\8.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\9.html">
+      <Link>data\Electromagnetism\9.html</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\music\level.mp3">
+      <Link>music\level.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\music\menu.mp3">
+      <Link>music\menu.mp3</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -388,24 +419,12 @@
       <Link>sound\celebrate.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\sound\click.wav">
-      <Link>sound\click.wav</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\sound\failure.mp3">
       <Link>sound\failure.mp3</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\sound\success.mp3">
       <Link>sound\success.mp3</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\music\level.ogg">
-      <Link>music\level.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\music\menu.ogg">
-      <Link>music\menu.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.png">

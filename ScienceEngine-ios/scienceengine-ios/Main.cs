@@ -36,6 +36,10 @@ namespace scienceengineios
 			webViewController.load (new NSUrlRequest(new NSUrl(localHtmlUrl, false)));
 			window.MakeKeyAndVisible();
 		}
+
+		public override bool supportsMusic() {
+			return true;
+		}
 	}
 
 	public class Application

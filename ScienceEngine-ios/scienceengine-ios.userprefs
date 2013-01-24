@@ -1,22 +1,21 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" />
   <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/Main.cs">
     <Files>
-      <File FileName="scienceengine-ios/Main.cs" Line="23" Column="15" />
+      <File FileName="scienceengine-ios/Main.cs" Line="86" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State selected="True" />
+        <State expanded="True">
+          <Node name="scienceengine-ios" expanded="True">
+            <Node name="References" expanded="True" />
+          </Node>
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint enabled="false" file="/Users/sridhar/Documents/workspace/libgdx/gdx/src/com/badlogic/gdx/assets/AssetManager.java" line="420" />
-      <Breakpoint enabled="false" file="/Users/sridhar/Documents/workspace/libgdx/gdx/src/com/badlogic/gdx/assets/AssetManager.java" line="421" />
-      <Breakpoint enabled="false" file="/Users/sridhar/Documents/workspace/libgdx/gdx/src/com/badlogic/gdx/graphics/g2d/TextureAtlas.java" line="97" />
-      <Breakpoint enabled="false" file="/Users/sridhar/Documents/workspace/libgdx/gdx/src/com/badlogic/gdx/graphics/g2d/TextureAtlas.java" line="99" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
