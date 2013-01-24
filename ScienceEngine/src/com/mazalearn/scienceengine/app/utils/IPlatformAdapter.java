@@ -48,5 +48,11 @@ public interface IPlatformAdapter {
   public void putBytes(Pixmap pixmap, byte[] lines);
 
   public byte[] getPngBytes(Pixmap snapshot);
+
+  // Does platform support playing music?
+  public boolean supportsMusic();
+
+  // Does platform support language change?
+  public boolean supportsLanguage();
 }
 

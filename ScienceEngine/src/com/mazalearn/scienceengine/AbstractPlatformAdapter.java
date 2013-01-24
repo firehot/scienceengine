@@ -99,4 +99,14 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   public byte[] getPngBytes(Pixmap snapshot) {
     throw new UnsupportedOperationException("Not implemented");
   }
+
+  @Override
+  public boolean supportsMusic() {
+    return false;
+  }
+
+  @Override
+  public boolean supportsLanguage() {
+    return false;
+  }
 }

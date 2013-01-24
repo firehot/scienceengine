@@ -8,13 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
-import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 /**
  * A simple options screen.
@@ -40,9 +40,9 @@ public class OptionsScreen extends AbstractScreen {
     table.columnDefaults(0).padRight(20);
     table.add(getMsg().getString("ScienceEngine.Options")).colspan(3); //$NON-NLS-1$
 
-    // Create locale selection box if Desktop or Android
-    Platform platform = ScienceEngine.getPlatformAdapter().getPlatform();
-    if (platform == Platform.Android || platform == Platform.Desktop) {
+    // Create locale selection box if platform supports languages
+    IPlatformAdapter platform = ScienceEngine.getPlatformAdapter();
+    if (platform.supportsLanguage()) {
       final SelectBox languageSelect = 
           new SelectBox(new String[] { "en", "ka", "hi"}, getSkin());
       languageSelect.setSelection(getMsg().getLanguage());
@@ -75,24 +75,26 @@ public class OptionsScreen extends AbstractScreen {
     table.add(getMsg().getString("ScienceEngine.SoundEffects")); //$NON-NLS-1$
     table.add(soundEffectsCheckbox).colspan(2).left();
 
-    final CheckBox musicCheckbox = new CheckBox("", getSkin()); //$NON-NLS-1$
-    musicCheckbox.setChecked(ScienceEngine.getPreferencesManager().isMusicEnabled());
-    musicCheckbox.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        boolean enabled = musicCheckbox.isChecked();
-        ScienceEngine.getPreferencesManager().setMusicEnabled(enabled);
-        ScienceEngine.getMusicManager().setEnabled(enabled);
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-
-        // if the music is now enabled, start playing the menu music
-        if (enabled)
-          ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
-      }
-    });
-    table.row();
-    table.add(getMsg().getString("ScienceEngine.Music")); //$NON-NLS-1$
-    table.add(musicCheckbox).colspan(2).left();
+    if (platform.supportsMusic()) {
+      final CheckBox musicCheckbox = new CheckBox("", getSkin()); //$NON-NLS-1$
+      musicCheckbox.setChecked(ScienceEngine.getPreferencesManager().isMusicEnabled());
+      musicCheckbox.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          boolean enabled = musicCheckbox.isChecked();
+          ScienceEngine.getPreferencesManager().setMusicEnabled(enabled);
+          ScienceEngine.getMusicManager().setEnabled(enabled);
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+  
+          // if the music is now enabled, start playing the menu music
+          if (enabled)
+            ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+        }
+      });
+      table.row();
+      table.add(getMsg().getString("ScienceEngine.Music")); //$NON-NLS-1$
+      table.add(musicCheckbox).colspan(2).left();
+    }
 
     // range is [0.0,1.0]; step is 0.1f
     final Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, getSkin());
@@ -117,6 +119,18 @@ public class OptionsScreen extends AbstractScreen {
     table.add(getMsg().getString("ScienceEngine.Volume")); //$NON-NLS-1$
     table.add(volumeSlider);
     table.add(volumeValue).width(40);
+    
+    // Add About
+    table.row();
+    TextButton aboutButton = 
+        new TextButton(getMsg().getString("ScienceEngine.About"), getSkin());
+    aboutButton.addListener(new ClickListener() {
+      @Override
+      public void clicked (InputEvent event, float x, float y) {
+        new AboutDialog(getSkin()).show(stage);
+      }      
+    });
+    table.add(aboutButton).colspan(3);
   }
 
   /**

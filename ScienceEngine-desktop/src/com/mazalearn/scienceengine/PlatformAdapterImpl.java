@@ -106,4 +106,14 @@ class PlatformAdapterImpl extends NonWebPlatformAdapter {
 
     return font;
   }
+
+  @Override
+  public boolean supportsMusic() {
+    return true;
+  }
+
+  @Override
+  public boolean supportsLanguage() {
+    return true;
+  }
 }

@@ -62,7 +62,7 @@ public class ComponentLoader {
     float y = (Float) LevelLoader.nvl(component.get("y"), 0f);
     float rotation = (Float) LevelLoader.nvl(component.get("rotation"), 0f);
 
-    Actor actor = create ? science2DController.addScience2DActor(type, viewSpec, x, y, rotation) : findActor(type);
+    Actor actor = create ? science2DController.addScience2DActor(type, viewSpec, x, y, rotation) : findActor(type, viewSpec);
     if (actor == null) {
       Gdx.app.error(ScienceEngine.LOG, "Could not load component: " + type);
       return;
@@ -99,7 +99,7 @@ public class ComponentLoader {
     }
   }
 
-  private Actor findActor(String type) {
+  private Actor findActor(String type, String viewSpec) {
     Actor actor = science2DController.getView().findActor(type);
     // If multiple actors of same type, they have number suffix 1,2,3...
     if (actor == null) {
@@ -107,6 +107,10 @@ public class ComponentLoader {
           .nvl(componentTypeCount.get(type), 0) + 1;
       componentTypeCount.put(type, count);
       actor = science2DController.getView().findActor(type + "." + count);
+    }
+    // Image name will be the viewspec
+    if (actor == null) {
+      actor = science2DController.getView().findActor(viewSpec);
     }
     return actor;
   }

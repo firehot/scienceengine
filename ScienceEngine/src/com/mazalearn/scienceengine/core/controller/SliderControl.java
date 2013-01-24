@@ -43,7 +43,12 @@ public class SliderControl implements IControl {
   
   @Override
   public void syncWithModel() {
-    slider.setValue(property.getValue());
+    Float value = property.getValue();
+    // Keep property value in min,max range.
+    if (value < property.getLow()) value = property.getLow();
+    if (value > property.getHigh()) value = property.getHigh();
+    property.setValue(value);
+    slider.setValue(value);
   }
  
   public boolean isAvailable() {

@@ -25,7 +25,7 @@ plan: [
           {goal: "Does movement of magnet affect the induced current?",
            postcondition: "Count(BarMagnet.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1",
            success: 250},
-          {goal: "Change magnet mode from free to rotate.\nDoes rotation of magnet affect the induced current?",
+          {goal: "Change magnet mode from Move to Rotate.\nDoes rotation of magnet affect the induced current?",
            postcondition: "Count(BarMagnet.Rotate) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1",
            success: 250},
           {goal: "Does movement of coil affect the induced current?",
