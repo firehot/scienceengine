@@ -31,8 +31,10 @@ i:data/Electromagnetism/6.png
 b:data/Electromagnetism/7.html
 t:data/Electromagnetism/7.json
 i:data/Electromagnetism/7.png
+b:data/Electromagnetism/8.html
 t:data/Electromagnetism/8.json
 i:data/Electromagnetism/8.png
+b:data/Electromagnetism/9.html
 t:data/Electromagnetism/9.json
 i:data/Electromagnetism/9.png
 t:data/Electromagnetism.json
@@ -72,6 +74,7 @@ i:images/coppercoils-front1.png
 i:images/coppercoils-front2.png
 i:images/coppercoils.png
 b:images/coppercoils.xcf
+i:images/copperwire.png
 i:images/cross.png
 i:images/current.png
 i:images/currentcoilsheet.png
@@ -96,6 +99,7 @@ i:images/electromagnetism/currentcoil/pack.png
 i:images/engine.png
 i:images/environment.jpg
 i:images/faraday.png
+i:images/ferrite.png
 i:images/fieldarrow-yellow.png
 i:images/fieldarrow.png
 i:images/fire-texture.jpg
@@ -108,6 +112,7 @@ i:images/iceberg.jpg
 i:images/lightbulb.png
 i:images/lock.png
 i:images/mariecurie.png
+i:images/neodymium.png
 i:images/newton.png
 i:images/oersted.png
 i:images/pinflat.png
@@ -119,12 +124,13 @@ i:images/rectangle_coil.png
 i:images/redballoon.png
 i:images/shoppingcart.png
 i:images/simplemagnet.png
+i:images/smco.png
 i:images/videoplay.png
 i:images/wheel.png
 d:music
 b:music/.gitignore
-a:music/level.ogg
-a:music/menu.ogg
+a:music/level.mp3
+a:music/menu.mp3
 d:skin
 b:skin/.gitignore
 t:skin/arial-15.fnt
@@ -139,6 +145,6 @@ i:skin/uiskin.png
 d:sound
 b:sound/.gitignore
 a:sound/celebrate.mp3
-a:sound/click.wav
+a:sound/click.mp3
 a:sound/failure.mp3
 a:sound/success.mp3

@@ -1,0 +1,7 @@
+/assets
+
+/WEB-INF/deploy
+/WEB-INF/appengine-generated
+/WEB-INF/lib
+/com.mazalearn.GwtDefinition
+
