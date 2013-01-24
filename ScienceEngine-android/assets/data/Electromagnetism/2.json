@@ -8,7 +8,7 @@ components:[
 circuits:[["CurrentSource","Wire"]],
 configs:[
 {name:"CurrentSource.CurrentType",permitted:true,value:"DC"},
-{name:"Current Source.CurrentFrequency",permitted:true,value:1.0},
+{name:"CurrentSource.CurrentFrequency",permitted:true,value:1.0},
 {name:"CurrentSource.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.CurrentDirection",permitted:true,value:true}],
 plan:[{type: "Guide", 

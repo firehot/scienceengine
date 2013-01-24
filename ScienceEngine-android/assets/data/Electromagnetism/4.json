@@ -1,4 +1,4 @@
-{name:"Electromagnetism",level:4,description:"Magnetic Field of an ElectroMagnet",
+{name:"Electromagnetism",level:5,description:"Magnetic Field of an ElectroMagnet",
 components:[
 {type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0,move:"None"},
 {type:"CurrentSource",x:389.0,y:181.0,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None"},
@@ -9,7 +9,7 @@ groups:[["ElectroMagnet","CurrentSource"]],
 circuits:[["CurrentSource","ElectroMagnet"]],
 configs:[
 {name:"CurrentSource.CurrentType",permitted:true,value:"DC"},
-{name:"CurrentSource.Frequency",permitted:true,value:1.0},
+{name:"CurrentSource.CurrentFrequency",permitted:true,value:1.0},
 {name:"CurrentSource.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.CurrentDirection",permitted:true,value:true},
 {name:"ElectroMagnet.CoilLoops",permitted:true,value:1.0}],

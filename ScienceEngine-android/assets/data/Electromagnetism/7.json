@@ -22,12 +22,19 @@ configs:[
 {name:"CurrentCoil.RotationVelocity", permitted:false, value:2}
 ],
 plan: [
+   {type: "ParameterProber",
+             goal:"Should MaxCurrent be increased or decreased to make the motor run faster?\nSelect X if parameter does not affect motor.",
+             success: 100,
+             failure: 50,
+             parameter:"CurrentSource.MaxCurrent", 
+             resultType:"Direct"},
   {type: "Guide",
    goal: "Can you make number of revolutions of the motor +5 by configuring only the magnet?",
    success:200,
    timelimit: 300,
    configs:[{name: "CurrentCoil.CommutatorType", permitted: false, value:"Connector"},
-            {name: "CurrentSource.CurrentDirection", permitted: false, value: false}
+            {name: "CurrentSource.CurrentDirection", permitted: false, value: false},
+            {name:"CurrentCoil.RotationDataType", permitted:true},
    ],
    subgoals:[{goal: "Have you configured the current coil to see the number of revolutions?", 
            postcondition: "CurrentCoil.RotationDataType = 'NumRevolutions'"},
@@ -37,7 +44,7 @@ plan: [
            when: "HorseshoeMagnet.Flip",
            postcondition: "(CurrentCoil.Angle / pi > 1.3 and CurrentCoil.Angle / pi < 1.7) or (CurrentCoil.Angle / pi > 0.3 and CurrentCoil.Angle / pi < 0.7)"},
           {goal: "Is number of revolutions increasing?",
-           postcondition: "CurrentCoil.RotationData >= 5"}
+           postcondition: "CurrentCoil.RotationData >= 5"},
    ]},
    {type: "Guide",
    goal: "Now, can you make number of revolutions of the motor +10 by configuring only the current source?",
@@ -65,7 +72,7 @@ plan: [
              parameter:"HorseshoeMagnet.Flip",
              result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
    {type: "ParameterProber",
-             goal:"Select decrease or increase parameter to make the motor run faster.\nSelect X if parameter does not affect motor.",
+             goal:"Should MaxCurrent be increased or decreased to make the motor run faster?\nSelect X if parameter does not affect motor.",
              success: 100,
              failure: 50,
              parameter:"CurrentSource.MaxCurrent", 
@@ -78,7 +85,7 @@ plan: [
              parameter:"CurrentSource.CurrentDirection",
              result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
    {type: "Abstractor", 
-        goal:"Select those variables in the shopping cart which affect the rotation speed of the motor. You have 3 tries.",
+        goal:"Select variables which affect the rotation speed of the motor and press Done.\nYou have 3 tries.",
         configs: [
         {name:"Environment.RoomTemperature", permitted: false},
         {name:"CurrentCoil.RotationDataType",permitted: false},
