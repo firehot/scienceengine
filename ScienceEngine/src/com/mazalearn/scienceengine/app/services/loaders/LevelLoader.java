@@ -48,7 +48,7 @@ public class LevelLoader {
     int level = science2DController.getLevel();
     FileHandle file = LevelUtil.getLevelFile(domain, ".json", level);
     if (file == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not open level json file");
+      Gdx.app.error(ScienceEngine.LOG, "Could not open level json file");
       return null;
     }
     String str = file.readString();

@@ -30,7 +30,10 @@ public class ConfigLoader {
     String name = (String) configObj.get("name");
     Gdx.app.log(ScienceEngine.LOG, "Loading config: " + name);
     IModelConfig<?> config = science2DModel.getConfig(name);
-    if (config == null) return;
+    if (config == null) {
+      Gdx.app.error(ScienceEngine.LOG, "Config not found:" + name);
+      return;
+    }
     
     config.setPermitted((Boolean) LevelLoader.nvl(configObj.get("permitted"), false));
     if (configObj.get("value") != null) {

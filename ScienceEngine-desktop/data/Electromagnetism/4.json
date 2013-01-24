@@ -9,7 +9,7 @@ groups:[["ElectroMagnet","CurrentSource"]],
 circuits:[["CurrentSource","ElectroMagnet"]],
 configs:[
 {name:"CurrentSource.CurrentType",permitted:true,value:"DC"},
-{name:"CurrentSource.Frequency",permitted:true,value:1.0},
+{name:"CurrentSource.CurrentFrequency",permitted:true,value:1.0},
 {name:"CurrentSource.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.CurrentDirection",permitted:true,value:true},
 {name:"ElectroMagnet.CoilLoops",permitted:true,value:1.0}],

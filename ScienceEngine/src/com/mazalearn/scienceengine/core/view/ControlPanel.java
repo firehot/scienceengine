@@ -59,7 +59,7 @@ public class ControlPanel extends Table {
     registerModelConfigs(modelControlPanel);
   }
   
-  public void reload() {
+  public void reload() { // TODO: remove - not being used
     science2DController.reload();
     refresh();
   }

@@ -70,12 +70,15 @@ class TutorLoader {
   @SuppressWarnings("unchecked")
   private List<Subgoal> loadSubgoals(Array<?> subgoalsObj) {
     List<Subgoal> subgoals = new ArrayList<Subgoal>();
-    if (subgoalsObj == null)
+    if (subgoalsObj == null) {
+      Gdx.app.error(ScienceEngine.LOG, "No subgoals found for Tutor");
       return subgoals;
+    }
     for (int i = 0; i < subgoalsObj.size; i++) {
       try {
         subgoals.add(loadSubgoal((OrderedMap<String, ?>) subgoalsObj.get(i)));
       } catch (SyntaxException e) {
+        Gdx.app.error(ScienceEngine.LOG, "Could not load subgoal");
         e.printStackTrace();
       }
     }

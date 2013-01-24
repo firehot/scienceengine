@@ -64,7 +64,7 @@ public class ComponentLoader {
 
     Actor actor = create ? science2DController.addScience2DActor(type, viewSpec, x, y, rotation) : findActor(type);
     if (actor == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Ignoring - Could not load component: " + type);
+      Gdx.app.error(ScienceEngine.LOG, "Could not load component: " + type);
       return;
     }
     if (component.get("x") != null)

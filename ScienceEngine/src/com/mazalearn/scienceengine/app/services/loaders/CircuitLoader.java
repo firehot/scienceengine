@@ -29,6 +29,7 @@ public class CircuitLoader {
       String name = circuit.get(i);
       Science2DBody body = science2DModel.findBody(name);
       if (body == null) {
+        Gdx.app.error(ScienceEngine.LOG, "Body not found: " + name);
         throw new IllegalArgumentException("Body not found: " + name);
       }
       circuitElements[i] = (CircuitElement) body;      

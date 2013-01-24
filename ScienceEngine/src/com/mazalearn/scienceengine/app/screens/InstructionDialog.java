@@ -35,7 +35,7 @@ public class InstructionDialog extends Dialog {
 
     getContentTable().add(description).width(400).pad(10);
     getContentTable().row();
-    getContentTable().add(navigationButton);
+    getContentTable().add(navigationButton).left();
     getContentTable().row();
     @SuppressWarnings("unchecked")
     final Cell<Label> navCell = (Cell<Label>) getContentTable().add(navigation).width(400).pad(10);

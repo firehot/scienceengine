@@ -28,6 +28,7 @@ public class GroupLoader {
       String name = group.get(i);
       Actor actor = science2DView.findActor(name);
       if (actor == null) {
+        Gdx.app.error(ScienceEngine.LOG, "Actor not found: " + name);
         throw new IllegalArgumentException("Actor not found: " + name);
       }
       groupElements[i] = actor;      

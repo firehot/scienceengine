@@ -99,13 +99,13 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
         dummy.setConfigParameter(probeConfig.getParameter(), value);
         science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
       }
+      ScienceEngine.selectBody(dummy, science2DController.getView());
     } else {
       dummy.setConfigParameter(null, 0);
       science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     }
     image.setVisible(activate);
     ScienceEngine.setProbeMode(activate);
-    ScienceEngine.selectBody(dummy, science2DController.getView());
     // Turn on access to disabled parts of control panel
     this.setVisible(activate);
   }
