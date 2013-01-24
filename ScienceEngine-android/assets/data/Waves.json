@@ -1,8 +1,4 @@
-{"Levels": [
-  {"name": "Waves in a string",
-   "description": "Create waves in a string to understand travelling waves, transverse waves, interference, superposition."
-  }
-],
+{"Levels": 1,
 "Resources": [
 {"type": "ignore",
  "duration": "2:03", 
