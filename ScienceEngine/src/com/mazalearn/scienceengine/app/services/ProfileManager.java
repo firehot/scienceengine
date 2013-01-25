@@ -29,7 +29,7 @@ public class ProfileManager {
     // create the handle for the profile data file
     FileHandle profileDataFile = null;
     try {
-      profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
+      profileDataFile = Gdx.files.external(PROFILE_DATA_FILE);
       Gdx.app.log(ScienceEngine.LOG,
           "Retrieving profile from: " + profileDataFile.path());
   
@@ -89,7 +89,7 @@ public class ProfileManager {
   protected void persist(Profile profile) {
     try {
       // create the handle for the profile data file
-      FileHandle profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
+      FileHandle profileDataFile = Gdx.files.external(PROFILE_DATA_FILE);
       Gdx.app.log(ScienceEngine.LOG, 
           "Persisting profile in: " + profileDataFile.path());
   

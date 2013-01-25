@@ -48,7 +48,8 @@ public class SplashScreen extends AbstractScreen {
       this.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+          if (ScienceEngine.DEV_MODE == DevMode.DEBUG && !profile.getUserEmail().isEmpty() &&
+        		  !profile.getUserName().isEmpty()) {
             scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
           } else if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
             // Onscreen keyboard not showing in IOS - this is a workaround.
