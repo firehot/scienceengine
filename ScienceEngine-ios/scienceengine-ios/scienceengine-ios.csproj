@@ -68,7 +68,6 @@
       </CustomCommands>
     </CustomCommands>
     <BuildIpa>True</BuildIpa>
-    <MtouchDebug>True</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -80,15 +79,15 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <IpaPackageName />
     <MtouchI18n>west</MtouchI18n>
+    <BuildIpa>True</BuildIpa>
     <CustomCommands>
       <CustomCommands>
         <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
-    <MtouchExtraArgs>-cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
-    <MtouchUseSGen>True</MtouchUseSGen>
-    <MtouchDebug>True</MtouchDebug>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchUseThumb>True</MtouchUseThumb>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -104,13 +103,11 @@
         <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
-    <MtouchI18n />
+    <MtouchI18n>west</MtouchI18n>
     <IpaPackageName />
     <MtouchArch>ARMv7</MtouchArch>
-    <MtouchExtraArgs>-cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
-    <additionalargs>-v -v -v</additionalargs>
-    <CodesignProvision>F8943087-71ED-4C4A-BF28-50442146F704</CodesignProvision>
-    <MtouchDebug>True</MtouchDebug>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
+    <CodesignProvision>8AEA0A63-0555-4AE7-983C-092A89ADA7EB</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
