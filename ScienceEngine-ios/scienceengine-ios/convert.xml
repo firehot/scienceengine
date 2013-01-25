@@ -24,11 +24,9 @@
 			<arg value="${IKVM_HOME}/bin/ikvmc.exe"/>
 			<arg value="-nostdlib"/>
 			<arg value="-target:library"/>
-			<arg value="-debug"/>
 			<arg value="-srcpath:${SRC}"/>
 			<arg value="-out:${OUT}"/>
-      <arg value="-r:libObjectAL.dll"/>
-			<arg value="-r:${MONO_HOME}/mscorlib.dll"/>
+      <arg value="-r:${MONO_HOME}/mscorlib.dll"/>
 			<arg value="-r:${MONO_HOME}/System.dll"/>
 			<arg value="-r:${MONO_HOME}/System.Core.dll"/>
 			<arg value="-r:${MONO_HOME}/System.Data.dll"/>
