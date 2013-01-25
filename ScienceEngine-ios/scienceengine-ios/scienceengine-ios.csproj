@@ -103,13 +103,11 @@
         <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
-    <MtouchI18n />
+    <MtouchI18n>west</MtouchI18n>
     <IpaPackageName />
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
-    <additionalargs>-v -v -v</additionalargs>
-    <CodesignProvision>F8943087-71ED-4C4A-BF28-50442146F704</CodesignProvision>
-    <MtouchDebug>True</MtouchDebug>
+    <CodesignProvision>8AEA0A63-0555-4AE7-983C-092A89ADA7EB</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
