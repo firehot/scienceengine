@@ -28,7 +28,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainAct
 public class ElectroMagnetismView extends AbstractScience2DView {
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
-  private static final String COACH_IMAGE = "coach";
   private static final String CURRENT = "current";
   private static final String COLOR = "color";
   private static final String PLATFORM = "platform";
