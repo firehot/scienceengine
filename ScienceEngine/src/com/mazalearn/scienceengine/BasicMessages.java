@@ -19,6 +19,10 @@ final class BasicMessages implements IMessage {
       String[] lines = contents.split("\n");
       for (String line: lines) {
         String[] keyval = line.split("=");
+        if (keyval.length < 2) {
+          Gdx.app.error(ScienceEngine.LOG, "Improper message line: " + line);
+          continue; // Improper line.
+        }
         i18nMap.put(keyval[0], keyval[1]);
       }
     }

@@ -24,7 +24,8 @@ public class FieldMeterActor extends Science2DActor {
   public FieldMeterActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
-    this.removeListener(getListeners().get(0));
+    this.removeListener(getListeners().get(0)); // help listener
+    this.removeListener(getListeners().get(0)); // move, rotate listener
     this.addListener(new ClickListener() {   
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
