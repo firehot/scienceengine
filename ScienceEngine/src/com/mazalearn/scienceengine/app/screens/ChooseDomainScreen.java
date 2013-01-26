@@ -1,7 +1,9 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -66,13 +68,30 @@ public class ChooseDomainScreen extends AbstractScreen {
         new String[] {StatesOfMatterController.DOMAIN, 
                       WaveController.DOMAIN, 
                       ElectroMagnetismController.DOMAIN};
+    Texture overlayLock = new Texture("images/lock.png");
     for (final String domain: domains) {
+      final boolean lock = !domain.equals(ElectroMagnetismController.DOMAIN);
+      Texture levelThumbnail = LevelUtil.getLevelThumbnail(domain, 1);
       Image domainThumb = 
-          new Image(LevelUtil.getLevelThumbnail(domain, 1));
+          lock ? new OverlayImage(levelThumbnail, overlayLock) : new Image(levelThumbnail);
       domainThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          gotoDomainHome(domain);
+          if (lock) {
+            Gdx.input.getTextInput(new TextInputListener() {
+              @Override
+              public void input(String passcode) {
+                if ("9876".equals(passcode)) {
+                  gotoDomainHome(domain);
+                }
+              }
+              
+              @Override
+              public void canceled() {}
+            }, "Enter key", "");         
+          } else {
+            gotoDomainHome(domain);
+          }
         }
 
       });
