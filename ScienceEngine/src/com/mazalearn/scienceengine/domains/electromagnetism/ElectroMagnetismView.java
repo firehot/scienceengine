@@ -83,6 +83,21 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     DrawingActor drawingActor = (DrawingActor) findActor(ComponentType.Drawing.name());
     drawingActor.getCoach().setLight(current, lightbulb.getColor());
     
+    // Show only the main actors - ScienceTrain and control related
+    List<String> actorsToBeHidden = 
+        Arrays.asList(new String[]{ComponentType.Dynamo.name(),  ComponentType.Magnet.name(), 
+            CircuitActor.COMPONENT_TYPE, ComponentType.Drawing.name(), 
+            ComponentType.Lightbulb.name()});
+    for (Actor actor: getActors()) {
+      String name = actor.getName();
+      if (actorsToBeHidden.contains(name)) {
+        actor.setVisible(false);
+      }
+      if (ComponentType.ScienceTrain.name().equals(name)) {
+        ((ScienceTrainActor) actor).animate();
+      }
+    }
+    
     // Post drawing, color and current to server
     Map<String, String> postParams = new HashMap<String, String>();
     postParams.put(USER_EMAIL, ScienceEngine.getUserEmail());
@@ -98,20 +113,6 @@ public class ElectroMagnetismView extends AbstractScience2DView {
       ScienceEngine.displayStatusMessage(this, "Network Problem: Failed to upload to MazaLearn");
     }
     
-    // Show only the main actors - ScienceTrain and control related
-    List<String> actorsToBeHidden = 
-        Arrays.asList(new String[]{ComponentType.Dynamo.name(),  ComponentType.Magnet.name(), 
-            CircuitActor.COMPONENT_TYPE, ComponentType.Drawing.name(), 
-            ComponentType.Lightbulb.name()});
-    for (Actor actor: getActors()) {
-      String name = actor.getName();
-      if (actorsToBeHidden.contains(name)) {
-        actor.setVisible(false);
-      }
-      if (ComponentType.ScienceTrain.name().equals(name)) {
-        ((ScienceTrainActor) actor).animate();
-      }
-    }
   }
 
   private String rgba(Color color) {
