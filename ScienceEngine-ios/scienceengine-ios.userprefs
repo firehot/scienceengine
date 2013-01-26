@@ -1,10 +1,10 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Ad-Hoc|iPhone" />
   <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="scienceengine-ios" expanded="True" selected="True" />
+          <Node name="scienceengine-ios" selected="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">
