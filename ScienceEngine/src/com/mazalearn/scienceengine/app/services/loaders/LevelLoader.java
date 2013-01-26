@@ -77,6 +77,7 @@ public class LevelLoader {
     readLevelInfo(rootElem);
     componentLoader.loadComponents((Array<?>) rootElem.get("components"), false);
     ConfigLoader.loadConfigs((Array<?>) rootElem.get("configs"), science2DModel);
+    controlPanel.enableControls(true);
     controlPanel.refresh();
   }
   

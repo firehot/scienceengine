@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
@@ -26,27 +25,14 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   }
   
   @Override
-  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
-    super.reinitialize(x, y, width, height, probeMode);
+  public void reinitialize(boolean probeMode) {
+    super.reinitialize(probeMode);
     reinitializeConfigs(probeMode);
   }
 
   private void reinitializeConfigs(boolean probeMode) {
     fieldMeter.setActive(!probeMode);
     fieldMeterActor.setVisible(!probeMode);
-    // Make all active elements not movable
-    String[] actorNames = 
-        new String[] { "BarMagnet", "Wire 1", "Wire 2", "ElectroMagnet"};
-    for (String actorName: actorNames) {
-      Science2DActor actor = (Science2DActor) science2DController.getView().findActor(actorName);
-      if (actor != null) {
-        if (probeMode) {
-          actor.setMovementMode(MovementMode.None.name());
-        } else {
-          actor.getBody().reset();
-        }
-      }
-    }
   }  
 
   protected void createFieldMeterSamples(Vector2[] points, Vector2[] bFields) {

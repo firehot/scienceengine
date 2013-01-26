@@ -44,12 +44,12 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public abstract void activate(boolean activate);
 
   @Override
-  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
-    this.setPosition(x, y);
-    this.setSize(width, height);
-    new ComponentLoader(science2DController).loadComponents(components, false);
-    ConfigLoader.loadConfigs(configs, science2DController.getModel());
-    science2DController.getControlPanel().refresh();
+  public void reinitialize(boolean probeMode) {
+    if (probeMode) {
+      new ComponentLoader(science2DController).loadComponents(components, false);
+      ConfigLoader.loadConfigs(configs, science2DController.getModel());
+      science2DController.getControlPanel().refresh();
+    }
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());

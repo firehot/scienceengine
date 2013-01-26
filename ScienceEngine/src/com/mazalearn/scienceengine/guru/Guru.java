@@ -43,14 +43,19 @@ public class Guru extends Group implements IDoneCallback {
       ControlPanel controlPanel) {
     super();
     this.science2DController = science2DController;
+
+    this.setPosition(0, 0);
+    // Guru has no direct user interaction - hence 0 size
+    this.setSize(0, 0);
+    
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
-    dashboard.setPosition(0, 0);
+    dashboard.setY(AbstractScreen.VIEWPORT_HEIGHT - dashboard.getPrefHeight() / 2);
+    dashboard.setX(AbstractScreen.VIEWPORT_WIDTH/2);
+    
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
     this.controlPanel = controlPanel;
-    this.setPosition(0, 0);
-    this.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
      
     this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
@@ -98,8 +103,7 @@ public class Guru extends Group implements IDoneCallback {
   public void endChallenge() {
     // Reinitialize current prober, if any
     if (currentTutor != null) {
-      currentTutor.reinitialize(getX(), getY(), AbstractScreen.VIEWPORT_WIDTH, 
-          AbstractScreen.VIEWPORT_HEIGHT, false);
+      currentTutor.reinitialize(false);
     }
 
     science2DController.getView().done(false);
@@ -128,7 +132,7 @@ public class Guru extends Group implements IDoneCallback {
         this.setPosition(0, 0);
         currentTutor.doSuccessActions();
         currentTutor.activate(false);
-        currentTutor.reinitialize(getX(), getY(), getWidth(), getHeight(), false);
+        currentTutor.reinitialize(false);
         
         // Success and no more tutors == WIN
         if (tutorIndex >= registeredTutors.size() - 1) {
@@ -182,8 +186,7 @@ public class Guru extends Group implements IDoneCallback {
       return;
     }
     currentTutor = registeredTutors.get(tutorIndex);
-    currentTutor.reinitialize(getX(), getY(), AbstractScreen.VIEWPORT_WIDTH, 
-        AbstractScreen.VIEWPORT_HEIGHT, true);
+    currentTutor.reinitialize(true);
     currentTutor.activate(true);
     dashboard.setGoal(currentTutor.getGoal());
     // Set up initial success and failure scores

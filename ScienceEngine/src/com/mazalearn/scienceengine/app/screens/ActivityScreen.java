@@ -74,6 +74,7 @@ public class ActivityScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
+    if (ScienceEngine.DEV_MODE == ScienceEngine.DevMode.DEBUG) return;
     Dialog dialog = new InstructionDialog(getStage(), getSkin(), activityName, activityDescription, 
         getMsg().getString("Level.Instructions"), "Start");
     dialog.show(stage);

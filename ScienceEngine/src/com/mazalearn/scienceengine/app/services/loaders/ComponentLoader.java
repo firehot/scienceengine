@@ -62,6 +62,7 @@ public class ComponentLoader {
     float y = (Float) LevelLoader.nvl(component.get("y"), 0f);
     float rotation = (Float) LevelLoader.nvl(component.get("rotation"), 0f);
 
+    // When not create, use name of component, not the type
     Actor actor = create ? science2DController.addScience2DActor(type, viewSpec, x, y, rotation) : findActor(type, viewSpec);
     if (actor == null) {
       Gdx.app.error(ScienceEngine.LOG, "Could not load component: " + type);

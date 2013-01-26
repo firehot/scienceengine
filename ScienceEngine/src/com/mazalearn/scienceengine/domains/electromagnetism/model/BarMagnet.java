@@ -145,7 +145,7 @@ public class BarMagnet extends AbstractMagnet {
       public boolean isPossible() { return isActive(); }
     });
     configs.add(new AbstractModelConfig<String>(this, 
-        Parameter.MagnetMode, MovementMode.values()) {
+        Parameter.MovementMode, MovementMode.values()) {
       public String getValue() { return getMovementMode(); }
       public void setValue(String value) { setMovementMode(value); }
       public boolean isPossible() { return isActive(); }

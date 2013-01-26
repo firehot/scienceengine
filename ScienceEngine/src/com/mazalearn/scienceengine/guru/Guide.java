@@ -23,9 +23,6 @@ public class Guide extends AbstractTutor {
   private float[] stageBeginTime;
   private int currentStage = -1;
 
-  private float guruWidth;
-  private float guruHeight;
-
   private Expr successActions;
 
   private Set<Variable> variables;
@@ -42,8 +39,6 @@ public class Guide extends AbstractTutor {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      science2DController.getGuru().setSize(guruWidth,  50);
-      science2DController.getGuru().setPosition(0, guruHeight - 50);
       stageBeginTime[currentStage] = ScienceEngine.getTime();
     } 
     ScienceEngine.setProbeMode(false);
@@ -51,13 +46,15 @@ public class Guide extends AbstractTutor {
   }
 
   /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(float, float, float, float)
+   * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(boolean)
+   */
+  /**
+   * Guide allows user to interact with bodies on screen as well as with its 
+   * own bodies - like subgoal.
    */
   @Override
-  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
-    super.reinitialize(x, y, 0, 0, probeMode);
-    this.guruWidth = width;
-    this.guruHeight = height;
+  public void reinitialize(boolean probeMode) {
+    super.reinitialize(probeMode);
     if (probeMode) {
       activateStage(0);
     }
@@ -84,7 +81,7 @@ public class Guide extends AbstractTutor {
   private Subgoal activateStage(int currentStage) {
     this.currentStage = currentStage;
     Subgoal subgoal = subgoals.get(currentStage);
-    subgoal.reinitialize(0, guruHeight - 50, 0, 0, true);
+    subgoal.reinitialize(true);
     subgoal.activate(true);
     return subgoal;
   }
@@ -110,7 +107,7 @@ public class Guide extends AbstractTutor {
   public void initialize(List<Subgoal> subgoals, String successActionsString) {
     this.subgoals = subgoals;
     for (Subgoal subgoal: subgoals) {
-      addActor(subgoal);
+      this.addActor(subgoal);
       subgoal.activate(false);
     }
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra

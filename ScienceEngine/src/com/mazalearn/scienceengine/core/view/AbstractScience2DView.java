@@ -100,7 +100,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   @Override
   public void challenge(boolean challenge) {
     // Reinitialize level
-    science2DModel.reset();
+    science2DController.reload();
 
     // Turn on or turn off music
     if (challenge) {

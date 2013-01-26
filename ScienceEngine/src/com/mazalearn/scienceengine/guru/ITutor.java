@@ -7,7 +7,7 @@ public interface ITutor {
 
   public void activate(boolean activate);
 
-  public void reinitialize(float x, float y, float width, float height, boolean probeMode);
+  public void reinitialize(boolean probeMode);
 
   public String getHint();
 

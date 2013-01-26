@@ -69,8 +69,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   }
   
   @Override
-  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
-    super.reinitialize(x,  y, width, height, probeMode);
+  public void reinitialize(boolean probeMode) {
+    super.reinitialize(probeMode);
     imageCorrect.setVisible(false);
     imageWrong.setVisible(false);
   }

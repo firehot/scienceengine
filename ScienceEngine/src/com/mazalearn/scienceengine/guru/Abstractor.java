@@ -28,8 +28,6 @@ public class Abstractor extends AbstractTutor {
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Table configTable;
   private ControlPanel controlPanel;
-  private float guruWidth;
-  private float guruHeight;
   private Skin skin;
   private Set<String> correctParameters;
   private Image[] life = new Image[3];
@@ -42,18 +40,19 @@ public class Abstractor extends AbstractTutor {
     super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.skin = skin;
     this.controlPanel = controlPanel;
-
   }
   
   /* (non-Javadoc)
    * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(float, float, float, float)
    */
+  /**
+   * Abstractor allows user to interact with bodies on screen as well as its
+   * own GUI. But does not directly interact - hence size 0.
+   */
   @Override
-  public void reinitialize(float x, float y, float width, float height, boolean probeMode) {
-    super.reinitialize(x, y, 0, 0, probeMode);
-    this.guruWidth = width;
-    this.guruHeight = height;
-    this.setPosition(0, 0);
+  public void reinitialize(boolean probeMode) {
+    super.reinitialize(probeMode);
+    this.setSize(0, 0);
     
     if (configTable == null) {
       createConfigTable(science2DController.getModel(), skin);
@@ -149,8 +148,6 @@ public class Abstractor extends AbstractTutor {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      science2DController.getGuru().setSize(guruWidth,  50);
-      science2DController.getGuru().setPosition(0, guruHeight - 50);
       controlPanel.refresh();
     }
     this.setVisible(activate);

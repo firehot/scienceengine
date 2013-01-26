@@ -8,7 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 
 public abstract class AbstractScience2DProber extends AbstractTutor {
 
@@ -21,6 +23,16 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
       int deltaSuccessScore, int deltaFailureScore) {
     super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
   }
+  
+  /**
+   * A prober covers the entire screen and allows user to interact only with probes
+   */
+  @Override
+  public void reinitialize(boolean probeMode) {
+   super.reinitialize(probeMode);
+   this.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+  }
+  
   
   public abstract void activate(boolean activate);
 
@@ -35,9 +47,11 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
       // Translate to local coordinates of actor
       localPoint.set(stagePoint);
       actor.stageToLocalCoordinates(localPoint);
-      if (actor.hit(localPoint.x, localPoint.y, true) != null) {
+      if (actor.hit(localPoint.x, localPoint.y, true) != null && 
+          !ComponentType.FieldMeter.name().equals(actor.getName())) {
         return true;
       }
+      /*
       // For a table, x and y are at center, top of table - not at bottom left
       if (actor instanceof Table) { // since labels do not seem to get hit
         float actorWidth = ((Table) actor).getPrefWidth();
@@ -46,7 +60,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
             stagePoint.y <= actor.getY() && stagePoint.y >= actor.getY() - actorHeight) {
           return true;
         }
-      }
+      } */
       if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION)
       System.out.println(actor.getClass().getName() + " Stagepoint: " + stagePoint + " localpoint: " + localPoint);
     }
