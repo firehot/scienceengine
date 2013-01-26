@@ -67,7 +67,7 @@ public class Abstractor extends AbstractTutor {
   private void createConfigTable(IScience2DModel science2DModel, Skin skin) {
     configTable = new Table(skin);
     configTable.setName("Configs");
-    configTable.setPosition(150, -125);
+    configTable.setPosition(150, 325);
     this.addActor(configTable);
     Texture shoppingCartTexture = new Texture("images/shoppingcart.png");
     final Image cart = new Image(shoppingCartTexture);

@@ -10,7 +10,7 @@ components:[{type:"Image",viewspec:"images/coppercoils-back.png", x:300.0,y:64.0
 groups:[["PickupCoil","Lightbulb", "images/coppercoils-back.png", "Ammeter"]],
 circuits:[["PickupCoil","Ammeter", "Lightbulb"]],
 configs:[
-{name:"BarMagnet.MagnetMode",permitted:true,value:"Move"},
+{name:"BarMagnet.MovementMode",permitted:true,value:"Move"},
 {name:"BarMagnet.MagnetStrength",permitted:true,value:10000.0},
 {name:"BarMagnet.RotationAngle",permitted:true},
 {name:"PickupCoil.CoilLoops",permitted:true},
@@ -56,7 +56,7 @@ plan: [
              resultType:"None"},
    {type: "Abstractor", 
         goal:"Select those variables in the shopping cart which affect the magnitude of induced EMF. You have 3 tries.",
-        configs: [{name: "BarMagnet.MagnetMode", permitted: false, value:"Rotate"},
+        configs: [{name: "BarMagnet.MovementMode", permitted: false, value:"Rotate"},
                   {name: "BarMagnet.RotationAngle", permitted: false, value:0}
                  ],
         parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],

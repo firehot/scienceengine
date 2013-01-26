@@ -7,9 +7,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -120,8 +117,6 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     this.probeConfig = probeConfig;
     this.hints = hints;
 
-    Group root = ((Stage)science2DController.getView()).getRoot();
-    Actor controlPanel = root.findActor("ControlPanel");
     this.resultType = ResultType.valueOf(resultType);
     if (this.resultType == ResultType.Spin) {   
       image.setX(AbstractScreen.VIEWPORT_WIDTH / 2 - image.getWidth() / 2 - 50);
@@ -174,7 +169,6 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
         case Direct: imageListener.setResult(1); break;
         case Inverse: imageListener.setResult(0); break;
       }
-      // TODO: addactorafter controlpanel for all three below and for image after that?
       this.addActor(decrease);
       this.addActor(increase);
       this.addActor(dontCare);      

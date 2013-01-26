@@ -5,7 +5,7 @@ components:[
 {type:"Compass",x:25.952377,y:340.19043,originX:32.0,originY:8.0,width:64.0,height:16.0,visible:true,rotation:0.0, move: "Move"},
 {type:"ControlPanel",x:703.0,y:255.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0}],
 configs:[
-{name:"BarMagnet.MagnetMode",permitted:false,value:"Move"},
+{name:"BarMagnet.MovementMode",permitted:false,value:"Move"},
 {name:"BarMagnet.MagnetStrength",permitted:true,value:3000.0},
 {name:"BarMagnet.RotationAngle",permitted:true},
 ],
@@ -51,17 +51,19 @@ plan:[
        ]},       
        {type: "FieldMagnitudeProber",
         goal: "Touch the ? where the magnetic field is stronger",
+        configs:[{BarMagnet.MovementMode:"None"}],
         timelimit: 10,
         success: 100,
         failure: 50,
-        components:[{type:"Compass", visible: false}]
+        components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
         }, 
         {type:"FieldDirectionProber",
         goal: "Touch ? and Drag in the direction of the magnetic field",
+        configs:[{BarMagnet.MovementMode:"None"}],
         timelimit: 10,
         success: 100,
         failure: 50,
-        components:[{type:"Compass", visible: false}]
-        }
+        components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
+        },
   ]
 }

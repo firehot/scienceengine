@@ -63,14 +63,14 @@ plan:[
         timelimit: 10,
         success: 100,
         failure: 50,
-        components:[{type:"Compass", visible: false}]
+        components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
         }, 
         {type:"FieldDirectionProber",
         goal: "Touch ? and Drag in the direction of the magnetic field",
         timelimit: 10,
         success: 100,
         failure: 50,
-        components:[{type:"Compass", visible: false}]
+        components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
         }
   ]
 }

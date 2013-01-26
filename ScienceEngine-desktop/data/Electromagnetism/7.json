@@ -22,12 +22,6 @@ configs:[
 {name:"CurrentCoil.RotationVelocity", permitted:false, value:2}
 ],
 plan: [
-   {type: "ParameterProber",
-             goal:"Should MaxCurrent be increased or decreased to make the motor run faster?\nSelect X if parameter does not affect motor.",
-             success: 100,
-             failure: 50,
-             parameter:"CurrentSource.MaxCurrent", 
-             resultType:"Direct"},
   {type: "Guide",
    goal: "Can you make number of revolutions of the motor +5 by configuring only the magnet?",
    success:200,

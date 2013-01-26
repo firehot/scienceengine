@@ -4,7 +4,6 @@ package com.mazalearn.scienceengine.guru;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
@@ -51,18 +50,9 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
           !ComponentType.FieldMeter.name().equals(actor.getName())) {
         return true;
       }
-      /*
-      // For a table, x and y are at center, top of table - not at bottom left
-      if (actor instanceof Table) { // since labels do not seem to get hit
-        float actorWidth = ((Table) actor).getPrefWidth();
-        float actorHeight = ((Table) actor).getPrefHeight();
-        if (stagePoint.x >= actor.getX() - actorWidth/ 2 && stagePoint.x <= actor.getX() + actorWidth/2 &&
-            stagePoint.y <= actor.getY() && stagePoint.y >= actor.getY() - actorHeight) {
-          return true;
-        }
-      } */
-      if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION)
-      System.out.println(actor.getClass().getName() + " Stagepoint: " + stagePoint + " localpoint: " + localPoint);
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG)
+        System.out.println(actor.getClass().getName() + 
+            " Stagepoint: " + stagePoint + " localpoint: " + localPoint);
     }
     return false;
   }
