@@ -82,7 +82,6 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   protected void goBack() {
-    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     DomainHomeScreen domainHomeScreen = 
         new DomainHomeScreen(scienceEngine, domain);
     scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));

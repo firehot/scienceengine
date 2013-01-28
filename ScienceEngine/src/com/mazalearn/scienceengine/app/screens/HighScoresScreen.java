@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 
 /**
  * A simple high scores screen.
@@ -46,7 +45,6 @@ public class HighScoresScreen extends AbstractScreen {
   
   @Override
   protected void goBack() {
-    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   

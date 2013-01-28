@@ -55,7 +55,6 @@ public class DomainHomeScreen extends AbstractScreen {
   }
 
   protected void goBack() {
-    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     profile.setDomain("");
     scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
   }

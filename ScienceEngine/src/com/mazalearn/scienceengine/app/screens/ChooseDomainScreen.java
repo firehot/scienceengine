@@ -107,7 +107,6 @@ public class ChooseDomainScreen extends AbstractScreen {
   
   @Override
   protected void goBack() {
-    ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   
