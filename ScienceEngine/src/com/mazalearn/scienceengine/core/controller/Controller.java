@@ -67,6 +67,7 @@ public class Controller {
         table.add(control.getActor());
     }
     Controller c = new Controller(controlTable.add(table), control);
+    c.validate();
     controlTable.row();
     return c;
   }

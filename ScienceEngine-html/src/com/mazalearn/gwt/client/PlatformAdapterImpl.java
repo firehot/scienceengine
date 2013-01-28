@@ -51,9 +51,18 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
         pixel <<= 8;
         pixel |= (int) lines[k++] & 0xFF;
         // TODO: Bug in Gwt PixMap - setColor uses format ARGB instead of RGBA
-        pixmap.drawPixel(i, j, pixel);
+        setColor(pixmap, pixel);
+        pixmap.drawPixel(i, j);
       }
     }
+  }
+
+  private void setColor(Pixmap pixmap, int color) {
+    float a = (color & 0xff) / 255f;
+    float r = ((color >>> 24) & 0xff) / 255f;
+    float g = ((color >>> 16) & 0xff) / 255f;
+    float b = ((color >>> 8) & 0xff) / 255f;
+    pixmap.setColor(r, g, b, a);
   }
 
   @Override

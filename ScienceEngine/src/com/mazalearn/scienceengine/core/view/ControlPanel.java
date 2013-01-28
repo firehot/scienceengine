@@ -78,7 +78,7 @@ public class ControlPanel extends Table {
     modelControlPanel.clear();
     // Register all model controllers
     for (final Science2DBody body: science2DModel.getBodies()) {
-      if (body.isActive() && body.allowsConfiguration()) {
+      if (body.allowsConfiguration()) {
         IModelConfig<?> bodyConfig = new AbstractModelConfig<Boolean>(body, asParameter(body), false) {
           @Override public boolean isPossible() { return body.isActive(); }      
           @Override public boolean isAvailable() { return isPossible() && !ScienceEngine.isProbeMode(); }
@@ -86,9 +86,9 @@ public class ControlPanel extends Table {
           @Override public void setValue(Boolean value) { ScienceEngine.pin(body, value); }
         };
         this.controllers.add(Controller.createController(bodyConfig, modelControlPanel, skin, "body"));
-      }
-      for (IModelConfig modelConfig: body.getConfigs()) {
-        this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+        for (IModelConfig modelConfig: body.getConfigs()) {
+          this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+        }
       }
     }
   }
