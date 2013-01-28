@@ -18,7 +18,7 @@ public interface IScience2DController {
   /**
    * Reloads the level, reinitializing all components and configurations
    */
-  void reload();
+  void reset();
   // Factory method to create an actor along with its backing model body
   public Actor addScience2DActor(String type, String viewSpec, float x,
       float y, float rotation);

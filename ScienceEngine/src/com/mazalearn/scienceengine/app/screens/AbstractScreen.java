@@ -68,7 +68,7 @@ public abstract class AbstractScreen implements Screen {
     final TextButton backButton = 
         new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin(), "body"); //$NON-NLS-1$
     backButton.setName("BackButton");
-    backButton.setPosition(5, VIEWPORT_HEIGHT - 50);
+    backButton.setPosition(5, VIEWPORT_HEIGHT - 30);
     backButton.setWidth(80);
     backButton.addListener(new ClickListener() {
       public void clicked(InputEvent event, float x, float y) {
@@ -146,7 +146,9 @@ public abstract class AbstractScreen implements Screen {
     stage.act(delta);
     clearScreen(backgroundColor);
     stage.draw();
-    Table.drawDebug(stage);
+    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+      Table.drawDebug(stage);
+    }
   }
 
   public void clearScreen(Color color) {

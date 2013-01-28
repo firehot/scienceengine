@@ -5,7 +5,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum StageComponent implements IComponentType {
-  Title(5, -10, Color.YELLOW),
+  Title(380, 20, Color.YELLOW),
   Status(10, 20, Color.RED);
   
   private int x;

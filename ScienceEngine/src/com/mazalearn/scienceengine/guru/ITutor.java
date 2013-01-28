@@ -26,4 +26,7 @@ public interface ITutor {
   // When tutor is successful, execute these actions
   void doSuccessActions();
 
+  // Reset components and configs to state at beginning
+  public void reset();
+
 }

@@ -104,6 +104,7 @@ public class Guru extends Group implements IDoneCallback {
     // Reinitialize current prober, if any
     if (currentTutor != null) {
       currentTutor.reinitialize(false);
+      currentTutor = null;
     }
 
     science2DController.getView().done(false);
@@ -209,5 +210,11 @@ public class Guru extends Group implements IDoneCallback {
   public void checkProgress() {
     if (currentTutor == null) return;
     currentTutor.checkProgress();
+  }
+
+  public void reset() {
+    if (currentTutor != null) {
+      currentTutor.reset();
+    }
   }
 }

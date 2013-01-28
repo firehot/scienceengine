@@ -99,9 +99,6 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
 
   @Override
   public void challenge(boolean challenge) {
-    // Reinitialize level
-    science2DController.reload();
-
     // Turn on or turn off music
     if (challenge) {
       ScienceEngine.getMusicManager().setEnabled(false);
@@ -109,10 +106,15 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
     }
     isChallengeInProgress = challenge;
+
     if (challenge) {
+      // Reinitialize level
+      science2DController.reset();
       science2DController.getGuru().startChallenge();
     } else {
       science2DController.getGuru().endChallenge();
+      // Reinitialize level
+      science2DController.reset();
     }
   }
     

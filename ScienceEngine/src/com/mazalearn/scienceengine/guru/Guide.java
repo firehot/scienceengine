@@ -61,6 +61,14 @@ public class Guide extends AbstractTutor {
   }
   
   @Override
+  public void reset() {
+    super.reset();
+    if (currentStage < 0 || currentStage == subgoals.size()) return;
+    Subgoal subgoal = subgoals.get(currentStage);
+    subgoal.reset();
+  }
+  
+  @Override
   public void act(float delta) {
     super.act(delta);
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;

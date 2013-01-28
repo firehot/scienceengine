@@ -11,15 +11,6 @@ components:[
                 visible:true,rotation:0.0,move:"None"},
 {type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 ],
-configs:[
-{name:"Dynamo.RotationVelocity", permitted:false, value:-4},
-{name:"Dynamo.AreaOrientation", permitted:true},
-{name:"Dynamo.Width", permitted:true},
-{name:"Dynamo.CoilLoops", permitted:true},
-{name:"Magnet.MagnetStrength", permitted:true},
-{name:"Magnet.MagnetType", permitted:true},
-{name:"Lightbulb.Color", permitted:true},
-],
 circuits:[["Lightbulb","Dynamo"]],
 plan: [
   {type: "Guide",
@@ -32,7 +23,8 @@ plan: [
             components:[{type: "Drawing", visible:true}],
             postcondition: "UserInput(NextButton) = 1"},
          {goal: "Configure your Magnet.", 
-           components:[{type:"Magnet", visible:true}],
+           components:[{type: "Drawing", visible:true},
+                       {type:"Magnet", visible:true}],
            configs:[
               {name:"Magnet.MagnetStrength", permitted:true},
               {name:"Magnet.MagnetType", permitted:true},

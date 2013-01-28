@@ -84,7 +84,7 @@ public class ViewControls extends Table implements IControl {
     // Add reset functionality for the activity
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
-          public void doCommand() { science2DController.reload(); }
+          public void doCommand() { science2DController.reset(); }
           public boolean isPossible() { return true; }
     };
     resetControl = new CommandButtonControl(resetModelConfig, skin);

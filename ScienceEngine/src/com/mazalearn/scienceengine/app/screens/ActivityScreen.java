@@ -107,7 +107,7 @@ public class ActivityScreen extends AbstractScreen {
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;
     }
-    // TODO: Move assets inside appropriate view
+    // TODO: Move assets inside appropriate view - automatically infer if possile.
     ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);
     ScienceEngine.assetManager.load("images/coppercoils-front2.png", Texture.class);
     ScienceEngine.assetManager.load("images/brush.png", Texture.class);

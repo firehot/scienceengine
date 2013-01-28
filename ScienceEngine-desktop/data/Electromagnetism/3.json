@@ -16,7 +16,9 @@ configs:[
 {name:"CurrentSource.1.CurrentType",permitted:true,value:"DC"},
 {name:"CurrentSource.1.CurrentFrequency",permitted:true,value:1.0},
 {name:"CurrentSource.1.MaxCurrent",permitted:true,value:5.0},
-{name:"CurrentSource.1.CurrentDirection",permitted:true,value:true}],
+{name:"CurrentSource.1.CurrentDirection",permitted:true,value:true}
+],
+plan:[
       {type: "Guide", 
        goal: "Can you make the compass go through one complete rotation?",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",

@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.guru;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
@@ -46,13 +47,19 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void reinitialize(boolean probeMode) {
     if (probeMode) {
-      new ComponentLoader(science2DController).loadComponents(components, false);
-      ConfigLoader.loadConfigs(configs, science2DController.getModel());
-      science2DController.getControlPanel().refresh();
+      reset();
     }
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());
+  }
+
+  @Override
+  public void reset() {
+    Gdx.app.log(ScienceEngine.LOG, "Reset tutor");
+    new ComponentLoader(science2DController).loadComponents(components, false);
+    ConfigLoader.loadConfigs(configs, science2DController.getModel());
+    science2DController.getControlPanel().refresh();
   }
 
   @Override

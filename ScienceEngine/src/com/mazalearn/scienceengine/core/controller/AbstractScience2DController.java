@@ -81,8 +81,9 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
-  public void reload() {
+  public void reset() {
     new LevelLoader(this).reload();
+    getGuru().reset();
   }
 
   @Override
