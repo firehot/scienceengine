@@ -39,7 +39,7 @@ public class Subgoal extends AbstractTutor {
       throw new RuntimeException(e);
     }
     this.variables = parser.getVariables();
-    // We use presence of dummy variable UserNext as argument of function UserNext
+    // We use presence of dummy variable NextButton as argument of function UserNext
     // to indicate that user input of nextButton is expected to succeed in this subgoal.
     for (Variable v: variables) {
       String name = v.name();

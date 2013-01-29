@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.utils;
 
 import java.io.File;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -54,5 +55,8 @@ public interface IPlatformAdapter {
 
   // Does platform support language change?
   public boolean supportsLanguage();
+
+  void httpPost(String path, String contentType, Map<String, String> params,
+      byte[] data);
 }
 

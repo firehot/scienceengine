@@ -40,6 +40,7 @@ public class Abstractor extends AbstractTutor {
     super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.skin = skin;
     this.controlPanel = controlPanel;
+    this.setSize(0, 0);
   }
   
   /* (non-Javadoc)
@@ -52,7 +53,6 @@ public class Abstractor extends AbstractTutor {
   @Override
   public void reinitialize(boolean probeMode) {
     super.reinitialize(probeMode);
-    this.setSize(0, 0);
     
     if (configTable == null) {
       createConfigTable(science2DController.getModel(), skin);

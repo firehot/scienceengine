@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -108,5 +109,11 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   @Override
   public boolean supportsLanguage() {
     return false;
+  }
+
+  @Override
+  public void httpPost(String path, String contentType, Map<String, String> params,
+      byte[] data){
+    throw new UnsupportedOperationException("Not implemented");
   }
 }

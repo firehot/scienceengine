@@ -1,11 +1,20 @@
 package com.mazalearn.gwt.client;
 
 import java.io.IOException;
+import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
+import com.mazalearn.scienceengine.ScienceEngine;
 
 class PlatformAdapterImpl extends AbstractPlatformAdapter {
   
@@ -84,4 +93,35 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   public boolean supportsLanguage() {
     return false;
   }
+  
+  @Override
+  public void httpPost(String path, String contentType, Map<String, String> params, byte[] data) {
+    String url = ScienceEngine.getHostPort() + "/" + path;
+    RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
+
+    try {
+      builder.setHeader("Content-Type", contentType); // "application/x-www-form-urlencoded");
+      for (Map.Entry<String, String> entry: params.entrySet()) {
+        builder.setHeader(entry.getKey(), entry.getValue());
+      }
+      String d = new String(data); // ???? should base64encode
+      builder.sendRequest(d, new RequestCallback() {
+
+        @Override
+        public void onError(Request request, Throwable exception) {
+        }
+
+        @Override
+        public void onResponseReceived(Request request, Response response) {
+          // TODO Auto-generated method stub
+          
+        }
+      });
+    } catch (RequestException e) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + url);
+      e.printStackTrace();
+      throw new GdxRuntimeException(e);
+    }
+  }
+  
 }

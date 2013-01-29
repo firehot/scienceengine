@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.utils.Net;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -114,7 +113,8 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     postParams.put(COLOR, rgba(color));
     postParams.put(PLATFORM, ScienceEngine.getPlatformAdapter().getPlatform().name());
     try {
-      Net.httpPost("/upload", "application/octet-stream", postParams, drawingActor.getDrawingPng());
+      ScienceEngine.getPlatformAdapter().httpPost("/upload", 
+          "application/octet-stream", postParams, drawingActor.getDrawingPng());
       ScienceEngine.displayStatusMessage(this, "Uploaded to MazaLearn - See www.mazalearn.com/train.html");
     } catch(GdxRuntimeException e) {
       e.printStackTrace();
