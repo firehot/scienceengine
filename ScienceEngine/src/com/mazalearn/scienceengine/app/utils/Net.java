@@ -6,6 +6,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 public class Net {
@@ -40,6 +41,7 @@ public class Net {
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
       e.printStackTrace();
+      throw new GdxRuntimeException(e);
     }
   }
 }
