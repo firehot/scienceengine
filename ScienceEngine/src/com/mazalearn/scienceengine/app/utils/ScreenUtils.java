@@ -57,9 +57,11 @@ public class ScreenUtils {
       Gdx.gl.glReadPixels(sx, sy, sw, sh, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixels);
     }
     Pixmap.setFilter(Filter.NearestNeighbour);
+    /*
     Pixmap scaledPic = new Pixmap(newWidth, newHeight, Format.RGBA8888);
     scaledPic.drawPixmap(screenShot, 0, 0, sw, sh, 0, 0, newWidth, newHeight);
-    screenShot.dispose();
+    screenShot.dispose();*/
+    Pixmap scaledPic = screenShot;
     if (makeBlackTransparent) {
       removeBlackAndYellow(scaledPic);
     }

@@ -129,8 +129,6 @@ public class Guru extends Group implements IDoneCallback {
       hinter.clearHint();
       
       if (currentTutor.hasSucceeded()) {
-        this.setSize(AbstractScreen.VIEWPORT_WIDTH,  AbstractScreen.VIEWPORT_HEIGHT);
-        this.setPosition(0, 0);
         currentTutor.doSuccessActions();
         currentTutor.activate(false);
         currentTutor.reinitialize(false);

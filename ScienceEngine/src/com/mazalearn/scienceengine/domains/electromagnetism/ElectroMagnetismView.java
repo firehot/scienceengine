@@ -44,7 +44,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   @Override
   public void act(float delta) {
     super.act(delta);
-    // TODO: Make below part of scripting language
+    // TODO: Make below part of scripting language - only in level 9
     if (dynamo != null && magnet != null) {
       // Clearance of 1 unit between magnet and dynamo is enforced
       magnet.setMaxWidth(dynamo.getWidth() - 1f);
@@ -57,9 +57,17 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   
   @Override
   public void prepareView() {
+    // Below are only in level 9
     dynamo = (Dynamo) science2DModel.findBody(ComponentType.Dynamo);
     magnet = (Magnet) science2DModel.findBody(ComponentType.Magnet);
     lightbulb = (Lightbulb) science2DModel.findBody(ComponentType.Lightbulb);
+    ScienceTrainActor scienceTrainActor = 
+        (ScienceTrainActor) findActor(ComponentType.ScienceTrain.name());
+    if (scienceTrainActor != null) {
+      scienceTrainActor.reset();
+    }
+    // above only in level 9
+
     for (List<CircuitElement> circuit: science2DModel.getCircuits()) {
       this.addActor(new CircuitActor(circuit));
     }

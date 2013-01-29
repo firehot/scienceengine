@@ -50,11 +50,15 @@ public class ScienceTrainActor extends Group {
     }
     super.draw(batch, parentAlpha);
   }
+  
+  public void reset() {
+    clearActions();
+  }
 
   public void animate() {
-    setPosition(0, getY());
     addAction(Actions.repeat(-1, 
       Actions.sequence(
+          Actions.moveTo(0,  getY()),
           Actions.moveBy(AbstractScreen.VIEWPORT_WIDTH, 0, 10), 
           Actions.moveBy(-AbstractScreen.VIEWPORT_WIDTH,0))));
   }

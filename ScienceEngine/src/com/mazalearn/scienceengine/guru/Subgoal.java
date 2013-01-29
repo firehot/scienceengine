@@ -24,6 +24,7 @@ public class Subgoal extends AbstractTutor {
   private String when;
   private boolean progress;
   private boolean isUserNext = true;
+  private Button nextButton;
   
   public Subgoal(IScience2DController science2DController,
       String goal, Array<?> components, Array<?> configs,
@@ -39,7 +40,7 @@ public class Subgoal extends AbstractTutor {
     }
     this.variables = parser.getVariables();
     // We use presence of dummy variable UserNext as argument of function UserNext
-    // to indicate that user input of next is expected to succeed in this subgoal.
+    // to indicate that user input of nextButton is expected to succeed in this subgoal.
     for (Variable v: variables) {
       String name = v.name();
       if (name.equals("NextButton")) {
@@ -50,17 +51,16 @@ public class Subgoal extends AbstractTutor {
     
     // Create a button NEXT at right place along with listener to set isUserNext.
     if (!isUserNext) {
-      // TODO: Move next button to dashboard next to Hint button
-      final Button next = new TextButton("Next", science2DController.getSkin());
-      next.setColor(Color.YELLOW);
-      next.addListener(new ClickListener() {
+      nextButton = new TextButton("Next", science2DController.getSkin());
+      nextButton.setColor(Color.YELLOW);
+      nextButton.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
-          next.setVisible(false);
+          nextButton.setVisible(false);
           isUserNext = true;
         }      
       });
-      next.setPosition(570, 350);
-      addActor(next);
+      nextButton.setPosition(570, 350);
+      addActor(nextButton);
     }
     
     this.when = when;
@@ -88,6 +88,15 @@ public class Subgoal extends AbstractTutor {
     return when;
   }
 
+  @Override
+  public void reset() {
+    super.reset();
+    if (nextButton != null) {
+      isUserNext = false;
+      nextButton.setVisible(true);
+    }
+  }
+  
   public boolean hasSucceeded() {
     if (postCondition == null) return false;  
     science2DController.getModel().bindParameterValues(variables);

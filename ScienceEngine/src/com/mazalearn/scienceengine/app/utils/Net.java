@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.app.utils;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -15,12 +14,12 @@ public class Net {
     String hostPort = ScienceEngine.getHostPort();
     String host = hostPort.substring(0, hostPort.indexOf(":"));
     int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
-    Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
-    if (socket == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + "/" + path);
-      return;
-    }
     try {
+      Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
+      if (socket == null) {
+        Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + "/" + path);
+        return;
+      }
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
       wr.writeBytes("POST " + path + " HTTP/1.0\r\n");
@@ -31,16 +30,14 @@ public class Net {
         wr.writeBytes(entry.getKey() + ": " + entry.getValue() + "\r\n");
       }
       wr.writeBytes("\r\n");
-      //URLEncoder.encode()
       wr.write(data, 0, data.length);
       wr.flush();
-      //wr.close();
       Gdx.app.log(ScienceEngine.LOG, "Posted to " + path + " bytes: " + data.length);
       byte[] response = new byte[1000];
       socket.getInputStream().read(response);
       Gdx.app.log(ScienceEngine.LOG, "Response " + new String(response));
       wr.close();
-    } catch (IOException e) {
+    } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
       e.printStackTrace();
     }
