@@ -80,6 +80,7 @@ namespace scienceengineios
 				config.orientationPortrait = false;
 				config.useAccelerometer = false;
 				config.useObjectAL = false;
+				config.preventScreenDimming = false;
 				return config;
 			}
 		}
