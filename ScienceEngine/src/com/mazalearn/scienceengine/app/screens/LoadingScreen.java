@@ -44,6 +44,11 @@ public class LoadingScreen extends AbstractScreen {
   }
 
   @Override
+  protected boolean needsBackButton() {
+    return false;
+  }
+
+  @Override
   public void show() {
     super.show();
 
@@ -78,8 +83,8 @@ public class LoadingScreen extends AbstractScreen {
   @Override
   public void resize(int width, int height) {
     // Set our screen to always be XXX x 480 in size
-    width = 480 * width / height;
-    height = 480;
+    width = AbstractScreen.VIEWPORT_HEIGHT * width / height;
+    height = AbstractScreen.VIEWPORT_HEIGHT;
     stage.setViewport(width, height, false);
 
     // Make the background fill the screen

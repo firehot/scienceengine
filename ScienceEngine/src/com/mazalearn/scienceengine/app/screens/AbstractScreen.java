@@ -61,7 +61,13 @@ public abstract class AbstractScreen implements Screen {
         return super.keyDown(event, keycode);
       }      
     });
-    stage.addActor(createBackButton());
+    if (this.needsBackButton()) {
+      stage.addActor(createBackButton());
+    }
+  }
+
+  protected boolean needsBackButton() {
+    return true;
   }
 
   protected Actor createBackButton() {

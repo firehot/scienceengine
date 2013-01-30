@@ -83,6 +83,11 @@ public class SplashScreen extends AbstractScreen {
   }
 
   @Override
+  protected boolean needsBackButton() {
+    return false;
+  }
+
+  @Override
   public void show() {
     super.show();
 
