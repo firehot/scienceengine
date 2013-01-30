@@ -23,7 +23,8 @@ final class BasicMessages implements IMessage {
           Gdx.app.error(ScienceEngine.LOG, "Improper message line: " + line);
           continue; // Improper line.
         }
-        i18nMap.put(keyval[0], keyval[1]);
+        String value = keyval[1].replace("\\n", "\n"); // Newlines
+        i18nMap.put(keyval[0], value);
       }
     }
   }
