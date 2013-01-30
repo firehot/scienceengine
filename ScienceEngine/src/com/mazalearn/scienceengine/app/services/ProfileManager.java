@@ -26,6 +26,8 @@ public class ProfileManager {
    * Retrieves the player's profile, creating one if needed.
    */
   public Profile retrieveProfile() {
+    if (profile != null) return profile;
+    
     // create the handle for the profile data file
     FileHandle profileDataFile = null;
     try {

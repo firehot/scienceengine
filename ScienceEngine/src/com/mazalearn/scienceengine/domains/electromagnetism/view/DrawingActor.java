@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
@@ -155,7 +157,17 @@ public class DrawingActor extends Science2DActor {
         COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA, COACH_HEIGHT - WHEEL_DIA - 1, 
         WHEEL_DIA, WHEEL_DIA, 
         COACH_WIDTH, WHEEL_DIA, WHEEL_DIA, WHEEL_DIA);
-    coachTexture.draw(snapshot, 0, 0);
+
+    // Workaround for GWT WebGL - TexSubImage2D gives an error, using TexImage2D instead.
+    // But that also does not seem to work.
+    if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.GWT) {
+      PixmapTextureData pd = (PixmapTextureData) coachTexture.getTextureData();
+      Pixmap p = pd.consumePixmap();
+      p.drawPixmap(snapshot, 0, 0);
+      coachTexture.load(pd);
+    } else {   
+      coachTexture.draw(snapshot, 0, 0);
+    }
     Pixmap.setBlending(b);
     screenShot.dispose();
     hasChangedSinceSnapshot = false;
