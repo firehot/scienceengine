@@ -102,11 +102,6 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   }
   
   @Override
-  public boolean supportsMusic() {
-    return true;
-  }
-
-  @Override
   public boolean supportsLanguage() {
     return true;
   }

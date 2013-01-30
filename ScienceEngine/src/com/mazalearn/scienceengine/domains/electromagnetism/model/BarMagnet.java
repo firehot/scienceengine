@@ -336,7 +336,6 @@ public class BarMagnet extends AbstractMagnet {
      * @return InputStream
      */
     public InputStream getResourceAsStream(String resource) throws IOException {
-      //InputStream stream = BarMagnet.class.getResourceAsStream(resource);
       InputStream stream = Gdx.files.internal(resource).read();
       if (stream == null) {
         throw new IOException("invalid resource: " + resource);

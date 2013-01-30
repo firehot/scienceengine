@@ -75,26 +75,24 @@ public class OptionsScreen extends AbstractScreen {
     table.add(getMsg().getString("ScienceEngine.SoundEffects")); //$NON-NLS-1$
     table.add(soundEffectsCheckbox).colspan(2).left();
 
-    if (platform.supportsMusic()) {
-      final CheckBox musicCheckbox = new CheckBox("", getSkin()); //$NON-NLS-1$
-      musicCheckbox.setChecked(ScienceEngine.getPreferencesManager().isMusicEnabled());
-      musicCheckbox.addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-          boolean enabled = musicCheckbox.isChecked();
-          ScienceEngine.getPreferencesManager().setMusicEnabled(enabled);
-          ScienceEngine.getMusicManager().setEnabled(enabled);
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-  
-          // if the music is now enabled, start playing the menu music
-          if (enabled)
-            ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
-        }
-      });
-      table.row();
-      table.add(getMsg().getString("ScienceEngine.Music")); //$NON-NLS-1$
-      table.add(musicCheckbox).colspan(2).left();
-    }
+    final CheckBox musicCheckbox = new CheckBox("", getSkin()); //$NON-NLS-1$
+    musicCheckbox.setChecked(ScienceEngine.getPreferencesManager().isMusicEnabled());
+    musicCheckbox.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        boolean enabled = musicCheckbox.isChecked();
+        ScienceEngine.getPreferencesManager().setMusicEnabled(enabled);
+        ScienceEngine.getMusicManager().setEnabled(enabled);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+
+        // if the music is now enabled, start playing the menu music
+        if (enabled)
+          ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+      }
+    });
+    table.row();
+    table.add(getMsg().getString("ScienceEngine.Music")); //$NON-NLS-1$
+    table.add(musicCheckbox).colspan(2).left();
 
     // range is [0.0,1.0]; step is 0.1f
     final Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, getSkin());

@@ -85,11 +85,6 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   }
   
   @Override
-  public boolean supportsMusic() {
-    return true;
-  }
-
-  @Override
   public boolean supportsLanguage() {
     return false;
   }

@@ -102,11 +102,6 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   }
 
   @Override
-  public boolean supportsMusic() {
-    return false;
-  }
-
-  @Override
   public boolean supportsLanguage() {
     return false;
   }

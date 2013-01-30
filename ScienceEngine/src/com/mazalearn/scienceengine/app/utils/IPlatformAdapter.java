@@ -50,9 +50,6 @@ public interface IPlatformAdapter {
 
   public byte[] getPngBytes(Pixmap snapshot);
 
-  // Does platform support playing music?
-  public boolean supportsMusic();
-
   // Does platform support language change?
   public boolean supportsLanguage();
 

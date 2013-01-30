@@ -36,7 +36,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
       IScience2DController controller) {
-    super(width, height, true);
+    super(width, height, false);
     this.skin = skin;
     this.science2DModel = science2DModel;
     this.science2DController = controller;
@@ -89,7 +89,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
   
   public BitmapFont getFont() {
-    return skin.getFont("default-font");
+    //return skin.getFont("default-font");
+    return skin.getFont("en");
   }
 
   @Override

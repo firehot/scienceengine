@@ -57,6 +57,7 @@ public class ComponentLoader {
     String viewSpec = (String) component.get("viewspec");
     Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
     if (type == null) return;
+    long startTime = System.currentTimeMillis();
     
     float x = (Float) LevelLoader.nvl(component.get("x"), 0f);
     float y = (Float) LevelLoader.nvl(component.get("y"), 0f);
@@ -98,6 +99,9 @@ public class ComponentLoader {
             (Array<String>) component.get("params"));
       }
     }
+    // TODO: Simplify logging so that timestamp printed along with log
+    Gdx.app.log(ScienceEngine.LOG, "Loaded component: " + type + 
+        " time(ms): " + (System.currentTimeMillis() - startTime));
   }
 
   private Actor findActor(String type, String viewSpec) {

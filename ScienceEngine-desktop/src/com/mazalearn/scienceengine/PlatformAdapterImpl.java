@@ -92,6 +92,9 @@ class PlatformAdapterImpl extends NonWebPlatformAdapter {
     } else if (language.equals("hi")) {
       fontFileName =  HINDI_TTF; // unicode: 0900-097F
       beginChar = '\u0900'; endChar = '\u097f';
+    } else if (language.equals("en")) {
+      fontFileName =  "Arial.ttf"; // unicode: 0020-00FF
+      beginChar = '\u0020'; endChar = '\u00ff';
     }
     BitmapFontCache.setFallbackFont(skin.getFont("en"));
     FileHandle fontFileHandle = Gdx.files.internal("skin/" + fontFileName);
@@ -105,11 +108,6 @@ class PlatformAdapterImpl extends NonWebPlatformAdapter {
     generator.dispose();      
 
     return font;
-  }
-
-  @Override
-  public boolean supportsMusic() {
-    return true;
   }
 
   @Override

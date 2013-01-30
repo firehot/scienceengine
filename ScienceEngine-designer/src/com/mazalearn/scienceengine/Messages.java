@@ -59,6 +59,8 @@ public class Messages implements IMessage {
     style1.font = font;
     style1 = skin.get("toggle", TextButtonStyle.class);
     style1.font = font;
+    style1 = skin.get("body", TextButtonStyle.class);
+    style1.font = font;
     LabelStyle style2 = skin.get(LabelStyle.class);
     style2.font = font;
     CheckBoxStyle style3 = skin.get(CheckBoxStyle.class);
