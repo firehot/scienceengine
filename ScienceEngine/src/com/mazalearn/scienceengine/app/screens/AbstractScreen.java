@@ -5,8 +5,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -14,7 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
@@ -71,11 +76,15 @@ public abstract class AbstractScreen implements Screen {
   }
 
   protected Actor createBackButton() {
-    final TextButton backButton = 
-        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin(), "body"); //$NON-NLS-1$
+    TextButton backButton = 
+        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin()); //$NON-NLS-1$
+    Drawable image = new TextureRegionDrawable(new TextureRegion(new Texture("images/back.png")));
+    TextButton.TextButtonStyle style = new TextButtonStyle(image, image, image);
+    style.font = getSkin().getFont("default-font");
+    backButton.setStyle(style);
     backButton.setName("BackButton");
-    backButton.setPosition(5, VIEWPORT_HEIGHT - 30);
-    backButton.setWidth(80);
+    backButton.setPosition(2, VIEWPORT_HEIGHT - 30);
+    backButton.setSize(80, 30);
     backButton.addListener(new ClickListener() {
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
