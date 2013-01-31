@@ -77,6 +77,7 @@ namespace scienceengineios
 				config.useAccelerometer = false;
 				config.useObjectAL = false;
 				config.preventScreenDimming = false;
+				config.displayScaleLargeScreenIfRetina = 0.5f;
 				return config;
 			}
 		}
