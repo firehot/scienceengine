@@ -4,19 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.Controller;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -25,21 +21,15 @@ public class ControlPanel extends Table {
   private final IScience2DModel science2DModel;
   private final Skin skin;
   private List<Controller> controllers = new ArrayList<Controller>();
-  private String domain;
   private Table modelControlPanel;
   private TextButton title;
-  private IScience2DController science2DController;
-  private Controller viewController;
   
-  public ControlPanel(IScience2DController science2DController, String domain, Skin skin) {
+  public ControlPanel(IScience2DModel science2DModel, Skin skin) {
     super(skin);
     this.skin = skin;
     this.setName("ControlPanel");
-    this.science2DController = science2DController;
-    this.science2DModel = science2DController.getModel();
-    this.domain = domain;
+    this.science2DModel = science2DModel;
     this.defaults().fill();
-    createViewControlPanel(this);
     this.modelControlPanel = createModelControlPanel(skin);
     this.add(modelControlPanel);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
@@ -93,24 +83,6 @@ public class ControlPanel extends Table {
     }
   }
 
-  private void createViewControlPanel(Table parentPanel) {
-    final ViewControls viewControls = new ViewControls(science2DController, skin);
-    // Register domain
-    this.title = new TextButton(domain, skin.get("body", TextButtonStyle.class));
-    title.setName(domain); 
-    title.setChecked(viewControls.isAvailable());
-    title.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        viewControls.setAvailable(!viewControls.isAvailable());
-      }
-    });
-    parentPanel.add(title);
-    parentPanel.row();
-    viewController = Controller.createController(viewControls, parentPanel, skin);
-    parentPanel.row();
-  }
-
   public Actor getTitle() {
     return this.title;
   }
@@ -126,8 +98,7 @@ public class ControlPanel extends Table {
   public void syncWithModel() {
     for (Controller controller: controllers) {
        controller.validate();
-     }
-    viewController.validate();
+    }
   }
   
   public void enableControls(boolean enable) {

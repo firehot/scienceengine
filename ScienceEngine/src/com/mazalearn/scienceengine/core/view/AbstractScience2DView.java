@@ -32,6 +32,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   private IScience2DController science2DController;
   // Commands at view level - possibly affecting multiple actors
   private List<IModelConfig<?>> viewCommands;
+  private ViewControls viewControls;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -176,24 +177,25 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   
   @Override
   public void prepareView() {
-    // Register help after all actors are already added so it is on top
-    //Actor help = new Helper(skin, 650, getHeight()  - 90);
-    //this.addActor(help);
     for (Actor actor: this.getActors()) {
       if (actor instanceof Science2DActor) {
         ((Science2DActor) actor).prepareActor();
       }
     }
+    this.addActor(viewControls);
+    this.addActor(controlPanel);
   }
 
-  public void setControlPanel(ControlPanel controlPanel) {
-    this.controlPanel = controlPanel;
-    // Register control panel
-    this.addActor(controlPanel);
-    
+  public ControlPanel setupStage() {
     // Register stage components
     for (StageComponent stageComponent: StageComponent.values()) {
-      Label component = new Label("", skin);
+      Actor component = null;
+      switch (stageComponent) {
+      case Status:
+      case Title: component = new Label("", skin); break;
+      case ViewControls: component = this.viewControls = new ViewControls(science2DController, skin); break;
+      case ControlPanel: component = this.controlPanel = new ControlPanel(science2DModel, skin); break;
+      }
       float x = stageComponent.getX();
       if (x < 0) {
         x = AbstractScreen.VIEWPORT_WIDTH + x;
@@ -212,6 +214,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       Label status = (Label) findActor(StageComponent.Status.name());
       status.setText("Demo only. Best experienced on Android/iPad Tablets.");
     }
+    
+    return controlPanel;
   }
 
   @Override

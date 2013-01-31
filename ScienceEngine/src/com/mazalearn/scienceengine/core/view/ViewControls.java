@@ -96,6 +96,7 @@ public class ViewControls extends Table implements IControl {
     viewControls.add(challengeControl.getActor()).colspan(2);
     viewControls.row();
     
+    syncWithModel();
     return viewControls;
   }
   

@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.guru;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -12,16 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class Hinter extends Group {
   private static List<Image> SCIENTISTS = new ArrayList<Image>();
-  private TextButton hintButton;
   float increment = 1, count = 0;
   private int scientistIndex = 0;
   private boolean jumpingMode = false;
   private String hint;
+  private Dashboard dashboard;
 
   static {
     Image image;
@@ -32,35 +30,25 @@ public class Hinter extends Group {
     SCIENTISTS.add(image = new Image(new Texture("images/faraday.png")));
     image.setName("Michael Faraday");
   }
-  public Hinter(Skin skin) {
-    
-    hintButton = new TextButton("", skin);
-    hintButton.setColor(Color.YELLOW);
-    hintButton.getLabel().setWrap(true);
-    
-    final ClickListener buttonClickListener = new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
-        hintButton.setVisible(false);
-        SCIENTISTS.get(scientistIndex).setVisible(false);
-        Hinter.this.addAction(Actions.delay(20, new Action() {
-          @Override
-          public boolean act(float delta) {
-            clearHint();
-            return true;
-          }          
-        }));
-      }
-    };
-    hintButton.addListener(buttonClickListener);
+  
+  public Hinter(final Dashboard dashboard, Skin skin) {
+    this.dashboard = dashboard;
     
     ClickListener imageClickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         if (jumpingMode) {
           jumpingMode = false;
-          hintButton.setVisible(true);
-          hintButton.setPosition(-hintButton.getWidth() - 100, -50);
+          dashboard.setSubgoal(hint);
         } else {
-          buttonClickListener.clicked(null, 0, 0);
+          dashboard.setSubgoal(null);
+          SCIENTISTS.get(scientistIndex).setVisible(false);
+          Hinter.this.addAction(Actions.delay(20, new Action() {
+            @Override
+            public boolean act(float delta) {
+              clearHint();
+              return true;
+            }          
+          }));
         }
       }
     };
@@ -69,10 +57,7 @@ public class Hinter extends Group {
       this.addActor(image);
       image.setVisible(false);
       image.addListener(imageClickListener);
-    }
-    
-    this.addActor(hintButton);
-    hintButton.setVisible(false);
+    }    
   }
   
   @Override
@@ -97,17 +82,14 @@ public class Hinter extends Group {
     this.setVisible(true);
     Image image = SCIENTISTS.get(scientistIndex);
     image.setVisible(false);
-    // TODO: BUG in libgdx for wrapped labels ??? hence setting height
-    hintButton.setSize(400, 50); 
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
     jumpingMode = false; // TODO: very irritating
     image = SCIENTISTS.get(scientistIndex);
-    // TODO: move hintbutton into dashboard
-    hintButton.setText("Hint: " + hint + "\n-" + image.getName());
-    image.setVisible(true);
+    // TODO: differentiate hint from subgoal in dashboard
+    // hintButton.setText("Hint: " + hint + "\n-" + image.getName());
+    dashboard.setSubgoal(hint);
+    //image.setVisible(true);
     image.setY(0);
-    hintButton.setVisible(true);
-    hintButton.setPosition(-hintButton.getWidth() - 100, -50);
   }
 
   public boolean hasHint() {

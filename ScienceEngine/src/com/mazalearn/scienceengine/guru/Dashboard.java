@@ -1,16 +1,17 @@
 package com.mazalearn.scienceengine.guru;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
 class Dashboard extends Table {
-  TextButton goal;
+  TextButton goal, subGoal;
   Label scoreLabel;
   int score;
   private Label timerLabel;
@@ -21,24 +22,30 @@ class Dashboard extends Table {
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       debug();
     }
-    this.setFillParent(false);
-    this.center();
-    goal = new TextButton("Goal", skin) {
-      private float increment = 0f; // TODO: 0.01f;
-      private float alpha = 1;
-      @Override
-      public void draw(SpriteBatch batch, float parentAlpha) {
-        Color c = batch.getColor();
-        batch.setColor(c.r, c.g, c.b, alpha);
-        super.draw(batch, alpha);
-        batch.setColor(c);
-        alpha += increment;
-        if (alpha > 1 - increment || alpha <= 0.5f) {
-          increment = -increment;
-        }
-      }      
-    };
+
+    this.add(createTutorBoard(skin));
+  }
+
+  private Table createTutorBoard(Skin skin) {
+    Table tutorTable = new Table(skin);
+    tutorTable.setFillParent(false);
+    tutorTable.center();
+    
+    goal = new TextButton("Goal", skin);
     goal.setColor(Color.YELLOW);
+    goal.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        subGoal.setVisible(!subGoal.isVisible());
+      }
+    });
+    
+    subGoal = new TextButton("", skin);
+    subGoal.setColor(Color.YELLOW);
+    subGoal.getLabel().setWrap(true);
+    subGoal.setVisible(false);
+    // TODO: BUG in libgdx for wrapped labels ??? hence setting height
+    //subGoal.setSize(400, 50); 
+    
     scoreLabel = new Label("0", skin);
 
     timerLabel = new Label("0", skin) {
@@ -58,14 +65,18 @@ class Dashboard extends Table {
     t.add("Timer");
     t.row();
     t.add(timerLabel).width(40).fill().right();
-    this.add(t).left();
-    this.add(goal).pad(0, 10, 0, 10).width(430).fill();
+    tutorTable.add(t).left();
+    tutorTable.add(goal).pad(0, 10, 0, 10).width(430).fill();
     goal.getLabel().setWrap(true);
     t = new Table(skin);
     t.add("Score");
     t.row();
     t.add(scoreLabel).width(40).fill().center();
-    this.add(t).right();
+    tutorTable.add(t).right();
+    tutorTable.row();
+    tutorTable.add("");
+    tutorTable.add(subGoal).width(400).height(50);
+    return tutorTable;
   }
   
   public void addScore(int deltaScore) {
@@ -74,8 +85,16 @@ class Dashboard extends Table {
   }
   
   public void setGoal(String text) {
-    // For a table, x and y are at center, top of table - not at bottom left
     goal.setText(text);
+  }
+  
+  public void setSubgoal(String text) {
+    if (text == null) {
+      subGoal.setVisible(false);
+      return;
+    }
+    subGoal.setText(text);
+    subGoal.setVisible(true);
   }
 
   public int getScore() {

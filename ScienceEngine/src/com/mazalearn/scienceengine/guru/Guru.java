@@ -61,7 +61,7 @@ public class Guru extends Group implements IDoneCallback {
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
     ((Stage)science2DController.getView()).addActor(successImage);
     ((Stage)science2DController.getView()).addActor(failureImage);
-    hinter = new Hinter(skin);
+    hinter = new Hinter(dashboard, skin);
     this.setVisible(false);
   }
 
