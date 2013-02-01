@@ -1,8 +1,6 @@
-package com.mazalearn.scienceengine.domains.molecules.model;
+package com.mazalearn.scienceengine.domains.statesofmatter.model;
 
-import com.mazalearn.scienceengine.core.model.IScience2DModel;
-
-public interface IMolecularModel extends IScience2DModel {
+public interface IMoleculeBox {
 
   // Initialize the molecules configuration (currently uniform random)
   public abstract void reset();

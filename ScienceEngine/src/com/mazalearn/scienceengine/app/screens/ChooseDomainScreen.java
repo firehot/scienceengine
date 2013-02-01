@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
-import com.mazalearn.scienceengine.domains.molecules.StatesOfMatterController;
+import com.mazalearn.scienceengine.domains.statesofmatter.StatesOfMatterController;
 import com.mazalearn.scienceengine.domains.waves.WaveController;
 
 public class ChooseDomainScreen extends AbstractScreen {

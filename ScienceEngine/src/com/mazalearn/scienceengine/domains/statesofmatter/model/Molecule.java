@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.molecules.model;
+package com.mazalearn.scienceengine.domains.statesofmatter.model;
 
 public class Molecule {
 

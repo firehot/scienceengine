@@ -1,7 +1,7 @@
-package com.mazalearn.scienceengine.domains.molecules.model;
+package com.mazalearn.scienceengine.domains.statesofmatter.model;
 
 
-public class LJMolecularModel extends AbstractMolecularModel {
+public class LJMoleculeBox extends AbstractMoleculeBox {
   // Assumptions
   // LJ_EPSILON = 1.0 = Depth of potential well
   // LJ_SIGMA = 1.0 = Distance at which inter-particle potential is 0
@@ -18,7 +18,7 @@ public class LJMolecularModel extends AbstractMolecularModel {
       {0, 0.02 * MIN_LJ_FORCE_OVER_R, 0.005 * MIN_LJ_FORCE_OVER_R};
   static final double MIN_LJ_POTENTIAL_ENERGY = 4/Math.pow(MIN_DISTANCE, 12) - 1/Math.pow(MIN_DISTANCE, 6) + LJ_CUTOFF_CORRECTION;
   
-  public LJMolecularModel(int boxWidth, int boxHeight, int N, double temperature) {
+  public LJMoleculeBox(int boxWidth, int boxHeight, int N, double temperature) {
     super(boxWidth, boxHeight, N, temperature);
   }
 

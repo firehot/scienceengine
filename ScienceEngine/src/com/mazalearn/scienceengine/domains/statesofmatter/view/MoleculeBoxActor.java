@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.molecules.view;
+package com.mazalearn.scienceengine.domains.statesofmatter.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -8,13 +8,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.domains.statesofmatter.model.IMoleculeBox;
 
-public class MoleculeBox extends Actor {
+public class MoleculeBoxActor extends Science2DActor {
   /**
    * 
    */
-  private IMolecularModel molecularModel;
+  private IMoleculeBox moleculeBox;
   private Texture moleculeTextureGray, moleculeTextureRed;
   private long timeStart;
   private BitmapFont font;
@@ -23,9 +25,9 @@ public class MoleculeBox extends Actor {
   private final int boxWidth;
   private final int N;
 
-  public MoleculeBox(IMolecularModel molecularModel, int N, int boxWidth, int boxHeight, BitmapFont font) {
-    this.setName("MoleculeBox");
-    this.molecularModel = molecularModel;
+  public MoleculeBoxActor(Science2DBody moleculeBox, int N, int boxWidth, int boxHeight, BitmapFont font) {
+    super(moleculeBox, null);
+    this.moleculeBox = (IMoleculeBox) moleculeBox;
     this.boxWidth = boxWidth;
     this.boxHeight = boxHeight;
     this.N = N;
@@ -60,8 +62,8 @@ public class MoleculeBox extends Actor {
     float scaleY = this.getHeight() / boxHeight;
     for (int i = 0; i < N; i++) {
       batch.draw(i > 0 ? moleculeTextureGray : moleculeTextureRed,
-          this.getX() + (float) molecularModel.getMolecule(i).x * scaleX, 
-          this.getY() + (float) molecularModel.getMolecule(i).y * scaleY);
+          this.getX() + (float) moleculeBox.getMolecule(i).x * scaleX, 
+          this.getY() + (float) moleculeBox.getMolecule(i).y * scaleY);
     }
     
     //Draw debug information
@@ -71,9 +73,9 @@ public class MoleculeBox extends Actor {
   public void drawDebug(SpriteBatch batch) {
     // Draw debug information
     font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-    font.draw(batch, String.valueOf(molecularModel.getTemperature()), 
+    font.draw(batch, String.valueOf(moleculeBox.getTemperature()), 
         this.getX() + 10, this.getY() + 20);
-    font.draw(batch, String.valueOf(molecularModel.getSimulatedTime()), 
+    font.draw(batch, String.valueOf(moleculeBox.getSimulatedTime()), 
         this.getX() + 10, this.getY() + 300);
     long timeNow = System.currentTimeMillis();
     font.draw(batch, String.valueOf(timeNow - timeStart), 

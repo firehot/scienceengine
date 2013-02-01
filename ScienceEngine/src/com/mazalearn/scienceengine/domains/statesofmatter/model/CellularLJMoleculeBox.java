@@ -1,10 +1,10 @@
-package com.mazalearn.scienceengine.domains.molecules.model;
+package com.mazalearn.scienceengine.domains.statesofmatter.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The LJMolecularModel holds many molecules and implements an integration
+ * The LJMoleculeBox holds many molecules and implements an integration
  * strategy based on the The Lennard Johnson potential function.
  * This potential function has a distance cutoff LJ_CUTOFF beyond which
  * interaction is assumed to be negligible. It is repulsive when molecules are 
@@ -43,7 +43,7 @@ import java.util.List;
  *
  */
 
-public class CellularLJMolecularModel extends LJMolecularModel {
+public class CellularLJMoleculeBox extends LJMoleculeBox {
   // Assumptions
   // LJ_EPSILON = 1.0 = Depth of potential well
   // LJ_SIGMA = 1.0 = Distance at which inter-particle potential is 0
@@ -55,17 +55,20 @@ public class CellularLJMolecularModel extends LJMolecularModel {
   private int nYCells;
   private Cell[][] cells;
 
-  CellularLJMolecularModel(int boxWidth, int boxHeight, int N, double temperature) {
+  CellularLJMoleculeBox(int boxWidth, int boxHeight, int N, double temperature) {
     super(boxWidth, boxHeight, N, temperature);
   }
   
+  @Override
   public void reset() {
     super.reset();
     this.neighbourCells = createNeighbourCells();
   }
+  
   // compute accelerations of all molecules from current positions, using
   // Lennard-Jones force law:
   // return potential Energy
+  @Override
   double computeAccelerations() {
     double potentialEnergy;
     

@@ -1,15 +1,16 @@
-package com.mazalearn.scienceengine.domains.molecules;
+package com.mazalearn.scienceengine.domains.statesofmatter;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
 import com.mazalearn.scienceengine.core.view.ModelControls;
-import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
-import com.mazalearn.scienceengine.domains.molecules.model.LJMolecularModel;
-import com.mazalearn.scienceengine.domains.molecules.view.MoleculeBox;
-import com.mazalearn.scienceengine.domains.molecules.view.StatesOfMatterView;
+import com.mazalearn.scienceengine.domains.statesofmatter.model.ComponentType;
+import com.mazalearn.scienceengine.domains.statesofmatter.model.StatesOfMatterModel;
+import com.mazalearn.scienceengine.domains.statesofmatter.view.MoleculeBoxActor;
+import com.mazalearn.scienceengine.domains.statesofmatter.view.StatesOfMatterView;
 
 /**
  * States of Matter science2DModel
@@ -17,16 +18,14 @@ import com.mazalearn.scienceengine.domains.molecules.view.StatesOfMatterView;
 public class StatesOfMatterController extends AbstractScience2DController {
   public static final String DOMAIN = "StatesOfMatter";
   private static final int N = 25; // Number of molecules
-  private static final int BOX_HEIGHT = 20;
-  private static final int BOX_WIDTH = 20;
 
-  private IMolecularModel statesOfMatterModel;
+  private IScience2DModel statesOfMatterModel;
   private StatesOfMatterView statesOfMatterView;
   ModelControls modelControls;
   
   public StatesOfMatterController(int level, int width, int height, Skin skin) {
     super(DOMAIN, level, skin);
-    statesOfMatterModel = new LJMolecularModel(BOX_WIDTH, BOX_HEIGHT, N, 0.5);
+    statesOfMatterModel = new StatesOfMatterModel(N);
     statesOfMatterModel.reset();
     statesOfMatterView = 
         new StatesOfMatterView(statesOfMatterModel, width, height, N, skin, this);
@@ -80,10 +79,16 @@ public class StatesOfMatterController extends AbstractScience2DController {
   protected Actor createActor(String type, String viewSpec, Science2DBody body) {
     int boxWidth = 20;
     int boxHeight = 20;
-    if (type.equals("MoleculeBox")) {
-      return new MoleculeBox(statesOfMatterModel, N, boxWidth, boxHeight, 
-          science2DView.getFont());
-    } else if (type.equals("ColorPanel")) {
+    ComponentType componentType;
+    try {
+      componentType = ComponentType.valueOf(type);
+    } catch(IllegalArgumentException e) {
+      return super.createActor(type, viewSpec, body);
+    }
+    switch (componentType) {
+    case MoleculeBox:
+      return new MoleculeBoxActor(body, N, boxWidth, boxHeight, science2DView.getFont());
+    case ColorPanel:
       return new ColorPanel(type);
     }
     return null;

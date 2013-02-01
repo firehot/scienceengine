@@ -1,13 +1,13 @@
-package com.mazalearn.scienceengine.domains.molecules.model;
+package com.mazalearn.scienceengine.domains.statesofmatter.model;
 
-public class SimpleMolecularModel extends AbstractMolecularModel implements IMolecularModel {
+public class SimpleMoleculeBox extends AbstractMoleculeBox implements IMoleculeBox {
 
   // Cutoff distance beyond which particles do not interact
   private static final double DISTANCE_CUTOFF = 2.5;
   private static final double DISTANCE_CUTOFF_SQUARED = DISTANCE_CUTOFF * DISTANCE_CUTOFF;
   protected static final double GRAVITY = -0.003;
   
-  SimpleMolecularModel(int boxWidth, int boxHeight, int N, double temperature) {
+  SimpleMoleculeBox(int boxWidth, int boxHeight, int N, double temperature) {
     super(boxWidth, boxHeight, N, temperature);
   }
 
@@ -15,6 +15,7 @@ public class SimpleMolecularModel extends AbstractMolecularModel implements IMol
     return GRAVITY;
   }
 
+  @Override
   double computeAccelerations() {
     
     double potentialEnergy = 0.0;

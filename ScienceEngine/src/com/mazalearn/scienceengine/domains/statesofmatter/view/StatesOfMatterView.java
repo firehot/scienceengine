@@ -1,18 +1,18 @@
-package com.mazalearn.scienceengine.domains.molecules.view;
+package com.mazalearn.scienceengine.domains.statesofmatter.view;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
-import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
 
 /**
  * States of Matter domain View.
  */
 public class StatesOfMatterView extends AbstractScience2DView {
    
-  public StatesOfMatterView(IMolecularModel molecularModel,
+  public StatesOfMatterView(IScience2DModel statesOfMatterModel,
       int width, int height, int N, Skin skin, IScience2DController controller) {
-    super(molecularModel, width, height, skin, controller);
+    super(statesOfMatterModel, width, height, skin, controller);
   }
 
 }

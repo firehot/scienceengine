@@ -1,16 +1,10 @@
-package com.mazalearn.scienceengine.domains.molecules.model;
-
-import java.util.List;
+package com.mazalearn.scienceengine.domains.statesofmatter.model;
 
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
-import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
-import com.mazalearn.scienceengine.core.model.IComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 
-public abstract class AbstractMolecularModel extends AbstractScience2DModel 
-    implements IMolecularModel {
+public abstract class AbstractMoleculeBox extends Science2DBody 
+    implements IMoleculeBox {
 
   protected static final double WALL_STIFFNESS = 50.0;
   protected static final double GRAVITY = -0.050;
@@ -34,14 +28,14 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
   protected double simulatedTime;
   protected HeatingLevel heatingLevel = HeatingLevel.Neutral;
 
-  public AbstractMolecularModel(int boxWidth, int boxHeight, int N,
+  public AbstractMoleculeBox(int boxWidth, int boxHeight, int N,
       double temperature) {
+    super(ComponentType.MoleculeBox, 0, 0, 0);
     this.N = N;
     this.boxWidth = boxWidth;
     this.boxHeight = boxHeight;
     this.temperature = temperature;
     this.molecules = new Molecule[N];
-    this.numStepsPerView = 10;
   }
   
   @Override
@@ -53,7 +47,7 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
     setState(state);
   }
   
-  private void reScaleDt() {
+  void reScaleDt() {
     
     // Set dt to be 1/10 of the average collision timeLimit
     // If box has area A, number of particles N, 
@@ -120,12 +114,6 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
     return simulatedTime;
   }
 
-  @Override
-  public void simulateSteps(float delta) {
-    super.simulateSteps(delta);
-    reScaleDt();
-  }
-
   public void setHeatingLevel(HeatingLevel heatingLevel) {
     this.heatingLevel = heatingLevel;
   }
@@ -150,7 +138,6 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
     return GRAVITY;
   }
 
-  @Override
   protected void singleStep() {  
     // Scale velocities up or down
     // vi *= (2-0.999995); or vi *= 0.999995;
@@ -238,23 +225,17 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
   }
 
   @Override
-  public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
-    modelConfigs.add(new AbstractModelConfig<String>(null, Parameter.StateOfMatter, State.values()) {
+  public void initializeConfigs() {
+    configs.add(new AbstractModelConfig<String>(this, Parameter.StateOfMatter, State.values()) {
       public String getValue() { return getState(); }
       public void setValue(String value) { setState(value); }
       public boolean isPossible() { return true; }
     });
 
-    modelConfigs.add(new AbstractModelConfig<String>(null, Parameter.HeatingLevel, HeatingLevel.values()) {
+    configs.add(new AbstractModelConfig<String>(this, Parameter.HeatingLevel, HeatingLevel.values()) {
       public String getValue() { return getHeatingLevel(); }
       public void setValue(String value) { setHeatingLevel(value); }
       public boolean isPossible() { return true; }
     });
-  }
-
-  @Override
-  protected Science2DBody createScience2DBody(String componentTypeName,
-      float x, float y, float rotation) {
-    return null;
   }
 }
