@@ -68,6 +68,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
     this.isPermitted = isPermitted;
   }
   
+  @Override public boolean isMeter() { return false; }
   @Override public boolean isPermitted() { return isPermitted; }  
   @Override public ConfigType getType() { return type; }
   @Override public String getName() { 
@@ -85,7 +86,7 @@ public abstract class AbstractModelConfig<T> implements IModelConfig<T> {
   @Override public void setValue(T value) {}
   @Override public abstract boolean isPossible();
   @Override public boolean isAvailable() { 
-    return isPermitted && isPossible() && (body == ScienceEngine.getSelectedBody() || ScienceEngine.isPinned(body));
+    return !isMeter() && isPermitted && isPossible() && (body == ScienceEngine.getSelectedBody() || ScienceEngine.isPinned(body));
   }
   @Override public boolean hasProbeMode() { return false; }
   @Override public void setProbeMode() {}

@@ -61,7 +61,8 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
         Parameter.Count, 0f, 1000f) {
       public Float getValue() { return (float) fieldSamples.size(); }
       public void setValue(Float value) { /* Ignore */ }
-      public boolean isPossible() { return false; }
+      public boolean isMeter() { return true; }
+      public boolean isPossible() { return isActive(); }
     });
   }
 

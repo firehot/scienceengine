@@ -12,6 +12,8 @@ public interface IModelConfig<T> {
   public IParameter getParameter();
   // Is this configuration hook available with current configs?
   public boolean isAvailable();
+  // Is this a meter (can only be get) or a config (can be get/set through GUI)
+  public boolean isMeter();
 
   // Only for COMMAND type
   public void doCommand();

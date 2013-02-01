@@ -77,7 +77,9 @@ public class ControlPanel extends Table {
         };
         this.controllers.add(Controller.createController(bodyConfig, modelControlPanel, skin, "body"));
         for (IModelConfig modelConfig: body.getConfigs()) {
-          this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+          if (!modelConfig.isMeter()) { // Meters should not be connected to GUI controls automatically
+            this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+          }
         }
       }
     }

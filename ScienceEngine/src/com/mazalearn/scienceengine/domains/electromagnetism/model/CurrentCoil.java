@@ -73,7 +73,8 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
         Parameter.RotationData, -1000, 1000) { // Still risky, limits may get exceeded
       public Float getValue() { return getRotationData(); }
       public void setValue(Float value) {}
-      public boolean isPossible() { return false; }
+      public boolean isMeter() { return true; }
+      public boolean isPossible() { return isActive(); }
     });
   }
   
