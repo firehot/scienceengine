@@ -22,7 +22,7 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
   // The minimum number of steps used to approximate one sine wave cycle.
   private static final float MIN_STEPS_PER_CYCLE = 10;
 
-  private static final float DEFAULT_MAX_CURRENT = 5f;
+  public static final float DEFAULT_MAX_CURRENT = 5f;
 
   private static final float TOLERANCE = 0.01f;
   
