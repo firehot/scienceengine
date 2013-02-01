@@ -17,17 +17,17 @@ import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
-public class ControlPanel extends Table {
+public class ModelControls extends Table {
   private final IScience2DModel science2DModel;
   private final Skin skin;
   private List<Controller> controllers = new ArrayList<Controller>();
   private Table modelControlPanel;
   private TextButton title;
   
-  public ControlPanel(IScience2DModel science2DModel, Skin skin) {
+  public ModelControls(IScience2DModel science2DModel, Skin skin) {
     super(skin);
     this.skin = skin;
-    this.setName("ControlPanel");
+    this.setName("ModelControls");
     this.science2DModel = science2DModel;
     this.defaults().fill();
     this.modelControlPanel = createModelControlPanel(skin);

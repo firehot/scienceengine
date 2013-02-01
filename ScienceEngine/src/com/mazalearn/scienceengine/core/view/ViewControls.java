@@ -60,8 +60,8 @@ public class ViewControls extends Table implements IControl {
         super.syncWithModel();
         toggleButton.setText(
             science2DView.isChallengeInProgress() ? 
-                getMsg().getString("ControlPanel.EndChallenge") : 
-                  getMsg().getString("ControlPanel.Challenge")); //$NON-NLS-1$ //$NON-NLS-2$
+                getMsg().getString("ViewControls.EndChallenge") : 
+                  getMsg().getString("ViewControls.Challenge")); //$NON-NLS-1$ //$NON-NLS-2$
       }
     };
     
@@ -76,8 +76,8 @@ public class ViewControls extends Table implements IControl {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(science2DView.isSuspended() ? 
-            getMsg().getString("ControlPanel.Resume") : 
-              getMsg().getString("ControlPanel.Pause")); //$NON-NLS-1$ //$NON-NLS-2$
+            getMsg().getString("ViewControls.Resume") : 
+              getMsg().getString("ViewControls.Pause")); //$NON-NLS-1$ //$NON-NLS-2$
       }
     };
 

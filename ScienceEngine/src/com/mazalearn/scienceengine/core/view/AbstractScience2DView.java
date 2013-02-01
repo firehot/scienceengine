@@ -27,7 +27,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   protected final IScience2DModel science2DModel;
   protected final Skin skin;
   private boolean isChallengeInProgress = false;
-  protected ControlPanel controlPanel;
+  protected ModelControls modelControls;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
   private IScience2DController science2DController;
@@ -184,10 +184,10 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       }
     }
     this.addActor(viewControls);
-    this.addActor(controlPanel);
+    this.addActor(modelControls);
   }
 
-  public ControlPanel setupStage() {
+  public ModelControls setupStage() {
     // Register stage components
     for (StageComponent stageComponent: StageComponent.values()) {
       Actor component = addStageComponent(stageComponent);
@@ -207,7 +207,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       status.setText("Demo only. Best experienced on Android/iPad Tablets.");
     }
     
-    return controlPanel;
+    return modelControls;
   }
 
   private Actor addStageComponent(StageComponent stageComponent) {
@@ -228,11 +228,11 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         viewControls.setName(stageComponent.name());
         return viewControls;
       }
-      case ControlPanel: {
-        this.controlPanel = new ControlPanel(science2DModel, skin);
-        this.addActor(controlPanel);
-        controlPanel.setName(stageComponent.name());
-        return controlPanel;
+      case ModelControls: {
+        this.modelControls = new ModelControls(science2DModel, skin);
+        this.addActor(modelControls);
+        modelControls.setName(stageComponent.name());
+        return modelControls;
       }
     }
     return component;

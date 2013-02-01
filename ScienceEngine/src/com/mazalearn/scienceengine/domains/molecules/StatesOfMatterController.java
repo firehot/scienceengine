@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
-import com.mazalearn.scienceengine.core.view.ControlPanel;
+import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.domains.molecules.model.IMolecularModel;
 import com.mazalearn.scienceengine.domains.molecules.model.LJMolecularModel;
 import com.mazalearn.scienceengine.domains.molecules.view.MoleculeBox;
@@ -22,7 +22,7 @@ public class StatesOfMatterController extends AbstractScience2DController {
 
   private IMolecularModel statesOfMatterModel;
   private StatesOfMatterView statesOfMatterView;
-  ControlPanel controlPanel;
+  ModelControls modelControls;
   
   public StatesOfMatterController(int level, int width, int height, Skin skin) {
     super(DOMAIN, level, skin);

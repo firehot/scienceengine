@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
-import com.mazalearn.scienceengine.core.view.ControlPanel;
+import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
@@ -28,7 +28,7 @@ import com.mazalearn.scienceengine.guru.ParameterProber;
 public abstract class AbstractScience2DController implements
     IScience2DController {
 
-  protected ControlPanel controlPanel;
+  protected ModelControls modelControls;
   protected IScience2DModel science2DModel;
   protected IScience2DView science2DView;
   protected Skin skin;
@@ -46,7 +46,7 @@ public abstract class AbstractScience2DController implements
       AbstractScience2DView science2DView) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
-    this.controlPanel = science2DView.setupStage();
+    this.modelControls = science2DView.setupStage();
   }
   
   @Override
@@ -70,8 +70,8 @@ public abstract class AbstractScience2DController implements
   }
 
   @Override
-  public ControlPanel getControlPanel() {
-    return controlPanel;
+  public ModelControls getModelControls() {
+    return modelControls;
   }
   
   @Override
@@ -89,13 +89,13 @@ public abstract class AbstractScience2DController implements
   public Guru getGuru() {
     if (guru == null) {
       Stage stage = (Stage) science2DView;
-      guru = new Guru(skin, this, controlPanel);
+      guru = new Guru(skin, this, modelControls);
       // Move control Panel to top - so it will be above others
-      stage.getRoot().addActor(controlPanel);
+      stage.getRoot().addActor(modelControls);
       // Move back button to top also - so it will be accessible
       stage.getRoot().addActor(stage.getRoot().findActor("BackButton"));
-      // Add guru before controlpanel so that controls are accessible.
-      stage.getRoot().addActorBefore(controlPanel, guru);
+      // Add guru before modelcontrols so that controls are accessible.
+      stage.getRoot().addActorBefore(modelControls, guru);
     }
     return guru;
   }
@@ -108,7 +108,7 @@ public abstract class AbstractScience2DController implements
             rotation * MathUtils.degreesToRadians);
     Actor actor = createActor(type, viewSpec, science2DBody);
     
-    if (actor == null && type.equals("ControlPanel")) {
+    if (actor == null && type.equals("ModelControls")) {
       return getView().findActor(type);
     }
     if (actor == null) return null;

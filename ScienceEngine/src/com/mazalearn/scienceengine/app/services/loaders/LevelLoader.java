@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.ControlPanel;
+import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 
@@ -20,7 +20,7 @@ public class LevelLoader {
   private IScience2DController science2DController;
   private IScience2DView science2DView;
   private IScience2DModel science2DModel;
-  private ControlPanel controlPanel;
+  private ModelControls modelControls;
   private int level;
   private OrderedMap<String, ?> rootElem;
   private ComponentLoader componentLoader;
@@ -31,7 +31,7 @@ public class LevelLoader {
     this.level = science2DController.getLevel();
     this.science2DView = science2DController.getView();
     this.science2DModel = science2DController.getModel();
-    this.controlPanel = science2DController.getControlPanel();
+    this.modelControls = science2DController.getModelControls();
     componentLoader = new ComponentLoader(science2DController);
     tutorLoader = new TutorLoader(science2DController);
   }
@@ -65,7 +65,7 @@ public class LevelLoader {
     
     science2DModel.prepareModel();
     science2DView.prepareView();
-    controlPanel.refresh();
+    modelControls.refresh();
     ConfigLoader.loadConfigs((Array<?>) rootElem.get("configs"), science2DModel);
     loadPlan((Array<?>) rootElem.get("plan"));
   }
@@ -77,8 +77,8 @@ public class LevelLoader {
     readLevelInfo(rootElem);
     componentLoader.loadComponents((Array<?>) rootElem.get("components"), false);
     ConfigLoader.loadConfigs((Array<?>) rootElem.get("configs"), science2DModel);
-    controlPanel.enableControls(true);
-    controlPanel.refresh();
+    modelControls.enableControls(true);
+    modelControls.refresh();
   }
   
   private void readLevelInfo(OrderedMap<String, ?> info) {

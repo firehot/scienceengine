@@ -77,7 +77,7 @@ public abstract class AbstractScreen implements Screen {
 
   protected Actor createBackButton() {
     TextButton backButton = 
-        new TextButton(ScienceEngine.getMsg().getString("ControlPanel.Back"), getSkin()); //$NON-NLS-1$
+        new TextButton(ScienceEngine.getMsg().getString("ViewControls.Back"), getSkin()); //$NON-NLS-1$
     Drawable image = new TextureRegionDrawable(new TextureRegion(new Texture("images/back.png")));
     TextButton.TextButtonStyle style = new TextButtonStyle(image, image, image);
     style.font = getSkin().getFont("default-font");

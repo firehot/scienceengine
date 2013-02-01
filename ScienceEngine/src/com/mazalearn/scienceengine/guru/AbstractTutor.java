@@ -59,7 +59,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     Gdx.app.log(ScienceEngine.LOG, "Reset tutor");
     new ComponentLoader(science2DController).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DController.getModel());
-    science2DController.getControlPanel().refresh();
+    science2DController.getModelControls().refresh();
   }
 
   @Override

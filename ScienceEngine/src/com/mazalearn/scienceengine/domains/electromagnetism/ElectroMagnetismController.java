@@ -108,7 +108,7 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new LightProber(this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("Abstractor".equals(type)) {
       return new Abstractor(this, goal, components, configs, skin, 
-          controlPanel, deltaSuccessScore, deltaFailureScore);
+          modelControls, deltaSuccessScore, deltaFailureScore);
     }
     return super.createTutor(type, goal, components, configs, deltaSuccessScore, deltaFailureScore);
   }

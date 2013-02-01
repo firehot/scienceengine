@@ -21,13 +21,13 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.ControlPanel;
+import com.mazalearn.scienceengine.core.view.ModelControls;
 
 public class Abstractor extends AbstractTutor {
 
   Vector2 points[] = new Vector2[] { new Vector2() };
   private Table configTable;
-  private ControlPanel controlPanel;
+  private ModelControls modelControls;
   private Skin skin;
   private Set<String> correctParameters;
   private Image[] life = new Image[3];
@@ -35,11 +35,11 @@ public class Abstractor extends AbstractTutor {
   
   public Abstractor(final IScience2DController science2DController, String goal, 
       Array<?> components, Array<?> configs, Skin skin, 
-      ControlPanel controlPanel, int deltaSuccessScore,
+      ModelControls modelControls, int deltaSuccessScore,
       int deltaFailureScore) {
     super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.skin = skin;
-    this.controlPanel = controlPanel;
+    this.modelControls = modelControls;
     this.setSize(0, 0);
   }
   
@@ -92,7 +92,7 @@ public class Abstractor extends AbstractTutor {
             if (configCheckBox.isChecked()) {
               ScienceEngine.pin(config.getBody(), true);
             }
-            controlPanel.refresh();
+            modelControls.refresh();
           }
         });
       }
@@ -148,7 +148,7 @@ public class Abstractor extends AbstractTutor {
   @Override
   public void activate(boolean activate) {
     if (activate) {
-      controlPanel.refresh();
+      modelControls.refresh();
     }
     this.setVisible(activate);
   }

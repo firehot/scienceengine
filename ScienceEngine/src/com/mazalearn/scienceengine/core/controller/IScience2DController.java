@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.ControlPanel;
+import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guru;
@@ -12,7 +12,7 @@ import com.mazalearn.scienceengine.guru.Guru;
 public interface IScience2DController {
   public IScience2DView getView();
   public IScience2DModel getModel();
-  public ControlPanel getControlPanel();
+  public ModelControls getModelControls();
   public String getDomain();
   int getLevel();
   /**
