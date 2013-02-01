@@ -7,7 +7,7 @@ components:[{type:"Image",viewspec:"images/coppercoils-back.png",x:300.0,y:64.0,
 {type:"Ammeter",x:420.0,y:318.0,originX:64.0,originY:32.0,width:128.0,height:64.0,visible:true,rotation:0.0},
 {type:"Dummy",x:370.0,y:313.0,originX:32.0,originY:32.0,width:0,height:0,visible:true,rotation:0.0},
 {type: "Environment", move: "None", params:[{name:"RoomTemperature"},{name:"EarthMagneticField"}]},
-{type:"ControlPanel",x:719.0,y:240.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None"}],
+],
 groups:[["PickupCoil","Ammeter","Lightbulb", "images/coppercoils-back.png"],["ElectroMagnet","CurrentSource"]],
 circuits:[["CurrentSource","ElectroMagnet"],["PickupCoil","Ammeter","Lightbulb"]],
 configs:[

@@ -6,7 +6,7 @@ components:[
 {type:"Wire",x:291.60007,y:229.20001,originX:0.0,originY:0.0,width:17.0,height:17.0,visible:true,rotation:0.0,move:"Move",bodytype:false},
 {type:"Wire",x:379.20013,y:228.0,originX:0.0,originY:0.0,width:18.0,height:18.0,visible:true,rotation:0.0,move:"Move",bodytype:false},
 {type:"Compass",x:30.976768,y:328.09283,originX:32.0,originY:8.0,width:64.0,height:16.0,visible:true,rotation:0.0,move:"Move",bodytype:false},
-{type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false}],
+],
 circuits:[["CurrentSource.1","Wire.1"],["CurrentSource.2","Wire.2"]],
 configs:[
 {name:"CurrentSource.2.CurrentType",permitted:true,value:"DC"},

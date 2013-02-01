@@ -9,7 +9,6 @@ components:[
                 visible:false,rotation:0.0,move:"Rotate",bodytype:true},
 {type:"ScienceTrain",x:450.0,y:320,originX:150.0,originY:75.0,width:200.0,height:40.0,
                 visible:true,rotation:0.0,move:"None"},
-{type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 ],
 circuits:[["Lightbulb","Dynamo"]],
 plan: [

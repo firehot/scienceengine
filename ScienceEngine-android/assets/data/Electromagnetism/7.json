@@ -4,11 +4,9 @@ description:"Creating a DC  motor by using commutator",
 components:[
 {type:"Image",viewspec:"images/brush.png", x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"HorseshoeMagnet", x:175, y:30.8,originX:175.0,originY:192.0,width:350.0,height:256.0,visible:true,rotation:0,move:"None",bodytype:false},
-{type:"CurrentSource",x:342.6001,y:345.59995,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None",bodytype:false},
+{type:"CurrentSource",x:342.6001,y:320.59995,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"CurrentCoil",x:282.86517,y:226.54425,originX:64.0,originY:16.0,width:128.0,height:32.0,visible:true,rotation:0.0,move:"Rotate",bodytype:true},
 {type:"Dummy",x:370.0,y:313.0,originX:32.0,originY:32.0,width:0,height:0,visible:true,rotation:0.0},
-{type:"ControlPanel",x:709.0,y:254.0,originX:0.0,originY:0.0,width:0.0,height:0.0,visible:true,rotation:0.0,move:"None",bodytype:false},
-{type:"Title",x:100.0,y:460.0,originX:0.0,originY:0.0,width:0.0,height:5.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type: "Environment", move: "None", params:[{name:"AirPermittivity"},{name:"RoomTemperature"},{name:"EarthMagneticField"}]}], 
 circuits:[["CurrentSource","CurrentCoil"]],
 configs:[
@@ -22,12 +20,6 @@ configs:[
 {name:"CurrentCoil.RotationVelocity", permitted:false, value:2}
 ],
 plan: [
-   {type: "ParameterProber",
-             goal:"Should MaxCurrent be increased or decreased to make the motor run faster?\nSelect X if parameter does not affect motor.",
-             success: 100,
-             failure: 50,
-             parameter:"CurrentSource.MaxCurrent", 
-             resultType:"Direct"},
   {type: "Guide",
    goal: "Can you make number of revolutions of the motor +5 by configuring only the magnet?",
    success:200,
