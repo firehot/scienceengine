@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.statesofmatter.view;
+package com.mazalearn.scienceengine.domains.statesofmatter;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;

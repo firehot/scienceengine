@@ -1,10 +1,13 @@
-package com.mazalearn.scienceengine.domains.statesofmatter.model;
+package com.mazalearn.scienceengine.domains.statesofmatter;
 
 import java.util.List;
 
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.domains.statesofmatter.model.AbstractMoleculeBox;
+import com.mazalearn.scienceengine.domains.statesofmatter.model.ComponentType;
+import com.mazalearn.scienceengine.domains.statesofmatter.model.LJMoleculeBox;
 
 public class StatesOfMatterModel extends AbstractScience2DModel {
 

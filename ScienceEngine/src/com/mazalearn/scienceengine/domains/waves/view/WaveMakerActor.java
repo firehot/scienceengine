@@ -20,6 +20,7 @@ public class WaveMakerActor extends Science2DActor {
     this.ball = ball;
     this.setWidth(this.getWidth() * 4); 
     this.setHeight(this.getHeight() * 4);
+    
     this.addListener(new DragListener() {
       @Override
       public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -38,7 +39,6 @@ public class WaveMakerActor extends Science2DActor {
   @Override
   public void act(float delta) {
     this.setY((originY + ball.pos.y) * ballDiameter);
-    //super.act(delta);
   }
 
   public void setBallDiameter(int ballDiameter) {

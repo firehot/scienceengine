@@ -8,9 +8,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.ColorPanel;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.domains.statesofmatter.model.ComponentType;
-import com.mazalearn.scienceengine.domains.statesofmatter.model.StatesOfMatterModel;
 import com.mazalearn.scienceengine.domains.statesofmatter.view.MoleculeBoxActor;
-import com.mazalearn.scienceengine.domains.statesofmatter.view.StatesOfMatterView;
 
 /**
  * States of Matter science2DModel

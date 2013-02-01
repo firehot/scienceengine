@@ -47,7 +47,7 @@ public abstract class AbstractMoleculeBox extends Science2DBody
     setState(state);
   }
   
-  void reScaleDt() {
+  public void reScaleDt() {
     
     // Set dt to be 1/10 of the average collision timeLimit
     // If box has area A, number of particles N, 
@@ -138,7 +138,7 @@ public abstract class AbstractMoleculeBox extends Science2DBody
     return GRAVITY;
   }
 
-  protected void singleStep() {  
+  public void singleStep() {  
     // Scale velocities up or down
     // vi *= (2-0.999995); or vi *= 0.999995;
     // Update velocities half-way with old acceleration
