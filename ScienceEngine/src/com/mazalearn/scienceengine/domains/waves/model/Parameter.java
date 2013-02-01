@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.waves;
+package com.mazalearn.scienceengine.domains.waves.model;
 
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
@@ -11,7 +11,7 @@ public enum Parameter implements IParameter {
   GenMode,
   PulseWidth,
   Tension,
-  Boundary;
+  BoundaryType;
   
   private Parameter() {
   }

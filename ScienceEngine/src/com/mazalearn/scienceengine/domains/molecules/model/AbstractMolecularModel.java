@@ -257,10 +257,4 @@ public abstract class AbstractMolecularModel extends AbstractScience2DModel
       float x, float y, float rotation) {
     return null;
   }
-
-  @Override
-  public IComponentType componentNameToType(String componentTypeName) {
-    return ComponentType.valueOf(componentTypeName);
-  }
-  
 }

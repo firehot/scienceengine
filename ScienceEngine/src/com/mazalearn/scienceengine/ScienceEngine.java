@@ -77,6 +77,8 @@ public class ScienceEngine extends Game {
 
   private static Set<Science2DBody> pinnedBodies = new HashSet<Science2DBody>();
 
+  private static long logicalTime;
+
   public static final int PIXELS_PER_M = 8;
 
   public ScienceEngine(String url) {
@@ -384,6 +386,7 @@ public class ScienceEngine extends Game {
    */
   public synchronized static void addTimeElapsed(float delta) {
     time += delta;
+    logicalTime++;
   }
   
   public static float getTime() {
@@ -417,5 +420,9 @@ public class ScienceEngine extends Game {
       return "www.mazalearn.com:80";
     }
     return "localhost:8888";
+  }
+
+  public static long getLogicalTime() {
+    return logicalTime;
   }
 }

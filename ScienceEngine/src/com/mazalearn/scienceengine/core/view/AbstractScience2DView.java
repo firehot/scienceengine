@@ -201,10 +201,10 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       }
       component.setPosition(x, y);
     }
-    // If GWT, make status a disclaimer about experiencing on Android Tablet
+    // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
-      Label status = (Label) findActor(StageComponent.Status.name());
-      status.setText("Demo only. Best experienced on Android/iPad Tablets.");
+      ScienceEngine.displayStatusMessage(this, 
+          "Partial Demo only. Best experienced on Android/iPad Tablet.");
     }
     
     return modelControls;
@@ -212,11 +212,14 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
 
   private Actor addStageComponent(StageComponent stageComponent) {
     Actor component = null;
-    switch (stageComponent) {
+    String text = "";
+    switch (stageComponent) { 
+      case User: text = ScienceEngine.getUserName();
+                 // fallthru
       case Status: 
-      case Title: {
+      case Title:{
         Table table = new Table(skin); 
-        table.add(component = new Label("", skin));
+        table.add(component = new Label(text, skin));
         component.setName(stageComponent.name());
         component.setColor(stageComponent.getColor());
         this.addActor(table);

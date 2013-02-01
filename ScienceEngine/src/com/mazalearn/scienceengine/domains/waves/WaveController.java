@@ -11,9 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.domains.waves.view.Boundary;
-import com.mazalearn.scienceengine.domains.waves.view.Hand;
-import com.mazalearn.scienceengine.domains.waves.view.WaveBox;
+import com.mazalearn.scienceengine.domains.waves.model.ComponentType;
+import com.mazalearn.scienceengine.domains.waves.view.BoundaryActor;
+import com.mazalearn.scienceengine.domains.waves.view.WaveMakerActor;
+import com.mazalearn.scienceengine.domains.waves.view.WaveBoxActor;
 
 /**
  * Wave Motion science2DModel
@@ -52,14 +53,21 @@ public class WaveController extends AbstractScience2DController {
   
   @Override
   protected Actor createActor(String type, String viewSpec, Science2DBody body) {
-    if (type.equals("WaveBox")) {
-      return new WaveBox(ballTextureRed, ballTextureBlue, 
-          waveModel.balls, ORIGIN_X, ORIGIN_Y, waveView);
-    } else if (type.equals("Boundary")) {
-      return new Boundary(ballTextureRed, 
+    ComponentType componentType;
+    try {
+      componentType = ComponentType.valueOf(type);
+    } catch(IllegalArgumentException e) {
+      return super.createActor(type, viewSpec, body);
+    }
+    switch (componentType) {
+    case WaveBox: 
+      return new WaveBoxActor(body, ballTextureRed, ballTextureBlue, 
+          ORIGIN_X, ORIGIN_Y, waveView);
+    case Boundary:
+      return new BoundaryActor(body, ballTextureRed, 
           waveModel.balls[waveModel.balls.length - 1], ORIGIN_Y);
-    } else if (type.equals("Hand")) {
-      return new Hand(waveModel.balls[0], ORIGIN_X - 1, ORIGIN_Y);
+    case WaveMaker:
+      return new WaveMakerActor(body, waveModel.balls[0], ORIGIN_X - 1, ORIGIN_Y);
     }
     return null;
   }  

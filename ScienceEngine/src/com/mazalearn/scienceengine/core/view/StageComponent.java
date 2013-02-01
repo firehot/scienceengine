@@ -8,7 +8,8 @@ public enum StageComponent implements IComponentType {
   Title(400, 470, Color.WHITE),
   Status(400, 10, Color.WHITE),
   ViewControls(740, -30, Color.BLACK), 
-  ModelControls(709, 262, Color.BLACK);
+  ModelControls(709, 262, Color.BLACK),
+  User(600, 470, Color.WHITE);
   
   private int x;
   private int y;

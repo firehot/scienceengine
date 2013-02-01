@@ -77,9 +77,4 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
   public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
   }
   
-  @Override
-  public IComponentType componentNameToType(String componentTypeName) {
-    return ComponentType.valueOf(componentTypeName);
-  }
-  
 }

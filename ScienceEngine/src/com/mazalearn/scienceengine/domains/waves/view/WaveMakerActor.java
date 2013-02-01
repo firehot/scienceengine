@@ -1,19 +1,20 @@
 package com.mazalearn.scienceengine.domains.waves.view;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.mazalearn.scienceengine.domains.waves.WaveModel.Ball;
+import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.domains.waves.model.WaveBox.Ball;
 
-public class Hand extends Image {
+public class WaveMakerActor extends Science2DActor {
   private final Ball ball;
   float lastTouchedY, originX, originY;
   private int ballDiameter;
 
-  public Hand(final Ball ball, float originX, float originY) {
-    super(new Texture("image-atlases/hand-pointer1.png"));
-    this.setName("Hand");
+  public WaveMakerActor(Science2DBody hand, final Ball ball, float originX, float originY) {
+    super(hand, new TextureRegion(new Texture("image-atlases/hand-pointer1.png")));
     this.originX = originX;
     this.originY = originY;
     this.ball = ball;
@@ -37,7 +38,7 @@ public class Hand extends Image {
   @Override
   public void act(float delta) {
     this.setY((originY + ball.pos.y) * ballDiameter);
-    super.act(delta);
+    //super.act(delta);
   }
 
   public void setBallDiameter(int ballDiameter) {

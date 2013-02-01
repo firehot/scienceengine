@@ -292,6 +292,4 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     }
     return null;
   }
-
-  public abstract IComponentType componentNameToType(String componentName);
 }

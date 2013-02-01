@@ -29,13 +29,11 @@ public class ActivityScreen extends AbstractScreen {
   private IScience2DController science2DController;
   private Profile profile;
   private String domain;
-  private String activityName;
   private String activityDescription;
 
   public ActivityScreen(ScienceEngine scienceEngine, String domain, int activityLevel) {
     super(scienceEngine, null);
     this.domain = domain;
-    this.activityName = getMsg().getString(domain + "." + activityLevel + ".Name");
     this.activityDescription = getMsg().getString(domain + "." + activityLevel + ".Description");
     String fileName = LevelUtil.getLevelFilename(domain, ".json", activityLevel);
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
