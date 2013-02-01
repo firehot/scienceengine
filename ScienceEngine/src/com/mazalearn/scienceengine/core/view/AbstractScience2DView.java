@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.InstructionDialog;
@@ -189,13 +190,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   public ControlPanel setupStage() {
     // Register stage components
     for (StageComponent stageComponent: StageComponent.values()) {
-      Actor component = null;
-      switch (stageComponent) {
-      case Status:
-      case Title: component = new Label("", skin); break;
-      case ViewControls: component = this.viewControls = new ViewControls(science2DController, skin); break;
-      case ControlPanel: component = this.controlPanel = new ControlPanel(science2DModel, skin); break;
-      }
+      Actor component = addStageComponent(stageComponent);
       float x = stageComponent.getX();
       if (x < 0) {
         x = AbstractScreen.VIEWPORT_WIDTH + x;
@@ -205,9 +200,6 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         y = AbstractScreen.VIEWPORT_HEIGHT + y;
       }
       component.setPosition(x, y);
-      component.setName(stageComponent.name());
-      component.setColor(stageComponent.getColor());
-      this.addActor(component);
     }
     // If GWT, make status a disclaimer about experiencing on Android Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
@@ -216,6 +208,34 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     }
     
     return controlPanel;
+  }
+
+  private Actor addStageComponent(StageComponent stageComponent) {
+    Actor component = null;
+    switch (stageComponent) {
+      case Status: 
+      case Title: {
+        Table table = new Table(skin); 
+        table.add(component = new Label("", skin));
+        component.setName(stageComponent.name());
+        component.setColor(stageComponent.getColor());
+        this.addActor(table);
+        return table;
+      }
+      case ViewControls: { 
+        this.viewControls = new ViewControls(science2DController, skin);
+        this.addActor(viewControls);
+        viewControls.setName(stageComponent.name());
+        return viewControls;
+      }
+      case ControlPanel: {
+        this.controlPanel = new ControlPanel(science2DModel, skin);
+        this.addActor(controlPanel);
+        controlPanel.setName(stageComponent.name());
+        return controlPanel;
+      }
+    }
+    return component;
   }
 
   @Override

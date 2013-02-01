@@ -5,7 +5,7 @@ com.badlogic.gdx.graphics.Color: {
   white: { a: 1, b: 1, g: 1, r: 1 },
   red: { a: 1, b: 0, g: 0, r: 1 },
   black: { a: 1, b: 0, g: 0, r: 0 },
-  yellow: {a:1, b:0, g:255, r:255 },
+  yellow: {a:1, b:0, g:1, r:1 },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
   dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } }
@@ -16,7 +16,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
   default: { down: default-round-down, up: default-round, font: default-font, fontColor: white },
-  body: { down: body-round-down, up: body-round, checked: body-round-down, font: default-font, fontColor: black, downFontColor: red, checkedFontColor: red },
+  body: { down: body-round-down, up: body-round, checked: body-round-down, font: default-font, fontColor: white, downFontColor: yellow, checkedFontColor: yellow },
   toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red }
 },
 com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {

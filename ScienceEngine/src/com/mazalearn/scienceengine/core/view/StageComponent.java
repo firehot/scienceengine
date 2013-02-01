@@ -5,8 +5,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum StageComponent implements IComponentType {
-  Title(250, -10, Color.YELLOW),
-  Status(10, 20, Color.RED),
+  Title(400, 470, Color.WHITE),
+  Status(400, 10, Color.WHITE),
   ViewControls(740, -30, Color.BLACK), 
   ControlPanel(709, 262, Color.BLACK);
   

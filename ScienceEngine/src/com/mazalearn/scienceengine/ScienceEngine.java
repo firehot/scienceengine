@@ -45,7 +45,7 @@ public class ScienceEngine extends Game {
 
   // mode of development
   public enum DevMode {PRODUCTION, DEBUG, DESIGN};
-  public static DevMode DEV_MODE = DevMode.DEBUG;
+  public static DevMode DEV_MODE = DevMode.PRODUCTION;
   
   // Provide access to this singleton scienceEngine from any class
   public static ScienceEngine SCIENCE_ENGINE;
@@ -327,7 +327,7 @@ public class ScienceEngine extends Game {
     if (body == null) return;
     eventLog.logEvent(body.name(), Parameter.Select.name());
     science2DView.checkGuruProgress();
-    displayEntityStatus(body.getComponentTypeName(), science2DView);
+    displayEntityStatus(body, body.getComponentTypeName(), science2DView);
   }
 
   /**
@@ -337,7 +337,7 @@ public class ScienceEngine extends Game {
    */
   public static void selectParameter(Science2DBody body, IParameter parameter, float value, IScience2DView science2DView) {
     getSoundManager().play(ScienceEngineSound.CLICK);
-    displayEntityStatus(parameter.name(), science2DView);
+    displayEntityStatus(body, parameter.name(), science2DView);
     if (body == null) return;
     science2DView.checkGuruProgress();
     eventLog.logEvent(body.name(), parameter.name(), value);
@@ -355,10 +355,9 @@ public class ScienceEngine extends Game {
     return eventLog;
   }
 
-  private static void displayEntityStatus(String entityName, IScience2DView stage) {
+  private static void displayEntityStatus(Science2DBody body, String entityName, IScience2DView stage) {
     if (stage == null) return;
-    String component = 
-        getSelectedBody() != null ? getSelectedBody().toString() + " - " : "";
+    String component = body != null ? body.toString() + " - " : "";
     if (entityName.contains(".")) {
       entityName = entityName.substring(0, entityName.indexOf("."));
     }

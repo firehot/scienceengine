@@ -62,6 +62,7 @@ public class DomainHomeScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
+    setBackgroundColor(new Color(0x84/255f,0x99/255f,0xa2/255f,1f));
     if (profile.getCurrentLevel() != 0) {
       gotoActivityLevel(profile.getCurrentLevel());
       return;
