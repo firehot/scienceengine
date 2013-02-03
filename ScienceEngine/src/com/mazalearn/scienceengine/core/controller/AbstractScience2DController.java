@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -46,7 +47,7 @@ public abstract class AbstractScience2DController implements
       AbstractScience2DView science2DView) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
-    this.modelControls = science2DView.setupStage();
+    this.modelControls = science2DView.setupControls();
   }
   
   @Override
@@ -93,7 +94,7 @@ public abstract class AbstractScience2DController implements
       // Move control Panel to top - so it will be above others
       stage.getRoot().addActor(modelControls);
       // Move back button to top also - so it will be accessible
-      stage.getRoot().addActor(stage.getRoot().findActor("BackButton"));
+      stage.getRoot().addActor(stage.getRoot().findActor(ScreenComponent.BackButton.name()));
       // Add guru before modelcontrols so that controls are accessible.
       stage.getRoot().addActorBefore(modelControls, guru);
     }

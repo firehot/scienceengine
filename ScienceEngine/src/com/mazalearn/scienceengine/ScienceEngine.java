@@ -20,6 +20,7 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
+import com.mazalearn.scienceengine.app.screens.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
@@ -37,7 +38,6 @@ import com.mazalearn.scienceengine.core.model.IParameter;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
-import com.mazalearn.scienceengine.core.view.StageComponent;
 
 public class ScienceEngine extends Game {
   // constant useful for logging
@@ -371,7 +371,7 @@ public class ScienceEngine extends Game {
   }
 
   public static void displayStatusMessage(IScience2DView stage, String message) {
-    Label status = (Label) stage.findActor(StageComponent.Status.name());
+    Label status = (Label) stage.findActor(ScreenComponent.Status.name());
     status.setText(message);
   }
 

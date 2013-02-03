@@ -1,21 +1,21 @@
-package com.mazalearn.scienceengine.core.view;
+package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
-public enum StageComponent implements IComponentType {
-  Title(400, 470, Color.WHITE),
+public enum ScreenComponent implements IComponentType {
+  Title(400, 465, Color.WHITE),
   Status(400, 10, Color.WHITE),
-  ViewControls(130, -75, Color.BLACK), 
-  ModelControls(719, 232, Color.BLACK),
-  User(730, 465, Color.WHITE);
+  User(730, 465, Color.WHITE),
+  BackButton(2, -30, Color.CLEAR), 
+  ViewControls(130, -30, Color.CLEAR);
   
   private int x;
   private int y;
   private Color color;
 
-  private StageComponent(int x, int y, Color color) {
+  private ScreenComponent(int x, int y, Color color) {
     this.x = x;
     this.y = y;
     this.color = color;
@@ -31,10 +31,10 @@ public enum StageComponent implements IComponentType {
     return ScienceEngine.getPlatformAdapter().getMsg().getString("Name." + name());  
   }
   
-  public static StageComponent valueOf(IComponentType cType) {
-    for (StageComponent stageComponent: StageComponent.values()) {
-      if (stageComponent.name().equals(cType.name())) {
-        return stageComponent;
+  public static ScreenComponent valueOf(IComponentType cType) {
+    for (ScreenComponent screenComponent: ScreenComponent.values()) {
+      if (screenComponent.name().equals(cType.name())) {
+        return screenComponent;
       }
     }
     return null;

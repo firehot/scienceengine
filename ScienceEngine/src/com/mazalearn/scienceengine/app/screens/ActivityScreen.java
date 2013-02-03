@@ -48,7 +48,7 @@ public class ActivityScreen extends AbstractScreen {
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
-      ((Stage) science2DView).addActor(createBackButton());
+      // ((Stage) science2DView).addActor(createBackButton());
       this.setStage(levelEditor);
     } else {
       this.setStage((Stage) science2DView);
@@ -99,7 +99,8 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
-    String fileName = LevelUtil.getLevelFilename(science2DController.getDomain(), ".json", science2DController.getLevel());
+    String fileName = LevelUtil.getLevelFilename(science2DController.getDomain(), 
+        ".json", science2DController.getLevel());
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;
     }

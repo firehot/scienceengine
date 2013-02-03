@@ -46,7 +46,7 @@ public class ChooseDomainScreen extends AbstractScreen {
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
 
     String title = getMsg().getString("ScienceEngine.ChooseDomain");
-    addTitle(title);
+    setTitle(title);
 
     // retrieve the default table
     Table table = super.getTable();

@@ -38,7 +38,7 @@ public class Controller {
     IControl control = null;
     
     switch(property.getType()) {
-      case TOGGLE: 
+      case TOGGLE:
         control = new ToggleButtonControl(property, skin, styleName);
         table.add(control.getActor());
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);

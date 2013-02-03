@@ -31,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.app.screens.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
@@ -136,7 +137,8 @@ public class LevelEditor extends Stage {
     titleTable.add("Level").pad(5);
     titleTable.add(level);
     titleTable.row();
-    final Label titleLabel = (Label) originalStage.getRoot().findActor("Title");
+    /*
+    final Label titleLabel = (Label) originalStage.getRoot().findActor(ScreenComponent.Title.name());
     final TextField description = 
         new TextField(titleLabel.getText().toString(), screen.getSkin());
     titleTable.add(description).colspan(3).fill().width(600);
@@ -145,6 +147,7 @@ public class LevelEditor extends Stage {
         titleLabel.setText(description.getText());
       }
     });
+    */
     
     this.actorPropertyPanel = new ActorPropertyPanel(screen.getSkin(), this);
     configTable = createConfigTable(science2DModel, screen.getSkin());

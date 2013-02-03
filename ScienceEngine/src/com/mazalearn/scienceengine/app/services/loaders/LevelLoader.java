@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -84,7 +85,7 @@ public class LevelLoader {
   private void readLevelInfo(OrderedMap<String, ?> info) {
     String description = (String) nvl(info.get("description"), 
         science2DController.getDomain() + " : Level " + level);
-    Label title = (Label) science2DView.findActor("Title");
+    Label title = (Label) science2DView.findActor(ScreenComponent.Title.name());
     title.setText(description);
   }
 

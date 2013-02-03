@@ -5,16 +5,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.InstructionDialog;
@@ -186,23 +182,20 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       }
     }
     this.addActor(viewControls);
+    viewControls.setPosition(130, AbstractScreen.VIEWPORT_HEIGHT - 75); 
     this.addActor(modelControls);
+    modelControls.setPosition(719, 232);
   }
 
-  public ModelControls setupStage() {
-    // Register stage components
-    for (StageComponent stageComponent: StageComponent.values()) {
-      Actor component = addStageComponent(stageComponent);
-      float x = stageComponent.getX();
-      if (x < 0) {
-        x = AbstractScreen.VIEWPORT_WIDTH + x;
-      }
-      float y = stageComponent.getY();
-      if (y < 0) {
-        y = AbstractScreen.VIEWPORT_HEIGHT + y;
-      }
-      component.setPosition(x, y);
-    }
+  public ModelControls setupControls() {
+    // Create view and model controls
+    this.viewControls = new ActivityViewControls(science2DController, skin);
+    viewControls.addActivityControls();
+    this.addActor(viewControls);
+
+    this.modelControls = new ModelControls(science2DModel, skin);
+    this.addActor(modelControls);
+
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
       ScienceEngine.displayStatusMessage(this, 
@@ -210,46 +203,6 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     }
     
     return modelControls;
-  }
-
-  private Actor addStageComponent(StageComponent stageComponent) {
-    Actor component = null;
-    String text = "";
-    switch (stageComponent) { 
-      case User: { 
-        text = ScienceEngine.getUserName();
-        Table table = new Table(skin);
-        table.setName(stageComponent.name());
-        Image image = new Image(new Texture("images/user.png"));
-        image.setSize(30,30);
-        table.add(image).width(20).height(30);
-        table.add(text);
-        this.addActor(table);
-        return table;
-      }
-      case Status: 
-      case Title: {
-        Table table = new Table(skin); 
-        table.add(component = new Label(text, skin));
-        component.setName(stageComponent.name());
-        component.setColor(stageComponent.getColor());
-        this.addActor(table);
-        return table;
-      }
-      case ViewControls: { 
-        this.viewControls = new ViewControls(science2DController, skin);
-        this.addActor(viewControls);
-        viewControls.setName(stageComponent.name());
-        return viewControls;
-      }
-      case ModelControls: {
-        this.modelControls = new ModelControls(science2DModel, skin);
-        this.addActor(modelControls);
-        modelControls.setName(stageComponent.name());
-        return modelControls;
-      }
-    }
-    return component;
   }
 
   @Override

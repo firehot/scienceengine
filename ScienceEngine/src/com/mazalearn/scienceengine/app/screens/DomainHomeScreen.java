@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -83,7 +82,7 @@ public class DomainHomeScreen extends AbstractScreen {
     
     String title = getMsg().getString("ScienceEngine." + domain) +
         " - " + getMsg().getString("ScienceEngine.Levels"); //$NON-NLS-1$ //$NON-NLS-2$
-    addTitle(title);
+    setTitle(title);
     
     table.add(createActivityLevelPane()).fill().width(AbstractScreen.VIEWPORT_WIDTH - 40);    
     table.row();

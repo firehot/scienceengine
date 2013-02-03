@@ -8,13 +8,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,7 +27,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.core.view.StageComponent;
+import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
  * The base class for all scienceEngine screens.
@@ -69,48 +70,15 @@ public abstract class AbstractScreen implements Screen {
         return super.keyDown(event, keycode);
       }      
     });
-    if (this.needsBackground()) {
-      stage.addActor(createBackButton());
-    }
-  }
-
-  private void setupBackground() {
-    setBackgroundColor(Color.CLEAR);
-    // retrieve the splash image's region from the atlas
-    AtlasRegion background = getAtlas().findRegion(
-        "splash-screen/splash-background"); //$NON-NLS-1$
-    Image bgImage = new Image(background);
-    bgImage.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
-    Actor a = stage.getRoot().findActor(StageComponent.Title.name());
-    stage.getRoot().addActorAfter(a, bgImage);
   }
 
   protected boolean needsBackground() {
     return true;
   }
 
-  protected Actor createBackButton() {
-    TextButton backButton = 
-        new TextButton(ScienceEngine.getMsg().getString("ViewControls.Back"), getSkin()); //$NON-NLS-1$
-    Drawable image = new TextureRegionDrawable(new TextureRegion(new Texture("images/back.png")));
-    TextButton.TextButtonStyle style = new TextButtonStyle(image, image, image);
-    style.font = getSkin().getFont("default-font");
-    backButton.setStyle(style);
-    backButton.setName("BackButton");
-    backButton.setPosition(2, VIEWPORT_HEIGHT - 30);
-    backButton.setSize(70, 30);
-    backButton.addListener(new ClickListener() {
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        goBack();
-      }      
-    });
-    return backButton;
-  }
-
   public void setStage(Stage stage) {
     this.stage = stage;
-    stage.addActor(createBackButton());
+    setupScreen(stage);
     Gdx.input.setInputProcessor(stage);    
   }
 
@@ -138,15 +106,103 @@ public abstract class AbstractScreen implements Screen {
     return scienceEngine.getAtlas();
   }
 
-  // TODO: setTitle instead.
-  protected void addTitle(String titleString) {
-    Table title = new Table(getSkin());
-    title.add(titleString);
-    title.setPosition(AbstractScreen.VIEWPORT_WIDTH / 2, AbstractScreen.VIEWPORT_HEIGHT - 10);
-    stage.addActor(title);
+  protected void setTitle(String titleString) {
+    Actor title = stage.getRoot().findActor(ScreenComponent.Title.name());
+    if (title != null) {
+      ((Label) title).setText(titleString);
+    }
   }
 
-  protected Table getTable() {
+  private void setupBackground(Stage stage) {
+    setBackgroundColor(Color.CLEAR);
+    // retrieve the splash image's region from the atlas
+    AtlasRegion background = getAtlas().findRegion(
+        "splash-screen/splash-background"); //$NON-NLS-1$
+    Image bgImage = new Image(background);
+    bgImage.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+    // Background should be behind everything else on stage.
+    if (stage.getActors().size > 0) {
+      stage.getRoot().addActorBefore(stage.getActors().get(0), bgImage);
+    } else {
+      stage.addActor(bgImage);
+    }
+  }
+
+  public void setupScreen(Stage stage) {
+    if (stage.getRoot().findActor(ScreenComponent.Title.name()) != null) return;
+    setupBackground(stage);
+    setupScreenComponents(stage);
+  }
+  
+  private void setupScreenComponents(Stage stage) {
+    // Register stage components
+    for (ScreenComponent screenComponent: ScreenComponent.values()) {
+      Actor component = addScreenComponent(screenComponent, stage, getSkin());
+      stage.addActor(component);
+      float x = screenComponent.getX();
+      if (x < 0) {
+        x = AbstractScreen.VIEWPORT_WIDTH + x;
+      }
+      float y = screenComponent.getY();
+      if (y < 0) {
+        y = AbstractScreen.VIEWPORT_HEIGHT + y;
+      }
+      component.setPosition(x, y);
+    }
+  }
+
+  private Actor addScreenComponent(ScreenComponent screenComponent, Stage stage, Skin skin) {
+    switch (screenComponent) { 
+      case User: { 
+        String text = ScienceEngine.getUserName();
+        Table table = new Table(skin);
+        table.setName(screenComponent.name());
+        Image image = new Image(new Texture("images/user.png"));
+        image.setSize(30,30);
+        table.add(image).width(20).height(30);
+        table.add(text);
+        return table;
+      }
+      case Status: 
+      case Title: {
+        Table table = new Table(skin);
+        Label label = new Label("", skin);
+        table.add(label);
+        label.setName(screenComponent.name());
+        label.setColor(screenComponent.getColor());
+        return table;
+      }
+      case BackButton: {
+        TextButton backButton = 
+            new TextButton(ScienceEngine.getMsg().getString("ViewControls.Back"), getSkin()); //$NON-NLS-1$
+        Drawable image = new TextureRegionDrawable(new TextureRegion(new Texture("images/back.png")));
+        TextButton.TextButtonStyle style = new TextButtonStyle(image, image, image);
+        style.font = skin.getFont("default-font");
+        backButton.setStyle(style);
+        backButton.setName(screenComponent.name());
+        backButton.setSize(70, 30);
+        backButton.addListener(new ClickListener() {
+          public void clicked(InputEvent event, float x, float y) {
+            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+            goBack();
+          }      
+        });
+        return backButton;
+      }
+      case ViewControls: {
+        Actor actor = stage.getRoot().findActor(ScreenComponent.ViewControls.name());
+        if (actor == null) {
+          ViewControls viewControls = new ViewControls(getSkin());
+          viewControls.addActivityControls();
+          actor = viewControls;
+        }
+        return actor;
+      }
+    }
+    return null;
+  }
+
+protected Table getTable() {
     if (table == null) {
       table = new Table(getSkin());
       table.setFillParent(true);
@@ -171,7 +227,7 @@ public abstract class AbstractScreen implements Screen {
     // Catch menu key to prevent onscreen keyboard coming up
     Gdx.input.setCatchMenuKey(true);
     if (needsBackground()) {
-      setupBackground();
+      setupScreen(stage);
     }
   }
 
