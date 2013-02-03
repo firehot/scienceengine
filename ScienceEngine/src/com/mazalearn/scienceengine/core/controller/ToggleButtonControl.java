@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.core.controller;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -24,7 +25,12 @@ public class ToggleButtonControl implements IControl {
   
   public ToggleButtonControl(final IModelConfig<Boolean> property, final Skin skin, String styleName) {
     this.toggleButton = new TextButton(property.getParameter().name(), 
-        skin.get(styleName, TextButtonStyle.class));
+        skin.get(styleName == "default" ? "toggle" : styleName, TextButtonStyle.class)) {
+      @Override
+      public void draw(SpriteBatch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+      }
+    };
     this.property = property;
     toggleButton.setName(property.getName()); 
     toggleButton.addListener(new ClickListener() {
@@ -53,7 +59,7 @@ public class ToggleButtonControl implements IControl {
     this.toggleButton.setChecked(property.getValue());
   }
   
-  public boolean isAvailable() {
+  public boolean isActivated() {
     return property.isAvailable();
   }
 }

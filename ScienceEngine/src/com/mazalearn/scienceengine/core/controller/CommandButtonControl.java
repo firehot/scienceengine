@@ -52,7 +52,7 @@ public class CommandButtonControl implements IControl {
   public void syncWithModel() {
   }
   
-  public boolean isAvailable() {
+  public boolean isActivated() {
     return command.isAvailable();
   }
 }

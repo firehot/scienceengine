@@ -51,7 +51,7 @@ public class SliderControl implements IControl {
     slider.setValue(value);
   }
  
-  public boolean isAvailable() {
+  public boolean isActivated() {
     return property.isAvailable();
   }
 

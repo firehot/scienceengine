@@ -20,7 +20,7 @@ public class Controller {
 
   public void validate() {
     control.syncWithModel();
-    cellTable.setWidget(control.isAvailable() ? this.table : null);
+    cellTable.setWidget(control.isActivated() ? this.table : null);
   }
 
   @SuppressWarnings({ "rawtypes" })

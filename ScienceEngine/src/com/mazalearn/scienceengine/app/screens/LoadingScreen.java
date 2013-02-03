@@ -44,7 +44,7 @@ public class LoadingScreen extends AbstractScreen {
   }
 
   @Override
-  protected boolean needsBackButton() {
+  protected boolean needsBackground() {
     return false;
   }
 

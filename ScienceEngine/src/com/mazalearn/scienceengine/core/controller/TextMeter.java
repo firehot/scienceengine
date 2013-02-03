@@ -43,7 +43,7 @@ public class TextMeter implements IControl {
     label.setText(String.valueOf(property.getValue()));
   }
   
-  public boolean isAvailable() {
+  public boolean isActivated() {
     return property.isAvailable();
   }
 }

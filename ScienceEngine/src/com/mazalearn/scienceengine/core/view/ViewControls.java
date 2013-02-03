@@ -1,9 +1,16 @@
 package com.mazalearn.scienceengine.core.view;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.OptionsDialog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
@@ -21,7 +28,8 @@ public class ViewControls extends Table implements IControl {
   private IControl resetControl;
   private IMessage messages;
   private IScience2DController science2DController;
-  private boolean isAvailable = true;
+  private boolean isActivated = false;
+  private Actor viewControlPanel;
   
   public ViewControls(IScience2DController science2DController, Skin skin) {
     super(skin);
@@ -30,14 +38,30 @@ public class ViewControls extends Table implements IControl {
     this.science2DView = science2DController.getView();
     messages = ScienceEngine.getMsg();
     this.defaults().fill();
-    this.add(createViewControlPanel(skin, science2DView));
+    Image image = new Image(new Texture("images/settings.png"));
+    image.setSize(VIEW_BUTTON_HEIGHT, VIEW_BUTTON_HEIGHT);
+    image.setPosition(VIEW_BUTTON_WIDTH / 2 - VIEW_BUTTON_HEIGHT / 2, 0);
+    Button imageButton = new TextButton("", skin, "body");
+    imageButton.addActor(image);
+    imageButton.addListener(new ClickListener() {
+      @Override
+      public void clicked (InputEvent event, float x, float y) {
+        isActivated = !isActivated();
+        viewControlPanel.setVisible(isActivated);
+      }
+    });
+    this.add(imageButton).width(VIEW_BUTTON_WIDTH).height(VIEW_BUTTON_HEIGHT);
+    this.row();
+    viewControlPanel = createViewControlPanel(skin, science2DView);
+    viewControlPanel.setVisible(isActivated());
+    this.add(viewControlPanel);
   }
   
   private IMessage getMsg() {
     return messages;
   }
   
-  private Actor createViewControlPanel(Skin skin,
+  private Actor createViewControlPanel(final Skin skin,
       final IScience2DView science2DView) {
     Table viewControls = new Table(skin);
     viewControls.setName("ViewControls");
@@ -55,7 +79,7 @@ public class ViewControls extends Table implements IControl {
           public boolean isPossible() { return true; }
     };
     
-    challengeControl = new ToggleButtonControl(challengeModelConfig, skin) {
+    challengeControl = new ToggleButtonControl(challengeModelConfig, skin, "body") {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(
@@ -72,7 +96,7 @@ public class ViewControls extends Table implements IControl {
           public Boolean getValue() { return science2DView.isSuspended(); }
           public boolean isPossible() { return true; }
     };
-    suspendControl = new ToggleButtonControl(pauseResumeModelConfig, skin) {
+    suspendControl = new ToggleButtonControl(pauseResumeModelConfig, skin, "body") {
       public void syncWithModel() {
         super.syncWithModel();
         toggleButton.setText(science2DView.isSuspended() ? 
@@ -87,13 +111,26 @@ public class ViewControls extends Table implements IControl {
           public void doCommand() { science2DController.reset(); }
           public boolean isPossible() { return true; }
     };
-    resetControl = new CommandButtonControl(resetModelConfig, skin);
+    resetControl = new CommandButtonControl(resetModelConfig, skin, "body");
+    
+    // Add options dialog for controlling language, music, sound.
+    Button optionsButton = new TextButton(
+        getMsg().getString("ScienceEngine.Options") + "...", skin, "body");
+    optionsButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        new OptionsDialog(getStage(), skin).show(getStage());
+      }
+    });
     
     viewControls.row();
-    viewControls.add(resetControl.getActor()).width(VIEW_BUTTON_WIDTH / 2);
-    viewControls.add(suspendControl.getActor()).width(VIEW_BUTTON_WIDTH / 2);
+    viewControls.add(resetControl.getActor());
     viewControls.row();
-    viewControls.add(challengeControl.getActor()).colspan(2);
+    viewControls.add(suspendControl.getActor());
+    viewControls.row();
+    viewControls.add(challengeControl.getActor());
+    viewControls.row();
+    viewControls.add(optionsButton);
     viewControls.row();
     
     syncWithModel();
@@ -116,11 +153,11 @@ public class ViewControls extends Table implements IControl {
     return this;
   }
 
-  public void setAvailable(boolean isAvailable) {
-    this.isAvailable = isAvailable;
+  public void setAvailable(boolean isActivated) {
+    this.isActivated = isActivated;
   }
   
-  public boolean isAvailable() {
-    return isAvailable;
+  public boolean isActivated() {
+    return isActivated;
   }
 }

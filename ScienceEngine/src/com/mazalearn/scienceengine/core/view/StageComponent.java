@@ -7,9 +7,9 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 public enum StageComponent implements IComponentType {
   Title(400, 470, Color.WHITE),
   Status(400, 10, Color.WHITE),
-  ViewControls(740, -30, Color.BLACK), 
-  ModelControls(709, 262, Color.BLACK),
-  User(600, 470, Color.WHITE);
+  ViewControls(130, -75, Color.BLACK), 
+  ModelControls(719, 232, Color.BLACK),
+  User(730, 465, Color.WHITE);
   
   private int x;
   private int y;

@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -12,7 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
@@ -32,20 +39,23 @@ public class DomainHomeScreen extends AbstractScreen {
   private static final int RESOURCE_WIDTH = 130;
   private static final int THUMBNAIL_WIDTH = 200;
   private static final int THUMBNAIL_HEIGHT = 150;
-  private static final int INFO_HEIGHT = 50;
-  private Image[] activityThumbs;
+  private static final int LEVEL_INFO_HEIGHT = 60;
+  private static final int RESOURCE_INFO_HEIGHT = 90;
+  private TextButton[] activityThumbs;
   private int numLevels;
   private Array<?> resources;
   private LabelStyle smallLabelStyle;
   private Profile profile;
   private String domain;
+  private TextButtonStyle smallButtonStyle;
   
   public DomainHomeScreen(ScienceEngine scienceEngine, String domain) {
     super(scienceEngine);
     this.domain = domain;
-    setBackgroundColor(Color.DARK_GRAY);
     readDomainActivityInfo();
-    smallLabelStyle = new LabelStyle(getSmallFont(), Color.WHITE);
+    smallLabelStyle = new LabelStyle(getSmallFont(), Color.BLACK);
+    smallButtonStyle = new TextButton.TextButtonStyle();
+    smallButtonStyle.font = getSmallFont();
     profile = ScienceEngine.getProfileManager().retrieveProfile();
     profile.setDomain(domain);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
@@ -62,25 +72,34 @@ public class DomainHomeScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    setBackgroundColor(new Color(0x84/255f,0x99/255f,0xa2/255f,1f));
+    // setBackgroundColor(new Color(0x84/255f,0x99/255f,0xa2/255f,1f));
     if (profile.getCurrentLevel() != 0) {
       gotoActivityLevel(profile.getCurrentLevel());
       return;
     }
     
     Table table = super.getTable();
+    table.debug();
     
-    table.defaults().fill().center().padLeft(30);
-    table.add(getMsg().getString("ScienceEngine." + domain) +
-        "- " + getMsg().getString("ScienceEngine.Levels")); //$NON-NLS-1$ //$NON-NLS-2$
+    String title = getMsg().getString("ScienceEngine." + domain) +
+        " - " + getMsg().getString("ScienceEngine.Levels"); //$NON-NLS-1$ //$NON-NLS-2$
+    addTitle(title);
+    
+    table.add(createActivityLevelPane()).fill().width(AbstractScreen.VIEWPORT_WIDTH - 40);    
     table.row();
     
-    table.add(createActivityLevelPane()).fill();    
+    Table resourcesOnInternet = new Table(getSkin());
+    resourcesOnInternet.debug();
+    resourcesOnInternet.add(getMsg().getString("ScienceEngine.ResourcesOnTheInternet")).fill();
+    Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+    pixmap.setColor(getSkin().getColor("separator"));
+    pixmap.drawRectangle(0, 0, 1, 1);
+    resourcesOnInternet.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pixmap), 
+        AbstractScreen.VIEWPORT_WIDTH - 20, 10)));
+    pixmap.dispose();
+    table.add(resourcesOnInternet).padTop(20);
     table.row();
-    table.add(getMsg().getString("ScienceEngine." + domain) + "- " + 
-        getMsg().getString("ScienceEngine.ResourcesOnTheInternet")).colspan(100); //$NON-NLS-1$ //$NON-NLS-2$
-    table.row();
-    table.add(createResourcePane()).fill();
+    table.add(createResourcePane());
     table.row();
   }
 
@@ -88,19 +107,10 @@ public class DomainHomeScreen extends AbstractScreen {
     Table activityLevels = new Table(getSkin());
     activityLevels.setName("Activity Levels");
     ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin());
-    activityThumbs = new Image[numLevels];
+    activityThumbs = new TextButton[numLevels];
     
     for (int level = 1; level <= numLevels; level++) {
       String activityName = getMsg().getString(domain + "." + level + ".Name");
-      Label label = new Label(activityName, smallLabelStyle); //$NON-NLS-1$
-      label.setWrap(true);
-      activityLevels.add(label).width(THUMBNAIL_WIDTH).left().top().pad(5);
-    }
-    activityLevels.row();
-    
-    Texture overlayLock = new Texture("images/lock.png");
-    boolean lock = false;
-    for (int level = 1; level <= numLevels; level++) {
       String filename = LevelUtil.getLevelFilename(domain, ".png", level);
       Pixmap pixmap;
       if (ScienceEngine.assetManager.isLoaded(filename)) {
@@ -108,9 +118,18 @@ public class DomainHomeScreen extends AbstractScreen {
       } else {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
-      Image activityThumb = 
-          lock ? new OverlayImage(new Texture(pixmap), overlayLock) 
-               : new Image(new Texture(pixmap));
+      final TextureRegionDrawable image = 
+          new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+      TextButton activityThumb = new TextButton(activityName, getSkin()) {
+        @Override
+        public void drawBackground(SpriteBatch batch, float parentAlpha) {
+          Color color = getColor();
+          batch.setColor(color.r, color.g, color.b, color.a * parentAlpha * 0.5f);
+          image.draw(batch, getX(), getY(), getWidth(), getHeight());
+        }
+      };
+      activityThumb.getLabel().setWrap(true);
+      activityThumb.setBackground(image);
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
         @Override
@@ -119,7 +138,7 @@ public class DomainHomeScreen extends AbstractScreen {
         }
       });
       activityThumbs[level - 1] = activityThumb;
-      activityLevels.add(activityThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
+      activityLevels.add(activityThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT).padTop(5);
     }
     activityLevels.row();
 
@@ -130,7 +149,7 @@ public class DomainHomeScreen extends AbstractScreen {
       ScrollPane scrollPane = new ScrollPane(label, getSkin());
       scrollPane.setScrollingDisabled(true, false);
       scrollPane.setFlickScroll(false);
-      activityLevels.add(scrollPane).width(THUMBNAIL_WIDTH).height(INFO_HEIGHT).left().pad(5);
+      activityLevels.add(scrollPane).width(THUMBNAIL_WIDTH).height(LEVEL_INFO_HEIGHT).left().pad(5);
     }
     activityLevels.row();
     activityLevelPane.setScrollingDisabled(false, true);
@@ -221,7 +240,7 @@ public class DomainHomeScreen extends AbstractScreen {
       }
       resource.add(scrollPane)
           .width(RESOURCE_WIDTH)
-          .height(INFO_HEIGHT)
+          .height(RESOURCE_INFO_HEIGHT)
           .left()
           .top()
           .pad(0, 5, 0, 5)

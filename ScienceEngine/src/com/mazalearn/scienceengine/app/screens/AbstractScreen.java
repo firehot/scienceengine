@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,6 +26,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.core.view.StageComponent;
 
 /**
  * The base class for all scienceEngine screens.
@@ -66,12 +69,23 @@ public abstract class AbstractScreen implements Screen {
         return super.keyDown(event, keycode);
       }      
     });
-    if (this.needsBackButton()) {
+    if (this.needsBackground()) {
       stage.addActor(createBackButton());
     }
   }
 
-  protected boolean needsBackButton() {
+  private void setupBackground() {
+    setBackgroundColor(Color.CLEAR);
+    // retrieve the splash image's region from the atlas
+    AtlasRegion background = getAtlas().findRegion(
+        "splash-screen/splash-background"); //$NON-NLS-1$
+    Image bgImage = new Image(background);
+    bgImage.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+    Actor a = stage.getRoot().findActor(StageComponent.Title.name());
+    stage.getRoot().addActorAfter(a, bgImage);
+  }
+
+  protected boolean needsBackground() {
     return true;
   }
 
@@ -84,7 +98,7 @@ public abstract class AbstractScreen implements Screen {
     backButton.setStyle(style);
     backButton.setName("BackButton");
     backButton.setPosition(2, VIEWPORT_HEIGHT - 30);
-    backButton.setSize(80, 30);
+    backButton.setSize(70, 30);
     backButton.addListener(new ClickListener() {
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -124,6 +138,14 @@ public abstract class AbstractScreen implements Screen {
     return scienceEngine.getAtlas();
   }
 
+  // TODO: setTitle instead.
+  protected void addTitle(String titleString) {
+    Table title = new Table(getSkin());
+    title.add(titleString);
+    title.setPosition(AbstractScreen.VIEWPORT_WIDTH / 2, AbstractScreen.VIEWPORT_HEIGHT - 10);
+    stage.addActor(title);
+  }
+
   protected Table getTable() {
     if (table == null) {
       table = new Table(getSkin());
@@ -148,6 +170,9 @@ public abstract class AbstractScreen implements Screen {
     Gdx.input.setCatchBackKey(true);
     // Catch menu key to prevent onscreen keyboard coming up
     Gdx.input.setCatchMenuKey(true);
+    if (needsBackground()) {
+      setupBackground();
+    }
   }
 
   @Override

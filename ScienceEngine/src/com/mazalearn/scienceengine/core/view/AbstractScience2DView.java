@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -214,10 +216,19 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     Actor component = null;
     String text = "";
     switch (stageComponent) { 
-      case User: text = ScienceEngine.getUserName();
-                 // fallthru
+      case User: { 
+        text = ScienceEngine.getUserName();
+        Table table = new Table(skin);
+        table.setName(stageComponent.name());
+        Image image = new Image(new Texture("images/user.png"));
+        image.setSize(30,30);
+        table.add(image).width(20).height(30);
+        table.add(text);
+        this.addActor(table);
+        return table;
+      }
       case Status: 
-      case Title:{
+      case Title: {
         Table table = new Table(skin); 
         table.add(component = new Label(text, skin));
         component.setName(stageComponent.name());

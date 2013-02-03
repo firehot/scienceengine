@@ -50,7 +50,7 @@ public class SelectBoxControl implements IControl {
     selectBox.setSelection(property.getValue());
   }
   
-  public boolean isAvailable() {
+  public boolean isActivated() {
     return property.isAvailable();
   }
 

@@ -53,6 +53,9 @@ public class ScienceEngine extends Game {
   // a libgdx helper class that logs the current FPS each second
   private FPSLogger fpsLogger;
 
+  // base of skin being used
+  private static String SKIN_BASE = "skin/uiskin1";
+  
   // services
   private static PreferencesManager preferencesManager;
   private static ProfileManager profileManager;
@@ -103,8 +106,8 @@ public class ScienceEngine extends Game {
 
   public Skin getSkin() {
     if (skin == null) {
-      FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
-      skin = new Skin(skinFile, new TextureAtlas(Gdx.files.internal("skin/uiskin.atlas")));
+      FileHandle skinFile = Gdx.files.internal(SKIN_BASE + ".json");
+      skin = new Skin(skinFile, new TextureAtlas(Gdx.files.internal(SKIN_BASE + ".atlas")));
       skin.add("en", skin.getFont("default-font"));
       getMsg().setLanguage(skin, "en");
    }

@@ -2,12 +2,10 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -43,17 +41,16 @@ public class ChooseDomainScreen extends AbstractScreen {
       gotoDomainHome(profile.getDomain());
       return;
     }
-    setBackgroundColor(new Color(0x84/255f,0x99/255f,0xa2/255f,1f));
-
+    
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+
+    String title = getMsg().getString("ScienceEngine.ChooseDomain");
+    addTitle(title);
 
     // retrieve the default table
     Table table = super.getTable();
     table.defaults().spaceBottom(20).fill().center();
-    Label label = new Label(getMsg().getString("ScienceEngine.ChooseDomain"), getSkin());
-    table.add(label).center().fill(false).spaceBottom(20); //$NON-NLS-1$
-    table.row();
 
     // create the domains Table
     table.add(createDomainsSelector());    

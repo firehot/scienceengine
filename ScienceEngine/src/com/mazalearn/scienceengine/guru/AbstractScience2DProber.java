@@ -44,12 +44,12 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
         return true;
       }
       // Since space in side table will not get hit, we check explicitly
-      // For a table, x and y are at center, top of table - not at bottom left
+      // For a table, x and y are at center of table - not at bottom left
       if (actor instanceof Table) {
         float actorWidth = ((Table) actor).getPrefWidth();
         float actorHeight = ((Table) actor).getPrefHeight();
         if (stagePoint.x >= actor.getX() - actorWidth/ 2 && stagePoint.x <= actor.getX() + actorWidth/2 &&
-            stagePoint.y <= actor.getY() && stagePoint.y >= actor.getY() - actorHeight) {
+            stagePoint.y <= actor.getY() - actorHeight/2 && stagePoint.y >= actor.getY() + actorHeight/2) {
           return true;
         }
       }
