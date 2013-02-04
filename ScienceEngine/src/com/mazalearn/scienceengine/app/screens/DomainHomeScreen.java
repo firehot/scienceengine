@@ -105,7 +105,7 @@ public class DomainHomeScreen extends AbstractScreen {
   private Actor createActivityLevelPane() {
     Table activityLevels = new Table(getSkin());
     activityLevels.setName("Activity Levels");
-    ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin());
+    ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin(), "thumbs");
     activityLevelPane.setFadeScrollBars(false);
     activityThumbs = new TextButton[numLevels];
     
@@ -120,12 +120,12 @@ public class DomainHomeScreen extends AbstractScreen {
       }
       final TextureRegionDrawable image = 
           new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-      TextButton activityThumb = new TextButton(activityName, getSkin()) {
+      TextButton activityThumb = new TextButton(level + "\n" + activityName, getSkin()) {
         @Override
         public void drawBackground(SpriteBatch batch, float parentAlpha) {
           Color color = getColor();
           batch.setColor(color.r, color.g, color.b, color.a * parentAlpha * 0.5f);
-          image.draw(batch, getX(), getY(), getWidth(), getHeight());
+          image.draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
         }
       };
       activityThumb.getLabel().setWrap(true);
