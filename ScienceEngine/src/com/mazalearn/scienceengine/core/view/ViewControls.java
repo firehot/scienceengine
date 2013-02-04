@@ -37,6 +37,8 @@ public class ViewControls extends Table implements IControl {
       @Override
       public void clicked (InputEvent event, float x, float y) {
         isActivated = !isActivated();
+        // Bring to top
+        getStage().addActor(ViewControls.this);
         viewControlPanel.setVisible(isActivated);
       }
     });
