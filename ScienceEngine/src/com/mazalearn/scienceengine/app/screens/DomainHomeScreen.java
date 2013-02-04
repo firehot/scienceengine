@@ -36,9 +36,9 @@ import com.mazalearn.scienceengine.app.utils.LevelUtil;
 public class DomainHomeScreen extends AbstractScreen {
 
   private static final int RESOURCE_WIDTH = 130;
-  private static final int THUMBNAIL_WIDTH = 200;
-  private static final int THUMBNAIL_HEIGHT = 150;
-  private static final int LEVEL_INFO_HEIGHT = 60;
+  private static final int THUMBNAIL_WIDTH = 242;
+  private static final int THUMBNAIL_HEIGHT = 182;
+  private static final int LEVEL_INFO_HEIGHT = 0;
   private static final int RESOURCE_INFO_HEIGHT = 90;
   private TextButton[] activityThumbs;
   private int numLevels;
@@ -106,6 +106,7 @@ public class DomainHomeScreen extends AbstractScreen {
     Table activityLevels = new Table(getSkin());
     activityLevels.setName("Activity Levels");
     ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin());
+    activityLevelPane.setFadeScrollBars(false);
     activityThumbs = new TextButton[numLevels];
     
     for (int level = 1; level <= numLevels; level++) {
