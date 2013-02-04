@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -42,7 +44,11 @@ public class FieldMeterActor extends Science2DActor {
   public Actor hit (float x, float y, boolean touchable) {
     if (touchable && this.getTouchable() != Touchable.enabled) return null;
     // If nothing else hits, and fieldmeter is present, it shows a hit.
-    return this;
+    // We exclude the top title and bottom status bars
+    // Operate directly on input coords since x,y received here are wrt FieldMeter
+    // and hence irrelevant
+    getStage().screenToStageCoordinates(pos.set(Gdx.input.getX(), Gdx.input.getY()));
+    return pos.y >= 20 && pos.y < AbstractScreen.VIEWPORT_HEIGHT - 30 ? this : null;
   }
 
   @Override

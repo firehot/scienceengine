@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,18 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
-import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.guru.IDoneCallback;
 
 /**
  * Shows a splash image and moves on to the next screen.
@@ -30,8 +23,7 @@ public class SplashScreen extends AbstractScreen {
 
   private Dialog loginDialog;
   private Label touchToEnter;
-  private Profile profile;
-
+  
   private final class SplashImage extends Image {
 
     private SplashImage(TextureRegion region) {
@@ -48,35 +40,20 @@ public class SplashScreen extends AbstractScreen {
       this.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          if (ScienceEngine.DEV_MODE == DevMode.DEBUG && !profile.getUserEmail().isEmpty() &&
-        		  !profile.getUserName().isEmpty()) {
-            scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
-          } else if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
-            // Onscreen keyboard not showing in IOS - this is a workaround.
-            Gdx.input.getTextInput(new TextInputListener() {
+            loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
               @Override
-              public void input(String email) {
-                profile.setUserName(email.substring(0, email.indexOf("@")));
-                profile.setUserEmail(email);
-                ScienceEngine.getProfileManager().persist();
+              public void done(boolean success) {
                 scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
               }
-              
-              @Override
-              public void canceled() {}
-            }, "Enter email address", profile.getUserEmail());
-          } else {
+            });
             loginDialog.show(stage);
           }
-        }      
-      });      
+        });      
     }
   }
 
   public SplashScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
-    ProfileManager profileManager = ScienceEngine.getProfileManager();
-    profile = profileManager.retrieveProfile();
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(true);
     }
@@ -109,78 +86,10 @@ public class SplashScreen extends AbstractScreen {
     AtlasRegion splashRegion = getAtlas().findRegion(
         "splash-screen/splash-image"); //$NON-NLS-1$
 
-    loginDialog = createLoginDialog(scienceEngine.getSkin());
-
     // We create the splash image actor; its size is set when the
     // resize() method gets called
     stage.addActor(new SplashImage(splashRegion));
     stage.addActor(touchToEnter);
-  }
-
-  private Dialog createLoginDialog(Skin skin) {
-    final Dialog dialog = new Dialog("", skin);
-    dialog.setSize(400, 150);
-    dialog.setPosition(AbstractScreen.VIEWPORT_WIDTH / 2, 100);
-    //dialog.setBackground((Drawable) null);
-
-    dialog.getContentTable().add(new Label("Name: ", skin));
-    final TextField name = new TextField(profile.getUserName(), skin);
-    dialog.getContentTable().add(name);
-    dialog.getContentTable().row();
-    dialog.getContentTable().add(new Label("Email: ", skin));
-    final TextField email = new TextField(profile.getUserEmail(), skin);
-    email.setWidth(200);
-    dialog.getContentTable().add(email).width(200);
-    dialog.getContentTable().row();
-    Label emailUseNote = new Label("Activation link will be sent to this email address", skin);
-    emailUseNote.setFontScale(0.9f);
-    dialog.getContentTable().add(emailUseNote).colspan(2);
-    dialog.getContentTable().row();
-
-    Table buttonsTable = new Table(skin);
-    TextButton loginButton = new TextButton("Login", skin);
-    buttonsTable.add(loginButton).uniform();
-    TextButton cancelButton = new TextButton("Cancel", skin);
-    buttonsTable.add(cancelButton).uniform();
-    dialog.getContentTable().add(buttonsTable).fill().colspan(2);
-    cancelButton.addListener(new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        dialog.hide();
-      }
-    });
-
-    loginButton.addListener(new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        profile.setUserName(name.getText());
-        profile.setUserEmail(email.getText());
-        ScienceEngine.getProfileManager().persist();
-        
-        // Primitive validation
-        if (!name.getText().matches("[a-zA-Z ]{2,30}") || !email.getText().contains("@")) {
-          if (!name.getText().matches("[a-zA-Z ]{2,30}")) {
-            name.setColor(Color.RED);
-            name.addAction(Actions.repeat(-1, Actions.sequence(Actions.fadeOut(1), Actions.fadeIn(1))));
-          } else {
-            name.setColor(1, 1, 1, 1);
-            name.clearActions();
-          }
-          if (!email.getText().contains("@")) {
-            email.setColor(Color.RED);
-            email.addAction(Actions.repeat(-1, Actions.sequence(Actions.fadeOut(1), Actions.fadeIn(1))));
-          } else {
-            email.setColor(1, 1, 1, 1);
-            email.clearActions();
-          }
-          return;
-        }
-        dialog.hide();
-        scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
-      }      
-    });      
-    
-    return dialog;
   }
 
   @Override

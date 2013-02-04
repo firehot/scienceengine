@@ -83,6 +83,7 @@ public class ActivityViewControls extends ViewControls {
   }
   
   public void syncWithModel() {
+    super.syncWithModel();
     challengeControl.syncWithModel();
     suspendControl.syncWithModel();
   }

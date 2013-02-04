@@ -28,6 +28,7 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.view.ViewControls;
+import com.mazalearn.scienceengine.guru.IDoneCallback;
 
 /**
  * The base class for all scienceEngine screens.
@@ -161,6 +162,14 @@ public abstract class AbstractScreen implements Screen {
         image.setSize(30,30);
         table.add(image).width(20).height(30);
         table.add(text);
+        table.addListener(new ClickListener() {
+          public void clicked(InputEvent event, float x, float y) {
+            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+            new LoginDialog(getSkin(), new IDoneCallback() {
+              @Override public void done(boolean success) {}
+            }).show(getStage());
+          }      
+         });
         return table;
       }
       case Status: 
