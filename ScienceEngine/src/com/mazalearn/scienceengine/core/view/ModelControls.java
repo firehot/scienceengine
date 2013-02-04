@@ -75,10 +75,15 @@ public class ModelControls extends Table {
           @Override public Boolean getValue() { return ScienceEngine.isPinned(body); }
           @Override public void setValue(Boolean value) { ScienceEngine.pin(body, value); }
         };
-        this.controllers.add(Controller.createController(bodyConfig, modelControlPanel, skin, "body"));
+        Controller bodyController = Controller.createController(bodyConfig, modelControlPanel, skin, "body");
+        this.controllers.add(bodyController);
+        // Indent controls for body a little to the right.
+        Table bodyControlPanel = new Table(skin);
+        modelControlPanel.add(bodyControlPanel).padLeft(15);
+        modelControlPanel.row();
         for (IModelConfig modelConfig: body.getConfigs()) {
           if (!modelConfig.isMeter()) { // Meters should not be connected to GUI controls automatically
-            this.controllers.add(Controller.createController(modelConfig, modelControlPanel, skin));
+            this.controllers.add(Controller.createController(modelConfig, bodyControlPanel, skin));
           }
         }
       }

@@ -9,7 +9,7 @@ public enum ScreenComponent implements IComponentType {
   Status(400, 10, Color.WHITE),
   User(730, 465, Color.WHITE),
   BackButton(2, -30, Color.CLEAR), 
-  ViewControls(130, -30, Color.CLEAR);
+  ViewControls(95, -30, Color.CLEAR);
   
   private int x;
   private int y;

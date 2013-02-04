@@ -71,16 +71,4 @@ public class Controller {
     controlTable.row();
     return c;
   }
-
-  @SuppressWarnings("unchecked")
-  public static Controller createController(IControl control,
-      Table controlTable, Skin skin) {
-    Table table = new Table(skin);
-    table.setName("test");
-    table.defaults().fill().expand();
-    table.add(control.getActor());
-    Controller c = new Controller(controlTable.add(table), control);
-    controlTable.row();
-    return c;
-  }
 }

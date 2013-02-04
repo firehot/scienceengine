@@ -62,9 +62,9 @@ class Dashboard extends Table {
     };
     
     Table t = new Table(skin);
-    t.add("Timer");
+    t.add(""); //t.add("Timer");
     t.row();
-    t.add(timerLabel).width(40).fill().right();
+    t.add("").width(40).fill().right();// t.add(timerLabel).width(40).fill().right();
     tutorTable.add(t).left();
     tutorTable.add(goal).pad(0, 10, 0, 10).width(430).fill();
     goal.getLabel().setWrap(true);

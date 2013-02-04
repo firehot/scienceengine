@@ -5,12 +5,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.InstructionDialog;
@@ -182,9 +189,9 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       }
     }
     this.addActor(viewControls);
-    viewControls.setPosition(130, AbstractScreen.VIEWPORT_HEIGHT - 75); 
+    viewControls.setPosition(95, AbstractScreen.VIEWPORT_HEIGHT - 60); 
     this.addActor(modelControls);
-    modelControls.setPosition(719, 232);
+    modelControls.setPosition(710, 232);
   }
 
   public ModelControls setupControls() {
@@ -195,6 +202,20 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
 
     this.modelControls = new ModelControls(science2DModel, skin);
     this.addActor(modelControls);
+    
+    Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-up.png")));
+    Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-down.png")));
+    Button goButton = new Button(up, down, down);
+    goButton.setSize(30, 30);
+    goButton.addListener(new ClickListener() {
+      @Override public void clicked(InputEvent event, float x, float y) {
+        isChallengeInProgress = !isChallengeInProgress;
+        challenge(isChallengeInProgress);
+      }
+    });
+    
+    this.addActor(goButton);
+    goButton.setPosition(120, AbstractScreen.VIEWPORT_HEIGHT - 30);
 
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {

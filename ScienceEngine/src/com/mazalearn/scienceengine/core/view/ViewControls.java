@@ -30,22 +30,22 @@ public class ViewControls extends Table implements IControl {
     this.defaults().fill();
     Image image = new Image(new Texture("images/settings.png"));
     image.setSize(VIEW_BUTTON_HEIGHT, VIEW_BUTTON_HEIGHT);
-    image.setPosition(VIEW_BUTTON_WIDTH / 2 - VIEW_BUTTON_HEIGHT / 2, 0);
+    image.setPosition(0, 0);
     Button imageButton = new TextButton("", skin, "body");
     imageButton.addActor(image);
     imageButton.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {
-        isActivated = !isActivated();
+        setActivated(!isActivated());
         // Bring to top
         getStage().addActor(ViewControls.this);
-        viewControlPanel.setVisible(isActivated);
       }
     });
-    this.add(imageButton).width(VIEW_BUTTON_WIDTH).height(VIEW_BUTTON_HEIGHT);
+    this.add(imageButton).width(VIEW_BUTTON_HEIGHT).height(VIEW_BUTTON_HEIGHT);
     this.row();
     viewControlPanel = createViewControlPanel(skin);
     this.add(viewControlPanel);
+    setActivated(isActivated);
   }
   
   private IMessage getMsg() {
@@ -64,7 +64,6 @@ public class ViewControls extends Table implements IControl {
   }
   
   public void syncWithModel() {
-    viewControlPanel.setVisible(isActivated());
   }
   
   public void enableControls(boolean enable) {
@@ -79,6 +78,11 @@ public class ViewControls extends Table implements IControl {
   public boolean isActivated() {
     return isActivated;
   }
+  
+  public void setActivated(boolean isActivated) {
+    this.isActivated = isActivated;
+    viewControlPanel.setVisible(isActivated);
+  }
 
   public void addActivityControls() {
     // Add options dialog for controlling language, music, sound.
@@ -87,7 +91,7 @@ public class ViewControls extends Table implements IControl {
     optionsButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        isActivated = false;
+        setActivated(false);
         new OptionsDialog(getStage(), skin).show(getStage());
       }
     });

@@ -13,7 +13,6 @@ import com.mazalearn.scienceengine.core.model.Parameter;
 public class ActivityViewControls extends ViewControls {
   private final IScience2DView science2DView;
   private IControl suspendControl;
-  private IControl challengeControl;
   private IControl resetControl;
   private IScience2DController science2DController;
   
@@ -29,29 +28,10 @@ public class ActivityViewControls extends ViewControls {
   
   @Override
   public void addActivityControls() {
-    // Add challenge/learn functionality
-    AbstractModelConfig<Boolean> challengeModelConfig = 
-        new AbstractModelConfig<Boolean>(null, 
-            Parameter.Challenge, false) { //$NON-NLS-1$ //$NON-NLS-2$
-          public void setValue(Boolean value) { science2DView.challenge(value);}
-          public Boolean getValue() { return science2DView.isChallengeInProgress(); }
-          public boolean isPossible() { return true; }
-    };
-    
-    challengeControl = new ToggleButtonControl(challengeModelConfig, skin, "body") {
-      public void syncWithModel() {
-        super.syncWithModel();
-        toggleButton.setText(
-            science2DView.isChallengeInProgress() ? 
-                getMsg().getString("ViewControls.EndChallenge") : 
-                  getMsg().getString("ViewControls.Challenge")); //$NON-NLS-1$ //$NON-NLS-2$
-      }
-    };
-    
     // Add pause/resume functionality for the activity
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
         new AbstractModelConfig<Boolean>(null, Parameter.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
-          public void setValue(Boolean value) { science2DView.suspend(value); }
+          public void setValue(Boolean value) { setActivated(false); science2DView.suspend(value); }
           public Boolean getValue() { return science2DView.isSuspended(); }
           public boolean isPossible() { return true; }
     };
@@ -67,7 +47,7 @@ public class ActivityViewControls extends ViewControls {
     // Add reset functionality for the activity
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
-          public void doCommand() { science2DController.reset(); }
+          public void doCommand() { setActivated(false); science2DController.reset(); }
           public boolean isPossible() { return true; }
     };
     resetControl = new CommandButtonControl(resetModelConfig, skin, "body");
@@ -76,15 +56,12 @@ public class ActivityViewControls extends ViewControls {
     viewControlPanel.row();
     viewControlPanel.add(suspendControl.getActor());
     viewControlPanel.row();
-    viewControlPanel.add(challengeControl.getActor());
-    viewControlPanel.row();
     super.addActivityControls();
     syncWithModel();
   }
   
   public void syncWithModel() {
     super.syncWithModel();
-    challengeControl.syncWithModel();
     suspendControl.syncWithModel();
   }
   
