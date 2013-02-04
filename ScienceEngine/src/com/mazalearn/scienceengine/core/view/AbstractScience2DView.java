@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,8 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.InstructionDialog;
+import com.mazalearn.scienceengine.app.screens.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -39,6 +40,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   // Commands at view level - possibly affecting multiple actors
   private List<IModelConfig<?>> viewCommands;
   private ViewControls viewControls;
+  private Button goButton;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -188,10 +190,15 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         ((Science2DActor) actor).prepareActor();
       }
     }
+    ScreenComponent sc = ScreenComponent.ActivityViewControls;
     this.addActor(viewControls);
-    viewControls.setPosition(95, AbstractScreen.VIEWPORT_HEIGHT - 60); 
+    viewControls.setPosition(sc.getX(), sc.getY());
+    
+    sc = ScreenComponent.ModelControls;
     this.addActor(modelControls);
-    modelControls.setPosition(710, 232);
+    modelControls.setPosition(sc.getX(), sc.getY());
+    
+    this.addActor(goButton);
   }
 
   public ModelControls setupControls() {
@@ -203,19 +210,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     this.modelControls = new ModelControls(science2DModel, skin);
     this.addActor(modelControls);
     
-    Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-up.png")));
-    Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-down.png")));
-    Button goButton = new Button(up, down, down);
-    goButton.setSize(30, 30);
-    goButton.addListener(new ClickListener() {
-      @Override public void clicked(InputEvent event, float x, float y) {
-        isChallengeInProgress = !isChallengeInProgress;
-        challenge(isChallengeInProgress);
-      }
-    });
-    
-    this.addActor(goButton);
-    goButton.setPosition(120, AbstractScreen.VIEWPORT_HEIGHT - 30);
+    addGoButton();
 
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
@@ -224,6 +219,36 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     }
     
     return modelControls;
+  }
+
+  private void addGoButton() {
+    Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-up.png")));
+    Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-down.png")));
+    goButton = new Button(up, down, down);
+    goButton.setSize(60, 60);
+    goButton.addListener(new ClickListener() {
+      @Override public void clicked(InputEvent event, float x, float y) {
+        if (isChallengeInProgress) {
+          isChallengeInProgress = false;
+          ScreenComponent goButtonTo = ScreenComponent.GoButtonUp;
+          goButton.addAction(Actions.parallel(
+              Actions.moveTo(goButtonTo.getX(), goButtonTo.getY(), 1),
+              Actions.sizeTo(60, 60, 1)));
+          challenge(false);
+        } else {
+          isChallengeInProgress = true;
+          ScreenComponent goButtonTo = ScreenComponent.GoButtonDown;
+          goButton.addAction(Actions.parallel(
+              Actions.moveTo(goButtonTo.getX(), goButtonTo.getY(), 1),
+              Actions.sizeTo(30, 30, 1)));
+          challenge(true);
+        }
+      }
+    });
+    
+    this.addActor(goButton);
+    ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
+    goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
   }
 
   @Override

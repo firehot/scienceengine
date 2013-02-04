@@ -137,17 +137,10 @@ public abstract class AbstractScreen implements Screen {
   private void setupScreenComponents(Stage stage) {
     // Register stage components
     for (ScreenComponent screenComponent: ScreenComponent.values()) {
+      if (!screenComponent.isInAllScreens()) continue;
       Actor component = addScreenComponent(screenComponent, stage, getSkin());
       stage.addActor(component);
-      float x = screenComponent.getX();
-      if (x < 0) {
-        x = AbstractScreen.VIEWPORT_WIDTH + x;
-      }
-      float y = screenComponent.getY();
-      if (y < 0) {
-        y = AbstractScreen.VIEWPORT_HEIGHT + y;
-      }
-      component.setPosition(x, y);
+      component.setPosition(screenComponent.getX(), screenComponent.getY());
     }
   }
 
