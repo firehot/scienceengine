@@ -3,11 +3,9 @@ package com.mazalearn.scienceengine.app.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -73,8 +71,7 @@ public class ActivityScreen extends AbstractScreen {
   public void show() {
     super.show();
     if (ScienceEngine.DEV_MODE == ScienceEngine.DevMode.DEBUG) return;
-    Actor introduction = new Introduction(getStage(), getSkin(), "", activityDescription, 
-        getMsg().getString("Level.Instructions"), "Start");
+    new Introduction(getStage(), getSkin(), activityDescription);
   }
   
   @Override

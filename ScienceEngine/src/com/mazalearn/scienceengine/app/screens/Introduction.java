@@ -92,8 +92,7 @@ public class Introduction extends Group {
     }
   }
 
-  public Introduction(final Stage stage, Skin skin, String title, 
-      String contents, String instructions, String buttonText) {  
+  public Introduction(final Stage stage, Skin skin, String contents) {  
     setPosition(0, 0);
     setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
     stage.addActor(this);
