@@ -170,7 +170,7 @@ public abstract class AbstractScreen implements Screen {
         label.setColor(screenComponent.getColor());
         return table;
       }
-      case BackButton: {
+      case Back: {
         TextButton backButton = 
             new TextButton(ScienceEngine.getMsg().getString("ViewControls.Back"), getSkin()); //$NON-NLS-1$
         Drawable image = new TextureRegionDrawable(new TextureRegion(new Texture("images/back.png")));

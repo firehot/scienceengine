@@ -94,7 +94,7 @@ public abstract class AbstractScience2DController implements
       // Move control Panel to top - so it will be above others
       stage.getRoot().addActor(modelControls);
       // Move back button to top also - so it will be accessible
-      stage.getRoot().addActor(stage.getRoot().findActor(ScreenComponent.BackButton.name()));
+      stage.getRoot().addActor(stage.getRoot().findActor(ScreenComponent.Back.name()));
       // Add guru before modelcontrols so that controls are accessible.
       stage.getRoot().addActorBefore(modelControls, guru);
     }
