@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -50,8 +50,8 @@ public class Guru extends Group implements IDoneCallback {
     
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
-    dashboard.setY(AbstractScreen.VIEWPORT_HEIGHT - dashboard.getPrefHeight() / 2);
-    dashboard.setX(AbstractScreen.VIEWPORT_WIDTH/2);
+    dashboard.setY(ScreenComponent.VIEWPORT_HEIGHT - dashboard.getPrefHeight() / 2);
+    dashboard.setX(ScreenComponent.VIEWPORT_WIDTH/2);
     
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
@@ -163,7 +163,7 @@ public class Guru extends Group implements IDoneCallback {
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     if (currentTutor != null) {
       // Place hinter to right of dashboard above the controls
-      hinter.setPosition(modelControls.getX(), AbstractScreen.VIEWPORT_HEIGHT - getY() - 50);
+      hinter.setPosition(modelControls.getX(), ScreenComponent.VIEWPORT_HEIGHT - getY() - 50);
       if (!hinter.hasHint()) {
         hinter.setHint(currentTutor.getHint());
       }

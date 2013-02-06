@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 
@@ -23,7 +23,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
       int deltaSuccessScore, int deltaFailureScore) {
     super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     // A prober covers the entire screen and allows user to interact only with probes
-    this.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+    this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }
   
   public abstract void activate(boolean activate);

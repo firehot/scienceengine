@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
 /**
@@ -83,8 +84,8 @@ public class LoadingScreen extends AbstractScreen {
   @Override
   public void resize(int width, int height) {
     // Set our screen to always be XXX x 480 in size
-    width = AbstractScreen.VIEWPORT_HEIGHT * width / height;
-    height = AbstractScreen.VIEWPORT_HEIGHT;
+    width = ScreenComponent.VIEWPORT_HEIGHT * width / height;
+    height = ScreenComponent.VIEWPORT_HEIGHT;
     stage.setViewport(width, height, false);
 
     // Make the background fill the screen

@@ -20,7 +20,6 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
-import com.mazalearn.scienceengine.app.screens.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
@@ -175,7 +174,7 @@ public class ScienceEngine extends Game {
       fpsLogger = new FPSLogger();
     //}
     
-    resize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+    resize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     SCIENCE_ENGINE = this;
   }
 

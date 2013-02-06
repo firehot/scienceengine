@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.ScreenComponent;
 
 final class ScoreImage extends Image {
   private int score;
@@ -23,8 +23,8 @@ final class ScoreImage extends Image {
 
   public void show(int score) {
     // Middle of screen
-    this.setX(AbstractScreen.VIEWPORT_WIDTH/2);
-    this.setY(AbstractScreen.VIEWPORT_HEIGHT/2);
+    this.setX(ScreenComponent.VIEWPORT_WIDTH/2);
+    this.setY(ScreenComponent.VIEWPORT_HEIGHT/2);
     this.score = score;
     this.setVisible(true);
     float moveBy = success ? 10 : -10;

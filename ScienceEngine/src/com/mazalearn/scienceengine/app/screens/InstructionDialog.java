@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.tablelayout.Cell;
+import com.mazalearn.scienceengine.ScreenComponent;
 
 public class InstructionDialog extends Dialog {
   
@@ -68,7 +69,7 @@ public class InstructionDialog extends Dialog {
     pixmap.setColor(c.r, c.g, c.b, 0.6f);
     pixmap.fillRectangle(0, 0, 512, 256);
     TextureRegion textureRegion = new TextureRegion(new Texture(pixmap), 
-        AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+        ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     pixmap.dispose();
     return new TextureRegionDrawable(textureRegion);
   }

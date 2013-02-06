@@ -1,7 +1,6 @@
-package com.mazalearn.scienceengine.app.screens;
+package com.mazalearn.scienceengine;
 
 import com.badlogic.gdx.graphics.Color;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ScreenComponent implements IComponentType {
@@ -11,7 +10,7 @@ public enum ScreenComponent implements IComponentType {
   Back(2, -30, Color.CLEAR, true, true), 
   ViewControls(95, -30, Color.CLEAR, true, true),
   ActivityViewControls(95, -60, Color.CLEAR, false, false),
-  ModelControls(710, 232, Color.CLEAR, false, false),
+  ModelControls(710, 232, Color.CLEAR, false, true),
   GoButtonUp(10, 220, Color.CLEAR, false, true),
   GoButtonDown(120, -30, Color.CLEAR, false, false);
   
@@ -20,6 +19,8 @@ public enum ScreenComponent implements IComponentType {
   private Color color;
   private boolean inAllScreens;
   private boolean helpTour;
+  public static final int VIEWPORT_HEIGHT = 480;
+  public static final int VIEWPORT_WIDTH = 800;
 
   private ScreenComponent(int x, int y, Color color, boolean inAllScreens, boolean helpTour) {
     this.x = x;
@@ -29,9 +30,9 @@ public enum ScreenComponent implements IComponentType {
     this.helpTour = helpTour;
   }
   
-  public int getX() { return x < 0 ? AbstractScreen.VIEWPORT_WIDTH + x : x; }
+  public int getX() { return x < 0 ? ScreenComponent.VIEWPORT_WIDTH + x : x; }
   
-  public int getY() { return y < 0 ? AbstractScreen.VIEWPORT_HEIGHT + y : y; }
+  public int getY() { return y < 0 ? ScreenComponent.VIEWPORT_HEIGHT + y : y; }
   
   public Color getColor() { return color; }
   

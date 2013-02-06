@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
@@ -74,7 +75,7 @@ public class SplashScreen extends AbstractScreen {
     touchToEnter = new Label("Touch to Start", scienceEngine.getSkin());
     touchToEnter.setColor(Color.WHITE);
     touchToEnter.setFontScale(2f);
-    touchToEnter.setPosition(VIEWPORT_WIDTH / 2 - 120, VIEWPORT_HEIGHT / 2 - 80);
+    touchToEnter.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - 120, ScreenComponent.VIEWPORT_HEIGHT / 2 - 80);
     touchToEnter.addAction(
         Actions.forever(
             Actions.sequence(

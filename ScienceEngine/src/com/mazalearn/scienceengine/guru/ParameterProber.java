@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
@@ -119,8 +119,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
 
     this.resultType = ResultType.valueOf(resultType);
     if (this.resultType == ResultType.Spin) {   
-      image.setX(AbstractScreen.VIEWPORT_WIDTH / 2 - image.getWidth() / 2 - 50);
-      image.setY(AbstractScreen.VIEWPORT_HEIGHT / 2 - image.getHeight() / 2);
+      image.setX(ScreenComponent.VIEWPORT_WIDTH / 2 - image.getWidth() / 2 - 50);
+      image.setY(ScreenComponent.VIEWPORT_HEIGHT / 2 - image.getHeight() / 2);
       
       Image clockwise = createResultImage("images/clockwise.png", 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);

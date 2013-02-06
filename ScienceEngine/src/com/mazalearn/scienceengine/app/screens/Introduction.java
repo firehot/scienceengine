@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 
 public class Introduction extends Group {
   
@@ -25,7 +26,7 @@ public class Introduction extends Group {
     private Image arrow;
     private Vector2 pos = new Vector2();
     private static final Vector2 CENTER_POS = 
-        new Vector2(AbstractScreen.VIEWPORT_WIDTH / 2, AbstractScreen.VIEWPORT_HEIGHT / 2);
+        new Vector2(ScreenComponent.VIEWPORT_WIDTH / 2, ScreenComponent.VIEWPORT_HEIGHT / 2);
 
     public ExpandOnClick(TextButton contentButton, String content, Image arrow) {
       this.contentButton = contentButton;
@@ -94,7 +95,7 @@ public class Introduction extends Group {
 
   public Introduction(final Stage stage, Skin skin, String contents) {  
     setPosition(0, 0);
-    setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+    setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     stage.addActor(this);
     // Move backbutton to top
     Actor backButton = stage.getRoot().findActor(ScreenComponent.Back.name());

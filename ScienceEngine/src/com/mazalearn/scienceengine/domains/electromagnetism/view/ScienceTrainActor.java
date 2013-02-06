@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
@@ -59,7 +59,7 @@ public class ScienceTrainActor extends Group {
     addAction(Actions.repeat(-1, 
       Actions.sequence(
           Actions.moveTo(0,  getY()),
-          Actions.moveBy(AbstractScreen.VIEWPORT_WIDTH, 0, 10), 
-          Actions.moveBy(-AbstractScreen.VIEWPORT_WIDTH,0))));
+          Actions.moveBy(ScreenComponent.VIEWPORT_WIDTH, 0, 10), 
+          Actions.moveBy(-ScreenComponent.VIEWPORT_WIDTH,0))));
   }
 }

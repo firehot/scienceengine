@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -33,9 +34,6 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
  * The base class for all scienceEngine screens.
  */
 public abstract class AbstractScreen implements Screen {
-  public static final int VIEWPORT_WIDTH = 800,
-      VIEWPORT_HEIGHT = 480;
-
   protected final ScienceEngine scienceEngine;
   protected Stage stage;
 
@@ -53,7 +51,7 @@ public abstract class AbstractScreen implements Screen {
   
   public AbstractScreen(ScienceEngine game) {
     this.scienceEngine = game;
-    this.stage = new Stage(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, false);
+    this.stage = new Stage(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, false);
     stage.addListener(new InputListener() {
       @Override
       public boolean keyDown(InputEvent event, int keycode) {
@@ -119,7 +117,7 @@ public abstract class AbstractScreen implements Screen {
     AtlasRegion background = getAtlas().findRegion(
         "splash-screen/splash-background"); //$NON-NLS-1$
     Image bgImage = new Image(background);
-    bgImage.setSize(AbstractScreen.VIEWPORT_WIDTH, AbstractScreen.VIEWPORT_HEIGHT);
+    bgImage.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     // Background should be behind everything else on stage.
     if (stage.getActors().size > 0) {
       stage.getRoot().addActorBefore(stage.getActors().get(0), bgImage);

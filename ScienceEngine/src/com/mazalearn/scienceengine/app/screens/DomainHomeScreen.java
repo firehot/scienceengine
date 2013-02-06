@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,13 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -35,11 +37,11 @@ import com.mazalearn.scienceengine.app.utils.LevelUtil;
  */
 public class DomainHomeScreen extends AbstractScreen {
 
-  private static final int RESOURCE_WIDTH = 130;
-  private static final int THUMBNAIL_WIDTH = 242;
-  private static final int THUMBNAIL_HEIGHT = 182;
+  private static final int RESOURCE_WIDTH = 254;
+  private static final int THUMBNAIL_WIDTH = 369; // 242;
+  private static final int THUMBNAIL_HEIGHT = 279; // 182;
   private static final int LEVEL_INFO_HEIGHT = 0;
-  private static final int RESOURCE_INFO_HEIGHT = 90;
+  private static final int RESOURCE_INFO_HEIGHT = 210;
   private TextButton[] activityThumbs;
   private int numLevels;
   private Array<?> resources;
@@ -84,25 +86,38 @@ public class DomainHomeScreen extends AbstractScreen {
         " - " + getMsg().getString("ScienceEngine.Levels"); //$NON-NLS-1$ //$NON-NLS-2$
     setTitle(title);
     
-    table.add(createActivityLevelPane()).fill().width(AbstractScreen.VIEWPORT_WIDTH - 40);    
+    final Actor activitiesPane = createActivitiesPane();
+    final Actor resourcesPane = createResourcePane();
+    @SuppressWarnings("unchecked")
+    final Cell<Actor> scrollPane = 
+        table.add(activitiesPane).fill().width(ScreenComponent.VIEWPORT_WIDTH - 40);    
     table.row();
-    
-    Table resourcesOnInternet = new Table(getSkin());
-    resourcesOnInternet.debug();
-    resourcesOnInternet.add(getMsg().getString("ScienceEngine.ResourcesOnTheInternet")).fill();
-    Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
-    pixmap.setColor(getSkin().getColor("separator"));
-    pixmap.drawRectangle(0, 0, 1, 1);
-    resourcesOnInternet.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pixmap), 
-        AbstractScreen.VIEWPORT_WIDTH - 20, 10)));
-    pixmap.dispose();
-    table.add(resourcesOnInternet).padTop(20);
-    table.row();
-    table.add(createResourcePane());
-    table.row();
+    Table buttonTable = new Table(getSkin());
+    final TextButton activityButton = new TextButton("Activities", getSkin(), "toggle");
+    activityButton.setChecked(true);
+    final TextButton resourcesButton = new TextButton("Resources On Internet", getSkin(), "toggle");
+    activityButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        scrollPane.setWidget(activitiesPane);
+        activityButton.setChecked(true);
+        resourcesButton.setChecked(false);
+      }
+    });
+    resourcesButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        scrollPane.setWidget(resourcesPane);
+        activityButton.setChecked(false);
+        resourcesButton.setChecked(true);
+      }
+    });
+    buttonTable.add(activityButton).width(200).pad(20);
+    buttonTable.add(resourcesButton).width(200).pad(20);
+    table.add(buttonTable).padTop(20);
   }
 
-  private Actor createActivityLevelPane() {
+  private Actor createActivitiesPane() {
     Table activityLevels = new Table(getSkin());
     activityLevels.setName("Activity Levels");
     ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin(), "thumbs");
@@ -224,13 +239,14 @@ public class DomainHomeScreen extends AbstractScreen {
       String rated = "*****".substring(0, (int) Math.floor(rating));
       Label ratingLabel = new Label(rated, getSkin(), "en", Color.YELLOW);
       resource.add(ratingLabel).right().width(50);
-      resource.add(play).width(30).height(30).top().center();
-      resource.add(new Label(duration, smallLabelStyle)).padLeft(10).width(40);
+      resource.add(play).width(60).height(60).top().center();
+      resource.add(new Label(duration, getSkin())).padLeft(10).width(40);
       resource.row();
       Label attributionLabel = 
           new Label(getMsg().getString("ScienceEngine.From") + ": " + 
                     attribution + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
-                    description, smallLabelStyle);
+                    description, getSkin());
+      attributionLabel.setAlignment(Align.top, Align.left);
       attributionLabel.setWrap(true);
       ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
       scrollPane.setScrollingDisabled(true,  false);

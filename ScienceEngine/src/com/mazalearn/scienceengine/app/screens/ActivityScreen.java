@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileManager;
@@ -39,7 +40,7 @@ public class ActivityScreen extends AbstractScreen {
       ScienceEngine.assetManager.unload(fileName);
     }
     this.science2DController = 
-        createDomainController(domain, activityLevel, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        createDomainController(domain, activityLevel, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     IScience2DView science2DView = science2DController.getView();
     ProfileManager profileManager = ScienceEngine.getProfileManager();
     profile = profileManager.retrieveProfile();
