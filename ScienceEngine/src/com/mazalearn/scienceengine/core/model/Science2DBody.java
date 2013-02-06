@@ -216,7 +216,7 @@ public class Science2DBody implements IBody {
   }
 
   public boolean allowsConfiguration() {
-    return true;
+    return !getConfigs().isEmpty();
   }
   
   //////////////////////////////////////////////////////////////////////////

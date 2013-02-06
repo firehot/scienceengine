@@ -25,13 +25,17 @@ public class Introduction extends Group {
     int currentComponent = 0;
     private Image arrow;
     private Vector2 pos = new Vector2();
+    private Image closeImage;
+    private TextButton nextButton;
     private static final Vector2 CENTER_POS = 
         new Vector2(ScreenComponent.VIEWPORT_WIDTH / 2, ScreenComponent.VIEWPORT_HEIGHT / 2);
 
-    public ExpandOnClick(TextButton contentButton, String content, Image arrow) {
+    public ExpandOnClick(TextButton contentButton, String content, Image arrow, TextButton nextButton, Image closeImage) {
       this.contentButton = contentButton;
       this.content = content;
       this.arrow = arrow;
+      this.closeImage = closeImage;
+      this.nextButton = nextButton;
       arrow.setPosition(CENTER_POS.x, CENTER_POS.y);
       setContent(content, CENTER_POS.x + 300, CENTER_POS.y + 200, 0);
       arrow.setVisible(false);
@@ -56,6 +60,10 @@ public class Introduction extends Group {
       } else {
         contentButton.setPosition(arrowX - w, arrowY);
       }
+      closeImage.setPosition(contentButton.getWidth() - closeImage.getWidth(), 
+          contentButton.getHeight() - closeImage.getHeight());
+      nextButton.setPosition(contentButton.getWidth() / 2 - nextButton.getWidth() / 2,
+          5);
     }            
     
     @Override 
@@ -77,8 +85,7 @@ public class Introduction extends Group {
                 currentComponent = 0;
               } else {
                 ScreenComponent screenComponent = screenComponents[currentComponent++];
-                text = ScienceEngine.getMsg().getString("Help." + screenComponent.name()) + "\n" +
-                    ScienceEngine.getMsg().getString("Help.Continue") + "\n\n\n";
+                text = ScienceEngine.getMsg().getString("Help." + screenComponent.name()) + "\n\n\n";
                 pos.set(screenComponent.getX(arrow.getWidth()), screenComponent.getY(arrow.getHeight())).sub(CENTER_POS);
                 arrow.setVisible(true);
                 arrow.setRotation(pos.angle());
@@ -105,20 +112,24 @@ public class Introduction extends Group {
     arrow.setSize(arrow.getWidth() * 1.5f, arrow.getHeight() * 1.5f);
     addActor(arrow);
     
-    contents += "\n\n" + ScienceEngine.getMsg().getString("Help.Tour") + "\n\n";
-    TextButton contentButton = new TextButton(contents, skin);
-    contentButton.getLabel().setWrap(true);
-    contentButton.addListener(new ExpandOnClick(contentButton, contents, arrow));
-    addActor(contentButton);
-
-    TextButton okButton = new TextButton(ScienceEngine.getMsg().getString("Name.Close"), skin);
-    okButton.setPosition(5, 5);
-    okButton.addListener(new ClickListener() {
+    Image closeImage = new Image(new Texture("images/cross.png"));
+    closeImage.setSize(closeImage.getWidth() / 2, closeImage.getHeight() / 2);
+    closeImage.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
         stage.getRoot().removeActor(Introduction.this);
       }      
     });
-    contentButton.addActor(okButton);
+
+    TextButton contentButton = new TextButton(contents + "\n\n\n", skin);
+    contentButton.getLabel().setWrap(true);
+    addActor(contentButton);
+
+    TextButton nextButton = new TextButton(ScienceEngine.getMsg().getString("Name.Next"), skin);
+    nextButton.setPosition(5, 5);
+    nextButton.addListener(new ExpandOnClick(contentButton, contents, arrow, nextButton, closeImage));
+    
+    contentButton.addActor(closeImage);
+    contentButton.addActor(nextButton);
   }
 }

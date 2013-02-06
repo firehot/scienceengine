@@ -18,10 +18,10 @@ enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true),
 };
 
 public enum ScreenComponent implements IComponentType {
-  Title(Align.CENTER, 0, Align.TOP, -5, Color.WHITE, true, true),
-  Status(Align.CENTER, 0, Align.BOTTOM, 5, Color.WHITE, true, true),
-  User(Align.RIGHT, -70, Align.TOP, -2, Color.WHITE, true, true),
-  Back(Align.LEFT, 0, Align.TOP, 0, Color.CLEAR, true, true), 
+  Title(Align.CENTER, 0, Align.TOP, -5, Color.WHITE, true, false),
+  Status(Align.CENTER, 0, Align.BOTTOM, 5, Color.WHITE, true, false),
+  User(Align.RIGHT, -70, Align.TOP, -2, Color.WHITE, true, false),
+  Back(Align.LEFT, 0, Align.TOP, 0, Color.CLEAR, true, false), 
   ViewControls(Align.LEFT, 81, Align.TOP, 0, Color.CLEAR, true, true),
   ModelControls(Align.RIGHT, -20, Align.MIDDLE, 0, Color.CLEAR, false, true),
   GoButtonUp(Align.LEFT, 10, Align.MIDDLE, 0, Color.CLEAR, false, true),

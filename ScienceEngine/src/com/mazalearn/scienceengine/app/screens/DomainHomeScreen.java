@@ -92,29 +92,20 @@ public class DomainHomeScreen extends AbstractScreen {
     final Cell<Actor> scrollPane = 
         table.add(activitiesPane).fill().width(ScreenComponent.VIEWPORT_WIDTH - 40);    
     table.row();
-    Table buttonTable = new Table(getSkin());
-    final TextButton activityButton = new TextButton("Activities", getSkin(), "toggle");
-    activityButton.setChecked(true);
-    final TextButton resourcesButton = new TextButton("Resources On Internet", getSkin(), "toggle");
-    activityButton.addListener(new ClickListener() {
+    final TextButton contentButton = new TextButton(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"), getSkin());
+    contentButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        scrollPane.setWidget(activitiesPane);
-        activityButton.setChecked(true);
-        resourcesButton.setChecked(false);
+        if (contentButton.isChecked()) {
+          scrollPane.setWidget(resourcesPane);
+          contentButton.setText(getMsg().getString("ScienceEngine.Activities"));
+        } else {
+          scrollPane.setWidget(activitiesPane);
+          contentButton.setText(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"));
+        }
       }
     });
-    resourcesButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        scrollPane.setWidget(resourcesPane);
-        activityButton.setChecked(false);
-        resourcesButton.setChecked(true);
-      }
-    });
-    buttonTable.add(activityButton).width(200).pad(20);
-    buttonTable.add(resourcesButton).width(200).pad(20);
-    table.add(buttonTable).padTop(20);
+    table.add(contentButton).width(400).height(50).padTop(50);
   }
 
   private Actor createActivitiesPane() {
