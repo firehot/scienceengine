@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -138,7 +139,14 @@ public abstract class AbstractScreen implements Screen {
       if (!screenComponent.isInAllScreens()) continue;
       Actor component = addScreenComponent(screenComponent, stage, getSkin());
       stage.addActor(component);
-      component.setPosition(screenComponent.getX(), screenComponent.getY());
+      if ((component instanceof Table) && !(component instanceof Button)) { // Place the center
+        Table t = (Table) component;
+        float x = screenComponent.getX(t.getPrefWidth()) + t.getPrefWidth() / 2;
+        float y = screenComponent.getY(t.getPrefHeight()) + t.getPrefHeight() / 2;
+        component.setPosition(x, y);
+      } else { // Place the left bottom corner
+        component.setPosition(screenComponent.getX(component.getWidth()), screenComponent.getY(component.getHeight()));
+      }
     }
   }
 
@@ -149,8 +157,10 @@ public abstract class AbstractScreen implements Screen {
         Table table = new Table(skin);
         table.setName(screenComponent.name());
         Image image = new Image(new Texture("images/user.png"));
-        image.setSize(30,30);
-        table.add(image).width(20).height(30);
+        image.setSize(ScreenComponent.getScaledX(30), ScreenComponent.getScaledY(30));
+        table.add(image)
+            .width(ScreenComponent.getScaledX(20))
+            .height(ScreenComponent.getScaledX(30));
         table.add(text);
         table.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
@@ -162,7 +172,7 @@ public abstract class AbstractScreen implements Screen {
       case Status: 
       case Title: {
         Table table = new Table(skin);
-        Label label = new Label("", skin);
+        Label label = new Label(screenComponent.name(), skin);
         table.add(label);
         label.setName(screenComponent.name());
         label.setColor(screenComponent.getColor());
@@ -176,7 +186,7 @@ public abstract class AbstractScreen implements Screen {
         style.font = skin.getFont("default-font");
         backButton.setStyle(style);
         backButton.setName(screenComponent.name());
-        backButton.setSize(70, 30);
+        backButton.setSize(ScreenComponent.getScaledX(70), ScreenComponent.getScaledY(30));
         backButton.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);

@@ -224,12 +224,14 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
 
   @Override
   public Vector2 getT1Position() {
-    return firstTerminal.set(getPosition()).add(1f, -2f);
+    return firstTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(1f), ScreenComponent.getScaledY(-2f));
   }
 
   @Override
   public Vector2 getT2Position() {
-    return secondTerminal.set(getPosition()).add(1.5f, 3.5f);
+    return secondTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(1.5f), ScreenComponent.getScaledY(3.5f));
   }
   
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.OptionsDialog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IControl;
@@ -29,7 +30,8 @@ public class ViewControls extends Table implements IControl {
     messages = ScienceEngine.getMsg();
     this.defaults().fill();
     Image image = new Image(new Texture("images/settings.png"));
-    image.setSize(VIEW_BUTTON_HEIGHT, VIEW_BUTTON_HEIGHT);
+    image.setSize(ScreenComponent.getScaledX(VIEW_BUTTON_HEIGHT),
+        ScreenComponent.getScaledY(VIEW_BUTTON_HEIGHT));
     image.setPosition(0, 0);
     Button imageButton = new TextButton("", skin, "body");
     imageButton.addActor(image);
@@ -41,7 +43,10 @@ public class ViewControls extends Table implements IControl {
         getStage().addActor(ViewControls.this);
       }
     });
-    this.add(imageButton).width(VIEW_BUTTON_HEIGHT).height(VIEW_BUTTON_HEIGHT);
+    this.add(imageButton)
+        .width(ScreenComponent.getScaledX(VIEW_BUTTON_HEIGHT))
+        .height(ScreenComponent.getScaledY(VIEW_BUTTON_HEIGHT))
+        .left();
     this.row();
     viewControlPanel = createViewControlPanel(skin);
     this.add(viewControlPanel);
@@ -57,8 +62,8 @@ public class ViewControls extends Table implements IControl {
     viewControlPanel.setName("ViewControls");
     viewControlPanel.defaults()
         .fill()
-        .height(VIEW_BUTTON_HEIGHT)
-        .width(VIEW_BUTTON_WIDTH)
+        .height(ScreenComponent.getScaledX(VIEW_BUTTON_HEIGHT))
+        .width(ScreenComponent.getScaledX(VIEW_BUTTON_WIDTH))
         .pad(0);
     return viewControlPanel;
   }

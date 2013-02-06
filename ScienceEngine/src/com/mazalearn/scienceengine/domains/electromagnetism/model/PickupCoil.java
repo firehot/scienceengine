@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
@@ -353,11 +354,13 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   
   @Override
   public Vector2 getT1Position() {
-    return firstTerminal.set(getPosition()).add(-4.5f, 13.5f);
+    return firstTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(-4.5f), ScreenComponent.getScaledY(13.5f));
   }
 
   @Override
   public Vector2 getT2Position() {
-    return secondTerminal.set(getPosition()).add(-4.5f, 12f);
+    return secondTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(-4.5f), ScreenComponent.getScaledY(12f));
   }
 }

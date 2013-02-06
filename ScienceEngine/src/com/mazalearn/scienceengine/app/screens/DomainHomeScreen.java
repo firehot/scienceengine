@@ -153,7 +153,11 @@ public class DomainHomeScreen extends AbstractScreen {
         }
       });
       activityThumbs[level - 1] = activityThumb;
-      activityLevels.add(activityThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT).padTop(5);
+      activityLevels
+          .add(activityThumb)
+          .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
+          .height(ScreenComponent.getScaledY(THUMBNAIL_HEIGHT))
+          .padTop(5);
     }
     activityLevels.row();
 
@@ -164,7 +168,12 @@ public class DomainHomeScreen extends AbstractScreen {
       ScrollPane scrollPane = new ScrollPane(label, getSkin());
       scrollPane.setScrollingDisabled(true, false);
       scrollPane.setFlickScroll(false);
-      activityLevels.add(scrollPane).width(THUMBNAIL_WIDTH).height(LEVEL_INFO_HEIGHT).left().pad(5);
+      activityLevels
+          .add(scrollPane)
+          .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
+          .height(ScreenComponent.getScaledY(LEVEL_INFO_HEIGHT))
+          .left()
+          .pad(5);
     }
     activityLevels.row();
     activityLevelPane.setScrollingDisabled(false, true);
@@ -255,8 +264,8 @@ public class DomainHomeScreen extends AbstractScreen {
         resource.debug();
       }
       resource.add(scrollPane)
-          .width(RESOURCE_WIDTH)
-          .height(RESOURCE_INFO_HEIGHT)
+          .width(ScreenComponent.getScaledX(RESOURCE_WIDTH))
+          .height(ScreenComponent.getScaledY(RESOURCE_INFO_HEIGHT))
           .left()
           .top()
           .pad(0, 5, 0, 5)

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -20,8 +21,8 @@ import com.mazalearn.scienceengine.domains.statesofmatter.StatesOfMatterControll
 import com.mazalearn.scienceengine.domains.waves.WaveController;
 
 public class ChooseDomainScreen extends AbstractScreen {
-  private static final int THUMBNAIL_WIDTH = 200;
-  private static final int THUMBNAIL_HEIGHT = 150;
+  private static final int THUMBNAIL_WIDTH = 242;
+  private static final int THUMBNAIL_HEIGHT = 182;
 
   private Profile profile;
 
@@ -98,7 +99,9 @@ public class ChooseDomainScreen extends AbstractScreen {
       levelTable.setName("Level");
       levelTable.add(domain);
       levelTable.row();
-      levelTable.add(domainThumb).width(THUMBNAIL_WIDTH).height(THUMBNAIL_HEIGHT);
+      levelTable.add(domainThumb)
+          .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
+          .height(ScreenComponent.getScaledY(THUMBNAIL_HEIGHT));
       table.add(levelTable).pad(5);
     }
     return flickScrollPane;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -134,12 +135,14 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
 
   @Override
   public Vector2 getT1Position() {
-    return firstTerminal.set(getPosition()).add(2.5f, 0);
+    return firstTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(2.5f), ScreenComponent.getScaledY(0));
   }
 
   @Override
   public Vector2 getT2Position() {
-    return secondTerminal.set(getPosition()).add(-2.5f, 0);
+    return secondTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(-2.5f), ScreenComponent.getScaledY(0));
   }
 }
 

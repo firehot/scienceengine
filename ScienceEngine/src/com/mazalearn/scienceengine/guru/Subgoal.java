@@ -60,7 +60,8 @@ public class Subgoal extends AbstractTutor {
           isUserNext = true;
         }      
       });
-      nextButton.setPosition(ScreenComponent.NextButton.getX(), ScreenComponent.NextButton.getY());
+      nextButton.setPosition(ScreenComponent.NextButton.getX(nextButton.getWidth()),
+          ScreenComponent.NextButton.getY(nextButton.getHeight()));
       addActor(nextButton);
     }
     

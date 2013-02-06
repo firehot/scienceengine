@@ -4,6 +4,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -206,11 +207,13 @@ public class CurrentSource extends Science2DBody implements ICurrent.Source {
 
   @Override
   public Vector2 getT1Position() {
-    return firstTerminal.set(getPosition()).add(-1, 1.5f);
+    return firstTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(-1f), ScreenComponent.getScaledY(1.5f));
   }
 
   @Override
   public Vector2 getT2Position() {
-    return secondTerminal.set(getPosition()).add(-1, -4.5f);
+    return secondTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(-1f), ScreenComponent.getScaledY(-4.5f));
   }
 }

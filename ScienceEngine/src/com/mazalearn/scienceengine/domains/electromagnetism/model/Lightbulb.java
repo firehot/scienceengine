@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -114,12 +115,14 @@ public class Lightbulb extends Science2DBody implements ICurrent.Sink {
   
   @Override
   public Vector2 getT2Position() {
-    return firstTerminal.set(getPosition()).add(-0.5f, -2.75f);
+    return firstTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(-0.5f), ScreenComponent.getScaledY(-2.75f));
   }
 
   @Override
   public Vector2 getT1Position() {
-    return secondTerminal.set(getPosition()).add(0.5f, -3.75f);
+    return secondTerminal.set(getPosition())
+        .add(ScreenComponent.getScaledX(0.55f), ScreenComponent.getScaledY(-3.75f));
   }
   
 }

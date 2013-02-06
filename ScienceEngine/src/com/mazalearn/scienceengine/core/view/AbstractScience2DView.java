@@ -190,13 +190,14 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         ((Science2DActor) actor).prepareActor();
       }
     }
-    ScreenComponent sc = ScreenComponent.ActivityViewControls;
+    // ScreenComponent sc = ScreenComponent.ActivityViewControls;
     this.addActor(viewControls);
-    viewControls.setPosition(sc.getX(), sc.getY());
+    //viewControls.setPosition(sc.getX(viewControls.getPrefWidth()), sc.getY(viewControls.getPrefHeight()));
     
-    sc = ScreenComponent.ModelControls;
+    ScreenComponent sc = ScreenComponent.ModelControls;
     this.addActor(modelControls);
-    modelControls.setPosition(sc.getX(), sc.getY());
+    modelControls.setPosition(sc.getX(modelControls.getPrefWidth()) + modelControls.getPrefWidth() / 2,
+        sc.getY(modelControls.getPrefHeight()) + modelControls.getPrefHeight() / 2);
     
     this.addActor(goButton);
   }
@@ -225,22 +226,24 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-up.png")));
     Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-down.png")));
     goButton = new Button(up, down, down);
-    goButton.setSize(60, 60);
+    goButton.setSize(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60));
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
         if (isChallengeInProgress) {
           isChallengeInProgress = false;
           ScreenComponent goButtonTo = ScreenComponent.GoButtonUp;
           goButton.addAction(Actions.parallel(
-              Actions.moveTo(goButtonTo.getX(), goButtonTo.getY(), 1),
-              Actions.sizeTo(60, 60, 1)));
+              Actions.moveTo(goButtonTo.getX(ScreenComponent.getScaledX(60)), 
+                  goButtonTo.getY(ScreenComponent.getScaledY(60)), 1),
+              Actions.sizeTo(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60), 1)));
           challenge(false);
         } else {
           isChallengeInProgress = true;
           ScreenComponent goButtonTo = ScreenComponent.GoButtonDown;
           goButton.addAction(Actions.parallel(
-              Actions.moveTo(goButtonTo.getX(), goButtonTo.getY(), 1),
-              Actions.sizeTo(30, 30, 1)));
+              Actions.moveTo(goButtonTo.getX(ScreenComponent.getScaledX(30)), 
+                  goButtonTo.getY(ScreenComponent.getScaledY(30)), 1),
+              Actions.sizeTo(ScreenComponent.getScaledX(30), ScreenComponent.getScaledY(30), 1)));
           challenge(true);
         }
       }
@@ -248,7 +251,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     
     this.addActor(goButton);
     ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
-    goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
+    goButton.setPosition(goButtonUp.getX(goButton.getWidth()), goButtonUp.getY(goButton.getHeight()));
   }
 
   @Override

@@ -79,11 +79,11 @@ public class Introduction extends Group {
                 ScreenComponent screenComponent = screenComponents[currentComponent++];
                 text = ScienceEngine.getMsg().getString("Help." + screenComponent.name()) + "\n" +
                     ScienceEngine.getMsg().getString("Help.Continue") + "\n\n\n";
-                pos.set(screenComponent.getX(), screenComponent.getY()).sub(CENTER_POS);
+                pos.set(screenComponent.getX(arrow.getWidth()), screenComponent.getY(arrow.getHeight())).sub(CENTER_POS);
                 arrow.setVisible(true);
                 arrow.setRotation(pos.angle());
-                arrow.setPosition(screenComponent.getX() - arrow.getWidth() * MathUtils.cosDeg(pos.angle()) * 2,
-                    screenComponent.getY() - arrow.getHeight() * MathUtils.sinDeg(pos.angle()) * 2);
+                arrow.setPosition(screenComponent.getX(arrow.getWidth()) - arrow.getWidth() * MathUtils.cosDeg(pos.angle()) * 2,
+                    screenComponent.getY(arrow.getHeight()) - arrow.getHeight() * MathUtils.sinDeg(pos.angle()) * 2);
                 setContent(text, arrow.getX(), arrow.getY(), pos.angle());
               }
               return true;
