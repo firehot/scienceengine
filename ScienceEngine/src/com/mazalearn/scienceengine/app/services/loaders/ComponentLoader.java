@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.EnvironmentBody;
@@ -70,17 +71,17 @@ public class ComponentLoader {
       return;
     }
     if (component.get("x") != null)
-      actor.setX(x);
+      actor.setX(ScreenComponent.getScaledX(x));
     if (component.get("y") != null)
-      actor.setY(y);
+      actor.setY(ScreenComponent.getScaledY(y));
     if (component.get("originX") != null)
-      actor.setOriginX((Float) component.get("originX"));
+      actor.setOriginX(ScreenComponent.getScaledX((Float) component.get("originX")));
     if (component.get("originY") != null)
-      actor.setOriginY((Float) component.get("originY"));
+      actor.setOriginY(ScreenComponent.getScaledY((Float) component.get("originY")));
     if (component.get("width") != null)
-      actor.setWidth((Float) component.get("width"));
+      actor.setWidth(ScreenComponent.getScaledX((Float) component.get("width")));
     if (component.get("height") != null)
-      actor.setHeight((Float) component.get("height"));
+      actor.setHeight(ScreenComponent.getScaledY((Float) component.get("height")));
     if (component.get("visible") != null)
       actor.setVisible((Boolean) component.get("visible"));
     if (component.get("rotation") != null)

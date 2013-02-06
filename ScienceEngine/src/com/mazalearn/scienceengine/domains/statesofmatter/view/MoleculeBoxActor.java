@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.statesofmatter.model.IMoleculeBox;
@@ -32,7 +32,7 @@ public class MoleculeBoxActor extends Science2DActor {
     this.boxHeight = boxHeight;
     this.N = N;
     this.font = font;
-    int pixelsPerM = ScienceEngine.PIXELS_PER_M;
+    int pixelsPerM = ScreenComponent.PIXELS_PER_M;
     Pixmap pixmap = new Pixmap(pixelsPerM, pixelsPerM, Format.RGBA8888);
     pixmap.setColor(Color.DARK_GRAY);
     pixmap.fillCircle(pixelsPerM / 2, pixelsPerM / 2, pixelsPerM / 2);

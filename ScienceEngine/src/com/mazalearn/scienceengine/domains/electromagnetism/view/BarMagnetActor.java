@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -34,7 +34,7 @@ public class BarMagnetActor extends Science2DActor {
     font.setColor(1f, 1f, 1f, parentAlpha);
     int angularVelocity = Math.round(barMagnet.getAngularVelocity());
     String rpm = String.valueOf(angularVelocity);
-    newPos.set(barMagnet.getWorldCenter()).mul(ScienceEngine.PIXELS_PER_M);
+    newPos.set(barMagnet.getWorldCenter()).mul(ScreenComponent.PIXELS_PER_M);
     // Create space for text - in screen coords and always left to right
     newPos.add(-10, 5);
     font.draw(batch, rpm, newPos.x, newPos.y);

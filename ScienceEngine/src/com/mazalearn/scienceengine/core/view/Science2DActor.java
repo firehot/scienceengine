@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
@@ -91,8 +92,8 @@ public class Science2DActor extends Actor {
           // box2d point of current touch
           getBox2DPositionFromViewPosition(viewPos, viewPos, getRotation());
           // Use center as origin - dont understand why this step
-          viewPos.sub(getWidth() / (2 * ScienceEngine.PIXELS_PER_M), 
-              getHeight() / (2 * ScienceEngine.PIXELS_PER_M));
+          viewPos.sub(getWidth() / (2 * ScreenComponent.PIXELS_PER_M), 
+              getHeight() / (2 * ScreenComponent.PIXELS_PER_M));
           body.applyForce(lastTouch, viewPos);
           if (lastTouch.len() > TOLERANCE) {
             ScienceEngine.selectParameter(body, Parameter.Rotate, lastTouch.len(), (IScience2DView) getStage());
@@ -193,7 +194,7 @@ public class Science2DActor extends Actor {
    */
   public void getViewPositionFromBox2DPosition(Vector2 viewPos) {
     viewPos.set(body.getWorldCenter());
-    viewPos.mul(ScienceEngine.PIXELS_PER_M);
+    viewPos.mul(ScreenComponent.PIXELS_PER_M);
     viewPos.sub(getOriginX(), getOriginY());
   }
   
@@ -206,7 +207,7 @@ public class Science2DActor extends Actor {
   public void getBox2DPositionFromViewPosition(Vector2 box2DPos, Vector2 viewPos, float rotation) {
     box2DPos.set(viewPos.x, viewPos.y);
     box2DPos.add(getOriginX(), getOriginY());
-    box2DPos.mul(1f / ScienceEngine.PIXELS_PER_M);
+    box2DPos.mul(1f / ScreenComponent.PIXELS_PER_M);
   }
   
   public void setPositionFromViewCoords(boolean isUserChange) {

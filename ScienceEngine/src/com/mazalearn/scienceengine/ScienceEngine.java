@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -80,8 +81,6 @@ public class ScienceEngine extends Game {
   private static Set<Science2DBody> pinnedBodies = new HashSet<Science2DBody>();
 
   private static long logicalTime;
-
-  public static final int PIXELS_PER_M = 8;
 
   public ScienceEngine(String url) {
     this.uri = url;
@@ -174,6 +173,8 @@ public class ScienceEngine extends Game {
       fpsLogger = new FPSLogger();
     //}
     
+    DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
+    ScreenComponent.setSize(displayMode.width, displayMode.height);
     resize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     SCIENCE_ENGINE = this;
   }

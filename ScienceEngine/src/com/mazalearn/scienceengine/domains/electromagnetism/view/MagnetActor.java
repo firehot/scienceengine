@@ -3,7 +3,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.view;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet;
@@ -27,8 +27,8 @@ public class MagnetActor extends Science2DActor {
   @Override
   public void act(float delta) {
     super.act(delta);
-    float width = magnet.getWidth() * ScienceEngine.PIXELS_PER_M;
-    float height = magnet.getHeight() * ScienceEngine.PIXELS_PER_M;
+    float width = magnet.getWidth() * ScreenComponent.PIXELS_PER_M;
+    float height = magnet.getHeight() * ScreenComponent.PIXELS_PER_M;
     this.setWidth(width);
     this.setHeight(height);
     this.setOrigin(width/2, height/2);

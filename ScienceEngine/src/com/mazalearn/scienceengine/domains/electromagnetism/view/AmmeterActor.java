@@ -31,7 +31,7 @@ public class AmmeterActor extends Science2DActor {
     shapeRenderer.identity();
     shapeRenderer.translate(getX() + getOriginX() + 1, getY() + 10, 0);
     shapeRenderer.rotate(0, 0, 1, 90 + needleAngle);
-    shapeRenderer.filledRect(0, 0, 40, 2);
+    shapeRenderer.filledRect(0, 0, getHeight() * 0.75f, 2);
     shapeRenderer.end();
     batch.begin();
   }

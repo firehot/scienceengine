@@ -161,7 +161,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       if (!locationGroup.contains(actor)) continue;
       deltaPosition.set(newBodyPosition)
           .sub(actor.getBody().getPosition())
-          .mul(ScienceEngine.PIXELS_PER_M);
+          .mul(ScreenComponent.PIXELS_PER_M);
       float deltaX = deltaPosition.x;
       float deltaY = deltaPosition.y;
       //float deltaAngle = (newBodyAngle - actor.getBody().getAngle()) % (2 * MathUtils.PI);

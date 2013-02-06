@@ -13,7 +13,7 @@ configs:[
 {name:"HorseshoeMagnet.MagnetStrength", permitted:true, value:20},
 {name:"HorseshoeMagnet.Flip", permitted:true},
 {name:"CurrentSource.CurrentType", permitted:false, value:"DC"},
-{name:"CurrentSource.Frequency", permitted:true, value:1.0},
+{name:"CurrentSource.CurrentFrequency", permitted:true, value:1.0},
 {name:"CurrentSource.MaxCurrent", permitted:true, value:3.0},
 {name:"CurrentSource.CurrentDirection", permitted:true, value:true},
 {name:"CurrentCoil.CommutatorType", permitted:true, value:"Connector"},

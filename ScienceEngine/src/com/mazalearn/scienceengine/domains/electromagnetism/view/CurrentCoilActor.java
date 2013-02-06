@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
@@ -72,9 +72,12 @@ currentcoil
     }
     int frameIndex = (int) Math.floor(((rotation + 360) % 360 ) / 10);
     TextureRegion frame = rotationFrames[frameIndex];
-    batch.draw(frame, (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 1) * ScienceEngine.PIXELS_PER_M, 
-        (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 2.5f) * ScienceEngine.PIXELS_PER_M,
-        frame.getRegionWidth()/2, frame.getRegionHeight()/2, getWidth()*1.2f, getWidth()*1.2f, 1, 1, 0); 
+    batch.draw(frame, 
+        (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 6) * ScreenComponent.PIXELS_PER_M, 
+        (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 8.5f) * ScreenComponent.PIXELS_PER_M,
+        ScreenComponent.getScaledX(frame.getRegionWidth()/2), 
+        ScreenComponent.getScaledY(frame.getRegionHeight()/2),
+        getWidth()*1.2f, getWidth()*1.2f, 1, 1, 0); 
 
     int rotation2 = rotationAngles[frameIndex];
     batch.draw(textureRegion, getX(), getY(), this.getOriginX(), 
@@ -86,7 +89,7 @@ currentcoil
     font.setColor(0f, 0f, 0f, parentAlpha);
     int data = Math.round(currentCoil.getRotationData());
     String rotationData = String.valueOf(data);
-    newPos.set(currentCoil.getWorldCenter()).mul(ScienceEngine.PIXELS_PER_M);
+    newPos.set(currentCoil.getWorldCenter()).mul(ScreenComponent.PIXELS_PER_M);
     // Create space for text - in screen coords and always left to right
     newPos.add(-5, 5);
     font.draw(batch, rotationData, newPos.x, newPos.y);

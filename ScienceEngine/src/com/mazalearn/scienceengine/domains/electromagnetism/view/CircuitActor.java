@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 
 public class CircuitActor extends Actor {
@@ -54,9 +54,9 @@ public class CircuitActor extends Actor {
     if (from.x == Float.NaN || from.y == Float.NaN || to.x == Float.NaN || to.y == Float.NaN) {
       return;
     }
-    delta.set(to).sub(from).mul(ScienceEngine.PIXELS_PER_M);
+    delta.set(to).sub(from).mul(ScreenComponent.PIXELS_PER_M);
     shapeRenderer.identity();
-    shapeRenderer.translate(from.x * ScienceEngine.PIXELS_PER_M, from.y * ScienceEngine.PIXELS_PER_M, 0);
+    shapeRenderer.translate(from.x * ScreenComponent.PIXELS_PER_M, from.y * ScreenComponent.PIXELS_PER_M, 0);
     // We will do Manhattan wiring covering shorter of deltax and deltay first, then the other
     if (Math.abs(delta.x) >= Math.abs(delta.y)) {
       shapeRenderer.rotate(0, 0, 1, delta.x < 0 ? 180 : 0);

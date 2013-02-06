@@ -104,8 +104,8 @@ public abstract class AbstractScience2DController implements
   @Override
   public Actor addScience2DActor(String type, String viewSpec,  float x, float y, float rotation) {
     Science2DBody science2DBody = 
-        getModel().addBody(type, x / ScienceEngine.PIXELS_PER_M, 
-            y / ScienceEngine.PIXELS_PER_M, 
+        getModel().addBody(type, x / ScreenComponent.PIXELS_PER_M, 
+            y / ScreenComponent.PIXELS_PER_M, 
             rotation * MathUtils.degreesToRadians);
     Actor actor = createActor(type, viewSpec, science2DBody);
     

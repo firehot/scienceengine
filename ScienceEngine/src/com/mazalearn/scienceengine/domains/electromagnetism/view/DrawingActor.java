@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -129,7 +130,7 @@ public class DrawingActor extends Science2DActor {
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
         if (DrawingActor.this.hit(localX, localY, true) == null) return;
         // Use coordinates at origin
-        pos.set(localX, localY).mul(1f / ScienceEngine.PIXELS_PER_M);
+        pos.set(localX, localY).mul(1f / ScreenComponent.PIXELS_PER_M);
         drawing.addPoint(pos.x, pos.y);
       }
     });
@@ -212,13 +213,13 @@ public class DrawingActor extends Science2DActor {
       prevPos.set(pointSequence.get(0));
       for (int i = 1; i < pointSequence.size(); i++) {
         pos.set(pointSequence.get(i)).sub(prevPos);
-        shapeRenderer.translate(prevPos.x * ScienceEngine.PIXELS_PER_M, 
-            prevPos.y * ScienceEngine.PIXELS_PER_M, 0);
+        shapeRenderer.translate(prevPos.x * ScreenComponent.PIXELS_PER_M, 
+            prevPos.y * ScreenComponent.PIXELS_PER_M, 0);
         shapeRenderer.rotate(0, 0, 1, pos.angle());
-        shapeRenderer.filledRect(0, 0, pos.len() * ScienceEngine.PIXELS_PER_M, LINE_WIDTH);
+        shapeRenderer.filledRect(0, 0, pos.len() * ScreenComponent.PIXELS_PER_M, LINE_WIDTH);
         shapeRenderer.rotate(0, 0, 1, -pos.angle());
-        shapeRenderer.translate(-prevPos.x * ScienceEngine.PIXELS_PER_M, 
-            -prevPos.y * ScienceEngine.PIXELS_PER_M, 0);
+        shapeRenderer.translate(-prevPos.x * ScreenComponent.PIXELS_PER_M, 
+            -prevPos.y * ScreenComponent.PIXELS_PER_M, 0);
         prevPos.set(pointSequence.get(i));
       }
     }

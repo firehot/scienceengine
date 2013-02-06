@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.AggregatorFunction;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
@@ -59,7 +60,7 @@ public class Subgoal extends AbstractTutor {
           isUserNext = true;
         }      
       });
-      nextButton.setPosition(570, 350);
+      nextButton.setPosition(ScreenComponent.NextButton.getX(), ScreenComponent.NextButton.getY());
       addActor(nextButton);
     }
     

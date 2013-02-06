@@ -5,7 +5,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 
@@ -25,7 +25,7 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
   private static final int ELECTROMAGNET_LOOPS_MAX = 4;
   private static final float MAX_EMF = 25;
   private static final float DISPLAY_WIDTH = 38f;
-  private static final float COIL_WIDTH = DISPLAY_WIDTH / ScienceEngine.PIXELS_PER_M;
+  private static final float COIL_WIDTH = DISPLAY_WIDTH / ScreenComponent.PIXELS_PER_M;
 
   private float maxStrengthOutside; // for debugging
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Dynamo;
@@ -33,7 +33,7 @@ public class DynamoActor extends Science2DActor {
   @Override
   public void act(float delta) {
     super.act(delta);
-    float width = dynamo.getWidth() * ScienceEngine.PIXELS_PER_M;
+    float width = dynamo.getWidth() * ScreenComponent.PIXELS_PER_M;
     this.setWidth(width);
     this.setHeight(width);
     this.setOrigin(width/2, width/2);
@@ -48,8 +48,8 @@ public class DynamoActor extends Science2DActor {
       for (int i = 1; i <= dynamo.getNumberOfLoops(); i++) {
         int frameIndex = (int) Math.floor(((rotation + 360 + i * perLoopRotation) % 360 ) / 10);
         TextureRegion frame = rotationFrames[frameIndex];
-        batch.draw(frame, (dynamo.getPosition().x - dynamo.getWidth() * 1.2f / 2) * ScienceEngine.PIXELS_PER_M, 
-            (dynamo.getPosition().y - dynamo.getHeight() * 1.4f / 2) * ScienceEngine.PIXELS_PER_M,
+        batch.draw(frame, (dynamo.getPosition().x - dynamo.getWidth() * 1.2f / 2) * ScreenComponent.PIXELS_PER_M, 
+            (dynamo.getPosition().y - dynamo.getHeight() * 1.4f / 2) * ScreenComponent.PIXELS_PER_M,
             0, 0, getWidth() * 1.2f, getWidth() * 1.2f, 1, 1, 0);
       }
     } else { // Parallel to rotation

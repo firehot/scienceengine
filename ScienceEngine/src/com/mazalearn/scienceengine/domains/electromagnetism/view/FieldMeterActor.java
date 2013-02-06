@@ -34,7 +34,7 @@ public class FieldMeterActor extends Science2DActor {
         super.touchUp(event, x, y, pointer, button);
         ScienceEngine.selectBody(fieldMeter, (IScience2DView) getStage());
         // Move field sampler here and convert to model coords
-        pos.set(event.getStageX(), event.getStageY()).mul(1f / ScienceEngine.PIXELS_PER_M);
+        pos.set(event.getStageX(), event.getStageY()).mul(1f / ScreenComponent.PIXELS_PER_M);
         fieldMeter.setPositionAndAngle(pos, 0);
       }
     });
@@ -61,7 +61,7 @@ public class FieldMeterActor extends Science2DActor {
       float magnitude = (float) Math.min(Math.log(1 + fieldSample.magnitude), 5);
       // location of field meter center is the sample point
       pos.set(fieldSample.x, fieldSample.y);
-      pos.mul(ScienceEngine.PIXELS_PER_M);
+      pos.mul(ScreenComponent.PIXELS_PER_M);
       // find location of origin
       float originX = magnitude * getWidth() / 2;
       float originY = magnitude * getHeight() / 2;
