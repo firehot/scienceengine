@@ -34,13 +34,13 @@ public class DrawingActor extends Science2DActor {
   private static final int LINE_WIDTH = 4;
   private static final float SCALE = 4f;
   private static final int WHEEL_DIA = 23;
-  private static final float DRAWING_WHEEL_DIA = SCALE * (WHEEL_DIA + 2);
   private static final int COACH_HEIGHT = 64;
   private static final int COACH_WIDTH = 105;
   private static final int WHEEL_OFFSET = 20;
-  private static final float DRAWING_WHEEL_OFFSET = SCALE * (WHEEL_OFFSET - 1);
-  private static final float DRAWING_COACH_WIDTH = SCALE * COACH_WIDTH;
-  private static final float DRAWING_COACH_HEIGHT = SCALE * COACH_HEIGHT;
+  private static float DRAWING_WHEEL_DIA = SCALE * (WHEEL_DIA + 2);
+  private static float DRAWING_WHEEL_OFFSET = SCALE * (WHEEL_OFFSET - 1);
+  private static float DRAWING_COACH_WIDTH = SCALE * COACH_WIDTH;
+  private static float DRAWING_COACH_HEIGHT = SCALE * COACH_HEIGHT;
   private final Drawing drawing;
   private Vector2 pos = new Vector2(), prevPos = new Vector2();
   private ShapeRenderer shapeRenderer;
@@ -51,6 +51,13 @@ public class DrawingActor extends Science2DActor {
   private Coach coach;
   private String viewSpec;
   
+  static {
+    // Scale screen sizes based on screen dimensions
+    DRAWING_WHEEL_DIA = ScreenComponent.getScaledX(SCALE * (WHEEL_DIA + 2));
+    DRAWING_WHEEL_OFFSET = ScreenComponent.getScaledX(SCALE * (WHEEL_OFFSET - 1));
+    DRAWING_COACH_WIDTH = ScreenComponent.getScaledX(SCALE * COACH_WIDTH);
+    DRAWING_COACH_HEIGHT = ScreenComponent.getScaledY(SCALE * COACH_HEIGHT);
+  }
   public static class Coach extends Group {
     private Label userCurrentLabel;
     private Color lightColor = Color.YELLOW;

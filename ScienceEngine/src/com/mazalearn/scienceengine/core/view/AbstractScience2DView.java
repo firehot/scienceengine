@@ -190,15 +190,11 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         ((Science2DActor) actor).prepareActor();
       }
     }
-    // ScreenComponent sc = ScreenComponent.ActivityViewControls;
+    // Bring view controls to top
     this.addActor(viewControls);
-    //viewControls.setPosition(sc.getX(viewControls.getPrefWidth()), sc.getY(viewControls.getPrefHeight()));
-    
-    ScreenComponent sc = ScreenComponent.ModelControls;
+    // Bring model controls to top and position
     this.addActor(modelControls);
-    modelControls.setPosition(sc.getX(modelControls.getPrefWidth()) + modelControls.getPrefWidth() / 2,
-        sc.getY(modelControls.getPrefHeight()) + modelControls.getPrefHeight() / 2);
-    
+    // Bring go button to top
     this.addActor(goButton);
   }
 

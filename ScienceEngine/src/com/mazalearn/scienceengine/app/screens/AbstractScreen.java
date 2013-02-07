@@ -71,13 +71,13 @@ public abstract class AbstractScreen implements Screen {
     });
   }
 
-  protected boolean needsBackground() {
+  protected boolean needsLayout() {
     return true;
   }
 
   public void setStage(Stage stage) {
     this.stage = stage;
-    setupScreen(stage);
+    layoutScreen(stage);
     Gdx.input.setInputProcessor(stage);    
   }
 
@@ -127,7 +127,7 @@ public abstract class AbstractScreen implements Screen {
     }
   }
 
-  public void setupScreen(Stage stage) {
+  public void layoutScreen(Stage stage) {
     if (stage.getRoot().findActor(ScreenComponent.Title.name()) != null) return;
     setupBackground(stage);
     setupScreenComponents(stage);
@@ -232,8 +232,8 @@ protected Table getTable() {
     Gdx.input.setCatchBackKey(true);
     // Catch menu key to prevent onscreen keyboard coming up
     Gdx.input.setCatchMenuKey(true);
-    if (needsBackground()) {
-      setupScreen(stage);
+    if (needsLayout()) {
+      layoutScreen(stage);
     }
   }
 

@@ -4,16 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScreenComponent;
 
 public class InstructionDialog extends Dialog {
@@ -32,32 +29,7 @@ public class InstructionDialog extends Dialog {
     navigation.setWidth(400);
     navigation.setWrap(true);
 
-    final TextButton navigationButton = new TextButton("Instructions >>", skin);
-
     getContentTable().add(description).width(400).pad(10);
-    getContentTable().row();
-    getContentTable().add(navigationButton).left();
-    getContentTable().row();
-    @SuppressWarnings("unchecked")
-    final Cell<Label> navCell = (Cell<Label>) getContentTable().add(navigation).width(400).pad(10);
-    getContentTable().setHeight(400);
-    getContentTable().row();
-    navCell.setWidget(null);
-
-    navigationButton.addListener(new ClickListener() {
-      @Override 
-      public void clicked (InputEvent event, float x, float y) {
-        if (navCell.getWidget() != null) {
-          navCell.setWidget(null);
-          navigationButton.setText("Instructions >>");
-        } else {
-          navCell.setWidget(navigation);
-          navigationButton.setText("Instructions <<");
-        }
-        hide();
-        show(stage);
-      }
-    });
 
     Button b = new TextButton(buttonText, skin);
     this.getButtonTable().add(b).width(200);

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.Controller;
@@ -47,6 +48,9 @@ public class ModelControls extends Table {
   
   public void refresh() {
     registerModelConfigs(modelControlPanel);
+    ScreenComponent sc = ScreenComponent.ModelControls;
+    setPosition(sc.getX(getPrefWidth()) + getPrefWidth() / 2,
+        sc.getY(getPrefHeight()) + getPrefHeight() / 2);
   }
   
   private IParameter asParameter(final Science2DBody body) {

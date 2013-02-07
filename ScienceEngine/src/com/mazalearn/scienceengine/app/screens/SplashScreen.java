@@ -61,7 +61,7 @@ public class SplashScreen extends AbstractScreen {
   }
 
   @Override
-  protected boolean needsBackground() {
+  protected boolean needsLayout() {
     return false;
   }
 

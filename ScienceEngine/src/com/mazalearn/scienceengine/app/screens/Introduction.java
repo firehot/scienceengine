@@ -45,7 +45,7 @@ public class Introduction extends Group {
       contentButton.setText(text);
       // Set size in a 3:1 aspect ratio
       float semiPerimeter = (float) Math.sqrt(text.length());
-      float h = semiPerimeter * SCALE / 3 + 50; // To hold OK Button
+      float h = semiPerimeter * SCALE / 3 + 50; // To hold Buttons
       float w = semiPerimeter * SCALE * 3 / 4;
       contentButton.setSize(w, h);
       // Put contentbutton on screen touching arrow based on quadrant
@@ -112,8 +112,8 @@ public class Introduction extends Group {
     arrow.setSize(arrow.getWidth() * 1.5f, arrow.getHeight() * 1.5f);
     addActor(arrow);
     
-    Image closeImage = new Image(new Texture("images/cross.png"));
-    closeImage.setSize(closeImage.getWidth() / 2, closeImage.getHeight() / 2);
+    Image closeImage = new Image(new Texture("images/close.png"));
+    closeImage.setSize(closeImage.getWidth(), closeImage.getHeight());
     closeImage.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
