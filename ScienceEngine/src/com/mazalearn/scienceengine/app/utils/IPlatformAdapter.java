@@ -53,7 +53,10 @@ public interface IPlatformAdapter {
   // Does platform support language change?
   public boolean supportsLanguage();
 
-  void httpPost(String path, String contentType, Map<String, String> params,
+  public void httpPost(String path, String contentType, Map<String, String> params,
       byte[] data);
+
+  public void takeSnapshot(Stage stage, String domain, int level, int x, int y,
+      int width, int height);
 }
 

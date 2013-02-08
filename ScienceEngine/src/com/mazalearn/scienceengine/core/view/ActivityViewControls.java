@@ -1,7 +1,13 @@
 package com.mazalearn.scienceengine.core.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
@@ -53,13 +59,48 @@ public class ActivityViewControls extends ViewControls {
     };
     resetControl = new CommandButtonControl(resetModelConfig, skin, "body");
 
+    // Add snapshot functionality
+    Button snapshotButton = new TextButton(
+        getMsg().getString("ScienceEngine.Snapshot"), skin, "body");
+    snapshotButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x1, float y1) {
+        setActivated(false);
+        takeSnapshot();
+      }
+    });
+
     viewControlPanel.add(resetControl.getActor());
     viewControlPanel.row();
     viewControlPanel.add(suspendControl.getActor());
     viewControlPanel.row();
+    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
+      viewControlPanel.add(snapshotButton);
+      viewControlPanel.row();
+    }
     syncWithModel();
   }
   
+  private void takeSnapshot() {
+    final Actor snapshotter = new Snapshotter();
+    snapshotter.addListener(new DragListener() {
+      public void drag (InputEvent event, float x, float y, int pointer) {
+        snapshotter.setPosition(Math.min(getTouchDownX(), event.getStageX()),
+            Math.min(getTouchDownY(), event.getStageY()));
+        snapshotter.setSize(Math.abs(getTouchDownX() - event.getStageX()), 
+            Math.abs(getTouchDownY() - event.getStageY()));
+      }
+
+      public void dragStop (InputEvent event, float x, float y, int pointer) {
+        getStage().getRoot().removeActor(snapshotter);
+        ScienceEngine.getPlatformAdapter().takeSnapshot(getStage(), 
+            science2DController.getDomain(), science2DController.getLevel(),
+            (int)snapshotter.getX(), (int)snapshotter.getY(), 
+            (int)snapshotter.getWidth(), (int)snapshotter.getHeight());
+      }
+    });
+    getStage().addActor(snapshotter);
+  }
   public void syncWithModel() {
     super.syncWithModel();
     suspendControl.syncWithModel();

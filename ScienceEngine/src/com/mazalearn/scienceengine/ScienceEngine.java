@@ -174,7 +174,7 @@ public class ScienceEngine extends Game {
     //}
     
     DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
-    ScreenComponent.setSize(displayMode.width, displayMode.height);
+    //ScreenComponent.setSize(displayMode.width, displayMode.height);
     resize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     SCIENCE_ENGINE = this;
   }

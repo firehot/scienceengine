@@ -19,10 +19,10 @@ enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true),
 };
 
 public enum ScreenComponent implements IComponentType {
-  Background(Align.LEFT, 0, Align.BOTTOM, 0, 800, 480, Color.CLEAR, false, false),
+  Background(Align.LEFT, 0, Align.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
   Prober(Align.LEFT, 0, Align.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
-  Title(Align.CENTER, 0, Align.TOP, -5, 0, 0, Color.WHITE, true, false),
-  Status(Align.CENTER, 0, Align.BOTTOM, 5, 0, 0, Color.WHITE, true, false),
+  Title(Align.CENTER, 0, Align.TOP, -2, 0, 0, Color.WHITE, true, false),
+  Status(Align.CENTER, 0, Align.BOTTOM, 2, 0, 0, Color.WHITE, true, false),
   User(Align.RIGHT, -70, Align.TOP, -2, 20, 30, Color.WHITE, true, false),
   Back(Align.LEFT, 0, Align.TOP, 0, 70, 30, Color.CLEAR, true, false), 
   ViewControls(Align.LEFT, 81, Align.TOP, 0, 0, 0, Color.CLEAR, true, true),
@@ -41,8 +41,8 @@ public enum ScreenComponent implements IComponentType {
   private int height;
   public static final int PIXELS_PER_M = 8;
   
-  static float X_SCALE;
-  static float Y_SCALE;  
+  static float X_SCALE = 1;
+  static float Y_SCALE = 1;  
   private static int CANONICAL_VIEWPORT_HEIGHT = 480;
   private static int CANONICAL_VIEWPORT_WIDTH = 800;
   public static int VIEWPORT_HEIGHT = CANONICAL_VIEWPORT_HEIGHT;

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 
@@ -114,7 +115,7 @@ public class Introduction extends Group {
     addActor(arrow);
     
     Image closeImage = new Image(new Texture("images/close.png"));
-    closeImage.setSize(closeImage.getWidth(), closeImage.getHeight());
+    closeImage.setSize(closeImage.getWidth() * 0.75f, closeImage.getHeight() * 0.75f);
     closeImage.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
@@ -122,8 +123,14 @@ public class Introduction extends Group {
       }      
     });
 
-    TextButton contentButton = new TextButton(contents + "\n\n\n", skin);
+    final TextButton contentButton = new TextButton(contents + "\n\n\n", skin);
     contentButton.getLabel().setWrap(true);
+    contentButton.addListener(new DragListener() {
+      public void touchDragged (InputEvent event, float x, float y, int pointer) {
+        super.touchDragged(event, x, y, pointer);
+        contentButton.setPosition(contentButton.getX() + getDeltaX(), contentButton.getY() + getDeltaY());
+      }
+    });
     addActor(contentButton);
 
     TextButton nextButton = new TextButton(ScienceEngine.getMsg().getString("Name.Next"), skin);

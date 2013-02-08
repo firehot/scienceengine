@@ -111,4 +111,8 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
       byte[] data){
     throw new UnsupportedOperationException("Not implemented");
   }
+
+  @Override
+  public void takeSnapshot(Stage stage, String domain, int level, int x, int y, int width, int height) {
+  }
 }

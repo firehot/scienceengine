@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -55,7 +56,7 @@ public class LevelSaver {
   private void writeLevelInfo(JsonWriter jsonWriter) throws IOException {
     jsonWriter.set("name", science2DController.getDomain());
     jsonWriter.set("level", level);
-    Label title = (Label) science2DView.findActor("Title");
+    Label title = (Label) science2DView.findActor(ScreenComponent.Title.name());
     jsonWriter.set("description", title.getText());
   }
   

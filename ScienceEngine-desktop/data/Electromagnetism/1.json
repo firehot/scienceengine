@@ -10,14 +10,6 @@ configs:[
 {name:"BarMagnet.RotationAngle",permitted:true},
 ],
 plan:[
-       {type: "FieldMagnitudeProber",
-        goal: "Touch the ? where the magnetic field is stronger",
-        configs:[{name: "BarMagnet.MovementMode", value:"None"}],
-        timelimit: 10,
-        success: 100,
-        failure: 50,
-        components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
-        },
       {type: "Guide", 
        goal: "Can you make the compass go through one complete rotation?",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",

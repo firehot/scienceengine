@@ -48,7 +48,6 @@ public class ActivityScreen extends AbstractScreen {
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
-      //((Stage) science2DView).addActor(createBackButton());
       this.setStage(levelEditor);
     } else {
       this.setStage((Stage) science2DView);
@@ -73,7 +72,7 @@ public class ActivityScreen extends AbstractScreen {
     super.show();
     String title = getMsg().getString(domain + "." + activityLevel + ".Name");
     setTitle(title);
-    if (ScienceEngine.DEV_MODE == ScienceEngine.DevMode.DEBUG) return;
+    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) return;
     String description = getMsg().getString(domain + "." + activityLevel + ".Description");
     new Introduction(getStage(), getSkin(), description);
   }

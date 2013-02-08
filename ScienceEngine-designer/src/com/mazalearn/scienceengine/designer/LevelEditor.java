@@ -21,16 +21,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
@@ -54,7 +50,7 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
  */
 public class LevelEditor extends Stage {
   private final AbstractScreen screen;
-  private static final float THUMBNAIL_SCALE = 7.5f;
+  private static final float THUMBNAIL_SCALE = 2.5f;
 
   private final OrthographicCamera orthographicCamera;
   enum Mode {
@@ -119,7 +115,7 @@ public class LevelEditor extends Stage {
     layout.setFillParent(true);
     layout.defaults().fill();
     Table titleTable = new Table(screen.getSkin());
-    titleTable.setName("Title");
+    titleTable.setName("TitleTable");
     titleTable.defaults().fill();
     titleTable.add(science2DController.getDomain()).pad(10);
     final SelectBox level = 
@@ -192,8 +188,10 @@ public class LevelEditor extends Stage {
         modelControls.refresh();
         modelControls.act(0);
         screen.clearScreen(Color.BLACK);
-        originalStage.draw();
-        saveLevelThumbnail(science2DController.getLevel());
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+        takeSnapshot(originalStage, science2DController.getDomain(),
+            science2DController.getLevel(), 0, 0, width, height);
       }      
     });
     menu.add(button).pad(10);
@@ -228,15 +226,14 @@ public class LevelEditor extends Stage {
   /**
    * Take screenshot, convert to a thumbnail and save to the level file as png.
    */
-  private void saveLevelThumbnail(int level) {
+  public static void takeSnapshot(Stage stage, String domain, int level, int x, int y, int width, int height) {
     FileHandle screenFile = 
-        LevelUtil.getLevelFile(science2DController.getDomain(), ".png", level);
+        LevelUtil.getLevelFile(domain, ".png", level);
     screenFile = Gdx.files.external(screenFile.path());
-    int width = Gdx.graphics.getWidth();
-    int height = Gdx.graphics.getHeight();
-    Pixmap screenShot = ScreenUtils.getScreenshot(0, 0, width, 
+    stage.draw();
+    Pixmap screenShot = ScreenUtils.getScreenshot(x, y, width, 
         height, LevelUtil.powerOf2Ceiling(width / THUMBNAIL_SCALE), 
-        LevelUtil.powerOf2Ceiling(height / THUMBNAIL_SCALE), originalStage, false);
+        LevelUtil.powerOf2Ceiling(height / THUMBNAIL_SCALE), stage, false);
     PixmapIO.writePNG(screenFile, screenShot);
     screenShot.dispose();
     System.out.println("[LevelEditor] Thumbnail successfully saved!" +

@@ -72,9 +72,11 @@ currentcoil
     }
     int frameIndex = (int) Math.floor(((rotation + 360) % 360 ) / 10);
     TextureRegion frame = rotationFrames[frameIndex];
-    batch.draw(frame, 
-        (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 6) * ScreenComponent.PIXELS_PER_M, 
-        (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 8.5f) * ScreenComponent.PIXELS_PER_M,
+    // 6, 8.5 for desktop 1280x1024
+    // 1, 2.5 for 800x640
+    batch.draw(frame,
+        (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 1) * ScreenComponent.PIXELS_PER_M, 
+        (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 2.5f) * ScreenComponent.PIXELS_PER_M,
         ScreenComponent.getScaledX(frame.getRegionWidth()/2), 
         ScreenComponent.getScaledY(frame.getRegionHeight()/2),
         getWidth()*1.2f, getWidth()*1.2f, 1, 1, 0); 
