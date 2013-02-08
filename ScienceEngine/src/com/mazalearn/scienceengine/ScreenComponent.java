@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
@@ -43,10 +44,14 @@ public enum ScreenComponent implements IComponentType {
   
   static float X_SCALE = 1;
   static float Y_SCALE = 1;  
-  private static int CANONICAL_VIEWPORT_HEIGHT = 480;
-  private static int CANONICAL_VIEWPORT_WIDTH = 800;
+  private final static int CANONICAL_VIEWPORT_HEIGHT = 480;
+  private final static int CANONICAL_VIEWPORT_WIDTH = 800;
   public static int VIEWPORT_HEIGHT = CANONICAL_VIEWPORT_HEIGHT;
   public static int VIEWPORT_WIDTH = CANONICAL_VIEWPORT_WIDTH;
+  private final static int CANONICAL_FONT_SIZE = 16;
+  private static int FontSize = CANONICAL_FONT_SIZE;
+  // Initial entry is a flag
+  private static int[] AVAILABLE_FONT_SIZES = {0, 12, 15, 16, 20, 26};
 
   /**
    * Constructor 
@@ -148,5 +153,19 @@ public enum ScreenComponent implements IComponentType {
     Align.TOP.base = VIEWPORT_HEIGHT;
     X_SCALE = VIEWPORT_WIDTH / (float) CANONICAL_VIEWPORT_WIDTH;
     Y_SCALE = VIEWPORT_HEIGHT / (float) CANONICAL_VIEWPORT_HEIGHT;
+    int fontSize = Math.round(Math.min(X_SCALE, Y_SCALE) * CANONICAL_FONT_SIZE);
+    FontSize = AVAILABLE_FONT_SIZES[AVAILABLE_FONT_SIZES.length - 1];
+    for (int i = 1; i < AVAILABLE_FONT_SIZES.length; i++) {
+      if (AVAILABLE_FONT_SIZES[i-1] < fontSize && fontSize <= AVAILABLE_FONT_SIZES[i]) {
+        FontSize = AVAILABLE_FONT_SIZES[i];
+        break;
+      }
+    }
+  }
+  
+  // should be called only after setSize has been called
+  public static String getFont() {
+    Gdx.app.log(ScienceEngine.LOG, "Font chosen size: " + FontSize);
+    return "font" + String.valueOf(FontSize);
   }
 }

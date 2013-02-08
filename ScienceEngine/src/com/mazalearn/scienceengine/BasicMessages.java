@@ -5,7 +5,14 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.services.IMessage;
 
 final class BasicMessages implements IMessage {
@@ -49,5 +56,29 @@ final class BasicMessages implements IMessage {
 
   @Override
   public void setFont(Skin skin) {
+    BitmapFont font = null;
+    String language = getLanguage();
+    try {
+      font = skin.getFont(language);
+    } catch (GdxRuntimeException e) { // font not found
+      font = skin.getFont("en"); // Supports only english
+    }
+    skin.add(language, font);
+  
+    TextButtonStyle style1 = skin.get(TextButtonStyle.class);
+    style1.font = font;
+    style1 = skin.get("toggle", TextButtonStyle.class);
+    style1.font = font;
+    style1 = skin.get("body", TextButtonStyle.class);
+    style1.font = font;
+    LabelStyle style2 = skin.get(LabelStyle.class);
+    style2.font = font;
+    CheckBoxStyle style3 = skin.get(CheckBoxStyle.class);
+    style3.font = font;
+    SelectBoxStyle style4 = skin.get(SelectBoxStyle.class);
+    style4.font = font;
+    TextField.TextFieldStyle style5 = skin.get(TextField.TextFieldStyle.class);
+    style5.font = font;
+    skin.add("default-font", font);
   }
 }

@@ -11,12 +11,12 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "ScienceEngine";
 		cfg.useGL20 = true;
-		cfg.width = 800;
-		cfg.height = 480;
+		cfg.width = 1024; // 800;
+		cfg.height = 768; // 480;
 		
 		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "");
 		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.Desktop));
-		ScienceEngine.DEV_MODE = DevMode.DEBUG;
+		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     new LwjglApplication(scienceEngine, cfg) {
       @Override
       public void exit() {

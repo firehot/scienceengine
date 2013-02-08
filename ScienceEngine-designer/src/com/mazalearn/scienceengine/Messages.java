@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
+// TODO: inherit from BasicMessages
 public class Messages implements IMessage {
   private static final String BUNDLE_NAME = "com.mazalearn.scienceengine.data.Messages"; //$NON-NLS-1$
 

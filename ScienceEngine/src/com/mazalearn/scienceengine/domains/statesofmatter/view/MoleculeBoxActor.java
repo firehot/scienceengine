@@ -17,7 +17,7 @@ public class MoleculeBoxActor extends Science2DActor {
    * 
    */
   private IMoleculeBox moleculeBox;
-  private Texture moleculeTextureGray, moleculeTextureRed;
+  private Texture moleculeTextureWhite, moleculeTextureRed;
   private long timeStart;
   private BitmapFont font;
   private Texture backgroundTexture;
@@ -34,17 +34,17 @@ public class MoleculeBoxActor extends Science2DActor {
     this.font = font;
     int pixelsPerM = ScreenComponent.PIXELS_PER_M;
     Pixmap pixmap = new Pixmap(pixelsPerM, pixelsPerM, Format.RGBA8888);
-    pixmap.setColor(Color.DARK_GRAY);
+    pixmap.setColor(Color.WHITE);
     pixmap.fillCircle(pixelsPerM / 2, pixelsPerM / 2, pixelsPerM / 2);
-    moleculeTextureGray = new Texture(pixmap);
+    moleculeTextureWhite = new Texture(pixmap);
     pixmap.setColor(Color.RED);
     pixmap.fillCircle(pixelsPerM / 2, pixelsPerM / 2, pixelsPerM / 2);
     moleculeTextureRed = new Texture(pixmap);
     pixmap.dispose();
     
-    // Use light-gray background color
+    // Use black background color
     pixmap = new Pixmap(1, 1, Format.RGBA8888);
-    pixmap.setColor(Color.LIGHT_GRAY);
+    pixmap.setColor(Color.BLACK);
     pixmap.fillRectangle(0, 0, 1, 1);
     backgroundTexture = new Texture(pixmap);
     pixmap.dispose();
@@ -61,7 +61,7 @@ public class MoleculeBoxActor extends Science2DActor {
     float scaleX = this.getWidth() / boxWidth;
     float scaleY = this.getHeight() / boxHeight;
     for (int i = 0; i < N; i++) {
-      batch.draw(i > 0 ? moleculeTextureGray : moleculeTextureRed,
+      batch.draw(i > 0 ? moleculeTextureWhite : moleculeTextureRed,
           this.getX() + (float) moleculeBox.getMolecule(i).x * scaleX, 
           this.getY() + (float) moleculeBox.getMolecule(i).y * scaleY);
     }
@@ -88,7 +88,7 @@ public class MoleculeBoxActor extends Science2DActor {
   }
 
   public void dispose() { // TODO: call this
-    moleculeTextureGray.dispose();
+    moleculeTextureWhite.dispose();
     backgroundTexture.dispose();
     font.dispose();
   }

@@ -106,6 +106,8 @@ public class ScienceEngine extends Game {
     if (skin == null) {
       FileHandle skinFile = Gdx.files.internal(SKIN_BASE + ".json");
       skin = new Skin(skinFile, new TextureAtlas(Gdx.files.internal(SKIN_BASE + ".atlas")));
+      skin.add("en", skin.getFont(ScreenComponent.getFont()));
+      getMsg().setFont(skin);
       skin.add("en", skin.getFont("default-font"));
       getMsg().setLanguage(skin, "en");
    }
@@ -174,7 +176,7 @@ public class ScienceEngine extends Game {
     //}
     
     DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
-    //ScreenComponent.setSize(displayMode.width, displayMode.height);
+    ScreenComponent.setSize(1024, 768); // displayMode.width, displayMode.height);
     resize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     SCIENCE_ENGINE = this;
   }

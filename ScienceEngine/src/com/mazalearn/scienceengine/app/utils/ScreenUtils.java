@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -108,6 +110,15 @@ public class ScreenUtils {
       }
     }
     Pixmap.setBlending(b);
+  }
+
+  public static TextureRegion createTexture(int width, int height, Color color) {
+    Pixmap pixmap = new Pixmap(1, 1 , Pixmap.Format.RGBA8888);
+    pixmap.setColor(color);
+    pixmap.fillRectangle(0, 0, 1, 1);
+    TextureRegion textureRegion = new TextureRegion(new Texture(pixmap), width, height);
+    pixmap.dispose();
+    return textureRegion;
   }
 
 }

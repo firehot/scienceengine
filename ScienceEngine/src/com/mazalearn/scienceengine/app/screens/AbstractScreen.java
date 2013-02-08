@@ -168,7 +168,7 @@ public abstract class AbstractScreen implements Screen {
       case Status: 
       case Title: {
         Table table = new Table(skin);
-        Label label = new Label(screenComponent.name(), skin);
+        Label label = new Label("", skin);
         table.add(label);
         label.setName(screenComponent.name());
         label.setColor(screenComponent.getColor());

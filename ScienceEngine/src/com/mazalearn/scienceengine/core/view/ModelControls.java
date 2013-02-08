@@ -73,6 +73,17 @@ public class ModelControls extends Table {
     // Register all model controllers
     for (final Science2DBody body: science2DModel.getBodies()) {
       if (body.allowsConfiguration()) {
+        // Only include bodies which have at least 1 permitted config.
+        boolean bodyHasConfigs = false;
+        for (IModelConfig modelConfig: body.getConfigs()) {
+          // Meters should not be connected to GUI controls automatically
+          if (!modelConfig.isMeter() && modelConfig.isPermitted()) {
+            bodyHasConfigs = true;
+            break;
+          }
+        }
+        if (!bodyHasConfigs) continue;
+        
         IModelConfig<?> bodyConfig = new AbstractModelConfig<Boolean>(body, asParameter(body), false) {
           @Override public boolean isPossible() { return body.isActive(); }      
           @Override public boolean isAvailable() { return isPossible() && !ScienceEngine.isProbeMode(); }

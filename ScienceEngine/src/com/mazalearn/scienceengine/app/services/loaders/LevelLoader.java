@@ -68,9 +68,9 @@ public class LevelLoader {
     CircuitLoader.loadCircuits((Array<?>) rootElem.get("circuits"), science2DModel);
     
     science2DModel.prepareModel();
-    modelControls.refresh();
     science2DView.prepareView();
     ConfigLoader.loadConfigs((Array<?>) rootElem.get("configs"), science2DModel);
+    modelControls.refresh();
     loadPlan((Array<?>) rootElem.get("plan"));
   }
   

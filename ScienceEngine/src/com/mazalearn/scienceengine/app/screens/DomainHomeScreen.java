@@ -31,6 +31,7 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 /**
  * Activity Home screen - shows all activity numLevels for that domain.
@@ -92,7 +93,8 @@ public class DomainHomeScreen extends AbstractScreen {
     final Cell<Actor> scrollPane = 
         table.add(activitiesPane).fill().width(ScreenComponent.VIEWPORT_WIDTH - 40);    
     table.row();
-    final TextButton contentButton = new TextButton(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"), getSkin());
+    final TextButton contentButton = 
+        new TextButton(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"), getSkin(), "body");
     contentButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -115,6 +117,10 @@ public class DomainHomeScreen extends AbstractScreen {
     activityLevelPane.setFadeScrollBars(false);
     activityThumbs = new TextButton[numLevels];
     
+    LabelStyle blueBackground = new LabelStyle(getSkin().get(LabelStyle.class));
+    blueBackground.background = 
+        new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, Color.BLUE));
+
     for (int level = 1; level <= numLevels; level++) {
       String activityName = getMsg().getString(domain + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(domain, ".png", level);
@@ -126,16 +132,23 @@ public class DomainHomeScreen extends AbstractScreen {
       }
       final TextureRegionDrawable image = 
           new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-      TextButton activityThumb = new TextButton(level + "\n" + activityName, getSkin()) {
+      TextButton activityThumb = new TextButton("", getSkin()) {
         @Override
         public void drawBackground(SpriteBatch batch, float parentAlpha) {
           Color color = getColor();
-          batch.setColor(color.r, color.g, color.b, color.a * parentAlpha * 0.5f);
+          batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
           image.draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
         }
       };
-      activityThumb.getLabel().setWrap(true);
       activityThumb.setBackground(image);
+      Label label = new Label(activityName, blueBackground);
+      label.setWrap(true);
+      label.setAlignment(Align.center, Align.center);
+      label.setWidth(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 4));
+      label.setHeight(ScreenComponent.getScaledY(50));
+      label.setPosition(ScreenComponent.getScaledX(2), ScreenComponent.getScaledY(40));
+      
+      activityThumb.addActor(label);
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
         @Override
@@ -177,6 +190,9 @@ public class DomainHomeScreen extends AbstractScreen {
     resourcesTable.setName("Resources");
     resourcesTable.defaults().fill();
     ScrollPane resourcePane = new ScrollPane(resourcesTable, getSkin());
+    LabelStyle blackBackground = new LabelStyle(getSkin().get(LabelStyle.class));
+    blackBackground.background = 
+        new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, Color.BLACK));
     
     for (int i = 0; i < resources.size; i++) {
       Table resource = new Table(getSkin());
@@ -244,8 +260,8 @@ public class DomainHomeScreen extends AbstractScreen {
       resource.row();
       Label attributionLabel = 
           new Label(getMsg().getString("ScienceEngine.From") + ": " + 
-                    attribution + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
-                    description, getSkin());
+                    attribution + "\n\n\n" +  //$NON-NLS-1$ //$NON-NLS-2$
+                    description, blackBackground);
       attributionLabel.setAlignment(Align.top, Align.left);
       attributionLabel.setWrap(true);
       ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
@@ -259,7 +275,7 @@ public class DomainHomeScreen extends AbstractScreen {
           .height(ScreenComponent.getScaledY(RESOURCE_INFO_HEIGHT))
           .left()
           .top()
-          .pad(0, 5, 0, 5)
+          .pad(0, 5, 5, 5)
           .colspan(3);
       resource.row();
       resourcesTable.add(resource).top().left();
