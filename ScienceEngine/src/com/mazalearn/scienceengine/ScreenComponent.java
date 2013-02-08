@@ -4,26 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
-enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true), 
-             TOP(480, false), BOTTOM(0, false), MIDDLE(240, false);
-  int base;
-  private boolean xDimension;
-  
-  float getValue(int offset) {
-    return base + (xDimension ? ScreenComponent.X_SCALE : ScreenComponent.Y_SCALE) * offset;
-  }
-  
-  private Align(int base, boolean xDimension) { 
-    this.base = base;
-    this.xDimension = xDimension;
-  }
-};
-
 public enum ScreenComponent implements IComponentType {
   Background(Align.LEFT, 0, Align.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
   Prober(Align.LEFT, 0, Align.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
-  Title(Align.CENTER, 0, Align.TOP, -2, 0, 0, Color.WHITE, true, false),
-  Status(Align.CENTER, 0, Align.BOTTOM, 2, 0, 0, Color.WHITE, true, false),
+  Title(Align.CENTER, 0, Align.TOP, -10, 0, 0, Color.WHITE, true, false),
+  Status(Align.CENTER, 0, Align.BOTTOM, 10, 0, 0, Color.WHITE, true, false),
   User(Align.RIGHT, -70, Align.TOP, -2, 20, 30, Color.WHITE, true, false),
   Back(Align.LEFT, 0, Align.TOP, 0, 70, 30, Color.CLEAR, true, false), 
   ViewControls(Align.LEFT, 81, Align.TOP, 0, 0, 0, Color.CLEAR, true, true),
@@ -33,7 +18,23 @@ public enum ScreenComponent implements IComponentType {
   NextButton(Align.CENTER, 108, Align.TOP, -50, 0, 0, Color.CLEAR, false, false),
   ;
   
-  private int xOffset, yOffset;
+  enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true), 
+    TOP(480, false), BOTTOM(0, false), MIDDLE(240, false);
+
+  int base;
+    private boolean xDimension;
+    
+    float getValue(int offset) {
+      return base + (xDimension ? ScreenComponent.X_SCALE : ScreenComponent.Y_SCALE) * offset;
+    }
+    
+    private Align(int base, boolean xDimension) { 
+      this.base = base;
+      this.xDimension = xDimension;
+    }
+  };
+
+private int xOffset, yOffset;
   private Color color;
   private boolean inAllScreens;
   private boolean helpTour;

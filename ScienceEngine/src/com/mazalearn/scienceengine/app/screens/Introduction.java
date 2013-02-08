@@ -115,15 +115,15 @@ public class Introduction extends Group {
     addActor(arrow);
     
     Image closeImage = new Image(new Texture("images/close.png"));
-    closeImage.setSize(closeImage.getWidth() * 0.75f, closeImage.getHeight() * 0.75f);
+    closeImage.setSize(closeImage.getWidth() * 0.50f, closeImage.getHeight() * 0.50f);
     closeImage.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
         stage.getRoot().removeActor(Introduction.this);
       }      
     });
-
-    final TextButton contentButton = new TextButton(contents + "\n\n\n", skin);
+    contents = contents + "\n\n\n\n";
+    final TextButton contentButton = new TextButton(contents, skin);
     contentButton.getLabel().setWrap(true);
     contentButton.addListener(new DragListener() {
       public void touchDragged (InputEvent event, float x, float y, int pointer) {
