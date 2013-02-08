@@ -108,8 +108,6 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
 
         @Override
         public void onResponseReceived(Request request, Response response) {
-          // TODO Auto-generated method stub
-          
         }
       });
     } catch (RequestException e) {

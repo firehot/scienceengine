@@ -21,6 +21,7 @@ import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guide;
 import com.mazalearn.scienceengine.guru.Guru;
@@ -30,6 +31,7 @@ public abstract class AbstractScience2DController implements
     IScience2DController {
 
   protected ModelControls modelControls;
+  protected ViewControls viewControls;
   protected IScience2DModel science2DModel;
   protected IScience2DView science2DView;
   protected Skin skin;
@@ -47,7 +49,9 @@ public abstract class AbstractScience2DController implements
       AbstractScience2DView science2DView) {
     this.science2DModel = science2DModel;
     this.science2DView = science2DView;
-    this.modelControls = science2DView.setupControls();
+    science2DView.setupControls();
+    this.modelControls = science2DView.getModelControls();
+    this.viewControls = science2DView.getViewControls();
   }
   
   @Override
@@ -76,6 +80,11 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
+  public ViewControls getViewControls() {
+    return viewControls;
+  }
+  
+  @Override
   public Skin getSkin() {
     return skin;
   }
@@ -90,11 +99,13 @@ public abstract class AbstractScience2DController implements
   public Guru getGuru() {
     if (guru == null) {
       Stage stage = (Stage) science2DView;
-      guru = new Guru(skin, this, modelControls);
+      guru = new Guru(skin, this);
       // Move control Panel to top - so it will be above others
       stage.getRoot().addActor(modelControls);
       // Move back button to top also - so it will be accessible
-      stage.getRoot().addActor(stage.getRoot().findActor(ScreenComponent.Back.name()));
+      Actor backButton = stage.getRoot().findActor(ScreenComponent.Back.name());
+      if (backButton != null) // TODO: required only for level editor - why?
+      stage.getRoot().addActor(backButton);
       // Add guru before modelcontrols so that controls are accessible.
       stage.getRoot().addActorBefore(modelControls, guru);
     }

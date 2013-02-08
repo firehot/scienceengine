@@ -113,13 +113,15 @@ public abstract class AbstractScreen implements Screen {
   }
 
   private void setupBackground(Stage stage) {
-    setBackgroundColor(Color.CLEAR);
+    setBackgroundColor(ScreenComponent.Background.getColor());
     // retrieve the splash image's region from the atlas
     AtlasRegion background = getAtlas().findRegion(
         "splash-screen/splash-background"); //$NON-NLS-1$
     Image bgImage = new Image(background);
-    bgImage.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+    bgImage.setName(ScreenComponent.Background.name());
+    bgImage.setSize(ScreenComponent.Background.getWidth(), ScreenComponent.Background.getHeight());
     // Background should be behind everything else on stage.
+    // TODO: set up with other screen components and ensure it is first inserted actor.
     if (stage.getActors().size > 0) {
       stage.getRoot().addActorBefore(stage.getActors().get(0), bgImage);
     } else {
@@ -127,12 +129,6 @@ public abstract class AbstractScreen implements Screen {
     }
   }
 
-  public void layoutScreen(Stage stage) {
-    if (stage.getRoot().findActor(ScreenComponent.Title.name()) != null) return;
-    setupBackground(stage);
-    setupScreenComponents(stage);
-  }
-  
   private void setupScreenComponents(Stage stage) {
     // Register stage components
     for (ScreenComponent screenComponent: ScreenComponent.values()) {
@@ -157,10 +153,10 @@ public abstract class AbstractScreen implements Screen {
         Table table = new Table(skin);
         table.setName(screenComponent.name());
         Image image = new Image(new Texture("images/user.png"));
-        image.setSize(ScreenComponent.getScaledX(30), ScreenComponent.getScaledY(30));
+        image.setSize(screenComponent.getWidth(), screenComponent.getHeight());
         table.add(image)
-            .width(ScreenComponent.getScaledX(20))
-            .height(ScreenComponent.getScaledX(30));
+            .width(screenComponent.getWidth())
+            .height(screenComponent.getHeight());
         table.add(text);
         table.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
@@ -186,7 +182,7 @@ public abstract class AbstractScreen implements Screen {
         style.font = skin.getFont("default-font");
         backButton.setStyle(style);
         backButton.setName(screenComponent.name());
-        backButton.setSize(ScreenComponent.getScaledX(70), ScreenComponent.getScaledY(30));
+        backButton.setSize(screenComponent.getWidth(), screenComponent.getHeight());
         backButton.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -199,7 +195,6 @@ public abstract class AbstractScreen implements Screen {
         Actor actor = stage.getRoot().findActor(ScreenComponent.ViewControls.name());
         if (actor == null) {
           ViewControls viewControls = new ViewControls(getSkin());
-          viewControls.addActivityControls();
           actor = viewControls;
         }
         return actor;
@@ -208,7 +203,13 @@ public abstract class AbstractScreen implements Screen {
     return null;
   }
 
-protected Table getTable() {
+  public void layoutScreen(Stage stage) {
+    if (stage.getRoot().findActor(ScreenComponent.Title.name()) != null) return;
+    setupBackground(stage);
+    setupScreenComponents(stage);
+  }
+  
+  protected Table getTable() {
     if (table == null) {
       table = new Table(getSkin());
       table.setFillParent(true);

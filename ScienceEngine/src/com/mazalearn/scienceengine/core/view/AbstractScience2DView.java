@@ -198,10 +198,9 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     this.addActor(goButton);
   }
 
-  public ModelControls setupControls() {
+  public void setupControls() {
     // Create view and model controls
     this.viewControls = new ActivityViewControls(science2DController, skin);
-    viewControls.addActivityControls();
     this.addActor(viewControls);
 
     this.modelControls = new ModelControls(science2DModel, skin);
@@ -214,7 +213,9 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       ScienceEngine.displayStatusMessage(this, 
           "Partial Demo only. Best experienced on Android/iPad Tablet.");
     }
-    
+  }
+  
+  public ModelControls getModelControls() {
     return modelControls;
   }
 
@@ -222,37 +223,33 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-up.png")));
     Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-down.png")));
     goButton = new Button(up, down, down);
-    goButton.setSize(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60));
+    ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
+    goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
-        if (isChallengeInProgress) {
-          isChallengeInProgress = false;
-          ScreenComponent goButtonTo = ScreenComponent.GoButtonUp;
-          goButton.addAction(Actions.parallel(
-              Actions.moveTo(goButtonTo.getX(ScreenComponent.getScaledX(60)), 
-                  goButtonTo.getY(ScreenComponent.getScaledY(60)), 1),
-              Actions.sizeTo(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60), 1)));
-          challenge(false);
-        } else {
-          isChallengeInProgress = true;
-          ScreenComponent goButtonTo = ScreenComponent.GoButtonDown;
-          goButton.addAction(Actions.parallel(
-              Actions.moveTo(goButtonTo.getX(ScreenComponent.getScaledX(30)), 
-                  goButtonTo.getY(ScreenComponent.getScaledY(30)), 1),
-              Actions.sizeTo(ScreenComponent.getScaledX(30), ScreenComponent.getScaledY(30), 1)));
-          challenge(true);
-        }
+        isChallengeInProgress = !isChallengeInProgress;
+        ScreenComponent goButtonTo = 
+            isChallengeInProgress ? ScreenComponent.GoButtonDown : ScreenComponent.GoButtonUp;
+        goButton.addAction(Actions.parallel(
+            Actions.moveTo(goButtonTo.getX(goButtonTo.getWidth()), 
+                goButtonTo.getY(goButtonTo.getHeight()), 1),
+            Actions.sizeTo(goButtonTo.getWidth(), goButtonTo.getHeight(), 1)));
+        challenge(isChallengeInProgress);
       }
     });
     
     this.addActor(goButton);
-    ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
     goButton.setPosition(goButtonUp.getX(goButton.getWidth()), goButtonUp.getY(goButton.getHeight()));
   }
 
   @Override
   public void checkGuruProgress() {
     science2DController.getGuru().checkProgress();
+  }
+
+  @Override
+  public ViewControls getViewControls() {
+    return viewControls;
   }
   
 }

@@ -37,4 +37,8 @@ public interface IScience2DView extends IDoneCallback {
   public BitmapFont getFont();
   // Commands available for this view
   List<IModelConfig<?>> getCommands();
+  // Get model controls for this view
+  public ModelControls getModelControls();
+  // Get view controls for this view
+  ViewControls getViewControls();
 }

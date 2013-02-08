@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guru;
 
@@ -28,4 +29,6 @@ public interface IScience2DController {
       Array<?> configs, int deltaSuccessScore, int deltaFailureScore);
   // Skin used in this invocation
   Skin getSkin();
+  // Return view controls
+  public ViewControls getViewControls();
 }

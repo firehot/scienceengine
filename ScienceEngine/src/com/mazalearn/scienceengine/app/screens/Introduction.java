@@ -106,6 +106,7 @@ public class Introduction extends Group {
     stage.addActor(this);
     // Move backbutton to top
     Actor backButton = stage.getRoot().findActor(ScreenComponent.Back.name());
+    if (backButton != null) // TODO: required for level editor only - why?
     stage.addActor(backButton);
     
     Image arrow = new Image(new Texture("images/fieldarrow-yellow.png"));

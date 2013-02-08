@@ -14,6 +14,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 
 public class LevelLoader {
@@ -22,6 +23,7 @@ public class LevelLoader {
   private IScience2DView science2DView;
   private IScience2DModel science2DModel;
   private ModelControls modelControls;
+  private ViewControls viewControls;
   private int level;
   private OrderedMap<String, ?> rootElem;
   private ComponentLoader componentLoader;
@@ -33,6 +35,7 @@ public class LevelLoader {
     this.science2DView = science2DController.getView();
     this.science2DModel = science2DController.getModel();
     this.modelControls = science2DController.getModelControls();
+    this.viewControls = science2DController.getViewControls();
     componentLoader = new ComponentLoader(science2DController);
     tutorLoader = new TutorLoader(science2DController);
   }
@@ -59,7 +62,7 @@ public class LevelLoader {
   
   public void loadFromJson() {
     Gdx.app.log(ScienceEngine.LOG, "Loading from json");
-    readLevelInfo(rootElem);
+    // readLevelInfo(rootElem);
     componentLoader.loadComponents((Array<?>) rootElem.get("components"), true);
     GroupLoader.loadGroups((Array<?>) rootElem.get("groups"), science2DView);
     CircuitLoader.loadCircuits((Array<?>) rootElem.get("circuits"), science2DModel);
@@ -79,6 +82,7 @@ public class LevelLoader {
     componentLoader.loadComponents((Array<?>) rootElem.get("components"), false);
     ConfigLoader.loadConfigs((Array<?>) rootElem.get("configs"), science2DModel);
     modelControls.enableControls(true);
+    viewControls.enableControls(true);
     modelControls.refresh();
   }
   

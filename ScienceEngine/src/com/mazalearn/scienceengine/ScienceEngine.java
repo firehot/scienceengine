@@ -372,6 +372,7 @@ public class ScienceEngine extends Game {
 
   public static void displayStatusMessage(IScience2DView stage, String message) {
     Label status = (Label) stage.findActor(ScreenComponent.Status.name());
+    if (status != null) // TODO: only for level editor - why?
     status.setText(message);
   }
 
@@ -379,6 +380,10 @@ public class ScienceEngine extends Game {
     isProbeMode = probeMode;
   }
 
+  /**
+   * Is activity in prober mode?
+   * @return
+   */
   public static boolean isProbeMode() {
     return isProbeMode;
   }

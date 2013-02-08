@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
@@ -67,6 +68,8 @@ public class Messages implements IMessage {
     style3.font = font;
     SelectBoxStyle style4 = skin.get(SelectBoxStyle.class);
     style4.font = font;
+    TextField.TextFieldStyle style5 = skin.get(TextField.TextFieldStyle.class);
+    style5.font = font;
     skin.add("default-font", font);
   }
 

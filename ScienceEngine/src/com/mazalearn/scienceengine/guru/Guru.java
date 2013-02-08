@@ -17,6 +17,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ModelControls;
+import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
  * Cycles through the eligible registeredTutors - probing the user with each one.
@@ -38,9 +39,9 @@ public class Guru extends Group implements IDoneCallback {
   private int deltaSuccessScore;
   private int deltaFailureScore;
   private IScience2DController science2DController;
+  private ViewControls viewControls;
   
-  public Guru(final Skin skin, IScience2DController science2DController, 
-      ModelControls modelControls) {
+  public Guru(final Skin skin, IScience2DController science2DController) {
     super();
     this.science2DController = science2DController;
 
@@ -55,7 +56,8 @@ public class Guru extends Group implements IDoneCallback {
     
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
-    this.modelControls = modelControls;
+    this.modelControls = science2DController.getModelControls();
+    this.viewControls = science2DController.getViewControls();
      
     this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
     this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
@@ -85,7 +87,7 @@ public class Guru extends Group implements IDoneCallback {
     excludedActors.clear();
     excludedActors.add(dashboard);
     for (Actor actor: science2DController.getView().getActors()) {
-      if (actor.isVisible() && actor != this) {
+      if (actor.isVisible() && actor != this && !ScreenComponent.Background.name().equals(actor.getName())) {
         excludedActors.add(actor);
       }
     }
@@ -199,6 +201,7 @@ public class Guru extends Group implements IDoneCallback {
     modelControls.refresh();
     // Turn off access to parts of control panel
     modelControls.enableControls(enableControls);
+    viewControls.enableControls(enableControls);
   }
 
   public void setGoal(String text) {

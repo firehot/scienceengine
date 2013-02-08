@@ -29,12 +29,12 @@ public class ActivityScreen extends AbstractScreen {
   private IScience2DController science2DController;
   private Profile profile;
   private String domain;
-  private String activityDescription;
+  private int activityLevel;
 
   public ActivityScreen(ScienceEngine scienceEngine, String domain, int activityLevel) {
     super(scienceEngine, null);
     this.domain = domain;
-    this.activityDescription = getMsg().getString(domain + "." + activityLevel + ".Description");
+    this.activityLevel = activityLevel;
     String fileName = LevelUtil.getLevelFilename(domain, ".json", activityLevel);
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       ScienceEngine.assetManager.unload(fileName);
@@ -48,7 +48,7 @@ public class ActivityScreen extends AbstractScreen {
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
-      // ((Stage) science2DView).addActor(createBackButton());
+      //((Stage) science2DView).addActor(createBackButton());
       this.setStage(levelEditor);
     } else {
       this.setStage((Stage) science2DView);
@@ -71,8 +71,11 @@ public class ActivityScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
+    String title = getMsg().getString(domain + "." + activityLevel + ".Name");
+    setTitle(title);
     if (ScienceEngine.DEV_MODE == ScienceEngine.DevMode.DEBUG) return;
-    new Introduction(getStage(), getSkin(), activityDescription);
+    String description = getMsg().getString(domain + "." + activityLevel + ".Description");
+    new Introduction(getStage(), getSkin(), description);
   }
   
   @Override

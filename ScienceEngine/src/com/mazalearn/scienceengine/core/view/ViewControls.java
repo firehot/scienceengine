@@ -51,6 +51,7 @@ public class ViewControls extends Table implements IControl {
     viewControlPanel = createViewControlPanel(skin);
     this.add(viewControlPanel);
     setActivated(isActivated);
+    addActivityControls();
   }
   
   private IMessage getMsg() {
@@ -89,7 +90,7 @@ public class ViewControls extends Table implements IControl {
     viewControlPanel.setVisible(isActivated);
   }
 
-  public void addActivityControls() {
+  private void addActivityControls() {
     // Add options dialog for controlling language, music, sound.
     Button optionsButton = new TextButton(
         getMsg().getString("ScienceEngine.Options") + "...", skin, "body");
@@ -103,6 +104,5 @@ public class ViewControls extends Table implements IControl {
     
     viewControlPanel.add(optionsButton);
     viewControlPanel.row();    
-    syncWithModel();
  }
 }

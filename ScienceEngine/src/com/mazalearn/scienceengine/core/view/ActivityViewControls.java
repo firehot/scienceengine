@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.core.view;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
@@ -20,20 +21,20 @@ public class ActivityViewControls extends ViewControls {
     super(skin);
     this.science2DController = science2DController;
     this.science2DView = science2DController.getView();
+    addActivityControls();
   }
   
   private IMessage getMsg() {
     return messages;
   }
   
-  @Override
-  public void addActivityControls() {
+  private void addActivityControls() {
     // Add pause/resume functionality for the activity
     AbstractModelConfig<Boolean> pauseResumeModelConfig = 
         new AbstractModelConfig<Boolean>(null, Parameter.PauseResume) { //$NON-NLS-1$ //$NON-NLS-2$
           public void setValue(Boolean value) { setActivated(false); science2DView.suspend(value); }
           public Boolean getValue() { return science2DView.isSuspended(); }
-          public boolean isPossible() { return true; }
+          public boolean isPossible() { return !ScienceEngine.isProbeMode(); }
     };
     suspendControl = new ToggleButtonControl(pauseResumeModelConfig, skin, "body") {
       public void syncWithModel() {
@@ -48,7 +49,7 @@ public class ActivityViewControls extends ViewControls {
     AbstractModelConfig<String> resetModelConfig = 
         new AbstractModelConfig<String>(null, Parameter.Reset) { //$NON-NLS-1$ //$NON-NLS-2$
           public void doCommand() { setActivated(false); science2DController.reset(); }
-          public boolean isPossible() { return true; }
+          public boolean isPossible() { return !ScienceEngine.isProbeMode(); }
     };
     resetControl = new CommandButtonControl(resetModelConfig, skin, "body");
 
@@ -56,7 +57,6 @@ public class ActivityViewControls extends ViewControls {
     viewControlPanel.row();
     viewControlPanel.add(suspendControl.getActor());
     viewControlPanel.row();
-    super.addActivityControls();
     syncWithModel();
   }
   
@@ -68,7 +68,7 @@ public class ActivityViewControls extends ViewControls {
   public void enableControls(boolean enable) {
     suspendControl.getActor().setVisible(enable);
     resetControl.getActor().setVisible(enable);
-    this.invalidate();
+    super.enableControls(enable);
   }
 
   @Override

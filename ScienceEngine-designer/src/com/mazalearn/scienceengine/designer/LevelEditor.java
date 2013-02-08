@@ -549,7 +549,7 @@ public class LevelEditor extends Stage {
     // Draw outline for actor
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
-    if (actor == modelControls) {
+    if (actor == modelControls && false) { // modelcontrols does not have title
       // Bounding box only for goal cell
       Actor title = modelControls.getTitle();
       shapeRenderer.rect(actor.getX() - modelControls.getPrefWidth()/2, 

@@ -7,6 +7,7 @@ enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true),
              TOP(480, false), BOTTOM(0, false), MIDDLE(240, false);
   int base;
   private boolean xDimension;
+  
   float getValue(int offset) {
     return base + (xDimension ? ScreenComponent.X_SCALE : ScreenComponent.Y_SCALE) * offset;
   }
@@ -18,15 +19,17 @@ enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true),
 };
 
 public enum ScreenComponent implements IComponentType {
-  Title(Align.CENTER, 0, Align.TOP, -5, Color.WHITE, true, false),
-  Status(Align.CENTER, 0, Align.BOTTOM, 5, Color.WHITE, true, false),
-  User(Align.RIGHT, -70, Align.TOP, -2, Color.WHITE, true, false),
-  Back(Align.LEFT, 0, Align.TOP, 0, Color.CLEAR, true, false), 
-  ViewControls(Align.LEFT, 81, Align.TOP, 0, Color.CLEAR, true, true),
-  ModelControls(Align.RIGHT, -20, Align.MIDDLE, 0, Color.CLEAR, false, true),
-  GoButtonUp(Align.LEFT, 10, Align.MIDDLE, 0, Color.CLEAR, false, true),
-  GoButtonDown(Align.LEFT, 120, Align.TOP, 0, Color.CLEAR, false, false),
-  NextButton(Align.CENTER, 108, Align.TOP, -50, Color.CLEAR, false, false),
+  Background(Align.LEFT, 0, Align.BOTTOM, 0, 800, 480, Color.CLEAR, false, false),
+  Prober(Align.LEFT, 0, Align.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
+  Title(Align.CENTER, 0, Align.TOP, -5, 0, 0, Color.WHITE, true, false),
+  Status(Align.CENTER, 0, Align.BOTTOM, 5, 0, 0, Color.WHITE, true, false),
+  User(Align.RIGHT, -70, Align.TOP, -2, 20, 30, Color.WHITE, true, false),
+  Back(Align.LEFT, 0, Align.TOP, 0, 70, 30, Color.CLEAR, true, false), 
+  ViewControls(Align.LEFT, 81, Align.TOP, 0, 0, 0, Color.CLEAR, true, true),
+  ModelControls(Align.RIGHT, -20, Align.MIDDLE, 0, 0, 0, Color.CLEAR, false, true),
+  GoButtonUp(Align.LEFT, 10, Align.MIDDLE, 0, 60, 60, Color.CLEAR, false, true),
+  GoButtonDown(Align.LEFT, 120, Align.TOP, 0, 30, 30, Color.CLEAR, false, false),
+  NextButton(Align.CENTER, 108, Align.TOP, -50, 0, 0, Color.CLEAR, false, false),
   ;
   
   private int xOffset, yOffset;
@@ -34,6 +37,8 @@ public enum ScreenComponent implements IComponentType {
   private boolean inAllScreens;
   private boolean helpTour;
   private Align alignX, alignY;
+  private int width;
+  private int height;
   public static final int PIXELS_PER_M = 8;
   
   static float X_SCALE;
@@ -52,18 +57,37 @@ public enum ScreenComponent implements IComponentType {
    * @param xOffset - xOffset offset
    * @param alignY - part of screen wrt which Y offset is specified - LEFT, CENTER, RIGHT
    * @param yOffset - yOffset offset
+   * @param width - canonical width - 0 indicates self-adjusting
+   * @param height - canonical height - 0 indicates self-adjusting
    * @param color - color of component
    * @param inAllScreens - whether this is present in all screens
    * @param helpTour - whether this component should be part of help tour
    */
-  private ScreenComponent(Align alignX, int xOffset, Align alignY, int yOffset, Color color, boolean inAllScreens, boolean helpTour) {
+  private ScreenComponent(Align alignX, int xOffset, Align alignY, int yOffset, 
+      int width, int height, Color color, boolean inAllScreens, boolean helpTour) {
     this.alignX = alignX;
     this.xOffset = xOffset;
     this.alignY = alignY;
     this.yOffset = yOffset;
+    this.width = width;
+    this.height = height;
     this.color = color;
     this.inAllScreens = inAllScreens;
     this.helpTour = helpTour;
+  }
+  
+  /**
+   * @return scaled width
+   */
+  public float getWidth() {
+    return width * X_SCALE;
+  }
+  
+  /**
+   * @return scaled height
+   */
+  public float getHeight() {
+    return height * Y_SCALE;
   }
   
   public float getX(float width) {
