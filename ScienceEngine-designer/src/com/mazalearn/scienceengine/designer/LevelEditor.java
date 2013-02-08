@@ -544,17 +544,8 @@ public class LevelEditor extends Stage {
 
   private void drawBoundingBox(Actor actor, boolean selected) {
     // Draw outline for actor
-    shapeRenderer.begin(ShapeType.Rectangle);
+    shapeRenderer.begin(ShapeType.Line);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
-    if (actor == modelControls && false) { // modelcontrols does not have title
-      // Bounding box only for goal cell
-      Actor title = modelControls.getTitle();
-      shapeRenderer.rect(actor.getX() - modelControls.getPrefWidth()/2, 
-          actor.getY() + modelControls.getPrefHeight()/2 - title.getHeight(), 
-          title.getWidth(), title.getHeight());
-      shapeRenderer.end();
-      return;
-    }
     shapeRenderer.rect(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
 
     // Draw handle for changing the size of the actor
@@ -565,16 +556,14 @@ public class LevelEditor extends Stage {
     shapeRenderer.end();
     
     // Draw handle for rotation
-    shapeRenderer.begin(ShapeType.FilledRectangle);
+    shapeRenderer.begin(ShapeType.Filled);
     shapeRenderer.setColor(Color.GREEN);
-    shapeRenderer.filledRect(actor.getX() + actor.getWidth() - handleSize.x, actor.getY(), 
+    shapeRenderer.rect(actor.getX() + actor.getWidth() - handleSize.x, actor.getY(), 
         handleSize.x, handleSize.y);
-    shapeRenderer.end();
     
     // Draw origin
-    shapeRenderer.begin(ShapeType.FilledCircle);
     shapeRenderer.setColor(Color.GREEN);
-    shapeRenderer.filledCircle(actor.getX() + actor.getOriginX(), 
+    shapeRenderer.circle(actor.getX() + actor.getOriginX(), 
         actor.getY() + actor.getOriginY(), handleSize.x / 2);
     shapeRenderer.end();
   }

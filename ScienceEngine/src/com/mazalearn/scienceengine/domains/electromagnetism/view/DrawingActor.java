@@ -200,7 +200,7 @@ public class DrawingActor extends Science2DActor {
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     shapeRenderer.identity();
     shapeRenderer.translate(getX(), getY(), 0);
-    shapeRenderer.begin(ShapeType.Rectangle);
+    shapeRenderer.begin(ShapeType.Line);
     shapeRenderer.setColor(Color.YELLOW);
     
     // Draw wheel areas
@@ -214,7 +214,7 @@ public class DrawingActor extends Science2DActor {
 
     // Draw user's drawing
     shapeRenderer.setColor(Color.WHITE);
-    shapeRenderer.begin(ShapeType.FilledRectangle);
+    shapeRenderer.begin(ShapeType.Filled);
     for (List<Vector2> pointSequence: pointSequences) {
       if (pointSequence.size() < 1) continue;
       prevPos.set(pointSequence.get(0));
@@ -223,7 +223,7 @@ public class DrawingActor extends Science2DActor {
         shapeRenderer.translate(prevPos.x * ScreenComponent.PIXELS_PER_M, 
             prevPos.y * ScreenComponent.PIXELS_PER_M, 0);
         shapeRenderer.rotate(0, 0, 1, pos.angle());
-        shapeRenderer.filledRect(0, 0, pos.len() * ScreenComponent.PIXELS_PER_M, LINE_WIDTH);
+        shapeRenderer.rect(0, 0, pos.len() * ScreenComponent.PIXELS_PER_M, LINE_WIDTH);
         shapeRenderer.rotate(0, 0, 1, -pos.angle());
         shapeRenderer.translate(-prevPos.x * ScreenComponent.PIXELS_PER_M, 
             -prevPos.y * ScreenComponent.PIXELS_PER_M, 0);
