@@ -1,12 +1,8 @@
 <project name="gdx" default="convert" basedir=".">
 	<property environment="env"/>
-	<property name="IKVM_HOME" value="${env.IKVM_HOME}"/>
+  <property file="convert.properties" />
+	<property name="IKVM_HOME" value="libs/ios/ikvm"/>
 	<property name="MONO_HOME" value="/Developer/MonoTouch/usr/lib/mono/2.1"/>
-	<property name="IN" value="-recurse:target/core/*.class"/>
-	<property name="OUT" value="gdx.dll"/>
-	<property name="SRC" value="src/"/>
-	<property name="CLASSPATH" value=""/>
-	<property name="EXCLUDE" value=""/>
 
 	<target name="compile">
 		<delete dir="target"/>
