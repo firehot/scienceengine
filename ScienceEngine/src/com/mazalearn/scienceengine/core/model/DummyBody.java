@@ -26,6 +26,7 @@ public class DummyBody extends Science2DBody {
 
     public void setConfigParameter(IParameter parameter) {
       this.parameter = parameter;
+      setPermitted(parameter != Parameter.Select);
     }
   }
 
@@ -41,7 +42,7 @@ public class DummyBody extends Science2DBody {
   
   @Override
   public boolean allowsConfiguration() {
-    return false;
+    return true;
   }
 
   public void setConfigParameter(IParameter parameter, float value) {

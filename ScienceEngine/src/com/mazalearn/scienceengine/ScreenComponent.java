@@ -6,6 +6,8 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ScreenComponent implements IComponentType {
   Background(Align.LEFT, 0, Align.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
+  Dashboard(Align.CENTER, 0, Align.TOP, -3, 0, 0, Color.BLACK, false, false),
+  ShoppingCart(Align.LEFT, 40, Align.TOP, -50, 50, 50, Color.BLACK, false, false),
   Prober(Align.LEFT, 0, Align.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
   Title(Align.CENTER, 0, Align.TOP, -10, 0, 0, Color.WHITE, true, false),
   Status(Align.CENTER, 0, Align.BOTTOM, 10, 0, 0, Color.WHITE, true, false),

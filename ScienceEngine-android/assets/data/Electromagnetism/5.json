@@ -21,6 +21,7 @@ plan: [
         goal: "Explore how induced current changes with change of different parameters.",
         success: 200,
         timelimit: 300,
+        configs: [{name: "BarMagnet.MovementMode", permitted: true, value:"Move"}],
         subgoals:[
           {goal: "Does movement of magnet affect the induced current?",
            postcondition: "Count(BarMagnet.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1",
@@ -57,7 +58,8 @@ plan: [
    {type: "Abstractor", 
         goal:"Select those variables in the shopping cart which affect the magnitude of induced EMF. You have 3 tries.",
         configs: [{name: "BarMagnet.MovementMode", permitted: false, value:"Rotate"},
-                  {name: "BarMagnet.RotationAngle", permitted: false, value:0}
+                  {name: "BarMagnet.RotationAngle", permitted: false, value:0},
+                  {name: "BarMagnet.RotationVelocity", permitted: true},
                  ],
         parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],
         success: 5000

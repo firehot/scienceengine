@@ -147,7 +147,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       this.addActor(dontCare);      
     } else {
       image.setX(ScreenComponent.getScaledX(700) - image.getWidth()/2);
-      image.setY(ScreenComponent.getScaledY(175) - image.getHeight()/2);
+      image.setY(ScreenComponent.getScaledY(250) - image.getHeight()/2);
      
       Image decrease = createResultImage("images/fieldarrow.png", 2);
       decrease.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);

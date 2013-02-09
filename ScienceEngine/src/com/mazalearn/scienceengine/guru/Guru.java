@@ -51,8 +51,8 @@ public class Guru extends Group implements IDoneCallback {
     
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
-    dashboard.setY(ScreenComponent.VIEWPORT_HEIGHT - dashboard.getPrefHeight() / 2);
-    dashboard.setX(ScreenComponent.VIEWPORT_WIDTH/2);
+    dashboard.setX(ScreenComponent.Dashboard.getX(dashboard.getPrefWidth()) + dashboard.getPrefWidth() / 2);
+    dashboard.setY(ScreenComponent.Dashboard.getY(dashboard.getPrefHeight()) + dashboard.getPrefHeight() / 2);
     
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
@@ -105,6 +105,7 @@ public class Guru extends Group implements IDoneCallback {
   public void endChallenge() {
     // Reinitialize current prober, if any
     if (currentTutor != null) {
+      currentTutor.activate(false);
       currentTutor.reinitialize(false);
       currentTutor = null;
     }

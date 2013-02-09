@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.ScreenComponent;
 
 class Dashboard extends Table {
   TextButton goal, subGoal;
@@ -43,8 +44,6 @@ class Dashboard extends Table {
     subGoal.setColor(Color.YELLOW);
     subGoal.getLabel().setWrap(true);
     subGoal.setVisible(false);
-    // TODO: BUG in libgdx for wrapped labels ??? hence setting height
-    //subGoal.setSize(400, 50); 
     
     scoreLabel = new Label("0", skin);
 
@@ -66,16 +65,18 @@ class Dashboard extends Table {
     t.row();
     t.add("").width(40).fill().right();// t.add(timerLabel).width(40).fill().right();
     tutorTable.add(t).left();
-    tutorTable.add(goal).pad(0, 10, 0, 10).width(430).fill();
+    tutorTable.add(goal).pad(0, 10, 0, 10).width(ScreenComponent.getScaledX(430)).fill();
     goal.getLabel().setWrap(true);
     t = new Table(skin);
-    t.add("Score");
+    t.add("Score").top();
     t.row();
-    t.add(scoreLabel).width(40).fill().center();
-    tutorTable.add(t).right();
+    t.add(scoreLabel).width(40).fill().top();
+    tutorTable.add(t).right().top();
     tutorTable.row();
     tutorTable.add("");
-    tutorTable.add(subGoal).width(400).height(50);
+    tutorTable.add(subGoal)
+        .width(ScreenComponent.getScaledX(400))
+        .height(ScreenComponent.getScaledY(50));
     return tutorTable;
   }
   

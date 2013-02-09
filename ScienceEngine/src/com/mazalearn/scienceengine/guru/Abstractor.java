@@ -71,8 +71,9 @@ public class Abstractor extends AbstractTutor {
     // TODO: Create cart as a screencomponent
     Texture shoppingCartTexture = new Texture("images/shoppingcart.png");
     final Image cart = new Image(shoppingCartTexture);
-    cart.setSize(ScreenComponent.getScaledX(50), ScreenComponent.getScaledY(50));
-    cart.setPosition(ScreenComponent.getScaledX(40), ScreenComponent.getScaledY(-40));
+    cart.setSize(ScreenComponent.ShoppingCart.getWidth(), ScreenComponent.ShoppingCart.getHeight());
+    cart.setPosition(ScreenComponent.ShoppingCart.getX(cart.getWidth()), 
+        ScreenComponent.ShoppingCart.getY(cart.getHeight()));
     cart.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         configTable.setVisible(!configTable.isVisible());
@@ -97,16 +98,18 @@ public class Abstractor extends AbstractTutor {
         });
       }
     }
+    // Shuffle parameters
     shuffle(checkBoxList);
+    // Add parameters to table
     for (CheckBox checkBox: checkBoxList) {
       configTable.add(checkBox).left().colspan(4);
       configTable.row();      
     }
-    // Shuffle rows
+    // Add lives to table
     for (int i = 0; i < 3; i++) {
       life[i] = new Image(shoppingCartTexture);
-      life[i].setSize(ScreenComponent.getScaledX(25), ScreenComponent.getScaledY(25));
-      configTable.add(life[i]).width(ScreenComponent.getScaledX(25));
+      life[i].setSize(ScreenComponent.ShoppingCart.getWidth() / 2, ScreenComponent.ShoppingCart.getHeight() / 2);
+      configTable.add(life[i]).width(ScreenComponent.ShoppingCart.getWidth() / 2);
     }
     configTable.add(createDoneButton(skin)).fill();
     configTable.row();
