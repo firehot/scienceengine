@@ -3,7 +3,7 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="scienceengine-ios/Main.cs">
     <Files>
       <File FileName="scienceengine-ios/convert.properties" Line="6" Column="3" />
-      <File FileName="scienceengine-ios/Main.cs" Line="69" Column="5" />
+      <File FileName="scienceengine-ios/Main.cs" Line="12" Column="11" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -20,4 +20,7 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.scienceengine-ios>
+    <IPhoneSimulatorTarget-Debug_27CiPhoneSimulator Device="IPad" SdkVersion="6.1" />
+  </MonoDevelop.Ide.ItemProperties.scienceengine-ios>
 </Properties>
