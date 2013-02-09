@@ -141,8 +141,6 @@ public class ScienceEngine extends Game {
   public void create() {
     Gdx.app.log(ScienceEngine.LOG, "Creating Engine on " + Gdx.app.getType());
     Gdx.app.log(ScienceEngine.LOG, "With params " + uri);
-    // Resize to full screen
-    //Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode());
 
     // create the preferences Manager
     preferencesManager = new PreferencesManager();
