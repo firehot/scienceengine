@@ -27,7 +27,7 @@
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="${ProjectDir}"  externalConsole="True" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
@@ -273,6 +273,61 @@
     <Content Include="..\..\ScienceEngine-android\assets\images\back.png">
       <Link>images\back.png</Link>
     </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\splashbackground.png">
+      <Link>image-atlases\splashbackground.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\close.png">
+      <Link>images\close.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\go-down.png">
+      <Link>images\go-down.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\go-up.png">
+      <Link>images\go-up.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\settings.png">
+      <Link>images\settings.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\user.png">
+      <Link>images\user.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-12.fnt">
+      <Link>skin\arial-12.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-12.png">
+      <Link>skin\arial-12.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-16.fnt">
+      <Link>skin\arial-16.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-16.png">
+      <Link>skin\arial-16.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-20.fnt">
+      <Link>skin\arial-20.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-20.png">
+      <Link>skin\arial-20.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-26.fnt">
+      <Link>skin\arial-26.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-26.png">
+      <Link>skin\arial-26.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial.ttf">
+      <Link>skin\arial.ttf</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\uiskin1.atlas">
+      <Link>skin\uiskin1.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\uiskin1.json">
+      <Link>skin\uiskin1.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\uiskin1.png">
+      <Link>skin\uiskin1.png</Link>
+    </Content>
+    <None Include="convert.properties" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -611,9 +666,6 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\images\questionmark.png">
       <Link>images\questionmark.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\questionmark1.png">
-      <Link>images\questionmark1.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\images\rectangle_coil.png">
       <Link>images\rectangle_coil.png</Link>

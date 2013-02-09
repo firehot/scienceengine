@@ -78,6 +78,7 @@ namespace scienceengineios
 				config.useObjectAL = false;
 				config.preventScreenDimming = false;
 				config.displayScaleLargeScreenIfRetina = 0.5f;
+				config.useMonotouchOpenTK = true;
 				return config;
 			}
 		}
