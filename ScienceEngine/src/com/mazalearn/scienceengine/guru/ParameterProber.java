@@ -50,6 +50,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   private Image createResultImage(String path, float x, float y) {
     Image image = new Image(new Texture(path));
     image.setVisible(false);
+    image.setSize(ScreenComponent.getScaledX(image.getWidth()),
+        ScreenComponent.getScaledY(image.getHeight()));
     image.setPosition(x - image.getWidth() / 2, y - image.getHeight() / 2);
     image.setOrigin(0, image.getHeight() / 2);
     return image;
@@ -57,6 +59,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     
   private Image createResultImage(String path, float scale) {
     Image image = new Image(new Texture(path));
+    image.setSize(ScreenComponent.getScaledX(image.getWidth()),
+        ScreenComponent.getScaledY(image.getHeight()));
     image.setVisible(false);
     image.setSize(image.getWidth() * scale, image.getHeight() * scale);
     image.setOrigin(0, image.getHeight() / 2);
@@ -119,7 +123,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
 
     this.resultType = ResultType.valueOf(resultType);
     if (this.resultType == ResultType.Spin) {   
-      image.setX(ScreenComponent.VIEWPORT_WIDTH / 2 - image.getWidth() / 2 - 50);
+      image.setX(ScreenComponent.VIEWPORT_WIDTH / 2 - image.getWidth() / 2 - ScreenComponent.getScaledX(50));
       image.setY(ScreenComponent.VIEWPORT_HEIGHT / 2 - image.getHeight() / 2);
       
       Image clockwise = createResultImage("images/clockwise.png", 
@@ -142,8 +146,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       this.addActor(antiClockwise);
       this.addActor(dontCare);      
     } else {
-      image.setX(700 - image.getWidth()/2);
-      image.setY(175 - image.getHeight()/2);
+      image.setX(ScreenComponent.getScaledX(700) - image.getWidth()/2);
+      image.setY(ScreenComponent.getScaledY(175) - image.getHeight()/2);
      
       Image decrease = createResultImage("images/fieldarrow.png", 2);
       decrease.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);

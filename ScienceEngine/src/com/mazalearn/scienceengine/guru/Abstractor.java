@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -40,15 +41,13 @@ public class Abstractor extends AbstractTutor {
     super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.skin = skin;
     this.modelControls = modelControls;
+    /* Abstractor allows user to interact with bodies on screen as well as its
+       own GUI. But does not directly interact - hence size 0.  */
     this.setSize(0, 0);
   }
   
   /* (non-Javadoc)
    * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(float, float, float, float)
-   */
-  /**
-   * Abstractor allows user to interact with bodies on screen as well as its
-   * own GUI. But does not directly interact - hence size 0.
    */
   @Override
   public void reinitialize(boolean probeMode) {
@@ -67,12 +66,13 @@ public class Abstractor extends AbstractTutor {
   private void createConfigTable(IScience2DModel science2DModel, Skin skin) {
     configTable = new Table(skin);
     configTable.setName("Configs");
-    configTable.setPosition(150, 325);
+    configTable.setPosition(ScreenComponent.getScaledX(150), ScreenComponent.getScaledY(325));
     this.addActor(configTable);
+    // TODO: Create cart as a screencomponent
     Texture shoppingCartTexture = new Texture("images/shoppingcart.png");
     final Image cart = new Image(shoppingCartTexture);
-    cart.setSize(50, 50);
-    cart.setPosition(40, -40);
+    cart.setSize(ScreenComponent.getScaledX(50), ScreenComponent.getScaledY(50));
+    cart.setPosition(ScreenComponent.getScaledX(40), ScreenComponent.getScaledY(-40));
     cart.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         configTable.setVisible(!configTable.isVisible());
@@ -105,8 +105,8 @@ public class Abstractor extends AbstractTutor {
     // Shuffle rows
     for (int i = 0; i < 3; i++) {
       life[i] = new Image(shoppingCartTexture);
-      life[i].setSize(25, 25);
-      configTable.add(life[i]).width(25);
+      life[i].setSize(ScreenComponent.getScaledX(25), ScreenComponent.getScaledY(25));
+      configTable.add(life[i]).width(ScreenComponent.getScaledX(25));
     }
     configTable.add(createDoneButton(skin)).fill();
     configTable.row();

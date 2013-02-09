@@ -17,6 +17,7 @@ final class ScoreImage extends Image {
   ScoreImage(Texture texture, Skin skin, boolean success) {
     super(texture);
     this.setVisible(false);
+    setSize(ScreenComponent.getScaledX(getWidth()), ScreenComponent.getScaledY(getHeight()));
     this.success = success;
     font = skin.getFont("default-font");
   }
@@ -27,7 +28,7 @@ final class ScoreImage extends Image {
     this.setY(ScreenComponent.VIEWPORT_HEIGHT/2);
     this.score = score;
     this.setVisible(true);
-    float moveBy = success ? 10 : -10;
+    float moveBy = ScreenComponent.getScaledY(success ? 10 : -10);
     this.setRotation(-5f);
     this.addAction(
         Actions.repeat(20,

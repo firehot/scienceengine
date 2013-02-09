@@ -9,7 +9,7 @@ public class ProbeImage extends Image {
   
   public ProbeImage() {
     super(QUESTION_MARK);
-     this.addAction(
+    this.addAction(
         Actions.forever(
             Actions.sequence(
                 Actions.alpha(0.5f, 1f),
