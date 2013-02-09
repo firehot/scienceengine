@@ -32,7 +32,7 @@ public class CircuitActor extends Actor {
     batch.end();
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     // Draw the circuit
-    shapeRenderer.begin(ShapeType.Filled);
+    shapeRenderer.begin(ShapeType.FilledRectangle);
     shapeRenderer.setColor(Color.GREEN);
     for (int i = 1; i < circuit.size(); i++) {
       CircuitElement prev = circuit.get(i - 1);
@@ -60,20 +60,18 @@ public class CircuitActor extends Actor {
     // We will do Manhattan wiring covering shorter of deltax and deltay first, then the other
     if (Math.abs(delta.x) >= Math.abs(delta.y)) {
       shapeRenderer.rotate(0, 0, 1, delta.x < 0 ? 180 : 0);
-      shapeRenderer.rect(0, -WIRE_WIDTH/2, Math.abs(delta.x), WIRE_WIDTH);
+      shapeRenderer.filledRect(0, -WIRE_WIDTH/2, Math.abs(delta.x), WIRE_WIDTH);
       shapeRenderer.translate(Math.abs(delta.x), 0, 0);
       shapeRenderer.rotate(0, 0, 1, delta.x < 0 ? -180 : 0);
       shapeRenderer.rotate(0, 0, 1, delta.y < 0 ? 180 : 0);
-      shapeRenderer.rect(-WIRE_WIDTH/2, 0, WIRE_WIDTH, Math.abs(delta.y));      
+      shapeRenderer.filledRect(-WIRE_WIDTH/2, 0, WIRE_WIDTH, Math.abs(delta.y));      
     } else {
       shapeRenderer.rotate(0, 0, 1, delta.y < 0 ? 180 : 0);
-      shapeRenderer.rect(-WIRE_WIDTH/2, 0, WIRE_WIDTH, Math.abs(delta.y));
+      shapeRenderer.filledRect(-WIRE_WIDTH/2, 0, WIRE_WIDTH, Math.abs(delta.y));
       shapeRenderer.translate(0, Math.abs(delta.y), 0);
       shapeRenderer.rotate(0, 0, 1, delta.y < 0 ? -180 : 0);
       shapeRenderer.rotate(0, 0, 1, delta.x < 0 ? 180 : 0);
-      shapeRenderer.rect(0, -WIRE_WIDTH/2, Math.abs(delta.x), WIRE_WIDTH);      
+      shapeRenderer.filledRect(0, -WIRE_WIDTH/2, Math.abs(delta.x), WIRE_WIDTH);      
     }
-    /*shapeRenderer.rotate(0, 0, 1, delta.angle());
-    shapeRenderer.filledRect(0, 0, delta.len() * ScienceEngine.PIXELS_PER_M, WIRE_WIDTH); */
   }
 }

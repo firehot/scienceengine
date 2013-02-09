@@ -25,13 +25,13 @@ public class AmmeterActor extends Science2DActor {
     super.draw(batch, parentAlpha);
     batch.end();
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
-    shapeRenderer.begin(ShapeType.Filled);
+    shapeRenderer.begin(ShapeType.FilledRectangle);
     shapeRenderer.setColor(Color.RED);
     float needleAngle = ammeter.getNeedleAngle() * MathUtils.radiansToDegrees;
     shapeRenderer.identity();
     shapeRenderer.translate(getX() + getOriginX() + 1, getY() + 10, 0);
     shapeRenderer.rotate(0, 0, 1, 90 + needleAngle);
-    shapeRenderer.rect(0, 0, getHeight() * 0.75f, 2);
+    shapeRenderer.filledRect(0, 0, getHeight() * 0.75f, 2);
     shapeRenderer.end();
     batch.begin();
   }
