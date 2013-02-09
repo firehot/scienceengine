@@ -173,8 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="libikvm-natives.a" />
-    <None Include="libgdx.a" />
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.html">
       <Link>data\Electromagnetism\1.html</Link>
     </Content>
@@ -269,7 +267,6 @@
     <Content Include="..\..\ScienceEngine-android\assets\music\menu.mp3">
       <Link>music\menu.mp3</Link>
     </Content>
-    <None Include="libfreetype.a" />
     <Content Include="..\..\ScienceEngine-android\assets\images\back.png">
       <Link>images\back.png</Link>
     </Content>
