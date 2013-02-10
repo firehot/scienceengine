@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.InstructionDialog;
+import com.mazalearn.scienceengine.app.screens.ChallengeEndDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -83,16 +83,14 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       ScienceEngine.getPlatformAdapter().showInternalURL(
           "data/" + science2DController.getDomain() + "/" + science2DController.getLevel() + ".html");
       challenge(false);
-      Dialog dialog = new InstructionDialog(this, skin, science2DController.getDomain(), 
-          ScienceEngine.getMsg().getString("Level.Success"), 
-          ScienceEngine.getMsg().getString("Level.Instructions"), "OK");
+      Dialog dialog = new ChallengeEndDialog(this, skin, science2DController.getDomain(), 
+          ScienceEngine.getMsg().getString("Level.Success"));
       dialog.show(this);      
     } else {
       // TODO: lack of symmetry here - cleanup required
       isChallengeInProgress = false;      
-      Dialog dialog = new InstructionDialog(this, skin, science2DController.getDomain(), 
-          ScienceEngine.getMsg().getString("Level.Failure"), 
-          ScienceEngine.getMsg().getString("Level.Instructions"), "OK");
+      Dialog dialog = new ChallengeEndDialog(this, skin, science2DController.getDomain(), 
+          ScienceEngine.getMsg().getString("Level.Failure"));
       dialog.show(this);      
     }
   }

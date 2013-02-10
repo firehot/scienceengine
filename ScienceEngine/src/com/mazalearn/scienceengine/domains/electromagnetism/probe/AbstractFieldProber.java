@@ -8,6 +8,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.ITutor;
 
 public abstract class AbstractFieldProber extends AbstractScience2DProber {
   private final Vector2 modelPos = new Vector2();
@@ -16,8 +17,9 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected int netSuccesses;
  
   protected AbstractFieldProber(IScience2DController science2DController, 
+      ITutor parent,
       String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.fieldMeterActor = (Science2DActor) science2DController.getView().findActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();

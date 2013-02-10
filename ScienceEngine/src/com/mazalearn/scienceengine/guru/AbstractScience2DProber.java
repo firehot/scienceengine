@@ -19,16 +19,14 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   private Vector2 localPoint = new Vector2();
 
   public AbstractScience2DProber(IScience2DController science2DController,
-      String goal, Array<?> components, Array<?> configs,
+      ITutor parent, String goal, Array<?> components, Array<?> configs,
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     // A prober covers almost the entire screen and allows user to interact only with probes
     // or with control buttons
     this.setSize(ScreenComponent.Prober.getWidth(), ScreenComponent.Prober.getHeight());
   }
   
-  public abstract void activate(boolean activate);
-
   private boolean areTooClose(Vector2[] points) {
     if (points.length < 2) return false;
     return approxEquals(points[0].len(), points[1].len()) && 

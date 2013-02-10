@@ -28,10 +28,10 @@ public class Subgoal extends AbstractTutor {
   private Button nextButton;
   
   public Subgoal(IScience2DController science2DController,
-      String goal, Array<?> components, Array<?> configs,
+      ITutor parent, String goal, Array<?> components, Array<?> configs,
       String when, String postConditionString,
       int deltaSuccessScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, 0);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, 0);
     Parser parser = createParser();
     try {
       this.postCondition = parser.parseString(postConditionString);
@@ -125,6 +125,6 @@ public class Subgoal extends AbstractTutor {
 
   @Override
   public void activate(boolean activate) {
-    this.setVisible(activate);
+    super.activate(activate);
   }
 }

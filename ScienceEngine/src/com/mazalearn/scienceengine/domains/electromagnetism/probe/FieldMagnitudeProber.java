@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
+import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
 // doubts on magnitude
@@ -50,9 +51,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] bFields;
 
   public FieldMagnitudeProber(IScience2DController science2DController,
-      String goal, Array<?> components, Array<?> configs, 
+      ITutor parent, String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "The field is stronger closer to the object generating the field",
         "The field is stronger if the current or magnet strength is larger"
@@ -77,6 +78,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   
   @Override
   public void activate(boolean activate) {
+    super.activate(activate);
     if (activate) {
       science2DController.getGuru().setupProbeConfigs(
           science2DController.getModel().getAllConfigs(), false);
@@ -104,7 +106,6 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
       imageCorrect.setVisible(true);
       fieldMeterActor.setVisible(false);
     }
-    this.setVisible(activate);
   }
 
   private boolean haveSimilarMagnitudes(float v1, float v2) {

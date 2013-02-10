@@ -60,4 +60,15 @@ public interface ITutor {
    */
   public void reset();
 
+  /**
+   * Pushes a goal onto the goal stack
+   * @param goal
+   */
+  void pushGoal(String goal);
+
+  /**
+   * Remove topmost goal from goal stack
+   */
+  void popGoal();
+
 }

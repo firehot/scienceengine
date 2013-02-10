@@ -12,15 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 
-public class Introduction extends Group {
+public class HelpTour extends Group {
   
   public static class ExpandOnClick extends ClickListener {
-    protected static final int SCALE = 33;
+    protected static final int SCALE = 25;
     private final TextButton contentButton;
     private String content;
     int currentComponent = 0;
@@ -38,7 +39,7 @@ public class Introduction extends Group {
       this.closeImage = closeImage;
       this.nextButton = nextButton;
       arrow.setPosition(CENTER_POS.x, CENTER_POS.y);
-      setContent(content, CENTER_POS.x + 300, CENTER_POS.y + 200, 0);
+      setContent(content, CENTER_POS.x, CENTER_POS.y, 0);
       arrow.setVisible(false);
     }
 
@@ -46,13 +47,16 @@ public class Introduction extends Group {
       contentButton.setText(text);
       // Set size in a 3:1 aspect ratio
       float semiPerimeter = (float) Math.sqrt(text.length());
-      float h = semiPerimeter * SCALE / 3 + 50; // To hold Buttons
-      float w = semiPerimeter * SCALE * 3 / 4;
+      float h = ScreenComponent.getScaledX(semiPerimeter * SCALE / 3 + 30); // To hold Buttons
+      float w = ScreenComponent.getScaledY(semiPerimeter * SCALE * 3 / 4);
       contentButton.setSize(w, h);
+      contentButton.getLabel().setAlignment(Align.center, Align.left);
       // Put contentbutton on screen touching arrow based on quadrant
       int sx = (int) Math.signum(MathUtils.cosDeg(angle));
       int sy = (int) Math.signum(MathUtils.sinDeg(angle));
-      if (sx >= 0 && sy >= 0) {
+      if (arrowX == CENTER_POS.x && arrowY == CENTER_POS.y) {
+        contentButton.setPosition(CENTER_POS.x - w / 2, CENTER_POS.y - h / 2);
+      } else if (sx >= 0 && sy >= 0) {
         contentButton.setPosition(arrowX - w, arrowY - h);
       } else if (sx <= 0 && sy >= 0) {
         contentButton.setPosition(arrowX, arrowY - h);
@@ -81,7 +85,7 @@ public class Introduction extends Group {
               }
               if (currentComponent >= screenComponents.length){
                 arrow.setPosition(CENTER_POS.x, CENTER_POS.y);
-                setContent(content, CENTER_POS.x + 300, CENTER_POS.y + 200, 0);
+                setContent(content, 0, 0, 0);
                 arrow.setVisible(false);
                 currentComponent = 0;
               } else {
@@ -101,7 +105,7 @@ public class Introduction extends Group {
     }
   }
 
-  public Introduction(final Stage stage, Skin skin, String contents) {  
+  public HelpTour(final Stage stage, Skin skin, String contents) {  
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     stage.addActor(this);
@@ -115,11 +119,12 @@ public class Introduction extends Group {
     addActor(arrow);
     
     Image closeImage = new Image(new Texture("images/close.png"));
-    closeImage.setSize(closeImage.getWidth() * 0.50f, closeImage.getHeight() * 0.50f);
+    closeImage.setSize(ScreenComponent.getScaledX(closeImage.getWidth() * 0.5f), 
+        ScreenComponent.getScaledY(closeImage.getHeight() * 0.5f));
     closeImage.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
-        stage.getRoot().removeActor(Introduction.this);
+        stage.getRoot().removeActor(HelpTour.this);
       }      
     });
     contents = contents + "\n\n\n\n";

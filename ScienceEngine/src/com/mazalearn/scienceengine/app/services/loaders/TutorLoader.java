@@ -13,6 +13,7 @@ import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
 import com.mazalearn.scienceengine.guru.Guide;
+import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
 import com.mazalearn.scienceengine.guru.Subgoal;
 
@@ -34,7 +35,7 @@ class TutorLoader {
         50.0f);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
-    AbstractTutor tutor = science2DController.createTutor(type, goal,
+    AbstractTutor tutor = science2DController.createTutor(null, type, goal,
         components, configs, (int) deltaSuccessScore, (int) deltaFailureScore);
     if (tutor instanceof ParameterProber) {
       String resultType = (String) tutorObj.get("resultType");
@@ -51,7 +52,7 @@ class TutorLoader {
     }
     if (tutor instanceof Guide) {
       Array<?> subgoalsObj = (Array<?>) tutorObj.get("subgoals");
-      List<Subgoal> subgoals = loadSubgoals(subgoalsObj);
+      List<Subgoal> subgoals = loadSubgoals(tutor, subgoalsObj);
       String successActions = (String) tutorObj.get("successactions");
       ((Guide) tutor).initialize(subgoals, successActions);
       return tutor;
@@ -68,7 +69,7 @@ class TutorLoader {
   }
 
   @SuppressWarnings("unchecked")
-  private List<Subgoal> loadSubgoals(Array<?> subgoalsObj) {
+  private List<Subgoal> loadSubgoals(ITutor parent, Array<?> subgoalsObj) {
     List<Subgoal> subgoals = new ArrayList<Subgoal>();
     if (subgoalsObj == null) {
       Gdx.app.error(ScienceEngine.LOG, "No subgoals found for Tutor");
@@ -76,7 +77,7 @@ class TutorLoader {
     }
     for (int i = 0; i < subgoalsObj.size; i++) {
       try {
-        subgoals.add(loadSubgoal((OrderedMap<String, ?>) subgoalsObj.get(i)));
+        subgoals.add(loadSubgoal(parent, (OrderedMap<String, ?>) subgoalsObj.get(i)));
       } catch (SyntaxException e) {
         Gdx.app.error(ScienceEngine.LOG, "Could not load subgoal");
         e.printStackTrace();
@@ -85,7 +86,7 @@ class TutorLoader {
     return subgoals;
   }
 
-  private Subgoal loadSubgoal(OrderedMap<String, ?> subgoalObj)
+  private Subgoal loadSubgoal(ITutor parent, OrderedMap<String, ?> subgoalObj)
       throws SyntaxException {
     String goal = (String) subgoalObj.get("goal");
     String when = (String) subgoalObj.get("when");
@@ -93,7 +94,7 @@ class TutorLoader {
     float success = (Float) LevelLoader.nvl(subgoalObj.get("success"), 100.0f);
     Array<?> components = (Array<?>) subgoalObj.get("components");
     Array<?> configs = (Array<?>) subgoalObj.get("configs");
-    Subgoal subgoal = new Subgoal(science2DController, goal, 
+    Subgoal subgoal = new Subgoal(science2DController, parent, goal, 
         components, configs, when, postCondition, (int) success);
     return subgoal;
   }

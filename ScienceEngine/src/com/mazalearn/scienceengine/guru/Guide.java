@@ -27,10 +27,10 @@ public class Guide extends AbstractTutor {
 
   private Set<Variable> variables;
     
-  public Guide(IScience2DController science2DController,
+  public Guide(IScience2DController science2DController, ITutor parent,
       String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
   }
   
   /* (non-Javadoc)
@@ -38,11 +38,11 @@ public class Guide extends AbstractTutor {
    */
   @Override
   public void activate(boolean activate) {
+    super.activate(activate);
     if (activate) {
       stageBeginTime[currentStage] = ScienceEngine.getTime();
     } 
     ScienceEngine.setProbeMode(false);
-    this.setVisible(activate);
   }
 
   /* (non-Javadoc)

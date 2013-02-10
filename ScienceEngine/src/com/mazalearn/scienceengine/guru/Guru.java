@@ -134,6 +134,7 @@ public class Guru extends Group implements IDoneCallback {
       if (currentTutor.hasSucceeded()) {
         currentTutor.doSuccessActions();
         hinter.setHint(null);
+        dashboard.clearGoals();
         currentTutor.activate(false);
         currentTutor.reinitialize(false);
         
@@ -171,6 +172,7 @@ public class Guru extends Group implements IDoneCallback {
       if (!hinter.hasHint()) {
         hinter.setHint(currentTutor.getHint());
       }
+      dashboard.setGoal(currentTutor.getGoal());
     }
   }
   

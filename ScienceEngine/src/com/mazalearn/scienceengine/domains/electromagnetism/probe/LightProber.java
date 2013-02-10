@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
+import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
 public class LightProber extends AbstractScience2DProber {
@@ -14,9 +15,9 @@ public class LightProber extends AbstractScience2DProber {
   private Image image;
   private LightbulbActor lightbulbActor;
   
-  public LightProber(IScience2DController science2DController, 
+  public LightProber(IScience2DController science2DController, ITutor parent,
       String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "Light intensity increases when more current is induced in the coil.",
         "More current is induced in the coil if the magnetic field changes faster at the coil.",
@@ -39,6 +40,7 @@ public class LightProber extends AbstractScience2DProber {
   
   @Override
   public void activate(boolean activate) {
+    super.activate(activate);
     if (activate) {
       science2DController.getGuru().setupProbeConfigs(
           science2DController.getModel().getAllConfigs(), true);
@@ -46,7 +48,6 @@ public class LightProber extends AbstractScience2DProber {
       image.setX(points[0].x - image.getWidth()/2);
       image.setY(points[0].y - image.getHeight()/2);
     }
-    this.setVisible(activate);
   }
 
   @Override

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
 // doubts on direction
@@ -21,9 +22,9 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private Vector2[] points, bFields;
 
   public FieldDirectionProber(final IScience2DController science2DController,
-      String goal, Array<?> components, Array<?> configs, 
+      ITutor parent, String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
         "The direction of the field is the direction in which a " +
         "free North Pole would move if placed at that point.",
@@ -88,6 +89,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   
   @Override
   public void activate(boolean activate) {
+    super.activate(activate);
     if (activate) {
       science2DController.getGuru().setupProbeConfigs(
           science2DController.getModel().getAllConfigs(), false);
@@ -100,7 +102,6 @@ public class FieldDirectionProber extends AbstractFieldProber {
       image.setVisible(true);
       fieldMeterActor.setVisible(false);
     }
-    this.setVisible(activate);
   }
 
 }

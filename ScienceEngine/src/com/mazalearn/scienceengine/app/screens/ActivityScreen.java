@@ -72,9 +72,6 @@ public class ActivityScreen extends AbstractScreen {
     super.show();
     String title = getMsg().getString(domain + "." + activityLevel + ".Name");
     setTitle(title);
-    if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) return;
-    String description = getMsg().getString(domain + "." + activityLevel + ".Description");
-    new Introduction(getStage(), getSkin(), description);
   }
   
   @Override

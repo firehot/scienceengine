@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -25,8 +24,8 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
@@ -41,23 +40,17 @@ public class DomainHomeScreen extends AbstractScreen {
   private static final int RESOURCE_WIDTH = 254;
   private static final int THUMBNAIL_WIDTH = 369; // 242;
   private static final int THUMBNAIL_HEIGHT = 279; // 182;
-  private static final int LEVEL_INFO_HEIGHT = 0;
   private static final int RESOURCE_INFO_HEIGHT = 210;
   private TextButton[] activityThumbs;
   private int numLevels;
   private Array<?> resources;
-  private LabelStyle smallLabelStyle;
   private Profile profile;
   private String domain;
-  private TextButtonStyle smallButtonStyle;
   
   public DomainHomeScreen(ScienceEngine scienceEngine, String domain) {
     super(scienceEngine);
     this.domain = domain;
     readDomainActivityInfo();
-    smallLabelStyle = new LabelStyle(getSmallFont(), Color.BLACK);
-    smallButtonStyle = new TextButton.TextButtonStyle();
-    smallButtonStyle.font = getSmallFont();
     profile = ScienceEngine.getProfileManager().retrieveProfile();
     profile.setDomain(domain);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
@@ -84,7 +77,7 @@ public class DomainHomeScreen extends AbstractScreen {
     table.debug();
     
     String title = getMsg().getString("ScienceEngine." + domain) +
-        " - " + getMsg().getString("ScienceEngine.Levels"); //$NON-NLS-1$ //$NON-NLS-2$
+        " - " + getMsg().getString("ScienceEngine.Activities"); //$NON-NLS-1$ //$NON-NLS-2$
     setTitle(title);
     
     final Actor activitiesPane = createActivitiesPane();
@@ -93,28 +86,28 @@ public class DomainHomeScreen extends AbstractScreen {
     final Cell<Actor> scrollPane = 
         table.add(activitiesPane).fill().width(ScreenComponent.VIEWPORT_WIDTH - 40);    
     table.row();
-    final TextButton contentButton = 
+    final TextButton contentTypeButton = 
         new TextButton(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"), getSkin(), "body");
-    contentButton.addListener(new ClickListener() {
+    contentTypeButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
-        if (contentButton.isChecked()) {
+        if (contentTypeButton.isChecked()) {
           scrollPane.setWidget(resourcesPane);
-          contentButton.setText(getMsg().getString("ScienceEngine.Activities"));
+          contentTypeButton.setText(getMsg().getString("ScienceEngine.Activities"));
         } else {
           scrollPane.setWidget(activitiesPane);
-          contentButton.setText(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"));
+          contentTypeButton.setText(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"));
         }
       }
     });
-    table.add(contentButton).width(400).height(50).padTop(50);
+    table.add(contentTypeButton).width(400).height(50).padTop(50);
   }
 
   private Actor createActivitiesPane() {
-    Table activityLevels = new Table(getSkin());
-    activityLevels.setName("Activity Levels");
-    ScrollPane activityLevelPane = new ScrollPane(activityLevels, getSkin(), "thumbs");
-    activityLevelPane.setFadeScrollBars(false);
+    Table activities = new Table(getSkin());
+    activities.setName("Activity Levels");
+    ScrollPane activitiesPane = new ScrollPane(activities, getSkin(), "thumbs");
+    activitiesPane.setFadeScrollBars(false);
     activityThumbs = new TextButton[numLevels];
     
     LabelStyle blueBackground = new LabelStyle(getSkin().get(LabelStyle.class));
@@ -141,14 +134,23 @@ public class DomainHomeScreen extends AbstractScreen {
         }
       };
       activityThumb.setBackground(image);
-      Label label = new Label(activityName, blueBackground);
-      label.setWrap(true);
-      label.setAlignment(Align.center, Align.center);
-      label.setWidth(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 4));
-      label.setHeight(ScreenComponent.getScaledY(50));
-      label.setPosition(ScreenComponent.getScaledX(2), ScreenComponent.getScaledY(40));
       
-      activityThumb.addActor(label);
+      Label nameLabel = new Label(activityName, blueBackground);
+      nameLabel.setWrap(true);
+      nameLabel.setAlignment(Align.center, Align.center);
+      nameLabel.setWidth(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 4));
+      nameLabel.setHeight(ScreenComponent.getScaledY(50));
+      nameLabel.setPosition(ScreenComponent.getScaledX(2), ScreenComponent.getScaledY(40));
+      activityThumb.addActor(nameLabel);
+      
+      Label levelLabel = new Label(String.valueOf(level), blueBackground);
+      levelLabel.setAlignment(Align.center, Align.center);
+      levelLabel.setWidth(ScreenComponent.getScaledX(30));
+      levelLabel.setHeight(ScreenComponent.getScaledY(30));
+      levelLabel.setPosition(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 34), 
+          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
+      activityThumb.addActor(levelLabel);
+      
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
         @Override
@@ -157,31 +159,16 @@ public class DomainHomeScreen extends AbstractScreen {
         }
       });
       activityThumbs[level - 1] = activityThumb;
-      activityLevels
+      activities
           .add(activityThumb)
           .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
           .height(ScreenComponent.getScaledY(THUMBNAIL_HEIGHT))
           .padTop(5);
     }
-    activityLevels.row();
+    activities.row();
 
-    for (int level = 1; level <= numLevels; level++) {
-      String activityDescription = getMsg().getString(domain + "." + level + ".Description");
-      Label label = new Label(activityDescription, smallLabelStyle);
-      label.setWrap(true);
-      ScrollPane scrollPane = new ScrollPane(label, getSkin());
-      scrollPane.setScrollingDisabled(true, false);
-      scrollPane.setFlickScroll(false);
-      activityLevels
-          .add(scrollPane)
-          .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
-          .height(ScreenComponent.getScaledY(LEVEL_INFO_HEIGHT))
-          .left()
-          .pad(5);
-    }
-    activityLevels.row();
-    activityLevelPane.setScrollingDisabled(false, true);
-    return activityLevelPane;
+    activitiesPane.setScrollingDisabled(false, true);
+    return activitiesPane;
   }
 
   @SuppressWarnings("unchecked")

@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.core.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.screens.HelpTour;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
@@ -70,6 +70,19 @@ public class ActivityViewControls extends ViewControls {
       }
     });
 
+    // Add Help tour
+    Button helpButton = new TextButton(
+        getMsg().getString("ScienceEngine.Help"), skin, "body");
+    helpButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x1, float y1) {
+        setActivated(false);
+        String description = getMsg().getString(science2DController.getDomain() + "." + 
+            science2DController.getLevel() + ".Description");
+        new HelpTour(getStage(), skin, description);
+      }
+    });
+
     viewControlPanel.add(resetControl.getActor());
     viewControlPanel.row();
     viewControlPanel.add(suspendControl.getActor());
@@ -78,6 +91,8 @@ public class ActivityViewControls extends ViewControls {
       viewControlPanel.add(snapshotButton);
       viewControlPanel.row();
     }
+    viewControlPanel.add(helpButton);
+    viewControlPanel.row();
     syncWithModel();
   }
   

@@ -9,6 +9,7 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.ITutor;
 
 public interface IScience2DController {
   public IScience2DView getView();
@@ -25,7 +26,7 @@ public interface IScience2DController {
       float y, float rotation);
   public Guru getGuru();
   // Factory method to create tutor
-  AbstractTutor createTutor(String type, String goal, Array<?> components,
+  AbstractTutor createTutor(ITutor parent, String type, String goal, Array<?> components,
       Array<?> configs, int deltaSuccessScore, int deltaFailureScore);
   // Skin used in this invocation
   Skin getSkin();

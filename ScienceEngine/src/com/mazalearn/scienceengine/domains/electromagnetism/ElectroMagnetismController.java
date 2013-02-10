@@ -33,6 +33,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainAct
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
+import com.mazalearn.scienceengine.guru.ITutor;
 
 /**
  * Electromagnetism Domain
@@ -98,18 +99,18 @@ public class ElectroMagnetismController extends AbstractScience2DController {
   }
 
   @Override
-  public AbstractTutor createTutor(String type, String goal, 
+  public AbstractTutor createTutor(ITutor parent, String type, String goal, 
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
     if ("FieldMagnitudeProber".equals(type)) {
-      return new FieldMagnitudeProber(this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new FieldMagnitudeProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("FieldDirectionProber".equals(type)) {
-      return new FieldDirectionProber(this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new FieldDirectionProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("LightProber".equals(type)) {
-      return new LightProber(this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new LightProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("Abstractor".equals(type)) {
-      return new Abstractor(this, goal, components, configs, skin, 
+      return new Abstractor(this, parent, goal, components, configs, skin, 
           science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore);
     }
-    return super.createTutor(type, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    return super.createTutor(parent, type, goal, components, configs, deltaSuccessScore, deltaFailureScore);
   }
 }

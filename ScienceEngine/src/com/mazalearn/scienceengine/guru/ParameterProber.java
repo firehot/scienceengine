@@ -73,9 +73,9 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   }
     
   public ParameterProber(IScience2DController science2DController,
-      String goal, Array<?> components, Array<?> configs, 
+      ITutor parent, String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.image = new ProbeImage();
     
     dummy = (DummyBody) science2DController.getModel().findBody(ComponentType.Dummy);
@@ -89,6 +89,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   
   @Override
   public void activate(boolean activate) {
+    super.activate(activate);
     if (activate) {
       if (resultType == ResultType.Spin) {
         List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
@@ -108,8 +109,6 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     }
     image.setVisible(activate);
     ScienceEngine.setProbeMode(activate);
-    // Turn on access to disabled parts of control panel
-    this.setVisible(activate);
   }
   
   @Override

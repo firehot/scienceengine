@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.guru;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,7 +13,7 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 
 class Dashboard extends Table {
-  TextButton goal, subGoal;
+  TextButton goal;
   Label scoreLabel;
   int score;
   private Label timerLabel;
@@ -36,14 +37,9 @@ class Dashboard extends Table {
     goal.setColor(Color.YELLOW);
     goal.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
-        subGoal.setVisible(!subGoal.isVisible());
+        //subGoal.setVisible(!subGoal.isVisible());
       }
     });
-    
-    subGoal = new TextButton("", skin);
-    subGoal.setColor(Color.YELLOW);
-    subGoal.getLabel().setWrap(true);
-    subGoal.setVisible(false);
     
     scoreLabel = new Label("0", skin);
 
@@ -74,9 +70,6 @@ class Dashboard extends Table {
     tutorTable.add(t).right().top();
     tutorTable.row();
     tutorTable.add("");
-    tutorTable.add(subGoal)
-        .width(ScreenComponent.getScaledX(400))
-        .height(ScreenComponent.getScaledY(50));
     return tutorTable;
   }
   
@@ -86,16 +79,17 @@ class Dashboard extends Table {
   }
   
   public void setGoal(String text) {
-    goal.setText(text);
-  }
-  
-  public void setSubgoal(String text) {
     if (text == null) {
-      subGoal.setVisible(false);
+      goal.setVisible(false);
+      goal.setText("");
       return;
     }
-    subGoal.setText(text);
-    subGoal.setVisible(true);
+    if (goal.getText().toString().equals(text)) return;
+    goal.setText(text);
+    goal.setVisible(true);
+    goal.addAction(Actions.sequence(
+        Actions.alpha(0, 1),
+        Actions.alpha(1, 2)));
   }
 
   public int getScore() {
@@ -108,5 +102,9 @@ class Dashboard extends Table {
   
   public void setTimeLimit(int timeLimitSeconds) {
     this.timeLeft = timeLimitSeconds;
+  }
+
+  public void clearGoals() {
+    setGoal(null);
   }
 }

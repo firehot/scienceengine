@@ -22,34 +22,16 @@ import com.mazalearn.scienceengine.guru.IDoneCallback;
  */
 public class SplashScreen extends AbstractScreen {
 
-  private Dialog loginDialog;
-  private Label touchToEnter;
-  
   private final class SplashImage extends Image {
 
     private SplashImage(TextureRegion region) {
       super(region);
       this.setFillParent(true);
-
       // this is needed for the fade-in effect to work correctly; we're just
       // making the image completely transparent
       this.getColor().a = 0f;
-
       // configure the fade-in effect on the splash image
       this.addAction(Actions.fadeIn(0.75f));
-      
-      this.addListener(new ClickListener() {
-        public void clicked (InputEvent event, float x, float y) {
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-            loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
-              @Override
-              public void done(boolean success) {
-                scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
-              }
-            });
-            loginDialog.show(stage);
-          }
-        });      
     }
   }
 
@@ -72,11 +54,24 @@ public class SplashScreen extends AbstractScreen {
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
     
-    touchToEnter = new Label("Touch to Start", scienceEngine.getSkin());
-    touchToEnter.setColor(Color.WHITE);
-    touchToEnter.setFontScale(2f);
-    touchToEnter.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - 120, ScreenComponent.VIEWPORT_HEIGHT / 2 - 80);
-    touchToEnter.addAction(
+    ClickListener startListener = new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+          final Dialog loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
+            @Override
+            public void done(boolean success) {
+              scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
+            }
+          });
+          loginDialog.show(stage);
+        }
+      };
+
+    Label touchToStart = new Label("Touch to Start", scienceEngine.getSkin());
+    touchToStart.setColor(Color.WHITE);
+    touchToStart.setFontScale(2f);
+    touchToStart.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - 120, ScreenComponent.VIEWPORT_HEIGHT / 2 - 80);
+    touchToStart.addAction(
         Actions.forever(
             Actions.sequence(
                 Actions.fadeIn(1f), 
@@ -84,13 +79,15 @@ public class SplashScreen extends AbstractScreen {
                 Actions.fadeOut(1f))));
 
     // retrieve the splash image's region from the atlas
-    AtlasRegion splashRegion = getAtlas().findRegion(
-        "splash-screen/splash-image"); //$NON-NLS-1$
+    AtlasRegion splashRegion = getAtlas().findRegion("splash-screen/splash-image"); //$NON-NLS-1$
 
     // We create the splash image actor; its size is set when the
     // resize() method gets called
-    stage.addActor(new SplashImage(splashRegion));
-    stage.addActor(touchToEnter);
+    SplashImage splashImage = new SplashImage(splashRegion);
+    stage.addActor(splashImage);
+    stage.addActor(touchToStart);
+    splashImage.addListener(startListener);
+    touchToStart.addListener(startListener);
   }
 
   @Override

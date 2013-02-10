@@ -25,6 +25,7 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Guide;
 import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
 
 public abstract class AbstractScience2DController implements
@@ -159,12 +160,12 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
-  public AbstractTutor createTutor(String type, String goal,
+  public AbstractTutor createTutor(ITutor parent, String type, String goal,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
     if ("ParameterProber".equals(type)) {
-      return new ParameterProber(this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new ParameterProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     } else if ("Guide".equals(type)) {
-      return new Guide(this, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new Guide(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     }
     return null;
   }

@@ -38,9 +38,7 @@ public class Hinter extends Group {
       public void clicked (InputEvent event, float x, float y) {
         if (jumpingMode) {
           jumpingMode = false;
-          dashboard.setSubgoal(hint);
         } else {
-          dashboard.setSubgoal(null);
           SCIENTISTS.get(scientistIndex).setVisible(false);
           Hinter.this.addAction(Actions.delay(20, new Action() {
             @Override
@@ -87,7 +85,6 @@ public class Hinter extends Group {
     image = SCIENTISTS.get(scientistIndex);
     // TODO: differentiate hint from subgoal in dashboard
     // hintButton.setText("Hint: " + hint + "\n-" + image.getName());
-    dashboard.setSubgoal(hint);
     //image.setVisible(true);
     image.setY(0);
   }
