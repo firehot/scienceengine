@@ -61,6 +61,11 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
+  public String getTitle() {
+    return ScienceEngine.getMsg().getString(domain + "." + level + ".Name");    
+  }
+  
+  @Override
   public int getLevel() {
     return level;
   }
@@ -100,7 +105,7 @@ public abstract class AbstractScience2DController implements
   public Guru getGuru() {
     if (guru == null) {
       Stage stage = (Stage) science2DView;
-      guru = new Guru(skin, this);
+      guru = new Guru(skin, this, this.getTitle());
       // Move control Panel to top - so it will be above others
       stage.getRoot().addActor(modelControls);
       // Move back button to top also - so it will be accessible

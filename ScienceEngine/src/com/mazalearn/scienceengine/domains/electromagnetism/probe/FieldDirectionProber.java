@@ -22,7 +22,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private Vector2[] points, bFields;
 
   public FieldDirectionProber(final IScience2DController science2DController,
-      ITutor parent, String goal, Array<?> components, Array<?> configs, 
+      final ITutor parent, String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
     super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
     this.hints = new String[] {
@@ -69,7 +69,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
             new Action() {
               @Override
               public boolean act(float delta) {
-                science2DController.getGuru().done(success);
+                done(success);
                 fieldMeterActor.setVisible(false);
                 userField.setVisible(false);
                 return true;

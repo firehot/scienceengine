@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.guru.IDoneCallback;
+import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
@@ -18,12 +18,12 @@ import com.mazalearn.scienceengine.guru.ProbeImage;
 public class FieldMagnitudeProber extends AbstractFieldProber {
   
   private final class ClickResult extends ClickListener {
-    private final IDoneCallback doneCallback;
+    private final Guru guru;
     private final boolean success;
  
-    private ClickResult(boolean success, IDoneCallback doneCallback) {
+    private ClickResult(boolean success, Guru guru) {
       this.success = success;
-      this.doneCallback = doneCallback;
+      this.guru = guru;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
                 @Override
                 public boolean act(float delta) {
                   fieldMeterActor.setVisible(false);
-                  doneCallback.done(success);
+                  done(success);
                   netSuccesses += success ? 1 : -1;
                   return true;
                 }
@@ -60,9 +60,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     };
     
     imageCorrect = new ProbeImage();
-    imageCorrect.addListener(new ClickResult(true, science2DController.getGuru()));
+    imageCorrect.addListener(new ClickResult(true, guru));
     imageWrong = new ProbeImage();
-    imageWrong.addListener(new ClickResult(false, science2DController.getGuru()));
+    imageWrong.addListener(new ClickResult(false, guru));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);

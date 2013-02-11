@@ -21,11 +21,12 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
  * Cycles through the eligible registeredTutors - probing the user with each one.
+ * This is the root of the tutor hierarchy.
  * 
  * @author sridhar
  * 
  */
-public class Guru extends Group implements IDoneCallback {  
+public class Guru extends Group implements ITutor {
   int tutorIndex = -1;
   ITutor currentTutor;
   protected Dashboard dashboard;
@@ -36,42 +37,40 @@ public class Guru extends Group implements IDoneCallback {
   private final SoundManager soundManager;
   private final ScoreImage successImage, failureImage;
   private Hinter hinter;
-  private int deltaSuccessScore;
-  private int deltaFailureScore;
   private IScience2DController science2DController;
   private ViewControls viewControls;
+  private List<String> goals = new ArrayList<String>();
+  private final String goal;
   
-  public Guru(final Skin skin, IScience2DController science2DController) {
+  public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
     this.science2DController = science2DController;
-
+    this.goal = goal;
+    goals.add(goal);
     this.setPosition(0, 0);
     // Guru has no direct user interaction - hence 0 size
     this.setSize(0, 0);
     
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
-    dashboard.setX(ScreenComponent.Dashboard.getX(dashboard.getPrefWidth()) + dashboard.getPrefWidth() / 2);
-    dashboard.setY(ScreenComponent.Dashboard.getY(dashboard.getPrefHeight()) + dashboard.getPrefHeight() / 2);
     
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
     this.modelControls = science2DController.getModelControls();
     this.viewControls = science2DController.getViewControls();
      
-    this.successImage = new ScoreImage(new Texture("images/greenballoon.png"), skin, true);
-    this.failureImage = new ScoreImage(new Texture("images/redballoon.png"), skin, false);
+    this.successImage = new ScoreImage(ScienceEngine.assetManager.get("images/greenballoon.png", Texture.class), skin, true);
+    this.failureImage = new ScoreImage(ScienceEngine.assetManager.get("images/redballoon.png", Texture.class), skin, false);
     ((Stage)science2DController.getView()).addActor(successImage);
     ((Stage)science2DController.getView()).addActor(failureImage);
-    hinter = new Hinter(dashboard, skin);
+    hinter = new Hinter(skin);
+    this.addActor(hinter);
     this.setVisible(false);
   }
 
   public void registerTutor(AbstractTutor tutor) {
     registeredTutors.add(tutor);
     this.addActor(tutor);
-    // Move hinter to top
-    this.addActor(hinter);
     tutor.activate(false);
   }
 
@@ -79,9 +78,10 @@ public class Guru extends Group implements IDoneCallback {
     // Mark start of challenge in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Challenge.name());
-    // Reset scores
+    // Reset scores and bring dashboard to top
     dashboard.resetScore();
-    
+    getStage().addActor(this); // ???
+
     // Collect actors to be excluded from probe points.
     // These are the visible actors.
     excludedActors.clear();
@@ -108,6 +108,9 @@ public class Guru extends Group implements IDoneCallback {
       currentTutor.activate(false);
       currentTutor.reinitialize(false);
       currentTutor = null;
+      // Remove all except the activity goal
+      goals.clear();
+      goals.add(goal);
     }
 
     science2DController.getView().done(false);
@@ -121,45 +124,37 @@ public class Guru extends Group implements IDoneCallback {
     return this.excludedActors;
   }
 
-  /**
-   * IDoneCallback interface implementation - probe is completed
-   */
   public void done(boolean success) {
-    if (success) {
-      soundManager.play(ScienceEngineSound.SUCCESS);
-      dashboard.addScore(deltaSuccessScore);
-      successImage.show(deltaSuccessScore);
-      hinter.clearHint();
+    if (success) {      
+      hinter.setHint(null);
       
-      if (currentTutor.hasSucceeded()) {
-        currentTutor.doSuccessActions();
-        hinter.setHint(null);
+      // Success and no more tutors == WIN
+      if (tutorIndex >= registeredTutors.size() - 1) {
+        soundManager.play(ScienceEngineSound.CELEBRATE);
+        science2DController.getView().done(true);
         dashboard.clearGoals();
-        currentTutor.activate(false);
-        currentTutor.reinitialize(false);
-        
-        // Success and no more tutors == WIN
-        if (tutorIndex >= registeredTutors.size() - 1) {
-          soundManager.play(ScienceEngineSound.CELEBRATE);
-          science2DController.getView().done(true);
-          this.setVisible(false);
-          return;
-        }
-      }
-      runTutor();
-    } else {
-      soundManager.play(ScienceEngineSound.FAILURE);
-      // Equate success and failure scores so that 0 progress after second try
-      deltaSuccessScore = deltaFailureScore;
-      dashboard.addScore(-deltaFailureScore);
-      failureImage.show(-deltaFailureScore);
-      // Loss
-      if (currentTutor.hasFailed()) {
-        science2DController.getView().done(false);
         this.setVisible(false);
         return;
       }
+      runTutor();
+    } else {
+      science2DController.getView().done(false);
+      this.setVisible(false);
+      return;
     }
+  }
+
+  public void doFailure(int score) {
+    soundManager.play(ScienceEngineSound.FAILURE);
+    dashboard.addScore(-score);
+    failureImage.show(-score);
+  }
+
+  public void doSuccess(int score) {
+    soundManager.play(ScienceEngineSound.SUCCESS);
+    dashboard.addScore(score);
+    successImage.show(score);
+    hinter.clearHint();
   }
   
   @Override
@@ -167,23 +162,29 @@ public class Guru extends Group implements IDoneCallback {
     super.act(dt);
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     if (currentTutor != null) {
-      // Place hinter to right of dashboard above the controls
-      hinter.setPosition(modelControls.getX(), ScreenComponent.VIEWPORT_HEIGHT - getY() - 50);
       if (!hinter.hasHint()) {
         hinter.setHint(currentTutor.getHint());
       }
-      dashboard.setGoal(currentTutor.getGoal());
+    }
+  }
+  
+  @Override
+  public String getGoal() {
+    return goals.get(goals.size() - 1);
+  }
+
+  public void pushGoal(String goal) {
+    goals.add(goal);
+  }
+  
+  public void popGoal(String goal) {
+    if (goals.size() > 0 && goals.get(goals.size() - 1).equals(goal)) {
+      goals.remove(goals.size() - 1);
     }
   }
   
   // Prerequisite: registeredTutors.size() >= 1
   private void runTutor() {
-    // If a valid tutor is already running, let it continue
-    if (currentTutor != null && !currentTutor.hasSucceeded()) {
-      currentTutor.activate(true);
-      return;
-    }
-    
     // Move on to next tutor
     tutorIndex++;
     if (tutorIndex == registeredTutors.size()) {
@@ -193,10 +194,7 @@ public class Guru extends Group implements IDoneCallback {
     currentTutor = registeredTutors.get(tutorIndex);
     currentTutor.reinitialize(true);
     currentTutor.activate(true);
-    dashboard.setGoal(currentTutor.getGoal());
-    // Set up initial success and failure scores
-    deltaSuccessScore = currentTutor.getSuccessScore();
-    deltaFailureScore = currentTutor.getFailureScore();
+    dashboard.setGoals(goals);
   }
   
   public void setupProbeConfigs(List<IModelConfig<?>> configs, boolean enableControls) {
@@ -208,10 +206,6 @@ public class Guru extends Group implements IDoneCallback {
     viewControls.enableControls(enableControls);
   }
 
-  public void setGoal(String text) {
-    dashboard.setGoal(text);
-  }
-
   public void checkProgress() {
     if (currentTutor == null) return;
     currentTutor.checkProgress();
@@ -221,5 +215,41 @@ public class Guru extends Group implements IDoneCallback {
     if (currentTutor != null) {
       currentTutor.reset();
     }
+  }
+
+  @Override
+  public void activate(boolean activate) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void reinitialize(boolean probeMode) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public String getHint() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public int getSuccessScore() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public int getFailureScore() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public void doSuccessActions() {
+    // TODO Auto-generated method stub
+    
   }
 }

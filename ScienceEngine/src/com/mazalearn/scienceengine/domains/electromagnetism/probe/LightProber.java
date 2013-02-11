@@ -34,7 +34,8 @@ public class LightProber extends AbstractScience2DProber {
   public void act(float delta) {
     super.act(delta);
     if (lightbulbActor != null && lightbulbActor.withinLightRegion(image.getX(), image.getY())) {
-      science2DController.getGuru().done(true);
+      guru.doSuccess(getSuccessScore());
+      done(true);
     }
   }
   
@@ -49,14 +50,4 @@ public class LightProber extends AbstractScience2DProber {
       image.setY(points[0].y - image.getHeight()/2);
     }
   }
-
-  @Override
-  public boolean hasSucceeded() {
-    return true;
-  }  
-
-  @Override
-  public boolean hasFailed() {
-    return false; // Allow learner to keep trying forever
-  }  
 }

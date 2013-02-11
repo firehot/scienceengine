@@ -1,8 +1,5 @@
 package com.mazalearn.scienceengine.guru;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -21,58 +18,57 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private int deltaFailureScore;
   private int deltaSuccessScore;
   protected String[] hints;
-  private List<String> goals = new ArrayList<String>();
+  protected String goal;
   protected IScience2DController science2DController;
-  private final ITutor parent;
-  private Boolean isActivated = null; 
+  protected final ITutor parent;
+  protected Guru guru;
+  protected boolean isActive;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
     this.parent = parent;
     this.science2DController = science2DController;
-    this.goals.add(goal);
+    this.goal = goal;
     this.components = components;
     this.configs = configs;
     this.deltaSuccessScore = deltaSuccessScore;
     this.deltaFailureScore = deltaFailureScore;
+    this.guru = science2DController.getGuru();
   }
 
   @Override
   public String getGoal() {
-    return goals.get(goals.size() - 1);
+    return goal;
+  }
+  
+  @Override
+  public void done(boolean success) {
+    activate(false);
+    reinitialize(false);
+    if (success) {
+      doSuccessActions();
+    }
+    parent.done(success);
   }
 
-  @Override
-  public void pushGoal(String goal) {
-    if (parent != null) {
-      parent.pushGoal(goal);
-    } else {
-      goals.add(goal);
-    }
+  protected void setSuccessScore(int score) {
+    deltaSuccessScore = score;
   }
-  
-  @Override
-  public void popGoal() {
-    if (parent != null) {
-      parent.popGoal();
-    } else {
-      goals.remove(goals.size() - 1);
-    }
-  }
-  
+
   @Override
   public void doSuccessActions() {
   }
 
   @Override
   public void activate(boolean activate) {
+    // TODO: if (isActive == activate) return;
+    isActive = activate;
     if (activate) {
-      pushGoal(goals.get(0));
-    } else if (isActivated != null && isActivated){
-      popGoal();
+      guru.pushGoal(goal);
+    } else {
+      guru.popGoal(goal);
     }
-    isActivated = activate;
     this.setVisible(activate);
   }
 
@@ -114,10 +110,4 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void checkProgress() {
   }
-  
-  @Override
-  public abstract boolean hasSucceeded();
-
-  @Override
-  public abstract boolean hasFailed();
 }

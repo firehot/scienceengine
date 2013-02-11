@@ -13,6 +13,7 @@ import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
 import com.mazalearn.scienceengine.guru.Guide;
+import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
 import com.mazalearn.scienceengine.guru.Subgoal;
@@ -20,9 +21,11 @@ import com.mazalearn.scienceengine.guru.Subgoal;
 class TutorLoader {
 
   private IScience2DController science2DController;
+  private Guru guru;
 
   public TutorLoader(IScience2DController science2DController) {
     this.science2DController = science2DController;
+    this.guru = science2DController.getGuru();
   }
 
   public AbstractTutor loadTutor(OrderedMap<String, ?> tutorObj) {
@@ -35,7 +38,7 @@ class TutorLoader {
         50.0f);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
-    AbstractTutor tutor = science2DController.createTutor(null, type, goal,
+    AbstractTutor tutor = science2DController.createTutor(guru, type, goal,
         components, configs, (int) deltaSuccessScore, (int) deltaFailureScore);
     if (tutor instanceof ParameterProber) {
       String resultType = (String) tutorObj.get("resultType");

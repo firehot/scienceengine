@@ -51,14 +51,20 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     modelPos.set(viewPos).mul(1f / ScreenComponent.PIXELS_PER_M);
     science2DController.getModel().getBField(modelPos, bField /* output */);
   }
-
+  
   @Override
-  public boolean hasSucceeded() {
-    return netSuccesses >= 10;
-  }
-
-  @Override
-  public boolean hasFailed() {
-    return false; // Allow learner to keep trying forever
+  public void done(boolean success) {
+    if (success) {
+      guru.doSuccess(getSuccessScore());
+    } else {
+      guru.doFailure(getFailureScore());
+      // TODO: equate success and failure scores
+    }
+    if (!success) return; // NO Failure exit
+    if (netSuccesses >= 10) {
+      parent.done(success);
+    } else {
+      activate(true);
+    }
   }
 }

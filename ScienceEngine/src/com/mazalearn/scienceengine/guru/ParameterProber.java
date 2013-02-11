@@ -69,7 +69,13 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   
   public void done(boolean success) {
     netSuccesses += success ? 1 : -1;
-    science2DController.getGuru().done(success);
+    if (success) {
+      guru.doSuccess(getSuccessScore());
+    } else {
+      guru.doFailure(getFailureScore());
+      setSuccessScore(getFailureScore()); // Equate success and failure scores
+    }
+    done(success);
   }
     
   public ParameterProber(IScience2DController science2DController,
@@ -187,19 +193,6 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       e.printStackTrace();
       throw new RuntimeException(e);
     }
-    this.resultExprVariables = parser.getVariables();
-    
+    this.resultExprVariables = parser.getVariables();   
   }
-
-  @Override
-  public boolean hasSucceeded() {
-    return netSuccesses >= 1;
-  }
-
-
-  @Override
-  public boolean hasFailed() {
-    return false; // Allow learner to keep trying forever
-  }
-
 }

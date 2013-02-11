@@ -56,7 +56,10 @@ public class Guide extends AbstractTutor {
   public void reinitialize(boolean probeMode) {
     super.reinitialize(probeMode);
     if (probeMode) {
-      activateStage(0);
+      this.currentStage = 0;
+      Subgoal subgoal = subgoals.get(0);
+      subgoal.reinitialize(true);
+      subgoal.activate(true);
     }
   }
   
@@ -69,40 +72,19 @@ public class Guide extends AbstractTutor {
   }
   
   @Override
-  public void act(float delta) {
-    super.act(delta);
-    if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
-    if (currentStage < 0 || currentStage == subgoals.size()) return;
-    Subgoal subgoal = subgoals.get(currentStage);
-    while (subgoal.hasSucceeded()) {
-      subgoal.activate(false);
-      currentStage++;
-      stageBeginTime[currentStage] = ScienceEngine.getTime();
-      science2DController.getGuru().done(true);
-      if (currentStage == subgoals.size()) {
-        break;
-      }
-      subgoal = activateStage(currentStage);
+  public void done(boolean success) {
+    if (!success) {
+      super.done(success);
+      return;
     }
-  }
-
-  private Subgoal activateStage(int currentStage) {
-    this.currentStage = currentStage;
+    // Move on to next stage
+    if (++currentStage == subgoals.size()) {
+      super.done(success);
+      return;
+    }
     Subgoal subgoal = subgoals.get(currentStage);
     subgoal.reinitialize(true);
     subgoal.activate(true);
-    return subgoal;
-  }
-
-  /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.guru.AbstractTutor#getHint()
-   */
-  @Override
-  public String getHint() {
-    if (currentStage < 0 || currentStage == subgoals.size()) return null;
-    // float timeElapsed = ScienceEngine.getTime() - stageBeginTime[currentStage];
-    Subgoal subgoal = subgoals.get(currentStage);
-    return subgoal.getGoal();
   }
 
   @Override
@@ -133,20 +115,10 @@ public class Guide extends AbstractTutor {
   }
 
   @Override
-  public boolean hasSucceeded() {
-    return currentStage == subgoals.size();
-  }
-  
-  @Override
   public void doSuccessActions() {
     if (successActions == null) return;
     science2DController.getModel().bindParameterValues(variables);
     successActions.bvalue();    
-  }
-
-  @Override
-  public boolean hasFailed() {
-    return false; // Allow learner to keep trying forever
   }
 
   private Parser createParser() {

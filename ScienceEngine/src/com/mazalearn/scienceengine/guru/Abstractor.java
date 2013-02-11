@@ -142,7 +142,7 @@ public class Abstractor extends AbstractTutor {
         if (!success) {
           life[--numLivesLeft].getColor().a = 0.3f;
         }
-        science2DController.getGuru().done(success);
+        done(success);
       }
     });
     return doneButton;
@@ -157,13 +157,16 @@ public class Abstractor extends AbstractTutor {
   }
 
   @Override
-  public boolean hasSucceeded() {
-    return true;
-  }
-
-  @Override
-  public boolean hasFailed() {
-    return numLivesLeft <= 0;
+  public void done(boolean success) {
+    if (!success) {
+      guru.doFailure(getFailureScore());
+      if (numLivesLeft <= 0) {
+        parent.done(false);
+      }
+    } else if (success) {
+      guru.doSuccess(getSuccessScore());
+      parent.done(true);
+    }
   }
 
   public void initialize(String[] parameters) {

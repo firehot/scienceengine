@@ -40,16 +40,6 @@ public interface ITutor {
   public void checkProgress();
 
   /**
-   * @return true iff has successfully completed all stages
-   */
-  public boolean hasSucceeded();
-
-  /**
-   * @return true iff will not be able to successfully complete all stages
-   */
-  public boolean hasFailed();
-
-  /**
    * When tutor is successful, this method is called
    */
   void doSuccessActions();
@@ -60,15 +50,6 @@ public interface ITutor {
    */
   public void reset();
 
-  /**
-   * Pushes a goal onto the goal stack
-   * @param goal
-   */
-  void pushGoal(String goal);
-
-  /**
-   * Remove topmost goal from goal stack
-   */
-  void popGoal();
-
+  // Called by child tutor when completed
+  public void done(boolean success);
 }

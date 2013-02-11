@@ -29,6 +29,7 @@ public class ActivityScreen extends AbstractScreen {
   private IScience2DController science2DController;
   private Profile profile;
   private String domain;
+  @SuppressWarnings("unused")
   private int activityLevel;
 
   public ActivityScreen(ScienceEngine scienceEngine, String domain, int activityLevel) {
@@ -62,18 +63,12 @@ public class ActivityScreen extends AbstractScreen {
         return super.keyDown(event, keycode);
       }      
     });
+    setTitle(science2DController.getTitle());
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(true);
     }
   }
 
-  @Override
-  public void show() {
-    super.show();
-    String title = getMsg().getString(domain + "." + activityLevel + ".Name");
-    setTitle(title);
-  }
-  
   @Override
   protected void goBack() {
     DomainHomeScreen domainHomeScreen = 
@@ -101,6 +96,10 @@ public class ActivityScreen extends AbstractScreen {
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;
     }
+    // Guru resources
+    ScienceEngine.assetManager.load("images/greenballoon.png", Texture.class);
+    ScienceEngine.assetManager.load("images/redballoon.png", Texture.class);
+    
     // TODO: Move assets inside appropriate view - automatically infer if possile.
     ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);
     ScienceEngine.assetManager.load("images/coppercoils-front2.png", Texture.class);

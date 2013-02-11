@@ -32,4 +32,6 @@ public interface IScience2DController {
   Skin getSkin();
   // Return view controls
   public ViewControls getViewControls();
+  // Get title of current activity
+  String getTitle();
 }

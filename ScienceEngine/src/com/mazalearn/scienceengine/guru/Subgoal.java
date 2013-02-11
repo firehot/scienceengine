@@ -4,12 +4,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.AggregatorFunction;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -23,9 +25,9 @@ public class Subgoal extends AbstractTutor {
   private final Expr postCondition;
   private Collection<Variable> variables;
   private String when;
-  private boolean progress;
-  private boolean isUserNext = true;
+  private boolean isUserNext = false;
   private Button nextButton;
+  private boolean postConditionSatisfied;
   
   public Subgoal(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs,
@@ -40,32 +42,20 @@ public class Subgoal extends AbstractTutor {
       throw new RuntimeException(e);
     }
     this.variables = parser.getVariables();
-    // We use presence of dummy variable NextButton as argument of function UserNext
-    // to indicate that user input of nextButton is expected to succeed in this subgoal.
-    for (Variable v: variables) {
-      String name = v.name();
-      if (name.equals("NextButton")) {
-        isUserNext = false;
-        break;
-      }
-    }
+    this.when = when;
     
     // Create a button NEXT at right place along with listener to set isUserNext.
-    if (!isUserNext) {
-      nextButton = new TextButton("Next", science2DController.getSkin());
-      nextButton.setColor(Color.YELLOW);
-      nextButton.addListener(new ClickListener() {
-        public void clicked (InputEvent event, float x, float y) {
-          nextButton.setVisible(false);
-          isUserNext = true;
-        }      
-      });
-      nextButton.setPosition(ScreenComponent.NextButton.getX(nextButton.getWidth()),
-          ScreenComponent.NextButton.getY(nextButton.getHeight()));
-      addActor(nextButton);
-    }
-    
-    this.when = when;
+    nextButton = new TextButton("Next", science2DController.getSkin());
+    nextButton.setColor(Color.YELLOW);
+    nextButton.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        nextButton.setVisible(false);
+        isUserNext = true;
+      }      
+    });
+    nextButton.setPosition(ScreenComponent.NextButton.getX(nextButton.getWidth()),
+        ScreenComponent.NextButton.getY(nextButton.getHeight()));
+    addActor(nextButton);    
   }
 
   private Parser createParser() {
@@ -91,40 +81,33 @@ public class Subgoal extends AbstractTutor {
   }
 
   @Override
+  public void act(float delta) {
+    super.act(delta);
+    if (!isActive || Math.round(ScienceEngine.getTime()) % 2 != 0) return;
+    checkProgress();
+  }
+
+  @Override
   public void reset() {
     super.reset();
-    if (nextButton != null) {
-      isUserNext = false;
-      nextButton.setVisible(true);
-    }
+    isUserNext = false;
+    nextButton.setVisible(false);
   }
   
-  public boolean hasSucceeded() {
-    if (postCondition == null) return false;  
-    science2DController.getModel().bindParameterValues(variables);
-    return postCondition.bvalue();
-  }
-
-
   @Override
-  public boolean hasFailed() {
-    return false; // Allow learner to keep trying forever
-  }
-
   public void checkProgress() {
-    this.progress = hasSucceeded();
-  }
-
-  @Override
-  public String getGoal() {
-    if (!progress) {
-      return super.getGoal();
+    if (postCondition == null) return;
+    if (!postConditionSatisfied) {
+      science2DController.getModel().bindParameterValues(variables);
+      postConditionSatisfied = postCondition.bvalue();
+      if (postConditionSatisfied) {
+        nextButton.setVisible(true);
+        Gdx.app.log(ScienceEngine.LOG, "Subgoal satisfied: " + goal);
+      }
     }
-    return null;
-  }
-
-  @Override
-  public void activate(boolean activate) {
-    super.activate(activate);
+    if (isUserNext && postConditionSatisfied) {
+      guru.doSuccess(getSuccessScore());
+      done(true);
+    }
   }
 }

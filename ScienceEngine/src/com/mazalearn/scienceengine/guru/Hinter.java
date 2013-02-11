@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.guru;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -12,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class Hinter extends Group {
   private static List<Image> SCIENTISTS = new ArrayList<Image>();
@@ -19,8 +20,11 @@ public class Hinter extends Group {
   private int scientistIndex = 0;
   private boolean jumpingMode = false;
   private String hint;
-  private Dashboard dashboard;
-
+  
+  static {
+    SCIENTISTS.add(new Image());
+  }
+/*
   static {
     Image image;
     SCIENTISTS.add(image = new Image(new Texture("images/edison.png")));
@@ -29,10 +33,9 @@ public class Hinter extends Group {
     image.setName("Hans Christian Oersted");
     SCIENTISTS.add(image = new Image(new Texture("images/faraday.png")));
     image.setName("Michael Faraday");
-  }
+  } */
   
-  public Hinter(final Dashboard dashboard, Skin skin) {
-    this.dashboard = dashboard;
+  public Hinter(Skin skin) {
     
     ClickListener imageClickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
@@ -86,6 +89,7 @@ public class Hinter extends Group {
     // TODO: differentiate hint from subgoal in dashboard
     // hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     //image.setVisible(true);
+    ScienceEngine.displayStatusMessage((IScience2DView) getStage(), hint);
     image.setY(0);
   }
 
