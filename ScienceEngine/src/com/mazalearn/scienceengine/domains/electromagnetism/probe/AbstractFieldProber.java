@@ -18,25 +18,14 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
  
   protected AbstractFieldProber(IScience2DController science2DController, 
       ITutor parent,
-      String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     this.fieldMeterActor = (Science2DActor) science2DController.getView().findActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
     }
   }
   
-  @Override
-  public void reinitialize(boolean probeMode) {
-    super.reinitialize(probeMode);
-    reinitializeConfigs(probeMode);
-  }
-
-  private void reinitializeConfigs(boolean probeMode) {
-    fieldMeter.setActive(!probeMode);
-    fieldMeterActor.setVisible(!probeMode);
-  }  
-
   protected void createFieldMeterSamples(Vector2[] points, Vector2[] bFields) {
     fieldMeter.reset();
     for (int i = 0; i < points.length; i++) {
@@ -55,16 +44,17 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   @Override
   public void done(boolean success) {
     if (success) {
-      guru.doSuccess(getSuccessScore());
+      guru.showSuccess(getSuccessScore());
     } else {
-      guru.doFailure(getFailureScore());
+      guru.showFailure(getFailureScore());
       // TODO: equate success and failure scores
     }
     if (!success) return; // NO Failure exit
-    if (netSuccesses >= 10) {
-      parent.done(success);
+
+    if (netSuccesses >= 2) {
+      super.done(success);
     } else {
-      activate(true);
+      teach();
     }
   }
 }

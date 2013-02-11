@@ -32,8 +32,8 @@ public class Subgoal extends AbstractTutor {
   public Subgoal(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs,
       String when, String postConditionString,
-      int deltaSuccessScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, 0);
+      int deltaSuccessScore, String[] hints) {
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, 0, hints);
     Parser parser = createParser();
     try {
       this.postCondition = parser.parseString(postConditionString);
@@ -83,7 +83,7 @@ public class Subgoal extends AbstractTutor {
   @Override
   public void act(float delta) {
     super.act(delta);
-    if (!isActive || Math.round(ScienceEngine.getTime()) % 2 != 0) return;
+    if (!isVisible() || Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     checkProgress();
   }
 
@@ -102,11 +102,11 @@ public class Subgoal extends AbstractTutor {
       postConditionSatisfied = postCondition.bvalue();
       if (postConditionSatisfied) {
         nextButton.setVisible(true);
-        Gdx.app.log(ScienceEngine.LOG, "Subgoal satisfied: " + goal);
+        guru.showSuccess(getSuccessScore());
+        Gdx.app.log(ScienceEngine.LOG, "Subgoal satisfied: " + getGoal());
       }
     }
     if (isUserNext && postConditionSatisfied) {
-      guru.doSuccess(getSuccessScore());
       done(true);
     }
   }

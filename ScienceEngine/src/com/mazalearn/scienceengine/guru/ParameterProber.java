@@ -70,51 +70,50 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   public void done(boolean success) {
     netSuccesses += success ? 1 : -1;
     if (success) {
-      guru.doSuccess(getSuccessScore());
+      guru.showSuccess(getSuccessScore());
     } else {
-      guru.doFailure(getFailureScore());
+      guru.showFailure(getFailureScore());
       setSuccessScore(getFailureScore()); // Equate success and failure scores
     }
-    done(success);
+    dummy.setConfigParameter(null, 0);
+    science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
+    image.setVisible(false);
+    ScienceEngine.setProbeMode(false);
+    super.done(success);
   }
     
   public ParameterProber(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     this.image = new ProbeImage();
     
     dummy = (DummyBody) science2DController.getModel().findBody(ComponentType.Dummy);
   }
   
   @Override
-  public void reinitialize(boolean probeMode) {
-    super.reinitialize(probeMode);
+  public void prepareToTeach() {
+    super.prepareToTeach();
     image.setVisible(false);
   }
   
   @Override
-  public void activate(boolean activate) {
-    super.activate(activate);
-    if (activate) {
-      if (resultType == ResultType.Spin) {
-        List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
-        configs.add(probeConfig);
-        science2DController.getGuru().setupProbeConfigs(configs, false);
-        science2DController.getModel().bindParameterValues(resultExprVariables);
-        imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
-      } else {
-        float value = MathUtils.random(0f, 10f);
-        dummy.setConfigParameter(probeConfig.getParameter(), value);
-        science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
-      }
-      ScienceEngine.selectBody(dummy, science2DController.getView());
+  public void teach() {
+    super.teach();
+    if (resultType == ResultType.Spin) {
+      List<IModelConfig<?>> configs = new ArrayList<IModelConfig<?>>();
+      configs.add(probeConfig);
+      science2DController.getGuru().setupProbeConfigs(configs, false);
+      science2DController.getModel().bindParameterValues(resultExprVariables);
+      imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
     } else {
-      dummy.setConfigParameter(null, 0);
-      science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
+      float value = MathUtils.random(0f, 10f);
+      dummy.setConfigParameter(probeConfig.getParameter(), value);
+      science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
     }
-    image.setVisible(activate);
-    ScienceEngine.setProbeMode(activate);
+    ScienceEngine.selectBody(dummy, science2DController.getView());
+    image.setVisible(true);
+    ScienceEngine.setProbeMode(true);
   }
   
   @Override
@@ -122,9 +121,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   }
   
   public void initialize(IModelConfig<?> probeConfig, 
-      String resultExprString, String resultType, String[] hints) {
+      String resultExprString, String resultType) {
     this.probeConfig = probeConfig;
-    this.hints = hints;
 
     this.resultType = ResultType.valueOf(resultType);
     if (this.resultType == ResultType.Spin) {   

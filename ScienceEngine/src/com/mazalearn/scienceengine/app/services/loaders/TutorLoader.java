@@ -38,19 +38,15 @@ class TutorLoader {
         50.0f);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
+    String[] hints = loadHints(tutorObj);
     AbstractTutor tutor = science2DController.createTutor(guru, type, goal,
-        components, configs, (int) deltaSuccessScore, (int) deltaFailureScore);
+        components, configs, (int) deltaSuccessScore, (int) deltaFailureScore, hints);
     if (tutor instanceof ParameterProber) {
       String resultType = (String) tutorObj.get("resultType");
       String parameterName = (String) tutorObj.get("parameter");
       String resultExpr = (String) tutorObj.get("result");
-      Array<?> hintObj = (Array<?>) tutorObj.get("hints");
-      String[] hints = hintObj == null ? new String[]{} : new String[hintObj.toArray().length];
-      for (int i = 0; i < hints.length; i++) {
-        hints[i] = (String) hintObj.get(i);
-      }
       IModelConfig<?> parameter = science2DController.getModel().getConfig(parameterName);
-      ((ParameterProber) tutor).initialize(parameter, resultExpr, resultType, hints);
+      ((ParameterProber) tutor).initialize(parameter, resultExpr, resultType);
       return tutor;
     }
     if (tutor instanceof Guide) {
@@ -69,6 +65,15 @@ class TutorLoader {
       ((Abstractor) tutor).initialize(parameters);      
     }
     return tutor;
+  }
+
+  private String[] loadHints(OrderedMap<String, ?> tutorObj) {
+    Array<?> hintObj = (Array<?>) tutorObj.get("hints");
+    String[] hints = hintObj == null ? new String[]{} : new String[hintObj.toArray().length];
+    for (int i = 0; i < hints.length; i++) {
+      hints[i] = (String) hintObj.get(i);
+    }
+    return hints;
   }
 
   @SuppressWarnings("unchecked")
@@ -91,6 +96,7 @@ class TutorLoader {
 
   private Subgoal loadSubgoal(ITutor parent, OrderedMap<String, ?> subgoalObj)
       throws SyntaxException {
+    String[] hints = loadHints(subgoalObj);
     String goal = (String) subgoalObj.get("goal");
     String when = (String) subgoalObj.get("when");
     String postCondition = (String) subgoalObj.get("postcondition");
@@ -98,7 +104,7 @@ class TutorLoader {
     Array<?> components = (Array<?>) subgoalObj.get("components");
     Array<?> configs = (Array<?>) subgoalObj.get("configs");
     Subgoal subgoal = new Subgoal(science2DController, parent, goal, 
-        components, configs, when, postCondition, (int) success);
+        components, configs, when, postCondition, (int) success, hints);
     return subgoal;
   }
 }

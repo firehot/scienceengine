@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ProbeImage;
 
@@ -18,12 +17,10 @@ import com.mazalearn.scienceengine.guru.ProbeImage;
 public class FieldMagnitudeProber extends AbstractFieldProber {
   
   private final class ClickResult extends ClickListener {
-    private final Guru guru;
     private final boolean success;
  
-    private ClickResult(boolean success, Guru guru) {
+    private ClickResult(boolean success) {
       this.success = success;
-      this.guru = guru;
     }
 
     @Override
@@ -53,16 +50,16 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   public FieldMagnitudeProber(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
-    this.hints = new String[] {
-        "The field is stronger closer to the object generating the field",
-        "The field is stronger if the current or magnet strength is larger"
-    };
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore,
+        new String[] {
+            "The field is stronger closer to the object generating the field",
+            "The field is stronger if the current or magnet strength is larger"
+        });
     
     imageCorrect = new ProbeImage();
-    imageCorrect.addListener(new ClickResult(true, guru));
+    imageCorrect.addListener(new ClickResult(true));
     imageWrong = new ProbeImage();
-    imageWrong.addListener(new ClickResult(false, guru));
+    imageWrong.addListener(new ClickResult(false));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
     this.bFields = new Vector2[] { new Vector2(), new Vector2()};
     this.addActor(imageCorrect);
@@ -70,42 +67,40 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   }
   
   @Override
-  public void reinitialize(boolean probeMode) {
-    super.reinitialize(probeMode);
+  public void prepareToTeach() {
+    super.prepareToTeach();
     imageCorrect.setVisible(false);
     imageWrong.setVisible(false);
   }
   
   @Override
-  public void activate(boolean activate) {
-    super.activate(activate);
-    if (activate) {
-      science2DController.getGuru().setupProbeConfigs(
-          science2DController.getModel().getAllConfigs(), false);
-      // Generate two random points P1, P2 in unit circle.
-      // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
-      // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2
-      do {
-        generateProbePoints(points);
-      } while (!arePointsAcceptable(points, bFields));
-      
-      createFieldMeterSamples(points, bFields);
-      
-      if (bFields[0].len() > bFields[1].len()) {
-        imageCorrect.setX(points[0].x - imageCorrect.getWidth()/2);
-        imageCorrect.setY(points[0].y - imageCorrect.getHeight()/2);
-        imageWrong.setX(points[1].x - imageWrong.getWidth()/2);
-        imageWrong.setY(points[1].y - imageWrong.getWidth()/2);
-      } else {
-        imageCorrect.setX(points[1].x - imageCorrect.getWidth()/2);
-        imageCorrect.setY(points[1].y - imageCorrect.getHeight()/2);
-        imageWrong.setX(points[0].x - imageWrong.getWidth()/2);
-        imageWrong.setY(points[0].y - imageWrong.getWidth()/2);
-      }
-      imageWrong.setVisible(true);
-      imageCorrect.setVisible(true);
-      fieldMeterActor.setVisible(false);
+  public void teach() {
+    super.teach();
+    science2DController.getGuru().setupProbeConfigs(
+        science2DController.getModel().getAllConfigs(), false);
+    // Generate two random points P1, P2 in unit circle.
+    // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
+    // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2
+    do {
+      generateProbePoints(points);
+    } while (!arePointsAcceptable(points, bFields));
+    
+    createFieldMeterSamples(points, bFields);
+    
+    if (bFields[0].len() > bFields[1].len()) {
+      imageCorrect.setX(points[0].x - imageCorrect.getWidth()/2);
+      imageCorrect.setY(points[0].y - imageCorrect.getHeight()/2);
+      imageWrong.setX(points[1].x - imageWrong.getWidth()/2);
+      imageWrong.setY(points[1].y - imageWrong.getWidth()/2);
+    } else {
+      imageCorrect.setX(points[1].x - imageCorrect.getWidth()/2);
+      imageCorrect.setY(points[1].y - imageCorrect.getHeight()/2);
+      imageWrong.setX(points[0].x - imageWrong.getWidth()/2);
+      imageWrong.setY(points[0].y - imageWrong.getWidth()/2);
     }
+    imageWrong.setVisible(true);
+    imageCorrect.setVisible(true);
+    fieldMeterActor.setVisible(false);
   }
 
   private boolean haveSimilarMagnitudes(float v1, float v2) {

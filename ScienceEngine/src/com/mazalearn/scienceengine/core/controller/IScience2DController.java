@@ -27,7 +27,7 @@ public interface IScience2DController {
   public Guru getGuru();
   // Factory method to create tutor
   AbstractTutor createTutor(ITutor parent, String type, String goal, Array<?> components,
-      Array<?> configs, int deltaSuccessScore, int deltaFailureScore);
+      Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints);
   // Skin used in this invocation
   Skin getSkin();
   // Return view controls

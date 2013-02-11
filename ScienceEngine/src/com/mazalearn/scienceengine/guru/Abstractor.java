@@ -37,8 +37,8 @@ public class Abstractor extends AbstractTutor {
   public Abstractor(final IScience2DController science2DController, ITutor parent, String goal, 
       Array<?> components, Array<?> configs, Skin skin, 
       ModelControls modelControls, int deltaSuccessScore,
-      int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      int deltaFailureScore, String[] hints) {
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     this.skin = skin;
     this.modelControls = modelControls;
     /* Abstractor allows user to interact with bodies on screen as well as its
@@ -50,8 +50,8 @@ public class Abstractor extends AbstractTutor {
    * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(float, float, float, float)
    */
   @Override
-  public void reinitialize(boolean probeMode) {
-    super.reinitialize(probeMode);
+  public void prepareToTeach() {
+    super.prepareToTeach();
     
     if (configTable == null) {
       createConfigTable(science2DController.getModel(), skin);
@@ -149,22 +149,20 @@ public class Abstractor extends AbstractTutor {
   }
 
   @Override
-  public void activate(boolean activate) {
-    super.activate(activate);
-    if (activate) {
-      modelControls.refresh();
-    }
+  public void teach() {
+    super.teach();
+    modelControls.refresh();
   }
 
   @Override
   public void done(boolean success) {
     if (!success) {
-      guru.doFailure(getFailureScore());
+      guru.showFailure(getFailureScore());
       if (numLivesLeft <= 0) {
         parent.done(false);
       }
     } else if (success) {
-      guru.doSuccess(getSuccessScore());
+      guru.showSuccess(getSuccessScore());
       parent.done(true);
     }
   }

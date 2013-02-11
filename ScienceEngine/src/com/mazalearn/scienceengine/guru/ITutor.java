@@ -18,19 +18,19 @@ public interface ITutor {
   public String getGoal();
 
   /**
-   * Prepare tutor to be run once.
-   * Reinitialize should have been called before.
-   * @param activate
+   * Prepare tutor before a session. 
    */
-  public void activate(boolean activate);
+  public void prepareToTeach();
 
   /**
-   * Reinitialize tutor before a series of runs. 
-   * Each individual run requires activate
-   * @param probeMode
+   * Teach session.
+   * prepareToTeach should have been called before.
    */
-  public void reinitialize(boolean probeMode);
+  public void teach();
 
+  /**
+   * @return hint for current session, if any. Maybe null.
+   */
   public String getHint();
 
   public int getSuccessScore();
@@ -40,16 +40,14 @@ public interface ITutor {
   public void checkProgress();
 
   /**
-   * When tutor is successful, this method is called
-   */
-  void doSuccessActions();
-
-  /**
    * Reset components and configs to state at beginning
-   * TODO: what is difference between reset and reinitialize???
+   * TODO: what is difference between reset and prepareToTeach???
    */
   public void reset();
 
-  // Called by child tutor when completed
+  /**
+   * Called when teaching session is completed
+   * @param success
+   */
   public void done(boolean success);
 }

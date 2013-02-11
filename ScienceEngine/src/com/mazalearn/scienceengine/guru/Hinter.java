@@ -74,11 +74,11 @@ public class Hinter extends Group {
   }
   
   public void setHint(String hint) {
+    if (hint == this.hint) return;
     if (hint == null) {
       this.setVisible(false);
       return;
     }
-    if (hint == this.hint) return;
     this.hint = hint;
     this.setVisible(true);
     Image image = SCIENTISTS.get(scientistIndex);
@@ -89,7 +89,7 @@ public class Hinter extends Group {
     // TODO: differentiate hint from subgoal in dashboard
     // hintButton.setText("Hint: " + hint + "\n-" + image.getName());
     //image.setVisible(true);
-    ScienceEngine.displayStatusMessage((IScience2DView) getStage(), hint);
+    ScienceEngine.displayStatusMessage((IScience2DView) getStage(), "Hint: " + hint);
     image.setY(0);
   }
 
@@ -99,6 +99,7 @@ public class Hinter extends Group {
   
   public void clearHint() {
     this.hint = null;
+    ScienceEngine.displayStatusMessage((IScience2DView) getStage(), "");
   }
 
 }

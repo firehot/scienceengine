@@ -39,14 +39,14 @@ public class Guru extends Group implements ITutor {
   private Hinter hinter;
   private IScience2DController science2DController;
   private ViewControls viewControls;
-  private List<String> goals = new ArrayList<String>();
+  private List<ITutor> activeTutors = new ArrayList<ITutor>();
   private final String goal;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
     this.science2DController = science2DController;
     this.goal = goal;
-    goals.add(goal);
+    activeTutors.add(this);
     this.setPosition(0, 0);
     // Guru has no direct user interaction - hence 0 size
     this.setSize(0, 0);
@@ -71,7 +71,6 @@ public class Guru extends Group implements ITutor {
   public void registerTutor(AbstractTutor tutor) {
     registeredTutors.add(tutor);
     this.addActor(tutor);
-    tutor.activate(false);
   }
 
   public void startChallenge() {
@@ -80,7 +79,7 @@ public class Guru extends Group implements ITutor {
         Parameter.Challenge.name());
     // Reset scores and bring dashboard to top
     dashboard.resetScore();
-    getStage().addActor(this); // ???
+    getStage().addActor(this); // bring Guru to top
 
     // Collect actors to be excluded from probe points.
     // These are the visible actors.
@@ -92,25 +91,22 @@ public class Guru extends Group implements ITutor {
       }
     }
     
-    if (registeredTutors.size() == 0) { // No tutors available
+    if (registeredTutors.size() == 0) { // No activeTutors available
       endChallenge();
       return;
     }
     
-    this.setVisible(true);
-    tutorIndex = -1;
-    runTutor();
+    prepareToTeach();
+    teach();
   }
   
   public void endChallenge() {
     // Reinitialize current prober, if any
     if (currentTutor != null) {
-      currentTutor.activate(false);
-      currentTutor.reinitialize(false);
       currentTutor = null;
-      // Remove all except the activity goal
-      goals.clear();
-      goals.add(goal);
+      // Remove all except self from active tutors
+      activeTutors.clear();
+      activeTutors.add(this);
     }
 
     science2DController.getView().done(false);
@@ -124,11 +120,11 @@ public class Guru extends Group implements ITutor {
     return this.excludedActors;
   }
 
+  @Override
   public void done(boolean success) {
-    if (success) {      
-      hinter.setHint(null);
-      
-      // Success and no more tutors == WIN
+    hinter.setHint(null);
+    if (success) {            
+      // Success and no more activeTutors == WIN
       if (tutorIndex >= registeredTutors.size() - 1) {
         soundManager.play(ScienceEngineSound.CELEBRATE);
         science2DController.getView().done(true);
@@ -136,7 +132,7 @@ public class Guru extends Group implements ITutor {
         this.setVisible(false);
         return;
       }
-      runTutor();
+      teach();
     } else {
       science2DController.getView().done(false);
       this.setVisible(false);
@@ -144,13 +140,13 @@ public class Guru extends Group implements ITutor {
     }
   }
 
-  public void doFailure(int score) {
+  public void showFailure(int score) {
     soundManager.play(ScienceEngineSound.FAILURE);
     dashboard.addScore(-score);
     failureImage.show(-score);
   }
 
-  public void doSuccess(int score) {
+  public void showSuccess(int score) {
     soundManager.play(ScienceEngineSound.SUCCESS);
     dashboard.addScore(score);
     successImage.show(score);
@@ -163,28 +159,32 @@ public class Guru extends Group implements ITutor {
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
     if (currentTutor != null) {
       if (!hinter.hasHint()) {
-        hinter.setHint(currentTutor.getHint());
+        hinter.setHint(activeTutors.get(activeTutors.size() - 1).getHint());
       }
     }
   }
   
   @Override
   public String getGoal() {
-    return goals.get(goals.size() - 1);
+    return goal;
   }
 
-  public void pushGoal(String goal) {
-    goals.add(goal);
+  public void pushTutor(ITutor tutor) {
+    activeTutors.add(tutor);
+    setGoalsInDashboard();
+    hinter.clearHint();
   }
   
-  public void popGoal(String goal) {
-    if (goals.size() > 0 && goals.get(goals.size() - 1).equals(goal)) {
-      goals.remove(goals.size() - 1);
+  public void popTutor(ITutor tutor) {
+    if (activeTutors.size() > 0 && activeTutors.get(activeTutors.size() - 1).equals(tutor)) {
+      activeTutors.remove(activeTutors.size() - 1);
+      hinter.clearHint();
     }
   }
   
   // Prerequisite: registeredTutors.size() >= 1
-  private void runTutor() {
+  @Override
+  public void teach() {
     // Move on to next tutor
     tutorIndex++;
     if (tutorIndex == registeredTutors.size()) {
@@ -192,8 +192,16 @@ public class Guru extends Group implements ITutor {
       return;
     }
     currentTutor = registeredTutors.get(tutorIndex);
-    currentTutor.reinitialize(true);
-    currentTutor.activate(true);
+    currentTutor.prepareToTeach();
+    currentTutor.teach();
+    setGoalsInDashboard();
+  }
+
+  private void setGoalsInDashboard() {
+    List<String> goals = new ArrayList<String>();
+    for (ITutor tutor: activeTutors) {
+      goals.add(tutor.getGoal());
+    }
     dashboard.setGoals(goals);
   }
   
@@ -218,38 +226,23 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public void activate(boolean activate) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  @Override
-  public void reinitialize(boolean probeMode) {
-    // TODO Auto-generated method stub
-    
+  public void prepareToTeach() {
+    this.setVisible(true);
+    tutorIndex = -1;
   }
 
   @Override
   public String getHint() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public int getSuccessScore() {
-    // TODO Auto-generated method stub
     return 0;
   }
 
   @Override
   public int getFailureScore() {
-    // TODO Auto-generated method stub
     return 0;
-  }
-
-  @Override
-  public void doSuccessActions() {
-    // TODO Auto-generated method stub
-    
   }
 }

@@ -17,16 +17,15 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected Array<?> configs;
   private int deltaFailureScore;
   private int deltaSuccessScore;
-  protected String[] hints;
-  protected String goal;
+  private String[] hints;
+  private String goal;
   protected IScience2DController science2DController;
   protected final ITutor parent;
-  protected Guru guru;
-  protected boolean isActive;
+  protected final Guru guru;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore) {
+      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     this.parent = parent;
     this.science2DController = science2DController;
     this.goal = goal;
@@ -34,7 +33,9 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.configs = configs;
     this.deltaSuccessScore = deltaSuccessScore;
     this.deltaFailureScore = deltaFailureScore;
+    this.hints = hints;
     this.guru = science2DController.getGuru();
+    this.setVisible(false);
   }
 
   @Override
@@ -44,11 +45,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void done(boolean success) {
-    activate(false);
-    reinitialize(false);
-    if (success) {
-      doSuccessActions();
-    }
+    guru.popTutor(this);
+    this.setVisible(false);
     parent.done(success);
   }
 
@@ -57,26 +55,14 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
 
   @Override
-  public void doSuccessActions() {
+  public void teach() {
+    this.setVisible(true);
   }
 
   @Override
-  public void activate(boolean activate) {
-    // TODO: if (isActive == activate) return;
-    isActive = activate;
-    if (activate) {
-      guru.pushGoal(goal);
-    } else {
-      guru.popGoal(goal);
-    }
-    this.setVisible(activate);
-  }
-
-  @Override
-  public void reinitialize(boolean probeMode) {
-    if (probeMode) {
-      reset();
-    }
+  public void prepareToTeach() {
+    reset();
+    guru.pushTutor(this);
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());

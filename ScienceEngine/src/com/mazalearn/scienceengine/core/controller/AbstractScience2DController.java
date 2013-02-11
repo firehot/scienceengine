@@ -166,11 +166,11 @@ public abstract class AbstractScience2DController implements
   
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal,
-      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore) {
+      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     if ("ParameterProber".equals(type)) {
-      return new ParameterProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new ParameterProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("Guide".equals(type)) {
-      return new Guide(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new Guide(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     }
     return null;
   }

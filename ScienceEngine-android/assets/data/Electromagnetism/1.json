@@ -11,12 +11,14 @@ configs:[
 ],
 plan:[
       {type: "Guide", 
-       goal: "Can you make the compass go through one complete rotation?",
+       goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
        timelimit: 120,
+       components:[{type:"FieldMeter", visible:false}],
        subgoals: [
-         {goal: "What happens to the compass when it moves around the magnet?",
+         {goal: "Make the compass go through one complete rotation",
+         hints: ["What happens to the compass when it moves around the magnet?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          success: 1000,
          components:[{type:"Compass", visible: true}]
@@ -28,29 +30,29 @@ plan:[
        success: 250,
        timelimit: 180,
        subgoals: [
-        {goal: "Click in many places around the magnet to see the field.",
+        {goal: "Touch the screen around the magnet to see the field.",
          postcondition: "FieldMeter.Count >= 10",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },
-          {goal: "What happens to the field when magnet is moved?",
-         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 5",
+          {goal: "Move the magnet. See how the field changes.",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 1",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },
-         {goal: "What happens to the field when magnet is rotated?",
-         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.RotationAngle) >= 5",
+         {goal: "Change rotation angle of magnet. See how the field changes",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.RotationAngle) >= 1",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },
-         {goal: "What happens to the field when magnet strength is changed?",
-         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetStrength) >= 5",
+         {goal: "Change the magnet strength. See how the field changes.",
+         postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetStrength) >= 1",
          success: 250,
          components:[{type:"Compass", visible: false}]
          }
        ]},       
        {type: "FieldMagnitudeProber",
-        goal: "Touch the ? where the magnetic field is stronger",
+        goal: "Touch one of the two ? where the magnetic field is stronger",
         configs:[{name: "BarMagnet.MovementMode", value:"None"}],
         timelimit: 10,
         success: 100,
@@ -58,7 +60,7 @@ plan:[
         components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
         }, 
         {type:"FieldDirectionProber",
-        goal: "Touch ? and Drag in the direction of the magnetic field",
+        goal: "Touch the ? and Drag in the direction of the magnetic field",
         configs:[{name: "BarMagnet.MovementMode", value:"None"}],
         timelimit: 10,
         success: 100,

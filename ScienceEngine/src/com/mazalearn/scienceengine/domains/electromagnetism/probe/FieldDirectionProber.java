@@ -24,12 +24,12 @@ public class FieldDirectionProber extends AbstractFieldProber {
   public FieldDirectionProber(final IScience2DController science2DController,
       final ITutor parent, String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
-    this.hints = new String[] {
-        "The direction of the field is the direction in which a " +
-        "free North Pole would move if placed at that point.",
-        "The direction of the field is where the compass needle's North would point."
-    };
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore,
+        new String[] {
+            "The direction of the field is the direction in which a " +
+            "free North Pole would move if placed at that point.",
+            "The direction of the field is where the compass needle's North would point."
+        });
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};
@@ -82,26 +82,24 @@ public class FieldDirectionProber extends AbstractFieldProber {
   }
   
   @Override
-  public void reinitialize(boolean probeMode) {
-    super.reinitialize(probeMode);
+  public void prepareToTeach() {
+    super.prepareToTeach();
     image.setVisible(false);
   }
   
   @Override
-  public void activate(boolean activate) {
-    super.activate(activate);
-    if (activate) {
-      science2DController.getGuru().setupProbeConfigs(
-          science2DController.getModel().getAllConfigs(), false);
-      generateProbePoints(points);
-      getBField(points[0], bFields[0]);
-      createFieldMeterSamples(points, bFields);
-      image.setX(points[0].x - image.getWidth()/2);
-      image.setY(points[0].y - image.getHeight()/2);
-      bFields[0].nor();
-      image.setVisible(true);
-      fieldMeterActor.setVisible(false);
-    }
+  public void teach() {
+    super.teach();
+    science2DController.getGuru().setupProbeConfigs(
+        science2DController.getModel().getAllConfigs(), false);
+    generateProbePoints(points);
+    getBField(points[0], bFields[0]);
+    createFieldMeterSamples(points, bFields);
+    image.setX(points[0].x - image.getWidth()/2);
+    image.setY(points[0].y - image.getHeight()/2);
+    bFields[0].nor();
+    image.setVisible(true);
+    fieldMeterActor.setVisible(false);
   }
 
 }

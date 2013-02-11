@@ -29,20 +29,20 @@ public class Guide extends AbstractTutor {
     
   public Guide(IScience2DController science2DController, ITutor parent,
       String goal, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
   }
   
   /* (non-Javadoc)
    * @see com.mazalearn.scienceengine.guru.AbstractTutor#activate(boolean)
    */
   @Override
-  public void activate(boolean activate) {
-    super.activate(activate);
-    if (activate) {
-      stageBeginTime[currentStage] = ScienceEngine.getTime();
-    } 
+  public void teach() {
+    super.teach();
+    stageBeginTime[currentStage] = ScienceEngine.getTime();
     ScienceEngine.setProbeMode(false);
+    Subgoal subgoal = subgoals.get(0);
+    subgoal.teach();
   }
 
   /* (non-Javadoc)
@@ -53,14 +53,11 @@ public class Guide extends AbstractTutor {
    * own bodies - like subgoal.
    */
   @Override
-  public void reinitialize(boolean probeMode) {
-    super.reinitialize(probeMode);
-    if (probeMode) {
-      this.currentStage = 0;
-      Subgoal subgoal = subgoals.get(0);
-      subgoal.reinitialize(true);
-      subgoal.activate(true);
-    }
+  public void prepareToTeach() {
+    super.prepareToTeach();
+    this.currentStage = 0;
+    Subgoal subgoal = subgoals.get(0);
+    subgoal.prepareToTeach();
   }
   
   @Override
@@ -80,11 +77,12 @@ public class Guide extends AbstractTutor {
     // Move on to next stage
     if (++currentStage == subgoals.size()) {
       super.done(success);
+      doSuccessActions();
       return;
     }
     Subgoal subgoal = subgoals.get(currentStage);
-    subgoal.reinitialize(true);
-    subgoal.activate(true);
+    subgoal.prepareToTeach();
+    subgoal.teach();
   }
 
   @Override
@@ -98,7 +96,6 @@ public class Guide extends AbstractTutor {
     this.subgoals = subgoals;
     for (Subgoal subgoal: subgoals) {
       this.addActor(subgoal);
-      subgoal.activate(false);
     }
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.stageBeginTime = new float[subgoals.size() + 1];
@@ -114,8 +111,7 @@ public class Guide extends AbstractTutor {
     }
   }
 
-  @Override
-  public void doSuccessActions() {
+  private void doSuccessActions() {
     if (successActions == null) return;
     science2DController.getModel().bindParameterValues(variables);
     successActions.bvalue();    
