@@ -157,12 +157,12 @@ public class Abstractor extends AbstractTutor {
   @Override
   public void done(boolean success) {
     if (!success) {
-      guru.showFailure(getFailureScore());
+      guru.showWrong(getFailureScore());
       if (numLivesLeft <= 0) {
         parent.done(false);
       }
     } else if (success) {
-      guru.showSuccess(getSuccessScore());
+      guru.showCorrect(getSuccessScore());
       parent.done(true);
     }
   }

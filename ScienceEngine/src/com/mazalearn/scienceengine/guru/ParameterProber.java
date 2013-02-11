@@ -70,9 +70,9 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   public void done(boolean success) {
     netSuccesses += success ? 1 : -1;
     if (success) {
-      guru.showSuccess(getSuccessScore());
+      guru.showCorrect(getSuccessScore());
     } else {
-      guru.showFailure(getFailureScore());
+      guru.showWrong(getFailureScore());
       setSuccessScore(getFailureScore()); // Equate success and failure scores
     }
     dummy.setConfigParameter(null, 0);

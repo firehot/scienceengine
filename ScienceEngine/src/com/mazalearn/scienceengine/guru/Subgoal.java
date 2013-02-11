@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -28,6 +29,7 @@ public class Subgoal extends AbstractTutor {
   private boolean isUserNext = false;
   private Button nextButton;
   private boolean postConditionSatisfied;
+  private String[] plaudits = {"Bravo", "Well Done", "Excellent", "Good"};
   
   public Subgoal(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs,
@@ -102,7 +104,8 @@ public class Subgoal extends AbstractTutor {
       postConditionSatisfied = postCondition.bvalue();
       if (postConditionSatisfied) {
         nextButton.setVisible(true);
-        guru.showSuccess(getSuccessScore());
+        String plaudit = plaudits[MathUtils.random(0, plaudits.length - 1)];
+        guru.showSuccess(plaudit);
         Gdx.app.log(ScienceEngine.LOG, "Subgoal satisfied: " + getGoal());
       }
     }

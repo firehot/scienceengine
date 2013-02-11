@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScreenComponent;
 
 final class ScoreImage extends Image {
-  private int score;
+  private String message;
   private final boolean success;
   private BitmapFont font;
 
@@ -22,11 +22,11 @@ final class ScoreImage extends Image {
     font = skin.getFont("default-font");
   }
 
-  public void show(int score) {
+  public void show(String message) {
     // Middle of screen
     this.setX(ScreenComponent.VIEWPORT_WIDTH/2);
     this.setY(ScreenComponent.VIEWPORT_HEIGHT/2);
-    this.score = score;
+    this.message = message;
     this.setVisible(true);
     float moveBy = ScreenComponent.getScaledY(success ? 10 : -10);
     this.setRotation(-5f);
@@ -48,7 +48,7 @@ final class ScoreImage extends Image {
     super.draw(batch, parentAlpha);
     Color c = font.getColor();
     font.setColor(Color.BLACK);
-    font.draw(batch, String.valueOf(score), getX() + getWidth()/2 - 10, getY() + getHeight()/2);
+    font.draw(batch, message, getX() + getWidth()/2 - 10, getY() + getHeight()/2);
     font.setColor(c);
   }
 }

@@ -99,6 +99,8 @@ public class ActivityScreen extends AbstractScreen {
     // Guru resources
     ScienceEngine.assetManager.load("images/greenballoon.png", Texture.class);
     ScienceEngine.assetManager.load("images/redballoon.png", Texture.class);
+    ScienceEngine.assetManager.load("images/check.png", Texture.class);
+    ScienceEngine.assetManager.load("images/cross.png", Texture.class);
     
     // TODO: Move assets inside appropriate view - automatically infer if possile.
     ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);

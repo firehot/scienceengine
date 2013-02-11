@@ -44,9 +44,9 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   @Override
   public void done(boolean success) {
     if (success) {
-      guru.showSuccess(getSuccessScore());
+      guru.showCorrect(getSuccessScore());
     } else {
-      guru.showFailure(getFailureScore());
+      guru.showWrong(getFailureScore());
       // TODO: equate success and failure scores
     }
     if (!success) return; // NO Failure exit

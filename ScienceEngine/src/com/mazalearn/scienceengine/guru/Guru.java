@@ -35,7 +35,7 @@ public class Guru extends Group implements ITutor {
   private final ModelControls modelControls;
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;
-  private final ScoreImage successImage, failureImage;
+  private final ScoreImage successImage, failureImage, correctImage, wrongImage;
   private Hinter hinter;
   private IScience2DController science2DController;
   private ViewControls viewControls;
@@ -61,8 +61,13 @@ public class Guru extends Group implements ITutor {
      
     this.successImage = new ScoreImage(ScienceEngine.assetManager.get("images/greenballoon.png", Texture.class), skin, true);
     this.failureImage = new ScoreImage(ScienceEngine.assetManager.get("images/redballoon.png", Texture.class), skin, false);
+    this.correctImage = new ScoreImage(ScienceEngine.assetManager.get("images/check.png", Texture.class), skin, true);
+    this.wrongImage = new ScoreImage(ScienceEngine.assetManager.get("images/cross.png", Texture.class), skin, false);
+    
     ((Stage)science2DController.getView()).addActor(successImage);
     ((Stage)science2DController.getView()).addActor(failureImage);
+    ((Stage)science2DController.getView()).addActor(correctImage);
+    ((Stage)science2DController.getView()).addActor(wrongImage);
     hinter = new Hinter(skin);
     this.addActor(hinter);
     this.setVisible(false);
@@ -140,16 +145,27 @@ public class Guru extends Group implements ITutor {
     }
   }
 
-  public void showFailure(int score) {
+  public void showWrong(int score) {
     soundManager.play(ScienceEngineSound.FAILURE);
     dashboard.addScore(-score);
-    failureImage.show(-score);
+    wrongImage.show(String.valueOf(score));
+  }
+  
+  public void showFailure(String message) {
+    soundManager.play(ScienceEngineSound.FAILURE);
+    failureImage.show(message);
   }
 
-  public void showSuccess(int score) {
+  public void showCorrect(int score) {
     soundManager.play(ScienceEngineSound.SUCCESS);
     dashboard.addScore(score);
-    successImage.show(score);
+    correctImage.show(String.valueOf(score));
+    hinter.clearHint();
+  }
+  
+  public void showSuccess(String message) {
+    soundManager.play(ScienceEngineSound.SUCCESS);
+    successImage.show(message);
     hinter.clearHint();
   }
   
