@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
-import com.mazalearn.scienceengine.guru.Guide;
+import com.mazalearn.scienceengine.guru.TutorGroup;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
 import com.mazalearn.scienceengine.guru.Subgoal;
@@ -40,8 +40,8 @@ class TutorLoader {
     if (tutor instanceof ParameterProber) {
       return makeParameterProber(tutorObj, (ParameterProber) tutor);
     }
-    if (tutor instanceof Guide) {
-      return makeGuide(tutorObj, (Guide) tutor);
+    if (tutor instanceof TutorGroup) {
+      return makeTutorGroup(tutorObj, (TutorGroup) tutor);
     }
     if (tutor instanceof Abstractor) {
       return makeAbstractor(tutorObj, (Abstractor) tutor);
@@ -62,12 +62,13 @@ class TutorLoader {
     return parameterProber;
   }
 
-  private AbstractTutor makeGuide(OrderedMap<String, ?> tutorObj, Guide guide) {
+  private AbstractTutor makeTutorGroup(OrderedMap<String, ?> tutorObj, TutorGroup tutorGroup) {
+    String groupType = (String) tutorObj.get("group");
     Array<?> subgoalsObj = (Array<?>) tutorObj.get("subgoals");
-    List<ITutor> childTutors = loadChildTutors(guide, subgoalsObj);
+    List<ITutor> childTutors = loadChildTutors(tutorGroup, subgoalsObj);
     String successActions = (String) tutorObj.get("successactions");
-    guide.initialize(childTutors, successActions);
-    return guide;
+    tutorGroup.initialize(groupType, childTutors, successActions);
+    return tutorGroup;
   }
 
   private AbstractTutor makeAbstractor(OrderedMap<String, ?> tutorObj,

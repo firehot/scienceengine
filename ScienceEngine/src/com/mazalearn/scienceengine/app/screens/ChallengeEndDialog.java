@@ -16,7 +16,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 public class ChallengeEndDialog extends Dialog {
   
   public ChallengeEndDialog(final Stage stage, Skin skin, String title, String contents) {
-    super("\n\n" + title, skin);
+    super("\n\n", skin);
     
     setBackground(createBackground());
     

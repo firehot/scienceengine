@@ -17,7 +17,8 @@ configs:[
 {name:"Ammeter.MaxCurrent",permitted:true},
 ],
 plan: [
-       {type: "Guide",
+       {type: "TutorGroup",
+        group: "Guide",
         goal: "Understand how current is induced by a bar magnet in a coil",
         success: 200,
         timelimit: 300,
@@ -49,27 +50,32 @@ plan: [
            postcondition: "Count(BarMagnet.MagnetStrength) > 3 and Max(PickupCoil.Current) > 1",
            success: 250}
    ]},
-   {type: "ParameterProber",
-             goal:"To increase induced current, should magnet strength decrease or increase?\nSelect X if it does not affect current.",
-             parameter:"BarMagnet.MagnetStrength", 
-             resultType:"Direct"}, 
-   {type: "ParameterProber",
-             goal:"To increase induced current, should number of coils decrease or increase?\nSelect X if it does not affect current.",
-             parameter:"PickupCoil.CoilLoops", 
-             resultType:"Direct"},     
-   {type: "ParameterProber",
-             goal:"To increase induced current, should earth's magnetic field decrease or increase?\nSelect X if it does not affect current.",
-             parameter:"Environment.EarthMagneticField", 
-             resultType:"None"},
-   {type: "Abstractor", 
-        goal:"Select those variables in the shopping cart which affect the magnitude of induced current. You have 3 tries.",
-        configs: [{name: "BarMagnet.MovementMode", permitted: false, value:"Rotate"},
-                  {name: "BarMagnet.RotationAngle", permitted: false, value:0},
-                  {name: "BarMagnet.RotationVelocity", permitted: true},
-                 ],
-        parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],
-        success: 5000
-        }
+       {type: "TutorGroup",
+        group: "Challenge",
+        goal: "Understand how current is induced by a bar magnet in a coil",
+        subgoals:[
+           {type: "ParameterProber",
+                     goal:"To increase induced current, should magnet strength decrease or increase?\nSelect X if it does not affect current.",
+                     parameter:"BarMagnet.MagnetStrength", 
+                     resultType:"Direct"}, 
+           {type: "ParameterProber",
+                     goal:"To increase induced current, should number of coils decrease or increase?\nSelect X if it does not affect current.",
+                     parameter:"PickupCoil.CoilLoops", 
+                     resultType:"Direct"},     
+           {type: "ParameterProber",
+                     goal:"To increase induced current, should earth's magnetic field decrease or increase?\nSelect X if it does not affect current.",
+                     parameter:"Environment.EarthMagneticField", 
+                     resultType:"None"},
+           {type: "Abstractor", 
+                goal:"Select those variables in the shopping cart which affect the magnitude of induced current. You have 3 tries.",
+                configs: [{name: "BarMagnet.MovementMode", permitted: false, value:"Rotate"},
+                          {name: "BarMagnet.RotationAngle", permitted: false, value:0},
+                          {name: "BarMagnet.RotationVelocity", permitted: true},
+                         ],
+                parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],
+                success: 5000
+                }
+         ]},
    ]
  
 }

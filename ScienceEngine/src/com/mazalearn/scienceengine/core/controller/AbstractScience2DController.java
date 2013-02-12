@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.core.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -23,7 +24,7 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Guide;
+import com.mazalearn.scienceengine.guru.TutorGroup;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
@@ -170,11 +171,12 @@ public abstract class AbstractScience2DController implements
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     if ("ParameterProber".equals(type)) {
       return new ParameterProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
-    } else if ("Guide".equals(type)) {
-      return new Guide(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    } else if ("TutorGroup".equals(type)) {
+      return new TutorGroup(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("Subgoal".equals(type)) {
       return new Subgoal(this, parent, goal, components, configs, deltaSuccessScore, hints);
     }
+    Gdx.app.error(ScienceEngine.LOG, "Could not load Tutor: " + type);
     return null;
   }
 

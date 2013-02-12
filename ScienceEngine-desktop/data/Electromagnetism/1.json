@@ -10,8 +10,9 @@ configs:[
 {name:"BarMagnet.RotationAngle",permitted:true},
 ],
 plan:[
-      {type: "Guide", 
-       goal: "Make the compass go through one complete rotation",
+       {type: "TutorGroup",
+       group: "Guide",
+       goal: "Magnet and Compass",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
        timelimit: 120,
@@ -25,8 +26,9 @@ plan:[
          components:[{type:"Compass", visible: true}]
          }],
        },
-       {type: "Guide",
-       goal: "Understand the magnetic field around the magnet",
+       {type: "TutorGroup",
+        group: "Guide",
+       goal: "Understand the magnetic field of a magnet",
        components:[{type:"FieldMeter", visible:true}],
        postcondition: "FieldMeter.Count >= 10",
        success: 250,
@@ -56,22 +58,32 @@ plan:[
          success: 250,
          components:[{type:"Compass", visible: false}]
          }
-       ]},       
-       {type: "FieldMagnitudeProber",
-        goal: "Touch one of the two ? where the magnetic field is stronger",
-        configs:[{name: "BarMagnet.MovementMode", value:"None"}],
-        timelimit: 10,
-        success: 100,
-        failure: 50,
-        components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
-        }, 
-        {type:"FieldDirectionProber",
-        goal: "Touch the ? and Drag in the direction of the magnetic field",
-        configs:[{name: "BarMagnet.MovementMode", value:"None"}],
-        timelimit: 10,
-        success: 100,
-        failure: 50,
-        components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
-        },
+       ]},    
+       {type: "TutorGroup",
+        group: "Challenge",
+        goal: "Understand the magnetic field of a magnet",
+        subgoals: [
+         {type: "FieldMagnitudeProber",
+          goal: "Touch one of the two ? where the magnetic field is stronger",
+          hints: ["The field is stronger closer to the poles of the magnet",
+                  "The field is stronger if the magnet strength is larger"],
+          configs:[{name: "BarMagnet.MovementMode", value:"None"}],
+          timelimit: 10,
+          success: 100,
+          failure: 50,
+          components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
+          }, 
+          {type:"FieldDirectionProber",
+          goal: "Touch the ? and Drag in the direction of the magnetic field",
+          hints: ["The direction of the field is the direction in which a free North Pole would move if placed at that point.",
+                  "The direction of the field is where the North of a compass needle in that location would point."],
+          configs:[{name: "BarMagnet.MovementMode", value:"None"}],
+          timelimit: 10,
+          success: 100,
+          failure: 50,
+          components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
+          },
+        ]
+        }
   ]
 }

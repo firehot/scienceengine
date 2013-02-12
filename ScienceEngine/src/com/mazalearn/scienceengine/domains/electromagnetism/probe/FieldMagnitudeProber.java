@@ -49,12 +49,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
 
   public FieldMagnitudeProber(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore,
-        new String[] {
-            "The field is stronger closer to the object generating the field",
-            "The field is stronger if the current or magnet strength is larger"
-        });
+      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     
     imageCorrect = new ProbeImage();
     imageCorrect.addListener(new ClickResult(true));

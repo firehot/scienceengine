@@ -30,7 +30,7 @@ final class ScoreImage extends Image {
     this.addAction(
           Actions.sequence(
               Actions.alpha(0),
-              Actions.alpha(1, 1),
+              Actions.alpha(1, 0.25f),
               Actions.delay(2),
               new Action() {
                 @Override

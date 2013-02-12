@@ -1,19 +1,33 @@
 package com.mazalearn.scienceengine.guru;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.services.AggregatorFunction;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.lang.IFunction;
+import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ModelControls;
@@ -42,11 +56,13 @@ public class Guru extends Group implements ITutor {
   private ViewControls viewControls;
   private List<ITutor> activeTutors = new ArrayList<ITutor>();
   private final String goal;
+  private Skin skin;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
     this.science2DController = science2DController;
     this.goal = goal;
+    this.skin = skin;
     activeTutors.add(this);
     this.setPosition(0, 0);
     // Guru has no direct user interaction - hence 0 size
@@ -207,7 +223,56 @@ public class Guru extends Group implements ITutor {
   @Override
   public void teach() {
     setGoalsInDashboard();
-    currentTutor.teach();
+    if (currentTutor.getGroupType() == GroupType.Challenge) {
+      doChallengeAnimation(currentTutor);
+    } else {
+      currentTutor.teach();
+    }
+  }
+  
+  private void doChallengeAnimation(final ITutor tutor) {
+    final LabelStyle large = new LabelStyle(skin.get(LabelStyle.class));
+    BitmapFont font = skin.getFont("font26");
+    font.setScale(4);
+    large.font = font;
+    final TextButton start = new TextButton("Challenge\nRound", skin);
+    start.setSize(500, 300);
+    start.setColor(Color.YELLOW);
+    start.getLabel().setStyle(large);
+    start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
+        ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
+    this.addActor(start);
+    start.addListener(new ClickListener() {
+      @Override
+      public void clicked (InputEvent event, float x, float y) {
+        start.setText("3");
+        start.setSize(100, 100);
+        start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
+            ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
+        start.addAction(
+            Actions.sequence(
+                Actions.repeat(3, 
+                    Actions.sequence(
+                        Actions.alpha(1),
+                        Actions.alpha(0, 1),
+                        new Action() {
+                          @Override
+                          public boolean act(float delta) {
+                            start.setText(String.valueOf(Integer.parseInt(start.getText().toString()) - 1));
+                            return true;
+                          }
+                        }
+                  )),
+                  new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                      Guru.this.removeActor(start);
+                      tutor.teach();
+                      return true;
+                    }
+                  }));
+      }
+    });
   }
 
   @Override
@@ -247,17 +312,33 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public int getSuccessScore() {
-    return 0;
-  }
-
-  @Override
-  public int getFailureScore() {
-    return 0;
-  }
-
-  @Override
   public String getHint() {
     return null;
+  }
+  
+  @Override
+  public GroupType getGroupType() {
+    return GroupType.Root;
+  }
+  
+  public Parser createParser() {
+    Parser parser = new Parser();
+    Map<String, IFunction.A0> functions0 = new HashMap<String, IFunction.A0>();
+    Map<String, IFunction.A1> functions1 = new HashMap<String, IFunction.A1>();
+    Map<String, IFunction.A2> functions2 = new HashMap<String, IFunction.A2>();
+
+    for (AggregatorFunction aggregatorFunction: AggregatorFunction.values()) {
+      functions1.put(aggregatorFunction.name(), aggregatorFunction);
+    }
+
+    for (final IModelConfig<?> command: science2DController.getView().getCommands()) {
+      functions0.put(command.getName(), new IFunction.A0() {
+         @Override
+         public float eval() { command.doCommand(); return 0; }
+      });
+    }
+
+    parser.allowFunctions(functions0, functions1, functions2);
+    return parser;
   }
 }

@@ -17,7 +17,7 @@ public enum ScreenComponent implements IComponentType {
   ModelControls(Align.RIGHT, -20, Align.MIDDLE, 0, 0, 0, Color.CLEAR, false, true),
   GoButtonUp(Align.LEFT, 10, Align.MIDDLE, 0, 60, 60, Color.CLEAR, false, true),
   GoButtonDown(Align.LEFT, 120, Align.TOP, 0, 30, 30, Color.CLEAR, false, false),
-  NextButton(Align.CENTER, 108, Align.TOP, -35, 0, 0, Color.CLEAR, false, false),
+  NextButton(Align.CENTER, 108, Align.TOP, -45, 0, 0, Color.CLEAR, false, false),
   ;
   
   enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true), 

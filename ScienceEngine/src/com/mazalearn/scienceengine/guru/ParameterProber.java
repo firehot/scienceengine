@@ -74,6 +74,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     } else {
       guru.showWrong(getFailureScore());
       setSuccessScore(getFailureScore()); // Equate success and failure scores
+      return;
     }
     dummy.setConfigParameter(null, 0);
     science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);

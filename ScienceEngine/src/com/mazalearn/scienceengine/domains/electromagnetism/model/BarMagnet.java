@@ -70,6 +70,7 @@ import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
  */
 public class BarMagnet extends AbstractMagnet {
   
+  public static final float MAX_STRENGTH = 10000f;
   // values used in MathCAD for generating the grid files
   //strength of the magnet, in Gauss
   private static final float GRID_MAGNET_STRENGTH = 1;
@@ -133,7 +134,7 @@ public class BarMagnet extends AbstractMagnet {
   public void initializeConfigs() {
     super.initializeConfigs();
     configs.add(new AbstractModelConfig<Float>(this, 
-        Parameter.MagnetStrength, 0f, 10000f) {
+        Parameter.MagnetStrength, 0f, MAX_STRENGTH) {
       public Float getValue() { return getStrength(); }
       public void setValue(Float value) { setStrength(value); }
       public boolean isPossible() { return isActive(); }

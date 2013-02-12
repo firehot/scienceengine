@@ -1,22 +1,18 @@
 package com.mazalearn.scienceengine.guru;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
-import com.mazalearn.scienceengine.core.lang.IFunction;
 import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
 
-public class Guide extends AbstractTutor {
+public class TutorGroup extends AbstractTutor {
   
   private List<ITutor> childTutors = Collections.emptyList();
   
@@ -28,8 +24,9 @@ public class Guide extends AbstractTutor {
   private Set<Variable> variables;
 
   private ITutor currentTutor;
+
     
-  public Guide(IScience2DController science2DController, ITutor parent,
+  public TutorGroup(IScience2DController science2DController, ITutor parent,
       String goal, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
@@ -92,7 +89,8 @@ public class Guide extends AbstractTutor {
     currentTutor.checkProgress();
   }
   
-  public void initialize(List<ITutor> childTutors, String successActionsString) {
+  public void initialize(String groupType, List<ITutor> childTutors, String successActionsString) {
+    this.setGroupType(GroupType.valueOf(groupType));
     this.childTutors = childTutors;
     for (ITutor childTutor: childTutors) {
       this.addActor((AbstractTutor) childTutor);
@@ -100,7 +98,7 @@ public class Guide extends AbstractTutor {
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.tutorBeginTime = new float[childTutors.size() + 1];
     if (successActionsString != null) {
-      Parser parser = createParser();
+      Parser parser = guru.createParser();
       try {
         this.successActions = parser.parseString(successActionsString);
       } catch (SyntaxException e) {
@@ -116,22 +114,4 @@ public class Guide extends AbstractTutor {
     science2DController.getModel().bindParameterValues(variables);
     successActions.bvalue();    
   }
-
-  private Parser createParser() {
-    Parser parser = new Parser();
-    Map<String, IFunction.A0> functions0 = new HashMap<String, IFunction.A0>();
-    Map<String, IFunction.A1> functions1 = new HashMap<String, IFunction.A1>();
-    Map<String, IFunction.A2> functions2 = new HashMap<String, IFunction.A2>();
-
-    for (final IModelConfig<?> command: science2DController.getView().getCommands()) {
-      functions0.put(command.getName(), new IFunction.A0() {
-         @Override
-         public float eval() { command.doCommand(); return 0; }
-      });
-    }
-
-    parser.allowFunctions(functions0, functions1, functions2);
-    return parser;
-  }
-
 }

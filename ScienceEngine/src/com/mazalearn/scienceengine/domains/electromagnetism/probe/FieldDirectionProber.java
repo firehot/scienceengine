@@ -23,13 +23,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
 
   public FieldDirectionProber(final IScience2DController science2DController,
       final ITutor parent, String goal, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore,
-        new String[] {
-            "The direction of the field is the direction in which a " +
-            "free North Pole would move if placed at that point.",
-            "The direction of the field is where the compass needle's North would point."
-        });
+      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};

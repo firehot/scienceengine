@@ -14,7 +14,8 @@ configs:[
 {name:"CurrentSource.CurrentDirection",permitted:true,value:true},
 {name:"ElectroMagnet.CoilLoops",permitted:true,value:1.0}],
 plan:[
-      {type: "Guide", 
+      {type: "TutorGroup",
+       group:"Guide",
        goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
@@ -28,7 +29,8 @@ plan:[
          components:[{type:"Compass", visible: true}]
          }],
        },
-       {type: "Guide",
+       {type: "TutorGroup",
+        group: "Guide",
        goal: "Understand the magnetic field around the electromagnet",
        postcondition: "FieldMeter.Count >= 10",
        success: 200,
@@ -65,19 +67,24 @@ plan:[
          components:[{type:"Compass", visible: false}]
          }
        ]},       
-       {type: "FieldMagnitudeProber",
-        goal: "Touch one of the two ? where the magnetic field is stronger",
-        timelimit: 10,
-        success: 100,
-        failure: 50,
-        components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
-        }, 
-        {type:"FieldDirectionProber",
-        goal: "Touch the ? and Drag in the direction of the magnetic field",
-        timelimit: 10,
-        success: 100,
-        failure: 50,
-        components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
-        }
-  ]
+       {type: "TutorGroup",
+        group: "Guide",
+       goal: "Understand the magnetic field around the electromagnet",
+       subgoals: [
+           {type: "FieldMagnitudeProber",
+            goal: "Touch one of the two ? where the magnetic field is stronger",
+            timelimit: 10,
+            success: 100,
+            failure: 50,
+            components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
+            }, 
+            {type:"FieldDirectionProber",
+            goal: "Touch the ? and Drag in the direction of the magnetic field",
+            timelimit: 10,
+            success: 100,
+            failure: 50,
+            components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
+            }
+        ]},
+      ]
 }

@@ -19,7 +19,8 @@ configs:[
 {name:"CurrentSource.1.CurrentDirection",permitted:true,value:true}
 ],
 plan:[
-      {type: "Guide", 
+      {type: "TutorGroup",
+       group: "Guide",
        goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
@@ -33,7 +34,8 @@ plan:[
          success: 1000
          }],
        },
-       {type: "Guide",
+       {type: "TutorGroup",
+       group: "Guide",
        goal: "Understand the magnetic field around the wires.",
        postcondition: "FieldMeter.Count >= 10",
        success: 200,
@@ -76,19 +78,28 @@ plan:[
          success: 200
          }
        ]},       
-       {type: "FieldMagnitudeProber",
-        goal: "Touch one of the two ? where the magnetic field is stronger",
-        components:[{type:"Compass", visible: true},{type:"Wire.1", move:"None"},{type:"Wire.2",move:"None"}],
-        timelimit: 10,
-        success: 100,
-        failure: 50
-        }, 
-        {type:"FieldDirectionProber",
-        goal: "Touch the ? and Drag in the direction of the magnetic field",
-        components:[{type:"Compass", visible: true},{type:"Wire.1", move:"None"},{type:"Wire.2",move:"None"}],
-        timelimit: 10,
-        success: 100,
-        failure: 50
-        }
+       {type: "TutorGroup",
+        group: "Challenge",
+       goal: "Understand the magnetic field around the wires.",
+       subgoals: [
+           {type: "FieldMagnitudeProber",
+            goal: "Touch one of the two ? where the magnetic field is stronger",
+             hints: ["The field is the sum of the fields of the two wires.",
+                    "The field is stronger if the current strength is larger"],
+            components:[{type:"Compass", visible: true},{type:"Wire.1", move:"None"},{type:"Wire.2",move:"None"}],
+            timelimit: 10,
+            success: 100,
+            failure: 50
+            }, 
+            {type:"FieldDirectionProber",
+            goal: "Touch the ? and Drag in the direction of the magnetic field",
+            hints: ["The direction of the field is the direction in which a free North Pole would move if placed at that point.",
+                    "The direction of the field is where the North of a compass needle in that location would point."],
+            components:[{type:"Compass", visible: true},{type:"Wire.1", move:"None"},{type:"Wire.2",move:"None"}],
+            timelimit: 10,
+            success: 100,
+            failure: 50
+            }
+        ]},
   ]
 }

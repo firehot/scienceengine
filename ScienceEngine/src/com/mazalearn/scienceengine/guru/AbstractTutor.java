@@ -10,6 +10,7 @@ import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
+import com.mazalearn.scienceengine.guru.ITutor.GroupType;
 
 public abstract class AbstractTutor extends Group implements ITutor {
 
@@ -22,6 +23,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected IScience2DController science2DController;
   protected final ITutor parent;
   protected final Guru guru;
+  private GroupType groupType = GroupType.None;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, Array<?> components, Array<?> configs, 
@@ -83,17 +85,24 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
 
 
-  @Override
   public int getSuccessScore() {
     return deltaSuccessScore;
   }
   
-  @Override
   public int getFailureScore() {
     return deltaFailureScore;
   }
   
   @Override
   public void checkProgress() {
+  }
+  
+  @Override
+  public GroupType getGroupType() {
+    return groupType;
+  }
+  
+  public void setGroupType(GroupType groupType) {
+    this.groupType = groupType;
   }
 }

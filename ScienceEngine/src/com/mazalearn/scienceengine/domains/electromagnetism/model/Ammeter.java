@@ -21,7 +21,7 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
   // The needle deflection range is this much on either side of the zero point.
   private static final float MAX_NEEDLE_ANGLE = MathUtils.degreesToRadians * 90;
 
-  private float maxCurrent = 3;
+  private float maxCurrent = 2;
 
   private static final int SMOOTH = 4;
 
@@ -42,7 +42,7 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
   public void initializeConfigs() {
     super.initializeConfigs();
     configs.add(new AbstractModelConfig<Float>(this, 
-        Parameter.MaxCurrent, 1f, 20f) {
+        Parameter.MaxCurrent, 1f, 10f) {
       public Float getValue() { return getMaxCurrent(); }
       public void setValue(Float value) { setMaxCurrent(value); }
       public boolean isPossible() { return isActive(); }

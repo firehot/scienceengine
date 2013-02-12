@@ -102,11 +102,11 @@ public class ElectroMagnetismController extends AbstractScience2DController {
   public AbstractTutor createTutor(ITutor parent, String type, String goal, 
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     if ("FieldMagnitudeProber".equals(type)) {
-      return new FieldMagnitudeProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new FieldMagnitudeProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("FieldDirectionProber".equals(type)) {
-      return new FieldDirectionProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new FieldDirectionProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("LightProber".equals(type)) {
-      return new LightProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore);
+      return new LightProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("Abstractor".equals(type)) {
       return new Abstractor(this, parent, goal, components, configs, skin, 
           science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore, hints);

@@ -12,6 +12,10 @@ package com.mazalearn.scienceengine.guru;
  */
 public interface ITutor {
 
+  enum GroupType {
+    Root, Guide, Challenge, None;
+  }
+  
   /**
    * @return goal of this tutor
    */
@@ -33,10 +37,9 @@ public interface ITutor {
    */
   public String getHint();
 
-  public int getSuccessScore();
-
-  public int getFailureScore();
-
+  /**
+   * check progress???
+   */
   public void checkProgress();
 
   /**
@@ -50,4 +53,9 @@ public interface ITutor {
    * @param success
    */
   public void done(boolean success);
+  
+  /**
+   * @return grouptype of this tutor
+   */
+  public GroupType getGroupType();
 }

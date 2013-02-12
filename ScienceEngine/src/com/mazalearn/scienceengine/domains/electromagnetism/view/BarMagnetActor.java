@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,7 +25,11 @@ public class BarMagnetActor extends Science2DActor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
+    Color c = batch.getColor();
+    float alpha = 0.5f + barMagnet.getStrength() / (2 * BarMagnet.MAX_STRENGTH);
+    batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, alpha);
     super.draw(batch, parentAlpha);
+    batch.setColor(c);
     if (MovementMode.valueOf(barMagnet.getMovementMode()) == MovementMode.Rotate) { // Display RPM
       drawRpm(batch, parentAlpha);
     }
