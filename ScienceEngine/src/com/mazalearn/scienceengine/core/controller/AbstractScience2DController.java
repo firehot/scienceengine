@@ -27,6 +27,7 @@ import com.mazalearn.scienceengine.guru.Guide;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
+import com.mazalearn.scienceengine.guru.Subgoal;
 
 public abstract class AbstractScience2DController implements
     IScience2DController {
@@ -171,6 +172,8 @@ public abstract class AbstractScience2DController implements
       return new ParameterProber(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("Guide".equals(type)) {
       return new Guide(this, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    } else if ("Subgoal".equals(type)) {
+      return new Subgoal(this, parent, goal, components, configs, deltaSuccessScore, hints);
     }
     return null;
   }

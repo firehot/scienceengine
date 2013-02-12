@@ -20,7 +20,8 @@ plan:[
        success: 1000,
        timelimit: 120,
        subgoals: [
-         {goal: "Make the compass go through one complete rotation",
+         {type: "Subgoal",
+          goal: "Make the compass go through one complete rotation",
          hints: ["What happens to the compass when it moves around the electromagnet?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          success: 1000,
@@ -33,27 +34,32 @@ plan:[
        success: 200,
        timelimit: 180,
        subgoals: [
-        {goal: "Touch the screen in many places around the electromagnet to see the field.",
+        {type: "Subgoal",
+          goal: "Touch the screen in many places around the electromagnet to see the field.",
          postcondition: "FieldMeter.Count >= 10",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },
-          {goal: "Move the electromagnet. See how the field changes.",
+          {type: "Subgoal",
+          goal: "Move the electromagnet. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(ElectroMagnet.Move) >= 1",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },
-         {goal: "Change the current direction. See how the field changes.",
+         {type: "Subgoal",
+          goal: "Change the current direction. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentDirection) >= 1",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },
-         {goal: "Change the current strength. See how the field changes.",
+         {type: "Subgoal",
+          goal: "Change the current strength. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
          success: 250,
          components:[{type:"Compass", visible: false}]
          },
-         {goal: "Change the current type to AC. See how the field changes",
+         {type: "Subgoal",
+          goal: "Change the current type to AC. See how the field changes",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentType) >= 1",
          success: 250,
          components:[{type:"Compass", visible: false}]

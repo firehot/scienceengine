@@ -100,7 +100,7 @@ public class LevelLoader {
     for (int i = 0; i < tutors.size; i++) {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> tutorObj = (OrderedMap<String, ?>) tutors.get(i);
-      AbstractTutor tutor = tutorLoader.loadTutor(tutorObj);
+      AbstractTutor tutor = tutorLoader.loadTutor(science2DController.getGuru(), tutorObj);
       science2DController.getGuru().registerTutor(tutor);
     }
   }

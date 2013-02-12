@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.core.lang.Variable;
 
 public class Guide extends AbstractTutor {
   
-  private List<Subgoal> subgoals = Collections.emptyList();
+  private List<ITutor> childTutors = Collections.emptyList();
   
   private float[] stageBeginTime;
   private int currentStage = -1;
@@ -33,6 +33,31 @@ public class Guide extends AbstractTutor {
     super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
   }
   
+  @Override
+  public void reset() {
+    super.reset();
+    if (currentStage < 0 || currentStage == childTutors.size()) return;
+    ITutor subgoal = childTutors.get(currentStage);
+    subgoal.reset();
+  }
+  
+  @Override
+  public void done(boolean success) {
+    if (!success) {
+      super.done(success);
+      return;
+    }
+    // Move on to next stage
+    if (++currentStage == childTutors.size()) {
+      super.done(success);
+      doSuccessActions();
+      return;
+    }
+    ITutor childTutor = childTutors.get(currentStage);
+    childTutor.prepareToTeach();
+    childTutor.teach();
+  }
+
   /* (non-Javadoc)
    * @see com.mazalearn.scienceengine.guru.AbstractTutor#activate(boolean)
    */
@@ -41,8 +66,8 @@ public class Guide extends AbstractTutor {
     super.teach();
     stageBeginTime[currentStage] = ScienceEngine.getTime();
     ScienceEngine.setProbeMode(false);
-    Subgoal subgoal = subgoals.get(0);
-    subgoal.teach();
+    ITutor childTutor = childTutors.get(0);
+    childTutor.teach();
   }
 
   /* (non-Javadoc)
@@ -56,49 +81,24 @@ public class Guide extends AbstractTutor {
   public void prepareToTeach() {
     super.prepareToTeach();
     this.currentStage = 0;
-    Subgoal subgoal = subgoals.get(0);
-    subgoal.prepareToTeach();
+    ITutor childTutor = childTutors.get(0);
+    childTutor.prepareToTeach();
   }
   
-  @Override
-  public void reset() {
-    super.reset();
-    if (currentStage < 0 || currentStage == subgoals.size()) return;
-    Subgoal subgoal = subgoals.get(currentStage);
-    subgoal.reset();
-  }
-  
-  @Override
-  public void done(boolean success) {
-    if (!success) {
-      super.done(success);
-      return;
-    }
-    // Move on to next stage
-    if (++currentStage == subgoals.size()) {
-      super.done(success);
-      doSuccessActions();
-      return;
-    }
-    Subgoal subgoal = subgoals.get(currentStage);
-    subgoal.prepareToTeach();
-    subgoal.teach();
-  }
-
   @Override
   public void checkProgress() {
-    if (currentStage < 0 || currentStage == subgoals.size()) return;
-    Subgoal subgoal = subgoals.get(currentStage);
-    subgoal.checkProgress();
+    if (currentStage < 0 || currentStage == childTutors.size()) return;
+    ITutor childTutor = childTutors.get(currentStage);
+    childTutor.checkProgress();
   }
   
-  public void initialize(List<Subgoal> subgoals, String successActionsString) {
-    this.subgoals = subgoals;
-    for (Subgoal subgoal: subgoals) {
-      this.addActor(subgoal);
+  public void initialize(List<ITutor> childTutors, String successActionsString) {
+    this.childTutors = childTutors;
+    for (ITutor childTutor: childTutors) {
+      this.addActor((AbstractTutor) childTutor);
     }
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
-    this.stageBeginTime = new float[subgoals.size() + 1];
+    this.stageBeginTime = new float[childTutors.size() + 1];
     if (successActionsString != null) {
       Parser parser = createParser();
       try {

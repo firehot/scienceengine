@@ -35,7 +35,8 @@ public class Guru extends Group implements ITutor {
   private final ModelControls modelControls;
   private final ConfigGenerator configGenerator;
   private final SoundManager soundManager;
-  private final ScoreImage successImage, failureImage, correctImage, wrongImage;
+  private final ScoreImage correctImage, wrongImage;
+  SuccessFailureImage successImage, failureImage;
   private Hinter hinter;
   private IScience2DController science2DController;
   private ViewControls viewControls;
@@ -59,8 +60,8 @@ public class Guru extends Group implements ITutor {
     this.modelControls = science2DController.getModelControls();
     this.viewControls = science2DController.getViewControls();
      
-    this.successImage = new ScoreImage(ScienceEngine.assetManager.get("images/greenballoon.png", Texture.class), skin, true);
-    this.failureImage = new ScoreImage(ScienceEngine.assetManager.get("images/redballoon.png", Texture.class), skin, false);
+    this.successImage = new SuccessFailureImage(ScienceEngine.assetManager.get("images/greenballoon.png", Texture.class), skin, true);
+    this.failureImage = new SuccessFailureImage(ScienceEngine.assetManager.get("images/redballoon.png", Texture.class), skin, false);
     this.correctImage = new ScoreImage(ScienceEngine.assetManager.get("images/check.png", Texture.class), skin, true);
     this.wrongImage = new ScoreImage(ScienceEngine.assetManager.get("images/cross.png", Texture.class), skin, false);
     
@@ -125,30 +126,10 @@ public class Guru extends Group implements ITutor {
     return this.excludedActors;
   }
 
-  @Override
-  public void done(boolean success) {
-    hinter.setHint(null);
-    if (success) {            
-      // Success and no more activeTutors == WIN
-      if (tutorIndex >= registeredTutors.size() - 1) {
-        soundManager.play(ScienceEngineSound.CELEBRATE);
-        science2DController.getView().done(true);
-        dashboard.clearGoals();
-        this.setVisible(false);
-        return;
-      }
-      teach();
-    } else {
-      science2DController.getView().done(false);
-      this.setVisible(false);
-      return;
-    }
-  }
-
   public void showWrong(int score) {
     soundManager.play(ScienceEngineSound.FAILURE);
     dashboard.addScore(-score);
-    wrongImage.show(String.valueOf(score));
+    wrongImage.show(String.valueOf(-score));
   }
   
   public void showFailure(String message) {
@@ -169,6 +150,19 @@ public class Guru extends Group implements ITutor {
     hinter.clearHint();
   }
   
+  public void pushTutor(ITutor tutor) {
+    activeTutors.add(tutor);
+    setGoalsInDashboard();
+    hinter.clearHint();
+  }
+  
+  public void popTutor(ITutor tutor) {
+    if (activeTutors.size() > 0 && activeTutors.get(activeTutors.size() - 1).equals(tutor)) {
+      activeTutors.remove(activeTutors.size() - 1);
+      hinter.clearHint();
+    }
+  }
+  
   @Override
   public void act(float dt) {
     super.act(dt);
@@ -185,19 +179,25 @@ public class Guru extends Group implements ITutor {
     return goal;
   }
 
-  public void pushTutor(ITutor tutor) {
-    activeTutors.add(tutor);
-    setGoalsInDashboard();
-    hinter.clearHint();
-  }
-  
-  public void popTutor(ITutor tutor) {
-    if (activeTutors.size() > 0 && activeTutors.get(activeTutors.size() - 1).equals(tutor)) {
-      activeTutors.remove(activeTutors.size() - 1);
-      hinter.clearHint();
+  @Override
+  public void done(boolean success) {
+    hinter.setHint(null);
+    if (!success) {
+      science2DController.getView().done(false);
+      this.setVisible(false);
+      return;
     }
+    // Success and no more activeTutors == WIN
+    if (tutorIndex >= registeredTutors.size() - 1) {
+      soundManager.play(ScienceEngineSound.CELEBRATE);
+      science2DController.getView().done(true);
+      dashboard.clearGoals();
+      this.setVisible(false);
+      return;
+    }
+    teach();
   }
-  
+
   // Prerequisite: registeredTutors.size() >= 1
   @Override
   public void teach() {
@@ -211,6 +211,12 @@ public class Guru extends Group implements ITutor {
     currentTutor.prepareToTeach();
     currentTutor.teach();
     setGoalsInDashboard();
+  }
+
+  @Override
+  public void prepareToTeach() {
+    this.setVisible(true);
+    tutorIndex = -1;
   }
 
   private void setGoalsInDashboard() {
@@ -242,17 +248,6 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public void prepareToTeach() {
-    this.setVisible(true);
-    tutorIndex = -1;
-  }
-
-  @Override
-  public String getHint() {
-    return null;
-  }
-
-  @Override
   public int getSuccessScore() {
     return 0;
   }
@@ -260,5 +255,10 @@ public class Guru extends Group implements ITutor {
   @Override
   public int getFailureScore() {
     return 0;
+  }
+
+  @Override
+  public String getHint() {
+    return null;
   }
 }

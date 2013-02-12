@@ -18,7 +18,8 @@ plan:[
        success: 1000,
        timelimit: 120,
        subgoals: [
-         { goal:"Make the compass go through one complete rotation",
+         { type: "Subgoal",
+         goal:"Make the compass go through one complete rotation",
          hints: ["What happens to the compass when it moves around the wire?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          components:[{type:"Compass", visible: true}],
@@ -31,27 +32,32 @@ plan:[
        success: 200,
        timelimit: 180,
        subgoals: [
-         {goal: "Move the wire and see how the field changes",
+         {type: "Subgoal",
+         goal: "Move the wire and see how the field changes",
          postcondition: "FieldMeter.Count >= 10 and Count(Wire.Move) >= 1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
-         {goal: "Make the current as DC and change max current. See how the field changes.",
+         {type: "Subgoal",
+         goal: "Make the current as DC and change max current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.MaxCurrent) >= 5",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
-         {goal: "Make the current as DC and change current direction. See how the field changes.",
+         {type: "Subgoal",
+         goal: "Make the current as DC and change current direction. See how the field changes.",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentDirection) >= 2",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
-         {goal: "Make the current as AC and change max current. See how the field changes.",
+         {type: "Subgoal",
+         goal: "Make the current as AC and change max current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.MaxCurrent) >= 5",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
-         {goal: "Make the current as AC and change current frequency. See how the field changes.",
+         {type: "Subgoal",
+         goal: "Make the current as AC and change current frequency. See how the field changes.",
          postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
          components:[{type:"Compass", visible: false}],
          success: 200
