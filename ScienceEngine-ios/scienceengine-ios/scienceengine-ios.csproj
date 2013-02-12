@@ -325,6 +325,9 @@
       <Link>skin\uiskin1.png</Link>
     </Content>
     <None Include="convert.properties" />
+    <Content Include="..\..\ScienceEngine-android\assets\images\check.png">
+      <Link>images\check.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

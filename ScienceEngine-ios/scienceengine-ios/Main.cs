@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using java.nio;
+using java.util;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
@@ -35,6 +36,12 @@ namespace scienceengineios
 			string localHtmlUrl = Path.Combine (NSBundle.MainBundle.BundlePath, url);
 			webViewController.load (new NSUrlRequest(new NSUrl(localHtmlUrl, false)));
 			window.MakeKeyAndVisible();
+		}
+
+		public override void httpPost(string path, string contentType, java.util.Map paramset, byte[] data) {
+			try {
+			  base.httpPost(path, contentType, paramset, data);
+			} catch (System.Net.Sockets.SocketException ignore) {}
 		}
 	}
 
