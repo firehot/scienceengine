@@ -35,10 +35,10 @@ public class Abstractor extends AbstractTutor {
   private int numLivesLeft = 3;
   
   public Abstractor(final IScience2DController science2DController, ITutor parent, String goal, 
-      Array<?> components, Array<?> configs, Skin skin, 
+      String name, Array<?> components, Array<?> configs, Skin skin, 
       ModelControls modelControls, int deltaSuccessScore,
       int deltaFailureScore, String[] hints) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    super(science2DController, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     this.skin = skin;
     this.modelControls = modelControls;
     /* Abstractor allows user to interact with bodies on screen as well as its

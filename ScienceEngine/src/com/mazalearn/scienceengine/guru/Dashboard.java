@@ -3,7 +3,10 @@ package com.mazalearn.scienceengine.guru;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.ScreenComponent;
 
 class Dashboard extends Table {
@@ -22,9 +26,8 @@ class Dashboard extends Table {
   int score;
   private Label timerLabel;
   float timeLeft = 300;
-  private Table goalTable;
+  private Group stageGroup;
   private Skin skin;
-  private Cell<Actor> goalCell;
   private ClickListener clickListener;
 
   Dashboard(Skin skin) {
@@ -37,24 +40,20 @@ class Dashboard extends Table {
     this.add(createTutorBoard(skin));
   }
 
-  @SuppressWarnings("unchecked")
   private Table createTutorBoard(Skin skin) {
     Table tutorTable = new Table(skin);
     tutorTable.setFillParent(false);
     tutorTable.center();
     
-    goalTable = new Table(skin);
-    goalTable.setVisible(false);
-    
     clickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
-        goalTable.setVisible(!goalTable.isVisible());
-        topGoal.setVisible(!topGoal.isVisible());
-        goalCell.setWidget(topGoal.isVisible() ? topGoal : goalTable);
-        reposition();
+        stageGroup.setVisible(!stageGroup.isVisible());
       }
     };
-    topGoal = createGoalButton("");
+    topGoal = new TextButton("", skin);
+    topGoal.setColor(Color.YELLOW);
+    topGoal.addListener(clickListener);
+    topGoal.getLabel().setWrap(true);
     
     scoreLabel = new Label("0", skin);
 
@@ -76,7 +75,7 @@ class Dashboard extends Table {
     t.row();
     t.add("").width(40).fill().right();// t.add(timerLabel).width(40).fill().right();
     tutorTable.add(t).left();
-    goalCell = tutorTable.add(topGoal).pad(0, 10, 0, 10).width(ScreenComponent.getScaledX(430)).fill();
+    tutorTable.add(topGoal).pad(0, 10, 0, 10).width(ScreenComponent.getScaledX(430)).fill();
     t = new Table(skin);
     t.add("Score").top();
     t.row();
@@ -87,14 +86,6 @@ class Dashboard extends Table {
     return tutorTable;
   }
 
-  private TextButton createGoalButton(String goal) {
-    TextButton goalButton = new TextButton(goal, skin);
-    goalButton.setColor(Color.YELLOW);
-    goalButton.addListener(clickListener);
-    goalButton.getLabel().setWrap(true);
-    return goalButton;
-  }
-  
   private void reposition() {
     invalidate();
     setX(ScreenComponent.Dashboard.getX(getPrefWidth()) + getPrefWidth() / 2);
@@ -106,18 +97,13 @@ class Dashboard extends Table {
     scoreLabel.setText(String.valueOf(score));
   }
   
-  public void setGoals(List<String> goals) {
-    goalTable.clear();
-    if (goals == null) {
+  public void setGoal(String goal) {
+    if (goal == null) {
       topGoal.setVisible(false);
       topGoal.setText("");
       return;
     }
-    for (String goal: goals) {
-      goalTable.add(createGoalButton(goal)).width(ScreenComponent.getScaledX(430)).fill();
-      goalTable.row();
-    }
-    topGoal.setText(goals.get(goals.size() - 1));
+    topGoal.setText(goal);
     topGoal.addAction(Actions.sequence(
         Actions.alpha(0),
         Actions.alpha(1, 2)));
@@ -137,6 +123,36 @@ class Dashboard extends Table {
   }
 
   public void clearGoals() {
-    setGoals(null);
+    setGoal(null);
+  }
+
+  private TextButton createStageButton(String name, float width, float height, float x, float y) {
+    TextButton stageButton = new TextButton(name, skin);
+    stageButton.addListener(clickListener);
+    stageButton.getLabel().setWrap(true);
+    stageButton.setSize(width, height);
+    stageButton.setPosition(x, y);
+    return stageButton;
+  }
+  
+  public void setStages(List<String> stages) {
+    stageGroup = new Group() {
+      Color c = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.5f);
+      TextureRegion gray = ScreenUtils.createTexture(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
+      public void draw(SpriteBatch batch, float parentAlpha) {
+        batch.draw(gray, getX(), getY());
+        super.draw(batch, parentAlpha);
+      }
+    };
+    stageGroup.setVisible(false);
+    stageGroup.setPosition(0, 0);
+    stageGroup.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+    this.getStage().addActor(stageGroup);
+    
+    float height = ScreenComponent.VIEWPORT_HEIGHT / (stages.size() + 3);
+    float width = 2.5f * ScreenComponent.VIEWPORT_WIDTH / (stages.size() + 3);
+    for (int i = 0; i < stages.size(); i++) {
+      stageGroup.addActor(createStageButton(stages.get(i), width, height, width / 2.5f * (i + 1), height * (i + 1)));
+    }
   }
 }

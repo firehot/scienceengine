@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.guru;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -10,7 +12,6 @@ import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
-import com.mazalearn.scienceengine.guru.ITutor.GroupType;
 
 public abstract class AbstractTutor extends Group implements ITutor {
 
@@ -24,13 +25,15 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected final ITutor parent;
   protected final Guru guru;
   private GroupType groupType = GroupType.None;
+  private String name;
 
   public AbstractTutor(IScience2DController science2DController,
-      ITutor parent, String goal, Array<?> components, Array<?> configs, 
+      ITutor parent, String goal, String name, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     this.parent = parent;
     this.science2DController = science2DController;
     this.goal = goal;
+    this.name = name;
     this.components = components;
     this.configs = configs;
     this.deltaSuccessScore = deltaSuccessScore;
@@ -43,6 +46,11 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public String getGoal() {
     return goal;
+  }
+  
+  @Override
+  public String getName() {
+    return name;
   }
   
   @Override
@@ -105,4 +113,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void setGroupType(GroupType groupType) {
     this.groupType = groupType;
   }
+
+  @Override
+  public List<ITutor> getChildTutors() {
+    return null;
+  }
+  
 }

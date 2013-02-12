@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -95,6 +94,19 @@ public class Guru extends Group implements ITutor {
     for (ITutor childTutor: childTutors) {
       this.addActor((AbstractTutor) childTutor);
     }
+    List<String> stages = new ArrayList<String>();
+    collectStages(this, stages);
+    dashboard.setStages(stages);
+  }
+  
+  private void collectStages(ITutor tutor, List<String> stages) {
+    if (tutor.getGroupType() == GroupType.None) { 
+      stages.add(tutor.getName());
+      return;
+    }
+    for (ITutor child: tutor.getChildTutors()) {
+      collectStages(child, stages);
+    }
   }
 
   public void startChallenge() {
@@ -170,7 +182,7 @@ public class Guru extends Group implements ITutor {
   
   public void pushTutor(ITutor tutor) {
     activeTutors.add(tutor);
-    setGoalsInDashboard();
+    dashboard.setGoal(activeTutors.get(activeTutors.size() - 1).getGoal());
     hinter.clearHint();
   }
   
@@ -222,7 +234,7 @@ public class Guru extends Group implements ITutor {
   // Prerequisite: childTutors.size() >= 1
   @Override
   public void teach() {
-    setGoalsInDashboard();
+    setGoalInDashboard();
     if (currentTutor.getGroupType() == GroupType.Challenge) {
       doChallengeAnimation(currentTutor);
     } else {
@@ -283,12 +295,8 @@ public class Guru extends Group implements ITutor {
     currentTutor.prepareToTeach();
   }
 
-  private void setGoalsInDashboard() {
-    List<String> goals = new ArrayList<String>();
-    for (ITutor tutor: activeTutors) {
-      goals.add(tutor.getGoal());
-    }
-    dashboard.setGoals(goals);
+  private void setGoalInDashboard() {
+    dashboard.setGoal(activeTutors.get(activeTutors.size() - 1).getGoal());
   }
   
   public void setupProbeConfigs(List<IModelConfig<?>> configs, boolean enableControls) {
@@ -319,6 +327,11 @@ public class Guru extends Group implements ITutor {
   @Override
   public GroupType getGroupType() {
     return GroupType.Root;
+  }
+  
+  @Override
+  public List<ITutor> getChildTutors() {
+    return childTutors;
   }
   
   public Parser createParser() {

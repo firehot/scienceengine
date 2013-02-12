@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.guru;
 
+import java.util.List;
+
 /**
  * A Tutor can be a guide, a prober or an abstractor.
  * A Guide walks through an activity showing points to be observed.
@@ -55,7 +57,16 @@ public interface ITutor {
   public void done(boolean success);
   
   /**
+   * @return list of child tutors or null if no children.
+   */
+  public List<ITutor> getChildTutors();
+  /**
    * @return grouptype of this tutor
    */
   public GroupType getGroupType();
+
+  /**
+   * @return short name of tutor
+   */
+  public String getName();
 }

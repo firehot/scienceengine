@@ -26,6 +26,7 @@ class TutorLoader {
 
   private AbstractTutor loadTutor(ITutor parentTutor, OrderedMap<String, ?> tutorObj) {
     String type = (String) tutorObj.get("type");
+    String name = (String) tutorObj.get("name");
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type);
     String goal = (String) tutorObj.get("goal");
     float deltaSuccessScore = (Float) LevelLoader.nvl(tutorObj.get("success"),
@@ -35,7 +36,7 @@ class TutorLoader {
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
     String[] hints = loadHints(tutorObj);
-    AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal,
+    AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, name,
         components, configs, (int) deltaSuccessScore, (int) deltaFailureScore, hints);
     if (tutor instanceof ParameterProber) {
       return makeParameterProber(tutorObj, (ParameterProber) tutor);

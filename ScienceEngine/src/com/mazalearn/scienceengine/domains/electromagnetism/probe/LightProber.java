@@ -16,8 +16,8 @@ public class LightProber extends AbstractScience2DProber {
   private LightbulbActor lightbulbActor;
   
   public LightProber(IScience2DController science2DController, ITutor parent,
-      String goal, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    super(science2DController, parent, goal, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      String goal, String name, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+    super(science2DController, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
 /*            "Light intensity increases when more current is induced in the coil.",
             "More current is induced in the coil if the magnetic field changes faster at the coil.",
             "Magnetic field change at the coil increases when the magnet moves faster relative to the coil.",
