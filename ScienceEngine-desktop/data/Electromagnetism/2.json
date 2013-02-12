@@ -28,37 +28,38 @@ plan:[
        },
        {type: "Guide",
        goal: "Understand the magnetic field around the wire",
-       postcondition: "FieldMeter.Count >= 15",
+       postcondition: "FieldMeter.Count >= 10",
        success: 200,
        timelimit: 180,
        subgoals: [
          {type: "Subgoal",
          goal: "Move the wire and see how the field changes",
+         hints: ["To see the field, click on the screen around the wires"],
          postcondition: "FieldMeter.Count >= 10 and Count(Wire.Move) >= 1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
          {type: "Subgoal",
          goal: "Make the current as DC and change max current. See how the field changes.",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.MaxCurrent) >= 5",
+         postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
          {type: "Subgoal",
          goal: "Make the current as DC and change current direction. See how the field changes.",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentDirection) >= 2",
+         postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentDirection) >=  1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
          {type: "Subgoal",
          goal: "Make the current as AC and change max current. See how the field changes.",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.MaxCurrent) >= 5",
+         postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
          {type: "Subgoal",
          goal: "Make the current as AC and change current frequency. See how the field changes.",
-         postcondition: "FieldMeter.Count >= 15 and Count(CurrentSource.CurrentFrequency) >= 2",
+         postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentFrequency) >= 1",
          components:[{type:"Compass", visible: false}],
          success: 200
          }
