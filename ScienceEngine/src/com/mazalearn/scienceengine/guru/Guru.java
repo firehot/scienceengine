@@ -20,7 +20,7 @@ import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
- * Cycles through the eligible registeredTutors - probing the user with each one.
+ * Cycles through the eligible childTutors - probing the user with each one.
  * This is the root of the tutor hierarchy.
  * 
  * @author sridhar
@@ -30,7 +30,7 @@ public class Guru extends Group implements ITutor {
   int tutorIndex = -1;
   ITutor currentTutor;
   protected Dashboard dashboard;
-  private List<ITutor> registeredTutors = new ArrayList<ITutor>();
+  private List<ITutor> childTutors = new ArrayList<ITutor>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final ModelControls modelControls;
   private final ConfigGenerator configGenerator;
@@ -62,8 +62,8 @@ public class Guru extends Group implements ITutor {
      
     this.successImage = new SuccessFailureImage(ScienceEngine.assetManager.get("images/greenballoon.png", Texture.class), skin, true);
     this.failureImage = new SuccessFailureImage(ScienceEngine.assetManager.get("images/redballoon.png", Texture.class), skin, false);
-    this.correctImage = new ScoreImage(ScienceEngine.assetManager.get("images/check.png", Texture.class), skin, true);
-    this.wrongImage = new ScoreImage(ScienceEngine.assetManager.get("images/cross.png", Texture.class), skin, false);
+    this.correctImage = new ScoreImage(ScienceEngine.assetManager.get("images/check.png", Texture.class), skin);
+    this.wrongImage = new ScoreImage(ScienceEngine.assetManager.get("images/cross.png", Texture.class), skin);
     
     ((Stage)science2DController.getView()).addActor(successImage);
     ((Stage)science2DController.getView()).addActor(failureImage);
@@ -74,9 +74,11 @@ public class Guru extends Group implements ITutor {
     this.setVisible(false);
   }
 
-  public void registerTutor(AbstractTutor tutor) {
-    registeredTutors.add(tutor);
-    this.addActor(tutor);
+  public void initialize(List<ITutor> childTutors) {
+    this.childTutors = childTutors;
+    for (ITutor childTutor: childTutors) {
+      this.addActor((AbstractTutor) childTutor);
+    }
   }
 
   public void startChallenge() {
@@ -97,7 +99,7 @@ public class Guru extends Group implements ITutor {
       }
     }
     
-    if (registeredTutors.size() == 0) { // No activeTutors available
+    if (childTutors.size() == 0) { // No activeTutors available
       endChallenge();
       return;
     }
@@ -179,6 +181,7 @@ public class Guru extends Group implements ITutor {
     return goal;
   }
 
+  // TODO: Guide and Guru both handle many children tutors - abstract this out
   @Override
   public void done(boolean success) {
     hinter.setHint(null);
@@ -188,35 +191,31 @@ public class Guru extends Group implements ITutor {
       return;
     }
     // Success and no more activeTutors == WIN
-    if (tutorIndex >= registeredTutors.size() - 1) {
+    if (++tutorIndex == childTutors.size()) {
       soundManager.play(ScienceEngineSound.CELEBRATE);
       science2DController.getView().done(true);
       dashboard.clearGoals();
       this.setVisible(false);
       return;
     }
-    teach();
-  }
-
-  // Prerequisite: registeredTutors.size() >= 1
-  @Override
-  public void teach() {
-    // Move on to next tutor
-    tutorIndex++;
-    if (tutorIndex == registeredTutors.size()) {
-      done(true);
-      return;
-    }
-    currentTutor = registeredTutors.get(tutorIndex);
+    currentTutor = childTutors.get(tutorIndex);
     currentTutor.prepareToTeach();
     currentTutor.teach();
+  }
+
+  // Prerequisite: childTutors.size() >= 1
+  @Override
+  public void teach() {
     setGoalsInDashboard();
+    currentTutor.teach();
   }
 
   @Override
   public void prepareToTeach() {
     this.setVisible(true);
-    tutorIndex = -1;
+    tutorIndex = 0;
+    currentTutor = childTutors.get(tutorIndex);
+    currentTutor.prepareToTeach();
   }
 
   private void setGoalsInDashboard() {

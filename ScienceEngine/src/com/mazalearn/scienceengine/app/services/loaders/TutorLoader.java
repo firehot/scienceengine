@@ -24,7 +24,7 @@ class TutorLoader {
     this.science2DController = science2DController;
   }
 
-  public AbstractTutor loadTutor(ITutor parentTutor, OrderedMap<String, ?> tutorObj) {
+  private AbstractTutor loadTutor(ITutor parentTutor, OrderedMap<String, ?> tutorObj) {
     String type = (String) tutorObj.get("type");
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type);
     String goal = (String) tutorObj.get("goal");
@@ -97,8 +97,8 @@ class TutorLoader {
     return hints;
   }
 
-  @SuppressWarnings("unchecked")
-  private List<ITutor> loadChildTutors(ITutor parent, Array<?> childTutorsObj) {
+  @SuppressWarnings("unchecked") 
+  public List<ITutor> loadChildTutors(ITutor parent, Array<?> childTutorsObj) {
     List<ITutor> childTutors = new ArrayList<ITutor>();
     if (childTutorsObj == null) {
       Gdx.app.error(ScienceEngine.LOG, "No child Tutors found for Tutor");

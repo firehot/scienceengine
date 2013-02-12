@@ -1,6 +1,8 @@
 package com.mazalearn.scienceengine.app.services.loaders;
 
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,10 +14,10 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.ViewControls;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
+import com.mazalearn.scienceengine.guru.ITutor;
 
 public class LevelLoader {
     
@@ -96,13 +98,8 @@ public class LevelLoader {
   private void loadPlan(Array<?> tutors) {
     if (tutors == null) return;
     Gdx.app.log(ScienceEngine.LOG, "Loading tutors");
-    
-    for (int i = 0; i < tutors.size; i++) {
-      @SuppressWarnings("unchecked")
-      OrderedMap<String, ?> tutorObj = (OrderedMap<String, ?>) tutors.get(i);
-      AbstractTutor tutor = tutorLoader.loadTutor(science2DController.getGuru(), tutorObj);
-      science2DController.getGuru().registerTutor(tutor);
-    }
+    List<ITutor> childTutors = tutorLoader.loadChildTutors(science2DController.getGuru(), tutors);
+    science2DController.getGuru().initialize(childTutors);
   }
 
   static Object nvl(Object val, Object defaultVal) {

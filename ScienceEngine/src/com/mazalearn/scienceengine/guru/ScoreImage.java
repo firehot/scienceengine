@@ -12,14 +12,12 @@ import com.mazalearn.scienceengine.ScreenComponent;
 
 final class ScoreImage extends Image {
   private String message;
-  private final boolean success;
   private BitmapFont font;
 
-  ScoreImage(Texture texture, Skin skin, boolean success) {
+  ScoreImage(Texture texture, Skin skin) {
     super(texture);
     this.setVisible(false);
     setSize(ScreenComponent.getScaledX(getWidth()), ScreenComponent.getScaledY(getHeight()));
-    this.success = success;
     font = skin.getFont("default-font");
   }
 
@@ -49,7 +47,7 @@ final class ScoreImage extends Image {
     super.draw(batch, parentAlpha);
     Color c = font.getColor();
     font.setColor(Color.WHITE);
-    font.draw(batch, message, getX() + getWidth()/2 - 10, getY() + getHeight()/2);
+    font.draw(batch, message, getX() + getWidth()/2 - 20, getY() + getHeight()/2);
     font.setColor(c);
   }
 }

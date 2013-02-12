@@ -20,12 +20,14 @@ public class Guide extends AbstractTutor {
   
   private List<ITutor> childTutors = Collections.emptyList();
   
-  private float[] stageBeginTime;
-  private int currentStage = -1;
+  private float[] tutorBeginTime;
+  private int tutorIndex = -1;
 
   private Expr successActions;
 
   private Set<Variable> variables;
+
+  private ITutor currentTutor;
     
   public Guide(IScience2DController science2DController, ITutor parent,
       String goal, Array<?> components, Array<?> configs, 
@@ -36,9 +38,9 @@ public class Guide extends AbstractTutor {
   @Override
   public void reset() {
     super.reset();
-    if (currentStage < 0 || currentStage == childTutors.size()) return;
-    ITutor subgoal = childTutors.get(currentStage);
-    subgoal.reset();
+    if (currentTutor != null) {
+      currentTutor.reset();
+    }
   }
   
   @Override
@@ -48,14 +50,14 @@ public class Guide extends AbstractTutor {
       return;
     }
     // Move on to next stage
-    if (++currentStage == childTutors.size()) {
+    if (++tutorIndex == childTutors.size()) {
       super.done(success);
       doSuccessActions();
       return;
     }
-    ITutor childTutor = childTutors.get(currentStage);
-    childTutor.prepareToTeach();
-    childTutor.teach();
+    currentTutor = childTutors.get(tutorIndex);
+    currentTutor.prepareToTeach();
+    currentTutor.teach();
   }
 
   /* (non-Javadoc)
@@ -64,10 +66,9 @@ public class Guide extends AbstractTutor {
   @Override
   public void teach() {
     super.teach();
-    stageBeginTime[currentStage] = ScienceEngine.getTime();
+    tutorBeginTime[tutorIndex] = ScienceEngine.getTime();
     ScienceEngine.setProbeMode(false);
-    ITutor childTutor = childTutors.get(0);
-    childTutor.teach();
+    currentTutor.teach();
   }
 
   /* (non-Javadoc)
@@ -80,16 +81,15 @@ public class Guide extends AbstractTutor {
   @Override
   public void prepareToTeach() {
     super.prepareToTeach();
-    this.currentStage = 0;
-    ITutor childTutor = childTutors.get(0);
-    childTutor.prepareToTeach();
+    this.tutorIndex = 0;
+    currentTutor = childTutors.get(0);
+    currentTutor.prepareToTeach();
   }
   
   @Override
   public void checkProgress() {
-    if (currentStage < 0 || currentStage == childTutors.size()) return;
-    ITutor childTutor = childTutors.get(currentStage);
-    childTutor.checkProgress();
+    if (currentTutor == null) return;
+    currentTutor.checkProgress();
   }
   
   public void initialize(List<ITutor> childTutors, String successActionsString) {
@@ -98,7 +98,7 @@ public class Guide extends AbstractTutor {
       this.addActor((AbstractTutor) childTutor);
     }
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
-    this.stageBeginTime = new float[childTutors.size() + 1];
+    this.tutorBeginTime = new float[childTutors.size() + 1];
     if (successActionsString != null) {
       Parser parser = createParser();
       try {
