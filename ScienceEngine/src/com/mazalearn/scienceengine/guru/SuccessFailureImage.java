@@ -47,8 +47,8 @@ final class SuccessFailureImage extends Image {
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
     Color c = font.getColor();
-    font.setColor(Color.BLACK);
-    font.draw(batch, message, getX() + getWidth()/2 - 10, getY() + getHeight()/2);
+    font.setColor(Color.WHITE);
+    font.draw(batch, message, getX() + getWidth()/2 - 30, getY() + getHeight()/2);
     font.setColor(c);
   }
 }

@@ -27,6 +27,7 @@ plan:[
        },
        {type: "Guide",
        goal: "Understand the magnetic field around the magnet",
+       components:[{type:"FieldMeter", visible:true}],
        postcondition: "FieldMeter.Count >= 10",
        success: 250,
        timelimit: 180,
