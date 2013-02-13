@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.guru.Abstractor;
 import com.mazalearn.scienceengine.guru.TutorGroup;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
-import com.mazalearn.scienceengine.guru.Subgoal;
+import com.mazalearn.scienceengine.guru.KnowledgeUnit;
 
 class TutorLoader {
 
@@ -47,8 +47,8 @@ class TutorLoader {
     if (tutor instanceof Abstractor) {
       return makeAbstractor(tutorObj, (Abstractor) tutor);
     }
-    if (tutor instanceof Subgoal) {
-      return makeSubgoal(tutorObj, (Subgoal) tutor);
+    if (tutor instanceof KnowledgeUnit) {
+      return makeKnowledgeUnit(tutorObj, (KnowledgeUnit) tutor);
     }
     return tutor;
   }
@@ -83,11 +83,11 @@ class TutorLoader {
     return abstractor;
   }
 
-  private Subgoal makeSubgoal(OrderedMap<String, ?> tutorObj, Subgoal subgoal) {
+  private KnowledgeUnit makeKnowledgeUnit(OrderedMap<String, ?> tutorObj, KnowledgeUnit knowledgeUnit) {
     String when = (String) tutorObj.get("when");
     String postConditionString = (String) tutorObj.get("postcondition");
-    subgoal.initialize(when, postConditionString);
-    return subgoal;
+    knowledgeUnit.initialize(when, postConditionString);
+    return knowledgeUnit;
   }
 
   private String[] loadHints(OrderedMap<String, ?> tutorObj) {

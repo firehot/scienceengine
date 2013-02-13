@@ -29,7 +29,7 @@ import com.mazalearn.scienceengine.guru.TutorGroup;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
-import com.mazalearn.scienceengine.guru.Subgoal;
+import com.mazalearn.scienceengine.guru.KnowledgeUnit;
 
 public abstract class AbstractScience2DController implements
     IScience2DController {
@@ -174,8 +174,8 @@ public abstract class AbstractScience2DController implements
       return new ParameterProber(this, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("TutorGroup".equals(type)) {
       return new TutorGroup(this, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
-    } else if ("Subgoal".equals(type)) {
-      return new Subgoal(this, parent, goal, name, components, configs, deltaSuccessScore, hints);
+    } else if ("KnowledgeUnit".equals(type)) {
+      return new KnowledgeUnit(this, parent, goal, name, components, configs, deltaSuccessScore, hints);
     } else if ("Abstractor".equals(type)) {
       return new Abstractor(this, parent, goal, name, components, configs, skin, 
           science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore, hints);

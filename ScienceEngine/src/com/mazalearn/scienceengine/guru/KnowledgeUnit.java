@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
 
-public class Subgoal extends AbstractTutor {
+public class KnowledgeUnit extends AbstractTutor {
   private Expr postCondition;
   private Collection<Variable> variables;
   private String when;
@@ -26,7 +26,7 @@ public class Subgoal extends AbstractTutor {
   private boolean postConditionSatisfied;
   private String[] plaudits = {"Bravo", "Well Done", "Excellent", "Good"};
   
-  public Subgoal(IScience2DController science2DController,
+  public KnowledgeUnit(IScience2DController science2DController,
       ITutor parent, String goal, String name, Array<?> components, Array<?> configs,
       int deltaSuccessScore, String[] hints) {
     super(science2DController, parent, goal, name, components, configs, deltaSuccessScore, 0, hints);
@@ -37,7 +37,7 @@ public class Subgoal extends AbstractTutor {
       public void clicked (InputEvent event, float x, float y) {
         nextButton.setVisible(false);
         isUserNext = true;
-      }      
+      }
     });
     nextButton.setPosition(ScreenComponent.NextButton.getX(nextButton.getWidth()),
         ScreenComponent.NextButton.getY(nextButton.getHeight()));
