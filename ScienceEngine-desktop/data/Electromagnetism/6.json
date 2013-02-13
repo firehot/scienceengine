@@ -43,7 +43,7 @@ plan: [
            postcondition: "Count(PickupCoil.CoilLoops) > 1 and Max(PickupCoil.Current) >= 1",
            success: 250},
            {type: "KnowledgeUnit",
-           name:"Change Electromagnet Coil Loops"
+           name:"Change Electromagnet Coil Loops",
           goal: "Change the number of coils on the Electromagnet. See how the induced current changes.",
            postcondition: "Count(ElectroMagnet.CoilLoops) > 1 and Max(PickupCoil.Current) >= 1",
            success: 250},

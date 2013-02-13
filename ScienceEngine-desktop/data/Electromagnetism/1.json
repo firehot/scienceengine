@@ -18,7 +18,7 @@ plan:[
        timelimit: 120,
        components:[{type:"FieldMeter", visible:false}],
        subgoals: [
-         {type: ""KnowledgeUnit"",
+         {type: "KnowledgeUnit",
           name: "Compass around Magnet",
           goal: "Make the compass go through one complete rotation",
          hints: ["What happens to the compass when it moves around the magnet?"],

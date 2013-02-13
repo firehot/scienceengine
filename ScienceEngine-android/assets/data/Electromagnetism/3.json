@@ -87,12 +87,12 @@ plan:[
        ]},       
        {type: "TutorGroup",
         group: "Challenge",
-       goal: "Understand the magnetic field around the wires.",
-       subgoals: [
+        goal: "Understand the magnetic field around the wires.",
+        subgoals: [
            {type: "FieldMagnitudeProber",
-            name: "Field Magnitude"
+            name: "Field Magnitude",
             goal: "Touch one of the two ? where the magnetic field is stronger",
-             hints: ["The field is the sum of the fields of the two wires.",
+            hints: ["The field is the sum of the fields of the two wires.",
                     "The field is stronger if the current strength is larger"],
             components:[{type:"Compass", visible: true},{type:"Wire.1", move:"None"},{type:"Wire.2",move:"None"}],
             timelimit: 10,
