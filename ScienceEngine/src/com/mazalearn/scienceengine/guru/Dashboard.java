@@ -1,12 +1,7 @@
 package com.mazalearn.scienceengine.guru;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,25 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
-import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.ScreenComponent;
 
 class Dashboard extends Table {
-  TextButton topGoal;
+  TextButton goal;
   Label scoreLabel;
   int score;
   private Label timerLabel;
   float timeLeft = 300;
-  private Group stageGroup;
-  private Skin skin;
+  private SubgoalNavigator subgoalNavigator;
   private ClickListener clickListener;
+  private ITutor activeTutor;
 
   Dashboard(Skin skin) {
     super(skin);
-    this.skin = skin;
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       debug();
     }
@@ -47,13 +39,21 @@ class Dashboard extends Table {
     
     clickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
-        stageGroup.setVisible(!stageGroup.isVisible());
+        if (subgoalNavigator.isVisible()) {
+          subgoalNavigator.setVisible(false);
+          return;
+        }
+        // Bring subgoal navigator to top, and dashboard above it.
+        subgoalNavigator.setVisible(true);
+        subgoalNavigator.setActiveTutor(activeTutor);
+        getStage().addActor(subgoalNavigator);
+        getStage().addActor(Dashboard.this);
       }
     };
-    topGoal = new TextButton("", skin);
-    topGoal.setColor(Color.YELLOW);
-    topGoal.addListener(clickListener);
-    topGoal.getLabel().setWrap(true);
+    goal = new TextButton("", skin);
+    goal.setColor(Color.YELLOW);
+    goal.addListener(clickListener);
+    goal.getLabel().setWrap(true);
     
     scoreLabel = new Label("0", skin);
 
@@ -75,7 +75,7 @@ class Dashboard extends Table {
     t.row();
     t.add("").width(40).fill().right();// t.add(timerLabel).width(40).fill().right();
     tutorTable.add(t).left();
-    tutorTable.add(topGoal).pad(0, 10, 0, 10).width(ScreenComponent.getScaledX(430)).fill();
+    tutorTable.add(goal).pad(0, 10, 0, 10).width(ScreenComponent.getScaledX(430)).fill();
     t = new Table(skin);
     t.add("Score").top();
     t.row();
@@ -92,28 +92,30 @@ class Dashboard extends Table {
     setY(ScreenComponent.Dashboard.getY(getPrefHeight()) + getPrefHeight() / 2);    
   }
   
-  public void addScore(int deltaScore) {
-    score += deltaScore;
-    scoreLabel.setText(String.valueOf(score));
-  }
-  
-  public void setGoal(String goal) {
-    if (goal == null) {
-      topGoal.setVisible(false);
-      topGoal.setText("");
-      return;
-    }
-    topGoal.setText(goal);
-    topGoal.addAction(Actions.sequence(
+  public void setActiveTutor(ITutor activeTutor) {
+    this.activeTutor = activeTutor;
+    this.goal.setText(activeTutor.getGoal());
+    this.goal.addAction(Actions.sequence(
         Actions.alpha(0),
         Actions.alpha(1, 2)));
     reposition();
+  }
+
+  public void clearActiveTutor() {
+    activeTutor = null;
+    goal.setVisible(false);
+    goal.setText("");
   }
 
   public int getScore() {
     return score;
   }
 
+  public void addScore(int deltaScore) {
+    score += deltaScore;
+    scoreLabel.setText(String.valueOf(score));
+  }
+  
   public void resetScore() {
     score = 0;
   }
@@ -122,37 +124,8 @@ class Dashboard extends Table {
     this.timeLeft = timeLimitSeconds;
   }
 
-  public void clearGoals() {
-    setGoal(null);
-  }
+  public void setSubgoalNavigator(SubgoalNavigator subgoalNavigator) {
+    this.subgoalNavigator = subgoalNavigator;
+  }  
 
-  private TextButton createStageButton(String name, float width, float height, float x, float y) {
-    TextButton stageButton = new TextButton(name, skin);
-    stageButton.addListener(clickListener);
-    stageButton.getLabel().setWrap(true);
-    stageButton.setSize(width, height);
-    stageButton.setPosition(x, y);
-    return stageButton;
-  }
-  
-  public void setStages(List<String> stages) {
-    stageGroup = new Group() {
-      Color c = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.5f);
-      TextureRegion gray = ScreenUtils.createTexture(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
-      public void draw(SpriteBatch batch, float parentAlpha) {
-        batch.draw(gray, getX(), getY());
-        super.draw(batch, parentAlpha);
-      }
-    };
-    stageGroup.setVisible(false);
-    stageGroup.setPosition(0, 0);
-    stageGroup.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
-    this.getStage().addActor(stageGroup);
-    
-    float height = ScreenComponent.VIEWPORT_HEIGHT / (stages.size() + 3);
-    float width = 2.5f * ScreenComponent.VIEWPORT_WIDTH / (stages.size() + 3);
-    for (int i = 0; i < stages.size(); i++) {
-      stageGroup.addActor(createStageButton(stages.get(i), width, height, width / 2.5f * (i + 1), height * (i + 1)));
-    }
-  }
 }

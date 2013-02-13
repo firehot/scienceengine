@@ -68,8 +68,8 @@ public class KnowledgeUnit extends AbstractTutor {
   }
 
   @Override
-  public void reset() {
-    super.reset();
+  public void prepareToTeach(ITutor childTutor) {
+    super.prepareToTeach(childTutor);
     isUserNext = false;
     nextButton.setVisible(false);
   }

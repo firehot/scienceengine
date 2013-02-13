@@ -93,8 +93,8 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   }
   
   @Override
-  public void prepareToTeach() {
-    super.prepareToTeach();
+  public void prepareToTeach(ITutor childTutor) {
+    super.prepareToTeach(childTutor);
     image.setVisible(false);
   }
   

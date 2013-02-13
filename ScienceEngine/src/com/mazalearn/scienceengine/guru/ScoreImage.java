@@ -17,7 +17,7 @@ final class ScoreImage extends Image {
   ScoreImage(Texture texture, Skin skin) {
     super(texture);
     this.setVisible(false);
-    setSize(ScreenComponent.getScaledX(getWidth()), ScreenComponent.getScaledY(getHeight()));
+    setSize(ScreenComponent.getScaledX(getWidth()) * 2, ScreenComponent.getScaledY(getHeight()) * 2);
     font = skin.getFont("default-font");
   }
 

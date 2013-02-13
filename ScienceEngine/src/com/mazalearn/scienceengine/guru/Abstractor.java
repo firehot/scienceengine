@@ -50,8 +50,8 @@ public class Abstractor extends AbstractTutor {
    * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(float, float, float, float)
    */
   @Override
-  public void prepareToTeach() {
-    super.prepareToTeach();
+  public void prepareToTeach(ITutor childTutor) {
+    super.prepareToTeach(childTutor);
     
     if (configTable == null) {
       createConfigTable(science2DController.getModel(), skin);

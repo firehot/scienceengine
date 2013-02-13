@@ -25,8 +25,11 @@ public interface ITutor {
 
   /**
    * Prepare tutor before a session. 
+   * Reset components and configs to state at beginning
+   * If childTutor is null, continue with current child if proper else 
+   * go to first child. Otherwise use childTutor.
    */
-  public void prepareToTeach();
+  public void prepareToTeach(ITutor childTutor);
 
   /**
    * Teach session.
@@ -45,12 +48,6 @@ public interface ITutor {
   public void checkProgress();
 
   /**
-   * Reset components and configs to state at beginning
-   * TODO: what is difference between reset and prepareToTeach???
-   */
-  public void reset();
-
-  /**
    * Called when teaching session is completed
    * @param success
    */
@@ -66,7 +63,10 @@ public interface ITutor {
   public GroupType getGroupType();
 
   /**
-   * @return short name of tutor
+   * @return short name of tutor - 
+   * TODO: remove???
    */
   public String getName();
+
+  public ITutor getParentTutor();
 }

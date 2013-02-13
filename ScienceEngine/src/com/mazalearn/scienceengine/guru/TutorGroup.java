@@ -33,14 +33,6 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public void reset() {
-    super.reset();
-    if (currentTutor != null) {
-      currentTutor.reset();
-    }
-  }
-  
-  @Override
   public void done(boolean success) {
     if (!success) {
       super.done(success);
@@ -53,34 +45,34 @@ public class TutorGroup extends AbstractTutor {
       return;
     }
     currentTutor = childTutors.get(tutorIndex);
-    currentTutor.prepareToTeach();
-    currentTutor.teach();
+    teach();
   }
 
   /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.guru.AbstractTutor#activate(boolean)
+   * @see com.mazalearn.scienceengine.guru.AbstractTutor#teach()
    */
   @Override
   public void teach() {
     super.teach();
     tutorBeginTime[tutorIndex] = ScienceEngine.getTime();
     ScienceEngine.setProbeMode(false);
+    currentTutor.prepareToTeach(null);
     currentTutor.teach();
   }
 
   /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(boolean)
-   */
-  /**
-   * Guide allows user to interact with bodies on screen as well as with its 
-   * own bodies - like subgoal.
+   * @see com.mazalearn.scienceengine.guru.AbstractTutor#prepareToTeach(ITutor)
    */
   @Override
-  public void prepareToTeach() {
-    super.prepareToTeach();
-    this.tutorIndex = 0;
-    currentTutor = childTutors.get(0);
-    currentTutor.prepareToTeach();
+  public void prepareToTeach(ITutor childTutor) {
+    super.prepareToTeach(childTutor);
+    if (childTutor != null) {
+      tutorIndex = childTutors.indexOf(childTutor);
+    }
+    if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
+      tutorIndex = 0;
+    }
+    currentTutor = childTutors.get(tutorIndex);
   }
   
   @Override

@@ -77,8 +77,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
   }
   
   @Override
-  public void prepareToTeach() {
-    super.prepareToTeach();
+  public void prepareToTeach(ITutor childTutor) {
+    super.prepareToTeach(childTutor);
     image.setVisible(false);
   }
   

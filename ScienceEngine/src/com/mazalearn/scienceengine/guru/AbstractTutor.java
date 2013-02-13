@@ -55,7 +55,6 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void done(boolean success) {
-    guru.popTutor(this);
     this.setVisible(false);
     parent.done(success);
   }
@@ -68,22 +67,24 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void teach() {
     this.setVisible(true);
   }
-
+  
   @Override
-  public void prepareToTeach() {
-    reset();
-    guru.pushTutor(this);
-    // Mark start of tutor in event log
-    ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
-        Parameter.Tutor.name());
+  public ITutor getParentTutor() {
+    return parent;
   }
-
+  
   @Override
-  public void reset() {
-    Gdx.app.log(ScienceEngine.LOG, "Reset tutor");
+  public void prepareToTeach(ITutor childTutor) {
+    Gdx.app.log(ScienceEngine.LOG, "Prepare to Teach: " + getGoal());
     new ComponentLoader(science2DController).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DController.getModel());
     science2DController.getModelControls().refresh();
+    
+    this.setVisible(false);
+    guru.setActiveTutor(this);
+    // Mark start of tutor in event log
+    ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
+        Parameter.Tutor.name());
   }
 
   @Override

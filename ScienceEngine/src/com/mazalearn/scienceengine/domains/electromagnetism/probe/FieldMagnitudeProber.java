@@ -63,8 +63,8 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   }
   
   @Override
-  public void prepareToTeach() {
-    super.prepareToTeach();
+  public void prepareToTeach(ITutor childTutor) {
+    super.prepareToTeach(childTutor);
     imageCorrect.setVisible(false);
     imageWrong.setVisible(false);
   }
