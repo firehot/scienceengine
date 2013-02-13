@@ -33,7 +33,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 /** Caches glyph geometry for a BitmapFont, providing a fast way to render static text. This saves needing to compute the location
  * of each glyph each frame.
  * @author Nathan Sweet
- * @author Matthias Mann */
+ * @author Matthias Mann 
+ * @author Sridhar Sundaram */
 public class BitmapFontCache {
   private final BitmapFont font;
   private float[] vertices = new float[0];
