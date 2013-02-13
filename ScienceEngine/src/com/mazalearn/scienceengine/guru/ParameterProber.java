@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -17,8 +16,7 @@ import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
-import com.mazalearn.scienceengine.core.model.ComponentType;
-import com.mazalearn.scienceengine.core.model.DummyBody;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 // outcome = function of parameter
 // doubts on how parameter change affects outcome
@@ -44,8 +42,6 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   private Set<Variable> resultExprVariables;
 
   protected IModelConfig<?> probeConfig;
-
-  protected DummyBody dummy;
   
   private Image createResultImage(String path, float x, float y) {
     Image image = new Image(new Texture(path));
@@ -76,7 +72,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       setSuccessScore(getFailureScore()); // Equate success and failure scores
       return;
     }
-    dummy.setConfigParameter(null, 0);
+    ScienceEngine.clearPins();
     science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     image.setVisible(false);
     ScienceEngine.setProbeMode(false);
@@ -88,14 +84,13 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     super(science2DController, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     this.image = new ProbeImage();
-    
-    dummy = (DummyBody) science2DController.getModel().findBody(ComponentType.Dummy);
   }
   
   @Override
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);
     image.setVisible(false);
+    ScienceEngine.clearPins();
   }
   
   @Override
@@ -108,11 +103,12 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       science2DController.getModel().bindParameterValues(resultExprVariables);
       imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
     } else {
-      float value = MathUtils.random(0f, 10f);
-      dummy.setConfigParameter(probeConfig.getParameter(), value);
       science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
+      ScienceEngine.pin(probeConfig.getBody(), true);
+      ScienceEngine.selectParameter(probeConfig.getBody(), probeConfig.getParameter(), 
+          probeConfig.getLow(), (IScience2DView) getStage());
     }
-    ScienceEngine.selectBody(dummy, science2DController.getView());
+    ScienceEngine.selectBody(null, science2DController.getView());
     image.setVisible(true);
     ScienceEngine.setProbeMode(true);
   }

@@ -413,6 +413,10 @@ public class ScienceEngine extends Game {
     }
   }
 
+  public static void clearPins() {
+    pinnedBodies.clear();
+  }
+
   public static String getUserEmail() {
     Profile profile = profileManager.retrieveProfile();
     return profile.getUserEmail();

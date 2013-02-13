@@ -58,7 +58,7 @@ plan: [
    ],
    subgoals:[{type: "KnowledgeUnit",
           name: "Configure NumRevolutions",
-          goal: "Configured the current coil to see the number of revolutions", 
+          goal: "Configure the current coil to see the number of revolutions", 
            postcondition: "CurrentCoil.RotationDataType = 'NumRevolutions'"},
           {type: "KnowledgeUnit",
           name: "Change current direction to rotate",
@@ -71,7 +71,7 @@ plan: [
            postcondition: "(CurrentCoil.Angle / pi > 1.3 and CurrentCoil.Angle / pi < 1.7) or (CurrentCoil.Angle / pi > 0.3 and CurrentCoil.Angle / pi < 0.7)"},
           {type: "KnowledgeUnit",
           name: "Sustain rotation by changing Current direction",
-          goal: "Make sure number of revolutions increasing",
+          goal: "Make sure number of revolutions is increasing",
            postcondition: "CurrentCoil.RotationData >= 10"}
    ]},
    {type: "TutorGroup",

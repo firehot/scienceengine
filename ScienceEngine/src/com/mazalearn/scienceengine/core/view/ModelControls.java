@@ -86,7 +86,7 @@ public class ModelControls extends Table {
         
         IModelConfig<?> bodyConfig = new AbstractModelConfig<Boolean>(body, asParameter(body), false) {
           @Override public boolean isPossible() { return body.isActive(); }      
-          @Override public boolean isAvailable() { return isPossible() && !ScienceEngine.isProbeMode(); }
+          @Override public boolean isAvailable() { return isPossible() && (!ScienceEngine.isProbeMode() || ScienceEngine.isPinned(body)); }
           @Override public Boolean getValue() { return ScienceEngine.isPinned(body); }
           @Override public void setValue(Boolean value) { ScienceEngine.pin(body, value); }
         };
