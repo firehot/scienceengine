@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Json;
 /**
  * Handles the scienceEngine preferences.
  * Preferences are global across users.
+ * Profile is per user - stored as a preference against email address of profile
  */
 public class PreferencesManager {
   // constants

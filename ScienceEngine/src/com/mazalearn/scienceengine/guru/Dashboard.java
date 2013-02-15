@@ -50,7 +50,7 @@ class Dashboard extends Table {
         getStage().addActor(Dashboard.this);
       }
     };
-    goal = new TextButton("", skin);
+    goal = new TextButton("", skin, "body");
     goal.setColor(Color.YELLOW);
     goal.addListener(clickListener);
     goal.getLabel().setWrap(true);
