@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.services.IMessage;
 
-final class BasicMessages implements IMessage {
+class BasicMessages implements IMessage {
   
   private Map<String,String> i18nMap = new HashMap<String, String>();
 
