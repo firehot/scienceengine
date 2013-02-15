@@ -16,7 +16,7 @@ public class HighScoresScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    Profile profile = ScienceEngine.getProfileManager().retrieveProfile();
+    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
 
     // retrieve the default table actor
     Table table = super.getTable();

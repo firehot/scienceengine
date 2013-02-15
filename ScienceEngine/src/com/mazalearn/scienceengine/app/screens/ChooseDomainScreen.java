@@ -28,7 +28,7 @@ public class ChooseDomainScreen extends AbstractScreen {
 
   public ChooseDomainScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
-    profile = ScienceEngine.getProfileManager().retrieveProfile();
+    profile = ScienceEngine.getPreferencesManager().getProfile();
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();

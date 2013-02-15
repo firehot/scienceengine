@@ -51,7 +51,7 @@ public class DomainHomeScreen extends AbstractScreen {
     super(scienceEngine);
     this.domain = domain;
     readDomainActivityInfo();
-    profile = ScienceEngine.getProfileManager().retrieveProfile();
+    profile = ScienceEngine.getPreferencesManager().getProfile();
     profile.setDomain(domain);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
@@ -68,8 +68,8 @@ public class DomainHomeScreen extends AbstractScreen {
   public void show() {
     super.show();
     // setBackgroundColor(new Color(0x84/255f,0x99/255f,0xa2/255f,1f));
-    if (profile.getCurrentLevel() != 0) {
-      gotoActivityLevel(profile.getCurrentLevel());
+    if (profile.getCurrentActivity() != 0) {
+      gotoActivityLevel(profile.getCurrentActivity());
       return;
     }
     

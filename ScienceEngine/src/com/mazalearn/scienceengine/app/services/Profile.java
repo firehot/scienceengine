@@ -16,6 +16,10 @@ import com.badlogic.gdx.utils.OrderedMap;
  * @see ProfileManager
  */
 public class Profile implements Serializable {
+  private static final String ACTIVITY = "activity";
+  private static final String DOMAIN = "domain";
+  private static final String USER_EMAIL = "useremail";
+  private static final String USER_NAME = "username";
   private Map<Integer, Integer> highScores;
   private Map<String, String> properties;
 
@@ -24,16 +28,16 @@ public class Profile implements Serializable {
     properties = new HashMap<String, String>();
   }
 
-  public void setCurrentLevel(int level) {
-    properties.put("level", String.valueOf(level));
+  public void setCurrentActivity(int level) {
+    properties.put(ACTIVITY, String.valueOf(level));
   }
   
   /**
    * Retrieves the ID of the next playable level.
    * Stupid ligbdx converts ints to floats when writing json.
    */
-  public int getCurrentLevel() {
-    String levelFloatStr = properties.get("level");
+  public int getCurrentActivity() {
+    String levelFloatStr = properties.get(ACTIVITY);
     return  levelFloatStr == null ? 0 : Math.round(Float.valueOf(levelFloatStr));
   }
 
@@ -82,11 +86,11 @@ public class Profile implements Serializable {
   }
 
   public void setDomain(String name) {
-    properties.put("domain", name);
+    properties.put(DOMAIN, name);
   }
 
   public String getDomain() {
-    String s = properties.get("domain");
+    String s = properties.get(DOMAIN);
     return s == null ? "" : s;
   }
 
@@ -95,20 +99,20 @@ public class Profile implements Serializable {
   }
 
   public void setUserName(String name) {
-    properties.put("name", name);
+    properties.put(USER_NAME, name);
   }
 
   public void setUserEmail(String email) {
-    properties.put("email", email);
+    properties.put(USER_EMAIL, email);
   }
 
   public String getUserName() {
-    String s = properties.get("name");
+    String s = properties.get(USER_NAME);
     return s == null ? "" : s;
   }
 
   public String getUserEmail() {
-    String s = properties.get("email");
+    String s = properties.get(USER_EMAIL);
     return s == null ? "" : s;
   }
 }

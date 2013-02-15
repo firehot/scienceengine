@@ -14,10 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.guru.IDoneCallback;
@@ -30,8 +29,7 @@ public class LoginDialog extends Dialog {
 
   public LoginDialog(Skin skin, IDoneCallback doneCallback) {
     super("", skin);
-    ProfileManager profileManager = ScienceEngine.getProfileManager();
-    this.profile = profileManager.retrieveProfile();
+    this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.doneCallback = doneCallback;
     this.skin = skin;
   }
@@ -45,7 +43,7 @@ public class LoginDialog extends Dialog {
     this.getContentTable().add(name);
     this.getContentTable().row();
     this.getContentTable().add(new Label("Email: ", skin));
-    final TextField email = new TextField(profile.getUserEmail(), skin);
+    final TextField email = new TextField(ScienceEngine.getUserEmail(), skin);
     email.setWidth(200);
     this.getContentTable().add(email).width(200);
     this.getContentTable().row();
@@ -70,9 +68,9 @@ public class LoginDialog extends Dialog {
     loginButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        profile = ScienceEngine.getPreferencesManager().loadProfile(email.getText());
         profile.setUserName(name.getText());
-        profile.setUserEmail(email.getText());
-        ScienceEngine.getProfileManager().persist();
+        ScienceEngine.getPreferencesManager().saveProfile();
         
         // Primitive validation
         if (!name.getText().matches("[a-zA-Z ]{2,30}") || !email.getText().contains("@")) {
@@ -102,8 +100,8 @@ public class LoginDialog extends Dialog {
   
   @Override
   public Dialog show(Stage stage) {
-    if (ScienceEngine.DEV_MODE == DevMode.DEBUG && !profile.getUserEmail().isEmpty() &&
-        !profile.getUserName().isEmpty()) {
+    String userEmail = ScienceEngine.getUserEmail();
+    if (ScienceEngine.DEV_MODE == DevMode.DEBUG && userEmail != null) {
       doneCallback.done(true);
       return null;
     } else if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
@@ -111,15 +109,16 @@ public class LoginDialog extends Dialog {
       Gdx.input.getTextInput(new TextInputListener() {
         @Override
         public void input(String email) {
+          ScienceEngine.getPreferencesManager().loadProfile(email);
           profile.setUserName(email.substring(0, email.indexOf("@")));
           profile.setUserEmail(email);
-          ScienceEngine.getProfileManager().persist();
+          ScienceEngine.getPreferencesManager().saveProfile();
           doneCallback.done(true);
         }
         
         @Override
         public void canceled() {}
-      }, "Enter email address", profile.getUserEmail());
+      }, "Enter email address", userEmail == null ? "" : userEmail);
       return null;
     } else {
       setupDialog();      

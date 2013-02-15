@@ -27,7 +27,6 @@ import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
@@ -58,7 +57,6 @@ public class ScienceEngine extends Game {
   
   // services
   private static PreferencesManager preferencesManager;
-  private static ProfileManager profileManager;
   private static MusicManager musicManager;
   private static SoundManager soundManager;
   private static IPlatformAdapter platformAdapter;
@@ -88,10 +86,6 @@ public class ScienceEngine extends Game {
 
   public static PreferencesManager getPreferencesManager() {
     return preferencesManager;
-  }
-
-  public static ProfileManager getProfileManager() {
-    return profileManager;
   }
 
   public static MusicManager getMusicManager() {
@@ -159,10 +153,6 @@ public class ScienceEngine extends Game {
       // ignore - not having sound is OK. Added for GWT.
     }
 
-    // create the profile Manager
-    profileManager = new ProfileManager();
-    profileManager.retrieveProfile();
-    
     // create the asset Manager
     assetManager = new AssetManager();
     assetManager.setLoader(IScience2DController.class, 
@@ -230,8 +220,9 @@ public class ScienceEngine extends Game {
         if (iLevel == null) {
           return new DomainHomeScreen(this, domain);
         }
-        
-        return new ActivityScreen(this, domain, iLevel);
+        if (!getUserEmail().isEmpty()) {
+          return new ActivityScreen(this, domain, iLevel);
+        }
       }
     }
     return new SplashScreen(this);
@@ -287,7 +278,7 @@ public class ScienceEngine extends Game {
 
     // persist the profile, because we don't know if the player will come
     // back to the scienceEngine
-    profileManager.persist();
+    preferencesManager.saveProfile();
     // For some reason, skin and atlas do not survive pause
     skin = null;
     atlas = null;
@@ -418,13 +409,11 @@ public class ScienceEngine extends Game {
   }
 
   public static String getUserEmail() {
-    Profile profile = profileManager.retrieveProfile();
-    return profile.getUserEmail();
+    return preferencesManager.getProfile().getUserEmail();
   }
 
   public static String getUserName() {
-    Profile profile = profileManager.retrieveProfile();
-    return profile.getUserName();
+    return preferencesManager.getProfile().getUserName();
   }
 
   public static String getHostPort() {

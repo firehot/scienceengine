@@ -7,10 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.ProfileManager;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
@@ -43,9 +42,8 @@ public class ActivityScreen extends AbstractScreen {
     this.science2DController = 
         createDomainController(domain, activityLevel, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     IScience2DView science2DView = science2DController.getView();
-    ProfileManager profileManager = ScienceEngine.getProfileManager();
-    profile = profileManager.retrieveProfile();
-    profile.setCurrentLevel(activityLevel);
+    profile = ScienceEngine.getPreferencesManager().getProfile();
+    profile.setCurrentActivity(activityLevel);
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
@@ -74,7 +72,7 @@ public class ActivityScreen extends AbstractScreen {
     DomainHomeScreen domainHomeScreen = 
         new DomainHomeScreen(scienceEngine, domain);
     scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));
-    profile.setCurrentLevel(0);
+    profile.setCurrentActivity(0);
   }
   
   public IScience2DController createDomainController(
