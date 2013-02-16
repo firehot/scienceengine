@@ -194,7 +194,7 @@ public class ScienceEngine extends Game {
    * @return screen corresponding to uri
    */
   private AbstractScreen createScreen(String uri) {
-    if (uri != null) {
+    if (uri != null && !getUserEmail().isEmpty()) {
       String path, query;
       int qmark = uri.indexOf("?");
       if (qmark == -1) {
@@ -217,12 +217,10 @@ public class ScienceEngine extends Game {
             iLevel = Integer.parseInt(queryParts[0].substring("level=".length()));
           }
         }
-        if (iLevel == null) {
-          return new DomainHomeScreen(this, domain);
-        }
-        if (!getUserEmail().isEmpty()) {
+        if (iLevel != null) {
           return new ActivityScreen(this, domain, iLevel);
         }
+        return new DomainHomeScreen(this, domain);
       }
     }
     return new SplashScreen(this);

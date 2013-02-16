@@ -21,7 +21,7 @@ plan:[
        subgoals: [
          { type: "KnowledgeUnit",
          goal:"Make the compass go through one complete rotation",
-         name:"Compass around Wire",
+         id:"Compass around Wire",
          hints: ["What happens to the compass when it moves around the wire?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          components:[{type:"Compass", visible: true}],
@@ -36,7 +36,7 @@ plan:[
        timelimit: 180,
        subgoals: [
          {type: "KnowledgeUnit",
-         name: "Move Wire",
+         id: "Move Wire",
          goal: "Move the wire and see how the field changes",
          hints: ["To see the field, click on the screen around the wires"],
          postcondition: "FieldMeter.Count >= 10 and Count(Wire.Move) >= 1",
@@ -44,28 +44,28 @@ plan:[
          success: 200
          },
          {type: "KnowledgeUnit",
-         name: "Max Current Change",
+         id: "Max Current Change",
          goal: "Make the current as DC and change max current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
          {type: "KnowledgeUnit",
-         name: "Current Direction Change",
+         id: "Current Direction Change",
          goal: "Make the current as DC and change current direction. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentDirection) >=  1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
          {type: "KnowledgeUnit",
-         name: "AC: Max Current Change",
+         id: "AC: Max Current Change",
          goal: "Make the current as AC and change max current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
          components:[{type:"Compass", visible: false}],
          success: 200
          },
          {type: "KnowledgeUnit",
-         name: "AC: Frequency Change",
+         id: "AC: Frequency Change",
          goal: "Make the current as AC and change current frequency. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentFrequency) >= 1",
          components:[{type:"Compass", visible: false}],
@@ -77,7 +77,7 @@ plan:[
        goal: "Understand the magnetic field around the wire",
        subgoals: [
            {type: "FieldMagnitudeProber",
-            name: "Field Magnitude",
+            id: "Field Magnitude",
             goal: "Touch one of the two ? where the magnetic field is stronger",
             hints: ["The field is stronger closer to the wire",
                     "The field is stronger if the current strength is larger"],
@@ -87,7 +87,7 @@ plan:[
             failure: 50
             }, 
             {type:"FieldDirectionProber",
-            name: "Field Direction",
+            id: "Field Direction",
             goal: "Touch the ? and Drag in the direction of the magnetic field",
             hints: ["The direction of the field is the direction in which a free North Pole would move if placed at that point.",
                     "The direction of the field is where the North of a compass needle in that location would point."],

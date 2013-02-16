@@ -10,12 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.guru.ITutor.GroupType;
 
@@ -25,7 +29,8 @@ public class SubgoalNavigator extends Group {
   private static final float SUBGOAL_HEIGHT = 150;
   Color c = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.5f);
   TextureRegion gray = ScreenUtils.createTexture(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
-  private TextButton activeTutorButton;
+  private TextButton activeSubgoalButton;
+  private Label[] subgoalTimeLabels;
   private Image userImage;
 
   public SubgoalNavigator(List<ITutor> subgoals, final Guru guru, Skin skin) {
@@ -33,14 +38,27 @@ public class SubgoalNavigator extends Group {
     setVisible(false);
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+    subgoalTimeLabels = new Label[subgoals.size()];
     addActor(createSubgoalsPane(subgoals, guru, skin));
     userImage = new Image(new Texture("images/user.png"));
   }
 
-  public void setActiveTutor(ITutor activeTutor) {
-    activeTutorButton = (TextButton) findActor(activeTutor.getGoal());
-    if (activeTutorButton != null) {
-      activeTutorButton.addActor(userImage);
+  /**
+   * Refresh subgoal activity times and show.
+   * @param activeSubgoal - subgoal which is active.
+   */
+  public void show(ITutor activeSubgoal) {
+    // Update times spent per subgoal
+    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    for (Label timeLabel: subgoalTimeLabels) {
+      String subgoalId = timeLabel.getName();
+      int timeSpent = Math.round(profile.getTimeSpent(subgoalId));
+      timeLabel.setText("Time: " + String.valueOf(timeSpent));
+    }
+    // Update active subgoal
+    activeSubgoalButton = (TextButton) findActor(activeSubgoal.getId());
+    if (activeSubgoalButton != null) {
+      activeSubgoalButton.addActor(userImage);
     }
   }
   
@@ -48,19 +66,30 @@ public class SubgoalNavigator extends Group {
     Table subgoalsTable = new Table(skin);
     subgoalsTable.setName("Subgoals");
     
+    int count = 0;
     for (final ITutor subgoal: subgoals) {
       TextButton subgoalButton = new TextButton(subgoal.getGoal(), skin);
       subgoalButton.addListener(new ClickListener() {
         @Override
         public void clicked (InputEvent event, float x, float y) {
           SubgoalNavigator.this.setVisible(false);
-          if (activeTutorButton != null) { // remove user image
-            activeTutorButton.removeActor(userImage);
+          if (activeSubgoalButton != null) { // remove user image
+            activeSubgoalButton.removeActor(userImage);
           }
           guru.goTo(subgoal);
         }        
       });
-      subgoalButton.setName(subgoal.getGoal());
+      subgoalButton.setName(subgoal.getId());
+      
+      Label timeLabel = new Label("", skin);
+      timeLabel.setName(subgoal.getId());
+      timeLabel.setAlignment(Align.center, Align.center);
+      timeLabel.setWidth(ScreenComponent.getScaledX(50));
+      timeLabel.setHeight(ScreenComponent.getScaledY(30));
+      timeLabel.setPosition(5, ScreenComponent.getScaledY(SUBGOAL_HEIGHT - 30));
+      subgoalTimeLabels[count++] = timeLabel;
+      subgoalButton.addActor(timeLabel);
+      
       if (subgoal.getParentTutor().getGroupType() == GroupType.Challenge) {
         subgoalButton.setColor(Color.RED);
       } else {

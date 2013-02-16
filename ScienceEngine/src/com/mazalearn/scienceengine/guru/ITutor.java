@@ -63,10 +63,9 @@ public interface ITutor {
   public GroupType getGroupType();
 
   /**
-   * @return short name of tutor - 
-   * TODO: remove???
+   * @return id of tutor - this must be unique within the level. 
    */
-  public String getName();
+  public String getId();
 
   public ITutor getParentTutor();
 }

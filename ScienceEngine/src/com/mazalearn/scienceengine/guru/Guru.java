@@ -44,6 +44,7 @@ public class Guru extends Group implements ITutor {
   int tutorIndex = -1;
   ITutor currentTutor;
   protected Dashboard dashboard;
+  private TimeTracker activeTimer;
   private List<ITutor> childTutors = new ArrayList<ITutor>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final ModelControls modelControls;
@@ -87,10 +88,22 @@ public class Guru extends Group implements ITutor {
     
     hinter = new Hinter(skin);
     this.addActor(hinter);
-    this.setVisible(false);
+    
+    activeTimer = new TimeTracker(this, "0", skin);
+    activeTimer.setPosition(5, 5);
+    this.addActor(activeTimer);
 
+    this.setVisible(false);
     activeTutor = this;
-}
+  }
+  
+  public ITutor getActiveTutor() {
+    return activeTutor;
+  }
+
+  public float getActiveTime() {
+    return activeTimer.getActiveTime();
+  }
 
   public void initialize(List<ITutor> childTutors) {
     this.childTutors = childTutors;
@@ -316,6 +329,11 @@ public class Guru extends Group implements ITutor {
   @Override
   public String getHint() {
     return null;
+  }
+  
+  @Override
+  public String getId() {
+    return "Guru";
   }
   
   @Override

@@ -6,16 +6,18 @@ import java.util.Map;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.mazalearn.scienceengine.ScienceEngine;
 
 /**
- * The player's profile.
+ * The learner's profile.
  * <p>
  * This class is used to store the scienceEngine progress, and is persisted to the file
  * system when the scienceEngine exits.
  * 
- * @see ProfileManager
  */
 public class Profile implements Serializable {
+  private static final String STATUS = "status";
+  private static final String TIME_SPENT = "timeSpent";
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
   private static final String DOMAIN = "domain";
@@ -30,9 +32,15 @@ public class Profile implements Serializable {
     properties = new HashMap<String, String>();
   }
 
+
+  public void setUserEmail(String userEmail) {
+    properties.put(USER_EMAIL, userEmail);
+  }
+
   public void setCurrentActivity(int level) {
     properties.put(LAST_ACTIVITY, properties.get(ACTIVITY));
     properties.put(ACTIVITY, String.valueOf(level));
+    save();
   }
   
   /**
@@ -100,6 +108,7 @@ public class Profile implements Serializable {
   public void setCurrentDomain(String name) {
     properties.put(LAST_DOMAIN, getLastDomain());
     properties.put(DOMAIN, name);
+    save();
   }
 
   public String getCurrentDomain() {
@@ -114,10 +123,7 @@ public class Profile implements Serializable {
 
   public void setUserName(String name) {
     properties.put(USER_NAME, name);
-  }
-
-  public void setUserEmail(String email) {
-    properties.put(USER_EMAIL, email);
+    save();
   }
 
   public String getUserName() {
@@ -128,5 +134,36 @@ public class Profile implements Serializable {
   public String getUserEmail() {
     String s = properties.get(USER_EMAIL);
     return s == null ? "" : s;
+  }
+
+  public float getTimeSpent(String subgoalId) {
+    String timeSpentStr = properties.get(makeSubgoalKey(subgoalId, TIME_SPENT));
+    return timeSpentStr == null ? 0 : Float.valueOf(timeSpentStr);
+  }
+
+  private String makeSubgoalKey(String subgoalId, String key) {
+    return getCurrentDomain() + "/" + 
+        getCurrentActivity() + "/" + subgoalId + "/" + key;
+  }
+
+  public void addTimeSpent(String subgoalId, float timeSpent) {
+    float timeAlreadySpent = getTimeSpent(subgoalId);
+    properties.put(makeSubgoalKey(subgoalId, TIME_SPENT), 
+        String.valueOf(timeAlreadySpent + timeSpent));
+    System.out.println(timeAlreadySpent + timeSpent);
+  }
+  
+  public void save() {
+    ScienceEngine.getPreferencesManager().saveProfile();
+  }
+
+  public boolean getStatus(String subgoalId) {
+    String status = properties.get(makeSubgoalKey(subgoalId, STATUS));
+    return status != null ? Boolean.parseBoolean(status) : false;
+  }
+
+  public void setStatus(String subgoalId, boolean success) {
+    properties.put(makeSubgoalKey(subgoalId, STATUS), String.valueOf(success));
+    save();
   }
 }

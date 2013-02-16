@@ -27,9 +27,9 @@ public class TutorGroup extends AbstractTutor {
 
     
   public TutorGroup(IScience2DController science2DController, ITutor parent,
-      String goal, String name, Array<?> components, Array<?> configs, 
+      String goal, String id, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    super(science2DController, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    super(science2DController, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
   }
   
   @Override

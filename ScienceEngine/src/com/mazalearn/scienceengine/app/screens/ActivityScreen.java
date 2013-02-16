@@ -71,8 +71,8 @@ public class ActivityScreen extends AbstractScreen {
   protected void goBack() {
     DomainHomeScreen domainHomeScreen = 
         new DomainHomeScreen(scienceEngine, domain);
-    scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));
     profile.setCurrentActivity(0);
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));
   }
   
   public IScience2DController createDomainController(

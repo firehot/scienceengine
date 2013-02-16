@@ -27,9 +27,9 @@ public class KnowledgeUnit extends AbstractTutor {
   private String[] plaudits = {"Bravo", "Well Done", "Excellent", "Good"};
   
   public KnowledgeUnit(IScience2DController science2DController,
-      ITutor parent, String goal, String name, Array<?> components, Array<?> configs,
+      ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
       int deltaSuccessScore, String[] hints) {
-    super(science2DController, parent, goal, name, components, configs, deltaSuccessScore, 0, hints);
+    super(science2DController, parent, goal, id, components, configs, deltaSuccessScore, 0, hints);
     
     // Create a button NEXT at right place along with listener to set isUserNext.
     nextButton = new TextButton("Next", science2DController.getSkin(), "body");

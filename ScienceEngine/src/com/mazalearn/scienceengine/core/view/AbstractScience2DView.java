@@ -131,8 +131,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   
   @Override
   public void act(float delta) {
-    ScienceEngine.addTimeElapsed(delta);
     if (isSuspended()) return;
+    ScienceEngine.addTimeElapsed(delta);
     science2DModel.simulateSteps(delta);
     super.act(delta);
   }

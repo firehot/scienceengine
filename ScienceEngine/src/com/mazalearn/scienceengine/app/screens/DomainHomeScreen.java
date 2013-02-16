@@ -148,6 +148,15 @@ public class DomainHomeScreen extends AbstractScreen {
           ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
       activityThumb.addActor(levelLabel);
       
+/*      float timeSpent = profile.getTimeSpent(subgoalId)
+      Label timeLabel = new Label(String.valueOf(level), blueBackground);
+      timeLabel.setAlignment(Align.center, Align.center);
+      timeLabel.setWidth(ScreenComponent.getScaledX(80));
+      timeLabel.setHeight(ScreenComponent.getScaledY(30));
+      timeLabel.setPosition(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 34), 
+          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
+      activityThumb.addActor(timeLabel); */
+
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
         @Override

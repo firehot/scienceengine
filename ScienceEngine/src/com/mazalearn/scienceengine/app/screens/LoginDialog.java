@@ -70,7 +70,6 @@ public class LoginDialog extends Dialog {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         profile = ScienceEngine.getPreferencesManager().loadProfile(email.getText());
         profile.setUserName(name.getText());
-        ScienceEngine.getPreferencesManager().saveProfile();
         
         // Primitive validation
         if (!name.getText().matches("[a-zA-Z ]{2,30}") || !email.getText().contains("@")) {
@@ -111,8 +110,6 @@ public class LoginDialog extends Dialog {
         public void input(String email) {
           ScienceEngine.getPreferencesManager().loadProfile(email);
           profile.setUserName(email.substring(0, email.indexOf("@")));
-          profile.setUserEmail(email);
-          ScienceEngine.getPreferencesManager().saveProfile();
           doneCallback.done(true);
         }
         

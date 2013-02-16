@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.guru;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -17,8 +16,6 @@ class Dashboard extends Table {
   TextButton goal;
   Label scoreLabel;
   int score;
-  private Label timerLabel;
-  float timeLeft = 300;
   private SubgoalNavigator subgoalNavigator;
   private ClickListener clickListener;
   private ITutor activeTutor;
@@ -45,30 +42,17 @@ class Dashboard extends Table {
         }
         // Bring subgoal navigator to top, and dashboard above it.
         subgoalNavigator.setVisible(true);
-        subgoalNavigator.setActiveTutor(activeTutor);
+        subgoalNavigator.show(activeTutor);
         getStage().addActor(subgoalNavigator);
         getStage().addActor(Dashboard.this);
       }
     };
-    goal = new TextButton("", skin, "body");
+    goal = new TextButton("", skin);
     goal.setColor(Color.YELLOW);
     goal.addListener(clickListener);
     goal.getLabel().setWrap(true);
     
     scoreLabel = new Label("0", skin);
-
-    timerLabel = new Label("0", skin) {
-      @Override
-      public void act(float delta) {
-        timeLeft -= delta;
-        String seconds = String.valueOf(Math.round(timeLeft % 60));
-        if (timeLeft < 0) {
-          // TODO: topGoal.setText("Time Up");
-        } else {
-          this.setText(Math.round(timeLeft / 60) + ":" + "0".substring(0, 2 - seconds.length()) + seconds);
-        }
-      }
-    };
     
     Table t = new Table(skin);
     t.add(""); //t.add("Timer");
@@ -119,11 +103,6 @@ class Dashboard extends Table {
   public void resetScore() {
     score = 0;
   }
-  
-  public void setTimeLimit(int timeLimitSeconds) {
-    this.timeLeft = timeLimitSeconds;
-  }
-
   public void setSubgoalNavigator(SubgoalNavigator subgoalNavigator) {
     this.subgoalNavigator = subgoalNavigator;
   }  

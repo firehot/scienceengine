@@ -88,7 +88,8 @@ public class PreferencesManager {
     // convert the given profile to text
     String profileAsText = new Json().toJson(profile);
     profileAsText = Base64Coder.encodeString(profileAsText);
-    getPrefs().putString(PREF_PROFILE, profileAsText);
+    String userEmail = getPrefs().getString(PREF_USER_EMAIL);
+    getPrefs().putString(userEmail, profileAsText);
     getPrefs().flush();
   }
 }
