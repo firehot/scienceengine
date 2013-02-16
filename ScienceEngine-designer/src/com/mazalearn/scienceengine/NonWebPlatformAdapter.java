@@ -64,14 +64,8 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       }
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
-      wr.writeBytes("POST " + path + " HTTP/1.0\r\n");
-      wr.writeBytes("Host: " + host + "\r\n");
-      wr.writeBytes("Content-Length: " + data.length + "\r\n");
-      wr.writeBytes("Content-Type: " + contentType + "\r\n");
-      for (Map.Entry<String, String> entry: params.entrySet()) {
-        wr.writeBytes(entry.getKey() + ": " + entry.getValue() + "\r\n");
-      }
-      wr.writeBytes("\r\n");
+      String header = makeHeaderString(path, contentType, params, data.length, host);
+      wr.writeBytes(header);
       wr.write(data, 0, data.length);
       wr.flush();
       Gdx.app.log(ScienceEngine.LOG, "Posted to " + path + " bytes: " + data.length);
@@ -84,6 +78,20 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       e.printStackTrace();
       throw new GdxRuntimeException(e);
     }
+  }
+
+  private String makeHeaderString(String path, String contentType,
+      Map<String, String> params, int length, String host) {
+    StringBuffer s = new StringBuffer();
+    s.append("POST " + path + " HTTP/1.0\r\n");
+    s.append("Host: " + host + "\r\n");
+    s.append("Content-Length: " + length + "\r\n");
+    s.append("Content-Type: " + contentType + "\r\n");
+    for (Map.Entry<String, String> entry: params.entrySet()) {
+      s.append(entry.getKey() + ": " + entry.getValue() + "\r\n");
+    }
+    s.append("\r\n");
+    return s.toString();
   }
 
   @Override

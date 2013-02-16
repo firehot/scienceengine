@@ -38,8 +38,8 @@ public class ChooseDomainScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    if (!profile.getDomain().equals("")) {
-      gotoDomainHome(profile.getDomain());
+    if (!profile.getCurrentDomain().equals("")) {
+      gotoDomainHome(profile.getCurrentDomain());
       return;
     }
     
@@ -81,7 +81,7 @@ public class ChooseDomainScreen extends AbstractScreen {
             Gdx.input.getTextInput(new TextInputListener() {
               @Override
               public void input(String passcode) {
-                if ("9876".equals(passcode)) {
+                if ("9n8e7s6s".equals(passcode)) {
                   gotoDomainHome(domain);
                 }
               }

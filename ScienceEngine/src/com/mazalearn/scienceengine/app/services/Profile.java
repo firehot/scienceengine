@@ -17,7 +17,9 @@ import com.badlogic.gdx.utils.OrderedMap;
  */
 public class Profile implements Serializable {
   private static final String ACTIVITY = "activity";
+  private static final String LAST_ACTIVITY = "last_activity";
   private static final String DOMAIN = "domain";
+  private static final String LAST_DOMAIN = "domain";
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
   private Map<Integer, Integer> highScores;
@@ -29,6 +31,7 @@ public class Profile implements Serializable {
   }
 
   public void setCurrentActivity(int level) {
+    properties.put(LAST_ACTIVITY, properties.get(ACTIVITY));
     properties.put(ACTIVITY, String.valueOf(level));
   }
   
@@ -38,6 +41,15 @@ public class Profile implements Serializable {
    */
   public int getCurrentActivity() {
     String levelFloatStr = properties.get(ACTIVITY);
+    return  levelFloatStr == null ? 0 : Math.round(Float.valueOf(levelFloatStr));
+  }
+
+  /**
+   * Retrieves the ID of the next playable level.
+   * Stupid ligbdx converts ints to floats when writing json.
+   */
+  public int getLastActivity() {
+    String levelFloatStr = properties.get(LAST_ACTIVITY);
     return  levelFloatStr == null ? 0 : Math.round(Float.valueOf(levelFloatStr));
   }
 
@@ -85,17 +97,19 @@ public class Profile implements Serializable {
     json.writeValue("highScores", highScores);
   }
 
-  public void setDomain(String name) {
+  public void setCurrentDomain(String name) {
+    properties.put(LAST_DOMAIN, getLastDomain());
     properties.put(DOMAIN, name);
   }
 
-  public String getDomain() {
+  public String getCurrentDomain() {
     String s = properties.get(DOMAIN);
     return s == null ? "" : s;
   }
 
-  public boolean getLocked(int iLevel) {
-    return false;
+  public String getLastDomain() {
+    String s = properties.get(LAST_DOMAIN);
+    return s == null ? "" : s;
   }
 
   public void setUserName(String name) {

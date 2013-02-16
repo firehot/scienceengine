@@ -52,7 +52,7 @@ public class DomainHomeScreen extends AbstractScreen {
     this.domain = domain;
     readDomainActivityInfo();
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    profile.setDomain(domain);
+    profile.setCurrentDomain(domain);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -60,14 +60,13 @@ public class DomainHomeScreen extends AbstractScreen {
   }
 
   protected void goBack() {
-    profile.setDomain("");
+    profile.setCurrentDomain("");
     scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
   }
   
   @Override
   public void show() {
     super.show();
-    // setBackgroundColor(new Color(0x84/255f,0x99/255f,0xa2/255f,1f));
     if (profile.getCurrentActivity() != 0) {
       gotoActivityLevel(profile.getCurrentActivity());
       return;
@@ -123,14 +122,12 @@ public class DomainHomeScreen extends AbstractScreen {
       } else {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
-      final TextureRegionDrawable image = 
+      TextureRegionDrawable image = 
           new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
       TextButton activityThumb = new TextButton("", getSkin()) {
         @Override
         public void drawBackground(SpriteBatch batch, float parentAlpha) {
-          Color color = getColor();
-          batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-          image.draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
+          getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
         }
       };
       activityThumb.setBackground(image);
@@ -168,7 +165,20 @@ public class DomainHomeScreen extends AbstractScreen {
     activities.row();
 
     activitiesPane.setScrollingDisabled(false, true);
+    setLastActiveLevel(activitiesPane);
     return activitiesPane;
+  }
+
+  private void setLastActiveLevel(ScrollPane activitiesPane) {
+    int lastActiveLevel = profile.getLastActivity() - 1;
+    if (lastActiveLevel >= 0) {
+      Image userImage = new Image(new Texture("images/user.png"));
+      userImage.setPosition(ScreenComponent.getScaledX(2), 
+          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 50));
+      activityThumbs[lastActiveLevel].addActor(userImage);
+      activitiesPane.layout();
+      activitiesPane.setScrollX(ScreenComponent.getScaledX(THUMBNAIL_WIDTH) * lastActiveLevel);
+    }
   }
 
   @SuppressWarnings("unchecked")
