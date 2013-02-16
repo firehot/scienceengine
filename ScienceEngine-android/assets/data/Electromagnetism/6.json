@@ -21,6 +21,7 @@ configs:[
 ],
 plan: [
   {type: "TutorGroup",
+   id: "Induced Current",
    group:"Guide",
    goal: "Explore how induced current changes with change of different parameters.",
    success: 200,
@@ -60,6 +61,7 @@ plan: [
    ]},
   {type: "TutorGroup",
    group:"Challenge",
+   id: "Induced Current Challenge",
    goal: "Explore how induced current changes with change of different parameters.",
    subgoals:[
        {type: "ParameterProber",

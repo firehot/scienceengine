@@ -16,6 +16,7 @@ configs:[
 plan:[
       {type: "TutorGroup",
        group:"Guide",
+       id: "Compass and Electromagnet",
        goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
@@ -32,6 +33,7 @@ plan:[
        },
        {type: "TutorGroup",
         group: "Guide",
+        id: "Magnetic Field",
        goal: "Understand the magnetic field around the electromagnet",
        postcondition: "FieldMeter.Count >= 10",
        success: 200,
@@ -74,7 +76,8 @@ plan:[
          }
        ]},       
        {type: "TutorGroup",
-        group: "Guide",
+        group: "Challenge",
+        id: "Magnetic Field Challenge",
        goal: "Understand the magnetic field around the electromagnet",
        subgoals: [
            {type: "FieldMagnitudeProber",

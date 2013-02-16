@@ -18,6 +18,7 @@ configs:[
 plan: [
        {type: "TutorGroup",
         group: "Guide",
+        id: "Induced Current",
         goal: "Understand how current is induced by a bar magnet in a coil",
         success: 200,
         timelimit: 300,
@@ -57,6 +58,7 @@ plan: [
    ]},
        {type: "TutorGroup",
         group: "Challenge",
+        id: "Induced Current Challenge",
         goal: "Understand how current is induced by a bar magnet in a coil",
         subgoals:[
            {type: "ParameterProber",

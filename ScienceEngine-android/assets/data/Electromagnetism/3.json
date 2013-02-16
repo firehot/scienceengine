@@ -20,6 +20,7 @@ configs:[
 ],
 plan:[
       {type: "TutorGroup",
+       id: "Wires and Compass",
        group: "Guide",
        goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
@@ -37,6 +38,7 @@ plan:[
        },
        {type: "TutorGroup",
        group: "Guide",
+       id: "Magnetic Field",
        goal: "Understand the magnetic field around the wires.",
        postcondition: "FieldMeter.Count >= 10",
        success: 200,
@@ -86,6 +88,7 @@ plan:[
          }
        ]},       
        {type: "TutorGroup",
+        id: "Magnetic Field Challenge",
         group: "Challenge",
         goal: "Understand the magnetic field around the wires.",
         subgoals: [

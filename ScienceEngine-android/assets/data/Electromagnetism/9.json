@@ -13,6 +13,7 @@ components:[
 circuits:[["Lightbulb","Dynamo"]],
 plan: [
   {type: "TutorGroup",
+   id: "Science Train",
    group:"Guide",
    goal: "Catch the Science Train - Light up your own coach",
    success:200,
