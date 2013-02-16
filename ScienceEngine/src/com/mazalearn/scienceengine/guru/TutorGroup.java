@@ -111,4 +111,13 @@ public class TutorGroup extends AbstractTutor {
     science2DController.getModel().bindParameterValues(variables);
     successActions.bvalue();    
   }
+  
+  @Override
+  public float getTimeSpent() {
+    float timeSpent = 0;
+    for (ITutor child: childTutors) {
+      timeSpent += child.getTimeSpent();
+    }
+    return timeSpent;
+  }
 }

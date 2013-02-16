@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
  * 
  */
 public class Profile implements Serializable {
+  private static final String DRAWING_PNG = "DrawingPng";
   private static final String STATUS = "status";
   private static final String TIME_SPENT = "timeSpent";
   private static final String ACTIVITY = "activity";
@@ -146,24 +148,39 @@ public class Profile implements Serializable {
         getCurrentActivity() + "/" + subgoalId + "/" + key;
   }
 
-  public void addTimeSpent(String subgoalId, float timeSpent) {
-    float timeAlreadySpent = getTimeSpent(subgoalId);
+  public void setTimeSpent(String subgoalId, float timeSpent) {
     properties.put(makeSubgoalKey(subgoalId, TIME_SPENT), 
-        String.valueOf(timeAlreadySpent + timeSpent));
-    System.out.println(timeAlreadySpent + timeSpent);
+        String.valueOf(timeSpent));
   }
   
   public void save() {
     ScienceEngine.getPreferencesManager().saveProfile();
   }
 
-  public boolean getStatus(String subgoalId) {
+  public boolean getSuccess(String subgoalId) {
     String status = properties.get(makeSubgoalKey(subgoalId, STATUS));
     return status != null ? Boolean.parseBoolean(status) : false;
   }
 
-  public void setStatus(String subgoalId, boolean success) {
+  public void setSuccess(String subgoalId, boolean success) {
     properties.put(makeSubgoalKey(subgoalId, STATUS), String.valueOf(success));
     save();
+  }
+
+  public void setDrawingPng(byte[] drawingPngBytes) {
+    try {
+      properties.put(DRAWING_PNG, new String(drawingPngBytes, "ISO-8859-1"));
+    } catch (UnsupportedEncodingException ignored) {
+    }
+    save();
+  }
+  
+  public byte[] getDrawingPng() {
+    String png = properties.get(DRAWING_PNG);
+    try {
+      return png == null ? new byte[0] : png.getBytes("ISO-8859-1");
+    } catch (UnsupportedEncodingException e) {
+      return new byte[0];
+    }
   }
 }

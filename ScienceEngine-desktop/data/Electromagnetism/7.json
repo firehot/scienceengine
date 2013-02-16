@@ -22,6 +22,7 @@ configs:[
 plan: [
   {type: "TutorGroup",
    group: "Guide",
+   id: "Magnet and Motor",
    goal: "Make number of revolutions of the motor +5 by configuring only the magnet",
    success:200,
    timelimit: 300,
@@ -49,6 +50,7 @@ plan: [
    ]},
    {type: "TutorGroup",
     group: "Guide",
+    id: "Current and Motor",
    goal: "Now, make number of revolutions of the motor +10 by configuring only the current source.",
    success:200,
    timelimit: 300,
@@ -75,6 +77,7 @@ plan: [
            postcondition: "CurrentCoil.RotationData >= 10"}
    ]},
    {type: "TutorGroup",
+    id: "Motor Challenge",
     group:"Challenge",
    goal: "Understand how a DC Motor works",
    subgoals:[

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -105,6 +106,10 @@ public class ElectroMagnetismView extends AbstractScience2DView {
       }
     }
     
+    // Save drawing png in profile
+    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    byte[] drawingPngBytes = drawingActor.getDrawingPng();
+    profile.setDrawingPng(drawingPngBytes);
     // Post drawing, color and current to server
     Map<String, String> postParams = new HashMap<String, String>();
     postParams.put(USER_EMAIL, ScienceEngine.getUserEmail());
@@ -114,7 +119,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     postParams.put(PLATFORM, ScienceEngine.getPlatformAdapter().getPlatform().name());
     try {
       ScienceEngine.getPlatformAdapter().httpPost("upload", 
-          "application/octet-stream", postParams, drawingActor.getDrawingPng());
+          "application/octet-stream", postParams, drawingPngBytes);
       ScienceEngine.displayStatusMessage(this, "Uploaded to MazaLearn - See www.mazalearn.com/train.html");
     } catch(GdxRuntimeException e) {
       e.printStackTrace();

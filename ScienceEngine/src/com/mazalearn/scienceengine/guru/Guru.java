@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.AggregatorFunction;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -41,6 +42,7 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
  * 
  */
 public class Guru extends Group implements ITutor {
+  public static final String ID = "Guru";
   int tutorIndex = -1;
   ITutor currentTutor;
   protected Dashboard dashboard;
@@ -58,6 +60,7 @@ public class Guru extends Group implements ITutor {
   private final String goal;
   private Skin skin;
   private ITutor activeTutor;
+  private Profile profile;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
@@ -68,6 +71,7 @@ public class Guru extends Group implements ITutor {
     // Guru has no direct user interaction - hence 0 size
     this.setSize(0, 0);
     
+    this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.dashboard = new Dashboard(skin);
     this.addActor(dashboard);
     
@@ -160,14 +164,11 @@ public class Guru extends Group implements ITutor {
   
   public void endChallenge() {
     // Reinitialize current prober, if any
-    if (currentTutor != null) {
-      currentTutor = null;
-      setActiveTutor(this);
-    }
+    activeTutor.done(false);
+    currentTutor = null;
+    setActiveTutor(this);
 
-    science2DController.getView().done(false);
     ScienceEngine.setProbeMode(false);
-    this.setVisible(false);
     // Clear event log
     ScienceEngine.getEventLog().clear();
   }
@@ -222,10 +223,13 @@ public class Guru extends Group implements ITutor {
     return goal;
   }
 
-  // TODO: Guide and Guru both handle many children tutors - abstract this out
+  // TODO: TutorGroup and Guru both handle many children tutors - abstract this out
   @Override
   public void done(boolean success) {
     hinter.setHint(null);
+    profile.setSuccess(getId(), success);
+    profile.setTimeSpent(getId(), getTimeSpent());
+    profile.save();
     if (!success) {
       science2DController.getView().done(false);
       this.setVisible(false);
@@ -333,7 +337,7 @@ public class Guru extends Group implements ITutor {
   
   @Override
   public String getId() {
-    return "Guru";
+    return ID;
   }
   
   @Override
@@ -387,5 +391,26 @@ public class Guru extends Group implements ITutor {
   @Override
   public ITutor getParentTutor() {
     return null;
+  }
+
+  @Override
+  public void addTimeSpent(float timeTaken) {
+  }
+
+  @Override
+  public float getTimeSpent() {
+    float timeSpent = 0;
+    for (ITutor child: childTutors) {
+      timeSpent += child.getTimeSpent();
+    }
+    return timeSpent;
+  }
+
+  @Override
+  public boolean getSuccess() {
+    for (ITutor child: childTutors) {
+      if (!child.getSuccess()) return false;
+    }
+    return true;
   }
 }

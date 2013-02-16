@@ -17,9 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.guru.ITutor.GroupType;
 
@@ -31,10 +29,12 @@ public class SubgoalNavigator extends Group {
   TextureRegion gray = ScreenUtils.createTexture(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
   private TextButton activeSubgoalButton;
   private Label[] subgoalTimeLabels;
+  private final List<ITutor> subgoals;
   private Image userImage;
 
   public SubgoalNavigator(List<ITutor> subgoals, final Guru guru, Skin skin) {
     super();
+    this.subgoals = subgoals;
     setVisible(false);
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
@@ -49,11 +49,19 @@ public class SubgoalNavigator extends Group {
    */
   public void show(ITutor activeSubgoal) {
     // Update times spent per subgoal
-    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
-    for (Label timeLabel: subgoalTimeLabels) {
-      String subgoalId = timeLabel.getName();
-      int timeSpent = Math.round(profile.getTimeSpent(subgoalId));
+    int count = 0;
+    for (final ITutor subgoal: this.subgoals) {
+      Label timeLabel = subgoalTimeLabels[count++];
+      int timeSpent = Math.round(subgoal.getTimeSpent());
       timeLabel.setText("Time: " + String.valueOf(timeSpent));
+      if (subgoal.getSuccess()) {
+        Image status = new Image(new Texture("images/check.png"));
+        TextButton subgoalButton = (TextButton) findActor(subgoal.getId());
+        subgoalButton.addActor(status);
+        status.setPosition(ScreenComponent.getScaledX(60),
+            ScreenComponent.getScaledY(SUBGOAL_HEIGHT - 64));
+        status.setSize(60, 60);
+      }
     }
     // Update active subgoal
     activeSubgoalButton = (TextButton) findActor(activeSubgoal.getId());
@@ -82,7 +90,6 @@ public class SubgoalNavigator extends Group {
       subgoalButton.setName(subgoal.getId());
       
       Label timeLabel = new Label("", skin);
-      timeLabel.setName(subgoal.getId());
       timeLabel.setAlignment(Align.center, Align.center);
       timeLabel.setWidth(ScreenComponent.getScaledX(50));
       timeLabel.setHeight(ScreenComponent.getScaledY(30));

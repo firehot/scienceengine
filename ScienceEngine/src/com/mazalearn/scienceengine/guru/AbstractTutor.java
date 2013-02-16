@@ -28,6 +28,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private GroupType groupType = GroupType.None;
   private String id;
   private Profile profile;
+  private float timeSpent;
+  private boolean success;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
@@ -43,6 +45,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.hints = hints;
     this.guru = science2DController.getGuru();
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
+    this.timeSpent = profile.getTimeSpent(id);
+    this.success = profile.getSuccess(id);
     this.setVisible(false);
   }
 
@@ -58,7 +62,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void done(boolean success) {
     this.setVisible(false);
-    profile.setStatus(id, success);
+    this.success = success;
+    profile.setSuccess(id, getSuccess());
+    profile.setTimeSpent(id, getTimeSpent());
+    profile.save();
     parent.done(success);
   }
 
@@ -121,6 +128,21 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public List<ITutor> getChildTutors() {
     return null;
+  }
+  
+  @Override
+  public void addTimeSpent(float delta) {
+    this.timeSpent += delta;
+  }
+  
+  @Override
+  public float getTimeSpent() {
+    return timeSpent;
+  }
+  
+  @Override
+  public boolean getSuccess() {
+    return success;
   }
   
 }

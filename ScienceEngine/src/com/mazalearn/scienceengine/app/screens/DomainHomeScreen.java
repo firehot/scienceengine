@@ -31,6 +31,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.guru.Guru;
 
 /**
  * Activity Home screen - shows all activity numLevels for that domain.
@@ -113,6 +114,7 @@ public class DomainHomeScreen extends AbstractScreen {
     blueBackground.background = 
         new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, Color.BLUE));
 
+    int lastActiveLevel = profile.getLastActivity() - 1;
     for (int level = 1; level <= numLevels; level++) {
       String activityName = getMsg().getString(domain + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(domain, ".png", level);
@@ -148,14 +150,24 @@ public class DomainHomeScreen extends AbstractScreen {
           ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
       activityThumb.addActor(levelLabel);
       
-/*      float timeSpent = profile.getTimeSpent(subgoalId)
-      Label timeLabel = new Label(String.valueOf(level), blueBackground);
+      boolean success = profile.getSuccess(Guru.ID);
+      if (success) {
+        Image status = new Image(new Texture("images/check.png"));
+        activityThumb.addActor(status);
+        status.setPosition(ScreenComponent.getScaledX(30),
+            ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
+        status.setSize(30, 30);
+      }
+      
+      profile.setCurrentActivity(level);
+      int timeSpent = Math.round(profile.getTimeSpent(Guru.ID));
+      Label timeLabel = new Label(String.valueOf(timeSpent), blueBackground);
       timeLabel.setAlignment(Align.center, Align.center);
-      timeLabel.setWidth(ScreenComponent.getScaledX(80));
+      timeLabel.setWidth(ScreenComponent.getScaledX(50));
       timeLabel.setHeight(ScreenComponent.getScaledY(30));
-      timeLabel.setPosition(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 34), 
+      timeLabel.setPosition(ScreenComponent.getScaledX(60), 
           ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
-      activityThumb.addActor(timeLabel); */
+      activityThumb.addActor(timeLabel);
 
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
@@ -174,12 +186,11 @@ public class DomainHomeScreen extends AbstractScreen {
     activities.row();
 
     activitiesPane.setScrollingDisabled(false, true);
-    setLastActiveLevel(activitiesPane);
+    setLastActiveLevel(activitiesPane, lastActiveLevel);
     return activitiesPane;
   }
 
-  private void setLastActiveLevel(ScrollPane activitiesPane) {
-    int lastActiveLevel = profile.getLastActivity() - 1;
+  private void setLastActiveLevel(ScrollPane activitiesPane, int lastActiveLevel) {
     if (lastActiveLevel >= 0) {
       Image userImage = new Image(new Texture("images/user.png"));
       userImage.setPosition(ScreenComponent.getScaledX(2), 

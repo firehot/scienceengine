@@ -68,4 +68,14 @@ public interface ITutor {
   public String getId();
 
   public ITutor getParentTutor();
+
+  /**
+   * Set the time taken in this tutor
+   * @param timeTaken
+   */
+  void addTimeSpent(float timeTaken);
+
+  float getTimeSpent();
+
+  boolean getSuccess();
 }

@@ -11,6 +11,7 @@ configs:[
 ],
 plan:[
        {type: "TutorGroup",
+       id: "Magnet and Compass",
        group: "Guide",
        goal: "Magnet and Compass",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
@@ -29,6 +30,7 @@ plan:[
        },
        {type: "TutorGroup",
         group: "Guide",
+        id: "Magnetic Field",
        goal: "Understand the magnetic field of a magnet",
        components:[{type:"FieldMeter", visible:true}],
        postcondition: "FieldMeter.Count >= 10",
@@ -66,6 +68,7 @@ plan:[
        ]},    
        {type: "TutorGroup",
         group: "Challenge",
+        id: "Magnetic Field Challenge",
         goal: "Understand the magnetic field of a magnet",
         subgoals: [
          {type: "FieldMagnitudeProber",

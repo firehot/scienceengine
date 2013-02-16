@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -113,9 +116,14 @@ public class DrawingActor extends Science2DActor {
     this.viewSpec = name;
     this.shapeRenderer = new ShapeRenderer();
     // snapshot will contain image of coach + 2 wheels
-    this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
+    try {
+      Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+      byte[] bytes = profile.getDrawingPng();
+      this.snapshot = new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
+    } catch (IOException e) {
+      this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
+    }    
     this.coachTexture = new Texture(snapshot);
-    
     this.coach = new Coach(coachTexture, skin);
     this.removeListener(getListeners().get(0));
     this.addListener(new ClickListener() {

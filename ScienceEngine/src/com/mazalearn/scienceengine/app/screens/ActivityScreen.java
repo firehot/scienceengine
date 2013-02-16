@@ -69,6 +69,8 @@ public class ActivityScreen extends AbstractScreen {
 
   @Override
   protected void goBack() {
+    // Stop challenge if it was in progress
+    science2DController.getGuru().endChallenge();
     DomainHomeScreen domainHomeScreen = 
         new DomainHomeScreen(scienceEngine, domain);
     profile.setCurrentActivity(0);
