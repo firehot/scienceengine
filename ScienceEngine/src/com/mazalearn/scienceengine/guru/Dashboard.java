@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.guru.ITutor.GroupType;
 
 class Dashboard extends Table {
   TextButton goal;
@@ -48,7 +49,6 @@ class Dashboard extends Table {
       }
     };
     goal = new TextButton("", skin);
-    goal.setColor(Color.YELLOW);
     goal.addListener(clickListener);
     goal.getLabel().setWrap(true);
     
@@ -79,6 +79,11 @@ class Dashboard extends Table {
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
     this.goal.setText(activeTutor.getGoal());
+    if (activeTutor.getParentTutor().getGroupType() == GroupType.Challenge) {
+      goal.setColor(Color.RED);
+    } else {
+      goal.setColor(Color.YELLOW);
+    }
     this.goal.addAction(Actions.sequence(
         Actions.alpha(0),
         Actions.alpha(1, 2)));

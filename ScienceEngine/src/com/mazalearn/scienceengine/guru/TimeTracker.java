@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.guru;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.app.utils.Format;
 
 public class TimeTracker extends Label {
   private float activeTime;
@@ -16,8 +17,7 @@ public class TimeTracker extends Label {
   public void act(float delta) {
     if (!guru.isVisible()) return;
     activeTime += delta;
-    String seconds = String.valueOf(Math.round(activeTime) % 60);
-    this.setText(Math.round(activeTime) / 60 + ":" + "0".substring(0, 2 - seconds.length()) + seconds);
+    this.setText(Format.formatTime(activeTime));
     // Cost it to the active Tutor
     guru.getActiveTutor().addTimeSpent(delta);
   }

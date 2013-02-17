@@ -47,6 +47,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.timeSpent = profile.getTimeSpent(id);
     this.successPercent = profile.getSuccessPercent(id);
+    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", SuccessPercent: " + successPercent);
     this.setVisible(false);
   }
 
@@ -63,8 +64,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void done(boolean success) {
     Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " success: " + success);
     this.setVisible(false);
-    this.successPercent = success ? 100 : 0;
-    profile.setSuccessPercent(id, getSuccessPercent());
+    if (success) {
+      this.successPercent = 100;
+      profile.setSuccessPercent(id, getSuccessPercent());
+    }
     profile.setTimeSpent(id, getTimeSpent());
     profile.save();
     parent.done(success);

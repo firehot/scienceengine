@@ -45,6 +45,7 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
  */
 public class Guru extends Group implements ITutor {
   public static final String ID = "Guru";
+  public static final String ROOT_ID = "Root";
   protected Dashboard dashboard;
   private TimeTracker activeTimer;
   private List<Actor> excludedActors = new ArrayList<Actor>();
@@ -111,7 +112,7 @@ public class Guru extends Group implements ITutor {
 
   public ITutor getRootTutor() {
     if (rootTutor == null) {
-      this.rootTutor = new TutorGroup(science2DController, this, goal, "Root",
+      this.rootTutor = new TutorGroup(science2DController, this, goal, ROOT_ID,
           null, null, 0, 0, null);
       this.addActor(rootTutor);      
     }
@@ -120,17 +121,20 @@ public class Guru extends Group implements ITutor {
   
   public void initialize(List<ITutor> childTutors) {
     rootTutor.initialize(GroupType.Guide.name(), childTutors, null);
-    List<ITutor> subgoals = new ArrayList<ITutor>();
+    Map<String, ITutor> subgoals = new HashMap<String, ITutor>();
     collectSubgoals(rootTutor, subgoals);
     
-    SubgoalNavigator subgoalNavigator = new SubgoalNavigator(subgoals, this, skin);
+    SubgoalNavigator subgoalNavigator = new SubgoalNavigator(subgoals.values(), this, skin);
     this.getStage().addActor(subgoalNavigator);    
     dashboard.setSubgoalNavigator(subgoalNavigator);
   }
   
-  private void collectSubgoals(ITutor tutor, List<ITutor> subgoals) {
+  private void collectSubgoals(ITutor tutor, Map<String, ITutor> subgoals) {
     if (tutor.getGroupType() == GroupType.None) { 
-      subgoals.add(tutor);
+      if (subgoals.get(tutor.getId()) != null) {
+        Gdx.app.error(ScienceEngine.LOG, "Duplicate Tutor ID: " + tutor.getId());
+      }
+      subgoals.put(tutor.getId(), tutor);
       return;
     }
     for (ITutor child: tutor.getChildTutors()) {
@@ -250,16 +254,9 @@ public class Guru extends Group implements ITutor {
   public void teach() {
     this.setVisible(true);
     rootTutor.teach();
-
-    /*currentTutor.prepareToTeach(null);
-    if (currentTutor.getGroupType() == GroupType.Challenge) {
-      doChallengeAnimation(currentTutor);
-    } else {
-      currentTutor.teach();
-    } */
   }
   
-  private void doChallengeAnimation(final ITutor tutor) {
+  public void doChallengeAnimation(final ITutor tutor) {
     final LabelStyle large = new LabelStyle(skin.get(LabelStyle.class));
     BitmapFont font = skin.getFont("font26");
     font.setScale(4);

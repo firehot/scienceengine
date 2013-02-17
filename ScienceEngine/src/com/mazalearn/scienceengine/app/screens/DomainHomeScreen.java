@@ -28,6 +28,7 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
@@ -114,7 +115,6 @@ public class DomainHomeScreen extends AbstractScreen {
     blueBackground.background = 
         new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, Color.BLUE));
 
-    int lastActiveLevel = profile.getLastActivity() - 1;
     for (int level = 1; level <= numLevels; level++) {
       String activityName = getMsg().getString(domain + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(domain, ".png", level);
@@ -150,26 +150,32 @@ public class DomainHomeScreen extends AbstractScreen {
           ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
       activityThumb.addActor(levelLabel);
       
-      TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.RED);
+      TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.GRAY);
       Image fullBar = new Image(bar);
       fullBar.setPosition(ScreenComponent.getScaledX(10),
           ScreenComponent.getScaledY(20));
-      fullBar.setSize(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20), 12);
+      fullBar.setSize(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20), 10);
       activityThumb.addActor(fullBar);
-      int percent = profile.getSuccessPercent(Guru.ID);
-      Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.GREEN));
+      int percent = profile.getSuccessPercent(level, Guru.ROOT_ID);
+      Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.RED));
       successBar.setPosition(ScreenComponent.getScaledX(10),
           ScreenComponent.getScaledY(20));
       successBar.setSize(percent * ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20) / 100f, 10);
       activityThumb.addActor(successBar);
+      Label percentLabel = new Label(String.valueOf(percent) + "%", blueBackground);
+      percentLabel.setAlignment(Align.center, Align.center);
+      percentLabel.setWidth(ScreenComponent.getScaledX(40));
+      percentLabel.setHeight(ScreenComponent.getScaledY(20));
+      percentLabel.setPosition(ScreenComponent.getScaledX(5), 
+          ScreenComponent.getScaledY(12));
+      activityThumb.addActor(percentLabel);
       
-      profile.setCurrentActivity(level);
-      int timeSpent = Math.round(profile.getTimeSpent(Guru.ID));
-      Label timeLabel = new Label(String.valueOf(timeSpent), blueBackground);
+      String timeSpent = Format.formatTime(profile.getTimeSpent(level, Guru.ID));
+      Label timeLabel = new Label(timeSpent, blueBackground);
       timeLabel.setAlignment(Align.center, Align.center);
       timeLabel.setWidth(ScreenComponent.getScaledX(50));
       timeLabel.setHeight(ScreenComponent.getScaledY(30));
-      timeLabel.setPosition(ScreenComponent.getScaledX(60), 
+      timeLabel.setPosition(ScreenComponent.getScaledX(2), 
           ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
       activityThumb.addActor(timeLabel);
 
@@ -190,15 +196,16 @@ public class DomainHomeScreen extends AbstractScreen {
     activities.row();
 
     activitiesPane.setScrollingDisabled(false, true);
-    setLastActiveLevel(activitiesPane, lastActiveLevel);
+    setLastActiveLevel(activitiesPane);
     return activitiesPane;
   }
 
-  private void setLastActiveLevel(ScrollPane activitiesPane, int lastActiveLevel) {
+  private void setLastActiveLevel(ScrollPane activitiesPane) {
+    int lastActiveLevel = profile.getLastActivity() - 1;
     if (lastActiveLevel >= 0) {
       Image userImage = new Image(new Texture("images/user.png"));
       userImage.setPosition(ScreenComponent.getScaledX(2), 
-          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 50));
+          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT / 2));
       activityThumbs[lastActiveLevel].addActor(userImage);
       activitiesPane.layout();
       activitiesPane.setScrollX(ScreenComponent.getScaledX(THUMBNAIL_WIDTH) * lastActiveLevel);

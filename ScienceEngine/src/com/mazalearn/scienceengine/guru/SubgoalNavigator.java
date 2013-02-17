@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.guru;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.guru.ITutor.GroupType;
 
@@ -29,10 +30,10 @@ public class SubgoalNavigator extends Group {
   TextureRegion gray = ScreenUtils.createTexture(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
   private TextButton activeSubgoalButton;
   private Label[] subgoalTimeLabels;
-  private final List<ITutor> subgoals;
+  private final Collection<ITutor> subgoals;
   private Image userImage;
 
-  public SubgoalNavigator(List<ITutor> subgoals, final Guru guru, Skin skin) {
+  public SubgoalNavigator(Collection<ITutor> subgoals, final Guru guru, Skin skin) {
     super();
     this.subgoals = subgoals;
     setVisible(false);
@@ -52,13 +53,12 @@ public class SubgoalNavigator extends Group {
     int count = 0;
     for (final ITutor subgoal: this.subgoals) {
       Label timeLabel = subgoalTimeLabels[count++];
-      int timeSpent = Math.round(subgoal.getTimeSpent());
-      timeLabel.setText("Time: " + String.valueOf(timeSpent));
+      timeLabel.setText(Format.formatTime(subgoal.getTimeSpent()) + "s");
       if (subgoal.getSuccessPercent() == 100) {
         Image status = new Image(new Texture("images/check.png"));
         TextButton subgoalButton = (TextButton) findActor(subgoal.getId());
         subgoalButton.addActor(status);
-        status.setPosition(ScreenComponent.getScaledX(60),
+        status.setPosition(ScreenComponent.getScaledX(70),
             ScreenComponent.getScaledY(SUBGOAL_HEIGHT - 64));
         status.setSize(60, 60);
       }
@@ -70,7 +70,7 @@ public class SubgoalNavigator extends Group {
     }
   }
   
-  private Actor createSubgoalsPane(List<ITutor> subgoals, final Guru guru, Skin skin) {
+  private Actor createSubgoalsPane(Collection<ITutor> subgoals, final Guru guru, Skin skin) {
     Table subgoalsTable = new Table(skin);
     subgoalsTable.setName("Subgoals");
     

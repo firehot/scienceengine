@@ -51,7 +51,7 @@ plan: [
            postcondition: "Count(Environment.EarthMagneticField) >= 3 and Max(PickupCoil.Current) > 1",
            success: 250},
            {type: "KnowledgeUnit",
-          id: "Magnet Strength and Induced Current",
+          id: "Change Magnet Strength",
           goal: "Change the magnet strength. See how the induced current changes.",
            postcondition: "Count(BarMagnet.MagnetStrength) > 3 and Max(PickupCoil.Current) > 1",
            success: 250}

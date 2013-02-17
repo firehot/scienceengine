@@ -34,7 +34,6 @@ public class Profile implements Serializable {
     properties = new HashMap<String, String>();
   }
 
-
   public void setUserEmail(String userEmail) {
     properties.put(USER_EMAIL, userEmail);
   }
@@ -139,13 +138,24 @@ public class Profile implements Serializable {
   }
 
   public float getTimeSpent(String subgoalId) {
-    String timeSpentStr = properties.get(makeSubgoalKey(subgoalId, TIME_SPENT));
+    return getTimeSpent(getCurrentActivity(), subgoalId);
+  }
+  
+  public float getTimeSpent(int activity, String subgoalId) {
+    String timeSpentStr = properties.get(makeSubgoalKey(activity, subgoalId, TIME_SPENT));
     return timeSpentStr == null ? 0 : Float.valueOf(timeSpentStr);
   }
 
+  private String makeSubgoalKey(String domain, int activity, String subgoalId, String key) {
+    return domain + "/" +  activity + "/" + subgoalId + "/" + key;
+  }
+
+  private String makeSubgoalKey(int activity, String subgoalId, String key) {
+    return makeSubgoalKey(getCurrentDomain(), activity, subgoalId, key);
+  }
+
   private String makeSubgoalKey(String subgoalId, String key) {
-    return getCurrentDomain() + "/" + 
-        getCurrentActivity() + "/" + subgoalId + "/" + key;
+    return makeSubgoalKey(getCurrentDomain(), getCurrentActivity(), subgoalId, key);
   }
 
   public void setTimeSpent(String subgoalId, float timeSpent) {
@@ -157,8 +167,17 @@ public class Profile implements Serializable {
     ScienceEngine.getPreferencesManager().saveProfile();
   }
 
+  /**
+   * Get percent success for this subgoalId
+   * @param subgoalId
+   * @return
+   */
   public int getSuccessPercent(String subgoalId) {
-    String status = properties.get(makeSubgoalKey(subgoalId, STATUS));
+    return getSuccessPercent(getCurrentActivity(), subgoalId);
+  }
+  
+  public int getSuccessPercent(int activity, String subgoalId) {
+    String status = properties.get(makeSubgoalKey(activity, subgoalId, STATUS));
     try {
       return status != null ? Integer.parseInt(status) : 0;
     } catch(NumberFormatException e) {

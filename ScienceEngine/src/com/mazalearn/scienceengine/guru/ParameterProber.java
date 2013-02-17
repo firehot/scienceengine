@@ -65,13 +65,12 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
   
   public void done(boolean success) {
     netSuccesses += success ? 1 : -1;
-    if (success) {
-      guru.showCorrect(getSuccessScore());
-    } else {
+    if (!success) {
       guru.showWrong(getFailureScore());
       setSuccessScore(getFailureScore()); // Equate success and failure scores
       return;
     }
+    guru.showCorrect(getSuccessScore());
     ScienceEngine.clearPins();
     science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     image.setVisible(false);

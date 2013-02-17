@@ -159,11 +159,11 @@ public class Abstractor extends AbstractTutor {
     if (!success) {
       guru.showWrong(getFailureScore());
       if (numLivesLeft <= 0) {
-        parent.done(false);
+        super.done(false);
       }
     } else if (success) {
       guru.showCorrect(getSuccessScore());
-      parent.done(true);
+      super.done(true);
     }
   }
 
