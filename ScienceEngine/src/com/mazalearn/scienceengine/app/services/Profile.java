@@ -157,13 +157,17 @@ public class Profile implements Serializable {
     ScienceEngine.getPreferencesManager().saveProfile();
   }
 
-  public boolean getSuccess(String subgoalId) {
+  public int getSuccessPercent(String subgoalId) {
     String status = properties.get(makeSubgoalKey(subgoalId, STATUS));
-    return status != null ? Boolean.parseBoolean(status) : false;
+    try {
+      return status != null ? Integer.parseInt(status) : 0;
+    } catch(NumberFormatException e) {
+      return 0;
+    }
   }
 
-  public void setSuccess(String subgoalId, boolean success) {
-    properties.put(makeSubgoalKey(subgoalId, STATUS), String.valueOf(success));
+  public void setSuccessPercent(String subgoalId, int percent) {
+    properties.put(makeSubgoalKey(subgoalId, STATUS), String.valueOf(percent));
     save();
   }
 

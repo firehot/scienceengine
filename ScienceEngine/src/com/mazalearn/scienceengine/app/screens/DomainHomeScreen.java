@@ -150,14 +150,18 @@ public class DomainHomeScreen extends AbstractScreen {
           ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
       activityThumb.addActor(levelLabel);
       
-      boolean success = profile.getSuccess(Guru.ID);
-      if (success) {
-        Image status = new Image(new Texture("images/check.png"));
-        activityThumb.addActor(status);
-        status.setPosition(ScreenComponent.getScaledX(30),
-            ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
-        status.setSize(30, 30);
-      }
+      TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.RED);
+      Image fullBar = new Image(bar);
+      fullBar.setPosition(ScreenComponent.getScaledX(10),
+          ScreenComponent.getScaledY(20));
+      fullBar.setSize(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20), 12);
+      activityThumb.addActor(fullBar);
+      int percent = profile.getSuccessPercent(Guru.ID);
+      Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.GREEN));
+      successBar.setPosition(ScreenComponent.getScaledX(10),
+          ScreenComponent.getScaledY(20));
+      successBar.setSize(percent * ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20) / 100f, 10);
+      activityThumb.addActor(successBar);
       
       profile.setCurrentActivity(level);
       int timeSpent = Math.round(profile.getTimeSpent(Guru.ID));

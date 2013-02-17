@@ -98,7 +98,8 @@ public class LevelLoader {
   private void loadPlan(Array<?> tutors) {
     if (tutors == null) return;
     Gdx.app.log(ScienceEngine.LOG, "Loading tutors");
-    List<ITutor> childTutors = tutorLoader.loadChildTutors(science2DController.getGuru(), tutors);
+    ITutor rootTutor = science2DController.getGuru().getRootTutor();
+    List<ITutor> childTutors = tutorLoader.loadChildTutors(rootTutor, tutors);
     science2DController.getGuru().initialize(childTutors);
   }
 

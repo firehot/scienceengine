@@ -77,5 +77,5 @@ public interface ITutor {
 
   float getTimeSpent();
 
-  boolean getSuccess();
+  int getSuccessPercent();
 }

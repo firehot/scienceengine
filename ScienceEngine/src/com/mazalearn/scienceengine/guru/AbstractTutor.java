@@ -29,7 +29,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private String id;
   private Profile profile;
   private float timeSpent;
-  private boolean success;
+  protected int successPercent;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
@@ -46,7 +46,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.guru = science2DController.getGuru();
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.timeSpent = profile.getTimeSpent(id);
-    this.success = profile.getSuccess(id);
+    this.successPercent = profile.getSuccessPercent(id);
     this.setVisible(false);
   }
 
@@ -61,9 +61,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void done(boolean success) {
+    Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " success: " + success);
     this.setVisible(false);
-    this.success = success;
-    profile.setSuccess(id, getSuccess());
+    this.successPercent = success ? 100 : 0;
+    profile.setSuccessPercent(id, getSuccessPercent());
     profile.setTimeSpent(id, getTimeSpent());
     profile.save();
     parent.done(success);
@@ -75,6 +76,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
 
   @Override
   public void teach() {
+    Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
     this.setVisible(true);
   }
   
@@ -85,7 +87,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void prepareToTeach(ITutor childTutor) {
-    Gdx.app.log(ScienceEngine.LOG, "Prepare to Teach: " + getGoal());
+    Gdx.app.log(ScienceEngine.LOG, "Prepare to Teach: " + getId());
     new ComponentLoader(science2DController).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DController.getModel());
     science2DController.getModelControls().refresh();
@@ -141,8 +143,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public boolean getSuccess() {
-    return success;
+  public int getSuccessPercent() {
+    return successPercent;
   }
   
 }

@@ -65,14 +65,18 @@ public class TutorGroup extends AbstractTutor {
    */
   @Override
   public void prepareToTeach(ITutor childTutor) {
-    super.prepareToTeach(childTutor);
     if (childTutor != null) {
       tutorIndex = childTutors.indexOf(childTutor);
     }
     if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
-      tutorIndex = 0;
+      // Find out where we last left off.
+      for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
+        if (childTutors.get(tutorIndex).getSuccessPercent() < 100) break;
+      }
+      if (tutorIndex == childTutors.size()) tutorIndex = 0;
     }
     currentTutor = childTutors.get(tutorIndex);
+    super.prepareToTeach(currentTutor);
   }
   
   @Override
@@ -119,5 +123,14 @@ public class TutorGroup extends AbstractTutor {
       timeSpent += child.getTimeSpent();
     }
     return timeSpent;
+  }
+  
+  @Override
+  public int getSuccessPercent() {
+    int numSuccesses = 0;
+    for (ITutor child: childTutors) {
+      if (child.getSuccessPercent() == 100) numSuccesses++;
+    }
+    return Math.round(numSuccesses * 100 / (float) childTutors.size());
   }
 }

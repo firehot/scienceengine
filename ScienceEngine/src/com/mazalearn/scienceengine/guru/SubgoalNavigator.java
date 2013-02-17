@@ -54,7 +54,7 @@ public class SubgoalNavigator extends Group {
       Label timeLabel = subgoalTimeLabels[count++];
       int timeSpent = Math.round(subgoal.getTimeSpent());
       timeLabel.setText("Time: " + String.valueOf(timeSpent));
-      if (subgoal.getSuccess()) {
+      if (subgoal.getSuccessPercent() == 100) {
         Image status = new Image(new Texture("images/check.png"));
         TextButton subgoalButton = (TextButton) findActor(subgoal.getId());
         subgoalButton.addActor(status);

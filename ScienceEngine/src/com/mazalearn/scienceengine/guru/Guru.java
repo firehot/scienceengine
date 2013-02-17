@@ -1,11 +1,13 @@
 package com.mazalearn.scienceengine.guru;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -43,11 +45,8 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
  */
 public class Guru extends Group implements ITutor {
   public static final String ID = "Guru";
-  int tutorIndex = -1;
-  ITutor currentTutor;
   protected Dashboard dashboard;
   private TimeTracker activeTimer;
-  private List<ITutor> childTutors = new ArrayList<ITutor>();
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final ModelControls modelControls;
   private final ConfigGenerator configGenerator;
@@ -61,6 +60,7 @@ public class Guru extends Group implements ITutor {
   private Skin skin;
   private ITutor activeTutor;
   private Profile profile;
+  private TutorGroup rootTutor;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
@@ -109,20 +109,23 @@ public class Guru extends Group implements ITutor {
     return activeTimer.getActiveTime();
   }
 
-  public void initialize(List<ITutor> childTutors) {
-    this.childTutors = childTutors;
-    for (ITutor childTutor: childTutors) {
-      this.addActor((AbstractTutor) childTutor);
+  public ITutor getRootTutor() {
+    if (rootTutor == null) {
+      this.rootTutor = new TutorGroup(science2DController, this, goal, "Root",
+          null, null, 0, 0, null);
+      this.addActor(rootTutor);      
     }
+    return rootTutor;
+  }
+  
+  public void initialize(List<ITutor> childTutors) {
+    rootTutor.initialize(GroupType.Guide.name(), childTutors, null);
     List<ITutor> subgoals = new ArrayList<ITutor>();
-    collectSubgoals(this, subgoals);
+    collectSubgoals(rootTutor, subgoals);
     
     SubgoalNavigator subgoalNavigator = new SubgoalNavigator(subgoals, this, skin);
     this.getStage().addActor(subgoalNavigator);    
     dashboard.setSubgoalNavigator(subgoalNavigator);
-    
-    this.tutorIndex = 0;
-    this.currentTutor = childTutors.get(0);
   }
   
   private void collectSubgoals(ITutor tutor, List<ITutor> subgoals) {
@@ -136,6 +139,7 @@ public class Guru extends Group implements ITutor {
   }
   
   public void startChallenge() {
+    Gdx.app.log(ScienceEngine.LOG, "Start Challenge: " + getId());
     // Mark start of challenge in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Challenge.name());
@@ -153,7 +157,7 @@ public class Guru extends Group implements ITutor {
       }
     }
     
-    if (childTutors.size() == 0) { // No activeTutors available
+    if (rootTutor.getChildTutors().size() == 0) { // No activeTutors available
       endChallenge();
       return;
     }
@@ -163,9 +167,9 @@ public class Guru extends Group implements ITutor {
   }
   
   public void endChallenge() {
+    Gdx.app.log(ScienceEngine.LOG, "End Challenge: " + getId());
     // Reinitialize current prober, if any
     activeTutor.done(false);
-    currentTutor = null;
     setActiveTutor(this);
 
     ScienceEngine.setProbeMode(false);
@@ -211,7 +215,7 @@ public class Guru extends Group implements ITutor {
   public void act(float dt) {
     super.act(dt);
     if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
-    if (currentTutor != null) {
+    if (activeTutor != null) {
       if (!hinter.hasHint()) {
         hinter.setHint(activeTutor.getHint());
       }
@@ -227,7 +231,7 @@ public class Guru extends Group implements ITutor {
   @Override
   public void done(boolean success) {
     hinter.setHint(null);
-    profile.setSuccess(getId(), success);
+    profile.setSuccessPercent(getId(), getSuccessPercent());
     profile.setTimeSpent(getId(), getTimeSpent());
     profile.save();
     if (!success) {
@@ -235,28 +239,24 @@ public class Guru extends Group implements ITutor {
       this.setVisible(false);
       return;
     }
-    // Success and no more childTutors == WIN
-    if (++tutorIndex == childTutors.size()) {
-      soundManager.play(ScienceEngineSound.CELEBRATE);
-      science2DController.getView().done(true);
-      dashboard.clearActiveTutor();
-      this.setVisible(false);
-      return;
-    }
-    currentTutor = childTutors.get(tutorIndex);
-    teach();
+    soundManager.play(ScienceEngineSound.CELEBRATE);
+    science2DController.getView().done(true);
+    dashboard.clearActiveTutor();
+    this.setVisible(false);
   }
 
   // Prerequisite: childTutors.size() >= 1
   @Override
   public void teach() {
     this.setVisible(true);
-    currentTutor.prepareToTeach(null);
+    rootTutor.teach();
+
+    /*currentTutor.prepareToTeach(null);
     if (currentTutor.getGroupType() == GroupType.Challenge) {
       doChallengeAnimation(currentTutor);
     } else {
       currentTutor.teach();
-    }
+    } */
   }
   
   private void doChallengeAnimation(final ITutor tutor) {
@@ -307,13 +307,7 @@ public class Guru extends Group implements ITutor {
   @Override
   public void prepareToTeach(ITutor childTutor) {
     this.setVisible(false);
-    if (childTutor != null) {
-      tutorIndex = childTutors.indexOf(childTutor);
-    }
-    if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
-      tutorIndex = 0;
-    }
-    currentTutor = childTutors.get(tutorIndex);
+    rootTutor.prepareToTeach(null);
   }
 
   public void setupProbeConfigs(List<IModelConfig<?>> configs, boolean enableControls) {
@@ -326,8 +320,8 @@ public class Guru extends Group implements ITutor {
   }
 
   public void checkProgress() {
-    if (currentTutor == null) return;
-    currentTutor.checkProgress();
+    if (activeTutor == null) return;
+    activeTutor.checkProgress();
   }
 
   @Override
@@ -347,7 +341,7 @@ public class Guru extends Group implements ITutor {
   
   @Override
   public List<ITutor> getChildTutors() {
-    return childTutors;
+    return Arrays.asList(new ITutor[] { rootTutor});
   }
   
   public Parser createParser() {
@@ -399,18 +393,11 @@ public class Guru extends Group implements ITutor {
 
   @Override
   public float getTimeSpent() {
-    float timeSpent = 0;
-    for (ITutor child: childTutors) {
-      timeSpent += child.getTimeSpent();
-    }
-    return timeSpent;
+    return rootTutor.getTimeSpent();
   }
 
   @Override
-  public boolean getSuccess() {
-    for (ITutor child: childTutors) {
-      if (!child.getSuccess()) return false;
-    }
-    return true;
+  public int getSuccessPercent() {
+    return rootTutor.getSuccessPercent();
   }
 }
