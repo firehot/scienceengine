@@ -36,6 +36,7 @@ plan:[
         id: "Magnetic Field",
        goal: "Understand the magnetic field around the electromagnet",
        postcondition: "FieldMeter.Count >= 10",
+       components:[{type:"Compass", visible: false}],
        success: 200,
        timelimit: 180,
        subgoals: [
@@ -44,35 +45,33 @@ plan:[
           goal: "Touch the screen in many places around the electromagnet to see the field.",
          postcondition: "FieldMeter.Count >= 10",
          success: 250,
-         components:[{type:"Compass", visible: false}]
          },
           {type: "KnowledgeUnit",
           id: "Move Electromagnet",
           goal: "Move the electromagnet. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(ElectroMagnet.Move) >= 1",
          success: 250,
-         components:[{type:"Compass", visible: false}]
          },
          {type: "KnowledgeUnit",
           id: "Current Direction Change",
           goal: "Change the current direction. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentDirection) >= 1",
+         components:[{type:"CurrentSource", pin: true}],
          success: 250,
-         components:[{type:"Compass", visible: false}]
          },
          {type: "KnowledgeUnit",
           id: "Max Current Change",
           goal: "Change the max current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
+         components:[{type:"CurrentSource", pin: true}],
          success: 250,
-         components:[{type:"Compass", visible: false}]
          },
          {type: "KnowledgeUnit",
           id: "AC Current and Field",
           goal: "Change the current type to AC. See how the field changes",
+         components:[{type:"CurrentSource", pin: true}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentType) >= 1",
          success: 250,
-         components:[{type:"Compass", visible: false}]
          }
        ]},       
        {type: "TutorGroup",
