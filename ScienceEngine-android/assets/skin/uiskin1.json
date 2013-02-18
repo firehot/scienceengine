@@ -1,6 +1,7 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: { 
 default-font: { file: arial-16.fnt },
+font80: { file: arial-80.fnt },
 font26: { file: arial-26.fnt },
 font20: { file: arial-20.fnt },
 font16: { file: arial-16.fnt },

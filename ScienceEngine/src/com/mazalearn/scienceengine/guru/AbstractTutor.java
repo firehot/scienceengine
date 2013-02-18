@@ -5,8 +5,13 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.loaders.ComponentLoader;
 import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
@@ -30,6 +35,9 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private Profile profile;
   private float timeSpent;
   protected int successPercent;
+  protected boolean isUserNext = false;
+  protected Button nextButton;
+  private boolean success;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
@@ -49,6 +57,34 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.successPercent = profile.getSuccessPercent(id);
     Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", SuccessPercent: " + successPercent);
     this.setVisible(false);
+    // Create a button NEXT at right place along with listener to set isUserNext.
+    createNextButton(science2DController);    
+
+  }
+
+  private void createNextButton(IScience2DController science2DController) {
+    nextButton = new TextButton("Next", science2DController.getSkin(), "body");
+    nextButton.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        nextButton.setVisible(false);
+        finish(success);
+      }
+    });
+    nextButton.setPosition(ScreenComponent.NextButton.getX(nextButton.getWidth()),
+        ScreenComponent.NextButton.getY(nextButton.getHeight()));
+    addActor(nextButton);
+  }
+  
+  @Override
+  public void prepareToFinish(boolean success) {
+    if (!success) return;
+    this.success = true;
+    nextButton.setVisible(true);
+    Gdx.app.log(ScienceEngine.LOG, "Subgoal satisfied: " + getGoal());
+  }
+  
+  protected boolean getSuccess() {
+    return success;
   }
 
   @Override
@@ -61,7 +97,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public void done(boolean success) {
+  public void finish(boolean success) {
     Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " success: " + success);
     this.setVisible(false);
     if (success) {
@@ -70,7 +106,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     }
     profile.setTimeSpent(id, getTimeSpent());
     profile.save();
-    parent.done(success);
+    parent.finish(success);
   }
 
   protected void setSuccessScore(int score) {
@@ -97,6 +133,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
     
     this.setVisible(false);
     guru.setActiveTutor(this);
+    isUserNext = false;
+    nextButton.setVisible(false);
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());

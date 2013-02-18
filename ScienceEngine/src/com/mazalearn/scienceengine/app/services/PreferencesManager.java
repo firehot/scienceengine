@@ -18,7 +18,6 @@ public class PreferencesManager {
   // Active user
   private static final String PREF_USER_EMAIL = "user.email";
   private static final String PREFS_NAME = "scienceengine";
-  private static final String PREF_PROFILE = "profile";
   private Profile profile;
 
   public PreferencesManager() {
@@ -64,6 +63,9 @@ public class PreferencesManager {
 
   private Profile retrieveProfile() {
     String userEmail = getPrefs().getString(PREF_USER_EMAIL);
+    if (userEmail == null || userEmail.isEmpty()) {
+      userEmail = "DemoUser@mazalearn.com";
+    }
     String profileAsText = getPrefs().getString(userEmail);
     if (profileAsText != null && !profileAsText.isEmpty()) {
       // decode the contents - base64 encoded

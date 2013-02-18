@@ -16,13 +16,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.AggregatorFunction;
@@ -37,7 +35,6 @@ import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.ViewControls;
-
 /**
  * Cycles through the eligible childTutors - probing the user with each one.
  * This is the root of the tutor hierarchy.
@@ -146,13 +143,13 @@ public class Guru extends Group implements ITutor {
     }
   }
   
-  public void startChallenge() {
-    Gdx.app.log(ScienceEngine.LOG, "Start Challenge: " + getId());
-    // Mark start of challenge in event log
+  public void beginTutoring() {
+    Gdx.app.log(ScienceEngine.LOG, "Start Tutoring: " + getId());
+    // Mark start of Tutoring in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
-        Parameter.Challenge.name());
-    // Reset scores and bring dashboard to top
+        Parameter.Tutoring.name());
     dashboard.resetScore();
+    dashboard.setVisible(true);
     getStage().addActor(this); // bring Guru to top
 
     // Collect actors to be excluded from probe points.
@@ -166,7 +163,7 @@ public class Guru extends Group implements ITutor {
     }
     
     if (rootTutor.getChildTutors().size() == 0) { // No activeTutors available
-      endChallenge();
+      endTutoring();
       return;
     }
     
@@ -174,12 +171,13 @@ public class Guru extends Group implements ITutor {
     teach();
   }
   
-  public void endChallenge() {
-    Gdx.app.log(ScienceEngine.LOG, "End Challenge: " + getId());
+  public void endTutoring() {
+    Gdx.app.log(ScienceEngine.LOG, "End Tutoring: " + getId());
     // Reinitialize current prober, if any
-    activeTutor.done(false);
+    activeTutor.finish(false);
     setActiveTutor(this);
-
+    dashboard.setVisible(false);
+    
     ScienceEngine.setProbeMode(false);
     // Clear event log
     ScienceEngine.getEventLog().clear();
@@ -237,7 +235,7 @@ public class Guru extends Group implements ITutor {
 
   // TODO: TutorGroup and Guru both handle many children tutors - abstract this out
   @Override
-  public void done(boolean success) {
+  public void finish(boolean success) {
     hinter.setHint(null);
     profile.setSuccessPercent(getId(), getSuccessPercent());
     profile.setTimeSpent(getId(), getTimeSpent());
@@ -262,47 +260,48 @@ public class Guru extends Group implements ITutor {
   
   public void doChallengeAnimation(final ITutor tutor) {
     final LabelStyle large = new LabelStyle(skin.get(LabelStyle.class));
-    BitmapFont font = skin.getFont("font26");
-    font.setScale(4);
+    BitmapFont font = skin.getFont("font80");
     large.font = font;
-    final TextButton start = new TextButton("Challenge\nRound", skin);
-    start.setSize(500, 300);
+    final TextButton start = new TextButton("Challenge", skin);
+    start.setSize(350, 100);
     start.setColor(Color.YELLOW);
     start.getLabel().setStyle(large);
     start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
         ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
     this.addActor(start);
-    start.addListener(new ClickListener() {
-      @Override
-      public void clicked (InputEvent event, float x, float y) {
-        start.setText("3");
-        start.setSize(100, 100);
-        start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
-            ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
-        start.addAction(
-            Actions.sequence(
-                Actions.repeat(3, 
-                    Actions.sequence(
-                        Actions.alpha(1),
-                        Actions.alpha(0, 1),
-                        new Action() {
-                          @Override
-                          public boolean act(float delta) {
-                            start.setText(String.valueOf(Integer.parseInt(start.getText().toString()) - 1));
-                            return true;
-                          }
-                        }
-                  )),
-                  new Action() {
-                    @Override
-                    public boolean act(float delta) {
-                      Guru.this.removeActor(start);
-                      tutor.teach();
-                      return true;
+    start.addAction(
+        Actions.sequence(
+            Actions.alpha(0, 2),
+            new Action() {
+              @Override
+              public boolean act(float delta) {
+                start.setText("3");
+                start.setSize(100, 100);
+                start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
+                    ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
+                return true;
+              }
+            },
+            Actions.repeat(3, 
+                Actions.sequence(
+                    Actions.alpha(1),
+                    Actions.alpha(0, 1),
+                    new Action() {
+                      @Override
+                      public boolean act(float delta) {
+                        start.setText(String.valueOf(Integer.parseInt(start.getText().toString()) - 1));
+                        return true;
+                      }
                     }
-                  }));
-      }
-    });
+              )),
+              new Action() {
+                @Override
+                public boolean act(float delta) {
+                  Guru.this.removeActor(start);
+                  tutor.teach();
+                  return true;
+                }
+              }));
   }
 
   @Override
@@ -321,7 +320,7 @@ public class Guru extends Group implements ITutor {
   }
 
   public void checkProgress() {
-    if (activeTutor == null) return;
+    if (activeTutor == this) return;
     activeTutor.checkProgress();
   }
 
@@ -400,5 +399,9 @@ public class Guru extends Group implements ITutor {
   @Override
   public int getSuccessPercent() {
     return rootTutor.getSuccessPercent();
+  }
+
+  @Override
+  public void prepareToFinish(boolean success) {
   }
 }

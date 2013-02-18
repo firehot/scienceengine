@@ -99,6 +99,9 @@ public class ComponentLoader {
         loadEnvironment((EnvironmentBody) science2DActor.getBody(),
             (Array<String>) component.get("params"));
       }
+      if (component.get("pin") != null) {
+        ScienceEngine.pin(science2DActor.getBody(), (Boolean) component.get("pin"));
+      }
     }
     // TODO: Simplify logging so that timestamp printed along with log
     Gdx.app.log(ScienceEngine.LOG, "Loaded component: " + type + 

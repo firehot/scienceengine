@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.ChallengeEndDialog;
+import com.mazalearn.scienceengine.app.screens.TutoringEndDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -32,7 +32,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
 
   protected final IScience2DModel science2DModel;
   protected final Skin skin;
-  private boolean isChallengeInProgress = false;
+  private boolean isTutoringInProgress = false;
   protected ModelControls modelControls;
   private List<List<Actor>> locationGroups;
   private Vector2 deltaPosition = new Vector2();
@@ -75,19 +75,19 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
   
   public void done(boolean success) {
-    if (!isChallengeInProgress) return;
+    if (!isTutoringInProgress) return;
     
     if (success) {
       ScienceEngine.getPlatformAdapter().showInternalURL(
           "data/" + science2DController.getDomain() + "/" + science2DController.getLevel() + ".html");
-      challenge(false);
-      Dialog dialog = new ChallengeEndDialog(this, skin, science2DController.getDomain(), 
+      tutoring(false);
+      Dialog dialog = new TutoringEndDialog(this, skin, science2DController.getDomain(), 
           ScienceEngine.getMsg().getString("Level.Success"));
       dialog.show(this);      
     } else {
       // TODO: lack of symmetry here - cleanup required
-      isChallengeInProgress = false;      
-      Dialog dialog = new ChallengeEndDialog(this, skin, science2DController.getDomain(), 
+      isTutoringInProgress = false;      
+      Dialog dialog = new TutoringEndDialog(this, skin, science2DController.getDomain(), 
           ScienceEngine.getMsg().getString("Level.Failure"));
       dialog.show(this);      
     }
@@ -104,29 +104,29 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
 
   @Override
-  public void challenge(boolean challenge) {
+  public void tutoring(boolean tutoringOn) {
     // Turn on or turn off music
-    if (challenge) {
+    if (tutoringOn) {
       ScienceEngine.getMusicManager().setEnabled(false);
     } else {
       ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
     }
-    isChallengeInProgress = challenge;
+    isTutoringInProgress = tutoringOn;
 
-    if (challenge) {
+    if (tutoringOn) {
       // Reinitialize level
       science2DController.reset();
-      science2DController.getGuru().startChallenge();
+      science2DController.getGuru().beginTutoring();
     } else {
-      science2DController.getGuru().endChallenge();
+      science2DController.getGuru().endTutoring();
       // Reinitialize level
       science2DController.reset();
     }
   }
     
   @Override
-  public boolean isChallengeInProgress() {
-    return isChallengeInProgress;
+  public boolean isTutoringInProgress() {
+    return isTutoringInProgress;
   }
   
   @Override
@@ -223,14 +223,14 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
-        isChallengeInProgress = !isChallengeInProgress;
+        isTutoringInProgress = !isTutoringInProgress;
         ScreenComponent goButtonTo = 
-            isChallengeInProgress ? ScreenComponent.GoButtonDown : ScreenComponent.GoButtonUp;
+            isTutoringInProgress ? ScreenComponent.GoButtonDown : ScreenComponent.GoButtonUp;
         goButton.addAction(Actions.parallel(
             Actions.moveTo(goButtonTo.getX(goButtonTo.getWidth()), 
                 goButtonTo.getY(goButtonTo.getHeight()), 1),
             Actions.sizeTo(goButtonTo.getWidth(), goButtonTo.getHeight(), 1)));
-        challenge(isChallengeInProgress);
+        tutoring(isTutoringInProgress);
       }
     });
     

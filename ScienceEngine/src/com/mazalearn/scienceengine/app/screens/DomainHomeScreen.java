@@ -39,6 +39,56 @@ import com.mazalearn.scienceengine.guru.Guru;
  */
 public class DomainHomeScreen extends AbstractScreen {
 
+  public static class BrowseUrlListener extends ClickListener {
+    private final String url;
+
+    public BrowseUrlListener(String url) {
+      this.url = url;
+    }
+
+    @Override
+    public void clicked(InputEvent event, float x, float y) {
+      ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      ScienceEngine.getPlatformAdapter().browseURL(url);
+    }
+  }
+
+  public static class VideoPlayListener extends ClickListener {
+    private final String fileName;
+    private final String url;
+
+    public VideoPlayListener(String fileName, String url) {
+      this.fileName = fileName;
+      this.url = url;
+    }
+
+    @Override
+    public void clicked(InputEvent event, float x, float y) {
+      ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      boolean playedVideo = false;
+      if (fileName != null) {
+        // Movie file extensions - we allow a limited set.
+        for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+          try {
+            FileHandle file = Gdx.files.external(fileName + extension);
+            if (!file.exists()) { // Try out absolute path
+              file = Gdx.files.absolute("/LocalDisk/" + fileName + extension);
+            }
+            if (file.exists()) {
+              playedVideo = ScienceEngine.getPlatformAdapter().playVideo(file.file());
+              break;
+            }
+          } catch (GdxRuntimeException e) {
+            // Ignore - it is ok for file to be inaccessible
+          }
+        }
+      }
+      if (url != null && !playedVideo) { // Fallback to the browser
+       ScienceEngine.getPlatformAdapter().browseURL(url);
+      }
+    }
+  }
+
   private static final int RESOURCE_WIDTH = 254;
   private static final int THUMBNAIL_WIDTH = 369; // 242;
   private static final int THUMBNAIL_HEIGHT = 279; // 182;
@@ -156,7 +206,7 @@ public class DomainHomeScreen extends AbstractScreen {
           ScreenComponent.getScaledY(20));
       fullBar.setSize(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20), 10);
       activityThumb.addActor(fullBar);
-      int percent = profile.getSuccessPercent(level, Guru.ROOT_ID);
+      int percent = profile.getSuccessPercent(level, Guru.ID);
       Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.RED));
       successBar.setPosition(ScreenComponent.getScaledX(10),
           ScreenComponent.getScaledY(20));
@@ -241,45 +291,16 @@ public class DomainHomeScreen extends AbstractScreen {
       resource.defaults().fill();
 
       Image play = null;
+      ClickListener clickListener = null;
       if (type.equals("video")) { //$NON-NLS-1$
         play = new Image(new Texture("images/videoplay.png")); //$NON-NLS-1$
-        play.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent event, float x, float y) {
-            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-            boolean playedVideo = false;
-            if (fileName != null) {
-              // Movie file extensions - we allow a limited set.
-              for (String extension: new String[] {".mp4", ".3gp", ".mov", ".wmv", ""}) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                try {
-                  FileHandle file = Gdx.files.external(fileName + extension);
-                  if (!file.exists()) { // Try out absolute path
-                    file = Gdx.files.absolute("/LocalDisk/" + fileName + extension);
-                  }
-                  if (file.exists()) {
-                    playedVideo = scienceEngine.playVideo(file.file());
-                    break;
-                  }
-                } catch (GdxRuntimeException e) {
-                  // Ignore - it is ok for file to be inaccessible
-                }
-              }
-            }
-            if (url != null && !playedVideo) { // Fallback to the browser
-             scienceEngine.browseURL(url);
-            }
-          }
-        });
+        play.addListener(clickListener = new VideoPlayListener(fileName, url));
       } else if (type.equals("web")) { //$NON-NLS-1$
         play = new Image(new Texture("images/browser.png")); //$NON-NLS-1$
-        play.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent event, float x, float y) {
-            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-            scienceEngine.browseURL(url);
-          }
-        });
+        play.addListener(clickListener = new BrowseUrlListener(url));
       }
+      resource.addListener(clickListener);
+      
       String rated = "*****".substring(0, (int) Math.floor(rating));
       Label ratingLabel = new Label(rated, getSkin(), "en", Color.YELLOW);
       resource.add(ratingLabel).right().width(50);

@@ -13,9 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScreenComponent;
 
-public class ChallengeEndDialog extends Dialog {
+public class TutoringEndDialog extends Dialog {
   
-  public ChallengeEndDialog(final Stage stage, Skin skin, String title, String contents) {
+  public TutoringEndDialog(final Stage stage, Skin skin, String title, String contents) {
     super("\n\n", skin);
     
     setBackground(createBackground());

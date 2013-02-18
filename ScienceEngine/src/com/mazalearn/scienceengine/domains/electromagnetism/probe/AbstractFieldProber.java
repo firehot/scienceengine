@@ -42,7 +42,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   }
   
   @Override
-  public void done(boolean success) {
+  public void finish(boolean success) {
     if (success) {
       guru.showCorrect(getSuccessScore());
     } else {
@@ -52,7 +52,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     if (!success) return; // NO Failure exit
 
     if (netSuccesses >= 2) {
-      super.done(success);
+      prepareToFinish(success);
     } else {
       teach();
     }

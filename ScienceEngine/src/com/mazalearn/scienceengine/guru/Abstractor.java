@@ -141,8 +141,12 @@ public class Abstractor extends AbstractTutor {
         boolean success = correctParameters.equals(chosenParameters);
         if (!success) {
           life[--numLivesLeft].getColor().a = 0.3f;
+          guru.showWrong(getFailureScore());
+          if (numLivesLeft > 0) return;
+        } else {
+          guru.showCorrect(getSuccessScore());
         }
-        done(success);
+        prepareToFinish(success);
       }
     });
     return doneButton;
@@ -152,19 +156,6 @@ public class Abstractor extends AbstractTutor {
   public void teach() {
     super.teach();
     modelControls.refresh();
-  }
-
-  @Override
-  public void done(boolean success) {
-    if (!success) {
-      guru.showWrong(getFailureScore());
-      if (numLivesLeft <= 0) {
-        super.done(false);
-      }
-    } else if (success) {
-      guru.showCorrect(getSuccessScore());
-      super.done(true);
-    }
   }
 
   public void initialize(String[] parameters) {

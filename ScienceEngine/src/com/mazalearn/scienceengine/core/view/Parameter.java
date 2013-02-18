@@ -6,7 +6,7 @@ import com.mazalearn.scienceengine.core.model.IParameter;
 
 public enum Parameter implements IParameter {
   Reset,
-  Challenge,
+  Tutoring,
   PauseResume,
   Select,
   Move,

@@ -18,9 +18,9 @@ public interface IScience2DView extends IDoneCallback {
   public Array<Actor> getActors();
   // Ask series of questions to probe learner's knowledge and understanding
   // If successful, learner can move to next level.
-  public void challenge(boolean challenge);
+  public void tutoring(boolean tutoringOn);
   // Whether probe mode is on
-  public boolean isChallengeInProgress();
+  public boolean isTutoringInProgress();
   // Return actor corresponding to name, if exists else null
   public Actor findActor(String name);
   // Return list of location groups

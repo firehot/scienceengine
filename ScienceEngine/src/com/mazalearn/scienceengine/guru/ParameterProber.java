@@ -22,7 +22,7 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 // doubts on how parameter change affects outcome
 // Generate a parameter point.
 // Is the outcome given by expression true?
-public class ParameterProber extends AbstractScience2DProber implements IDoneCallback {
+public class ParameterProber extends AbstractScience2DProber {
   
   protected int netSuccesses;
   enum ResultType {
@@ -63,19 +63,12 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     return image;
   }
   
-  public void done(boolean success) {
-    netSuccesses += success ? 1 : -1;
-    if (!success) {
-      guru.showWrong(getFailureScore());
-      setSuccessScore(getFailureScore()); // Equate success and failure scores
-      return;
-    }
-    guru.showCorrect(getSuccessScore());
+  public void finish(boolean success) {
     ScienceEngine.clearPins();
     science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     image.setVisible(false);
     ScienceEngine.setProbeMode(false);
-    super.done(success);
+    super.finish(success);
   }
     
   public ParameterProber(IScience2DController science2DController,
@@ -121,6 +114,18 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
     this.probeConfig = probeConfig;
 
     this.resultType = ResultType.valueOf(resultType);
+    IDoneCallback doneCallback = new IDoneCallback() {
+      @Override public void done(boolean success) { 
+        netSuccesses += success ? 1 : -1;
+        if (!success) {
+          guru.showWrong(getFailureScore());
+          setSuccessScore(getFailureScore()); // Equate success and failure scores
+          return;
+        }
+        guru.showCorrect(getSuccessScore());
+        prepareToFinish(success);
+      }
+    };
     if (this.resultType == ResultType.Spin) {   
       image.setX(ScreenComponent.VIEWPORT_WIDTH / 2 - image.getWidth() / 2 - ScreenComponent.getScaledX(50));
       image.setY(ScreenComponent.VIEWPORT_HEIGHT / 2 - image.getHeight() / 2);
@@ -132,7 +137,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       Image antiClockwise = createResultImage("images/anticlockwise.png", 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
   
-      imageListener = new ClickResult(this, new Image[] {clockwise, antiClockwise, dontCare},
+      imageListener = new ClickResult(doneCallback, new Image[] {clockwise, antiClockwise, dontCare},
           new ClickResult.StateMapper() {
         @Override
         public int map(float x, float y) {
@@ -157,7 +162,7 @@ public class ParameterProber extends AbstractScience2DProber implements IDoneCal
       Image increase = createResultImage("images/fieldarrow.png", 2);
       increase.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);
 
-      imageListener = new ClickResult(this, new Image[] {decrease, increase, dontCare},
+      imageListener = new ClickResult(doneCallback, new Image[] {decrease, increase, dontCare},
           new ClickResult.StateMapper() {
         @Override
         public int map(float x, float y) {

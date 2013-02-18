@@ -121,14 +121,6 @@ public class ScienceEngine extends Game {
     ScienceEngine.platformAdapter = platformAdapter;
   }
   
-  public void browseURL(String url){
-    getPlatformAdapter().browseURL(url);
-  }
-
-
-  public boolean playVideo(File file) {
-    return getPlatformAdapter().playVideo(file);
-  }
   // Game-related methods
   
   @Override

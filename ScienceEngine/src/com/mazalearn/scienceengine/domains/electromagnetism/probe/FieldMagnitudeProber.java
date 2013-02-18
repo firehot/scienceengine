@@ -33,7 +33,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
                 @Override
                 public boolean act(float delta) {
                   fieldMeterActor.setVisible(false);
-                  done(success);
+                  finish(success);
                   netSuccesses += success ? 1 : -1;
                   return true;
                 }

@@ -64,7 +64,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
             new Action() {
               @Override
               public boolean act(float delta) {
-                done(success);
+                finish(success);
                 fieldMeterActor.setVisible(false);
                 userField.setVisible(false);
                 return true;

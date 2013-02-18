@@ -53,14 +53,14 @@ public class SubgoalNavigator extends Group {
     int count = 0;
     for (final ITutor subgoal: this.subgoals) {
       Label timeLabel = subgoalTimeLabels[count++];
-      timeLabel.setText(Format.formatTime(subgoal.getTimeSpent()) + "s");
+      timeLabel.setText(Format.formatTime(subgoal.getTimeSpent()));
       if (subgoal.getSuccessPercent() == 100) {
         Image status = new Image(new Texture("images/check.png"));
         TextButton subgoalButton = (TextButton) findActor(subgoal.getId());
         subgoalButton.addActor(status);
         status.setPosition(ScreenComponent.getScaledX(70),
             ScreenComponent.getScaledY(SUBGOAL_HEIGHT - 64));
-        status.setSize(60, 60);
+        status.setSize(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60));
       }
     }
     // Update active subgoal

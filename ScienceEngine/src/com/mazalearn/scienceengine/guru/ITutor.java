@@ -51,7 +51,7 @@ public interface ITutor {
    * Called when teaching session is completed
    * @param success
    */
-  public void done(boolean success);
+  public void finish(boolean success);
   
   /**
    * @return list of child tutors or null if no children.
@@ -89,4 +89,6 @@ public interface ITutor {
    * For a group tutor, this is the percentage of children which are successful.
    */
   int getSuccessPercent();
+
+  void prepareToFinish(boolean success);
 }
