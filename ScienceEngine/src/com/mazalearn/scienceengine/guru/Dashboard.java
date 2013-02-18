@@ -79,7 +79,7 @@ class Dashboard extends Table {
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
     this.goal.setText(activeTutor.getGoal());
-    if (activeTutor.getParentTutor().getGroupType() == GroupType.Challenge) {
+    if (activeTutor.getParentTutor() != null && activeTutor.getParentTutor().getGroupType() == GroupType.Challenge) {
       goal.setColor(Color.RED);
     } else {
       goal.setColor(Color.YELLOW);

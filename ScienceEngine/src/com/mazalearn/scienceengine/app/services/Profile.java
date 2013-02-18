@@ -192,7 +192,7 @@ public class Profile implements Serializable {
 
   public void setDrawingPng(byte[] drawingPngBytes) {
     try {
-      properties.put(DRAWING_PNG, new String(drawingPngBytes, "ISO-8859-1"));
+      properties.put(DRAWING_PNG, new String(drawingPngBytes, "US_ASCII"));
     } catch (UnsupportedEncodingException ignored) {
     }
     save();
@@ -201,7 +201,7 @@ public class Profile implements Serializable {
   public byte[] getDrawingPng() {
     String png = properties.get(DRAWING_PNG);
     try {
-      return png == null ? new byte[0] : png.getBytes("ISO-8859-1");
+      return png == null ? new byte[0] : png.getBytes("US_ASCII");
     } catch (UnsupportedEncodingException e) {
       return new byte[0];
     }

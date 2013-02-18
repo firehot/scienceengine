@@ -67,15 +67,26 @@ public interface ITutor {
    */
   public String getId();
 
+  /**
+   * @return parent tutor of this tutor. NULL only for Guru.
+   */
   public ITutor getParentTutor();
 
   /**
-   * Set the time taken in this tutor
+   * Add to the time taken in this tutor
    * @param timeTaken
    */
   void addTimeSpent(float timeTaken);
 
+  /**
+   * @return time spent on this tutor
+   */
   float getTimeSpent();
 
+  /**
+   * @return success percent on this tutor.
+   * For a non-group tutor, this is 0 or 100.
+   * For a group tutor, this is the percentage of children which are successful.
+   */
   int getSuccessPercent();
 }
