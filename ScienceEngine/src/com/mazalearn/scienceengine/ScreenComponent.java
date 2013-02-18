@@ -11,7 +11,7 @@ public enum ScreenComponent implements IComponentType {
   Prober(Align.LEFT, 0, Align.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
   Title(Align.CENTER, 0, Align.TOP, -10, 0, 0, Color.WHITE, true, false),
   Status(Align.CENTER, 0, Align.BOTTOM, 10, 0, 0, Color.WHITE, true, false),
-  User(Align.RIGHT, -70, Align.TOP, -2, 20, 30, Color.WHITE, true, false),
+  User(Align.RIGHT, -20, Align.TOP, -2, 20, 30, Color.WHITE, true, false),
   Back(Align.LEFT, 0, Align.TOP, 0, 70, 30, Color.CLEAR, true, false), 
   ViewControls(Align.LEFT, 81, Align.TOP, 0, 0, 0, Color.CLEAR, true, true),
   ModelControls(Align.RIGHT, -20, Align.MIDDLE, 0, 0, 0, Color.CLEAR, false, true),

@@ -2,13 +2,18 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
@@ -19,6 +24,7 @@ import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.domains.statesofmatter.StatesOfMatterController;
 import com.mazalearn.scienceengine.domains.waves.WaveController;
+import com.mazalearn.scienceengine.guru.Guru;
 
 public class ChooseDomainScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 242;
@@ -72,8 +78,17 @@ public class ChooseDomainScreen extends AbstractScreen {
     for (final String domain: domains) {
       final boolean lock = !domain.equals(ElectroMagnetismController.DOMAIN);
       Texture levelThumbnail = LevelUtil.getLevelThumbnail(domain, 1);
-      Image domainThumb = 
-          lock ? new OverlayImage(levelThumbnail, overlayLock) : new Image(levelThumbnail);
+      TextButton domainThumb = DomainHomeScreen.createImageButton(levelThumbnail, getSkin());
+      if (lock) {
+        Image lockImage = new Image(overlayLock);
+        lockImage.setPosition(THUMBNAIL_WIDTH / 2 - lockImage.getWidth() / 2,
+            THUMBNAIL_HEIGHT / 2 - lockImage.getHeight() / 2);
+        domainThumb.addActor(lockImage);
+      } else {
+        int progressPercentage = findDomainProgressPercentage(domain);
+        DomainHomeScreen.createProgressPercentageBar(getSkin().get(LabelStyle.class),
+            domainThumb, progressPercentage, THUMBNAIL_WIDTH);
+      }
       domainThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
@@ -105,6 +120,31 @@ public class ChooseDomainScreen extends AbstractScreen {
       table.add(levelTable).pad(5);
     }
     return flickScrollPane;
+  }
+  
+  private int findDomainProgressPercentage(String domain) {
+    profile = ScienceEngine.getPreferencesManager().getProfile();
+    int numLevels = getDomainLevels(domain);
+    int percent = 0;
+    for (int level = 1; level <= numLevels; level++) {
+      percent += profile.getSuccessPercent(domain, level, Guru.ID);
+    }
+    return Math.round(percent * 100 / (100f * numLevels));
+  }
+
+  @SuppressWarnings("unchecked")
+  public int getDomainLevels(String domain) {
+    FileHandle file;
+    String fileName = "data/" + domain + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
+    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
+    file = Gdx.files.internal(fileName);
+    if (file == null) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not open file: " + fileName); //$NON-NLS-1$
+    }
+    String fileContents = file.readString();
+    OrderedMap<String, ?> rootElem = 
+        (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
+    return Math.round((Float) rootElem.get("Levels")); //$NON-NLS-1$
   }
   
   @Override

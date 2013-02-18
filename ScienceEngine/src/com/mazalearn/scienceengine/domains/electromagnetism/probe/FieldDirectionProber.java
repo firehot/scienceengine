@@ -59,14 +59,16 @@ public class FieldDirectionProber extends AbstractFieldProber {
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         final boolean success = Math.abs(userField.getRotation() - bFields[0].angle()) < TOLERANCE * 100;
         fieldMeterActor.setVisible(true);
-        netSuccesses += success ? 1 : -1;
         userField.addAction(Actions.sequence(Actions.delay(2f),
             new Action() {
               @Override
               public boolean act(float delta) {
-                finish(success);
                 fieldMeterActor.setVisible(false);
                 userField.setVisible(false);
+                if (success) {
+                  image.setVisible(false);
+                }
+                prepareToFinish(success);
                 return true;
               }
             }));

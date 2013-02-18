@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -174,60 +175,18 @@ public class DomainHomeScreen extends AbstractScreen {
       } else {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
-      TextureRegionDrawable image = 
-          new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-      TextButton activityThumb = new TextButton("", getSkin()) {
-        @Override
-        public void drawBackground(SpriteBatch batch, float parentAlpha) {
-          getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
-        }
-      };
-      activityThumb.setBackground(image);
+      TextButton activityThumb = createImageButton(new Texture(pixmap), getSkin());
       
-      Label nameLabel = new Label(activityName, blueBackground);
-      nameLabel.setWrap(true);
-      nameLabel.setAlignment(Align.center, Align.center);
-      nameLabel.setWidth(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 4));
-      nameLabel.setHeight(ScreenComponent.getScaledY(50));
-      nameLabel.setPosition(ScreenComponent.getScaledX(2), ScreenComponent.getScaledY(40));
-      activityThumb.addActor(nameLabel);
-      
-      Label levelLabel = new Label(String.valueOf(level), blueBackground);
-      levelLabel.setAlignment(Align.center, Align.center);
-      levelLabel.setWidth(ScreenComponent.getScaledX(30));
-      levelLabel.setHeight(ScreenComponent.getScaledY(30));
-      levelLabel.setPosition(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 34), 
-          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
-      activityThumb.addActor(levelLabel);
-      
-      TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.GRAY);
-      Image fullBar = new Image(bar);
-      fullBar.setPosition(ScreenComponent.getScaledX(10),
-          ScreenComponent.getScaledY(20));
-      fullBar.setSize(ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20), 10);
-      activityThumb.addActor(fullBar);
+      // Name Label
+      createLabel(activityName, activityThumb, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground);
+      // Level Label
+      createLabel(String.valueOf(level), activityThumb, THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground);
+      // Progress bar
       int percent = profile.getSuccessPercent(level, Guru.ID);
-      Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.RED));
-      successBar.setPosition(ScreenComponent.getScaledX(10),
-          ScreenComponent.getScaledY(20));
-      successBar.setSize(percent * ScreenComponent.getScaledX(THUMBNAIL_WIDTH - 20) / 100f, 10);
-      activityThumb.addActor(successBar);
-      Label percentLabel = new Label(String.valueOf(percent) + "%", blueBackground);
-      percentLabel.setAlignment(Align.center, Align.center);
-      percentLabel.setWidth(ScreenComponent.getScaledX(40));
-      percentLabel.setHeight(ScreenComponent.getScaledY(20));
-      percentLabel.setPosition(ScreenComponent.getScaledX(5), 
-          ScreenComponent.getScaledY(12));
-      activityThumb.addActor(percentLabel);
-      
+      createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
+      // Timespent label
       String timeSpent = Format.formatTime(profile.getTimeSpent(level, Guru.ID));
-      Label timeLabel = new Label(timeSpent, blueBackground);
-      timeLabel.setAlignment(Align.center, Align.center);
-      timeLabel.setWidth(ScreenComponent.getScaledX(50));
-      timeLabel.setHeight(ScreenComponent.getScaledY(30));
-      timeLabel.setPosition(ScreenComponent.getScaledX(2), 
-          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT - 34));
-      activityThumb.addActor(timeLabel);
+      createLabel(timeSpent, activityThumb, 2, THUMBNAIL_HEIGHT - 34, 50, 30, blueBackground);
 
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
@@ -248,6 +207,56 @@ public class DomainHomeScreen extends AbstractScreen {
     activitiesPane.setScrollingDisabled(false, true);
     setLastActiveLevel(activitiesPane);
     return activitiesPane;
+  }
+
+  // Used from ChooseDomain screen
+  // TODO: move to common place
+  public static TextButton createImageButton(Texture texture, Skin skin) {
+    TextureRegionDrawable image = 
+        new TextureRegionDrawable(new TextureRegion(texture));
+    TextButton activityThumb = new TextButton("", skin) {
+      @Override
+      public void drawBackground(SpriteBatch batch, float parentAlpha) {
+        getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
+      }
+    };
+    activityThumb.setBackground(image);
+    return activityThumb;
+  }
+
+  private static void createLabel(String text, TextButton thumbnail,
+      int x, int y, int width, int height, LabelStyle labelStyle) {
+    Label nameLabel = new Label(text, labelStyle);
+    nameLabel.setWrap(true);
+    nameLabel.setAlignment(Align.center, Align.center);
+    nameLabel.setWidth(ScreenComponent.getScaledX(width));
+    nameLabel.setHeight(ScreenComponent.getScaledY(height));
+    nameLabel.setPosition(ScreenComponent.getScaledX(x), ScreenComponent.getScaledY(y));
+    thumbnail.addActor(nameLabel);
+  }
+
+  // Also used from ChooseDomainScreen.
+  // TODO: Move to common area.
+  public static void createProgressPercentageBar(LabelStyle labelStyle,
+      TextButton thumbnail, int percent, int width) {
+    TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.GRAY);
+    Image fullBar = new Image(bar);
+    fullBar.setPosition(ScreenComponent.getScaledX(10),
+        ScreenComponent.getScaledY(20));
+    fullBar.setSize(ScreenComponent.getScaledX(width - 20), 10);
+    thumbnail.addActor(fullBar);
+    Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.RED));
+    successBar.setPosition(ScreenComponent.getScaledX(10),
+        ScreenComponent.getScaledY(20));
+    successBar.setSize(percent * ScreenComponent.getScaledX(width - 20) / 100f, 10);
+    thumbnail.addActor(successBar);
+    Label percentLabel = new Label(String.valueOf(percent) + "%", labelStyle);
+    percentLabel.setAlignment(Align.center, Align.center);
+    percentLabel.setWidth(ScreenComponent.getScaledX(40));
+    percentLabel.setHeight(ScreenComponent.getScaledY(20));
+    percentLabel.setPosition(ScreenComponent.getScaledX(5), 
+        ScreenComponent.getScaledY(12));
+    thumbnail.addActor(percentLabel);
   }
 
   private void setLastActiveLevel(ScrollPane activitiesPane) {

@@ -27,6 +27,7 @@ public class ComponentLoader {
   private void loadEnvironment(EnvironmentBody environment,
       Array<?> environmentParams) {
     Gdx.app.log(ScienceEngine.LOG, "Loading environment");
+    if (environmentParams == null) return;
     for (int i = 0; i < environmentParams.size; i++) {
       @SuppressWarnings("unchecked")
       OrderedMap<String, ?> parameter = (OrderedMap<String, ?>) environmentParams

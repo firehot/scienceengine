@@ -14,7 +14,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   private final Vector2 modelPos = new Vector2();
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
-  protected int netSuccesses;
+  private int netSuccesses;
  
   protected AbstractFieldProber(IScience2DController science2DController, 
       ITutor parent, String goal, String id,
@@ -42,7 +42,8 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   }
   
   @Override
-  public void finish(boolean success) {
+  public void prepareToFinish(boolean success) {
+    netSuccesses += success ? 1 : -1;
     if (success) {
       guru.showCorrect(getSuccessScore());
     } else {
@@ -52,9 +53,15 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     if (!success) return; // NO Failure exit
 
     if (netSuccesses >= 2) {
-      prepareToFinish(success);
+      super.prepareToFinish(success);
     } else {
       teach();
     }
+  }
+  
+  @Override
+  public void prepareToTeach(ITutor tutor) {
+    super.prepareToTeach(tutor);
+    netSuccesses = 0;
   }
 }

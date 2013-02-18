@@ -33,8 +33,11 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
                 @Override
                 public boolean act(float delta) {
                   fieldMeterActor.setVisible(false);
-                  finish(success);
-                  netSuccesses += success ? 1 : -1;
+                  if (success) {
+                    imageCorrect.setVisible(false);
+                    imageWrong.setVisible(false);
+                  }
+                  prepareToFinish(success);
                   return true;
                 }
               })

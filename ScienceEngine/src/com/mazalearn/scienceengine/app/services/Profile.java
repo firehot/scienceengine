@@ -185,6 +185,16 @@ public class Profile implements Serializable {
     }
   }
 
+
+  public int getSuccessPercent(String domain, int level, String id) {
+    String status = properties.get(makeSubgoalKey(domain, level, id, STATUS));
+    try {
+      return status != null ? Integer.parseInt(status) : 0;
+    } catch(NumberFormatException e) {
+      return 0;
+    }
+  }
+
   public void setSuccessPercent(String subgoalId, int percent) {
     properties.put(makeSubgoalKey(subgoalId, STATUS), String.valueOf(percent));
     save();
