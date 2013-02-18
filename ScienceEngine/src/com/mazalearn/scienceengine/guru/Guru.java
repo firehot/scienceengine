@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -121,24 +123,26 @@ public class Guru extends Group implements ITutor {
   
   public void initialize(List<ITutor> childTutors) {
     rootTutor.initialize(GroupType.Guide.name(), childTutors, null);
-    Map<String, ITutor> subgoals = new HashMap<String, ITutor>();
-    collectSubgoals(rootTutor, subgoals);
+    List<ITutor> subgoals = new ArrayList<ITutor>();
+    Set<String> subgoalIds = new HashSet<String>();
+    collectSubgoals(rootTutor, subgoals, subgoalIds);
     
-    SubgoalNavigator subgoalNavigator = new SubgoalNavigator(subgoals.values(), this, skin);
+    SubgoalNavigator subgoalNavigator = new SubgoalNavigator(subgoals, this, skin);
     this.getStage().addActor(subgoalNavigator);    
     dashboard.setSubgoalNavigator(subgoalNavigator);
   }
   
-  private void collectSubgoals(ITutor tutor, Map<String, ITutor> subgoals) {
+  private void collectSubgoals(ITutor tutor, List<ITutor> subgoals, Set<String> subgoalIds) {
     if (tutor.getGroupType() == GroupType.None) { 
-      if (subgoals.get(tutor.getId()) != null) {
+      if (subgoalIds.contains(tutor.getId())) {
         Gdx.app.error(ScienceEngine.LOG, "Duplicate Tutor ID: " + tutor.getId());
       }
-      subgoals.put(tutor.getId(), tutor);
+      subgoals.add(tutor);
+      subgoalIds.add(tutor.getId());
       return;
     }
     for (ITutor child: tutor.getChildTutors()) {
-      collectSubgoals(child, subgoals);
+      collectSubgoals(child, subgoals, subgoalIds);
     }
   }
   

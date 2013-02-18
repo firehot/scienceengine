@@ -108,7 +108,7 @@ public class LoginDialog extends Dialog {
       Gdx.input.getTextInput(new TextInputListener() {
         @Override
         public void input(String email) {
-          ScienceEngine.getPreferencesManager().loadProfile(email);
+          profile = ScienceEngine.getPreferencesManager().loadProfile(email);
           profile.setUserName(email.substring(0, email.indexOf("@")));
           doneCallback.done(true);
         }
