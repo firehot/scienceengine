@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -34,21 +35,48 @@ public class TutorNavigator extends Group {
   private Label[] tutorTimeLabels;
   private final Collection<ITutor> tutors;
   private Image userImage;
+  TextButton goal;
+  private ITutor activeTutor;
+  private Group tutorsPanel;
 
   public TutorNavigator(Collection<ITutor> tutors, final Guru guru, Skin skin) {
     super();
     this.tutors = tutors;
-    setVisible(false);
     setPosition(0, 0);
-    setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     tutorTimeLabels = new Label[tutors.size()];
-    addActor(createTutorsPane(tutors, guru, skin));
+    tutorsPanel = new Group() {
+      @Override
+      public void draw(SpriteBatch batch, float parentAlpha) {
+        batch.draw(gray, getX(), getY());
+        super.draw(batch, parentAlpha);
+      }      
+    };
+    tutorsPanel.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+    tutorsPanel.addActor(createTutorsPane(tutors, guru, skin));
+    tutorsPanel.setVisible(false);
+    addActor(tutorsPanel);
     userImage = new Image(new Texture("images/user.png"));
+    ClickListener clickListener = new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        if (tutorsPanel.isVisible()) {
+          tutorsPanel.setVisible(false);
+          return;
+        }
+        // Bring tutor navigator to top and make tutorsPanel visible
+        tutorsPanel.setVisible(true);
+        show(activeTutor);
+        getStage().addActor(TutorNavigator.this);
+      }
+    };
+    goal = new TextButton("This is a very long long long test goal" + 
+        "This is a very long long long test goal", skin);
+    goal.addListener(clickListener);
+    addActor(goal);
   }
 
   /**
    * Refresh tutor activity times and show.
-   * @param activeTutor - subgoal which is active.
+   * @param activeTutor - tutor which is active.
    */
   public void show(ITutor activeTutor) {
     // Update times spent per subgoal
@@ -58,8 +86,8 @@ public class TutorNavigator extends Group {
       timeLabel.setText(Format.formatTime(tutor.getTimeSpent()));
       if (tutor.getSuccessPercent() == 100) {
         Image status = new Image(new Texture("images/check.png"));
-        TextButton subgoalButton = (TextButton) findActor(tutor.getId());
-        subgoalButton.addActor(status);
+        TextButton tutorButton = (TextButton) findActor(tutor.getId());
+        tutorButton.addActor(status);
         status.setPosition(ScreenComponent.getScaledX(70),
             ScreenComponent.getScaledY(TUTOR_HEIGHT - 64));
         status.setSize(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60));
@@ -72,6 +100,29 @@ public class TutorNavigator extends Group {
     }
   }
   
+  public void setActiveTutor(ITutor activeTutor) {
+    this.activeTutor = activeTutor;
+    goal.setText(activeTutor.getGoal());
+    if (activeTutor.getParentTutor() != null && 
+        activeTutor.getParentTutor().getGroupType() == GroupType.Challenge) {
+      goal.setColor(Color.MAGENTA);
+    } else {
+      goal.setColor(Color.YELLOW);
+    }
+    goal.addAction(Actions.sequence(
+        Actions.alpha(0),
+        Actions.alpha(1, 2)));
+    goal.setPosition(ScreenComponent.Goal.getX(goal.getWidth()), 
+        ScreenComponent.Goal.getY(goal.getHeight()));
+    goal.setVisible(true);
+  }
+
+  public void clearActiveTutor() {
+    activeTutor = null;
+    goal.setVisible(false);
+    goal.setText("");
+  }
+
   private Actor createTutorsPane(Collection<ITutor> tutors, final Guru guru, Skin skin) {
     Table tutorsTable = new Table(skin);
     tutorsTable.setName("Tutors");
@@ -82,7 +133,7 @@ public class TutorNavigator extends Group {
       tutorButton.addListener(new ClickListener() {
         @Override
         public void clicked (InputEvent event, float x, float y) {
-          TutorNavigator.this.setVisible(false);
+          tutorsPanel.setVisible(false);
           if (activeTutorButton != null) { // remove user image
             activeTutorButton.removeActor(userImage);
           }
@@ -104,7 +155,7 @@ public class TutorNavigator extends Group {
       DomainHomeScreen.createLabel(String.valueOf(count), tutorButton, TUTOR_WIDTH - 20, 
           TUTOR_HEIGHT - 30, 20, 30, labelBackground);
       if (tutor.getParentTutor().getGroupType() == GroupType.Challenge) {
-        tutorButton.setColor(Color.RED);
+        tutorButton.setColor(Color.MAGENTA);
       } else {
         tutorButton.setColor(Color.YELLOW);
       }
@@ -123,10 +174,5 @@ public class TutorNavigator extends Group {
     tutorsPane.setSize(ScreenComponent.VIEWPORT_WIDTH - 2 * ScreenComponent.getScaledX(50),
         ScreenComponent.getScaledY(TUTOR_HEIGHT + 15));
     return tutorsPane;
-  }
-
-  public void draw(SpriteBatch batch, float parentAlpha) {
-    batch.draw(gray, getX(), getY());
-    super.draw(batch, parentAlpha);
   }
 }

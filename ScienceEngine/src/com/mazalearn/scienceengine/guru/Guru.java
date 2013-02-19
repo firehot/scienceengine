@@ -61,6 +61,7 @@ public class Guru extends Group implements ITutor {
   private ITutor activeTutor;
   private Profile profile;
   private TutorGroup rootTutor;
+  private TutorNavigator tutorNavigator;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
@@ -120,26 +121,25 @@ public class Guru extends Group implements ITutor {
   
   public void initialize(List<ITutor> childTutors) {
     rootTutor.initialize(GroupType.Guide.name(), childTutors, null);
-    List<ITutor> subgoals = new ArrayList<ITutor>();
-    Set<String> subgoalIds = new HashSet<String>();
-    collectSubgoals(rootTutor, subgoals, subgoalIds);
+    List<ITutor> tutors = new ArrayList<ITutor>();
+    Set<String> tutorIds = new HashSet<String>();
+    collectLeafTutors(rootTutor, tutors, tutorIds);
     
-    TutorNavigator tutorNavigator = new TutorNavigator(subgoals, this, skin);
+    tutorNavigator = new TutorNavigator(tutors, this, skin);
     this.getStage().addActor(tutorNavigator);    
-    dashboard.setSubgoalNavigator(tutorNavigator);
   }
   
-  private void collectSubgoals(ITutor tutor, List<ITutor> subgoals, Set<String> subgoalIds) {
+  private void collectLeafTutors(ITutor tutor, List<ITutor> tutors, Set<String> tutorIds) {
     if (tutor.getGroupType() == GroupType.None) { 
-      if (subgoalIds.contains(tutor.getId())) {
+      if (tutorIds.contains(tutor.getId())) {
         Gdx.app.error(ScienceEngine.LOG, "Duplicate Tutor ID: " + tutor.getId());
       }
-      subgoals.add(tutor);
-      subgoalIds.add(tutor.getId());
+      tutors.add(tutor);
+      tutorIds.add(tutor.getId());
       return;
     }
     for (ITutor child: tutor.getChildTutors()) {
-      collectSubgoals(child, subgoals, subgoalIds);
+      collectLeafTutors(child, tutors, tutorIds);
     }
   }
   
@@ -213,7 +213,7 @@ public class Guru extends Group implements ITutor {
   
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
-    dashboard.setActiveTutor(activeTutor);
+    tutorNavigator.setActiveTutor(activeTutor);
     hinter.clearHint();
   }
   
@@ -247,7 +247,7 @@ public class Guru extends Group implements ITutor {
     }
     soundManager.play(ScienceEngineSound.CELEBRATE);
     science2DController.getView().done(true);
-    dashboard.clearActiveTutor();
+    tutorNavigator.clearActiveTutor();
     this.setVisible(false);
   }
 
@@ -365,20 +365,20 @@ public class Guru extends Group implements ITutor {
     return parser;
   }
 
-  public void goTo(ITutor subgoal) {
+  public void goTo(ITutor tutor) {
     activeTutor.prepareToTeach(null); // Disable active Tutor
     ScienceEngine.setProbeMode(false);
     setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     // ??? why above series ??? 
-    prepareTutors(subgoal);
-    subgoal.prepareToTeach(null);
+    prepareTutors(tutor);
+    tutor.prepareToTeach(null);
     teach();
   }
 
-  private void prepareTutors(ITutor subgoal) {
-    if (subgoal.getParentTutor() != null) {
-      prepareTutors(subgoal.getParentTutor());
-      subgoal.getParentTutor().prepareToTeach(subgoal);
+  private void prepareTutors(ITutor tutor) {
+    if (tutor.getParentTutor() != null) {
+      prepareTutors(tutor.getParentTutor());
+      tutor.getParentTutor().prepareToTeach(tutor);
     }
   }
   

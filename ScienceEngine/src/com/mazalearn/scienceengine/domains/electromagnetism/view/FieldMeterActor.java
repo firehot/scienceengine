@@ -48,7 +48,8 @@ public class FieldMeterActor extends Science2DActor {
     // Operate directly on input coords since x,y received here are wrt FieldMeter
     // and hence irrelevant
     getStage().screenToStageCoordinates(pos.set(Gdx.input.getX(), Gdx.input.getY()));
-    return pos.y >= 20 && pos.y < ScreenComponent.VIEWPORT_HEIGHT - 30 ? this : null;
+    return pos.y >= ScreenComponent.getScaledY(20) && 
+        pos.y < ScreenComponent.VIEWPORT_HEIGHT - ScreenComponent.getScaledY(30) ? this : null;
   }
 
   @Override
