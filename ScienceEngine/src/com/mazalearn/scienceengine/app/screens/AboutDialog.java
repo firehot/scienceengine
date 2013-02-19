@@ -18,6 +18,9 @@ public class AboutDialog extends Dialog {
     getContentTable().add(image).width(100).height(80).center();
     getContentTable().row();
     
+    Label name = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), skin);
+    name.setWidth(600);
+
     Label description = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Maza"), skin);
     description.setWidth(600);
     description.setWrap(true);
@@ -27,6 +30,8 @@ public class AboutDialog extends Dialog {
     copyrights.setWidth(600);
     copyrights.setWrap(true);
 
+    getContentTable().add(name).width(600).pad(10);
+    getContentTable().row();
     getContentTable().add(description).width(600).pad(10);
     getContentTable().row();
     getContentTable().add(copyrights).width(600).pad(10);

@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.utils.Format;
@@ -90,14 +91,18 @@ public class TutorNavigator extends Group {
       });
       tutorButton.setName(tutor.getId());
       
+      LabelStyle labelBackground = new LabelStyle(skin.get(LabelStyle.class));
+      labelBackground.background = 
+          new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, new Color(61f/255, 83f/255, 58f/255, 1)));
+
       // Time spent
       tutorTimeLabels[count++] = 
-          DomainHomeScreen.createLabel("", tutorButton, 5, TUTOR_HEIGHT - 30,
-              50, 30, skin.get(LabelStyle.class));
+          DomainHomeScreen.createLabel("", tutorButton, 0, TUTOR_HEIGHT - 30,
+              50, 30, labelBackground);
       
       // Count
-      DomainHomeScreen.createLabel(String.valueOf(count), tutorButton, TUTOR_WIDTH - 15, 
-          TUTOR_HEIGHT - 30, 10, 30, skin.get(LabelStyle.class));
+      DomainHomeScreen.createLabel(String.valueOf(count), tutorButton, TUTOR_WIDTH - 20, 
+          TUTOR_HEIGHT - 30, 20, 30, labelBackground);
       if (tutor.getParentTutor().getGroupType() == GroupType.Challenge) {
         tutorButton.setColor(Color.RED);
       } else {
