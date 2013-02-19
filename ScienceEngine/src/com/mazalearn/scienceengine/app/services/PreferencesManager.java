@@ -63,17 +63,18 @@ public class PreferencesManager {
 
   private Profile retrieveProfile() {
     String userEmail = getPrefs().getString(PREF_USER_EMAIL);
-    if (userEmail == null || userEmail.isEmpty()) {
+    if (userEmail == null || userEmail.length() == 0) {
       userEmail = "DemoUser@mazalearn.com";
     }
     String profileAsText = getPrefs().getString(userEmail);
-    if (profileAsText != null && !profileAsText.isEmpty()) {
+    if (profileAsText != null && profileAsText.length() > 0) {
       // decode the contents - base64 encoded
       profileAsText = Base64Coder.decodeString(profileAsText);
       profile = new Json().fromJson(Profile.class, profileAsText);
     } else {
       profile = new Profile();
       profile.setUserEmail(userEmail);
+      profile.setUserName(userEmail.substring(0, userEmail.indexOf("@")));
       saveProfile();
     }
     return profile;

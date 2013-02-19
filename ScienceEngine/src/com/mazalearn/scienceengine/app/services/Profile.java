@@ -124,7 +124,6 @@ public class Profile implements Serializable {
 
   public void setUserName(String name) {
     properties.put(USER_NAME, name);
-    save();
   }
 
   public String getUserName() {

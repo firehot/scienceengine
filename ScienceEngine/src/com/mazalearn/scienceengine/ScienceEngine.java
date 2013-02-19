@@ -186,7 +186,7 @@ public class ScienceEngine extends Game {
    * @return screen corresponding to uri
    */
   private AbstractScreen createScreen(String uri) {
-    if (uri != null && !getUserEmail().isEmpty()) {
+    if (uri != null && getUserEmail().length() > 0) {
       String path, query;
       int qmark = uri.indexOf("?");
       if (qmark == -1) {
