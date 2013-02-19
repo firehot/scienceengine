@@ -17,7 +17,7 @@ class Dashboard extends Table {
   TextButton goal;
   Label scoreLabel;
   int score;
-  private SubgoalNavigator subgoalNavigator;
+  private TutorNavigator tutorNavigator;
   private ClickListener clickListener;
   private ITutor activeTutor;
 
@@ -37,14 +37,14 @@ class Dashboard extends Table {
     
     clickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
-        if (subgoalNavigator.isVisible()) {
-          subgoalNavigator.setVisible(false);
+        if (tutorNavigator.isVisible()) {
+          tutorNavigator.setVisible(false);
           return;
         }
         // Bring subgoal navigator to top, and dashboard above it.
-        subgoalNavigator.setVisible(true);
-        subgoalNavigator.show(activeTutor);
-        getStage().addActor(subgoalNavigator);
+        tutorNavigator.setVisible(true);
+        tutorNavigator.show(activeTutor);
+        getStage().addActor(tutorNavigator);
         getStage().addActor(Dashboard.this);
       }
     };
@@ -108,8 +108,8 @@ class Dashboard extends Table {
   public void resetScore() {
     score = 0;
   }
-  public void setSubgoalNavigator(SubgoalNavigator subgoalNavigator) {
-    this.subgoalNavigator = subgoalNavigator;
+  public void setSubgoalNavigator(TutorNavigator tutorNavigator) {
+    this.tutorNavigator = tutorNavigator;
   }  
 
 }

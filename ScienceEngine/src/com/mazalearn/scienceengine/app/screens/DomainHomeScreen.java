@@ -224,8 +224,10 @@ public class DomainHomeScreen extends AbstractScreen {
     return activityThumb;
   }
 
-  private static void createLabel(String text, TextButton thumbnail,
-      int x, int y, int width, int height, LabelStyle labelStyle) {
+  // Used from Subgoal Navigator
+  // TODO: Move to common place
+  public static Label createLabel(String text, TextButton thumbnail,
+      float x, float y, float width, float height, LabelStyle labelStyle) {
     Label nameLabel = new Label(text, labelStyle);
     nameLabel.setWrap(true);
     nameLabel.setAlignment(Align.center, Align.center);
@@ -233,6 +235,7 @@ public class DomainHomeScreen extends AbstractScreen {
     nameLabel.setHeight(ScreenComponent.getScaledY(height));
     nameLabel.setPosition(ScreenComponent.getScaledX(x), ScreenComponent.getScaledY(y));
     thumbnail.addActor(nameLabel);
+    return nameLabel;
   }
 
   // Also used from ChooseDomainScreen.

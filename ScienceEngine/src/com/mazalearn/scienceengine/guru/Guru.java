@@ -124,9 +124,9 @@ public class Guru extends Group implements ITutor {
     Set<String> subgoalIds = new HashSet<String>();
     collectSubgoals(rootTutor, subgoals, subgoalIds);
     
-    SubgoalNavigator subgoalNavigator = new SubgoalNavigator(subgoals, this, skin);
-    this.getStage().addActor(subgoalNavigator);    
-    dashboard.setSubgoalNavigator(subgoalNavigator);
+    TutorNavigator tutorNavigator = new TutorNavigator(subgoals, this, skin);
+    this.getStage().addActor(tutorNavigator);    
+    dashboard.setSubgoalNavigator(tutorNavigator);
   }
   
   private void collectSubgoals(ITutor tutor, List<ITutor> subgoals, Set<String> subgoalIds) {
