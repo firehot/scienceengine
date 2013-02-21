@@ -12,9 +12,12 @@
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
 <%@ page import="com.google.appengine.api.datastore.Text" %>
 <%@ page import="com.google.gson.Gson" %>
+<%@ page import="com.google.gson.reflect.TypeToken" %>
+
+<%@ page import="java.lang.reflect.Type" %>
+<%@ page import="java.util.Map" %>
 
 <%@ page import="com.mazalearn.gwt.server.Domain" %>
-<%@ page import="com.mazalearn.gwt.server.DomainProgress" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -62,18 +65,23 @@
         <tr><td>Email</td><td>${fn:escapeXml(userEmail)}</td></tr>
       </table>
    
-<%  /* Get domains of this user's embedded profile entity */
-     for (Domain domain: Domain.values()) {
-       String domainProgressStr = ((Text) profile.getProperty(domain.name())).getValue();
-       DomainProgress domainProgress = new Gson().fromJson(domainProgressStr, DomainProgress.class);
-%>
-     <p>
-     what?
-     <%= domain.name() %>
-     <%= domainProgressStr %>
-     <!-- domainProgress.tutors.size() -->
 <%
-       //System.out.println(domainProgress.tutors.size());
+     /* Get domains of this user's embedded profile entity */
+   for (Domain domain: Domain.values()) {
+      String domainProgressStr = ((Text) profile.getProperty(domain.name())).getValue();
+      Type statsType = new TypeToken<Map<String, Float>>() {}.getType();
+      Map<String, Float> stats = new Gson().fromJson(domainProgressStr, statsType);
+   %>
+    <table>
+<%
+     for (String pkey: stats.keySet()) {
+%>
+       <tr><td><%= pkey %></td><td><%= stats.get(pkey) %></td></tr>
+<%       
+     }
+%>
+     </table>
+<%
      }
 %>      
  

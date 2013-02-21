@@ -397,7 +397,7 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public int getSuccessPercent() {
+  public float getSuccessPercent() {
     return rootTutor.getSuccessPercent();
   }
 

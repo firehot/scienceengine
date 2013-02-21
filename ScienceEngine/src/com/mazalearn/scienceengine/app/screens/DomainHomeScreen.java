@@ -183,7 +183,7 @@ public class DomainHomeScreen extends AbstractScreen {
       // Level Label
       createLabel(String.valueOf(level), activityThumb, THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground);
       // Progress bar
-      int percent = profile.getSuccessPercent(level, Guru.ID);
+      float percent = profile.getSuccessPercent(level, Guru.ID);
       createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
       // Timespent label
       String timeSpent = Format.formatTime(profile.getTimeSpent(level, Guru.ID));
@@ -242,7 +242,7 @@ public class DomainHomeScreen extends AbstractScreen {
   // Also used from ChooseDomainScreen.
   // TODO: Move to common area.
   public static void createProgressPercentageBar(LabelStyle labelStyle,
-      TextButton thumbnail, int percent, int width) {
+      TextButton thumbnail, float percent, int width) {
     TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.GRAY);
     Image fullBar = new Image(bar);
     fullBar.setPosition(ScreenComponent.getScaledX(10),
@@ -254,7 +254,7 @@ public class DomainHomeScreen extends AbstractScreen {
         ScreenComponent.getScaledY(20));
     successBar.setSize(percent * ScreenComponent.getScaledX(width - 20) / 100f, 10);
     thumbnail.addActor(successBar);
-    Label percentLabel = new Label(String.valueOf(percent) + "%", labelStyle);
+    Label percentLabel = new Label(String.valueOf(Math.round(percent)) + "%", labelStyle);
     percentLabel.setAlignment(Align.center, Align.center);
     percentLabel.setWidth(ScreenComponent.getScaledX(40));
     percentLabel.setHeight(ScreenComponent.getScaledY(20));

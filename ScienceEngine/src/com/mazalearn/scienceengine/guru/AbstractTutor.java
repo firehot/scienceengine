@@ -34,7 +34,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private String id;
   private Profile profile;
   private float timeSpent;
-  protected int successPercent;
+  protected float successPercent;
   protected boolean isUserNext = false;
   protected Button nextButton;
   private boolean success;
@@ -184,7 +184,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public int getSuccessPercent() {
+  public float getSuccessPercent() {
     return successPercent;
   }
   

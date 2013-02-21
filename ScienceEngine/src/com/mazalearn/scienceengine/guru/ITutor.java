@@ -88,7 +88,7 @@ public interface ITutor {
    * For a non-group tutor, this is 0 or 100.
    * For a group tutor, this is the percentage of children which are successful.
    */
-  int getSuccessPercent();
+  float getSuccessPercent();
 
   void prepareToFinish(boolean success);
 }

@@ -138,11 +138,11 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public int getSuccessPercent() {
+  public float getSuccessPercent() {
     int numSuccesses = 0;
     for (ITutor child: childTutors) {
       if (child.getSuccessPercent() == 100) numSuccesses++;
     }
-    return Math.round(numSuccesses * 100 / (float) childTutors.size());
+    return numSuccesses * 100 / (float) childTutors.size();
   }
 }

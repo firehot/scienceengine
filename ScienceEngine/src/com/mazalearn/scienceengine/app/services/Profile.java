@@ -26,11 +26,12 @@ public class Profile implements Serializable {
   private static final String DOMAIN = "domain";
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
-  private HashMap<Domain, HashMap<String, String>> domainProperties;
-  private HashMap<String, String> properties, currentDomain;
+  private HashMap<Domain, HashMap<String, Float>> domainStats;
+  private HashMap<String, String> properties;
+  private HashMap<String, Float> currentDomainStats;
 
   public Profile() {
-    domainProperties = new HashMap<Domain, HashMap<String, String>>();
+    domainStats = new HashMap<Domain, HashMap<String, Float>>();
     properties = new HashMap<String, String>();
   }
 
@@ -72,32 +73,35 @@ public class Profile implements Serializable {
     if (properties == null) {
       properties = new HashMap<String,String>();
     }
-
-    domainProperties = new HashMap<Domain, HashMap<String,String>>();
+    
+    Object domainObj = json.readValue("domains", OrderedMap.class, OrderedMap.class, jsonData);
+    domainStats = new HashMap<Domain, HashMap<String, Float>>();
     for (Domain domain: Domain.values()) {
-      HashMap<String,String> props = json.readValue(domain.name(), HashMap.class, String.class, jsonData);
+      HashMap<String, Float> props = json.readValue(domain.name(), HashMap.class, Float.class, domainObj);
       if (props == null) {
-        props = new HashMap<String, String>();
+        props = new HashMap<String, Float>();
       }
-      domainProperties.put(domain, props);
+      domainStats.put(domain, props);
     }
   }
 
   @Override
   public void write(Json json) {
     json.writeValue("properties", properties);
+    json.writeObjectStart("domains");
     for (Domain domain: Domain.values()) {
-      HashMap<String,String> props = domainProperties.get(domain);
+      HashMap<String,?> props = domainStats.get(domain);
       json.writeValue(domain.name(), props);
     }
+    json.writeObjectEnd();
   }
 
   public void setCurrentDomain(Domain domain) {
     properties.put(DOMAIN, domain != null ? domain.name() : null);
-    currentDomain = domainProperties.get(domain);
-    if (currentDomain == null) {
-      currentDomain = new HashMap<String,String>();
-      domainProperties.put(domain, currentDomain);
+    currentDomainStats = domainStats.get(domain);
+    if (currentDomainStats == null) {
+      currentDomainStats = new HashMap<String, Float>();
+      domainStats.put(domain, currentDomainStats);
     }
     save();
   }
@@ -126,8 +130,8 @@ public class Profile implements Serializable {
   }
   
   public float getTimeSpent(int activity, String tutorId) {
-    String timeSpentStr = currentDomain.get(makeTutorKey(activity, tutorId, TIME_SPENT));
-    return timeSpentStr == null ? 0 : Float.valueOf(timeSpentStr);
+    Float timeSpent = (Float) currentDomainStats.get(makeTutorKey(activity, tutorId, TIME_SPENT));
+    return timeSpent == null ? 0 : timeSpent;
   }
 
   private String makeTutorKey(int activity, String tutorId, String key) {
@@ -139,8 +143,8 @@ public class Profile implements Serializable {
   }
 
   public void setTimeSpent(String tutorId, float timeSpent) {
-    currentDomain.put(makeTutorKey(tutorId, TIME_SPENT), 
-        String.valueOf(timeSpent));
+    currentDomainStats.put(makeTutorKey(tutorId, TIME_SPENT), (Float) timeSpent);
+        //String.valueOf(timeSpent));
   }
   
   public void save() {
@@ -152,34 +156,37 @@ public class Profile implements Serializable {
    * @param tutorId
    * @return
    */
-  public int getSuccessPercent(String tutorId) {
+  public float getSuccessPercent(String tutorId) {
     return getSuccessPercent(getCurrentActivity(), tutorId);
   }
   
-  public int getSuccessPercent(int activity, String tutorId) {
-    String status = currentDomain.get(makeTutorKey(activity, tutorId, SUCCESS_PERCENT));
-    try {
+  public float getSuccessPercent(int activity, String tutorId) {
+    Float status = currentDomainStats.get(makeTutorKey(activity, tutorId, SUCCESS_PERCENT));
+    return status == null ? 0 : status;
+    /*try {
       return status != null ? Integer.parseInt(status) : 0;
     } catch(NumberFormatException e) {
       return 0;
-    }
+    }*/
   }
 
 
-  public int getSuccessPercent(Domain domain, int level, String id) {
-    HashMap<String, String> domainProps = domainProperties.get(domain);
+  public float getSuccessPercent(Domain domain, int level, String id) {
+    HashMap<String, Float> domainProps = domainStats.get(domain);
     if (domainProps == null) return 0;
     
-    String status = domainProps.get(makeTutorKey(level, id, SUCCESS_PERCENT));
+    Float status = domainProps.get(makeTutorKey(level, id, SUCCESS_PERCENT));
+    return status == null ? 0 : status;
+    /*
     try {
       return status != null ? Integer.parseInt(status) : 0;
     } catch(NumberFormatException e) {
       return 0;
-    }
+    } */
   }
 
-  public void setSuccessPercent(String tutorId, int percent) {
-    currentDomain.put(makeTutorKey(tutorId, SUCCESS_PERCENT), String.valueOf(percent));
+  public void setSuccessPercent(String tutorId, float percent) {
+    currentDomainStats.put(makeTutorKey(tutorId, SUCCESS_PERCENT), percent);
     save();
   }
 
