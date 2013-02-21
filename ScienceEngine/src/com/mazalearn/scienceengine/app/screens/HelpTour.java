@@ -20,7 +20,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 
 public class HelpTour extends Group {
   
-  public static class ExpandOnClick extends ClickListener {
+  public static class NextOnClick extends ClickListener {
     protected static final int SCALE = 25;
     private final TextButton contentButton;
     private String content;
@@ -32,7 +32,7 @@ public class HelpTour extends Group {
     private static final Vector2 CENTER_POS = 
         new Vector2(ScreenComponent.VIEWPORT_WIDTH / 2, ScreenComponent.VIEWPORT_HEIGHT / 2);
 
-    public ExpandOnClick(TextButton contentButton, String content, Image arrow, TextButton nextButton, Image closeImage) {
+    public NextOnClick(TextButton contentButton, String content, Image arrow, TextButton nextButton, Image closeImage) {
       this.contentButton = contentButton;
       this.content = content;
       this.arrow = arrow;
@@ -140,7 +140,7 @@ public class HelpTour extends Group {
 
     TextButton nextButton = new TextButton(ScienceEngine.getMsg().getString("Name.Next"), skin);
     nextButton.setPosition(5, 5);
-    nextButton.addListener(new ExpandOnClick(contentButton, contents, arrow, nextButton, closeImage));
+    nextButton.addListener(new NextOnClick(contentButton, contents, arrow, nextButton, closeImage));
     
     contentButton.addActor(closeImage);
     contentButton.addActor(nextButton);

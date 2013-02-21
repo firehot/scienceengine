@@ -109,7 +109,7 @@ public class ActivityViewControls extends ViewControls {
       public void dragStop (InputEvent event, float x, float y, int pointer) {
         getStage().getRoot().removeActor(snapshotter);
         ScienceEngine.getPlatformAdapter().takeSnapshot(getStage(), 
-            science2DController.getDomain(), science2DController.getLevel(),
+            science2DController.getDomain().name(), science2DController.getLevel(),
             (int)snapshotter.getX(), (int)snapshotter.getY(), 
             (int)snapshotter.getWidth(), (int)snapshotter.getHeight());
       }

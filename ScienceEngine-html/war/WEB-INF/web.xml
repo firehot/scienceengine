@@ -46,6 +46,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>ProfileServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.ProfileServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>UploadServlet</servlet-name>
     <servlet-class>com.mazalearn.gwt.server.UploadServlet</servlet-class>
   </servlet>
@@ -79,6 +84,10 @@
   <servlet-mapping>
     <servlet-name>UploadServlet</servlet-name>
     <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProfileServlet</servlet-name>
+    <url-pattern>/profile</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>UserImageServlet</servlet-name>

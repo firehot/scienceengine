@@ -60,6 +60,8 @@ public class SplashScreen extends AbstractScreen {
           final Dialog loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
             @Override
             public void done(boolean success) {
+              // TODO: sync when idle or at a better place.
+              ScienceEngine.getPreferencesManager().syncProfiles();
               scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
             }
           });

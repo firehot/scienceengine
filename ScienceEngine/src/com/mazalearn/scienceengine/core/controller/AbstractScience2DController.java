@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
@@ -39,11 +40,11 @@ public abstract class AbstractScience2DController implements
   protected IScience2DModel science2DModel;
   protected IScience2DView science2DView;
   protected Skin skin;
-  private String domain;
+  private Domain domain;
   private int level;
   private Guru guru;
 
-  protected AbstractScience2DController(String domain, int level, Skin skin) {
+  protected AbstractScience2DController(Domain domain, int level, Skin skin) {
     this.domain = domain;
     this.level = level;
     this.skin = skin;
@@ -59,7 +60,7 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
-  public String getDomain() {
+  public Domain getDomain() {
     return domain;
   }
   

@@ -93,7 +93,7 @@ public class SoundManager implements
   }
 
   /**
-   * Enables or disabled the sound.
+   * Enables or disables the sound.
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

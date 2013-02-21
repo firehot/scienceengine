@@ -1,9 +1,16 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Base64Coder;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
+import com.mazalearn.scienceengine.ScienceEngine;
 
 /**
  * Handles the scienceEngine preferences.
@@ -11,6 +18,8 @@ import com.badlogic.gdx.utils.Json;
  * Profile is per user - stored as a preference against email address of profile
  */
 public class PreferencesManager {
+  private static final String USER_EMAIL = "useremail";
+  private static final String SYNC_PROFILES = "syncprofiles";
   // constants
   private static final String PREF_VOLUME = "volume";
   private static final String PREF_MUSIC_ENABLED = "music.enabled";
@@ -87,12 +96,47 @@ public class PreferencesManager {
     return retrieveProfile();
   }
 
+  private String getSyncProfilesString() {
+    String s = getPrefs().getString(SYNC_PROFILES);
+    return s == null ? "" : s;
+  }
+  
+  private void setSyncProfilesString(String s) {
+    getPrefs().putString(SYNC_PROFILES, s);
+  }
+  
   public void saveProfile() {
     // convert the given profile to text
     String profileAsText = new Json().toJson(profile);
     profileAsText = Base64Coder.encodeString(profileAsText);
     String userEmail = getPrefs().getString(PREF_USER_EMAIL);
     getPrefs().putString(userEmail, profileAsText);
+    String syncProfilesString = getSyncProfilesString();
+    if (!syncProfilesString.startsWith(userEmail + "\n")) {
+      setSyncProfilesString(userEmail + "\n" + syncProfilesString);
+    }
+    getPrefs().flush();
+  }
+  
+  public void syncProfiles() {
+    Map<String, String> postParams = new HashMap<String, String>();
+    String syncProfilesString = getPrefs().getString(SYNC_PROFILES);
+    String[] syncProfilesArray = syncProfilesString.split("\n");
+    HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
+    for (String profileKey: syncProfiles) {
+      String encodedProfile = getPrefs().getString(profileKey);
+      postParams.put(USER_EMAIL, profileKey);
+      try {
+        // Post profile to server
+        ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
+            postParams, encodedProfile.getBytes());
+        Gdx.app.log(ScienceEngine.LOG, "Uploaded Profile to MazaLearn - " + profileKey);
+      } catch(GdxRuntimeException e) {
+        e.printStackTrace();
+        Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to upload - " + profileKey);
+      }
+    }
+    setSyncProfilesString("");
     getPrefs().flush();
   }
 }

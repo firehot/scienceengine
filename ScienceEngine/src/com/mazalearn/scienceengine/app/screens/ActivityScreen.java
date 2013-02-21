@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -27,15 +28,15 @@ public class ActivityScreen extends AbstractScreen {
 
   private IScience2DController science2DController;
   private Profile profile;
-  private String domain;
+  private Domain domain;
   @SuppressWarnings("unused")
   private int activityLevel;
 
-  public ActivityScreen(ScienceEngine scienceEngine, String domain, int activityLevel) {
+  public ActivityScreen(ScienceEngine scienceEngine, Domain domain, int activityLevel) {
     super(scienceEngine, null);
     this.domain = domain;
     this.activityLevel = activityLevel;
-    String fileName = LevelUtil.getLevelFilename(domain, ".json", activityLevel);
+    String fileName = LevelUtil.getLevelFilename(domain.name(), ".json", activityLevel);
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       ScienceEngine.assetManager.unload(fileName);
     }
@@ -78,12 +79,13 @@ public class ActivityScreen extends AbstractScreen {
   }
   
   public IScience2DController createDomainController(
-      String domain, int level, int width, int height) {
-    if (domain.equalsIgnoreCase(StatesOfMatterController.DOMAIN)) {
+      Domain domain, int level, int width, int height) {
+    switch (domain) {
+    case StatesOfMatter: 
       return new StatesOfMatterController(level, width, height, getSkin());
-    } else if (domain.equalsIgnoreCase(WaveController.DOMAIN)) {
+    case Waves:
       return  new WaveController(level, width, height, getAtlas(), getSkin());
-    } else if (domain.equalsIgnoreCase(ElectroMagnetismController.DOMAIN)) {
+    case Electromagnetism:
       return new ElectroMagnetismController(level, width, height, getSkin());
     }
     return null;
@@ -91,7 +93,7 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
-    String fileName = LevelUtil.getLevelFilename(science2DController.getDomain(), 
+    String fileName = LevelUtil.getLevelFilename(domain.name(), 
         ".json", science2DController.getLevel());
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;

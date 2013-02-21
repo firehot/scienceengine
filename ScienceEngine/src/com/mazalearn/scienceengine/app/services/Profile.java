@@ -26,11 +26,9 @@ public class Profile implements Serializable {
   private static final String LAST_DOMAIN = "domain";
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
-  private Map<Integer, Integer> highScores;
   private Map<String, String> properties;
 
   public Profile() {
-    highScores = new HashMap<Integer, Integer>();
     properties = new HashMap<String, String>();
   }
 
@@ -62,23 +60,6 @@ public class Profile implements Serializable {
     return  levelFloatStr == null ? 0 : Math.round(Float.valueOf(levelFloatStr));
   }
 
-  /**
-   * Retrieves the high scores for each level (Level-ID -> High score).
-   */
-  public Map<Integer, Integer> getHighScores() {
-    return highScores;
-  }
-
-  /**
-   * Gets the current high score for the given level.
-   */
-  public int getHighScore(int levelId) {
-    if (highScores == null)
-      return 0;
-    Integer highScore = highScores.get(levelId);
-    return (highScore == null ? 0 : highScore);
-  }
-
   // Serializable implementation
 
   @SuppressWarnings("unchecked")
@@ -89,21 +70,11 @@ public class Profile implements Serializable {
     if (properties == null) {
       properties = new HashMap<String, String>();
     }
-    // libgdx handles the keys of JSON formatted HashMaps as Strings, but we
-    // want it to be an integer instead (levelId)
-    Map<String, Integer> highScores = json.readValue("highScores",
-        HashMap.class, Integer.class, jsonData);
-    for (String levelIdAsString : highScores.keySet()) {
-      int levelId = Integer.valueOf(levelIdAsString);
-      Integer highScore = highScores.get(levelIdAsString);
-      this.highScores.put(levelId, highScore);
-    }
   }
 
   @Override
   public void write(Json json) {
     json.writeValue("properties", properties);
-    json.writeValue("highScores", highScores);
   }
 
   public void setCurrentDomain(String name) {

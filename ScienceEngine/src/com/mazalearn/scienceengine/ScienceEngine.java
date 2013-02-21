@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +25,6 @@ import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
-import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
@@ -201,7 +199,7 @@ public class ScienceEngine extends Game {
       if (pathSegments.length > i && isSupportedSubject(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
       if (pathSegments.length > i && findSupportedDomain(pathSegments[i]) != null) {
-        String domain = findSupportedDomain(pathSegments[i]);
+        Domain domain = findSupportedDomain(pathSegments[i]);
         Integer iLevel = null;
         if (query != null) {
           String[] queryParts = query.toLowerCase().split("&");
@@ -230,10 +228,9 @@ public class ScienceEngine extends Game {
     return boards.contains(token);
   }
   
-  private String findSupportedDomain(String token) {
-    String[] topics = new String[] {"Electromagnetism", "Waves", "StatesOfMatter"};
-    for (String topic: topics) {
-      if (topic.toLowerCase().equals(token)) return topic;
+  private Domain findSupportedDomain(String token) {
+    for (Domain domain: Domain.values()) {
+      if (domain.name().toLowerCase().equals(token)) return domain;
     }
     return null;
   }

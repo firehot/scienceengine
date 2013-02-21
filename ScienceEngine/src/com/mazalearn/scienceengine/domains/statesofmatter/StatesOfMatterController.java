@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.statesofmatter;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -14,7 +15,6 @@ import com.mazalearn.scienceengine.domains.statesofmatter.view.MoleculeBoxActor;
  * States of Matter science2DModel
  */
 public class StatesOfMatterController extends AbstractScience2DController {
-  public static final String DOMAIN = "StatesOfMatter";
   private static final int N = 25; // Number of molecules
 
   private IScience2DModel statesOfMatterModel;
@@ -22,7 +22,7 @@ public class StatesOfMatterController extends AbstractScience2DController {
   ModelControls modelControls;
   
   public StatesOfMatterController(int level, int width, int height, Skin skin) {
-    super(DOMAIN, level, skin);
+    super(Domain.StatesOfMatter, level, skin);
     statesOfMatterModel = new StatesOfMatterModel(N);
     statesOfMatterModel.reset();
     statesOfMatterView = 

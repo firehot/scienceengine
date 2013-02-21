@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
@@ -21,9 +22,6 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
-import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
-import com.mazalearn.scienceengine.domains.statesofmatter.StatesOfMatterController;
-import com.mazalearn.scienceengine.domains.waves.WaveController;
 import com.mazalearn.scienceengine.guru.Guru;
 
 public class ChooseDomainScreen extends AbstractScreen {
@@ -45,7 +43,7 @@ public class ChooseDomainScreen extends AbstractScreen {
   public void show() {
     super.show();
     if (!profile.getCurrentDomain().equals("")) {
-      gotoDomainHome(profile.getCurrentDomain());
+      gotoDomainHome(Domain.valueOf(profile.getCurrentDomain()));
       return;
     }
     
@@ -70,14 +68,10 @@ public class ChooseDomainScreen extends AbstractScreen {
     ScrollPane flickScrollPane = new ScrollPane(table, getSkin());
     table.setFillParent(false);
     table.defaults().fill();
-    final String[] domains = 
-        new String[] {StatesOfMatterController.DOMAIN, 
-                      WaveController.DOMAIN, 
-                      ElectroMagnetismController.DOMAIN};
     Texture overlayLock = new Texture("images/lock.png");
-    for (final String domain: domains) {
-      final boolean lock = !domain.equals(ElectroMagnetismController.DOMAIN);
-      Texture levelThumbnail = LevelUtil.getLevelThumbnail(domain, 1);
+    for (final Domain domain: Domain.values()) {
+      final boolean lock = !domain.equals(Domain.Electromagnetism);
+      Texture levelThumbnail = LevelUtil.getLevelThumbnail(domain.name(), 1);
       TextButton domainThumb = DomainHomeScreen.createImageButton(levelThumbnail, getSkin());
       if (lock) {
         Image lockImage = new Image(overlayLock);
@@ -85,7 +79,7 @@ public class ChooseDomainScreen extends AbstractScreen {
             THUMBNAIL_HEIGHT / 2 - lockImage.getHeight() / 2);
         domainThumb.addActor(lockImage);
       } else {
-        int progressPercentage = findDomainProgressPercentage(domain);
+        int progressPercentage = findDomainProgressPercentage(domain.name());
         DomainHomeScreen.createProgressPercentageBar(getSkin().get(LabelStyle.class),
             domainThumb, progressPercentage, THUMBNAIL_WIDTH);
       }
@@ -112,7 +106,7 @@ public class ChooseDomainScreen extends AbstractScreen {
       });
       Table levelTable = new Table(getSkin());
       levelTable.setName("Level");
-      levelTable.add(domain);
+      levelTable.add(domain.name());
       levelTable.row();
       levelTable.add(domainThumb)
           .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
@@ -152,7 +146,7 @@ public class ChooseDomainScreen extends AbstractScreen {
     scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   
-  private void gotoDomainHome(final String domain) {
+  private void gotoDomainHome(final Domain domain) {
     Gdx.app.log(ScienceEngine.LOG, "Starting " + domain); //$NON-NLS-1$
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     AbstractScreen domainHomeScreen = new DomainHomeScreen(scienceEngine, domain);

@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.esotericsoftware.tablelayout.Cell;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -98,14 +99,14 @@ public class DomainHomeScreen extends AbstractScreen {
   private int numLevels;
   private Array<?> resources;
   private Profile profile;
-  private String domain;
+  private Domain domain;
   
-  public DomainHomeScreen(ScienceEngine scienceEngine, String domain) {
+  public DomainHomeScreen(ScienceEngine scienceEngine, Domain domain) {
     super(scienceEngine);
     this.domain = domain;
     readDomainActivityInfo();
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    profile.setCurrentDomain(domain);
+    profile.setCurrentDomain(domain.name());
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -168,7 +169,7 @@ public class DomainHomeScreen extends AbstractScreen {
 
     for (int level = 1; level <= numLevels; level++) {
       String activityName = getMsg().getString(domain + "." + level + ".Name");
-      String filename = LevelUtil.getLevelFilename(domain, ".png", level);
+      String filename = LevelUtil.getLevelFilename(domain.name(), ".png", level);
       Pixmap pixmap;
       if (ScienceEngine.assetManager.isLoaded(filename)) {
         pixmap = ScienceEngine.assetManager.get(filename, Pixmap.class);
@@ -374,7 +375,7 @@ public class DomainHomeScreen extends AbstractScreen {
   @Override
   public void addAssets() {
     for (int level = 1; level <= numLevels; level++) {
-      String filename = LevelUtil.getLevelFilename(domain, ".png", level);
+      String filename = LevelUtil.getLevelFilename(domain.name(), ".png", level);
       ScienceEngine.assetManager.load(filename, Pixmap.class);
     }
   }

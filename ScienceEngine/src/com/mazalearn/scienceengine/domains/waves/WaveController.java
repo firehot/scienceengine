@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.domains.waves.model.ComponentType;
@@ -21,7 +22,6 @@ import com.mazalearn.scienceengine.domains.waves.view.WaveBoxActor;
  */
 public class WaveController extends AbstractScience2DController {
   
-  public static final String DOMAIN = "Waves";
   private static final int NUM_BALLS = 40;
   private static final float ORIGIN_Y = 10;
   private static final float ORIGIN_X = 4;
@@ -31,7 +31,7 @@ public class WaveController extends AbstractScience2DController {
   private WaveView waveView;
 
   public WaveController(int level, int width, int height, TextureAtlas atlas, Skin skin) {
-    super(DOMAIN, level, skin);
+    super(Domain.Waves, level, skin);
     this.waveModel = new WaveModel(NUM_BALLS);;
     waveView = new WaveView(width, height, waveModel, skin, atlas, this);
     initialize(waveModel, waveView);

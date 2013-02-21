@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 
 public class TutoringEndDialog extends Dialog {
   
-  public TutoringEndDialog(final Stage stage, Skin skin, String title, String contents) {
+  public TutoringEndDialog(final Stage stage, Skin skin, String contents) {
     super("\n\n", skin);
     
     setBackground(createBackground());

@@ -70,6 +70,7 @@ public class TutorNavigator extends Group {
     };
     goal = new TextButton("This is a very long long long test goal" + 
         "This is a very long long long test goal", skin);
+    goal.getLabel().setWrap(true);
     goal.addListener(clickListener);
     addActor(goal);
   }

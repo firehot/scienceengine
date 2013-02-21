@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
@@ -50,9 +51,9 @@ public class LevelLoader {
   @SuppressWarnings("unchecked")
   public OrderedMap<String, ?> getJsonFromFile() {
     Gdx.app.log(ScienceEngine.LOG, "Opening level json file");
-    String domain = science2DController.getDomain();
+    Domain domain = science2DController.getDomain();
     int level = science2DController.getLevel();
-    FileHandle file = LevelUtil.getLevelFile(domain, ".json", level);
+    FileHandle file = LevelUtil.getLevelFile(domain.name(), ".json", level);
     if (file == null) {
       Gdx.app.error(ScienceEngine.LOG, "Could not open level json file");
       return null;
