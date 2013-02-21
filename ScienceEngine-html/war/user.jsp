@@ -17,6 +17,8 @@
 <%@ page import="java.lang.reflect.Type" %>
 <%@ page import="java.util.Map" %>
 
+<%@ page import="com.mazalearn.gwt.server.Activity" %>
+<%@ page import="com.mazalearn.gwt.server.Activity.Tutor" %>
 <%@ page import="com.mazalearn.gwt.server.Domain" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -35,17 +37,6 @@
     pageContext.setAttribute("userEmail", userEmail);
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
-    if (user != null) {
-      pageContext.setAttribute("user", user);
-%>
-<p>Hello, ${fn:escapeXml(user.nickname)}! 
-<%
-    } else {
-%>
-<p>Hello!
-
-<%
-    }
 %>
 
 <%
@@ -62,21 +53,34 @@
 %>
 
       <table>
-        <tr><td>Email</td><td>${fn:escapeXml(userEmail)}</td></tr>
+        <tr><td>User</td><td>${fn:escapeXml(userEmail)}</td></tr>
       </table>
    
 <%
      /* Get domains of this user's embedded profile entity */
    for (Domain domain: Domain.values()) {
-      String domainProgressStr = ((Text) profile.getProperty(domain.name())).getValue();
-      Type statsType = new TypeToken<Map<String, Float>>() {}.getType();
-      Map<String, Float> stats = new Gson().fromJson(domainProgressStr, statsType);
+     String domainStatsStr = ((Text) profile.getProperty(domain.name())).getValue();
+     Type statsType = new TypeToken<Map<String, Float>>() {}.getType();
+     Map<String, Float> stats = new Gson().fromJson(domainStatsStr, statsType);
+     Activity activity1 = Activity.load(getServletContext(), "/assets/data/" + domain.name() + "/1.json");
+     activity1.populateStats(stats);
    %>
-    <table>
+    <p>
+    <%= domain.name() %>
+    <table border="1">
+     <tr>
+        <td>Goal</td>
+        <td>Time Spent</td>
+        <td>% Complete</td>
+     </tr>
 <%
-     for (String pkey: stats.keySet()) {
+     for (Tutor tutor: activity1.getTutors()) {
 %>
-       <tr><td><%= pkey %></td><td><%= stats.get(pkey) %></td></tr>
+       <tr>
+         <td><%= tutor.goal %></td>
+         <td><%= tutor.timeSpent %></td>
+         <td><%= tutor.successPercent %></td>
+       </tr>
 <%       
      }
 %>
