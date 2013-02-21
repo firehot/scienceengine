@@ -106,7 +106,7 @@ public class DomainHomeScreen extends AbstractScreen {
     this.domain = domain;
     readDomainActivityInfo();
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    profile.setCurrentDomain(domain.name());
+    profile.setCurrentDomain(domain);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -114,7 +114,7 @@ public class DomainHomeScreen extends AbstractScreen {
   }
 
   protected void goBack() {
-    profile.setCurrentDomain("");
+    profile.setCurrentDomain(null);
     scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
   }
   

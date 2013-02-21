@@ -2,6 +2,7 @@ package com.mazalearn.gwt.server;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -16,8 +17,10 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @SuppressWarnings("serial")
 public class ProfileServlet extends HttpServlet {
@@ -39,6 +42,7 @@ public class ProfileServlet extends HttpServlet {
 
   static class Profile {
     Map<String, String> properties;
+    Map<String, Map<String, String>> domains;
   };
 
   public void saveUserProfile(String userEmail, byte[] profileBytes) 
@@ -55,23 +59,35 @@ public class ProfileServlet extends HttpServlet {
     String profileStringBase64 = new String(profileBytes);
     String profileStringJson = new String(Base64.decode(profileStringBase64));
     
-    profileStringJson = profileStringJson.replace("/", ".");
     int count = profileStringJson.length();
     while (profileStringJson.charAt(--count) == 0);
     System.out.println((int) profileStringJson.charAt(count));
     System.out.println("User " + userEmail + " saved profile: \n<" + profileStringJson.substring(0, count + 1) + ">");
     Gson gson = new Gson();
-    Profile profile = gson.fromJson(profileStringJson.substring(0, count + 1), Profile.class);
+    //Profile profile = gson.fromJson(profileStringJson.substring(0, count + 1), Profile.class);
+    Type fooType = new TypeToken<Map<String, Map<String,String>>>() {}.getType();
+    Map<String, Map<String, String>> props = gson.fromJson(profileStringJson.substring(0, count+1), fooType);
     
     EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(Profile.class.getSimpleName());
     if (profileEntity == null) {
       profileEntity = new EmbeddedEntity();
       user.setProperty(Profile.class.getSimpleName(), profileEntity);
     }
-    for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
-      profileEntity.setProperty(entry.getKey(), entry.getValue());
+    for (Map.Entry<String, Map<String, String>> entry: props.entrySet()) {
+      //profileEntity.setProperty(entry.getKey(), entry.getValue());
+      if ("properties".equals(entry.getKey())) {
+        for (Map.Entry<String, String> item: entry.getValue().entrySet()) {
+          profileEntity.setProperty(item.getKey(), item.getValue());
+          System.out.println("Property: " + item.getKey());
+        }
+      } else { // Store in JSON form
+        String json = gson.toJson(entry.getValue());
+        profileEntity.setProperty(entry.getKey(), new Text(json));
+        System.out.println("Domain: " + entry.getKey() + " -> " + json);
+      }
     }
     ds.put(user);
+    System.out.println(user.toString());
   }
   
 

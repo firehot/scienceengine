@@ -42,8 +42,8 @@ public class ChooseDomainScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    if (!profile.getCurrentDomain().equals("")) {
-      gotoDomainHome(Domain.valueOf(profile.getCurrentDomain()));
+    if (profile.getCurrentDomain() != null) {
+      gotoDomainHome(profile.getCurrentDomain());
       return;
     }
     
@@ -79,7 +79,7 @@ public class ChooseDomainScreen extends AbstractScreen {
             THUMBNAIL_HEIGHT / 2 - lockImage.getHeight() / 2);
         domainThumb.addActor(lockImage);
       } else {
-        int progressPercentage = findDomainProgressPercentage(domain.name());
+        int progressPercentage = findDomainProgressPercentage(domain);
         DomainHomeScreen.createProgressPercentageBar(getSkin().get(LabelStyle.class),
             domainThumb, progressPercentage, THUMBNAIL_WIDTH);
       }
@@ -116,7 +116,7 @@ public class ChooseDomainScreen extends AbstractScreen {
     return flickScrollPane;
   }
   
-  private int findDomainProgressPercentage(String domain) {
+  private int findDomainProgressPercentage(Domain domain) {
     profile = ScienceEngine.getPreferencesManager().getProfile();
     int numLevels = getDomainLevels(domain);
     int percent = 0;
@@ -127,9 +127,9 @@ public class ChooseDomainScreen extends AbstractScreen {
   }
 
   @SuppressWarnings("unchecked")
-  public int getDomainLevels(String domain) {
+  public int getDomainLevels(Domain domain) {
     FileHandle file;
-    String fileName = "data/" + domain + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
+    String fileName = "data/" + domain.name() + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
     file = Gdx.files.internal(fileName);
     if (file == null) {

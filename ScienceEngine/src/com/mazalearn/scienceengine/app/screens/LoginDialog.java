@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -101,10 +100,7 @@ public class LoginDialog extends Dialog {
   @Override
   public Dialog show(Stage stage) {
     String userEmail = ScienceEngine.getUserEmail();
-    if (ScienceEngine.DEV_MODE == DevMode.DEBUG && userEmail != null) {
-      doneCallback.done(true);
-      return null;
-    } else if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
+    if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
       // Onscreen keyboard not showing in IOS - this is a workaround.
       Gdx.input.getTextInput(new TextInputListener() {
         @Override

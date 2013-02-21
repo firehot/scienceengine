@@ -25,7 +25,7 @@ public class PreferencesManager {
   private static final String PREF_MUSIC_ENABLED = "music.enabled";
   private static final String PREF_SOUND_ENABLED = "sound.enabled";
   // Active user
-  private static final String PREF_USER_EMAIL = "user.email";
+  private static final String PREF_USER_EMAIL = "useremail";
   private static final String PREFS_NAME = "scienceengine";
   private Profile profile;
 

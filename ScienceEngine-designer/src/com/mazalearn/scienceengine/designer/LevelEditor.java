@@ -117,7 +117,7 @@ public class LevelEditor extends Stage {
     Table titleTable = new Table(screen.getSkin());
     titleTable.setName("TitleTable");
     titleTable.defaults().fill();
-    titleTable.add(science2DController.getDomain()).pad(10);
+    titleTable.add(science2DController.getDomain().name()).pad(10);
     final SelectBox level = 
         new SelectBox(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, 
             screen.getSkin());
@@ -190,7 +190,7 @@ public class LevelEditor extends Stage {
         screen.clearScreen(Color.BLACK);
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
-        takeSnapshot(originalStage, science2DController.getDomain(),
+        takeSnapshot(originalStage, science2DController.getDomain().name(),
             science2DController.getLevel(), 0, 0, width, height);
       }      
     });

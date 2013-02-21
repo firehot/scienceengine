@@ -2,11 +2,11 @@ package com.mazalearn.scienceengine.app.services;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.Map;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 /**
@@ -17,18 +17,20 @@ import com.mazalearn.scienceengine.ScienceEngine;
  * 
  */
 public class Profile implements Serializable {
+
   private static final String DRAWING_PNG = "DrawingPng";
-  private static final String STATUS = "status";
+  private static final String SUCCESS_PERCENT = "successPercent";
   private static final String TIME_SPENT = "timeSpent";
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
   private static final String DOMAIN = "domain";
-  private static final String LAST_DOMAIN = "domain";
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
-  private Map<String, String> properties;
+  private HashMap<Domain, HashMap<String, String>> domainProperties;
+  private HashMap<String, String> properties, currentDomain;
 
   public Profile() {
+    domainProperties = new HashMap<Domain, HashMap<String, String>>();
     properties = new HashMap<String, String>();
   }
 
@@ -68,29 +70,41 @@ public class Profile implements Serializable {
 
     properties = json.readValue("properties", HashMap.class, String.class, jsonData);
     if (properties == null) {
-      properties = new HashMap<String, String>();
+      properties = new HashMap<String,String>();
+    }
+
+    domainProperties = new HashMap<Domain, HashMap<String,String>>();
+    for (Domain domain: Domain.values()) {
+      HashMap<String,String> props = json.readValue(domain.name(), HashMap.class, String.class, jsonData);
+      if (props == null) {
+        props = new HashMap<String, String>();
+      }
+      domainProperties.put(domain, props);
     }
   }
 
   @Override
   public void write(Json json) {
     json.writeValue("properties", properties);
+    for (Domain domain: Domain.values()) {
+      HashMap<String,String> props = domainProperties.get(domain);
+      json.writeValue(domain.name(), props);
+    }
   }
 
-  public void setCurrentDomain(String name) {
-    properties.put(LAST_DOMAIN, getLastDomain());
-    properties.put(DOMAIN, name);
+  public void setCurrentDomain(Domain domain) {
+    properties.put(DOMAIN, domain != null ? domain.name() : null);
+    currentDomain = domainProperties.get(domain);
+    if (currentDomain == null) {
+      currentDomain = new HashMap<String,String>();
+      domainProperties.put(domain, currentDomain);
+    }
     save();
   }
 
-  public String getCurrentDomain() {
+  public Domain getCurrentDomain() {
     String s = properties.get(DOMAIN);
-    return s == null ? "" : s;
-  }
-
-  public String getLastDomain() {
-    String s = properties.get(LAST_DOMAIN);
-    return s == null ? "" : s;
+    return s == null || s.length() == 0 ? null : Domain.valueOf(s);
   }
 
   public void setUserName(String name) {
@@ -111,25 +125,21 @@ public class Profile implements Serializable {
     return getTimeSpent(getCurrentActivity(), subgoalId);
   }
   
-  public float getTimeSpent(int activity, String subgoalId) {
-    String timeSpentStr = properties.get(makeSubgoalKey(activity, subgoalId, TIME_SPENT));
+  public float getTimeSpent(int activity, String tutorId) {
+    String timeSpentStr = currentDomain.get(makeTutorKey(activity, tutorId, TIME_SPENT));
     return timeSpentStr == null ? 0 : Float.valueOf(timeSpentStr);
   }
 
-  private String makeSubgoalKey(String domain, int activity, String subgoalId, String key) {
-    return domain + "/" +  activity + "/" + subgoalId + "/" + key;
+  private String makeTutorKey(int activity, String tutorId, String key) {
+    return activity + "$" + tutorId + "$" + key;
   }
 
-  private String makeSubgoalKey(int activity, String subgoalId, String key) {
-    return makeSubgoalKey(getCurrentDomain(), activity, subgoalId, key);
+  private String makeTutorKey(String tutorId, String key) {
+    return makeTutorKey(getCurrentActivity(), tutorId, key);
   }
 
-  private String makeSubgoalKey(String subgoalId, String key) {
-    return makeSubgoalKey(getCurrentDomain(), getCurrentActivity(), subgoalId, key);
-  }
-
-  public void setTimeSpent(String subgoalId, float timeSpent) {
-    properties.put(makeSubgoalKey(subgoalId, TIME_SPENT), 
+  public void setTimeSpent(String tutorId, float timeSpent) {
+    currentDomain.put(makeTutorKey(tutorId, TIME_SPENT), 
         String.valueOf(timeSpent));
   }
   
@@ -139,15 +149,15 @@ public class Profile implements Serializable {
 
   /**
    * Get percent success for this subgoalId
-   * @param subgoalId
+   * @param tutorId
    * @return
    */
-  public int getSuccessPercent(String subgoalId) {
-    return getSuccessPercent(getCurrentActivity(), subgoalId);
+  public int getSuccessPercent(String tutorId) {
+    return getSuccessPercent(getCurrentActivity(), tutorId);
   }
   
-  public int getSuccessPercent(int activity, String subgoalId) {
-    String status = properties.get(makeSubgoalKey(activity, subgoalId, STATUS));
+  public int getSuccessPercent(int activity, String tutorId) {
+    String status = currentDomain.get(makeTutorKey(activity, tutorId, SUCCESS_PERCENT));
     try {
       return status != null ? Integer.parseInt(status) : 0;
     } catch(NumberFormatException e) {
@@ -156,8 +166,11 @@ public class Profile implements Serializable {
   }
 
 
-  public int getSuccessPercent(String domain, int level, String id) {
-    String status = properties.get(makeSubgoalKey(domain, level, id, STATUS));
+  public int getSuccessPercent(Domain domain, int level, String id) {
+    HashMap<String, String> domainProps = domainProperties.get(domain);
+    if (domainProps == null) return 0;
+    
+    String status = domainProps.get(makeTutorKey(level, id, SUCCESS_PERCENT));
     try {
       return status != null ? Integer.parseInt(status) : 0;
     } catch(NumberFormatException e) {
@@ -165,8 +178,8 @@ public class Profile implements Serializable {
     }
   }
 
-  public void setSuccessPercent(String subgoalId, int percent) {
-    properties.put(makeSubgoalKey(subgoalId, STATUS), String.valueOf(percent));
+  public void setSuccessPercent(String tutorId, int percent) {
+    currentDomain.put(makeTutorKey(tutorId, SUCCESS_PERCENT), String.valueOf(percent));
     save();
   }
 
