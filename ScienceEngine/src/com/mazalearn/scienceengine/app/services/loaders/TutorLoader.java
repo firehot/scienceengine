@@ -65,8 +65,8 @@ class TutorLoader {
 
   private AbstractTutor makeTutorGroup(OrderedMap<String, ?> tutorObj, TutorGroup tutorGroup) {
     String groupType = (String) tutorObj.get("group");
-    Array<?> subgoalsObj = (Array<?>) tutorObj.get("subgoals");
-    List<ITutor> childTutors = loadChildTutors(tutorGroup, subgoalsObj);
+    Array<?> childTutorsObj = (Array<?>) tutorObj.get("childtutors");
+    List<ITutor> childTutors = loadChildTutors(tutorGroup, childTutorsObj);
     String successActions = (String) tutorObj.get("successactions");
     tutorGroup.initialize(groupType, childTutors, successActions);
     return tutorGroup;

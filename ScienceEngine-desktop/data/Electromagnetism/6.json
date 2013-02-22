@@ -19,14 +19,14 @@ configs:[
 {name:"PickupCoil.CoilLoops",permitted:true,value:2.0},
 {name:"Ammeter.MaxCurrent",permitted:true},
 ],
-plan: [
+tutors: [
   {type: "TutorGroup",
    id: "Induced Current",
    group:"Guide",
    goal: "Explore how induced current changes with change of different parameters.",
    success: 200,
    timelimit: 300,
-   subgoals:[
+   childtutors:[
           {type: "KnowledgeUnit",
            id: "Move Electromagnet",
            goal: "Move the Electromagnet back and forth. See how the induced current changes.",
@@ -67,7 +67,7 @@ plan: [
    group:"Challenge",
    id: "Induced Current Challenge",
    goal: "Explore how induced current changes with change of different parameters.",
-   subgoals:[
+   childtutors:[
        {type: "ParameterProber",
         id: "Max Current and Induced Current",
                  goal:"To increase induced current, should max current increase or decrease?\nSelect X if it does not affect induced current.",

@@ -9,7 +9,7 @@ configs:[
 {name:"BarMagnet.MagnetStrength",permitted:true,value:3000.0},
 {name:"BarMagnet.RotationAngle",permitted:true},
 ],
-plan:[
+tutors:[
        {type: "TutorGroup",
        id: "Magnet and Compass",
        group: "Guide",
@@ -18,7 +18,7 @@ plan:[
        success: 1000,
        timelimit: 120,
        components:[{type:"FieldMeter", visible:false}],
-       subgoals: [
+       childtutors: [
          {type: "KnowledgeUnit",
           id: "Compass around Magnet",
           goal: "Make the compass go through one complete rotation",
@@ -36,7 +36,7 @@ plan:[
        postcondition: "FieldMeter.Count >= 10",
        success: 250,
        timelimit: 180,
-       subgoals: [
+       childtutors: [
         {type: "KnowledgeUnit",
          goal: "Touch the screen in multiple places around the magnet to see the field.",
          id: "Magnetic Field", 
@@ -68,7 +68,7 @@ plan:[
         group: "Challenge",
         id: "Magnetic Field Challenge",
         goal: "Understand the magnetic field of a magnet",
-        subgoals: [
+        childtutors: [
          {type: "FieldMagnitudeProber",
           goal: "Touch one of the two ? where the magnetic field is stronger",
           id: "Field Magnitude",

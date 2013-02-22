@@ -86,9 +86,6 @@ public class Hinter extends Group {
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
     jumpingMode = false; // TODO: very irritating
     image = SCIENTISTS.get(scientistIndex);
-    // TODO: differentiate hint from subgoal in dashboard
-    // hintButton.setText("Hint: " + hint + "\n-" + image.getName());
-    //image.setVisible(true);
     ScienceEngine.displayStatusMessage((IScience2DView) getStage(), "Hint: " + hint);
     image.setY(0);
   }

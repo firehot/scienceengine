@@ -15,7 +15,7 @@ configs:[
 {name:"PickupCoil.CoilLoops",permitted:true},
 {name:"Ammeter.MaxCurrent",permitted:true},
 ],
-plan: [
+tutors: [
        {type: "TutorGroup",
         group: "Guide",
         id: "Induced Current",
@@ -23,7 +23,7 @@ plan: [
         success: 200,
         timelimit: 300,
         configs: [{name: "BarMagnet.MovementMode", permitted: true, value:"Move"}],
-        subgoals:[
+        childtutors:[
           {type: "KnowledgeUnit",
            id:"Move Magnet",
           goal: "Move the bar magnet back and forth. See how the light changes and current shown in ammeter changes.",
@@ -64,7 +64,7 @@ plan: [
         group: "Challenge",
         id: "Induced Current Challenge",
         goal: "Understand how current is induced by a bar magnet in a coil",
-        subgoals:[
+        childtutors:[
            {type: "ParameterProber",
             id: "Magnet Strength and Induced Current",
                      goal:"To increase induced current, should magnet strength decrease or increase?\nSelect X if it does not affect current.",

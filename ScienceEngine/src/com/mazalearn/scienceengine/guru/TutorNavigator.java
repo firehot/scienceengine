@@ -80,7 +80,7 @@ public class TutorNavigator extends Group {
    * @param activeTutor - tutor which is active.
    */
   public void show(ITutor activeTutor) {
-    // Update times spent per subgoal
+    // Update times spent per tutor
     int count = 0;
     for (final ITutor tutor: this.tutors) {
       Label timeLabel = tutorTimeLabels[count++];
@@ -94,7 +94,7 @@ public class TutorNavigator extends Group {
         status.setSize(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60));
       }
     }
-    // Update active subgoal
+    // Update active tutor
     activeTutorButton = (TextButton) findActor(activeTutor.getId());
     if (activeTutorButton != null) {
       activeTutorButton.addActor(userImage);

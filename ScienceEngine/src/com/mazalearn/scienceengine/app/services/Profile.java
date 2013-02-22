@@ -125,8 +125,8 @@ public class Profile implements Serializable {
     return s == null ? "" : s;
   }
 
-  public float getTimeSpent(String subgoalId) {
-    return getTimeSpent(getCurrentActivity(), subgoalId);
+  public float getTimeSpent(String tutorId) {
+    return getTimeSpent(getCurrentActivity(), tutorId);
   }
   
   public float getTimeSpent(int activity, String tutorId) {
@@ -152,7 +152,7 @@ public class Profile implements Serializable {
   }
 
   /**
-   * Get percent success for this subgoalId
+   * Get percent success for this tutorId
    * @param tutorId
    * @return
    */

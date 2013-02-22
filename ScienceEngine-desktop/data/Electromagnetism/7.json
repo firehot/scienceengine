@@ -19,7 +19,7 @@ configs:[
 {name:"CurrentCoil.CommutatorType", permitted:true, value:"Connector"},
 {name:"CurrentCoil.RotationVelocity", permitted:false, value:2}
 ],
-plan: [
+tutors: [
   {type: "TutorGroup",
    group: "Guide",
    id: "Magnet and Motor",
@@ -30,7 +30,7 @@ plan: [
             {name: "CurrentSource.CurrentDirection", permitted: false, value: false},
             {name:"CurrentCoil.RotationDataType", permitted:true, value:"NumRevolutions"},
    ],
-   subgoals:[{type: "KnowledgeUnit",
+   childtutors:[{type: "KnowledgeUnit",
              id: "Flip Horseshoe Magnet to Rotate",
              components:[{type:"HorseshoeMagnet", pin: true}],
              goal: "Flip the horseshoe magnet and see how it affects the rotation of the coil. Give the coil a starting push.", 
@@ -58,7 +58,7 @@ plan: [
             {name: "CurrentSource.CurrentDirection", permitted: true, value: false},
             {name:"CurrentCoil.RotationDataType", permitted:true, value:"NumRevolutions"},
    ],
-   subgoals:[{type: "KnowledgeUnit",
+   childtutors:[{type: "KnowledgeUnit",
               id: "Change current direction to rotate",
               goal: "Change current direction and see how it affects the rotation of the coil. Give the coil a starting push.", 
               components:[{type:"CurrentSource", pin: true}],
@@ -79,7 +79,7 @@ plan: [
     id: "Motor Challenge",
     group:"Challenge",
     goal: "Understand how a DC Motor works",
-    subgoals:[
+    childtutors:[
        {type:"ParameterProber",
         id: "Magnet Field Direction and Rotation Direction",
                  goal:"Click on ? and select correct direction of rotation of motor.",

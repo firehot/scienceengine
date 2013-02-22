@@ -18,7 +18,7 @@ configs:[
 {name:"CurrentSource.1.MaxCurrent",permitted:true,value:5.0},
 {name:"CurrentSource.1.CurrentDirection",permitted:true,value:true}
 ],
-plan:[
+tutors:[
       {type: "TutorGroup",
        id: "Wires and Compass",
        group: "Guide",
@@ -26,7 +26,7 @@ plan:[
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
        timelimit: 120,
-       subgoals: [
+       childtutors: [
          {type: "KnowledgeUnit",
           id: "Compass around Wires",
           goal: "Make the compass go through one complete rotation",
@@ -44,7 +44,7 @@ plan:[
        components:[{type:"Compass", visible: false}],
        success: 200,
        timelimit: 180,
-       subgoals: [
+       childtutors: [
          {type: "KnowledgeUnit",
           id: "Move Wires",
           goal: "Move first wire 1 and then wire 2. Observe how the field changes.",
@@ -91,7 +91,7 @@ plan:[
         id: "Magnetic Field Challenge",
         group: "Challenge",
         goal: "Understand the magnetic field around the wires.",
-        subgoals: [
+        childtutors: [
            {type: "FieldMagnitudeProber",
             id: "Field Magnitude",
             goal: "Touch one of the two ? where the magnetic field is stronger",

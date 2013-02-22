@@ -19,7 +19,7 @@ configs:[
 {name:"CurrentCoil.CommutatorType",permitted:true,value:"Connector"},
 {name:"CurrentCoil.RotationVelocity", permitted:false, value:2}
 ],
-plan: [
+tutors: [
   {type: "TutorGroup",
    id: "AC Motor",
    group:"Guide",
@@ -29,7 +29,7 @@ plan: [
    configs:[{name: "CurrentCoil.CommutatorType", permitted: false, value:"Connector"},
             {name: "CurrentCoil.RotationDataType", value:"NumRevolutions", permitted: false},
    ],
-   subgoals:[{
+   childtutors:[{
            type: "KnowledgeUnit",
            id: "Tune Current to spin Motor",
            goal: "Make the AC motor spin on its own by tuning the frequency and current strength.",

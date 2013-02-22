@@ -15,14 +15,14 @@ public class Activity {
     public String id;
     public String goal;
     public String group;
-    Tutor[] subgoals;
+    Tutor[] childTutors;
     public transient float successPercent;
     public transient float timeSpent;
   };
   String description;
   String name;
   int level;
-  Tutor[] plan;
+  Tutor[] tutors;
   public transient List<Tutor> leafTutors;
   
   public static Activity load(ServletContext servletContext, String fileName) {
@@ -32,7 +32,7 @@ public class Activity {
     json = s.hasNext() ? s.next() : "";
     Activity activity = new Gson().fromJson(json, Activity.class);
     activity.leafTutors = new ArrayList<Tutor>();
-    collectLeafTutors(activity.plan, activity.leafTutors);
+    collectLeafTutors(activity.tutors, activity.leafTutors);
     return activity;
   }
   
@@ -47,7 +47,7 @@ public class Activity {
       Float successPercent = stats.get(successPercentKey);
       tutor.successPercent = successPercent == null ? 0 : successPercent;
       Float timeSpent = stats.get(timeSpentKey);
-      tutor.timeSpent = timeSpent == null ? 0 : timeSpent;
+      tutor.timeSpent = timeSpent == null ? 0 : Math.round(timeSpent);
     }  
   }
 
@@ -58,7 +58,7 @@ public class Activity {
       if (child.group == null || child.group.equals("None")) {
         leafTutors.add(child);
       } else {
-        collectLeafTutors(child.subgoals, leafTutors);
+        collectLeafTutors(child.childTutors, leafTutors);
       }
     }
   }

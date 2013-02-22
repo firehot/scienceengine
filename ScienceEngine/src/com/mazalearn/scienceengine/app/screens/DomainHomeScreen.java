@@ -225,7 +225,7 @@ public class DomainHomeScreen extends AbstractScreen {
     return activityThumb;
   }
 
-  // Used from Subgoal Navigator
+  // Used from Tutor Navigator
   // TODO: Move to common place
   public static Label createLabel(String text, TextButton thumbnail,
       float x, float y, float width, float height, LabelStyle labelStyle) {

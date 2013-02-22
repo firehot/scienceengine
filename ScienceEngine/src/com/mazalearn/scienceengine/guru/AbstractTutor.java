@@ -80,7 +80,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     if (!success) return;
     this.success = true;
     nextButton.setVisible(true);
-    Gdx.app.log(ScienceEngine.LOG, "Subgoal satisfied: " + getGoal());
+    Gdx.app.log(ScienceEngine.LOG, "Tutor satisfied: " + getGoal());
   }
   
   protected boolean getSuccess() {

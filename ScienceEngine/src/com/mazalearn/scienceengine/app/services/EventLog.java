@@ -22,7 +22,7 @@ public class EventLog {
     String object = name.substring(0, pos);
     String action = name.substring(pos + 1);
     aggregator.init();
-    // Go in reverse order and stop on end of current subgoal
+    // Go in reverse order and stop on end of current tutor
     for (int i = events.size() - 1; i >= 0; i--) {
       Event e = events.get(i);
       if (e.getObject().equals(ComponentType.Global.name()) &&

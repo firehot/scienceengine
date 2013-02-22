@@ -11,7 +11,7 @@ components:[
                 visible:true,rotation:0.0,move:"None"},
 ],
 circuits:[["Lightbulb","Dynamo"]],
-plan: [
+tutors: [
   {type: "TutorGroup",
    id: "Science Train",
    group:"Guide",
@@ -19,7 +19,7 @@ plan: [
    success:200,
    timelimit: 300,
    successactions: "Upload()",
-   subgoals:[
+   childtutors:[
          {type: "KnowledgeUnit",
           id: "Draw coach",
           goal: "Draw your coach and wheels in the outlined space.", 
