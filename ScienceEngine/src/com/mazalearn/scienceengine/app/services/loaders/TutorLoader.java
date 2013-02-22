@@ -11,6 +11,7 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
+import com.mazalearn.scienceengine.guru.McqTutor;
 import com.mazalearn.scienceengine.guru.TutorGroup;
 import com.mazalearn.scienceengine.guru.ITutor;
 import com.mazalearn.scienceengine.guru.ParameterProber;
@@ -35,9 +36,12 @@ class TutorLoader {
         50.0f);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
-    String[] hints = loadHints(tutorObj);
+    String[] hints = loadStringArray("hints", tutorObj);
     AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, id,
         components, configs, (int) deltaSuccessScore, (int) deltaFailureScore, hints);
+    if (tutor instanceof McqTutor) {
+      return makeMcqTutor(tutorObj, (McqTutor) tutor);
+    }
     if (tutor instanceof ParameterProber) {
       return makeParameterProber(tutorObj, (ParameterProber) tutor);
     }
@@ -61,6 +65,14 @@ class TutorLoader {
     IModelConfig<?> parameter = science2DController.getModel().getConfig(parameterName);
     parameterProber.initialize(parameter, resultExpr, resultType);
     return parameterProber;
+  }
+
+  private AbstractTutor makeMcqTutor(OrderedMap<String, ?> tutorObj,
+      McqTutor mcqTutor) {
+    String answerMask = (String) tutorObj.get("answermask");
+    String[] options = loadStringArray("options", tutorObj);
+    mcqTutor.initialize(options, answerMask);
+    return mcqTutor;
   }
 
   private AbstractTutor makeTutorGroup(OrderedMap<String, ?> tutorObj, TutorGroup tutorGroup) {
@@ -90,8 +102,8 @@ class TutorLoader {
     return knowledgeUnit;
   }
 
-  private String[] loadHints(OrderedMap<String, ?> tutorObj) {
-    Array<?> hintObj = (Array<?>) tutorObj.get("hints");
+  private String[] loadStringArray(String attribute, OrderedMap<String, ?> tutorObj) {
+    Array<?> hintObj = (Array<?>) tutorObj.get(attribute);
     String[] hints = hintObj == null ? new String[]{} : new String[hintObj.toArray().length];
     for (int i = 0; i < hints.length; i++) {
       hints[i] = (String) hintObj.get(i);

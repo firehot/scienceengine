@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -179,15 +181,15 @@ public class DomainHomeScreen extends AbstractScreen {
       TextButton activityThumb = createImageButton(new Texture(pixmap), getSkin());
       
       // Name Label
-      createLabel(activityName, activityThumb, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground);
+      activityThumb.addActor(createLabel(activityName, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground));
       // Level Label
-      createLabel(String.valueOf(level), activityThumb, THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground);
+      activityThumb.addActor(createLabel(String.valueOf(level), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
       // Progress bar
       float percent = profile.getSuccessPercent(level, Guru.ID);
       createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
       // Timespent label
       String timeSpent = Format.formatTime(profile.getTimeSpent(level, Guru.ID));
-      createLabel(timeSpent, activityThumb, 2, THUMBNAIL_HEIGHT - 34, 50, 30, blueBackground);
+      activityThumb.addActor(createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 50, 30, blueBackground));
 
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
@@ -227,7 +229,7 @@ public class DomainHomeScreen extends AbstractScreen {
 
   // Used from Tutor Navigator
   // TODO: Move to common place
-  public static Label createLabel(String text, TextButton thumbnail,
+  public static Label createLabel(String text, 
       float x, float y, float width, float height, LabelStyle labelStyle) {
     Label nameLabel = new Label(text, labelStyle);
     nameLabel.setWrap(true);
@@ -235,8 +237,20 @@ public class DomainHomeScreen extends AbstractScreen {
     nameLabel.setWidth(ScreenComponent.getScaledX(width));
     nameLabel.setHeight(ScreenComponent.getScaledY(height));
     nameLabel.setPosition(ScreenComponent.getScaledX(x), ScreenComponent.getScaledY(y));
-    thumbnail.addActor(nameLabel);
     return nameLabel;
+  }
+
+  // Used from Tutor Navigator
+  // TODO: Move to common place
+  public static Button createTextButton(String text, 
+      float x, float y, float width, float height, TextButtonStyle textButtonStyle) {
+    TextButton button = new TextButton(text, textButtonStyle);
+    button.getLabel().setWrap(true);
+    button.getLabel().setAlignment(Align.center, Align.center);
+    button.setWidth(ScreenComponent.getScaledX(width));
+    button.setHeight(ScreenComponent.getScaledY(height));
+    button.setPosition(x, y);
+    return button;
   }
 
   // Also used from ChooseDomainScreen.

@@ -262,7 +262,7 @@ public class Guru extends Group implements ITutor {
     final LabelStyle large = new LabelStyle(skin.get(LabelStyle.class));
     BitmapFont font = skin.getFont("font80");
     large.font = font;
-    final TextButton start = new TextButton("Challenge", skin);
+    final TextButton start = new TextButton(tutor.getGroupType().name(), skin);
     start.setSize(350, 100);
     start.setColor(Color.YELLOW);
     start.getLabel().setStyle(large);

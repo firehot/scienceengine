@@ -15,7 +15,7 @@ import java.util.List;
 public interface ITutor {
 
   enum GroupType {
-    Root, Guide, Challenge, None;
+    Root, Guide, Challenge, RapidFire, None;
   }
   
   /**

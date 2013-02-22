@@ -11,6 +11,19 @@ configs:[
 ],
 tutors:[
        {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "Test Knowledge",
+       childtutors: [
+         {type: "MCQ",
+          id: "test",
+          goal:"In a bar magnet, the magnetic field is strongest close to the",
+          options:["South Pole", "North Pole", "Central Pole", "Both Poles"],
+          answermask: "0001"
+          }
+        ]
+       },
+       {type: "TutorGroup",
        id: "Magnet and Compass",
        group: "Guide",
        goal: "Magnet and Compass",

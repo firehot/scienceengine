@@ -104,9 +104,12 @@ public class TutorNavigator extends Group {
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
     goal.setText(activeTutor.getGoal());
-    if (activeTutor.getParentTutor() != null && 
-        activeTutor.getParentTutor().getGroupType() == GroupType.Challenge) {
-      goal.setColor(Color.MAGENTA);
+    if (activeTutor.getParentTutor() != null) {
+      if (activeTutor.getParentTutor().getGroupType() == GroupType.Challenge) {
+        goal.setColor(Color.MAGENTA);
+      } else if (activeTutor.getParentTutor().getGroupType() == GroupType.RapidFire) {
+        goal.setColor(Color.ORANGE);
+      }
     } else {
       goal.setColor(Color.YELLOW);
     }
@@ -148,14 +151,17 @@ public class TutorNavigator extends Group {
           new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, new Color(61f/255, 83f/255, 58f/255, 1)));
 
       // Time spent
-      tutorTimeLabels[count++] = 
-          DomainHomeScreen.createLabel("", tutorButton, 0, TUTOR_HEIGHT - 30,
+      tutorTimeLabels[count] = 
+          DomainHomeScreen.createLabel("", 0, TUTOR_HEIGHT - 30,
               50, 30, labelBackground);
+      tutorButton.addActor(tutorTimeLabels[count++]);
       
       // Count
-      DomainHomeScreen.createLabel(String.valueOf(count), tutorButton, TUTOR_WIDTH - 20, 
-          TUTOR_HEIGHT - 30, 20, 30, labelBackground);
-      if (tutor.getParentTutor().getGroupType() == GroupType.Challenge) {
+      tutorButton.addActor(DomainHomeScreen.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
+          TUTOR_HEIGHT - 30, 20, 30, labelBackground));
+      if (tutor.getParentTutor().getGroupType() == GroupType.RapidFire) {
+        tutorButton.setColor(Color.ORANGE);
+      } else if (tutor.getParentTutor().getGroupType() == GroupType.Challenge) {
         tutorButton.setColor(Color.MAGENTA);
       } else {
         tutorButton.setColor(Color.YELLOW);

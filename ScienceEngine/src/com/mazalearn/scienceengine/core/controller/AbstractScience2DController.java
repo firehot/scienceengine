@@ -26,6 +26,7 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.guru.AbstractTutor;
 import com.mazalearn.scienceengine.guru.Abstractor;
+import com.mazalearn.scienceengine.guru.McqTutor;
 import com.mazalearn.scienceengine.guru.TutorGroup;
 import com.mazalearn.scienceengine.guru.Guru;
 import com.mazalearn.scienceengine.guru.ITutor;
@@ -170,16 +171,18 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
-  public AbstractTutor createTutor(ITutor parent, String type, String goal, String name,
+  public AbstractTutor createTutor(ITutor parent, String type, String goal, String id,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    if ("ParameterProber".equals(type)) {
-      return new ParameterProber(this, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    if ("MCQ".equals(type)) {
+      return new McqTutor(this, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints);
+    } else if ("ParameterProber".equals(type)) {
+      return new ParameterProber(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("TutorGroup".equals(type)) {
-      return new TutorGroup(this, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      return new TutorGroup(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("KnowledgeUnit".equals(type)) {
-      return new KnowledgeUnit(this, parent, goal, name, components, configs, deltaSuccessScore, hints);
+      return new KnowledgeUnit(this, parent, goal, id, components, configs, deltaSuccessScore, hints);
     } else if ("Abstractor".equals(type)) {
-      return new Abstractor(this, parent, goal, name, components, configs, skin, 
+      return new Abstractor(this, parent, goal, id, components, configs, skin, 
           science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore, hints);
     }
     Gdx.app.error(ScienceEngine.LOG, "Could not load Tutor: " + type);
