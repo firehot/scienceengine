@@ -74,7 +74,7 @@ public class LevelLoader {
     science2DView.prepareView();
     ConfigLoader.loadConfigs((Array<?>) rootElem.get("configs"), science2DModel);
     modelControls.refresh();
-    loadPlan((Array<?>) rootElem.get("plan"));
+    loadTutors((Array<?>) rootElem.get("tutors"));
   }
   
   public void reload() {
@@ -96,7 +96,7 @@ public class LevelLoader {
     title.setText(description);
   }
 
-  private void loadPlan(Array<?> tutors) {
+  private void loadTutors(Array<?> tutors) {
     if (tutors == null) return;
     Gdx.app.log(ScienceEngine.LOG, "Loading tutors");
     ITutor rootTutor = science2DController.getGuru().getRootTutor();
