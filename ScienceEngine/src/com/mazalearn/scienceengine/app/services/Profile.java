@@ -40,7 +40,10 @@ public class Profile implements Serializable {
   }
 
   public void setCurrentActivity(int level) {
-    properties.put(LAST_ACTIVITY, properties.get(ACTIVITY));
+    String activity = properties.get(ACTIVITY);
+    if (activity.equals(String.valueOf(level))) return;
+    
+    properties.put(LAST_ACTIVITY, activity);
     properties.put(ACTIVITY, String.valueOf(level));
     save();
   }
@@ -74,14 +77,18 @@ public class Profile implements Serializable {
       properties = new HashMap<String,String>();
     }
     
+    String domainStr = properties.get(DOMAIN);
     Object domainObj = json.readValue("domains", OrderedMap.class, OrderedMap.class, jsonData);
     domainStats = new HashMap<Domain, HashMap<String, Float>>();
     for (Domain domain: Domain.values()) {
-      HashMap<String, Float> props = json.readValue(domain.name(), HashMap.class, Float.class, domainObj);
-      if (props == null) {
-        props = new HashMap<String, Float>();
+      HashMap<String, Float> stats = json.readValue(domain.name(), HashMap.class, Float.class, domainObj);
+      if (stats == null) {
+        stats = new HashMap<String, Float>();
       }
-      domainStats.put(domain, props);
+      domainStats.put(domain, stats);
+      if (domain.name().equals(domainStr)) {
+        currentDomainStats = stats;
+      }
     }
   }
 
@@ -97,6 +104,7 @@ public class Profile implements Serializable {
   }
 
   public void setCurrentDomain(Domain domain) {
+    if (domain.name().equals(properties.get(DOMAIN))) return;
     properties.put(DOMAIN, domain != null ? domain.name() : null);
     currentDomainStats = domainStats.get(domain);
     if (currentDomainStats == null) {
@@ -105,7 +113,7 @@ public class Profile implements Serializable {
     }
     save();
   }
-
+  
   public Domain getCurrentDomain() {
     String s = properties.get(DOMAIN);
     return s == null || s.length() == 0 ? null : Domain.valueOf(s);
@@ -143,7 +151,12 @@ public class Profile implements Serializable {
   }
 
   public void setTimeSpent(String tutorId, float timeSpent) {
-    currentDomainStats.put(makeTutorKey(tutorId, TIME_SPENT), (Float) timeSpent);
+    saveStat(makeTutorKey(tutorId, TIME_SPENT), timeSpent);
+  }
+
+  private void saveStat(String tutorKey, float value) {
+    if (currentDomainStats.get(tutorKey) == value) return;
+    currentDomainStats.put(tutorKey, (Float) value);
   }
   
   public void save() {
@@ -174,8 +187,7 @@ public class Profile implements Serializable {
   }
 
   public void setSuccessPercent(String tutorId, float percent) {
-    currentDomainStats.put(makeTutorKey(tutorId, SUCCESS_PERCENT), percent);
-    save();
+    saveStat(makeTutorKey(tutorId, SUCCESS_PERCENT), percent);
   }
 
   public void setDrawingPng(byte[] drawingPngBytes) {

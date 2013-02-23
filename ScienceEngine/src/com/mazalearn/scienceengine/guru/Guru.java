@@ -150,6 +150,7 @@ public class Guru extends Group implements ITutor {
         Parameter.Tutoring.name());
     dashboard.resetScore();
     dashboard.setVisible(true);
+    tutorNavigator.setVisible(true);
     getStage().addActor(this); // bring Guru to top
 
     // Collect actors to be excluded from probe points.
@@ -177,6 +178,7 @@ public class Guru extends Group implements ITutor {
     activeTutor.finish(false);
     setActiveTutor(this);
     dashboard.setVisible(false);
+    tutorNavigator.setVisible(false);
     
     ScienceEngine.setProbeMode(false);
     // Clear event log
@@ -239,7 +241,6 @@ public class Guru extends Group implements ITutor {
     hinter.setHint(null);
     profile.setSuccessPercent(getId(), getSuccessPercent());
     profile.setTimeSpent(getId(), getTimeSpent());
-    profile.save();
     if (!success) {
       science2DController.getView().done(false);
       this.setVisible(false);

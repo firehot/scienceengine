@@ -94,7 +94,6 @@ public class SplashScreen extends AbstractScreen {
 
   @Override
   protected void goBack() {
-    ScienceEngine.getPreferencesManager().saveProfile();
     Gdx.app.log(ScienceEngine.LOG, "Exiting engine"); //$NON-NLS-1$
     Gdx.app.exit();
   }

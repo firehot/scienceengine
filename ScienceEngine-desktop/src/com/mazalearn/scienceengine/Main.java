@@ -20,7 +20,6 @@ public class Main {
     new LwjglApplication(scienceEngine, cfg) {
       @Override
       public void exit() {
-        ScienceEngine.getPreferencesManager().saveProfile();
         super.exit();
       }
     };

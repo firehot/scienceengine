@@ -68,8 +68,10 @@ public class LoginDialog extends Dialog {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         profile = ScienceEngine.getPreferencesManager().loadProfile(email.getText());
-        profile.setUserName(name.getText());
-        profile.save();
+        if (!profile.getUserName().equals(name.getText())) {
+          profile.setUserName(name.getText());
+          profile.save();
+        }
         
         // Primitive validation
         if (!name.getText().matches("[a-zA-Z ]{2,30}") || !email.getText().contains("@")) {
@@ -106,8 +108,11 @@ public class LoginDialog extends Dialog {
         @Override
         public void input(String email) {
           profile = ScienceEngine.getPreferencesManager().loadProfile(email);
-          profile.setUserName(email.substring(0, email.indexOf("@")));
-          profile.save();
+          String userName = email.substring(0, email.indexOf("@"));
+          if (!userName.equals(profile.getUserName())) {
+            profile.setUserName(userName);
+            profile.save();
+          }
           doneCallback.done(true);
         }
         

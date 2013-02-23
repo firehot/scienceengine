@@ -80,7 +80,7 @@ public class PreferencesManager {
       // decode the contents - base64 encoded
       profileAsText = Base64Coder.decodeString(profileAsText);
       profile = new Json().fromJson(Profile.class, profileAsText);
-    } else {
+    } else { // Create a new Profile
       profile = new Profile();
       profile.setUserEmail(userEmail);
       profile.setUserName(userEmail.substring(0, userEmail.indexOf("@")));
@@ -116,11 +116,14 @@ public class PreferencesManager {
       setSyncProfilesString(userEmail + "\n" + syncProfilesString);
     }
     getPrefs().flush();
+    Gdx.app.log(ScienceEngine.LOG, "Saved Profile - " + userEmail);
   }
   
   public void syncProfiles() {
     Map<String, String> postParams = new HashMap<String, String>();
     String syncProfilesString = getPrefs().getString(SYNC_PROFILES);
+    if (syncProfilesString.length() == 0) return;
+    
     String[] syncProfilesArray = syncProfilesString.split("\n");
     HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
     for (String profileKey: syncProfiles) {

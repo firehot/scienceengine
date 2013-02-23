@@ -263,9 +263,6 @@ public class ScienceEngine extends Game {
     super.pause();
     Gdx.app.log(ScienceEngine.LOG, "Pausing engine");
 
-    // persist the profile, because we don't know if the player will come
-    // back to the scienceEngine
-    preferencesManager.saveProfile();
     // For some reason, skin and atlas do not survive pause
     skin = null;
     atlas = null;

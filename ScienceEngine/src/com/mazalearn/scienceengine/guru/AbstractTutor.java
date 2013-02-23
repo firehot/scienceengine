@@ -105,7 +105,6 @@ public abstract class AbstractTutor extends Group implements ITutor {
       profile.setSuccessPercent(id, getSuccessPercent());
     }
     profile.setTimeSpent(id, getTimeSpent());
-    profile.save();
     parent.finish(success);
   }
 
