@@ -25,7 +25,7 @@ public class McqTutor extends AbstractTutor {
     
     @Override
     public void clicked (InputEvent event, float x, float y) {
-      tutor.finish(correct);
+      tutor.prepareToFinish(correct);
     }
   }
 
@@ -42,13 +42,13 @@ public class McqTutor extends AbstractTutor {
   }
   
   @Override
-  public void finish(boolean success) {
+  public void prepareToFinish(boolean success) {
     if (success) {
       guru.showCorrect(getSuccessScore());
     } else {
       guru.showWrong(getFailureScore());
     }
-    super.finish(success);
+    super.prepareToFinish(success);
   }
 
   /**

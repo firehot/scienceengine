@@ -21,6 +21,10 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
   // The needle deflection range is this much on either side of the zero point.
   private static final float MAX_NEEDLE_ANGLE = MathUtils.degreesToRadians * 90;
 
+  // Weightage of max/min against current needle deflection to compute max/min
+  // This allows max/min to decay to 0
+  private static final float HYSTERESIS = 0.97f;
+
   private float maxCurrent = 2;
 
   private static final int SMOOTH = 4;
@@ -29,7 +33,7 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
   // Needle deflection angle
-  private float needleAngle;
+  private float needleAngle, minNeedleAngle, maxNeedleAngle;
 
   private float current;
 
@@ -49,6 +53,11 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
     });
   }
   
+  @Override
+  public void reset() {
+    super.reset();
+    maxNeedleAngle = minNeedleAngle = needleAngle = 0;
+  }
   /**
    * Sets the needle's deflection angle.
    * 
@@ -58,6 +67,24 @@ public class Ammeter extends Science2DBody implements ICurrent.Sink {
     needleAngle = Clamp.clamp(-MAX_NEEDLE_ANGLE, needleAngle, +MAX_NEEDLE_ANGLE);
     // Smoothe out the needle angle using hysteresis   
     this.needleAngle = (needleAngle + (SMOOTH - 1) * this.needleAngle) / SMOOTH;
+    maxNeedleAngle = Math.max(maxNeedleAngle, this.needleAngle);
+    maxNeedleAngle = maxNeedleAngle * HYSTERESIS + (1 - HYSTERESIS) * this.needleAngle;
+    minNeedleAngle = Math.min(minNeedleAngle, this.needleAngle);
+    minNeedleAngle = minNeedleAngle * HYSTERESIS + (1 - HYSTERESIS) * this.needleAngle;
+  }
+
+  /**
+   * @return needle deflection angle, in radians
+   */
+  public float getMinNeedleAngle() {
+    return maxNeedleAngle;
+  }
+
+  /**
+   * @return needle deflection angle, in radians
+   */
+  public float getMaxNeedleAngle() {
+    return minNeedleAngle;
   }
 
   /**

@@ -144,7 +144,6 @@ public class Profile implements Serializable {
 
   public void setTimeSpent(String tutorId, float timeSpent) {
     currentDomainStats.put(makeTutorKey(tutorId, TIME_SPENT), (Float) timeSpent);
-        //String.valueOf(timeSpent));
   }
   
   public void save() {
@@ -163,11 +162,6 @@ public class Profile implements Serializable {
   public float getSuccessPercent(int activity, String tutorId) {
     Float status = currentDomainStats.get(makeTutorKey(activity, tutorId, SUCCESS_PERCENT));
     return status == null ? 0 : status;
-    /*try {
-      return status != null ? Integer.parseInt(status) : 0;
-    } catch(NumberFormatException e) {
-      return 0;
-    }*/
   }
 
 
@@ -177,12 +171,6 @@ public class Profile implements Serializable {
     
     Float status = domainProps.get(makeTutorKey(level, id, SUCCESS_PERCENT));
     return status == null ? 0 : status;
-    /*
-    try {
-      return status != null ? Integer.parseInt(status) : 0;
-    } catch(NumberFormatException e) {
-      return 0;
-    } */
   }
 
   public void setSuccessPercent(String tutorId, float percent) {
