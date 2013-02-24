@@ -68,7 +68,7 @@ public class TutorGroup extends AbstractTutor {
     if (currentTutor.getGroupType() == GroupType.Challenge) {
       guru.doChallengeAnimation(currentTutor);
     } else if (currentTutor.getGroupType() == GroupType.RapidFire) {
-      guru.doChallengeAnimation(currentTutor);
+      guru.doRapidFireAnimation(currentTutor);
     } else {
       currentTutor.teach();
     }

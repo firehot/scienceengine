@@ -115,8 +115,8 @@ public class TutorNavigator extends Group {
       goal.setColor(Color.YELLOW);
     }
     goal.addAction(Actions.sequence(
-        Actions.alpha(0, 1),
-        Actions.alpha(1, 1)));
+        Actions.alpha(0),
+        Actions.alpha(1, 2)));
     goal.setPosition(ScreenComponent.Goal.getX(goal.getWidth()), 
         ScreenComponent.Goal.getY(goal.getHeight()));
     goal.setVisible(true);

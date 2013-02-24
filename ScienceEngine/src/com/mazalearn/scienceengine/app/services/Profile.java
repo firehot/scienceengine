@@ -77,7 +77,6 @@ public class Profile implements Serializable {
       properties = new HashMap<String,String>();
     }
     
-    String domainStr = properties.get(DOMAIN);
     Object domainObj = json.readValue("domains", OrderedMap.class, OrderedMap.class, jsonData);
     domainStats = new HashMap<Domain, HashMap<String, Float>>();
     for (Domain domain: Domain.values()) {
@@ -86,10 +85,10 @@ public class Profile implements Serializable {
         stats = new HashMap<String, Float>();
       }
       domainStats.put(domain, stats);
-      if (domain.name().equals(domainStr)) {
-        currentDomainStats = stats;
-      }
     }
+    // Set current domain
+    Domain currentDomain = Domain.valueOf(properties.get(DOMAIN));
+    currentDomainStats = domainStats.get(currentDomain);
   }
 
   @Override
@@ -154,9 +153,9 @@ public class Profile implements Serializable {
     saveStat(makeTutorKey(tutorId, TIME_SPENT), timeSpent);
   }
 
-  private void saveStat(String tutorKey, float value) {
+  private void saveStat(String tutorKey, Float value) {
     if (currentDomainStats.get(tutorKey) == value) return;
-    currentDomainStats.put(tutorKey, (Float) value);
+    currentDomainStats.put(tutorKey, value);
   }
   
   public void save() {

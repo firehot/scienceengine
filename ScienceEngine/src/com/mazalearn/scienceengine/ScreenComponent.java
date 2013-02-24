@@ -16,7 +16,7 @@ public enum ScreenComponent implements IComponentType {
   ViewControls(Align.LEFT, 81, Align.TOP, 0, 0, 0, Color.CLEAR, true, true),
   ModelControls(Align.RIGHT, -20, Align.MIDDLE, 0, 0, 0, Color.CLEAR, false, true),
   GoButtonUp(Align.LEFT, 10, Align.MIDDLE, 0, 60, 60, Color.CLEAR, false, true),
-  GoButtonDown(Align.LEFT, 120, Align.TOP, 0, 30, 30, Color.CLEAR, false, false),
+  GoButtonDown(Align.CENTER, 0, Align.TOP, -30, 0, 0, Color.CLEAR, false, false),
   NextButton(Align.CENTER, 108, Align.TOP, -50, 0, 0, Color.CLEAR, false, false), 
   Goal(Align.CENTER, 0, Align.TOP, -30, 800, 0, Color.YELLOW, false, false),
   McqOption(Align.CENTER, 0, Align.TOP, -60, 800, 0, Color.YELLOW, false, false),

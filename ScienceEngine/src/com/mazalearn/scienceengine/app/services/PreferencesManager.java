@@ -103,6 +103,7 @@ public class PreferencesManager {
   
   private void setSyncProfilesString(String s) {
     getPrefs().putString(SYNC_PROFILES, s);
+    getPrefs().flush();
   }
   
   public void saveProfile() {
@@ -140,6 +141,5 @@ public class PreferencesManager {
       }
     }
     setSyncProfilesString("");
-    getPrefs().flush();
   }
 }

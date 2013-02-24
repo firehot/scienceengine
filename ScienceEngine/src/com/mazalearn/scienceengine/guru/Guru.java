@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -260,6 +261,32 @@ public class Guru extends Group implements ITutor {
   }
   
   public void doChallengeAnimation(final ITutor tutor) {
+    final Image challenge = new Image(new Texture("images/challenge.png"));
+    challenge.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2,
+        ScreenComponent.VIEWPORT_HEIGHT - 60);
+    challenge.setSize(32, 32);
+    // TODO: Why does sizeTo animation not work below? Once it works, remove initial sizing to 256, 256
+    this.addActor(challenge);
+    challenge.addAction(
+        Actions.sequence(
+            Actions.sizeTo(256, 256),
+            Actions.parallel(
+                Actions.moveTo(ScreenComponent.VIEWPORT_WIDTH / 2 - challenge.getWidth() / 2, 
+                    ScreenComponent.VIEWPORT_HEIGHT / 2 - challenge.getHeight() / 2, 2),
+                Actions.sizeTo(256, 256, 2),
+                Actions.rotateBy(360, 2)),
+            Actions.delay(2),
+            new Action() {
+              @Override
+              public boolean act(float delta) {
+                Guru.this.removeActor(challenge);
+                tutor.teach();
+                return true;
+              }
+            }));
+  }
+
+  public void doRapidFireAnimation(final ITutor tutor) {
     final LabelStyle large = new LabelStyle(skin.get(LabelStyle.class));
     BitmapFont font = skin.getFont("font80");
     large.font = font;
