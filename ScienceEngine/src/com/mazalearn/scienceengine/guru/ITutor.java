@@ -2,6 +2,8 @@ package com.mazalearn.scienceengine.guru;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
+
 /**
  * A Tutor can be a guide, a prober or an abstractor.
  * A Guide walks through an activity showing points to be observed.
@@ -15,7 +17,16 @@ import java.util.List;
 public interface ITutor {
 
   enum GroupType {
-    Root, Guide, Challenge, RapidFire, None;
+    Root(Color.CLEAR), Guide(Color.YELLOW), Challenge(Color.RED), RapidFire(Color.MAGENTA), None(Color.CLEAR);
+    Color color;
+
+    private GroupType(Color color) {
+      this.color = color;
+    }
+    
+    public Color getColor() {
+      return color;
+    }
   }
   
   /**

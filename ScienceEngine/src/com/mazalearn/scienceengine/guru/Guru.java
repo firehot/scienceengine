@@ -13,6 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -261,15 +262,19 @@ public class Guru extends Group implements ITutor {
   }
   
   public void doChallengeAnimation(final ITutor tutor) {
-    final Image challenge = new Image(new Texture("images/challenge.png"));
+    final Image challenge = new Image(new Texture("images/challenge.png")) {
+      @Override public void draw(SpriteBatch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+      }
+    };
     challenge.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2,
         ScreenComponent.VIEWPORT_HEIGHT - 60);
-    challenge.setSize(32, 32);
+    challenge.setSize(256, 256);
     // TODO: Why does sizeTo animation not work below? Once it works, remove initial sizing to 256, 256
     this.addActor(challenge);
     challenge.addAction(
         Actions.sequence(
-            Actions.sizeTo(256, 256),
+            // Actions.sizeTo(256, 256),
             Actions.parallel(
                 Actions.moveTo(ScreenComponent.VIEWPORT_WIDTH / 2 - challenge.getWidth() / 2, 
                     ScreenComponent.VIEWPORT_HEIGHT / 2 - challenge.getHeight() / 2, 2),

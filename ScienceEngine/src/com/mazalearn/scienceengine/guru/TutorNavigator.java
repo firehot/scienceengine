@@ -106,11 +106,7 @@ public class TutorNavigator extends Group {
     this.activeTutor = activeTutor;
     goal.setText(activeTutor.getGoal());
     if (activeTutor.getParentTutor() != null) {
-      if (activeTutor.getParentTutor().getGroupType() == GroupType.Challenge) {
-        goal.setColor(Color.MAGENTA);
-      } else if (activeTutor.getParentTutor().getGroupType() == GroupType.RapidFire) {
-        goal.setColor(Color.ORANGE);
-      }
+      goal.setColor(activeTutor.getParentTutor().getGroupType().getColor());
     } else {
       goal.setColor(Color.YELLOW);
     }
@@ -160,13 +156,7 @@ public class TutorNavigator extends Group {
       // Count
       tutorButton.addActor(DomainHomeScreen.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
           TUTOR_HEIGHT - 30, 20, 30, labelBackground));
-      if (tutor.getParentTutor().getGroupType() == GroupType.RapidFire) {
-        tutorButton.setColor(Color.ORANGE);
-      } else if (tutor.getParentTutor().getGroupType() == GroupType.Challenge) {
-        tutorButton.setColor(Color.MAGENTA);
-      } else {
-        tutorButton.setColor(Color.YELLOW);
-      }
+      tutorButton.setColor(tutor.getParentTutor().getGroupType().getColor());
       tutorButton.getLabel().setWrap(true);
       tutorsTable
           .add(tutorButton)
