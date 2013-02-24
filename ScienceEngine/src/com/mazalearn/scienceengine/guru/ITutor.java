@@ -17,7 +17,12 @@ import com.badlogic.gdx.graphics.Color;
 public interface ITutor {
 
   enum GroupType {
-    Root(Color.CLEAR), Guide(Color.YELLOW), Challenge(Color.RED), RapidFire(Color.MAGENTA), None(Color.CLEAR);
+    Root(Color.CLEAR), 
+    Guide(Color.YELLOW), 
+    Challenge(Color.RED), 
+    RapidFire(Color.MAGENTA), 
+    None(Color.CLEAR);
+    
     Color color;
 
     private GroupType(Color color) {
@@ -59,10 +64,9 @@ public interface ITutor {
   public void checkProgress();
 
   /**
-   * Called when teaching session is completed
-   * @param success
+   * Called when a teaching session is completed
    */
-  public void finish(boolean success);
+  public void finish();
   
   /**
    * @return list of child tutors or null if no children.
@@ -101,5 +105,10 @@ public interface ITutor {
    */
   float getSuccessPercent();
 
+  /**
+   * Only reason for this is to allow human click on next to cause
+   * finish to happen
+   * @param success
+   */
   void prepareToFinish(boolean success);
 }

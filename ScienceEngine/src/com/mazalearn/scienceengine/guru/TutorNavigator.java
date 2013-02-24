@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -23,7 +24,6 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
 import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
-import com.mazalearn.scienceengine.guru.ITutor.GroupType;
 
 public class TutorNavigator extends Group {
   
@@ -38,6 +38,7 @@ public class TutorNavigator extends Group {
   TextButton goal;
   private ITutor activeTutor;
   private Group tutorsPanel;
+  private Button nextButton;
 
   public TutorNavigator(Collection<ITutor> tutors, final Guru guru, Skin skin) {
     super();
@@ -74,8 +75,24 @@ public class TutorNavigator extends Group {
     goal.addListener(clickListener);
     addActor(goal);
     this.setVisible(false);
+    // Create a button NEXT for learner to click when ready to move on.
+    createNextButton(skin);    
   }
 
+  private void createNextButton(Skin skin) {
+    nextButton = new TextButton("Next", skin, "body");
+    nextButton.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        nextButton.setVisible(false);
+        activeTutor.finish();
+      }
+    });
+    nextButton.setPosition(ScreenComponent.NextButton.getX(nextButton.getWidth()),
+        ScreenComponent.NextButton.getY(nextButton.getHeight()));
+    nextButton.setVisible(false);
+    addActor(nextButton);
+  }
+  
   /**
    * Refresh tutor activity times and show.
    * @param activeTutor - tutor which is active.
@@ -172,5 +189,9 @@ public class TutorNavigator extends Group {
     tutorsPane.setSize(ScreenComponent.VIEWPORT_WIDTH - 2 * ScreenComponent.getScaledX(50),
         ScreenComponent.getScaledY(TUTOR_HEIGHT + 15));
     return tutorsPane;
+  }
+
+  public void showNextButton(boolean show) {
+    nextButton.setVisible(show);    
   }
 }

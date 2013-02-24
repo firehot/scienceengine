@@ -13,16 +13,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.AggregatorFunction;
@@ -64,7 +66,7 @@ public class Guru extends Group implements ITutor {
   private Profile profile;
   private TutorGroup rootTutor;
   private TutorNavigator tutorNavigator;
-  
+
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
     this.science2DController = science2DController;
@@ -128,7 +130,7 @@ public class Guru extends Group implements ITutor {
     collectLeafTutors(rootTutor, tutors, tutorIds);
     
     tutorNavigator = new TutorNavigator(tutors, this, skin);
-    this.getStage().addActor(tutorNavigator);    
+    this.addActor(tutorNavigator);    
   }
   
   private void collectLeafTutors(ITutor tutor, List<ITutor> tutors, Set<String> tutorIds) {
@@ -177,7 +179,8 @@ public class Guru extends Group implements ITutor {
   public void endTutoring() {
     Gdx.app.log(ScienceEngine.LOG, "End Tutoring: " + getId());
     // Reinitialize current prober, if any
-    activeTutor.finish(false);
+    activeTutor.prepareToFinish(false);
+    activeTutor.finish();
     setActiveTutor(this);
     dashboard.setVisible(false);
     tutorNavigator.setVisible(false);
@@ -197,9 +200,10 @@ public class Guru extends Group implements ITutor {
     wrongImage.show(String.valueOf(-score));
   }
   
-  public void showFailure(String message) {
+  public void showFailure(int score) {
     soundManager.play(ScienceEngineSound.FAILURE);
-    failureImage.show(message);
+    dashboard.addScore(-score);
+    failureImage.show(String.valueOf(-score));
   }
 
   public void showCorrect(int score) {
@@ -209,9 +213,10 @@ public class Guru extends Group implements ITutor {
     hinter.clearHint();
   }
   
-  public void showSuccess(String message) {
+  public void showSuccess(int score) {
     soundManager.play(ScienceEngineSound.SUCCESS);
-    successImage.show(message);
+    dashboard.addScore(score);
+    successImage.show(String.valueOf(score));
     hinter.clearHint();
   }
   
@@ -237,13 +242,12 @@ public class Guru extends Group implements ITutor {
     return goal;
   }
 
-  // TODO: TutorGroup and Guru both handle many children tutors - abstract this out
   @Override
-  public void finish(boolean success) {
+  public void finish() {
     hinter.setHint(null);
     profile.setSuccessPercent(getId(), getSuccessPercent());
     profile.setTimeSpent(getId(), getTimeSpent());
-    if (!success) {
+    if (!rootTutor.success) {
       science2DController.getView().done(false);
       this.setVisible(false);
       return;
@@ -262,14 +266,11 @@ public class Guru extends Group implements ITutor {
   }
   
   public void doChallengeAnimation(final ITutor tutor) {
-    final Image challenge = new Image(new Texture("images/challenge.png")) {
-      @Override public void draw(SpriteBatch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-      }
-    };
+    final Image challenge = new Image(new Texture("images/challenge.png"));
     challenge.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2,
         ScreenComponent.VIEWPORT_HEIGHT - 60);
     challenge.setSize(256, 256);
+    soundManager.play(ScienceEngineSound.CHALLENGE);
     // TODO: Why does sizeTo animation not work below? Once it works, remove initial sizing to 256, 256
     this.addActor(challenge);
     challenge.addAction(
@@ -277,10 +278,10 @@ public class Guru extends Group implements ITutor {
             // Actions.sizeTo(256, 256),
             Actions.parallel(
                 Actions.moveTo(ScreenComponent.VIEWPORT_WIDTH / 2 - challenge.getWidth() / 2, 
-                    ScreenComponent.VIEWPORT_HEIGHT / 2 - challenge.getHeight() / 2, 2),
-                Actions.sizeTo(256, 256, 2),
-                Actions.rotateBy(360, 2)),
-            Actions.delay(2),
+                    ScreenComponent.VIEWPORT_HEIGHT / 2 - challenge.getHeight() / 2, 3),
+                Actions.sizeTo(256, 256, 3),
+                Actions.rotateBy(360, 3)),
+            Actions.delay(3),
             new Action() {
               @Override
               public boolean act(float delta) {
@@ -301,6 +302,7 @@ public class Guru extends Group implements ITutor {
     start.getLabel().setStyle(large);
     start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
         ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
+    soundManager.play(ScienceEngineSound.RAPID_FIRE);
     this.addActor(start);
     start.addAction(
         Actions.sequence(
@@ -436,5 +438,9 @@ public class Guru extends Group implements ITutor {
 
   @Override
   public void prepareToFinish(boolean success) {
+  }
+
+  public void showNextButton(boolean show) {
+    tutorNavigator.showNextButton(show);
   }
 }

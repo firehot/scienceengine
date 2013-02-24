@@ -13,12 +13,16 @@ tutors:[
        {type: "TutorGroup",
        id: "Multiple Choice Questions",
        group: "RapidFire",
-       goal: "Test Knowledge",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "BarMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
        childtutors: [
          {type: "MCQ",
           id: "test",
           goal:"In a bar magnet, the magnetic field is strongest close to the",
-          options:["South Pole", "North Pole", "Central Pole", "Both Poles"],
+          options:["South Pole Only", "North Pole Only", "Central Pole Only", "Both North and South Poles"],
           answermask: "0001"
           }
         ]
@@ -80,7 +84,7 @@ tutors:[
        {type: "TutorGroup",
         group: "Challenge",
         id: "Magnetic Field Challenge",
-        goal: "Understand the magnetic field of a magnet",
+        goal: "Challenge: Magnetic Field around a Magnet",
         childtutors: [
          {type: "FieldMagnitudeProber",
           goal: "Touch one of the two ? where the magnetic field is stronger",

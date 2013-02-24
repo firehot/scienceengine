@@ -44,11 +44,12 @@ public class McqTutor extends AbstractTutor {
   @Override
   public void prepareToFinish(boolean success) {
     if (success) {
-      guru.showCorrect(getSuccessScore());
+      guru.showSuccess(getSuccessScore());
     } else {
-      guru.showWrong(getFailureScore());
+      guru.showFailure(getFailureScore());
     }
-    super.prepareToFinish(success);
+    this.success = success;
+    guru.showNextButton(true);
   }
 
   /**
@@ -58,11 +59,11 @@ public class McqTutor extends AbstractTutor {
    */
   public void initialize(String[] options, String answerMask) {
     int index = 0;
+    float y = ScreenComponent.McqOption.getY(0);
     for (String option: options) {
       Button optionButton = DomainHomeScreen.createTextButton(option, 
-          ScreenComponent.McqOption.getX(200), 
-          ScreenComponent.McqOption.getY(50 * (index + 1)), 
-          200, 50, skin.get(TextButtonStyle.class));
+          ScreenComponent.McqOption.getX(200), y - 50 * 2 * index, 
+          200, 40, skin.get(TextButtonStyle.class));
       optionButton.setColor(Color.YELLOW);
       this.addActor(optionButton);
       ClickListener listener = new ChoiceListener(this, answerMask.charAt(index) == '1');

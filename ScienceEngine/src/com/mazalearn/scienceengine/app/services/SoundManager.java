@@ -21,7 +21,9 @@ public class SoundManager implements
     CLICK("sound/click.mp3"), 
     SUCCESS("sound/success.mp3"), 
     FAILURE("sound/failure.mp3"),
-    CELEBRATE("sound/celebrate.mp3");
+    CELEBRATE("sound/celebrate.mp3"),
+    RAPID_FIRE("sound/rapidfire.mp3"),
+    CHALLENGE("sound/challenge.mp3");
 
     private final String fileName;
 

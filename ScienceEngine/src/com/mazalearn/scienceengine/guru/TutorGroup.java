@@ -33,15 +33,15 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public void finish(boolean success) {
+  public void finish() {
     if (!success) {
-      super.finish(success);
+      super.finish();
       return;
     }
     // Move on to next stage
     if (++tutorIndex == childTutors.size()) {
       if (getSuccessPercent() == 100) {
-        super.finish(success);
+        super.finish();
         doSuccessActions();
         return;
       }

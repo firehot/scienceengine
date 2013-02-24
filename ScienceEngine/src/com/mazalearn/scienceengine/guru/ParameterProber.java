@@ -63,12 +63,13 @@ public class ParameterProber extends AbstractScience2DProber {
     return image;
   }
   
-  public void finish(boolean success) {
+  @Override 
+  public void finish() {
     ScienceEngine.clearPins();
     science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     image.setVisible(false);
     ScienceEngine.setProbeMode(false);
-    super.finish(success);
+    super.finish();
   }
     
   public ParameterProber(IScience2DController science2DController,
