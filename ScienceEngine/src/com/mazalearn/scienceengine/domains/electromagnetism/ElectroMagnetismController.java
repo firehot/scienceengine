@@ -32,8 +32,8 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.MagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.ITutor;
+import com.mazalearn.scienceengine.tutor.AbstractTutor;
+import com.mazalearn.scienceengine.tutor.ITutor;
 
 /**
  * Electromagnetism Domain

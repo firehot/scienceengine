@@ -7,8 +7,8 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.guru.ITutor;
+import com.mazalearn.scienceengine.tutor.AbstractScience2DProber;
+import com.mazalearn.scienceengine.tutor.ITutor;
 
 public abstract class AbstractFieldProber extends AbstractScience2DProber {
   private final Vector2 modelPos = new Vector2();

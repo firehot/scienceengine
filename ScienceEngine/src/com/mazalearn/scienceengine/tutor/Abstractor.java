@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.guru;
+package com.mazalearn.scienceengine.tutor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,7 +47,7 @@ public class Abstractor extends AbstractTutor {
   }
   
   /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.guru.AbstractTutor#reinitialize(float, float, float, float)
+   * @see com.mazalearn.scienceengine.tutor.AbstractTutor#reinitialize(float, float, float, float)
    */
   @Override
   public void prepareToTeach(ITutor childTutor) {

@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.guru;
+package com.mazalearn.scienceengine.tutor;
 
 import java.util.ArrayList;
 import java.util.List;

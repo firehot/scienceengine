@@ -9,13 +9,13 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Abstractor;
-import com.mazalearn.scienceengine.guru.McqTutor;
-import com.mazalearn.scienceengine.guru.TutorGroup;
-import com.mazalearn.scienceengine.guru.ITutor;
-import com.mazalearn.scienceengine.guru.ParameterProber;
-import com.mazalearn.scienceengine.guru.KnowledgeUnit;
+import com.mazalearn.scienceengine.tutor.AbstractTutor;
+import com.mazalearn.scienceengine.tutor.Abstractor;
+import com.mazalearn.scienceengine.tutor.ITutor;
+import com.mazalearn.scienceengine.tutor.KnowledgeUnit;
+import com.mazalearn.scienceengine.tutor.McqTutor;
+import com.mazalearn.scienceengine.tutor.ParameterProber;
+import com.mazalearn.scienceengine.tutor.TutorGroup;
 
 class TutorLoader {
 

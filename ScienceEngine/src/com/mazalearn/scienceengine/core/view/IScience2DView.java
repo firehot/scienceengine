@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
-import com.mazalearn.scienceengine.guru.IDoneCallback;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public interface IScience2DView extends IDoneCallback {
   // Pause/Resume model actions in the activity. 

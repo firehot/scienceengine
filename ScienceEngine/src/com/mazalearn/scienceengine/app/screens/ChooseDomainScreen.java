@@ -22,7 +22,7 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
-import com.mazalearn.scienceengine.guru.Guru;
+import com.mazalearn.scienceengine.tutor.Guru;
 
 public class ChooseDomainScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 242;

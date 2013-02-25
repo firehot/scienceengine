@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.guru.ITutor;
-import com.mazalearn.scienceengine.guru.ProbeImage;
+import com.mazalearn.scienceengine.tutor.ITutor;
+import com.mazalearn.scienceengine.tutor.ProbeImage;
 
 // doubts on magnitude
 // Generate A, B at two "random" points around magnet

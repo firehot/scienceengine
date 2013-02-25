@@ -5,9 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
-import com.mazalearn.scienceengine.guru.AbstractScience2DProber;
-import com.mazalearn.scienceengine.guru.ITutor;
-import com.mazalearn.scienceengine.guru.ProbeImage;
+import com.mazalearn.scienceengine.tutor.AbstractScience2DProber;
+import com.mazalearn.scienceengine.tutor.ITutor;
+import com.mazalearn.scienceengine.tutor.ProbeImage;
 
 public class LightProber extends AbstractScience2DProber {
 

@@ -24,14 +24,14 @@ import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.core.view.ViewControls;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Abstractor;
-import com.mazalearn.scienceengine.guru.McqTutor;
-import com.mazalearn.scienceengine.guru.TutorGroup;
-import com.mazalearn.scienceengine.guru.Guru;
-import com.mazalearn.scienceengine.guru.ITutor;
-import com.mazalearn.scienceengine.guru.ParameterProber;
-import com.mazalearn.scienceengine.guru.KnowledgeUnit;
+import com.mazalearn.scienceengine.tutor.AbstractTutor;
+import com.mazalearn.scienceengine.tutor.Abstractor;
+import com.mazalearn.scienceengine.tutor.Guru;
+import com.mazalearn.scienceengine.tutor.ITutor;
+import com.mazalearn.scienceengine.tutor.KnowledgeUnit;
+import com.mazalearn.scienceengine.tutor.McqTutor;
+import com.mazalearn.scienceengine.tutor.ParameterProber;
+import com.mazalearn.scienceengine.tutor.TutorGroup;
 
 public abstract class AbstractScience2DController implements
     IScience2DController {

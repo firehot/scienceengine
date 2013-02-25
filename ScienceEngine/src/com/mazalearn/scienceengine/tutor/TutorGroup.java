@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.guru;
+package com.mazalearn.scienceengine.tutor;
 
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +57,7 @@ public class TutorGroup extends AbstractTutor {
   }
 
   /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.guru.AbstractTutor#teach()
+   * @see com.mazalearn.scienceengine.tutor.AbstractTutor#teach()
    */
   @Override
   public void teach() {
@@ -75,7 +75,7 @@ public class TutorGroup extends AbstractTutor {
   }
 
   /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.guru.AbstractTutor#prepareToTeach(ITutor)
+   * @see com.mazalearn.scienceengine.tutor.AbstractTutor#prepareToTeach(ITutor)
    */
   @Override
   public void prepareToTeach(ITutor childTutor) {

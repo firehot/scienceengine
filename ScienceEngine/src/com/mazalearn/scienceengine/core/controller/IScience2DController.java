@@ -8,9 +8,9 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.ViewControls;
-import com.mazalearn.scienceengine.guru.AbstractTutor;
-import com.mazalearn.scienceengine.guru.Guru;
-import com.mazalearn.scienceengine.guru.ITutor;
+import com.mazalearn.scienceengine.tutor.AbstractTutor;
+import com.mazalearn.scienceengine.tutor.Guru;
+import com.mazalearn.scienceengine.tutor.ITutor;
 
 public interface IScience2DController {
   public IScience2DView getView();

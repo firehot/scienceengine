@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.guru;
+package com.mazalearn.scienceengine.tutor;
 
 
 import com.badlogic.gdx.math.MathUtils;

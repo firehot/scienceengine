@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
-import com.mazalearn.scienceengine.guru.IDoneCallback;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public class LoginDialog extends Dialog {
   

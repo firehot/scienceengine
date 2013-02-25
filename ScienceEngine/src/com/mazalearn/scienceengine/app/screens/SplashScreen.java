@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
-import com.mazalearn.scienceengine.guru.IDoneCallback;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 /**
  * Shows a splash image and moves on to the next screen.
