@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
-import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
+import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.services.EventLog;
@@ -198,8 +198,8 @@ public class ScienceEngine extends Game {
       int i = 3;
       if (pathSegments.length > i && isSupportedSubject(pathSegments[i])) i++;
       if (pathSegments.length > i && isSupportedBoard(pathSegments[i])) i++;
-      if (pathSegments.length > i && findSupportedDomain(pathSegments[i]) != null) {
-        Domain domain = findSupportedDomain(pathSegments[i]);
+      if (pathSegments.length > i && findSupportedTopic(pathSegments[i]) != null) {
+        Topic topic = findSupportedTopic(pathSegments[i]);
         Integer iLevel = null;
         if (query != null) {
           String[] queryParts = query.toLowerCase().split("&");
@@ -208,9 +208,9 @@ public class ScienceEngine extends Game {
           }
         }
         if (iLevel != null) {
-          return new ActivityScreen(this, domain, iLevel);
+          return new ActivityScreen(this, topic, iLevel);
         }
-        return new DomainHomeScreen(this, domain);
+        return new TopicHomeScreen(this, topic);
       }
     }
     return new SplashScreen(this);
@@ -228,9 +228,9 @@ public class ScienceEngine extends Game {
     return boards.contains(token);
   }
   
-  private Domain findSupportedDomain(String token) {
-    for (Domain domain: Domain.values()) {
-      if (domain.name().toLowerCase().equals(token)) return domain;
+  private Topic findSupportedTopic(String token) {
+    for (Topic topic: Topic.values()) {
+      if (topic.name().toLowerCase().equals(token)) return topic;
     }
     return null;
   }

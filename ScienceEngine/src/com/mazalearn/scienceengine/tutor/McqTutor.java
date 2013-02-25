@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
+import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public class McqTutor extends AbstractTutor {
@@ -61,7 +61,7 @@ public class McqTutor extends AbstractTutor {
     int index = 0;
     float y = ScreenComponent.McqOption.getY(0);
     for (String option: options) {
-      Button optionButton = DomainHomeScreen.createTextButton(option, 
+      Button optionButton = TopicHomeScreen.createTextButton(option, 
           ScreenComponent.McqOption.getX(200), y - 50 * 2 * index, 
           200, 40, skin.get(TextButtonStyle.class));
       optionButton.setColor(Color.YELLOW);

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.mazalearn.scienceengine.Domain;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 /**
@@ -24,15 +24,15 @@ public class Profile implements Serializable {
   private static final String POINTS_EARNED = "pointsEarned";
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
-  private static final String DOMAIN = "domain";
+  private static final String TOPIC = "topic";
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
-  private HashMap<Domain, HashMap<String, Float>> domainStats;
+  private HashMap<Topic, HashMap<String, Float>> topicStats;
   private HashMap<String, String> properties;
-  private HashMap<String, Float> currentDomainStats;
+  private HashMap<String, Float> currentTopicStats;
 
   public Profile() {
-    domainStats = new HashMap<Domain, HashMap<String, Float>>();
+    topicStats = new HashMap<Topic, HashMap<String, Float>>();
     properties = new HashMap<String, String>();
   }
 
@@ -78,45 +78,45 @@ public class Profile implements Serializable {
       properties = new HashMap<String,String>();
     }
     
-    Object domainObj = json.readValue("domains", OrderedMap.class, OrderedMap.class, jsonData);
-    domainStats = new HashMap<Domain, HashMap<String, Float>>();
-    for (Domain domain: Domain.values()) {
-      HashMap<String, Float> stats = json.readValue(domain.name(), HashMap.class, Float.class, domainObj);
+    Object topicObj = json.readValue("topics", OrderedMap.class, OrderedMap.class, jsonData);
+    topicStats = new HashMap<Topic, HashMap<String, Float>>();
+    for (Topic topic: Topic.values()) {
+      HashMap<String, Float> stats = json.readValue(topic.name(), HashMap.class, Float.class, topicObj);
       if (stats == null) {
         stats = new HashMap<String, Float>();
       }
-      domainStats.put(domain, stats);
+      topicStats.put(topic, stats);
     }
-    // Set current domain
-    Domain currentDomain = Domain.valueOf(properties.get(DOMAIN));
-    currentDomainStats = domainStats.get(currentDomain);
+    // Set current topic
+    Topic currentTopic = Topic.valueOf(properties.get(TOPIC));
+    currentTopicStats = topicStats.get(currentTopic);
   }
 
   @Override
   public void write(Json json) {
     json.writeValue("properties", properties);
-    json.writeObjectStart("domains");
-    for (Domain domain: Domain.values()) {
-      HashMap<String,?> props = domainStats.get(domain);
-      json.writeValue(domain.name(), props);
+    json.writeObjectStart("topics");
+    for (Topic topic: Topic.values()) {
+      HashMap<String,?> props = topicStats.get(topic);
+      json.writeValue(topic.name(), props);
     }
     json.writeObjectEnd();
   }
 
-  public void setCurrentDomain(Domain domain) {
-    if (domain.name().equals(properties.get(DOMAIN))) return;
-    properties.put(DOMAIN, domain != null ? domain.name() : null);
-    currentDomainStats = domainStats.get(domain);
-    if (currentDomainStats == null) {
-      currentDomainStats = new HashMap<String, Float>();
-      domainStats.put(domain, currentDomainStats);
+  public void setCurrentTopic(Topic topic) {
+    if (topic.name().equals(properties.get(TOPIC))) return;
+    properties.put(TOPIC, topic != null ? topic.name() : null);
+    currentTopicStats = topicStats.get(topic);
+    if (currentTopicStats == null) {
+      currentTopicStats = new HashMap<String, Float>();
+      topicStats.put(topic, currentTopicStats);
     }
     save();
   }
   
-  public Domain getCurrentDomain() {
-    String s = properties.get(DOMAIN);
-    return s == null || s.length() == 0 ? null : Domain.valueOf(s);
+  public Topic getCurrentTopic() {
+    String s = properties.get(TOPIC);
+    return s == null || s.length() == 0 ? null : Topic.valueOf(s);
   }
 
   public void setUserName(String name) {
@@ -138,7 +138,7 @@ public class Profile implements Serializable {
   }
   
   public float getTimeSpent(int activity, String tutorId) {
-    Float timeSpent = (Float) currentDomainStats.get(makeTutorKey(activity, tutorId, TIME_SPENT));
+    Float timeSpent = (Float) currentTopicStats.get(makeTutorKey(activity, tutorId, TIME_SPENT));
     return timeSpent == null ? 0 : timeSpent;
   }
 
@@ -155,8 +155,8 @@ public class Profile implements Serializable {
   }
 
   private void saveStat(String tutorKey, Float value) {
-    if (currentDomainStats.get(tutorKey) == value) return;
-    currentDomainStats.put(tutorKey, value);
+    if (currentTopicStats.get(tutorKey) == value) return;
+    currentTopicStats.put(tutorKey, value);
     save();
   }
   
@@ -174,16 +174,16 @@ public class Profile implements Serializable {
   }
   
   public float getCompletionPercent(int activity, String tutorId) {
-    Float status = currentDomainStats.get(makeTutorKey(activity, tutorId, COMPLETION_PERCENT));
+    Float status = currentTopicStats.get(makeTutorKey(activity, tutorId, COMPLETION_PERCENT));
     return status == null ? 0 : status;
   }
 
 
-  public float getCompletionPercent(Domain domain, int level, String id) {
-    HashMap<String, Float> domainProps = domainStats.get(domain);
-    if (domainProps == null) return 0;
+  public float getCompletionPercent(Topic topic, int level, String id) {
+    HashMap<String, Float> topicProps = topicStats.get(topic);
+    if (topicProps == null) return 0;
     
-    Float status = domainProps.get(makeTutorKey(level, id, COMPLETION_PERCENT));
+    Float status = topicProps.get(makeTutorKey(level, id, COMPLETION_PERCENT));
     return status == null ? 0 : status;
   }
 
@@ -201,16 +201,16 @@ public class Profile implements Serializable {
   }
   
   public float getPointsEarned(int activity, String tutorId) {
-    Float status = currentDomainStats.get(makeTutorKey(activity, tutorId, POINTS_EARNED));
+    Float status = currentTopicStats.get(makeTutorKey(activity, tutorId, POINTS_EARNED));
     return status == null ? 0 : status;
   }
 
 
-  public float getPointsEarned(Domain domain, int level, String id) {
-    HashMap<String, Float> domainProps = domainStats.get(domain);
-    if (domainProps == null) return 0;
+  public float getPointsEarned(Topic topic, int level, String id) {
+    HashMap<String, Float> topicProps = topicStats.get(topic);
+    if (topicProps == null) return 0;
     
-    Float status = domainProps.get(makeTutorKey(level, id, POINTS_EARNED));
+    Float status = topicProps.get(makeTutorKey(level, id, POINTS_EARNED));
     return status == null ? 0 : status;
   }
 

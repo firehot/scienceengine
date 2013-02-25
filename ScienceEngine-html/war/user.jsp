@@ -19,7 +19,7 @@
 
 <%@ page import="com.mazalearn.gwt.server.Activity" %>
 <%@ page import="com.mazalearn.gwt.server.Activity.Tutor" %>
-<%@ page import="com.mazalearn.gwt.server.Domain" %>
+<%@ page import="com.mazalearn.gwt.server.Topic" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -65,13 +65,13 @@
     <div id="chart_div"></div>
 
 <%
-    String userEmail = request.getParameter("userEmail");
+  String userEmail = request.getParameter("userEmail");
     if (userEmail == null) {
-        userEmail = "DemoUser@mazalearn.com";
+    userEmail = "DemoUser@mazalearn.com";
     }
-    Domain domain = Domain.Electromagnetism;
+    Topic domain = Topic.Electromagnetism;
     try {
-      domain = Domain.valueOf(request.getParameter("domain"));
+  domain = Topic.valueOf(request.getParameter("domain"));
     } catch(Exception ignored) {};
     pageContext.setAttribute("userEmail", userEmail);
     pageContext.setAttribute("domain", domain);

@@ -62,7 +62,7 @@ public class SplashScreen extends AbstractScreen {
             public void done(boolean success) {
               // TODO: sync when idle or at a better place.
               ScienceEngine.getPreferencesManager().syncProfiles();
-              scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
+              scienceEngine.setScreen(new ChooseTopicScreen(scienceEngine));
             }
           });
           loginDialog.show(stage);

@@ -117,7 +117,7 @@ public class LevelEditor extends Stage {
     Table titleTable = new Table(screen.getSkin());
     titleTable.setName("TitleTable");
     titleTable.defaults().fill();
-    titleTable.add(science2DController.getDomain().name()).pad(10);
+    titleTable.add(science2DController.getTopic().name()).pad(10);
     final SelectBox level = 
         new SelectBox(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, 
             screen.getSkin());
@@ -190,7 +190,7 @@ public class LevelEditor extends Stage {
         screen.clearScreen(Color.BLACK);
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
-        takeSnapshot(originalStage, science2DController.getDomain().name(),
+        takeSnapshot(originalStage, science2DController.getTopic().name(),
             science2DController.getLevel(), 0, 0, width, height);
       }      
     });
@@ -226,9 +226,9 @@ public class LevelEditor extends Stage {
   /**
    * Take screenshot, convert to a thumbnail and save to the level file as png.
    */
-  public static void takeSnapshot(Stage stage, String domain, int level, int x, int y, int width, int height) {
+  public static void takeSnapshot(Stage stage, String topic, int level, int x, int y, int width, int height) {
     FileHandle screenFile = 
-        LevelUtil.getLevelFile(domain, ".png", level);
+        LevelUtil.getLevelFile(topic, ".png", level);
     screenFile = Gdx.files.external(screenFile.path());
     stage.draw();
     Pixmap screenShot = ScreenUtils.getScreenshot(x, y, width, 

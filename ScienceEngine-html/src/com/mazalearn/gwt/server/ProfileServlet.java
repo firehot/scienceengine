@@ -40,7 +40,7 @@ public class ProfileServlet extends HttpServlet {
   
   static class Profile {
     Map<String, String> properties;
-    Map<String, Map<String, Float>> domains;
+    Map<String, Map<String, Float>> topics;
   }
 
   public void saveUserProfile(String userEmail, byte[] profileBytes) 
@@ -71,9 +71,9 @@ public class ProfileServlet extends HttpServlet {
     for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
       profileEntity.setProperty(entry.getKey(), entry.getValue());
     }
-    for (Map.Entry<String, Map<String, Float>> domainStats: profile.domains.entrySet()) {
-      String jsonStats = gson.toJson(domainStats.getValue());
-      profileEntity.setProperty(domainStats.getKey(), new Text(jsonStats));
+    for (Map.Entry<String, Map<String, Float>> topicStats: profile.topics.entrySet()) {
+      String jsonStats = gson.toJson(topicStats.getValue());
+      profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
     ds.put(user);
   }

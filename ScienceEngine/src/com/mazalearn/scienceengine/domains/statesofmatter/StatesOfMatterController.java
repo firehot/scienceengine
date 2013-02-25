@@ -2,7 +2,7 @@ package com.mazalearn.scienceengine.domains.statesofmatter;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.Domain;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -22,7 +22,7 @@ public class StatesOfMatterController extends AbstractScience2DController {
   ModelControls modelControls;
   
   public StatesOfMatterController(int level, int width, int height, Skin skin) {
-    super(Domain.StatesOfMatter, level, skin);
+    super(Topic.StatesOfMatter, level, skin);
     statesOfMatterModel = new StatesOfMatterModel(N);
     statesOfMatterModel.reset();
     statesOfMatterView = 

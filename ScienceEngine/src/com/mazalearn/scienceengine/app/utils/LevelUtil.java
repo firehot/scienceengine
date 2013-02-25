@@ -9,9 +9,9 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class LevelUtil {
 
-  public static Texture getLevelThumbnail(String domain, int level) {
+  public static Texture getLevelThumbnail(String topic, int level) {
     FileHandle screenFile = 
-        LevelUtil.getLevelFile(domain, ".png", level);      
+        LevelUtil.getLevelFile(topic, ".png", level);      
     Pixmap pixmap;
     try {
       pixmap = new Pixmap(screenFile);
@@ -33,13 +33,13 @@ public class LevelUtil {
     return 1 << (int) Math.ceil(Math.log(value) / Math.log(2));
   }
 
-  public static FileHandle getLevelFile(String domain, String extension, int level) {
-    return Gdx.files.internal(getLevelFilename(domain, extension, level));
+  public static FileHandle getLevelFile(String topic, String extension, int level) {
+    return Gdx.files.internal(getLevelFilename(topic, extension, level));
   }
 
-  public static String getLevelFilename(String domain,
+  public static String getLevelFilename(String topic,
       String extension, int level) {
-    return "data/" + domain + "/" + level + extension;
+    return "data/" + topic + "/" + level + extension;
   }
 
 }

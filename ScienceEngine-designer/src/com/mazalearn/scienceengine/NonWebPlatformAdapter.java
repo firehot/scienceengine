@@ -100,7 +100,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
 
   @Override
-  public void takeSnapshot(Stage stage, String domain, int level, int x, int y, int width, int height) {
-    LevelEditor.takeSnapshot(stage, domain, level, x, y, width, height);
+  public void takeSnapshot(Stage stage, String topic, int level, int x, int y, int width, int height) {
+    LevelEditor.takeSnapshot(stage, topic, level, x, y, width, height);
   }
 }

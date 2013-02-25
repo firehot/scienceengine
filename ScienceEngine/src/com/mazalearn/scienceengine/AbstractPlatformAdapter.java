@@ -113,6 +113,6 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   }
 
   @Override
-  public void takeSnapshot(Stage stage, String domain, int level, int x, int y, int width, int height) {
+  public void takeSnapshot(Stage stage, String topic, int level, int x, int y, int width, int height) {
   }
 }

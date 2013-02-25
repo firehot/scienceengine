@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.DomainHomeScreen;
+import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
@@ -166,12 +166,12 @@ public class TutorNavigator extends Group {
 
       // Time spent
       tutorTimeLabels[count] = 
-          DomainHomeScreen.createLabel("", 0, TUTOR_HEIGHT - 30,
+          TopicHomeScreen.createLabel("", 0, TUTOR_HEIGHT - 30,
               50, 30, labelBackground);
       tutorButton.addActor(tutorTimeLabels[count++]);
       
       // Count
-      tutorButton.addActor(DomainHomeScreen.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
+      tutorButton.addActor(TopicHomeScreen.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
           TUTOR_HEIGHT - 30, 20, 30, labelBackground));
       tutorButton.setColor(tutor.getParentTutor().getGroupType().getColor());
       tutorButton.getLabel().setWrap(true);

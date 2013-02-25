@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.esotericsoftware.tablelayout.Cell;
-import com.mazalearn.scienceengine.Domain;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -39,9 +39,9 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.tutor.Guru;
 
 /**
- * Activity Home screen - shows all activity numLevels for that domain.
+ * Activity Home screen - shows all activity numLevels for that topic.
  */
-public class DomainHomeScreen extends AbstractScreen {
+public class TopicHomeScreen extends AbstractScreen {
 
   public static class BrowseUrlListener extends ClickListener {
     private final String url;
@@ -98,17 +98,16 @@ public class DomainHomeScreen extends AbstractScreen {
   private static final int THUMBNAIL_HEIGHT = 279; // 182;
   private static final int RESOURCE_INFO_HEIGHT = 210;
   private TextButton[] activityThumbs;
-  private int numLevels;
   private Array<?> resources;
   private Profile profile;
-  private Domain domain;
+  private Topic topic;
   
-  public DomainHomeScreen(ScienceEngine scienceEngine, Domain domain) {
+  public TopicHomeScreen(ScienceEngine scienceEngine, Topic topic) {
     super(scienceEngine);
-    this.domain = domain;
-    readDomainActivityInfo();
+    this.topic = topic;
+    readTopicResourcesInfo();
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    profile.setCurrentDomain(domain);
+    profile.setCurrentTopic(topic);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -116,8 +115,8 @@ public class DomainHomeScreen extends AbstractScreen {
   }
 
   protected void goBack() {
-    profile.setCurrentDomain(null);
-    scienceEngine.setScreen(new ChooseDomainScreen(scienceEngine));
+    profile.setCurrentTopic(null);
+    scienceEngine.setScreen(new ChooseTopicScreen(scienceEngine));
   }
   
   @Override
@@ -131,7 +130,7 @@ public class DomainHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     table.debug();
     
-    String title = getMsg().getString("ScienceEngine." + domain) +
+    String title = getMsg().getString("ScienceEngine." + topic) +
         " - " + getMsg().getString("ScienceEngine.Activities"); //$NON-NLS-1$ //$NON-NLS-2$
     setTitle(title);
     
@@ -163,15 +162,15 @@ public class DomainHomeScreen extends AbstractScreen {
     activities.setName("Activity Levels");
     ScrollPane activitiesPane = new ScrollPane(activities, getSkin(), "thumbs");
     activitiesPane.setFadeScrollBars(false);
-    activityThumbs = new TextButton[numLevels];
+    activityThumbs = new TextButton[topic.getNumLevels()];
     
     LabelStyle blueBackground = new LabelStyle(getSkin().get(LabelStyle.class));
     blueBackground.background = 
         new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, Color.BLUE));
 
-    for (int level = 1; level <= numLevels; level++) {
-      String activityName = getMsg().getString(domain + "." + level + ".Name");
-      String filename = LevelUtil.getLevelFilename(domain.name(), ".png", level);
+    for (int level = 1; level <= topic.getNumLevels(); level++) {
+      String activityName = getMsg().getString(topic + "." + level + ".Name");
+      String filename = LevelUtil.getLevelFilename(topic.name(), ".png", level);
       Pixmap pixmap;
       if (ScienceEngine.assetManager.isLoaded(filename)) {
         pixmap = ScienceEngine.assetManager.get(filename, Pixmap.class);
@@ -212,7 +211,7 @@ public class DomainHomeScreen extends AbstractScreen {
     return activitiesPane;
   }
 
-  // Used from ChooseDomain screen
+  // Used from ChooseTopic screen
   // TODO: move to common place
   public static TextButton createImageButton(Texture texture, Skin skin) {
     TextureRegionDrawable image = 
@@ -253,7 +252,7 @@ public class DomainHomeScreen extends AbstractScreen {
     return button;
   }
 
-  // Also used from ChooseDomainScreen.
+  // Also used from ChooseTopicScreen.
   // TODO: Move to common area.
   public static void createProgressPercentageBar(LabelStyle labelStyle,
       TextButton thumbnail, float percent, int width) {
@@ -365,15 +364,15 @@ public class DomainHomeScreen extends AbstractScreen {
   private void gotoActivityLevel(final int iLevel) {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     AbstractScreen activityLevelScreen = 
-        new ActivityScreen(scienceEngine, domain, iLevel);
+        new ActivityScreen(scienceEngine, topic, iLevel);
     // Set loading screen
     scienceEngine.setScreen(new LoadingScreen(scienceEngine, activityLevelScreen));
   }
   
   @SuppressWarnings("unchecked")
-  public void readDomainActivityInfo() {
+  public void readTopicResourcesInfo() {
     FileHandle file;
-    String fileName = "data/" + domain + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
+    String fileName = "data/" + topic + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
     Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
     file = Gdx.files.internal(fileName);
     if (file == null) {
@@ -382,14 +381,13 @@ public class DomainHomeScreen extends AbstractScreen {
     String fileContents = file.readString();
     OrderedMap<String, ?> rootElem = 
         (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
-    this.numLevels = Math.round((Float) rootElem.get("Levels")); //$NON-NLS-1$
     this.resources = (Array<?>) rootElem.get("Resources");   //$NON-NLS-1$
   }
   
   @Override
   public void addAssets() {
-    for (int level = 1; level <= numLevels; level++) {
-      String filename = LevelUtil.getLevelFilename(domain.name(), ".png", level);
+    for (int level = 1; level <= topic.getNumLevels(); level++) {
+      String filename = LevelUtil.getLevelFilename(topic.name(), ".png", level);
       ScienceEngine.assetManager.load(filename, Pixmap.class);
     }
   }

@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,11 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.OrderedMap;
-import com.mazalearn.scienceengine.Domain;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -24,13 +21,13 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.tutor.Guru;
 
-public class ChooseDomainScreen extends AbstractScreen {
+public class ChooseTopicScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 242;
   private static final int THUMBNAIL_HEIGHT = 182;
 
   private Profile profile;
 
-  public ChooseDomainScreen(ScienceEngine scienceEngine) {
+  public ChooseTopicScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
     profile = ScienceEngine.getPreferencesManager().getProfile();
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
@@ -42,48 +39,48 @@ public class ChooseDomainScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    if (profile.getCurrentDomain() != null) {
-      gotoDomainHome(profile.getCurrentDomain());
+    if (profile.getCurrentTopic() != null) {
+      gotoTopicHome(profile.getCurrentTopic());
       return;
     }
     
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
 
-    String title = getMsg().getString("ScienceEngine.ChooseDomain");
+    String title = getMsg().getString("ScienceEngine.ChooseTopic");
     setTitle(title);
 
     // retrieve the default table
     Table table = super.getTable();
     table.defaults().spaceBottom(20).fill().center();
 
-    // create the domains Table
-    table.add(createDomainsSelector());    
+    // create the Topics Table
+    table.add(createTopicsSelector());    
     table.row();
   }
 
-  public Actor createDomainsSelector() {
+  public Actor createTopicsSelector() {
     Table table = new Table(getSkin());
-    table.setName("Domain Selector");
+    table.setName("Topic Selector");
     ScrollPane flickScrollPane = new ScrollPane(table, getSkin());
     table.setFillParent(false);
     table.defaults().fill();
     Texture overlayLock = new Texture("images/lock.png");
-    for (final Domain domain: Domain.values()) {
-      final boolean lock = !domain.equals(Domain.Electromagnetism);
-      Texture levelThumbnail = LevelUtil.getLevelThumbnail(domain.name(), 1);
-      TextButton domainThumb = DomainHomeScreen.createImageButton(levelThumbnail, getSkin());
+    for (final Topic topic: Topic.values()) {
+      final boolean lock = !topic.equals(Topic.Electromagnetism);
+      Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic.name(), 1);
+      TextButton topicThumb = TopicHomeScreen.createImageButton(levelThumbnail, getSkin());
       if (lock) {
         Image lockImage = new Image(overlayLock);
         lockImage.setPosition(THUMBNAIL_WIDTH / 2 - lockImage.getWidth() / 2,
             THUMBNAIL_HEIGHT / 2 - lockImage.getHeight() / 2);
-        domainThumb.addActor(lockImage);
+        topicThumb.addActor(lockImage);
       } else {
-        int progressPercentage = findDomainProgressPercentage(domain);
-        DomainHomeScreen.createProgressPercentageBar(getSkin().get(LabelStyle.class),
-            domainThumb, progressPercentage, THUMBNAIL_WIDTH);
+        int progressPercentage = findTopicProgressPercentage(topic);
+        TopicHomeScreen.createProgressPercentageBar(getSkin().get(LabelStyle.class),
+            topicThumb, progressPercentage, THUMBNAIL_WIDTH);
       }
-      domainThumb.addListener(new ClickListener() {
+      topicThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           if (lock) {
@@ -91,7 +88,7 @@ public class ChooseDomainScreen extends AbstractScreen {
               @Override
               public void input(String passcode) {
                 if ("9n8e7s6s".equals(passcode)) {
-                  gotoDomainHome(domain);
+                  gotoTopicHome(topic);
                 }
               }
               
@@ -99,16 +96,16 @@ public class ChooseDomainScreen extends AbstractScreen {
               public void canceled() {}
             }, "Enter key", "");         
           } else {
-            gotoDomainHome(domain);
+            gotoTopicHome(topic);
           }
         }
 
       });
       Table levelTable = new Table(getSkin());
       levelTable.setName("Level");
-      levelTable.add(domain.name());
+      levelTable.add(topic.name());
       levelTable.row();
-      levelTable.add(domainThumb)
+      levelTable.add(topicThumb)
           .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
           .height(ScreenComponent.getScaledY(THUMBNAIL_HEIGHT));
       table.add(levelTable).pad(5);
@@ -116,40 +113,25 @@ public class ChooseDomainScreen extends AbstractScreen {
     return flickScrollPane;
   }
   
-  private int findDomainProgressPercentage(Domain domain) {
+  private int findTopicProgressPercentage(Topic topic) {
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    int numLevels = getDomainLevels(domain);
+    int numLevels = topic.getNumLevels();
     int percent = 0;
     for (int level = 1; level <= numLevels; level++) {
-      percent += profile.getCompletionPercent(domain, level, Guru.ID);
+      percent += profile.getCompletionPercent(topic, level, Guru.ID);
     }
     return Math.round(percent * 100 / (100f * numLevels));
   }
 
-  @SuppressWarnings("unchecked")
-  public int getDomainLevels(Domain domain) {
-    FileHandle file;
-    String fileName = "data/" + domain.name() + ".json"; //$NON-NLS-1$ //$NON-NLS-2$
-    Gdx.app.log(ScienceEngine.LOG, "Opening file: " + fileName); //$NON-NLS-1$
-    file = Gdx.files.internal(fileName);
-    if (file == null) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not open file: " + fileName); //$NON-NLS-1$
-    }
-    String fileContents = file.readString();
-    OrderedMap<String, ?> rootElem = 
-        (OrderedMap<String, ?>) new JsonReader().parse(fileContents);
-    return Math.round((Float) rootElem.get("Levels")); //$NON-NLS-1$
-  }
-  
   @Override
   protected void goBack() {
     scienceEngine.setScreen(new SplashScreen(scienceEngine));
   }
   
-  private void gotoDomainHome(final Domain domain) {
-    Gdx.app.log(ScienceEngine.LOG, "Starting " + domain); //$NON-NLS-1$
+  private void gotoTopicHome(final Topic topic) {
+    Gdx.app.log(ScienceEngine.LOG, "Starting " + topic); //$NON-NLS-1$
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-    AbstractScreen domainHomeScreen = new DomainHomeScreen(scienceEngine, domain);
-    scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));
+    AbstractScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, topicHomeScreen));
   }
 }

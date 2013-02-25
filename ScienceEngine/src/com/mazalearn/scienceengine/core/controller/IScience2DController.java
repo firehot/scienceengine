@@ -3,7 +3,7 @@ package com.mazalearn.scienceengine.core.controller;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.Domain;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
@@ -16,7 +16,7 @@ public interface IScience2DController {
   public IScience2DView getView();
   public IScience2DModel getModel();
   public ModelControls getModelControls();
-  public Domain getDomain();
+  public Topic getTopic();
   int getLevel();
   /**
    * Reloads the level, reinitializing all components and configurations

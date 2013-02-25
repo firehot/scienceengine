@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mazalearn.scienceengine.Domain;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -28,20 +28,20 @@ public class ActivityScreen extends AbstractScreen {
 
   private IScience2DController science2DController;
   private Profile profile;
-  private Domain domain;
+  private Topic topic;
   @SuppressWarnings("unused")
   private int activityLevel;
 
-  public ActivityScreen(ScienceEngine scienceEngine, Domain domain, int activityLevel) {
+  public ActivityScreen(ScienceEngine scienceEngine, Topic topic, int activityLevel) {
     super(scienceEngine, null);
-    this.domain = domain;
+    this.topic = topic;
     this.activityLevel = activityLevel;
-    String fileName = LevelUtil.getLevelFilename(domain.name(), ".json", activityLevel);
+    String fileName = LevelUtil.getLevelFilename(topic.name(), ".json", activityLevel);
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       ScienceEngine.assetManager.unload(fileName);
     }
     this.science2DController = 
-        createDomainController(domain, activityLevel, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+        createTopicController(topic, activityLevel, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     IScience2DView science2DView = science2DController.getView();
     profile = ScienceEngine.getPreferencesManager().getProfile();
     profile.setCurrentActivity(activityLevel);
@@ -72,15 +72,15 @@ public class ActivityScreen extends AbstractScreen {
   protected void goBack() {
     // Stop tutoring if it was in progress
     science2DController.getGuru().endTutoring();
-    DomainHomeScreen domainHomeScreen = 
-        new DomainHomeScreen(scienceEngine, domain);
+    TopicHomeScreen topicHomeScreen = 
+        new TopicHomeScreen(scienceEngine, topic);
     profile.setCurrentActivity(0);
-    scienceEngine.setScreen(new LoadingScreen(scienceEngine, domainHomeScreen));
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, topicHomeScreen));
   }
   
-  public IScience2DController createDomainController(
-      Domain domain, int level, int width, int height) {
-    switch (domain) {
+  public IScience2DController createTopicController(
+      Topic topic, int level, int width, int height) {
+    switch (topic) {
     case StatesOfMatter: 
       return new StatesOfMatterController(level, width, height, getSkin());
     case Waves:
@@ -93,7 +93,7 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
-    String fileName = LevelUtil.getLevelFilename(domain.name(), 
+    String fileName = LevelUtil.getLevelFilename(topic.name(), 
         ".json", science2DController.getLevel());
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;

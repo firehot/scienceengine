@@ -56,7 +56,7 @@ public interface IPlatformAdapter {
   public void httpPost(String path, String contentType, Map<String, String> params,
       byte[] data);
 
-  public void takeSnapshot(Stage stage, String domain, int level, int x, int y,
+  public void takeSnapshot(Stage stage, String topic, int level, int x, int y,
       int width, int height);
 }
 

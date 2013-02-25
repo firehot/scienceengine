@@ -77,7 +77,7 @@ public class ActivityViewControls extends ViewControls {
       @Override
       public void clicked(InputEvent event, float x1, float y1) {
         setActivated(false);
-        String description = getMsg().getString(science2DController.getDomain() + "." + 
+        String description = getMsg().getString(science2DController.getTopic() + "." + 
             science2DController.getLevel() + ".Description");
         new HelpTour(getStage(), skin, description);
       }
@@ -109,7 +109,7 @@ public class ActivityViewControls extends ViewControls {
       public void dragStop (InputEvent event, float x, float y, int pointer) {
         getStage().getRoot().removeActor(snapshotter);
         ScienceEngine.getPlatformAdapter().takeSnapshot(getStage(), 
-            science2DController.getDomain().name(), science2DController.getLevel(),
+            science2DController.getTopic().name(), science2DController.getLevel(),
             (int)snapshotter.getX(), (int)snapshotter.getY(), 
             (int)snapshotter.getWidth(), (int)snapshotter.getHeight());
       }

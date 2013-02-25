@@ -11,6 +11,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
+// TODO: REmove dependence on domains.COmponentTyep above
 
 public abstract class AbstractScience2DProber extends AbstractTutor {
 
