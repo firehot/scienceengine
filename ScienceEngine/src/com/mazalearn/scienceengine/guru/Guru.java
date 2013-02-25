@@ -245,9 +245,9 @@ public class Guru extends Group implements ITutor {
   @Override
   public void finish() {
     hinter.setHint(null);
-    profile.setSuccessPercent(getId(), getSuccessPercent());
+    profile.setCompletionPercent(getId(), getCompletionPercent());
     profile.setTimeSpent(getId(), getTimeSpent());
-    if (!rootTutor.success) {
+    if (!rootTutor.isComplete) {
       science2DController.getView().done(false);
       this.setVisible(false);
       return;
@@ -432,8 +432,8 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public float getSuccessPercent() {
-    return rootTutor.getSuccessPercent();
+  public float getCompletionPercent() {
+    return rootTutor.getCompletionPercent();
   }
 
   @Override

@@ -121,7 +121,7 @@ public class ChooseDomainScreen extends AbstractScreen {
     int numLevels = getDomainLevels(domain);
     int percent = 0;
     for (int level = 1; level <= numLevels; level++) {
-      percent += profile.getSuccessPercent(domain, level, Guru.ID);
+      percent += profile.getCompletionPercent(domain, level, Guru.ID);
     }
     return Math.round(percent * 100 / (100f * numLevels));
   }

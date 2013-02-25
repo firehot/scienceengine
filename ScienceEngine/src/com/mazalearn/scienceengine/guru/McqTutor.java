@@ -48,7 +48,7 @@ public class McqTutor extends AbstractTutor {
     } else {
       guru.showFailure(getFailureScore());
     }
-    this.success = success;
+    this.isComplete = success;
     guru.showNextButton(true);
   }
 

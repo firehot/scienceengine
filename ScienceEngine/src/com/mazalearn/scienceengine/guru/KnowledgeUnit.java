@@ -54,7 +54,7 @@ public class KnowledgeUnit extends AbstractTutor {
   @Override
   public void checkProgress() {
     if (postCondition == null) return;
-    if (!getSuccess()) {
+    if (!isComplete()) {
       science2DController.getModel().bindParameterValues(variables);
       prepareToFinish(postCondition.bvalue());
     }

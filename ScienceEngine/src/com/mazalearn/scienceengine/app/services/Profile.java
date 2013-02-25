@@ -19,8 +19,9 @@ import com.mazalearn.scienceengine.ScienceEngine;
 public class Profile implements Serializable {
 
   private static final String DRAWING_PNG = "DrawingPng";
-  private static final String SUCCESS_PERCENT = "successPercent";
+  private static final String COMPLETION_PERCENT = "completionPercent";
   private static final String TIME_SPENT = "timeSpent";
+  private static final String POINTS_EARNED = "pointsEarned";
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
   private static final String DOMAIN = "domain";
@@ -156,6 +157,7 @@ public class Profile implements Serializable {
   private void saveStat(String tutorKey, Float value) {
     if (currentDomainStats.get(tutorKey) == value) return;
     currentDomainStats.put(tutorKey, value);
+    save();
   }
   
   public void save() {
@@ -163,30 +165,57 @@ public class Profile implements Serializable {
   }
 
   /**
-   * Get percent success for this tutorId
+   * Get percent isComplete for this tutorId
    * @param tutorId
    * @return
    */
-  public float getSuccessPercent(String tutorId) {
-    return getSuccessPercent(getCurrentActivity(), tutorId);
+  public float getCompletionPercent(String tutorId) {
+    return getCompletionPercent(getCurrentActivity(), tutorId);
   }
   
-  public float getSuccessPercent(int activity, String tutorId) {
-    Float status = currentDomainStats.get(makeTutorKey(activity, tutorId, SUCCESS_PERCENT));
+  public float getCompletionPercent(int activity, String tutorId) {
+    Float status = currentDomainStats.get(makeTutorKey(activity, tutorId, COMPLETION_PERCENT));
     return status == null ? 0 : status;
   }
 
 
-  public float getSuccessPercent(Domain domain, int level, String id) {
+  public float getCompletionPercent(Domain domain, int level, String id) {
     HashMap<String, Float> domainProps = domainStats.get(domain);
     if (domainProps == null) return 0;
     
-    Float status = domainProps.get(makeTutorKey(level, id, SUCCESS_PERCENT));
+    Float status = domainProps.get(makeTutorKey(level, id, COMPLETION_PERCENT));
     return status == null ? 0 : status;
   }
 
-  public void setSuccessPercent(String tutorId, float percent) {
-    saveStat(makeTutorKey(tutorId, SUCCESS_PERCENT), percent);
+  public void setCompletionPercent(String tutorId, float percent) {
+    saveStat(makeTutorKey(tutorId, COMPLETION_PERCENT), percent);
+  }
+
+  /**
+   * Get points earned for this tutorId
+   * @param tutorId
+   * @return
+   */
+  public float getPointsEarned(String tutorId) {
+    return getCompletionPercent(getCurrentActivity(), tutorId);
+  }
+  
+  public float getPointsEarned(int activity, String tutorId) {
+    Float status = currentDomainStats.get(makeTutorKey(activity, tutorId, POINTS_EARNED));
+    return status == null ? 0 : status;
+  }
+
+
+  public float getPointsEarned(Domain domain, int level, String id) {
+    HashMap<String, Float> domainProps = domainStats.get(domain);
+    if (domainProps == null) return 0;
+    
+    Float status = domainProps.get(makeTutorKey(level, id, POINTS_EARNED));
+    return status == null ? 0 : status;
+  }
+
+  public void setPointsEarned(String tutorId, float points) {
+    saveStat(makeTutorKey(tutorId, POINTS_EARNED), points);
   }
 
   public void setDrawingPng(byte[] drawingPngBytes) {

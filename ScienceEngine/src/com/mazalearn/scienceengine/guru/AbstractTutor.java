@@ -29,8 +29,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private String id;
   private Profile profile;
   private float timeSpent;
-  protected float successPercent;
-  protected boolean success;
+  protected float completionPercent;
+  protected boolean isComplete;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
@@ -47,8 +47,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.guru = science2DController.getGuru();
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.timeSpent = profile.getTimeSpent(id);
-    this.successPercent = profile.getSuccessPercent(id);
-    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", SuccessPercent: " + successPercent);
+    this.completionPercent = profile.getCompletionPercent(id);
+    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", SuccessPercent: " + completionPercent);
     this.setVisible(false);
 
   }
@@ -56,13 +56,13 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void prepareToFinish(boolean success) {
     if (!success) return;
-    this.success = true;
+    this.isComplete = true;
     guru.showNextButton(true);
     Gdx.app.log(ScienceEngine.LOG, "Tutor satisfied: " + getGoal());
   }
   
-  protected boolean getSuccess() {
-    return success;
+  protected boolean isComplete() {
+    return isComplete;
   }
 
   @Override
@@ -76,14 +76,15 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void finish() {
-    Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " success: " + success);
+    Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " isComplete: " + isComplete);
     this.setVisible(false);
-    if (success) {
-      this.successPercent = 100;
-      profile.setSuccessPercent(id, getSuccessPercent());
+    if (isComplete) {
+      this.completionPercent = 100;
+      profile.setCompletionPercent(id, getCompletionPercent());
     }
     profile.setTimeSpent(id, getTimeSpent());
-    parent.prepareToFinish(success);
+    guru.setActiveTutor(parent);
+    parent.prepareToFinish(isComplete);
     parent.finish();
   }
 
@@ -161,8 +162,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public float getSuccessPercent() {
-    return successPercent;
+  public float getCompletionPercent() {
+    return completionPercent;
   }
   
 }

@@ -30,7 +30,7 @@ class TutorLoader {
     String id = (String) tutorObj.get("id");
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type);
     String goal = (String) tutorObj.get("goal");
-    float deltaSuccessScore = (Float) LevelLoader.nvl(tutorObj.get("success"),
+    float deltaSuccessScore = (Float) LevelLoader.nvl(tutorObj.get("isComplete"),
         100.0f);
     float deltaFailureScore = (Float) LevelLoader.nvl(tutorObj.get("falure"),
         50.0f);

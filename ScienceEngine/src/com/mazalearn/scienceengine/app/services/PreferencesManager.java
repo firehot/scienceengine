@@ -111,7 +111,12 @@ public class PreferencesManager {
     String profileAsText = new Json().toJson(profile);
     profileAsText = Base64Coder.encodeString(profileAsText);
     String userEmail = getPrefs().getString(PREF_USER_EMAIL);
+    String savedProfile = getPrefs().getString(userEmail);
+    // No need to save if already up to date
+    if (profileAsText.equals(savedProfile)) return;
+    
     getPrefs().putString(userEmail, profileAsText);
+    // Add to set of profiles which need to be synced to server
     String syncProfilesString = getSyncProfilesString();
     if (!syncProfilesString.startsWith(userEmail + "\n")) {
       setSyncProfilesString(userEmail + "\n" + syncProfilesString);

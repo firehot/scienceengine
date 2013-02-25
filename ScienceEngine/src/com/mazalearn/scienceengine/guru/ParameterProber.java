@@ -120,7 +120,7 @@ public class ParameterProber extends AbstractScience2DProber {
         netSuccesses += success ? 1 : -1;
         if (!success) {
           guru.showWrong(getFailureScore());
-          setSuccessScore(getFailureScore()); // Equate success and failure scores
+          setSuccessScore(getFailureScore()); // Equate isComplete and failure scores
           return;
         }
         guru.showCorrect(getSuccessScore());

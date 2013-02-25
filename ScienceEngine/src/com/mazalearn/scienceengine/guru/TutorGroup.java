@@ -34,20 +34,20 @@ public class TutorGroup extends AbstractTutor {
   
   @Override
   public void finish() {
-    if (!success) {
+    if (!isComplete) {
       super.finish();
       return;
     }
     // Move on to next stage
     if (++tutorIndex == childTutors.size()) {
-      if (getSuccessPercent() == 100) {
+      if (getCompletionPercent() == 100) {
         super.finish();
         doSuccessActions();
         return;
       }
       // Goto first tutor which has not been successfully done
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getSuccessPercent() != 100) {
+        if (childTutors.get(tutorIndex).getCompletionPercent() != 100) {
           break;
         }
       }
@@ -85,7 +85,7 @@ public class TutorGroup extends AbstractTutor {
     if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
       // Find out where we last left off.
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getSuccessPercent() < 100) break;
+        if (childTutors.get(tutorIndex).getCompletionPercent() < 100) break;
       }
       if (tutorIndex == childTutors.size()) tutorIndex = 0;
     }
@@ -140,11 +140,11 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public float getSuccessPercent() {
-    int numSuccesses = 0;
+  public float getCompletionPercent() {
+    int numCompletions = 0;
     for (ITutor child: childTutors) {
-      if (child.getSuccessPercent() == 100) numSuccesses++;
+      if (child.getCompletionPercent() == 100) numCompletions++;
     }
-    return numSuccesses * 100 / (float) childTutors.size();
+    return numCompletions * 100 / (float) childTutors.size();
   }
 }

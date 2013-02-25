@@ -42,7 +42,7 @@ public class Activity {
   
   public void populateStats(Map<String, Float> stats) {
     for (Tutor tutor: leafTutors) {
-      String successPercentKey = "1$" + tutor.id + "$successPercent";
+      String successPercentKey = "1$" + tutor.id + "$completionPercent";
       String timeSpentKey = "1$" + tutor.id + "$timeSpent";
       Float successPercent = stats.get(successPercentKey);
       tutor.successPercent = successPercent == null ? 0 : successPercent;
