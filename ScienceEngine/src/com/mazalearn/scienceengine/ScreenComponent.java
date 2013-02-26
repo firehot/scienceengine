@@ -5,44 +5,53 @@ import com.badlogic.gdx.graphics.Color;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ScreenComponent implements IComponentType {
-  Background(Align.LEFT, 0, Align.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
-  Dashboard(Align.CENTER, 0, Align.TOP, -3, 0, 0, Color.BLACK, false, false),
-  ShoppingCart(Align.LEFT, 40, Align.TOP, -50, 50, 50, Color.BLACK, false, false),
-  Prober(Align.LEFT, 0, Align.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
-  Title(Align.CENTER, 0, Align.TOP, -10, 0, 0, Color.WHITE, true, false),
-  Status(Align.CENTER, 0, Align.BOTTOM, 10, 0, 0, Color.WHITE, true, false),
-  User(Align.RIGHT, -20, Align.TOP, -2, 20, 30, Color.WHITE, true, false),
-  Back(Align.LEFT, 0, Align.TOP, 0, 70, 30, Color.CLEAR, true, false), 
-  ViewControls(Align.LEFT, 81, Align.TOP, 0, 0, 0, Color.CLEAR, true, true),
-  ModelControls(Align.RIGHT, -20, Align.MIDDLE, 0, 0, 0, Color.CLEAR, false, true),
-  GoButtonUp(Align.LEFT, 10, Align.MIDDLE, 0, 60, 60, Color.CLEAR, false, true),
-  GoButtonDown(Align.CENTER, 0, Align.TOP, -30, 0, 0, Color.CLEAR, false, false),
-  NextButton(Align.CENTER, 108, Align.TOP, -50, 0, 0, Color.CLEAR, false, false), 
-  Goal(Align.CENTER, 0, Align.TOP, -30, 800, 0, Color.YELLOW, false, false),
-  McqOption(Align.CENTER, 0, Align.MIDDLE, 100, 800, 0, Color.YELLOW, false, false),
+  Background(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
+  Dashboard(XAlign.CENTER, 0, YAlign.TOP, -3, 0, 0, Color.BLACK, false, false),
+  ShoppingCart(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 50, Color.BLACK, false, false),
+  Prober(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
+  Title(XAlign.CENTER, 0, YAlign.TOP, -10, 0, 0, Color.WHITE, true, false),
+  Status(XAlign.CENTER, 0, YAlign.BOTTOM, 10, 0, 0, Color.WHITE, true, false),
+  User(XAlign.RIGHT, -20, YAlign.TOP, -2, 20, 30, Color.WHITE, true, false),
+  Back(XAlign.LEFT, 0, YAlign.TOP, 0, 70, 30, Color.CLEAR, true, false), 
+  ViewControls(XAlign.LEFT, 81, YAlign.TOP, 0, 0, 0, Color.CLEAR, true, true),
+  ModelControls(XAlign.RIGHT, -20, YAlign.MIDDLE, 0, 0, 0, Color.CLEAR, false, true),
+  GoButtonUp(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 60, 60, Color.CLEAR, false, true),
+  GoButtonDown(XAlign.CENTER, 0, YAlign.TOP, -30, 0, 0, Color.CLEAR, false, false),
+  NextButton(XAlign.CENTER, 108, YAlign.TOP, -50, 0, 0, Color.CLEAR, false, false), 
+  Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 800, 0, Color.YELLOW, false, false),
+  McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 800, 0, Color.YELLOW, false, false),
   ;
   
-  enum Align { LEFT(0, true), CENTER(400, true), RIGHT(800, true), 
-    TOP(480, false), BOTTOM(0, false), MIDDLE(240, false);
-
-  int base;
-    private boolean xDimension;
+  enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800); 
+    int base;
     
     float getValue(int offset) {
-      return base + (xDimension ? ScreenComponent.X_SCALE : ScreenComponent.Y_SCALE) * offset;
+      return base + ScreenComponent.X_SCALE * offset;
     }
     
-    private Align(int base, boolean xDimension) { 
+    private XAlign(int base) { 
       this.base = base;
-      this.xDimension = xDimension;
+    }
+  };
+  
+  enum YAlign { BOTTOM(0), MIDDLE(480 / 2), TOP(480); 
+    int base;
+    
+    float getValue(int offset) {
+      return base + ScreenComponent.Y_SCALE * offset;
+    }
+    
+    private YAlign(int base) { 
+      this.base = base;
     }
   };
 
-private int xOffset, yOffset;
+  private int xOffset, yOffset;
   private Color color;
   private boolean inAllScreens;
   private boolean helpTour;
-  private Align alignX, alignY;
+  private XAlign xAlign;
+  private YAlign yAlign;
   private int width;
   private int height;
   public static final int PIXELS_PER_M = 8;
@@ -61,11 +70,11 @@ private int xOffset, yOffset;
   /**
    * Constructor 
    * Specifies how closest point of component is placed on the screen.
-   * e.g. alignX being LEFT means LEFT edge of component is positioned
-   * e.g. alignY being MIDDLE means MIDDLE of component is positioned
-   * @param alignX - part of screen wrt which X offset is specified - LEFT, CENTER, RIGHT
+   * e.g. xAlign being LEFT means LEFT edge of component is positioned
+   * e.g. yAlign being MIDDLE means MIDDLE of component is positioned
+   * @param xAlign - part of screen wrt which X offset is specified
    * @param xOffset - xOffset offset
-   * @param alignY - part of screen wrt which Y offset is specified - LEFT, CENTER, RIGHT
+   * @param yAlign - part of screen wrt which Y offset is specified
    * @param yOffset - yOffset offset
    * @param width - canonical width - 0 indicates self-adjusting
    * @param height - canonical height - 0 indicates self-adjusting
@@ -73,11 +82,11 @@ private int xOffset, yOffset;
    * @param inAllScreens - whether this is present in all screens
    * @param helpTour - whether this component should be part of help tour
    */
-  private ScreenComponent(Align alignX, int xOffset, Align alignY, int yOffset, 
+  private ScreenComponent(XAlign xAlign, int xOffset, YAlign yAlign, int yOffset, 
       int width, int height, Color color, boolean inAllScreens, boolean helpTour) {
-    this.alignX = alignX;
+    this.xAlign = xAlign;
     this.xOffset = xOffset;
-    this.alignY = alignY;
+    this.yAlign = yAlign;
     this.yOffset = yOffset;
     this.width = width;
     this.height = height;
@@ -101,19 +110,19 @@ private int xOffset, yOffset;
   }
   
   public float getX(float width) {
-    switch (alignX ) {
-    case LEFT: return alignX.getValue(xOffset);
-    case CENTER: return alignX.getValue(xOffset) - width / 2;
-    case RIGHT: return alignX.getValue(xOffset) - width;
+    switch (xAlign ) {
+    case LEFT: return xAlign.getValue(xOffset);
+    case CENTER: return xAlign.getValue(xOffset) - width / 2;
+    case RIGHT: return xAlign.getValue(xOffset) - width;
     }
     return 0;
   }
   
   public float getY(float height) {
-    switch (alignY ) {
-    case BOTTOM: return alignY.getValue(yOffset);
-    case MIDDLE: return alignY.getValue(yOffset) - height / 2;
-    case TOP: return alignY.getValue(yOffset) - height;
+    switch (yAlign ) {
+    case BOTTOM: return yAlign.getValue(yOffset);
+    case MIDDLE: return yAlign.getValue(yOffset) - height / 2;
+    case TOP: return yAlign.getValue(yOffset) - height;
     }
     return 0;
   }
@@ -152,10 +161,10 @@ private int xOffset, yOffset;
   public static void setSize(int width, int height) {
     VIEWPORT_WIDTH = width;
     VIEWPORT_HEIGHT = height;
-    Align.CENTER.base = VIEWPORT_WIDTH / 2;
-    Align.MIDDLE.base = VIEWPORT_HEIGHT / 2;
-    Align.RIGHT.base = VIEWPORT_WIDTH;
-    Align.TOP.base = VIEWPORT_HEIGHT;
+    XAlign.CENTER.base = VIEWPORT_WIDTH / 2;
+    YAlign.MIDDLE.base = VIEWPORT_HEIGHT / 2;
+    XAlign.RIGHT.base = VIEWPORT_WIDTH;
+    YAlign.TOP.base = VIEWPORT_HEIGHT;
     X_SCALE = VIEWPORT_WIDTH / (float) CANONICAL_VIEWPORT_WIDTH;
     Y_SCALE = VIEWPORT_HEIGHT / (float) CANONICAL_VIEWPORT_HEIGHT;
     int fontSize = Math.round(Math.min(X_SCALE, Y_SCALE) * CANONICAL_FONT_SIZE);

@@ -173,8 +173,10 @@ public abstract class AbstractScience2DController implements
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String id,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    if ("MCQ".equals(type)) {
-      return new McqTutor(this, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints);
+    if ("MCQ1".equals(type)) {
+      return new McqTutor(this, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints, true);
+    } else if ("MCQ".equals(type)) {
+      return new McqTutor(this, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints, false);
     } else if ("ParameterProber".equals(type)) {
       return new ParameterProber(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("TutorGroup".equals(type)) {

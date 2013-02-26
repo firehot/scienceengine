@@ -11,23 +11,6 @@ configs:[
 ],
 tutors:[
        {type: "TutorGroup",
-       id: "Multiple Choice Questions",
-       group: "RapidFire",
-       goal: "RapidFire Quiz: Time 1 minute",
-       components: [ {type: "BarMagnet", visible: false},
-                     {type: "Compass", visible: false},
-                     {type: "FieldMeter", visible: false}
-                   ],
-       childtutors: [
-         {type: "MCQ",
-          id: "test",
-          goal:"In a bar magnet, the magnetic field is strongest close to the",
-          options:["South Pole Only", "North Pole Only", "Central Pole Only", "Both North and South Poles"],
-          answermask: "0001"
-          }
-        ]
-       },
-       {type: "TutorGroup",
        id: "Magnet and Compass",
        group: "Guide",
        goal: "Magnet and Compass",
@@ -109,6 +92,64 @@ tutors:[
           components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
           },
         ]
-        }
+        },
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "BarMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+         {type: "MCQ1",
+          id: "1",
+          goal:"In a bar magnet, the magnetic field is ",
+          options:["strongest close to the South Pole Only", 
+                   "strongest close to the North Pole Only", 
+                   "strongest exactly midway between North pole and South Pole",
+                   "Uniform along the length of the magnet",
+                   "strongest near North and South Poles"],
+          answermask: "00001"
+          },
+         {type: "MCQ",
+          id: "2",
+          goal:"A Bar Magnet has the following poles ",
+          options:["South Pole", 
+                   "North Pole", 
+                   "Central Pole",
+                   "East Pole",
+                   "West Pole"],
+          answermask: "11000"
+          },
+         {type: "MCQ1",
+          id: "3",
+          goal:"As the distance from the magnet increases the strength of the magnetic field",
+          options:["increases", 
+                   "decreases", 
+                   "stays constant",
+                   "none of the above"],
+          answermask: "0100"
+          },
+         {type: "MCQ",
+          id: "4",
+          goal:"The North pole of a bar magnet is ",
+          options:["attracted to the North pole of any other magnet", 
+                   "repelled by the North pole of any other magnet", 
+                   "attracted by the South pole of any other magnet",
+                   "repelled by the South pole of any other magnet"],
+          answermask: "0110"
+          },
+         {type: "MCQ",
+          id: "5",
+          goal:"Magnetic field lines of force ",
+          options:["go away from the North pole", 
+                   "go towards the South pole", 
+                   "represent the direction at any point, in which a free North pole would move",
+                   "represent the direction at any point, in which a free South pole would move"],
+          answermask: "1110"
+          }
+        ]
+       }
   ]
 }

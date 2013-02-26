@@ -42,7 +42,7 @@ public class Profile implements Serializable {
 
   public void setCurrentActivity(int level) {
     String activity = properties.get(ACTIVITY);
-    if (activity.equals(String.valueOf(level))) return;
+    if (String.valueOf(level).equals(activity)) return;
     
     properties.put(LAST_ACTIVITY, activity);
     properties.put(ACTIVITY, String.valueOf(level));
@@ -88,7 +88,10 @@ public class Profile implements Serializable {
       topicStats.put(topic, stats);
     }
     // Set current topic
-    Topic currentTopic = Topic.valueOf(properties.get(TOPIC));
+    Topic currentTopic = Topic.Electromagnetism;
+    try {
+      currentTopic = Topic.valueOf(properties.get(TOPIC));
+    } catch (Exception ignored) {}
     currentTopicStats = topicStats.get(currentTopic);
   }
 

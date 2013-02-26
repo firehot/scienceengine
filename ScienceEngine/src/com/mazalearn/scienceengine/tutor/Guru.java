@@ -16,15 +16,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.AggregatorFunction;
@@ -90,10 +86,10 @@ public class Guru extends Group implements ITutor {
     this.correctImage = new ScoreImage(ScienceEngine.assetManager.get("images/check.png", Texture.class), skin);
     this.wrongImage = new ScoreImage(ScienceEngine.assetManager.get("images/cross.png", Texture.class), skin);
     
-    ((Stage)science2DController.getView()).addActor(successImage);
-    ((Stage)science2DController.getView()).addActor(failureImage);
-    ((Stage)science2DController.getView()).addActor(correctImage);
-    ((Stage)science2DController.getView()).addActor(wrongImage);
+    addActor(successImage);
+    addActor(failureImage);
+    addActor(correctImage);
+    addActor(wrongImage);
     
     hinter = new Hinter(skin);
     this.addActor(hinter);
@@ -195,18 +191,21 @@ public class Guru extends Group implements ITutor {
   }
 
   public void showWrong(int score) {
+    addActor(wrongImage); // Bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
     dashboard.addScore(-score);
     wrongImage.show(String.valueOf(-score));
   }
   
   public void showFailure(int score) {
+    addActor(failureImage); // bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
     dashboard.addScore(-score);
     failureImage.show(String.valueOf(-score));
   }
 
   public void showCorrect(int score) {
+    addActor(correctImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
     dashboard.addScore(score);
     correctImage.show(String.valueOf(score));
@@ -214,6 +213,7 @@ public class Guru extends Group implements ITutor {
   }
   
   public void showSuccess(int score) {
+    addActor(successImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
     dashboard.addScore(score);
     successImage.show(String.valueOf(score));

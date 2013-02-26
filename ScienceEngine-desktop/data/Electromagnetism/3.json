@@ -113,5 +113,45 @@ tutors:[
             failure: 50
             }
         ]},
-  ]
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "Wire.1", visible: false},
+                     {type: "Wire.2", visible: false},
+                     {type: "CurrentSource.1", visible: false},
+                     {type: "CurrentSource.2", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+         {type: "MCQ1",
+          id: "1",
+          goal:"As the distance from the current carrying wire increases the strength of the magnetic field",
+          options:["increases", 
+                   "decreases", 
+                   "stays constant",
+                   "none of the above"],
+          answermask: "0100"
+          },
+         {type: "MCQ1",
+          id: "2",
+          goal:"Two infinite current carrying wires with current in the same direction will",
+          options:["Repel each other", 
+                   "Attract each other", 
+                   "Not affect each other",
+                   "Repel if AC current and attract if DC current"],
+          answermask: "0100"
+          },
+         {type: "MCQ1",
+          id: "3",
+          goal:"The magnetic fields at a point due to multiple wires carrying current",
+          options:["will all add up", 
+                   "will cancel each other out", 
+                   "will multiply each other",
+                   "will divide each other"],
+          answermask: "1000"
+          }
+      ]},
+   ]
 }

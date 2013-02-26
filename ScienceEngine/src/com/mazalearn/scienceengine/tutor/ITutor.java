@@ -99,9 +99,9 @@ public interface ITutor {
   float getTimeSpent();
 
   /**
-   * @return isComplete percent on this tutor.
+   * @return completion percent on this tutor.
    * For a non-group tutor, this is 0 or 100.
-   * For a group tutor, this is the percentage of children which are successful.
+   * For a group tutor, this is the percentage of children which are complete.
    */
   float getCompletionPercent();
 
