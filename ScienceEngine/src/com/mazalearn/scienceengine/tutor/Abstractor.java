@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -99,7 +98,7 @@ public class Abstractor extends AbstractTutor {
       }
     }
     // Shuffle parameters
-    shuffle(checkBoxList);
+    Utils.shuffle(checkBoxList);
     // Add parameters to table
     for (CheckBox checkBox: checkBoxList) {
       configTable.add(checkBox).left().colspan(4);
@@ -113,15 +112,6 @@ public class Abstractor extends AbstractTutor {
     }
     configTable.add(createDoneButton(skin)).fill();
     configTable.row();
-  }
-
-  private <T> void shuffle(List<T> list) {
-    for (int i = list.size(); i > 1; i--) {
-      T tmp = list.get(i - 1);
-      int j = MathUtils.random(i - 1);
-      list.set(i - 1, list.get(j));
-      list.set(j, tmp);
-    }
   }
 
   private TextButton createDoneButton(Skin skin) {

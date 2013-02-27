@@ -4,9 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScreenComponent;
 
 final class SuccessFailureImage extends Image {
@@ -22,13 +25,12 @@ final class SuccessFailureImage extends Image {
     font = skin.getFont("default-font");
   }
 
-  public void show(String message) {
+  public void show(String message, final IDoneCallback doneCallback) {
     // Middle of screen
-    this.setX(ScreenComponent.VIEWPORT_WIDTH/2);
-    this.setY(ScreenComponent.VIEWPORT_HEIGHT/2);
-    this.message = message;
+    this.setPosition(ScreenComponent.VIEWPORT_WIDTH/2, ScreenComponent.VIEWPORT_HEIGHT/2);
+    this.message = success ? message : "Continue";
     this.setVisible(true);
-    float moveBy = ScreenComponent.getScaledY(success ? 10 : -10);
+    float moveBy = ScreenComponent.getScaledY(success ? 10 : -5);
     this.setRotation(-5f);
     this.addAction(
         Actions.repeat(20,
@@ -42,6 +44,17 @@ final class SuccessFailureImage extends Image {
                 )
             )
         );
+    if (doneCallback == null) return;
+    
+    this.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        for (EventListener l: getListeners()) {
+          removeListener(l);
+        }
+        setVisible(false);
+        doneCallback.done(true);
+      }      
+    });
   }
 
   public void draw(SpriteBatch batch, float parentAlpha) {

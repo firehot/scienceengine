@@ -71,11 +71,7 @@ tutors: [
        {type: "TutorGroup",
        id: "Multiple Choice Questions",
        group: "RapidFire",
-       goal: "RapidFire Quiz: Time 1 minute",
-       components: [ {type: "ElectroMagnet", visible: false},
-                     {type: "Compass", visible: false},
-                     {type: "FieldMeter", visible: false}
-                   ],
+       goal: "RapidFire Quiz",
        childtutors: [
           {type: "MCQ1",
           id: "1",

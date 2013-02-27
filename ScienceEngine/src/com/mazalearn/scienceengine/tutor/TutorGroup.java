@@ -103,6 +103,10 @@ public class TutorGroup extends AbstractTutor {
     for (ITutor childTutor: childTutors) {
       this.addActor((AbstractTutor) childTutor);
     }
+    if (getGroupType() == GroupType.RapidFire) {
+      // Shuffle child tutors
+      Utils.shuffle(childTutors);
+    }
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.tutorBeginTime = new float[childTutors.size() + 1];
     if (successActionsString != null) {
@@ -119,6 +123,7 @@ public class TutorGroup extends AbstractTutor {
 
   @Override
   public List<ITutor> getChildTutors() {
+    if (getGroupType() == GroupType.RapidFire) return null;
     return childTutors;
   }
   

@@ -116,15 +116,8 @@ tutors:[
        {type: "TutorGroup",
        id: "Multiple Choice Questions",
        group: "RapidFire",
-       goal: "RapidFire Quiz: Time 1 minute",
-       components: [ {type: "Wire.1", visible: false},
-                     {type: "Wire.2", visible: false},
-                     {type: "CurrentSource.1", visible: false},
-                     {type: "CurrentSource.2", visible: false},
-                     {type: "Compass", visible: false},
-                     {type: "FieldMeter", visible: false}
-                   ],
-       childtutors: [
+       goal: "RapidFire Quiz",
+      childtutors: [
          {type: "MCQ1",
           id: "1",
           goal:"As the distance from the current carrying wire increases the strength of the magnetic field",

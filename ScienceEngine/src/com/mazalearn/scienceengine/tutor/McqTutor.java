@@ -1,8 +1,12 @@
 package com.mazalearn.scienceengine.tutor;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -45,6 +49,7 @@ public class McqTutor extends AbstractTutor {
   private Button[] optionButtons;
   private String answerMask;
   private boolean singleAnswer;
+  private int[] permutation;
 
   public McqTutor(IScience2DController science2dController, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
@@ -66,15 +71,30 @@ public class McqTutor extends AbstractTutor {
   public void finish() {
     boolean success = true;
     for (int index = 0; index < optionButtons.length; index++) {
-      success &= (answerMask.charAt(index) == '1') == optionButtons[index].isChecked();
+      success &= (answerMask.charAt(permutation[index]) == '1') == optionButtons[index].isChecked();
     }
     if (success) {
       guru.showSuccess(getSuccessScore());
+      super.finish();
     } else {
-      guru.showFailure(getFailureScore());
+      for (int index = 0; index < optionButtons.length; index++) {
+        if (answerMask.charAt(permutation[index]) == '1') {
+          optionButtons[index].addAction(
+              Actions.repeat(-1, 
+                  Actions.sequence(
+                      Actions.alpha(0, 0.5f),
+                      Actions.alpha(1, 0.5f),
+                      Actions.delay(1))));
+        }
+      }
+      guru.showFailure(getFailureScore(), new IDoneCallback() {
+        @Override
+        public void done(boolean success) {
+          McqTutor.super.finish();
+        }      
+      });
     }
     this.isComplete = true;
-    super.finish();
   }
 
   /**
@@ -88,7 +108,9 @@ public class McqTutor extends AbstractTutor {
     this.answerMask = answerMask;
     int index = 0;
     int numAnswers = 0;
-    for (String option: options) {
+    List<String> optionList = Arrays.asList(options);
+    permutation = Utils.shuffle(optionList);  
+    for (String option: optionList) {
       Button optionButton = TopicHomeScreen.createTextButton(option, 
           ScreenComponent.McqOption.getX(ScreenComponent.getScaledX(400)), 
           y - ScreenComponent.getScaledY(30 * 2 * index), 
@@ -104,11 +126,11 @@ public class McqTutor extends AbstractTutor {
       index++;
     }
     if (answerMask.length() != options.length) {
-      Gdx.app.error(ScienceEngine.LOG, "Answer mask does not match number of options");      
+      Gdx.app.error(ScienceEngine.LOG, getGoal() + ": Answer mask does not match number of options");      
     } else if (singleAnswer && numAnswers != 1) {
-      Gdx.app.error(ScienceEngine.LOG, "Single Answer MCQ does not have one answer specified");
+      Gdx.app.error(ScienceEngine.LOG, getGoal() + ": Single Answer MCQ does not have one answer specified");
     } else if (numAnswers == 0) {
-      Gdx.app.error(ScienceEngine.LOG, "No answers specified in Answer mask");            
+      Gdx.app.error(ScienceEngine.LOG, getGoal() + ": No answers specified in Answer mask");            
     }
   }
 }

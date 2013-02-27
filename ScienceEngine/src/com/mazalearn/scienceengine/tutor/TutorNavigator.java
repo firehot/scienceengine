@@ -24,6 +24,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.tutor.ITutor.GroupType;
 
 public class TutorNavigator extends Group {
   
@@ -120,10 +121,10 @@ public class TutorNavigator extends Group {
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
     goal.setText(activeTutor.getGoal());
-    if (activeTutor.getParentTutor() != null) {
-      goal.setColor(activeTutor.getParentTutor().getGroupType().getColor());
+    if (activeTutor.getGroupType() != GroupType.None) { 
+      goal.setColor(activeTutor.getGroupType().getColor());
     } else {
-      goal.setColor(Color.YELLOW);
+      goal.setColor(activeTutor.getParentTutor().getGroupType().getColor());
     }
     goal.addAction(Actions.sequence(
         Actions.alpha(0),
@@ -172,7 +173,11 @@ public class TutorNavigator extends Group {
       tutorButton.addActor(TopicHomeScreen.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
           TUTOR_HEIGHT - 30, 20, 30, labelBackground));
       ScreenComponent.scaleSize(tutorButton, TUTOR_WIDTH, TUTOR_HEIGHT);
-      tutorButton.setColor(tutor.getParentTutor().getGroupType().getColor());
+      if (tutor.getGroupType() != GroupType.None) { 
+        tutorButton.setColor(tutor.getGroupType().getColor());
+      } else {
+        tutorButton.setColor(tutor.getParentTutor().getGroupType().getColor());
+      }
       tutorButton.getLabel().setWrap(true);
       tutorsTable
           .add(tutorButton)
@@ -191,6 +196,6 @@ public class TutorNavigator extends Group {
   }
 
   public void showNextButton(boolean show) {
-    nextButton.setVisible(show);    
+    nextButton.setVisible(show);
   }
 }

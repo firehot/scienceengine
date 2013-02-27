@@ -197,11 +197,11 @@ public class Guru extends Group implements ITutor {
     wrongImage.show(String.valueOf(-score));
   }
   
-  public void showFailure(int score) {
+  public void showFailure(int score, IDoneCallback doneCallback) {
     addActor(failureImage); // bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
     dashboard.addScore(-score);
-    failureImage.show(String.valueOf(-score));
+    failureImage.show(String.valueOf(-score), doneCallback);
   }
 
   public void showCorrect(int score) {
@@ -216,7 +216,7 @@ public class Guru extends Group implements ITutor {
     addActor(successImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
     dashboard.addScore(score);
-    successImage.show(String.valueOf(score));
+    successImage.show(String.valueOf(score), null);
     hinter.clearHint();
   }
   
