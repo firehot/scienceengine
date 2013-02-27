@@ -15,13 +15,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.screens.HelpTour;
 import com.mazalearn.scienceengine.app.screens.TutoringEndDialog;
+import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -203,6 +207,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     this.addActor(modelControls);
     
     addGoButton();
+    // Help icon
+    addHelpButton();
 
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
@@ -215,6 +221,33 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     return modelControls;
   }
 
+  private void addHelpButton() {
+    Image helpImage = new Image(new Texture("images/help.png"));
+    helpImage.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x1, float y1) {
+        String description = ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
+            science2DController.getLevel() + ".Description");
+        List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
+        for (Actor actor: getActors()) {
+          if ((actor instanceof Science2DActor)) {
+            helpComponents.add((IHelpComponent) actor);
+          }
+        }
+        for (ScreenComponent screenComponent: ScreenComponent.values()) {
+          if (screenComponent.showInHelpTour()) {
+            helpComponents.add(screenComponent);
+          }
+        }
+        new HelpTour(AbstractScience2DView.this, skin, description, helpComponents);
+      }
+    });
+    ScreenComponent sc = ScreenComponent.Help;
+    helpImage.setPosition(sc.getX(), sc.getY());
+    helpImage.setSize(sc.getWidth(), sc.getHeight());
+    this.addActor(helpImage);
+  }
+  
   private void addGoButton() {
     Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-up.png")));
     Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-down.png")));

@@ -76,28 +76,7 @@ public class ActivityViewControls extends ViewControls {
     });
 
     // Add Help tour
-    Button helpButton = new TextButton(
-        getMsg().getString("ScienceEngine.Help"), skin, "body");
-    helpButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x1, float y1) {
-        setActivated(false);
-        String description = getMsg().getString(science2DController.getTopic() + "." + 
-            science2DController.getLevel() + ".Description");
-        List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
-        for (Actor actor: science2DView.getActors()) {
-          if ((actor instanceof Science2DActor)) {
-            helpComponents.add((IHelpComponent) actor);
-          }
-        }
-        for (ScreenComponent screenComponent: ScreenComponent.values()) {
-          if (screenComponent.showInHelpTour()) {
-            helpComponents.add(screenComponent);
-          }
-        }
-        new HelpTour(getStage(), skin, description, helpComponents);
-      }
-    });
+//    Button helpButton = addHelpButton();
 
     viewControlPanel.add(resetControl.getActor());
     viewControlPanel.row();
@@ -107,11 +86,11 @@ public class ActivityViewControls extends ViewControls {
       viewControlPanel.add(snapshotButton);
       viewControlPanel.row();
     }
-    viewControlPanel.add(helpButton);
+//    viewControlPanel.add(helpButton);
     viewControlPanel.row();
     syncWithModel();
   }
-  
+
   private void takeSnapshot() {
     final Actor snapshotter = new Snapshotter();
     snapshotter.addListener(new DragListener() {

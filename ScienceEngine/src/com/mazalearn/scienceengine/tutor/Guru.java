@@ -200,7 +200,7 @@ public class Guru extends Group implements ITutor {
   public void showFailure(int score, IDoneCallback doneCallback) {
     addActor(failureImage); // bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
-    dashboard.addScore(-score);
+    //dashboard.addScore(-score);
     failureImage.show(String.valueOf(-score), doneCallback);
   }
 
