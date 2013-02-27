@@ -101,13 +101,14 @@ public class ChooseTopicScreen extends AbstractScreen {
         }
 
       });
+      ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       Table levelTable = new Table(getSkin());
       levelTable.setName("Level");
       levelTable.add(topic.name());
       levelTable.row();
       levelTable.add(topicThumb)
-          .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
-          .height(ScreenComponent.getScaledY(THUMBNAIL_HEIGHT));
+          .width(topicThumb.getWidth())
+          .height(topicThumb.getHeight());
       table.add(levelTable).pad(5);
     }
     return flickScrollPane;

@@ -91,6 +91,46 @@ tutors: [
                 success: 5000
                 }
          ]},
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "BarMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+         {type: "MCQ",
+          id: "1",
+          goal:"Induced Current in a coil due to a bar magnet increases when",
+          options:["Bar magnet strength increases", 
+                   "Number of loops in coil increases", 
+                   "Relative motion between the coil and magnet increases",
+                   "Bar magnet strength decreases",
+                   "Number of loops in coil decreases",
+                   "Relative motion between the coil and magnet decreases"],
+          answermask: "111000"
+          },
+         {type: "MCQ",
+          id: "2",
+          goal:"The magnitude of Induced Current depends on ",
+           options:["Amount of magnetic flux on the coil", 
+                   "Rate of change of magnetic flux on the coil", 
+                   "Magnetic permittivity of air",
+                   "Electric conductivity of air"],
+         answermask: "0100"
+          },
+        {type: "MCQ",
+          id: "3",
+          goal:"When a magnet rotates in the presence of a coil, the induced current in the coil",
+          options:["stays constant", 
+                   "changes in magnitude based on rotation", 
+                   "changes in direction based on rotation",
+                   "is direct current",
+                   "is alternating current"],
+          answermask: "01101"
+          }
+       ]
+       }
    ]
- 
 }

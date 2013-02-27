@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ScreenComponent implements IComponentType {
@@ -19,7 +20,7 @@ public enum ScreenComponent implements IComponentType {
   GoButtonDown(XAlign.CENTER, 0, YAlign.TOP, -30, 0, 0, Color.CLEAR, false, false),
   NextButton(XAlign.CENTER, 108, YAlign.TOP, -50, 0, 0, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 800, 0, Color.YELLOW, false, false),
-  McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 800, 0, Color.YELLOW, false, false),
+  McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, Color.YELLOW, false, false),
   ;
   
   enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800); 
@@ -46,14 +47,15 @@ public enum ScreenComponent implements IComponentType {
     }
   };
 
-  private int xOffset, yOffset;
-  private Color color;
-  private boolean inAllScreens;
-  private boolean helpTour;
-  private XAlign xAlign;
-  private YAlign yAlign;
-  private int width;
-  private int height;
+  private final int xOffset, yOffset;
+  private final Color color;
+  private final boolean inAllScreens;
+  private final boolean helpTour;
+  private final XAlign xAlign;
+  private final YAlign yAlign;
+  private final int canonicalWidth;
+  private final int canonicalHeight;
+  private float x, y, width, height;
   public static final int PIXELS_PER_M = 8;
   
   static float X_SCALE = 1;
@@ -76,8 +78,8 @@ public enum ScreenComponent implements IComponentType {
    * @param xOffset - xOffset offset
    * @param yAlign - part of screen wrt which Y offset is specified
    * @param yOffset - yOffset offset
-   * @param width - canonical width - 0 indicates self-adjusting
-   * @param height - canonical height - 0 indicates self-adjusting
+   * @param canonicalWidth - canonical canonicalWidth - 0 indicates self-adjusting
+   * @param canonicalHeight - canonical canonicalHeight - 0 indicates self-adjusting
    * @param color - color of component
    * @param inAllScreens - whether this is present in all screens
    * @param helpTour - whether this component should be part of help tour
@@ -88,26 +90,29 @@ public enum ScreenComponent implements IComponentType {
     this.xOffset = xOffset;
     this.yAlign = yAlign;
     this.yOffset = yOffset;
-    this.width = width;
-    this.height = height;
+    this.canonicalWidth = width;
+    this.canonicalHeight = height;
     this.color = color;
     this.inAllScreens = inAllScreens;
     this.helpTour = helpTour;
   }
   
   /**
-   * @return scaled width
+   * @return scaled canonicalWidth
    */
   public float getWidth() {
-    return width * X_SCALE;
+    return width;
   }
   
   /**
-   * @return scaled height
+   * @return scaled canonicalHeight
    */
   public float getHeight() {
-    return height * Y_SCALE;
+    return height;
   }
+  
+  public float getX() { return x; }
+  public float getY() { return y; }
   
   public float getX(float width) {
     switch (xAlign ) {
@@ -157,6 +162,19 @@ public enum ScreenComponent implements IComponentType {
   public static float getScaledY(float y) {
     return y * Y_SCALE;
   }
+  
+  public static void scaleSize(Actor actor, float cWidth, float cHeight) {
+    actor.setSize(getScaledX(cWidth), getScaledY(cHeight));
+  }
+
+  public static void scalePosition(Actor actor, float cX, float cY) {
+    actor.setPosition(getScaledX(cX), getScaledY(cY));
+  }
+
+  public static void scalePositionAndSize(Actor actor, float cX, float cY, float cWidth, float cHeight) {
+    scaleSize(actor, cWidth, cHeight);
+    scalePosition(actor, cX, cY);
+  }
 
   public static void setSize(int width, int height) {
     VIEWPORT_WIDTH = width;
@@ -174,6 +192,12 @@ public enum ScreenComponent implements IComponentType {
         FontSize = AVAILABLE_FONT_SIZES[i];
         break;
       }
+    }
+    for (ScreenComponent sc: values()) {
+      sc.width = sc.canonicalWidth * X_SCALE;
+      sc.height = sc.canonicalHeight * Y_SCALE;
+      sc.x = sc.getX(sc.width);
+      sc.y = sc.getY(sc.height);
     }
   }
   

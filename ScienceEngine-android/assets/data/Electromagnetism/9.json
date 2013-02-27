@@ -67,6 +67,34 @@ tutors: [
               {name:"Lightbulb.Color", permitted:true},
               ],
             postcondition: "1 = 1"},
-   ]},
+       ]},
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "ElectroMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+          {type: "MCQ1",
+          id: "1",
+          goal:"The material used to provide the highest 'magnetic strength' (BHMax) is",
+           options:["Ferrite (Ferric Oxide based)", 
+                   "Samarium-Cobalt (SmCo)",
+                   "Neodymium (FeNiCo)",
+                   "Cobalt"
+                   ],
+         answermask: "0010"
+          },
+          {type: "MCQ1",
+          id: "2",
+          goal:"Higher current is induced in a dynamo coil when it is spinning so that its axis",
+           options:["Is parallel to the plane of the coil", 
+                   "Is perpendicular to the plane of the coil"
+                   ],
+         answermask: "01"
+          }]
+       }
 ],
 }

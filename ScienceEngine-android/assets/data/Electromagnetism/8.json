@@ -37,5 +37,25 @@ tutors: [
            hints: ["Give it a starting spin"],
            postcondition: "CurrentCoil.RotationData >= 5"},
    ]},
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "ElectroMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+          {type: "MCQ",
+          id: "1",
+          goal:"The speed of rotation of the AC motor is affected by",
+           options:["Magnetic field", 
+                   "Air Permittivity",
+                   "Current Magnitude",
+                   "Current Frequency"
+                   ],
+         answermask: "1011"
+          }]
+       }
 ]
 }

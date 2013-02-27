@@ -66,14 +66,14 @@ public class Abstractor extends AbstractTutor {
   private void createConfigTable(IScience2DModel science2DModel, Skin skin) {
     configTable = new Table(skin);
     configTable.setName("Configs");
-    configTable.setPosition(ScreenComponent.getScaledX(150), ScreenComponent.getScaledY(325));
+    ScreenComponent.scalePosition(configTable, 150, 325);
     this.addActor(configTable);
     // TODO: Create cart as a screencomponent
     Texture shoppingCartTexture = new Texture("images/shoppingcart.png");
     final Image cart = new Image(shoppingCartTexture);
     cart.setSize(ScreenComponent.ShoppingCart.getWidth(), ScreenComponent.ShoppingCart.getHeight());
-    cart.setPosition(ScreenComponent.ShoppingCart.getX(cart.getWidth()), 
-        ScreenComponent.ShoppingCart.getY(cart.getHeight()));
+    cart.setPosition(ScreenComponent.ShoppingCart.getX(), 
+        ScreenComponent.ShoppingCart.getY());
     cart.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         configTable.setVisible(!configTable.isVisible());

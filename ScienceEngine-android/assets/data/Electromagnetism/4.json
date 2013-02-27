@@ -96,5 +96,62 @@ tutors:[
             components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
             }
         ]},
-      ]
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "BarMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+         {type: "MCQ1",
+          id: "1",
+          goal:"In an ElectroMagnet, the magnetic field is ",
+          options:["strongest close to the South Pole Only", 
+                   "strongest close to the North Pole Only", 
+                   "strongest exactly midway between North pole and South Pole",
+                   "Uniform along the length of the magnet",
+                   "strongest near North and South Poles"],
+          answermask: "00001"
+          },
+         {type: "MCQ",
+          id: "2",
+          goal:"An ElectroMagnet has the following poles ",
+          options:["South Pole", 
+                   "North Pole", 
+                   "Central Pole",
+                   "East Pole",
+                   "West Pole"],
+          answermask: "11000"
+          },
+         {type: "MCQ1",
+          id: "3",
+          goal:"When the direction of current in an ElectroMagnet is reversed",
+          options:["its magnetic field direction stays the same", 
+                   "its magnetic field direction reverses", 
+                   "its magnetic field disappears",
+                   "none of the above"],
+          answermask: "0100"
+          },
+         {type: "MCQ1",
+          id: "4",
+          goal:"With alternating current in an ElectroMagnet",
+          options:["there will no magnetic field", 
+                   "there will be a constant magnetic field perpendicular to the ElectroMagnet", 
+                   "there will be an alternating magnetic field",
+                   "none of the above"],
+          answermask: "0100"
+          },
+         {type: "MCQ1",
+          id: "5",
+          goal:"The direction of magnetic field for an ElectroMagnet is given by",
+          options:["Curl right hand into a fist placed along the wire with thumb in direction of current. The magnetic field is given by the curling fingers.", 
+                    "Given by Fleming's left hand rule",
+                   "Given by Flemings right hand rule"],
+          answermask: "100"
+          }
+        ]
+       }
+     ]
 }

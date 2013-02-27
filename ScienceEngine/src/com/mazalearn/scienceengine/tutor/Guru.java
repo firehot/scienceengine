@@ -130,7 +130,7 @@ public class Guru extends Group implements ITutor {
   }
   
   private void collectLeafTutors(ITutor tutor, List<ITutor> tutors, Set<String> tutorIds) {
-    if (tutor.getGroupType() == GroupType.None) { 
+    if (tutor.getChildTutors() == null) { 
       if (tutorIds.contains(tutor.getId())) {
         Gdx.app.error(ScienceEngine.LOG, "Duplicate Tutor ID: " + tutor.getId());
       }

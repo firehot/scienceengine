@@ -83,7 +83,7 @@ public class McqTutor extends AbstractTutor {
    * @param answerMask - sequence of truth value of options - true = 1, false = 0
    */
   public void initialize(String[] options, String answerMask) {
-    float y = ScreenComponent.McqOption.getY(0);
+    float y = ScreenComponent.McqOption.getY();
     this.optionButtons = new Button[options.length];
     this.answerMask = answerMask;
     int index = 0;
@@ -92,8 +92,7 @@ public class McqTutor extends AbstractTutor {
       Button optionButton = TopicHomeScreen.createTextButton(option, 
           ScreenComponent.McqOption.getX(ScreenComponent.getScaledX(400)), 
           y - ScreenComponent.getScaledY(30 * 2 * index), 
-          ScreenComponent.getScaledX(400), 
-          ScreenComponent.getScaledY(30),
+          400, 30,
           skin.get("toggle", TextButtonStyle.class));
       optionButton.setColor(Color.YELLOW);
       this.addActor(optionButton);

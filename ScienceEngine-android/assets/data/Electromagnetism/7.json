@@ -117,5 +117,38 @@ tutors: [
             success: 5000
             },
        ]},
-   ],
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "ElectroMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+         {type: "MCQ",
+          id: "1",
+          goal:"Direction of movement of current carrying wire in a magnetic field is given by",
+          options:["Fleming's Left Hand Rule", 
+                   "Fleming's Right Hand Rule", 
+                   "Volta's Righthand Thumb rule",
+                   "None of the above"],
+          answermask: "1000"
+          },
+         {type: "MCQ",
+          id: "2",
+          goal:"The speed of rotation of the DC motor increases when",
+           options:["Magnetic field increases", 
+                   "Magnetic field decreases", 
+                   "Air Permittivity increases",
+                   "Air Permittivity decreases",
+                   "Earth's magnetic field increases",
+                   "Earth's magnetic field decreases",
+                   "Current increases",
+                   "Current decreases"
+                   ],
+         answermask: "10000010"
+          }]
+       }
+   ]
 }

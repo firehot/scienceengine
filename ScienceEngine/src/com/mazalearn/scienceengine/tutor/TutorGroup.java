@@ -65,12 +65,10 @@ public class TutorGroup extends AbstractTutor {
     tutorBeginTime[tutorIndex] = ScienceEngine.getTime();
     ScienceEngine.setProbeMode(false);
     currentTutor.prepareToTeach(null);
-    if (currentTutor.getGroupType() == GroupType.Challenge) {
-      guru.doChallengeAnimation(currentTutor);
-    } else if (currentTutor.getGroupType() == GroupType.RapidFire) {
-      guru.doRapidFireAnimation(currentTutor);
-    } else {
-      currentTutor.teach();
+    switch(currentTutor.getGroupType()) {
+    case Challenge: guru.doChallengeAnimation(currentTutor); break;
+    case RapidFire: guru.doRapidFireAnimation(currentTutor); break;
+    default: currentTutor.teach(); break;
     }
   }
 

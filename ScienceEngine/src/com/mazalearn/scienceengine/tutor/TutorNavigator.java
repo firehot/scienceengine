@@ -107,9 +107,7 @@ public class TutorNavigator extends Group {
         Image status = new Image(new Texture("images/check.png"));
         TextButton tutorButton = (TextButton) findActor(tutor.getId());
         tutorButton.addActor(status);
-        status.setPosition(ScreenComponent.getScaledX(70),
-            ScreenComponent.getScaledY(TUTOR_HEIGHT - 64));
-        status.setSize(ScreenComponent.getScaledX(60), ScreenComponent.getScaledY(60));
+        ScreenComponent.scalePositionAndSize(status, 70, TUTOR_HEIGHT - 64, 60, 60);
       }
     }
     // Update active tutor
@@ -173,12 +171,13 @@ public class TutorNavigator extends Group {
       // Count
       tutorButton.addActor(TopicHomeScreen.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
           TUTOR_HEIGHT - 30, 20, 30, labelBackground));
+      ScreenComponent.scaleSize(tutorButton, TUTOR_WIDTH, TUTOR_HEIGHT);
       tutorButton.setColor(tutor.getParentTutor().getGroupType().getColor());
       tutorButton.getLabel().setWrap(true);
       tutorsTable
           .add(tutorButton)
-          .width(ScreenComponent.getScaledX(TUTOR_WIDTH))
-          .height(ScreenComponent.getScaledY(TUTOR_HEIGHT))
+          .width(tutorButton.getWidth())
+          .height(tutorButton.getHeight())
           .pad(5);
     }
     ScrollPane tutorsPane = new ScrollPane(tutorsTable, skin);

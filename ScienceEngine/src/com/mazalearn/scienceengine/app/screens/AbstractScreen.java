@@ -141,7 +141,7 @@ public abstract class AbstractScreen implements Screen {
         float y = screenComponent.getY(t.getPrefHeight()) + t.getPrefHeight() / 2;
         component.setPosition(x, y);
       } else { // Place the left bottom corner
-        component.setPosition(screenComponent.getX(component.getWidth()), screenComponent.getY(component.getHeight()));
+        component.setPosition(screenComponent.getX(), screenComponent.getY());
       }
     }
   }

@@ -47,8 +47,9 @@ public class HelpTour extends Group {
       contentButton.setText(text);
       // Set size in a 3:1 aspect ratio
       float semiPerimeter = (float) Math.sqrt(text.length());
-      float h = ScreenComponent.getScaledX(semiPerimeter * SCALE / 3 + 30); // To hold Buttons
-      float w = ScreenComponent.getScaledY(semiPerimeter * SCALE * 3 / 4);
+      float h = semiPerimeter * SCALE / 3 + 30; // To hold Buttons
+      float w = semiPerimeter * SCALE * 3 / 4;
+      ScreenComponent.scaleSize(contentButton, w, h);
       contentButton.setSize(w, h);
       contentButton.getLabel().setAlignment(Align.center, Align.left);
       // Put contentbutton on screen touching arrow based on quadrant
@@ -119,8 +120,7 @@ public class HelpTour extends Group {
     addActor(arrow);
     
     Image closeImage = new Image(new Texture("images/close.png"));
-    closeImage.setSize(ScreenComponent.getScaledX(closeImage.getWidth() * 0.5f), 
-        ScreenComponent.getScaledY(closeImage.getHeight() * 0.5f));
+    ScreenComponent.scaleSize(closeImage, closeImage.getWidth() * 0.5f, closeImage.getHeight() * 0.5f);
     closeImage.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {

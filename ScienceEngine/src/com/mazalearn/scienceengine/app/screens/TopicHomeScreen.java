@@ -198,10 +198,11 @@ public class TopicHomeScreen extends AbstractScreen {
         }
       });
       activityThumbs[level - 1] = activityThumb;
+      ScreenComponent.scaleSize(activityThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       activities
           .add(activityThumb)
-          .width(ScreenComponent.getScaledX(THUMBNAIL_WIDTH))
-          .height(ScreenComponent.getScaledY(THUMBNAIL_HEIGHT))
+          .width(activityThumb.getWidth())
+          .height(activityThumb.getHeight())
           .padTop(5);
     }
     activities.row();
@@ -233,9 +234,7 @@ public class TopicHomeScreen extends AbstractScreen {
     Label nameLabel = new Label(text, labelStyle);
     nameLabel.setWrap(true);
     nameLabel.setAlignment(Align.center, Align.center);
-    nameLabel.setWidth(ScreenComponent.getScaledX(width));
-    nameLabel.setHeight(ScreenComponent.getScaledY(height));
-    nameLabel.setPosition(ScreenComponent.getScaledX(x), ScreenComponent.getScaledY(y));
+    ScreenComponent.scalePositionAndSize(nameLabel, x, y, width, height);
     return nameLabel;
   }
 
@@ -246,8 +245,7 @@ public class TopicHomeScreen extends AbstractScreen {
     TextButton button = new TextButton(text, textButtonStyle);
     button.getLabel().setWrap(true);
     button.getLabel().setAlignment(Align.center, Align.center);
-    button.setWidth(ScreenComponent.getScaledX(width));
-    button.setHeight(ScreenComponent.getScaledY(height));
+    ScreenComponent.scaleSize(button, width, height);
     button.setPosition(x, y);
     return button;
   }
@@ -258,21 +256,14 @@ public class TopicHomeScreen extends AbstractScreen {
       TextButton thumbnail, float percent, int width) {
     TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.GRAY);
     Image fullBar = new Image(bar);
-    fullBar.setPosition(ScreenComponent.getScaledX(10),
-        ScreenComponent.getScaledY(20));
-    fullBar.setSize(ScreenComponent.getScaledX(width - 20), 10);
+    ScreenComponent.scalePositionAndSize(fullBar, 10, 20, width - 20, 10);
     thumbnail.addActor(fullBar);
     Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.RED));
-    successBar.setPosition(ScreenComponent.getScaledX(10),
-        ScreenComponent.getScaledY(20));
-    successBar.setSize(percent * ScreenComponent.getScaledX(width - 20) / 100f, 10);
+    ScreenComponent.scalePositionAndSize(successBar, 10, 20, percent * (width - 20) / 100f, 10);
     thumbnail.addActor(successBar);
     Label percentLabel = new Label(String.valueOf(Math.round(percent)) + "%", labelStyle);
     percentLabel.setAlignment(Align.center, Align.center);
-    percentLabel.setWidth(ScreenComponent.getScaledX(40));
-    percentLabel.setHeight(ScreenComponent.getScaledY(20));
-    percentLabel.setPosition(ScreenComponent.getScaledX(5), 
-        ScreenComponent.getScaledY(12));
+    ScreenComponent.scalePositionAndSize(percentLabel, 5, 12, 40, 20);
     thumbnail.addActor(percentLabel);
   }
 
@@ -280,8 +271,7 @@ public class TopicHomeScreen extends AbstractScreen {
     int lastActiveLevel = profile.getLastActivity() - 1;
     if (lastActiveLevel >= 0) {
       Image userImage = new Image(new Texture("images/user.png"));
-      userImage.setPosition(ScreenComponent.getScaledX(2), 
-          ScreenComponent.getScaledY(THUMBNAIL_HEIGHT / 2));
+      ScreenComponent.scalePosition(userImage, 2, THUMBNAIL_HEIGHT / 2);
       activityThumbs[lastActiveLevel].addActor(userImage);
       activitiesPane.layout();
       activitiesPane.setScrollX(ScreenComponent.getScaledX(THUMBNAIL_WIDTH) * lastActiveLevel);
@@ -345,9 +335,10 @@ public class TopicHomeScreen extends AbstractScreen {
       if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
         resource.debug();
       }
+      ScreenComponent.scaleSize(scrollPane, RESOURCE_WIDTH, RESOURCE_INFO_HEIGHT);
       resource.add(scrollPane)
-          .width(ScreenComponent.getScaledX(RESOURCE_WIDTH))
-          .height(ScreenComponent.getScaledY(RESOURCE_INFO_HEIGHT))
+          .width(scrollPane.getWidth())
+          .height(scrollPane.getHeight())
           .left()
           .top()
           .pad(0, 5, 5, 5)

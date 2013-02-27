@@ -93,6 +93,35 @@ tutors: [
                  parameter:"Environment.EarthMagneticField", 
                  resultType:"None"}
      ]},  
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "ElectroMagnet", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+         {type: "MCQ",
+          id: "1",
+          goal:"Induced Current in a coil due to an electromagnet increases when",
+          options:["Magnitude of current in electromagnet increases", 
+                   "Number of loops in coil increases", 
+                   "Relative motion between the coil and electromagnet increases",
+                   "Magnitude of current in electromagnet decreases",
+                   "Number of loops in coil decreases",
+                   "Relative motion between the coil and electromagnet decreases"],
+          answermask: "111000"
+          },
+         {type: "MCQ",
+          id: "2",
+          goal:"The magnitude of Induced Current depends on ",
+           options:["Amount of magnetic flux on the coil", 
+                   "Rate of change of magnetic flux on the coil", 
+                   "Magnetic permittivity of air",
+                   "Electric conductivity of air"],
+         answermask: "0100"
+          }]
+       }
    ]
- 
 }

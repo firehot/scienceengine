@@ -107,7 +107,7 @@ public class Profile implements Serializable {
   }
 
   public void setCurrentTopic(Topic topic) {
-    if (topic.name().equals(properties.get(TOPIC))) return;
+    if (topic != null && topic.name().equals(properties.get(TOPIC))) return;
     properties.put(TOPIC, topic != null ? topic.name() : null);
     currentTopicStats = topicStats.get(topic);
     if (currentTopicStats == null) {

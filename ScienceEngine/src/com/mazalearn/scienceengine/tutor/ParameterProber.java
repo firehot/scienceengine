@@ -46,8 +46,7 @@ public class ParameterProber extends AbstractScience2DProber {
   private Image createResultImage(String path, float x, float y) {
     Image image = new Image(new Texture(path));
     image.setVisible(false);
-    image.setSize(ScreenComponent.getScaledX(image.getWidth()),
-        ScreenComponent.getScaledY(image.getHeight()));
+    ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
     image.setPosition(x - image.getWidth() / 2, y - image.getHeight() / 2);
     image.setOrigin(0, image.getHeight() / 2);
     return image;
@@ -55,8 +54,7 @@ public class ParameterProber extends AbstractScience2DProber {
     
   private Image createResultImage(String path, float scale) {
     Image image = new Image(new Texture(path));
-    image.setSize(ScreenComponent.getScaledX(image.getWidth()),
-        ScreenComponent.getScaledY(image.getHeight()));
+    ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
     image.setVisible(false);
     image.setSize(image.getWidth() * scale, image.getHeight() * scale);
     image.setOrigin(0, image.getHeight() / 2);

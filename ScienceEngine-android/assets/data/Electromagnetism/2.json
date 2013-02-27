@@ -100,5 +100,43 @@ tutors:[
             failure: 50
             }
         ]},
+       {type: "TutorGroup",
+       id: "Multiple Choice Questions",
+       group: "RapidFire",
+       goal: "RapidFire Quiz: Time 1 minute",
+       components: [ {type: "Wire", visible: false},
+                     {type: "CurrentSource", visible: false},
+                     {type: "Compass", visible: false},
+                     {type: "FieldMeter", visible: false}
+                   ],
+       childtutors: [
+         {type: "MCQ1",
+          id: "1",
+          goal:"As the distance from the current carrying wire increases the strength of the magnetic field",
+          options:["increases", 
+                   "decreases", 
+                   "stays constant",
+                   "none of the above"],
+          answermask: "0100"
+          },
+         {type: "MCQ",
+          id: "2",
+          goal:"The direction of magnetic field at a point near an infinite current carrying wire",
+          options:["Curl right hand into a fist placed along the wire with thumb in direction of current. The magnetic field is given by the curling fingers.", 
+                   "Is tangential to a circle drawn to touch the point with center at the wire", 
+                   "Given by Fleming's left hand rule",
+                   "Given by Flemings right hand rule"],
+          answermask: "1100"
+          },
+         {type: "MCQ",
+          id: "3",
+          goal:"Magnetic field lines of force",
+          options:["go away from the North pole", 
+                   "go towards the South pole", 
+                   "represent the direction at any point, in which a free North pole would move",
+                   "represent the direction at any point, in which a free South pole would move"],
+          answermask: "1110"
+          }
+      ]},
       ]
 }

@@ -17,7 +17,7 @@ final class SuccessFailureImage extends Image {
   SuccessFailureImage(Texture texture, Skin skin, boolean success) {
     super(texture);
     this.setVisible(false);
-    setSize(ScreenComponent.getScaledX(getWidth()), ScreenComponent.getScaledY(getHeight()));
+    ScreenComponent.scaleSize(this, getWidth(), getHeight());
     this.success = success;
     font = skin.getFont("default-font");
   }

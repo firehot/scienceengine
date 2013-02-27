@@ -221,21 +221,20 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     goButton = new Button(up, down, down);
     ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
     goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
+    goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
         isTutoringInProgress = !isTutoringInProgress;
         ScreenComponent goButtonTo = 
             isTutoringInProgress ? ScreenComponent.GoButtonDown : ScreenComponent.GoButtonUp;
         goButton.addAction(Actions.parallel(
-            Actions.moveTo(goButtonTo.getX(goButtonTo.getWidth()), 
-                goButtonTo.getY(goButtonTo.getHeight()), 1),
+            Actions.moveTo(goButtonTo.getX(), goButtonTo.getY(), 1),
             Actions.sizeTo(goButtonTo.getWidth(), goButtonTo.getHeight(), 1)));
         tutoring(isTutoringInProgress);
       }
     });
     
     this.addActor(goButton);
-    goButton.setPosition(goButtonUp.getX(goButton.getWidth()), goButtonUp.getY(goButton.getHeight()));
   }
 
   @Override

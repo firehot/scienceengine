@@ -30,9 +30,7 @@ public class ViewControls extends Table implements IControl {
     messages = ScienceEngine.getMsg();
     this.defaults().fill();
     Image image = new Image(new Texture("images/settings.png"));
-    image.setSize(ScreenComponent.getScaledX(VIEW_BUTTON_HEIGHT),
-        ScreenComponent.getScaledY(VIEW_BUTTON_HEIGHT));
-    image.setPosition(0, 0);
+    ScreenComponent.scalePositionAndSize(image, 0, 0, VIEW_BUTTON_HEIGHT, VIEW_BUTTON_HEIGHT);
     Button imageButton = new TextButton("", skin, "body");
     imageButton.addActor(image);
     imageButton.addListener(new ClickListener() {
@@ -44,8 +42,8 @@ public class ViewControls extends Table implements IControl {
       }
     });
     this.add(imageButton)
-        .width(ScreenComponent.getScaledX(VIEW_BUTTON_HEIGHT))
-        .height(ScreenComponent.getScaledY(VIEW_BUTTON_HEIGHT))
+        .width(image.getWidth())
+        .height(image.getHeight())
         .left();
     this.row();
     viewControlPanel = createViewControlPanel(skin);
