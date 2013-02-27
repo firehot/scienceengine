@@ -128,7 +128,7 @@ tutors: [
           options:["Fleming's Left Hand Rule", 
                    "Fleming's Right Hand Rule", 
                    "Volta's Righthand Thumb rule",
-                   "None of the above"],
+                   "None of these"],
           answermask: "1000"
           },
          {type: "MCQ",

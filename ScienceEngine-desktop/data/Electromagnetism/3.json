@@ -124,7 +124,7 @@ tutors:[
           options:["increases", 
                    "decreases", 
                    "stays constant",
-                   "none of the above"],
+                   "none of these"],
           answermask: "0100"
           },
          {type: "MCQ1",

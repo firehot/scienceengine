@@ -120,11 +120,7 @@ tutors: [
        {type: "TutorGroup",
        id: "Multiple Choice Questions",
        group: "RapidFire",
-       goal: "RapidFire Quiz: Time 1 minute",
-       components: [ {type: "ElectroMagnet", visible: false},
-                     {type: "Compass", visible: false},
-                     {type: "FieldMeter", visible: false}
-                   ],
+       goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",
           id: "1",
@@ -132,7 +128,7 @@ tutors: [
           options:["Fleming's Left Hand Rule", 
                    "Fleming's Right Hand Rule", 
                    "Volta's Righthand Thumb rule",
-                   "None of the above"],
+                   "None of these"],
           answermask: "1000"
           },
          {type: "MCQ",
@@ -148,7 +144,17 @@ tutors: [
                    "Current decreases"
                    ],
          answermask: "10000010"
-          }]
+          },
+         {type: "MCQ",
+          id: "3",
+          goal:"Electric motors work by placing a(n) ____ between the poles of a permanent magnet or an electromagnet.",
+           options:["armature", 
+                   "galvanometer", 
+                   "electromagnet",
+                   "Both (a) and (b)"],
+         answermask: "1000"
+          }
+          ]
        }
    ]
 }

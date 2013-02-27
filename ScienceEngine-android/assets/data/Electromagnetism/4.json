@@ -99,11 +99,7 @@ tutors:[
        {type: "TutorGroup",
        id: "Multiple Choice Questions",
        group: "RapidFire",
-       goal: "RapidFire Quiz: Time 1 minute",
-       components: [ {type: "BarMagnet", visible: false},
-                     {type: "Compass", visible: false},
-                     {type: "FieldMeter", visible: false}
-                   ],
+       goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ1",
           id: "1",
@@ -131,7 +127,7 @@ tutors:[
           options:["its magnetic field direction stays the same", 
                    "its magnetic field direction reverses", 
                    "its magnetic field disappears",
-                   "none of the above"],
+                   "none of these"],
           answermask: "0100"
           },
          {type: "MCQ1",
@@ -140,7 +136,7 @@ tutors:[
           options:["there will no magnetic field", 
                    "there will be a constant magnetic field perpendicular to the ElectroMagnet", 
                    "there will be an alternating magnetic field",
-                   "none of the above"],
+                   "none of these"],
           answermask: "0100"
           },
          {type: "MCQ1",
@@ -150,6 +146,34 @@ tutors:[
                     "Given by Fleming's left hand rule",
                    "Given by Flemings right hand rule"],
           answermask: "100"
+          },
+         {type: "MCQ1",
+          id: "6",
+          goal:"What happens to the magnetic field intensity if the current carrying wire has three times as many loops, and the same amount of current?",
+          options:["it is 1/3 as strong", 
+                   "it is nine times stronger",
+                   "it is three times stronger",
+                   "it doesn't change",
+                   "it is 1/9 as strong"],
+          answermask: "00100"
+          },
+         {type: "MCQ1",
+          id: "7",
+          goal:"Four solenoids have the same number of loops. Which solenoid would produce the strongest magnetic field?",
+          options:["the solenoid with 1 A of current", 
+                   "the solenoid with 10 A of current",
+                   "the solenoid with 100 A of current",
+                   "the solenoid with 0.1 A of current"],
+          answermask: "0010"
+          },
+         {type: "MCQ1",
+          id: "8",
+          goal:"If each of the following solenoids carries the same electric current, which one would produce the strongest magnetic field?",
+          options:["solenoid with a single loop", 
+                   "solenoid with 100 loops",
+                   "solenoid with 10 loops",
+                   "solenoid with 1000 loops"],
+          answermask: "0001"
           }
         ]
        }

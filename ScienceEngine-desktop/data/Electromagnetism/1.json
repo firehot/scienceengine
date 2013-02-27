@@ -124,7 +124,7 @@ tutors:[
           options:["increases", 
                    "decreases", 
                    "stays constant",
-                   "none of the above"],
+                   "none of these"],
           answermask: "0100"
           },
          {type: "MCQ",
@@ -278,7 +278,7 @@ tutors:[
           options:["evenly distributed throughout a magnet", 
                    "distributed randomly in a magnet", 
                    "concentrated near the ends",
-                   "None of the above"],
+                   "None of these"],
           answermask: "0010"
           },
          {type: "MCQ1",

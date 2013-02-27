@@ -127,7 +127,7 @@ tutors:[
           options:["its magnetic field direction stays the same", 
                    "its magnetic field direction reverses", 
                    "its magnetic field disappears",
-                   "none of the above"],
+                   "none of these"],
           answermask: "0100"
           },
          {type: "MCQ1",
@@ -136,7 +136,7 @@ tutors:[
           options:["there will no magnetic field", 
                    "there will be a constant magnetic field perpendicular to the ElectroMagnet", 
                    "there will be an alternating magnetic field",
-                   "none of the above"],
+                   "none of these"],
           answermask: "0100"
           },
          {type: "MCQ1",
