@@ -1,5 +1,8 @@
 package com.mazalearn.scienceengine.core.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -8,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.HelpTour;
+import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
@@ -79,7 +84,18 @@ public class ActivityViewControls extends ViewControls {
         setActivated(false);
         String description = getMsg().getString(science2DController.getTopic() + "." + 
             science2DController.getLevel() + ".Description");
-        new HelpTour(getStage(), skin, description);
+        List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
+        for (Actor actor: science2DView.getActors()) {
+          if ((actor instanceof Science2DActor)) {
+            helpComponents.add((IHelpComponent) actor);
+          }
+        }
+        for (ScreenComponent screenComponent: ScreenComponent.values()) {
+          if (screenComponent.showInHelpTour()) {
+            helpComponents.add(screenComponent);
+          }
+        }
+        new HelpTour(getStage(), skin, description, helpComponents);
       }
     });
 

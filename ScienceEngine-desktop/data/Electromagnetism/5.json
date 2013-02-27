@@ -152,7 +152,7 @@ tutors: [
                    "changing the current in a nearby wire",
                    "all of these",
                    "none of these"],
-          answermask: "0010"
+          answermask: "00100"
           },
         {type: "MCQ1",
           id: "7",
@@ -209,5 +209,6 @@ tutors: [
                    "pushing the magnet in rather than pulling it out"],
           answermask: "1000"
           }
+        ]}
    ]
 }

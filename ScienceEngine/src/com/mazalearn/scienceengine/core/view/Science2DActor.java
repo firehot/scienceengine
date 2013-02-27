@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
@@ -29,7 +30,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
  * 
  * 
  */
-public class Science2DActor extends Actor {
+public class Science2DActor extends Actor implements IHelpComponent {
   protected static final float TOLERANCE = 0.1f;
   private Science2DBody body;
   private TextureRegion textureRegion;

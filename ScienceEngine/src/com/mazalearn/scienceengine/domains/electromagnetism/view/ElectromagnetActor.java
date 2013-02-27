@@ -13,7 +13,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
 public class ElectromagnetActor extends Science2DActor {
   private static TextureRegion coil = 
       new TextureRegion(new Texture("images/electromagnet-coil.png"));
-  private static int COIL_OFFSET = 38;
+  private static float COIL_WIDTH = ElectroMagnet.DISPLAY_WIDTH;
   private ElectroMagnet electromagnet;
   public ElectromagnetActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
@@ -22,18 +22,23 @@ public class ElectromagnetActor extends Science2DActor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    super.draw(batch, parentAlpha);
+    batch.draw(getTextureRegion(), getX(), getY(), this.getOriginX(), 
+        this.getOriginY(), super.getWidth(), getHeight(), 1, 1, getRotation());
     // Add the additional loops
     for (int i = 1; i <= electromagnet.getNumberOfLoops(); i++) {
-      batch.draw(coil, getX() - i * COIL_OFFSET, getY(), 0, 0, getWidth(), 
+      batch.draw(coil, getX() - i * ScreenComponent.getScaledX(COIL_WIDTH), getY(), 0, 0, super.getWidth(), 
           getHeight(), 1, 1, getRotation());
     }
+  }
+  
+  @Override
+  public float getWidth() {
+    return super.getWidth() - (electromagnet != null ? electromagnet.getNumberOfLoops() * ScreenComponent.getScaledX(COIL_WIDTH) : 0);
   }
 
   public Actor hit (float x, float y, boolean touchable) {
     if (touchable && getTouchable() != Touchable.enabled) return null;
-    float coilWidth = electromagnet.getCoilWidth() * ScreenComponent.PIXELS_PER_M;
-    return x >= - electromagnet.getNumberOfLoops() * coilWidth && x < getWidth() 
+    return x >= - electromagnet.getNumberOfLoops() * ScreenComponent.getScaledX(COIL_WIDTH) && x < super.getWidth() 
         && y >= 0 && y < getHeight() ? this : null;
   }
 

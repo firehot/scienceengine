@@ -24,7 +24,7 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
   private static final float TOLERANCE = 0.1f;
   private static final int ELECTROMAGNET_LOOPS_MAX = 4;
   private static final float MAX_EMF = 25;
-  private static final float DISPLAY_WIDTH = 38f;
+  public static final float DISPLAY_WIDTH = 38f;
   private static final float COIL_WIDTH = DISPLAY_WIDTH / ScreenComponent.PIXELS_PER_M;
 
   private float maxStrengthOutside; // for debugging

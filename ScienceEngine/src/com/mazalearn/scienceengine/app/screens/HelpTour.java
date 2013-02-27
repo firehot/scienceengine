@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.app.screens;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -20,8 +22,16 @@ import com.mazalearn.scienceengine.ScreenComponent;
 
 public class HelpTour extends Group {
   
+  public interface IHelpComponent {
+    public String getName();
+    public float getX();
+    public float getY();
+    public float getWidth();
+    public float getHeight();
+  }
+  
   public static class NextOnClick extends ClickListener {
-    protected static final int SCALE = 25;
+    protected static final int SCALE = 40;
     private final TextButton contentButton;
     private String content;
     int currentComponent = 0;
@@ -29,10 +39,13 @@ public class HelpTour extends Group {
     private Vector2 pos = new Vector2();
     private Image closeImage;
     private TextButton nextButton;
+    private List<IHelpComponent> helpComponents;
     private static final Vector2 CENTER_POS = 
         new Vector2(ScreenComponent.VIEWPORT_WIDTH / 2, ScreenComponent.VIEWPORT_HEIGHT / 2);
 
-    public NextOnClick(TextButton contentButton, String content, Image arrow, TextButton nextButton, Image closeImage) {
+    public NextOnClick(List<IHelpComponent> iHelpComponents,
+        TextButton contentButton, String content, Image arrow, TextButton nextButton, Image closeImage) {
+      this.helpComponents = iHelpComponents;
       this.contentButton = contentButton;
       this.content = content;
       this.arrow = arrow;
@@ -79,24 +92,20 @@ public class HelpTour extends Group {
           new Action() {
             @Override public boolean act(float delta) {
               String text;
-              ScreenComponent[] screenComponents = ScreenComponent.values();
-              while (!screenComponents[currentComponent].showInHelpTour()) {
-                currentComponent++;
-                if (currentComponent == screenComponents.length) break; 
-              }
-              if (currentComponent >= screenComponents.length){
+              if (currentComponent >= helpComponents.size()){
                 arrow.setPosition(CENTER_POS.x, CENTER_POS.y);
-                setContent(content, 0, 0, 0);
+                setContent(content, CENTER_POS.x, CENTER_POS.y, 0);
                 arrow.setVisible(false);
                 currentComponent = 0;
               } else {
-                ScreenComponent screenComponent = screenComponents[currentComponent++];
-                text = ScienceEngine.getMsg().getString("Help." + screenComponent.name()) + "\n\n\n";
-                pos.set(screenComponent.getX(arrow.getWidth()), screenComponent.getY(arrow.getHeight())).sub(CENTER_POS);
+                IHelpComponent helpComponent = helpComponents.get(currentComponent++);
+                text = ScienceEngine.getMsg().getString("Help." + helpComponent.getName()) + "\n\n\n";
+                pos.set(helpComponent.getX() + helpComponent.getWidth() / 2, 
+                    helpComponent.getY() + helpComponent.getHeight() / 2).sub(CENTER_POS);
                 arrow.setVisible(true);
                 arrow.setRotation(pos.angle());
-                arrow.setPosition(screenComponent.getX(arrow.getWidth()) - arrow.getWidth() * MathUtils.cosDeg(pos.angle()) * 2,
-                    screenComponent.getY(arrow.getHeight()) - arrow.getHeight() * MathUtils.sinDeg(pos.angle()) * 2);
+                arrow.setPosition(helpComponent.getX() + helpComponent.getWidth() / 2 - arrow.getWidth() * MathUtils.cosDeg(pos.angle()) * 2,
+                    helpComponent.getY() + helpComponent.getHeight() / 2 - arrow.getHeight() * MathUtils.sinDeg(pos.angle()) * 2);
                 setContent(text, arrow.getX(), arrow.getY(), pos.angle());
               }
               return true;
@@ -106,7 +115,7 @@ public class HelpTour extends Group {
     }
   }
 
-  public HelpTour(final Stage stage, Skin skin, String contents) {  
+  public HelpTour(final Stage stage, Skin skin, String contents, List<IHelpComponent> iHelpComponents) {
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     stage.addActor(this);
@@ -140,7 +149,7 @@ public class HelpTour extends Group {
 
     TextButton nextButton = new TextButton(ScienceEngine.getMsg().getString("Name.Next"), skin);
     nextButton.setPosition(5, 5);
-    nextButton.addListener(new NextOnClick(contentButton, contents, arrow, nextButton, closeImage));
+    nextButton.addListener(new NextOnClick(iHelpComponents, contentButton, contents, arrow, nextButton, closeImage));
     
     contentButton.addActor(closeImage);
     contentButton.addActor(nextButton);

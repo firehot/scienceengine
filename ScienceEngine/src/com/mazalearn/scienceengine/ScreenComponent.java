@@ -3,9 +3,10 @@ package com.mazalearn.scienceengine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
-public enum ScreenComponent implements IComponentType {
+public enum ScreenComponent implements IComponentType, IHelpComponent {
   Background(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
   Dashboard(XAlign.CENTER, 0, YAlign.TOP, -3, 0, 0, Color.BLACK, false, false),
   ShoppingCart(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 50, Color.BLACK, false, false),
@@ -205,5 +206,10 @@ public enum ScreenComponent implements IComponentType {
   public static String getFont() {
     Gdx.app.log(ScienceEngine.LOG, "Font chosen size: " + FontSize);
     return "font" + String.valueOf(FontSize);
+  }
+
+  @Override
+  public String getName() {
+    return name();
   }
 }
