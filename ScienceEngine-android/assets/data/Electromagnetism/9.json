@@ -74,7 +74,7 @@ tutors: [
        goal: "RapidFire Quiz",
        childtutors: [
           {type: "MCQ1",
-          id: "1",
+          id: "9.1",
           goal:"The material used to provide the highest 'magnetic strength' (BHMax) is",
            options:["Ferrite (Ferric Oxide based)", 
                    "Samarium-Cobalt (SmCo)",
@@ -84,7 +84,7 @@ tutors: [
          answermask: "0010"
           },
           {type: "MCQ1",
-          id: "2",
+          id: "9.2",
           goal:"Higher current is induced in a dynamo coil when it is spinning so that its axis",
            options:["Is parallel to the plane of the coil", 
                    "Is perpendicular to the plane of the coil"

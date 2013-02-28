@@ -97,7 +97,7 @@ tutors: [
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",
-          id: "1",
+          id: "5.1",
           goal:"Induced Current in a coil due to a bar magnet increases when",
           options:["Bar magnet strength increases", 
                    "Number of loops in coil increases", 
@@ -108,7 +108,7 @@ tutors: [
           answermask: "111000"
           },
          {type: "MCQ",
-          id: "2",
+          id: "5.2",
           goal:"The magnitude of Induced Current depends on ",
            options:["Amount of magnetic flux on the coil", 
                    "Rate of change of magnetic flux on the coil", 
@@ -117,7 +117,7 @@ tutors: [
          answermask: "0100"
           },
         {type: "MCQ",
-          id: "3",
+          id: "5.3",
           goal:"When a magnet rotates in the presence of a coil, the induced current in the coil",
           options:["stays constant", 
                    "changes in magnitude based on rotation", 
@@ -127,7 +127,7 @@ tutors: [
           answermask: "01101"
           },
         {type: "MCQ1",
-          id: "4",
+          id: "5.4",
           goal:"Thrust a magnet into a coil of wire and the coil",
           options:["becomes an electromagnet", 
                    "has a current in it", 
@@ -136,7 +136,7 @@ tutors: [
           answermask: "0100"
           },
         {type: "MCQ1",
-          id: "5",
+          id: "5.5",
           goal:"When a magnet is thrust into a coil of wire, the coil tends to",
          options:["attract the magnet as it enters", 
                    "repel the magnet as it enters", 
@@ -145,7 +145,7 @@ tutors: [
           answermask: "0100"
           },
         {type: "MCQ",
-          id: "6",
+          id: "5.6",
           goal:"Voltage can be induced in a wire by",
          options:["moving the wire near a magnet", 
                    "moving a magnet near the wire", 
@@ -154,7 +154,7 @@ tutors: [
           answermask: "1110"
           },
         {type: "MCQ1",
-          id: "7",
+          id: "5.7",
           goal:"If a magnet is pushed into a coil, voltage is induced across the coil. If the same magnet is pushed into a coil with twice the number of loops,",
          options:["one-half as much voltage is induced", 
                    "the same voltage is induced", 
@@ -164,7 +164,7 @@ tutors: [
           answermask: "00100"
           },
         {type: "MCQ1",
-          id: "8",
+          id: "5.8",
           goal:"Disconnect a small-voltage battery from a coil of many loops of wire, and a large voltage is produced by",
          options:["the large collapse in the magnetic field", 
                    "latent energy in the battery", 
@@ -174,7 +174,7 @@ tutors: [
           answermask: "10000"
           },
         {type: "MCQ1",
-          id: "9",
+          id: "5.9",
           goal:"How does the voltage induced upon two equal coils, one made of copper and one made of rubber, differ?",
          options:["voltage in copper much greater", 
                    "voltage in rubber much greater", 
@@ -183,7 +183,7 @@ tutors: [
           answermask: "0001"
           },
         {type: "MCQ1",
-          id: "10",
+          id: "5.10",
           goal:"How does the voltage induced upon two equal coils, one made of copper and one made of rubber, differ?",
          options:["voltage in copper much greater", 
                    "voltage in rubber much greater", 
@@ -192,7 +192,7 @@ tutors: [
           answermask: "0001"
           },
         {type: "MCQ1",
-          id: "11",
+          id: "5.11",
           goal:"A device that uses electromagnetic induction to convert kinetic energy into electrical energy is called a(n)",
          options:["transformer", 
                    "commutator", 
@@ -200,7 +200,7 @@ tutors: [
           answermask: "001"
           },
         {type: "MCQ1",
-          id: "12",
+          id: "5.12",
           goal:"What would induce a greater electric current in a wire?",
          options:["adding more loops of wire", 
                    "removing loops of wire", 

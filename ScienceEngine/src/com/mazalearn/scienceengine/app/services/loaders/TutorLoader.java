@@ -94,8 +94,8 @@ class TutorLoader {
     String groupType = (String) tutorObj.get("group");
     Gdx.app.log(ScienceEngine.LOG, "Loading Reviewer");
     List<ITutor> reviewTutors = new ArrayList<ITutor>();
-    // Assumption: Last level is the review level
-    for (int level = 1; level < science2DController.getTopic().getNumLevels(); level++) {
+    // Assumption: Current level is the review level
+    for (int level = 1; level < science2DController.getLevel(); level++) {
       OrderedMap<String, ?> rootElem = LevelLoader.getJsonFromFile(science2DController.getTopic(), level);
       Array<?> tutorsObj = (Array<?>) rootElem.get("tutors");
       for (int i = 0; i < tutorsObj.size; i++) {

@@ -119,7 +119,7 @@ tutors:[
        goal: "RapidFire Quiz",
       childtutors: [
          {type: "MCQ1",
-          id: "1",
+          id: "3.1",
           goal:"As the distance from the current carrying wire increases the strength of the magnetic field",
           options:["increases", 
                    "decreases", 
@@ -128,7 +128,7 @@ tutors:[
           answermask: "0100"
           },
          {type: "MCQ1",
-          id: "2",
+          id: "3.2",
           goal:"Two infinite current carrying wires with current in the same direction will",
           options:["Repel each other", 
                    "Attract each other", 
@@ -137,7 +137,7 @@ tutors:[
           answermask: "0100"
           },
          {type: "MCQ1",
-          id: "3",
+          id: "3.3",
           goal:"The magnetic fields at a point due to multiple wires carrying current",
           options:["will all add up", 
                    "will cancel each other out", 

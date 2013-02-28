@@ -123,7 +123,7 @@ tutors: [
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",
-          id: "1",
+          id: "7.1",
           goal:"Direction of movement of current carrying wire in a magnetic field is given by",
           options:["Fleming's Left Hand Rule", 
                    "Fleming's Right Hand Rule", 
@@ -132,7 +132,7 @@ tutors: [
           answermask: "1000"
           },
          {type: "MCQ",
-          id: "2",
+          id: "7.2",
           goal:"The speed of rotation of the DC motor increases when",
            options:["Magnetic field increases", 
                    "Magnetic field decreases", 
@@ -146,7 +146,7 @@ tutors: [
          answermask: "10000010"
           },
          {type: "MCQ",
-          id: "3",
+          id: "7.3",
           goal:"Electric motors work by placing a(n) ____ between the poles of a permanent magnet or an electromagnet.",
            options:["armature", 
                    "galvanometer", 

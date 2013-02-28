@@ -98,7 +98,7 @@ tutors: [
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",
-          id: "1",
+          id: "6.1",
           goal:"Induced Current in a coil due to an electromagnet increases when",
           options:["Magnitude of current in electromagnet increases", 
                    "Number of loops in coil increases", 
@@ -109,7 +109,7 @@ tutors: [
           answermask: "111000"
           },
          {type: "MCQ",
-          id: "2",
+          id: "6.2",
           goal:"The magnitude of Induced Current depends on ",
            options:["Amount of magnetic flux on the coil", 
                    "Rate of change of magnetic flux on the coil", 

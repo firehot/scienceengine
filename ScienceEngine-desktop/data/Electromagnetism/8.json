@@ -43,7 +43,7 @@ tutors: [
        goal: "RapidFire Quiz",
        childtutors: [
           {type: "MCQ",
-          id: "1",
+          id: "8.1",
           goal:"The speed of rotation of the AC motor is affected by",
            options:["Magnetic field", 
                    "Air Permittivity",
