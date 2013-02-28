@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
@@ -84,7 +84,7 @@ public class ActivityScreen extends AbstractScreen {
     case StatesOfMatter: 
       return new StatesOfMatterController(level, width, height, getSkin());
     case Waves:
-      return  new WaveController(level, width, height, getAtlas(), getSkin());
+      return  new WaveController(level, width, height, getSkin());
     case Electromagnetism:
       return new ElectroMagnetismController(level, width, height, getSkin());
     }
@@ -105,6 +105,8 @@ public class ActivityScreen extends AbstractScreen {
     ScienceEngine.assetManager.load("images/cross.png", Texture.class);
     
     // TODO: Move assets inside appropriate view - automatically infer if possile.
+    // TODO: Load corresponding atlas and use
+    // ScienceEngine.assetManager.load("images/electromagnetism/pack.atlas", TextureAtlas.class);
     ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);
     ScienceEngine.assetManager.load("images/coppercoils-front2.png", Texture.class);
     ScienceEngine.assetManager.load("images/brush.png", Texture.class);

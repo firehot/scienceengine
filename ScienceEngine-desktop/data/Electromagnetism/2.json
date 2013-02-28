@@ -141,7 +141,7 @@ tutors:[
           goal:"Moving electric charges will interact with",
           options:["an electric field", 
                    "a magnetic field", 
-                   "both of these",
+                   "magnetic as well as electric fields",
                    "none of these"],
           answermask: "0010"
           },
@@ -150,7 +150,7 @@ tutors:[
           goal:"Surrounding every moving electron is",
           options:["an electric field", 
                    "a magnetic field", 
-                   "both of these",
+                   "both magnetic and electric fields",
                    "none of these"],
           answermask: "0010"
           },
@@ -159,7 +159,7 @@ tutors:[
           goal:"Surrounding every moving electron is",
           options:["extend radially from the wire", 
                    "circle the wire in closed loops", 
-                   "both of these",
+                   "extend radially from the wire as well as circle the wire in closed loops",
                    "none of these"],
           answermask: "0100"
           },

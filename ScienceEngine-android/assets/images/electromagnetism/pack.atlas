@@ -1,0 +1,96 @@
+
+pack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+go1-down
+  rotate: false
+  xy: 1, 197
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+horseshoemagnet
+  rotate: false
+  xy: 303, 241
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+coppercoils
+  rotate: false
+  xy: 561, 241
+  size: 128, 256
+  orig: 128, 256
+  offset: 0, 0
+  index: -1
+engine
+  rotate: false
+  xy: 1, 67
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+barmagnet
+  rotate: false
+  xy: 691, 433
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+electromagnet
+  rotate: false
+  xy: 691, 303
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+greenballoon
+  rotate: false
+  xy: 821, 303
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ammeter
+  rotate: false
+  xy: 1, 1
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+redballoon
+  rotate: false
+  xy: 691, 173
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+currentsource
+  rotate: false
+  xy: 821, 173
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+compass
+  rotate: false
+  xy: 303, 207
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+lightbulb
+  rotate: false
+  xy: 949, 433
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+currentwire-down
+  rotate: false
+  xy: 131, 33
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

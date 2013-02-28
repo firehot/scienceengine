@@ -137,7 +137,7 @@ tutors:[
                    "there will be a constant magnetic field perpendicular to the ElectroMagnet", 
                    "there will be an alternating magnetic field",
                    "none of these"],
-          answermask: "0100"
+          answermask: "0010"
           },
          {type: "MCQ1",
           id: "5",

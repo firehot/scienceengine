@@ -1,13 +1,12 @@
 package com.mazalearn.scienceengine.domains.waves;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.domains.waves.model.ComponentType;
 import com.mazalearn.scienceengine.domains.waves.view.BoundaryActor;
-import com.mazalearn.scienceengine.domains.waves.view.WaveMakerActor;
 import com.mazalearn.scienceengine.domains.waves.view.WaveBoxActor;
+import com.mazalearn.scienceengine.domains.waves.view.WaveMakerActor;
 
 public class WaveView extends AbstractScience2DView {
 
@@ -20,7 +19,7 @@ public class WaveView extends AbstractScience2DView {
   
   
   public WaveView(float width, float height, final WaveModel waveModel,
-      Skin skin, TextureAtlas atlas, IScience2DController controller) {
+      Skin skin, IScience2DController controller) {
     super(waveModel, width, height, skin, controller);
     this.waveModel = waveModel;
   }

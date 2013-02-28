@@ -31,6 +31,7 @@ import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.KnowledgeUnit;
 import com.mazalearn.scienceengine.tutor.McqTutor;
 import com.mazalearn.scienceengine.tutor.ParameterProber;
+import com.mazalearn.scienceengine.tutor.Reviewer;
 import com.mazalearn.scienceengine.tutor.TutorGroup;
 
 public abstract class AbstractScience2DController implements
@@ -181,6 +182,8 @@ public abstract class AbstractScience2DController implements
       return new ParameterProber(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("TutorGroup".equals(type)) {
       return new TutorGroup(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    } else if ("Reviewer".equals(type)) {
+      return new Reviewer(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     } else if ("KnowledgeUnit".equals(type)) {
       return new KnowledgeUnit(this, parent, goal, id, components, configs, deltaSuccessScore, hints);
     } else if ("Abstractor".equals(type)) {

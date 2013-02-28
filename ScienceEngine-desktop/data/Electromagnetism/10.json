@@ -1,0 +1,12 @@
+{name:"Electromagnetism",level:10,description:"Science Genius Certificate in Electromagnetism",
+components:[
+],
+tutors: [
+       {type: "Reviewer",
+       id: "Review Quiz",
+       group: "RapidFire",
+       goal: "RapidFire Review Quiz",
+       childtutors: []
+       }
+]
+}

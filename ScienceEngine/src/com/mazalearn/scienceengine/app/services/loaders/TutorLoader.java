@@ -12,9 +12,11 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
 import com.mazalearn.scienceengine.tutor.Abstractor;
 import com.mazalearn.scienceengine.tutor.ITutor;
+import com.mazalearn.scienceengine.tutor.ITutor.GroupType;
 import com.mazalearn.scienceengine.tutor.KnowledgeUnit;
 import com.mazalearn.scienceengine.tutor.McqTutor;
 import com.mazalearn.scienceengine.tutor.ParameterProber;
+import com.mazalearn.scienceengine.tutor.Reviewer;
 import com.mazalearn.scienceengine.tutor.TutorGroup;
 
 class TutorLoader {
@@ -44,6 +46,9 @@ class TutorLoader {
     }
     if (tutor instanceof ParameterProber) {
       return makeParameterProber(tutorObj, (ParameterProber) tutor);
+    }
+    if (tutor instanceof Reviewer) {
+      return makeReviewer(tutorObj, (Reviewer) tutor);
     }
     if (tutor instanceof TutorGroup) {
       return makeTutorGroup(tutorObj, (TutorGroup) tutor);
@@ -84,6 +89,29 @@ class TutorLoader {
     return tutorGroup;
   }
 
+  @SuppressWarnings("unchecked")
+  private AbstractTutor makeReviewer(OrderedMap<String, ?> tutorObj, Reviewer reviewer) {
+    String groupType = (String) tutorObj.get("group");
+    Gdx.app.log(ScienceEngine.LOG, "Loading Reviewer");
+    List<ITutor> reviewTutors = new ArrayList<ITutor>();
+    // Assumption: Last level is the review level
+    for (int level = 1; level < science2DController.getTopic().getNumLevels(); level++) {
+      OrderedMap<String, ?> rootElem = LevelLoader.getJsonFromFile(science2DController.getTopic(), level);
+      Array<?> tutorsObj = (Array<?>) rootElem.get("tutors");
+      for (int i = 0; i < tutorsObj.size; i++) {
+        OrderedMap<String, ?> groupTutorsObj = (OrderedMap<String, ?>) tutorsObj.get(i);
+        if (GroupType.RapidFire.name().equals(groupTutorsObj.get("group"))) {
+          Array<?> childTutorsObj = (Array<?>) groupTutorsObj.get("childtutors");
+          List<ITutor> childTutors = loadChildTutors(reviewer, childTutorsObj);
+          reviewTutors.addAll(childTutors);
+        }
+      }
+    }
+    String successActions = (String) tutorObj.get("successactions");
+    reviewer.initialize(groupType, reviewTutors, successActions);
+    return reviewer;
+  }
+
   private AbstractTutor makeAbstractor(OrderedMap<String, ?> tutorObj,
       Abstractor abstractor) {
     Array<?> parametersObj = (Array<?>) tutorObj.get("parameters");
@@ -115,7 +143,7 @@ class TutorLoader {
   public List<ITutor> loadChildTutors(ITutor parent, Array<?> childTutorsObj) {
     List<ITutor> childTutors = new ArrayList<ITutor>();
     if (childTutorsObj == null) {
-      Gdx.app.error(ScienceEngine.LOG, "No child Tutors found for Tutor");
+      Gdx.app.error(ScienceEngine.LOG, "No child Tutors found for Tutor: " + parent.getGoal());
       return childTutors;
     }
     for (int i = 0; i < childTutorsObj.size; i++) {

@@ -3,9 +3,8 @@ package com.mazalearn.scienceengine.domains.waves;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,8 +13,8 @@ import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.domains.waves.model.ComponentType;
 import com.mazalearn.scienceengine.domains.waves.view.BoundaryActor;
-import com.mazalearn.scienceengine.domains.waves.view.WaveMakerActor;
 import com.mazalearn.scienceengine.domains.waves.view.WaveBoxActor;
+import com.mazalearn.scienceengine.domains.waves.view.WaveMakerActor;
 
 /**
  * Wave Motion science2DModel
@@ -30,10 +29,10 @@ public class WaveController extends AbstractScience2DController {
   private TextureRegion ballTextureBlue;
   private WaveView waveView;
 
-  public WaveController(int level, int width, int height, TextureAtlas atlas, Skin skin) {
+  public WaveController(int level, int width, int height, Skin skin) {
     super(Topic.Waves, level, skin);
     this.waveModel = new WaveModel(NUM_BALLS);;
-    waveView = new WaveView(width, height, waveModel, skin, atlas, this);
+    waveView = new WaveView(width, height, waveModel, skin, this);
     initialize(waveModel, waveView);
     
     ballTextureRed = createBallTexture(Color.RED);

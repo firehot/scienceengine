@@ -140,19 +140,18 @@ tutors: [
           goal:"When a magnet is thrust into a coil of wire, the coil tends to",
          options:["attract the magnet as it enters", 
                    "repel the magnet as it enters", 
-                   "both of these",
-                   "neither of these"],
+                   "attract and repel the magnet as it enters",
+                   "none of these"],
           answermask: "0100"
           },
-        {type: "MCQ1",
+        {type: "MCQ",
           id: "6",
           goal:"Voltage can be induced in a wire by",
          options:["moving the wire near a magnet", 
                    "moving a magnet near the wire", 
                    "changing the current in a nearby wire",
-                   "all of these",
                    "none of these"],
-          answermask: "00100"
+          answermask: "1110"
           },
         {type: "MCQ1",
           id: "7",

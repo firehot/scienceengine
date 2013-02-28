@@ -84,6 +84,10 @@ public class McqActor extends Group {
   
   public TextButton[] setUp(ITutor tutor, List<String> optionList, boolean singleAnswer) {
     optionListener.setUp(tutor, optionList, singleAnswer);
+    for (Button optionButton: optionButtons) {
+      optionButton.setChecked(false);
+      optionButton.clearActions();
+    }
     return optionButtons;
   }
 }
