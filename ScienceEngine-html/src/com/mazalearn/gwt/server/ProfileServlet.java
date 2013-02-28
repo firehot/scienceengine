@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 @SuppressWarnings("serial")
 public class ProfileServlet extends HttpServlet {
 
+  private static final String PROFILE = "Profile";
   static final String USER_EMAIL = "useremail";
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -63,10 +64,10 @@ public class ProfileServlet extends HttpServlet {
     Gson gson = new Gson();
     Profile profile = gson.fromJson(profileStringJson.substring(0, count+1), Profile.class);
     
-    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty("Profile");
+    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
     if (profileEntity == null) {
       profileEntity = new EmbeddedEntity();
-      user.setProperty("Profile", profileEntity);
+      user.setProperty(PROFILE, profileEntity);
     }
     for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
       profileEntity.setProperty(entry.getKey(), entry.getValue());
@@ -76,6 +77,7 @@ public class ProfileServlet extends HttpServlet {
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
     ds.put(user);
+    System.out.println(profileEntity);
   }
   
 

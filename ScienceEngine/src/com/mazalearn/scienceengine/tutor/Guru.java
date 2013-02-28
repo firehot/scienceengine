@@ -62,6 +62,7 @@ public class Guru extends Group implements ITutor {
   private Profile profile;
   private TutorGroup rootTutor;
   private TutorNavigator tutorNavigator;
+  private McqActor mcqActor;
 
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
@@ -442,5 +443,12 @@ public class Guru extends Group implements ITutor {
 
   public void showNextButton(boolean show) {
     tutorNavigator.showNextButton(show);
+  }
+
+  public McqActor getMcqActor() {
+    if (mcqActor == null) {
+      mcqActor = new McqActor(skin);
+    }
+    return mcqActor;
   }
 }

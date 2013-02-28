@@ -67,14 +67,14 @@
 <%
   String userEmail = request.getParameter("userEmail");
     if (userEmail == null) {
-    userEmail = "DemoUser@mazalearn.com";
+      userEmail = "DemoUser@mazalearn.com";
     }
-    Topic domain = Topic.Electromagnetism;
+    Topic topic = Topic.Electromagnetism;
     try {
-  domain = Topic.valueOf(request.getParameter("domain"));
+      topic = Topic.valueOf(request.getParameter("topic"));
     } catch(Exception ignored) {};
     pageContext.setAttribute("userEmail", userEmail);
-    pageContext.setAttribute("domain", domain);
+    pageContext.setAttribute("topic", topic);
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
 %>
@@ -97,14 +97,15 @@
       </table>
    
 <%
-   String domainStatsStr = ((Text) profile.getProperty(domain.name())).getValue();
+   String domainStatsStr = ((Text) profile.getProperty(topic.name())).getValue();
    Type statsType = new TypeToken<Map<String, Float>>() {}.getType();
    Map<String, Float> stats = new Gson().fromJson(domainStatsStr, statsType);
-   Activity activity1 = Activity.load(getServletContext(), "/assets/data/" + domain.name() + "/1.json");
+   Activity activity1 = Activity.load(getServletContext(), "/assets/data/" + topic.name() + "/1.json");
    activity1.populateStats(stats);
    %>
     <p>
-    <%= domain.name() %>
+    <%= topic.name() %>
+    <img src="/assets/data/<%= topic.name() %>/1.png" width=400>
     <table border="1">
      <tr>
         <td>Goal</td>
@@ -121,7 +122,7 @@
        <tr>
          <td><%= tutor.goal %></td>
          <td><%= tutor.timeSpent %></td>
-         <td><%= tutor.successPercent %></td>
+         <td><%=tutor.completionPercent%></td>
        </tr>
 <%       
      }

@@ -22,6 +22,8 @@ public class ElectromagnetActor extends Science2DActor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
+    // x is location between coils and front.
+    // coil..coil..x..front
     batch.draw(getTextureRegion(), getX(), getY(), this.getOriginX(), 
         this.getOriginY(), super.getWidth(), getHeight(), 1, 1, getRotation());
     // Add the additional loops
@@ -33,6 +35,7 @@ public class ElectromagnetActor extends Science2DActor {
   
   @Override
   public float getWidth() {
+    // TODO: Hack so that helptour can point to electromagnet correctly. Not used anywhere else.
     return super.getWidth() - (electromagnet != null ? electromagnet.getNumberOfLoops() * ScreenComponent.getScaledX(COIL_WIDTH) : 0);
   }
 

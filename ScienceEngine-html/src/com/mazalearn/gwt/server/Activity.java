@@ -16,7 +16,7 @@ public class Activity {
     public String goal;
     public String group;
     Tutor[] childTutors;
-    public transient float successPercent;
+    public transient float completionPercent;
     public transient float timeSpent;
   };
   String description;
@@ -45,7 +45,7 @@ public class Activity {
       String successPercentKey = "1$" + tutor.id + "$completionPercent";
       String timeSpentKey = "1$" + tutor.id + "$timeSpent";
       Float successPercent = stats.get(successPercentKey);
-      tutor.successPercent = successPercent == null ? 0 : successPercent;
+      tutor.completionPercent = successPercent == null ? 0 : successPercent;
       Float timeSpent = stats.get(timeSpentKey);
       tutor.timeSpent = timeSpent == null ? 0 : Math.round(timeSpent);
     }  

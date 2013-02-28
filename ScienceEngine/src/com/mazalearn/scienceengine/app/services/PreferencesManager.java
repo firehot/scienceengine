@@ -109,6 +109,7 @@ public class PreferencesManager {
   public void saveProfile() {
     // convert the given profile to text
     String profileAsText = new Json().toJson(profile);
+    Gdx.app.log(ScienceEngine.LOG, "Saving Profile - " + profileAsText);
     profileAsText = Base64Coder.encodeString(profileAsText);
     String userEmail = getPrefs().getString(PREF_USER_EMAIL);
     String savedProfile = getPrefs().getString(userEmail);

@@ -240,7 +240,7 @@ public class TopicHomeScreen extends AbstractScreen {
 
   // Used from Tutor Navigator
   // TODO: Move to common place
-  public static Button createTextButton(String text, 
+  public static TextButton createTextButton(String text, 
       float x, float y, float width, float height, TextButtonStyle textButtonStyle) {
     TextButton button = new TextButton(text, textButtonStyle);
     button.getLabel().setWrap(true);

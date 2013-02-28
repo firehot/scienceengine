@@ -17,15 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.HelpTour;
-import com.mazalearn.scienceengine.app.screens.TutoringEndDialog;
 import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
+import com.mazalearn.scienceengine.app.screens.TutoringEndDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -249,8 +248,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
   
   private void addGoButton() {
-    Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-up.png")));
-    Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go-down.png")));
+    Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go1-up.png")));
+    Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go1-down.png")));
     goButton = new Button(up, down, down);
     ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
     goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
