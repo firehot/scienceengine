@@ -129,22 +129,24 @@ public class Abstractor extends AbstractTutor {
           }
         }
         boolean success = correctParameters.equals(chosenParameters);
-        delegateeHasFinished(success);
+        systemReadyToFinish(success);
       }
     });
     return doneButton;
   }
   
   @Override
-  public void delegateeHasFinished(boolean success) {
+  public void systemReadyToFinish(boolean success) {
     if (!success) {
       life[--numLivesLeft].getColor().a = 0.3f;
       guru.showWrong(getFailurePoints());
-      if (numLivesLeft > 0) return;
-    } else {
-      guru.showCorrect(getSuccessScore());
+      if (numLivesLeft == 0) {
+        super.systemReadyToFinish(false);
+      }
+      return;
     }
-    super.delegateeHasFinished(success);    
+    guru.showCorrect(getSuccessScore());
+    super.systemReadyToFinish(true);
   }
 
   @Override

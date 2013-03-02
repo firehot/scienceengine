@@ -33,21 +33,22 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public void finish() {
-    if (!isSuccess()) {
-      super.finish();
+  public void systemReadyToFinish(boolean success) {
+    // If this tutor has been unsuccessful, it informs parent.
+    if (!success) {
+      super.systemReadyToFinish(false);
       return;
     }
     // Move on to next stage
     if (++tutorIndex == childTutors.size()) {
-      if (getPercentAttempted() == 100) {
-        super.finish();
+      if (getAttemptPercent() == 100) {
+        super.systemReadyToFinish(true);
         doSuccessActions();
         return;
       }
       // Goto first tutor which has not been successfully done
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getPercentAttempted() != 100) {
+        if (childTutors.get(tutorIndex).getAttemptPercent() < 100) {
           break;
         }
       }
@@ -83,12 +84,14 @@ public class TutorGroup extends AbstractTutor {
     if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
       // Find out where we last left off.
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getPercentAttempted() < 100) break;
+        if (childTutors.get(tutorIndex).getNumAttempts() < 1) break;
       }
       if (tutorIndex == childTutors.size()) tutorIndex = 0;
     }
     currentTutor = childTutors.get(tutorIndex);
     super.prepareToTeach(currentTutor);
+    // No user input required for group tutors
+    state = State.UserFinished;
   }
   
   @Override
@@ -143,11 +146,20 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public float getPercentAttempted() {
-    int numCompletions = 0;
+  public float getNumAttempts() {
+    int numAttempted = 0;
     for (ITutor child: childTutors) {
-      if (child.getPercentAttempted() == 100) numCompletions++;
+      if (child.getAttemptPercent() > 0) numAttempted++;
     }
-    return numCompletions * 100 / (float) childTutors.size();
+    return numAttempted;
+  }
+  
+  @Override
+  public float getAttemptPercent() {
+    float attemptPercent = 0;
+    for (ITutor child: childTutors) {
+      attemptPercent += child.getAttemptPercent();
+    }
+    return attemptPercent / childTutors.size();
   }
 }

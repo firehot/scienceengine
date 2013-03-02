@@ -16,6 +16,10 @@ import com.badlogic.gdx.graphics.Color;
  */
 public interface ITutor {
 
+  enum State {
+    Constructed, Initialized, PreparedToTeach, Teaching, SystemFinished, UserFinished, Finished;
+  };
+  
   enum GroupType {
     Root(Color.CLEAR), 
     Guide(Color.YELLOW), 
@@ -103,7 +107,7 @@ public interface ITutor {
    * For a non-group tutor, this is 0 or 100.
    * For a group tutor, this is the percentage of children which are complete.
    */
-  float getPercentAttempted();
+  float getNumAttempts();
 
   /**
    * Tutor can delegate to a child tutor or another component for part of 
@@ -111,5 +115,14 @@ public interface ITutor {
    * an indication of whether delegatee was successful.
    * @param success
    */
-  void delegateeHasFinished(boolean success);
+  void systemReadyToFinish(boolean success);
+
+  /**
+   * User has finished actions on this tutor.
+   */
+  public void userReadyToFinish();
+
+  float getAttemptPercent();
+
+  public State getState();
 }

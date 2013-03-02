@@ -173,7 +173,7 @@ public class Profile implements Serializable {
    * @param tutorId
    * @return
    */
-  public float getPercentAttempted(String tutorId) {
+  public float getNumAttempts(String tutorId) {
     return getPercentAttempted(getCurrentActivity(), tutorId);
   }
   
@@ -191,7 +191,7 @@ public class Profile implements Serializable {
     return status == null ? 0 : status;
   }
 
-  public void setPercentAttempted(String tutorId, float percent) {
+  public void setNumAttempts(String tutorId, float percent) {
     saveStat(makeTutorKey(tutorId, ATTEMPT_PERCENT), percent);
   }
 

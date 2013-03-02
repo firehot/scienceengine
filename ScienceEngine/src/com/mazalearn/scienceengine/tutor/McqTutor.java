@@ -32,14 +32,15 @@ public class McqTutor extends AbstractTutor {
   }
   
   @Override
-  public void delegateeHasFinished(boolean success) {
-    this.success = success;
-    this.numAttempts++;
+  public void systemReadyToFinish(boolean success) {
+    if (state == State.SystemFinished && this.success == success) return;
+    super.systemReadyToFinish(success);
     guru.showNextButton(true);
   }
   
   @Override
   public void finish() {
+    if (state != State.Finished) return;
     boolean success = true;
     for (int i = 0; i < answerMask.length(); i++) {
       success &= (answerMask.charAt(permutation[i]) == '1') == optionButtons[i].isChecked();

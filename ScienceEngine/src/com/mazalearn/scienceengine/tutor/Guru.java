@@ -176,8 +176,8 @@ public class Guru extends Group implements ITutor {
   public void endTutoring() {
     Gdx.app.log(ScienceEngine.LOG, "End Tutoring: " + getId());
     // Reinitialize current prober, if any
-    activeTutor.delegateeHasFinished(false);
-    activeTutor.finish();
+    activeTutor.systemReadyToFinish(false);
+    activeTutor.userReadyToFinish();
     setActiveTutor(this);
     dashboard.setVisible(false);
     tutorNavigator.setVisible(false);
@@ -246,7 +246,7 @@ public class Guru extends Group implements ITutor {
   @Override
   public void finish() {
     hinter.setHint(null);
-    profile.setPercentAttempted(getId(), getPercentAttempted());
+    profile.setNumAttempts(getId(), getNumAttempts());
     profile.setTimeSpent(getId(), getTimeSpent());
     if (!rootTutor.isSuccess()) {
       science2DController.getView().done(false);
@@ -433,12 +433,12 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public float getPercentAttempted() {
-    return rootTutor.getPercentAttempted();
+  public float getNumAttempts() {
+    return rootTutor.getNumAttempts();
   }
 
   @Override
-  public void delegateeHasFinished(boolean success) {
+  public void systemReadyToFinish(boolean success) {
   }
 
   public void showNextButton(boolean show) {
@@ -450,5 +450,19 @@ public class Guru extends Group implements ITutor {
       mcqActor = new McqActor(skin);
     }
     return mcqActor;
+  }
+
+  @Override
+  public void userReadyToFinish() {
+  }
+
+  @Override
+  public float getAttemptPercent() {
+    return rootTutor.getAttemptPercent();
+  }
+  
+  @Override
+  public State getState() {
+    return rootTutor.getState();
   }
 }

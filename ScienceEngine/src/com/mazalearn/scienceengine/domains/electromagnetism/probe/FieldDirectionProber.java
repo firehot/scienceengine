@@ -68,7 +68,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
                 if (success) {
                   image.setVisible(false);
                 }
-                delegateeHasFinished(success);
+                systemReadyToFinish(success);
                 return true;
               }
             }));

@@ -47,16 +47,13 @@ public class KnowledgeUnit extends AbstractTutor {
   }
 
   @Override
-  public void prepareToTeach(ITutor childTutor) {
-    super.prepareToTeach(childTutor);
-  }
-  
-  @Override
   public void checkProgress() {
     if (postCondition == null) return;
     if (!isSuccess()) {
       science2DController.getModel().bindParameterValues(variables);
-      delegateeHasFinished(postCondition.bvalue());
+      if (postCondition.bvalue()) {
+        systemReadyToFinish(true);
+      }
     }
   }
 }

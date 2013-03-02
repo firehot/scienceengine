@@ -29,10 +29,26 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private String id;
   private Profile profile;
   private float timeSpent;
-  protected float attemptPercent;
   protected int numAttempts;
   protected boolean success;
+  protected State state = State.Constructed;
 
+  /**
+   * State Machine
+   * construted --> initialized --> preparedToTeach --> teaching --> systemFinished--> finished --
+   *                                      |              \----> userFinished -------/            |
+   *                                      |                                                      |
+   *                                      |----<-----------------------<----------------------<--|
+   * @param science2DController 
+   * @param parent
+   * @param goal
+   * @param id
+   * @param components
+   * @param configs
+   * @param successPoints
+   * @param failurePoints
+   * @param hints
+   */
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
       int successPoints, int failurePoints, String[] hints) {
@@ -48,21 +64,22 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.guru = science2DController.getGuru();
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.timeSpent = profile.getTimeSpent(id);
-    this.attemptPercent = profile.getPercentAttempted(id);
-    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", SuccessPercent: " + attemptPercent);
+    this.numAttempts = (int) profile.getNumAttempts(id);
+    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", NumAttempts: " + numAttempts);
     this.setVisible(false);
 
   }
 
   @Override
-  public void delegateeHasFinished(boolean success) {
-    if (!success) return;
-    if (getGroupType() == GroupType.None) { 
-      this.numAttempts++;
-    }
+  public void systemReadyToFinish(boolean success) {
+    if (state == State.SystemFinished && this.success == success) return;
+    Gdx.app.log(ScienceEngine.LOG, "System ready to finish: " + getGoal());
     this.success = success;
-    guru.showNextButton(true);
-    Gdx.app.log(ScienceEngine.LOG, "Tutor satisfied: " + getGoal());
+    state = (state == State.UserFinished) ? State.Finished : State.SystemFinished;
+    if (state == State.SystemFinished) {
+      guru.showNextButton(true);
+    }
+    finish();
   }
   
   /**
@@ -83,17 +100,27 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
+  public void userReadyToFinish() { // Assumed to be always success
+    Gdx.app.log(ScienceEngine.LOG, "User has finished");
+    guru.showNextButton(false);
+    state = (state == State.SystemFinished) ? State.Finished : State.UserFinished;
+    finish();
+  }
+  
+  @Override
   public void finish() {
-    Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " isAttempted: " + numAttempts);
+    if (state != State.Finished) return;
+    Gdx.app.log(ScienceEngine.LOG, "finish: " + getId());
     this.setVisible(false);
-    if (numAttempts > 0) {
-      this.attemptPercent = 100;
-      profile.setPercentAttempted(id, getPercentAttempted());
-    }
-    profile.setTimeSpent(id, getTimeSpent());
+    
+    recordStats();
     guru.setActiveTutor(parent);
-    parent.delegateeHasFinished(success);
-    parent.finish();
+    parent.systemReadyToFinish(true);
+  }
+
+  private void recordStats() {
+    profile.setNumAttempts(id, getNumAttempts());
+    profile.setTimeSpent(id, getTimeSpent());
   }
 
   protected void setSuccessPoints(int points) {
@@ -104,6 +131,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void teach() {
     Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
     this.setVisible(true);
+    this.numAttempts++;
+    state = State.Teaching;
   }
   
   @Override
@@ -117,6 +146,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     new ComponentLoader(science2DController).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DController.getModel());
     science2DController.getModelControls().refresh();
+    state = State.PreparedToTeach;
     
     this.setVisible(false);
     guru.setActiveTutor(this);
@@ -170,8 +200,18 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public float getPercentAttempted() {
-    return attemptPercent;
+  public float getNumAttempts() {
+    return numAttempts;
+  }
+  
+  @Override
+  public float getAttemptPercent() {
+    return numAttempts == 0 ? 0 : 100;
+  }
+  
+  @Override
+  public State getState() {
+    return state;
   }
   
 }

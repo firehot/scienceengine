@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
@@ -45,6 +46,7 @@ public class McqActor extends Group {
     
     @Override
     public void clicked (InputEvent event, float x, float y) {
+      if (tutor.getState() == ITutor.State.Finished) return;
       Button thisButton = (Button) event.getListenerActor();
       if (singleAnswer && thisButton.isChecked()) {
         // Clear all buttons except this one.
@@ -54,7 +56,7 @@ public class McqActor extends Group {
           }
         }
       }
-      tutor.delegateeHasFinished(false);
+      tutor.systemReadyToFinish(false);
     }
   }
 
@@ -74,6 +76,7 @@ public class McqActor extends Group {
           400, 30,
           skin.get("toggle", TextButtonStyle.class));
       optionButton.setColor(Color.YELLOW);
+      optionButton.getLabel().setAlignment(Align.center, Align.left);
       this.addActor(optionButton);
       optionButton.addListener(listener);
       optionButtons[i] = optionButton;
@@ -87,6 +90,8 @@ public class McqActor extends Group {
     for (Button optionButton: optionButtons) {
       optionButton.setChecked(false);
       optionButton.clearActions();
+      Color c = optionButton.getColor();
+      optionButton.setColor(c.r, c.g, c.b, 1);
     }
     return optionButtons;
   }

@@ -85,7 +85,7 @@ public class TutorNavigator extends Group {
     nextButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         nextButton.setVisible(false);
-        activeTutor.finish();
+        activeTutor.userReadyToFinish();
       }
     });
     nextButton.setPosition(ScreenComponent.NextButton.getX(nextButton.getWidth()),
@@ -104,7 +104,7 @@ public class TutorNavigator extends Group {
     for (final ITutor tutor: this.tutors) {
       Label timeLabel = tutorTimeLabels[count++];
       timeLabel.setText(Format.formatTime(tutor.getTimeSpent()));
-      if (tutor.getPercentAttempted() == 100) {
+      if (tutor.getAttemptPercent() == 100) {
         Image status = new Image(new Texture("images/check.png"));
         TextButton tutorButton = (TextButton) findActor(tutor.getId());
         tutorButton.addActor(status);
