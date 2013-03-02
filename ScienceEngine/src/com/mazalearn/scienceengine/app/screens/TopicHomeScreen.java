@@ -183,7 +183,7 @@ public class TopicHomeScreen extends AbstractScreen {
       // Level Label
       activityThumb.addActor(createLabel(String.valueOf(level), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
       // Progress bar
-      float percent = profile.getCompletionPercent(level, Guru.ID);
+      float percent = profile.getPercentAttempted(level, Guru.ID);
       createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
       // Timespent label
       String timeSpent = Format.formatTime(profile.getTimeSpent(level, Guru.ID));

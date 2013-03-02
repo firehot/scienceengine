@@ -108,21 +108,26 @@ public class ParameterProber extends AbstractScience2DProber {
   public void checkProgress() {
   }
   
+  @Override
+  public void delegateeHasFinished(boolean success) {
+    netSuccesses += success ? 1 : -1;
+    if (!success) {
+      guru.showWrong(getFailurePoints());
+      setSuccessPoints(getFailurePoints()); // Equate isAttempted and failure scores
+      return;
+    }
+    guru.showCorrect(getSuccessScore());
+    super.delegateeHasFinished(success);
+  }
+
   public void initialize(IModelConfig<?> probeConfig, 
       String resultExprString, String resultType) {
     this.probeConfig = probeConfig;
 
     this.resultType = ResultType.valueOf(resultType);
     IDoneCallback doneCallback = new IDoneCallback() {
-      @Override public void done(boolean success) { 
-        netSuccesses += success ? 1 : -1;
-        if (!success) {
-          guru.showWrong(getFailureScore());
-          setSuccessScore(getFailureScore()); // Equate isComplete and failure scores
-          return;
-        }
-        guru.showCorrect(getSuccessScore());
-        prepareToFinish(success);
+      @Override public void done(boolean success) {
+        delegateeHasFinished(success);
       }
     };
     if (this.resultType == ResultType.Spin) {   

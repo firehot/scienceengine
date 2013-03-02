@@ -33,7 +33,7 @@ tutors: [
    childtutors:[{type: "KnowledgeUnit",
              id: "Flip Horseshoe Magnet to Rotate",
              components:[{type:"HorseshoeMagnet", pin: true}],
-             goal: "Flip the horseshoe magnet and see how it affects the rotation of the coil. Give the coil a starting push.", 
+             goal: "Flip the horseshoe magnet and see how it affects the coil. Give the coil a starting push.", 
              postcondition: "CurrentCoil.AngularVelocity <> 0 and CurrentCoil.RotationData <> 0 and Count(HorseshoeMagnet.Flip) >= 2"},
             {type: "KnowledgeUnit",
              id: "Flip Horseshoe Magnet at the right time",

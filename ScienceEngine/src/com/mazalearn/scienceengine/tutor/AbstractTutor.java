@@ -18,8 +18,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
 
   protected Array<?> components;
   protected Array<?> configs;
-  private int deltaFailureScore;
-  private int deltaSuccessScore;
+  private int failurePoints;
+  private int successPoints;
   private String[] hints;
   private String goal;
   protected IScience2DController science2DController;
@@ -29,40 +29,48 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private String id;
   private Profile profile;
   private float timeSpent;
-  protected float completionPercent;
-  protected boolean isComplete;
+  protected float attemptPercent;
+  protected int numAttempts;
+  protected boolean success;
 
   public AbstractTutor(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+      int successPoints, int failurePoints, String[] hints) {
     this.parent = parent;
     this.science2DController = science2DController;
     this.goal = goal;
     this.id = id;
     this.components = components;
     this.configs = configs;
-    this.deltaSuccessScore = deltaSuccessScore;
-    this.deltaFailureScore = deltaFailureScore;
+    this.successPoints = successPoints;
+    this.failurePoints = failurePoints;
     this.hints = hints;
     this.guru = science2DController.getGuru();
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.timeSpent = profile.getTimeSpent(id);
-    this.completionPercent = profile.getCompletionPercent(id);
-    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", SuccessPercent: " + completionPercent);
+    this.attemptPercent = profile.getPercentAttempted(id);
+    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", SuccessPercent: " + attemptPercent);
     this.setVisible(false);
 
   }
 
   @Override
-  public void prepareToFinish(boolean success) {
+  public void delegateeHasFinished(boolean success) {
     if (!success) return;
-    this.isComplete = true;
+    if (getGroupType() == GroupType.None) { 
+      this.numAttempts++;
+    }
+    this.success = success;
     guru.showNextButton(true);
     Gdx.app.log(ScienceEngine.LOG, "Tutor satisfied: " + getGoal());
   }
   
-  protected boolean isComplete() {
-    return isComplete;
+  /**
+   * Did this specific instance of the tutor end with success?
+   * @return
+   */
+  protected boolean isSuccess() {
+    return success;
   }
 
   @Override
@@ -76,20 +84,20 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void finish() {
-    Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " isComplete: " + isComplete);
+    Gdx.app.log(ScienceEngine.LOG, "done: " + getId() + " isAttempted: " + numAttempts);
     this.setVisible(false);
-    if (isComplete) {
-      this.completionPercent = 100;
-      profile.setCompletionPercent(id, getCompletionPercent());
+    if (numAttempts > 0) {
+      this.attemptPercent = 100;
+      profile.setPercentAttempted(id, getPercentAttempted());
     }
     profile.setTimeSpent(id, getTimeSpent());
     guru.setActiveTutor(parent);
-    parent.prepareToFinish(isComplete);
+    parent.delegateeHasFinished(success);
     parent.finish();
   }
 
-  protected void setSuccessScore(int score) {
-    deltaSuccessScore = score;
+  protected void setSuccessPoints(int points) {
+    successPoints = points;
   }
 
   @Override
@@ -126,11 +134,11 @@ public abstract class AbstractTutor extends Group implements ITutor {
 
 
   public int getSuccessScore() {
-    return deltaSuccessScore;
+    return successPoints;
   }
   
-  public int getFailureScore() {
-    return deltaFailureScore;
+  public int getFailurePoints() {
+    return failurePoints;
   }
   
   @Override
@@ -162,8 +170,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public float getCompletionPercent() {
-    return completionPercent;
+  public float getPercentAttempted() {
+    return attemptPercent;
   }
   
 }

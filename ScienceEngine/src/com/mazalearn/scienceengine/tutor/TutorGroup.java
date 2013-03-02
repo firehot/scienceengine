@@ -28,26 +28,26 @@ public class TutorGroup extends AbstractTutor {
     
   public TutorGroup(IScience2DController science2DController, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    super(science2DController, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      int successPoints, int failurePoints, String[] hints) {
+    super(science2DController, parent, goal, id, components, configs, successPoints, failurePoints, hints);
   }
   
   @Override
   public void finish() {
-    if (!isComplete) {
+    if (!isSuccess()) {
       super.finish();
       return;
     }
     // Move on to next stage
     if (++tutorIndex == childTutors.size()) {
-      if (getCompletionPercent() == 100) {
+      if (getPercentAttempted() == 100) {
         super.finish();
         doSuccessActions();
         return;
       }
       // Goto first tutor which has not been successfully done
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getCompletionPercent() != 100) {
+        if (childTutors.get(tutorIndex).getPercentAttempted() != 100) {
           break;
         }
       }
@@ -83,7 +83,7 @@ public class TutorGroup extends AbstractTutor {
     if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
       // Find out where we last left off.
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getCompletionPercent() < 100) break;
+        if (childTutors.get(tutorIndex).getPercentAttempted() < 100) break;
       }
       if (tutorIndex == childTutors.size()) tutorIndex = 0;
     }
@@ -143,10 +143,10 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public float getCompletionPercent() {
+  public float getPercentAttempted() {
     int numCompletions = 0;
     for (ITutor child: childTutors) {
-      if (child.getCompletionPercent() == 100) numCompletions++;
+      if (child.getPercentAttempted() == 100) numCompletions++;
     }
     return numCompletions * 100 / (float) childTutors.size();
   }

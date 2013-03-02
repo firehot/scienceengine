@@ -103,12 +103,13 @@ public interface ITutor {
    * For a non-group tutor, this is 0 or 100.
    * For a group tutor, this is the percentage of children which are complete.
    */
-  float getCompletionPercent();
+  float getPercentAttempted();
 
   /**
-   * Only reason for this is to allow human click on next to cause
-   * finish to happen
-   * @param isComplete
+   * Tutor can delegate to a child tutor or another component for part of 
+   * the teaching. The delegatee reports back through this method along with
+   * an indication of whether delegatee was successful.
+   * @param success
    */
-  void prepareToFinish(boolean success);
+  void delegateeHasFinished(boolean success);
 }

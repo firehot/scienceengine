@@ -19,7 +19,8 @@ import com.mazalearn.scienceengine.ScienceEngine;
 public class Profile implements Serializable {
 
   private static final String DRAWING_PNG = "DrawingPng";
-  private static final String COMPLETION_PERCENT = "completionPercent";
+  private static final String ATTEMPT_PERCENT = "attemptPercent";
+  private static final String CORRECT_PERCENT = "correctPercent";
   private static final String TIME_SPENT = "timeSpent";
   private static final String POINTS_EARNED = "pointsEarned";
   private static final String ACTIVITY = "activity";
@@ -168,30 +169,30 @@ public class Profile implements Serializable {
   }
 
   /**
-   * Get percent isComplete for this tutorId
+   * Get percent attempted for this tutorId
    * @param tutorId
    * @return
    */
-  public float getCompletionPercent(String tutorId) {
-    return getCompletionPercent(getCurrentActivity(), tutorId);
+  public float getPercentAttempted(String tutorId) {
+    return getPercentAttempted(getCurrentActivity(), tutorId);
   }
   
-  public float getCompletionPercent(int activity, String tutorId) {
-    Float status = currentTopicStats.get(makeTutorKey(activity, tutorId, COMPLETION_PERCENT));
+  public float getPercentAttempted(int activity, String tutorId) {
+    Float status = currentTopicStats.get(makeTutorKey(activity, tutorId, ATTEMPT_PERCENT));
     return status == null ? 0 : status;
   }
 
 
-  public float getCompletionPercent(Topic topic, int level, String id) {
+  public float getPercentAttempted(Topic topic, int level, String id) {
     HashMap<String, Float> topicProps = topicStats.get(topic);
     if (topicProps == null) return 0;
     
-    Float status = topicProps.get(makeTutorKey(level, id, COMPLETION_PERCENT));
+    Float status = topicProps.get(makeTutorKey(level, id, ATTEMPT_PERCENT));
     return status == null ? 0 : status;
   }
 
-  public void setCompletionPercent(String tutorId, float percent) {
-    saveStat(makeTutorKey(tutorId, COMPLETION_PERCENT), percent);
+  public void setPercentAttempted(String tutorId, float percent) {
+    saveStat(makeTutorKey(tutorId, ATTEMPT_PERCENT), percent);
   }
 
   /**
@@ -200,7 +201,7 @@ public class Profile implements Serializable {
    * @return
    */
   public float getPointsEarned(String tutorId) {
-    return getCompletionPercent(getCurrentActivity(), tutorId);
+    return getPercentAttempted(getCurrentActivity(), tutorId);
   }
   
   public float getPointsEarned(int activity, String tutorId) {

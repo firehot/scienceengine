@@ -35,9 +35,9 @@ public class Abstractor extends AbstractTutor {
   
   public Abstractor(final IScience2DController science2DController, ITutor parent, String goal, 
       String name, Array<?> components, Array<?> configs, Skin skin, 
-      ModelControls modelControls, int deltaSuccessScore,
-      int deltaFailureScore, String[] hints) {
-    super(science2DController, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      ModelControls modelControls, int successPoints,
+      int failurePoints, String[] hints) {
+    super(science2DController, parent, goal, name, components, configs, successPoints, failurePoints, hints);
     this.skin = skin;
     this.modelControls = modelControls;
     /* Abstractor allows user to interact with bodies on screen as well as its
@@ -129,17 +129,22 @@ public class Abstractor extends AbstractTutor {
           }
         }
         boolean success = correctParameters.equals(chosenParameters);
-        if (!success) {
-          life[--numLivesLeft].getColor().a = 0.3f;
-          guru.showWrong(getFailureScore());
-          if (numLivesLeft > 0) return;
-        } else {
-          guru.showCorrect(getSuccessScore());
-        }
-        prepareToFinish(success);
+        delegateeHasFinished(success);
       }
     });
     return doneButton;
+  }
+  
+  @Override
+  public void delegateeHasFinished(boolean success) {
+    if (!success) {
+      life[--numLivesLeft].getColor().a = 0.3f;
+      guru.showWrong(getFailurePoints());
+      if (numLivesLeft > 0) return;
+    } else {
+      guru.showCorrect(getSuccessScore());
+    }
+    super.delegateeHasFinished(success);    
   }
 
   @Override

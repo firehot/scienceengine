@@ -18,8 +18,8 @@ public class KnowledgeUnit extends AbstractTutor {
   
   public KnowledgeUnit(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
-      int deltaSuccessScore, String[] hints) {
-    super(science2DController, parent, goal, id, components, configs, deltaSuccessScore, 0, hints);
+      int successPoints, String[] hints) {
+    super(science2DController, parent, goal, id, components, configs, successPoints, 0, hints);
     
   }
 
@@ -54,9 +54,9 @@ public class KnowledgeUnit extends AbstractTutor {
   @Override
   public void checkProgress() {
     if (postCondition == null) return;
-    if (!isComplete()) {
+    if (!isSuccess()) {
       science2DController.getModel().bindParameterValues(variables);
-      prepareToFinish(postCondition.bvalue());
+      delegateeHasFinished(postCondition.bvalue());
     }
   }
 }

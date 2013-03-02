@@ -176,7 +176,7 @@ public class Guru extends Group implements ITutor {
   public void endTutoring() {
     Gdx.app.log(ScienceEngine.LOG, "End Tutoring: " + getId());
     // Reinitialize current prober, if any
-    activeTutor.prepareToFinish(false);
+    activeTutor.delegateeHasFinished(false);
     activeTutor.finish();
     setActiveTutor(this);
     dashboard.setVisible(false);
@@ -246,9 +246,9 @@ public class Guru extends Group implements ITutor {
   @Override
   public void finish() {
     hinter.setHint(null);
-    profile.setCompletionPercent(getId(), getCompletionPercent());
+    profile.setPercentAttempted(getId(), getPercentAttempted());
     profile.setTimeSpent(getId(), getTimeSpent());
-    if (!rootTutor.isComplete) {
+    if (!rootTutor.isSuccess()) {
       science2DController.getView().done(false);
       this.setVisible(false);
       return;
@@ -433,12 +433,12 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public float getCompletionPercent() {
-    return rootTutor.getCompletionPercent();
+  public float getPercentAttempted() {
+    return rootTutor.getPercentAttempted();
   }
 
   @Override
-  public void prepareToFinish(boolean success) {
+  public void delegateeHasFinished(boolean success) {
   }
 
   public void showNextButton(boolean show) {

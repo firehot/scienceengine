@@ -37,7 +37,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
                     imageCorrect.setVisible(false);
                     imageWrong.setVisible(false);
                   }
-                  prepareToFinish(success);
+                  delegateeHasFinished(success);
                   return true;
                 }
               })

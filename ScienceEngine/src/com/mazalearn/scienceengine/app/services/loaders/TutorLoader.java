@@ -32,15 +32,15 @@ class TutorLoader {
     String id = (String) tutorObj.get("id");
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type);
     String goal = (String) tutorObj.get("goal");
-    float deltaSuccessScore = (Float) LevelLoader.nvl(tutorObj.get("isComplete"),
+    float successPoints = (Float) LevelLoader.nvl(tutorObj.get("success"),
         100.0f);
-    float deltaFailureScore = (Float) LevelLoader.nvl(tutorObj.get("falure"),
+    float failurePoints = (Float) LevelLoader.nvl(tutorObj.get("falure"),
         50.0f);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
     String[] hints = loadStringArray("hints", tutorObj);
     AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, id,
-        components, configs, (int) deltaSuccessScore, (int) deltaFailureScore, hints);
+        components, configs, (int) successPoints, (int) failurePoints, hints);
     if (tutor instanceof McqTutor) {
       return makeMcqTutor(tutorObj, (McqTutor) tutor);
     }

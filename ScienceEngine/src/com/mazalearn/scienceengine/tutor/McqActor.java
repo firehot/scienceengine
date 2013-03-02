@@ -54,7 +54,7 @@ public class McqActor extends Group {
           }
         }
       }
-      tutor.prepareToFinish(false);
+      tutor.delegateeHasFinished(false);
     }
   }
 

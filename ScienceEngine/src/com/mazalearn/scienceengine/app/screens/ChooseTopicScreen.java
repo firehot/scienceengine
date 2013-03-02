@@ -119,7 +119,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     int numLevels = topic.getNumLevels();
     int percent = 0;
     for (int level = 1; level <= numLevels; level++) {
-      percent += profile.getCompletionPercent(topic, level, Guru.ID);
+      percent += profile.getPercentAttempted(topic, level, Guru.ID);
     }
     return Math.round(percent * 100 / (100f * numLevels));
   }

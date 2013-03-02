@@ -23,17 +23,18 @@ public class McqTutor extends AbstractTutor {
 
   public McqTutor(IScience2DController science2DController, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
-      Skin skin, int deltaSuccessScore, int deltaFailureScore, String[] hints,
+      Skin skin, int successPoints, int failurePoints, String[] hints,
       boolean singleAnswer) {
     super(science2DController, parent, goal, id, 
-        components, configs, deltaSuccessScore, deltaFailureScore, hints);
+        components, configs, successPoints, failurePoints, hints);
     this.singleAnswer = singleAnswer;
     this.setSize(ScreenComponent.Prober.getWidth(), ScreenComponent.Prober.getHeight());
   }
   
   @Override
-  public void prepareToFinish(boolean success) {
-    this.isComplete = true;
+  public void delegateeHasFinished(boolean success) {
+    this.success = success;
+    this.numAttempts++;
     guru.showNextButton(true);
   }
   
@@ -57,14 +58,13 @@ public class McqTutor extends AbstractTutor {
                       Actions.delay(1))));
         }
       }
-      guru.showFailure(getFailureScore(), new IDoneCallback() {
+      guru.showFailure(getFailurePoints(), new IDoneCallback() {
         @Override
         public void done(boolean success) {
           McqTutor.super.finish();
         }      
       });
     }
-    this.isComplete = true;
   }
 
   /**
