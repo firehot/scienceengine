@@ -144,7 +144,16 @@ tutors:[
                    "will multiply each other",
                    "will divide each other"],
           answermask: "1000"
+          },
+         {type: "MCQ1",
+          id: "3.4",
+          goal:"Two parallel wires carrying opposite direction currents will",
+          options:["be attracted to each other", 
+                   "repel each other", 
+                   "not affect each other",
+                   "attract, then repel each other"],
+          answermask: "1000"
           }
-      ]},
+     ]},
    ]
 }

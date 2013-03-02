@@ -116,7 +116,35 @@ tutors: [
                    "Magnetic permittivity of air",
                    "Electric conductivity of air"],
          answermask: "0100"
-          }]
+          },
+         {type: "MCQ",
+          id: "6.3",
+          goal:"Whenever a conductor cuts magnetic flux, an emf is induced in it. This is known as ",
+           options:["Faraday's Law", 
+                   "Joule's Law", 
+                   "Coulomb's Law",
+                   "Ohm's Law"],
+         answermask: "0100"
+          },
+        {type: "MCQ1",
+          id: "6.4",
+          goal:"A device that uses electromagnetic induction to convert kinetic energy into electrical energy is called a(n)",
+         options:["transformer", 
+                   "commutator", 
+                   "generator"],
+          answermask: "001"
+          },
+        {type: "MCQ1",
+          id: "6.5",
+          goal:"Disconnect a small-voltage battery from a coil of many loops of wire, and a large voltage is produced by",
+         options:["the large collapse in the magnetic field", 
+                   "latent energy in the battery", 
+                   "the resistance of the battery to a change in polarity",
+                   "electrons already in the wire",
+                   "the electric field between the battery terminals"],
+          answermask: "10000"
+          }
+          ]
        }
    ]
 }

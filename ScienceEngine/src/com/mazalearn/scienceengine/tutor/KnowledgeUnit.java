@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.tutor;
 import java.util.Collection;
 
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
@@ -14,7 +13,6 @@ public class KnowledgeUnit extends AbstractTutor {
   private Expr postCondition;
   private Collection<Variable> variables;
   private String when;
-  //  private String[] plaudits = {"Bravo", "Well Done", "Excellent", "Good"};
   
   public KnowledgeUnit(IScience2DController science2DController,
       ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
@@ -37,13 +35,6 @@ public class KnowledgeUnit extends AbstractTutor {
 
   public String getWhen() {
     return when;
-  }
-
-  @Override
-  public void act(float delta) {
-    super.act(delta);
-    if (!isVisible() || Math.round(ScienceEngine.getTime()) % 2 != 0) return;
-    checkProgress();
   }
 
   @Override
