@@ -6,8 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,12 +26,14 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
  * The base class for all scienceEngine screens.
  */
 public abstract class AbstractScreen implements Screen {
+  private static final String BASIC_SCREEN = "BasicScreen";
   protected final ScienceEngine scienceEngine;
   protected Stage stage;
 
@@ -74,7 +76,7 @@ public abstract class AbstractScreen implements Screen {
 
   public void setStage(Stage stage) {
     this.stage = stage;
-    layoutScreen(stage);
+    setupBasicScreen(stage);
     Gdx.input.setInputProcessor(stage);    
   }
 
@@ -98,11 +100,6 @@ public abstract class AbstractScreen implements Screen {
     return font;
   }
 
-  public void loadSplashAtlas() {
-    ScienceEngine.loadAtlas("image-atlases/pages.atlas");
-    ScienceEngine.assetManager.finishLoading();
-  }
-  
   protected void setTitle(String titleString) {
     Actor title = stage.getRoot().findActor(ScreenComponent.Title.name());
     if (title != null) {
@@ -110,29 +107,16 @@ public abstract class AbstractScreen implements Screen {
     }
   }
 
-  private void setupBackground(Stage stage) {
-    setBackgroundColor(ScreenComponent.Background.getColor());
-    // retrieve the splash image's region from the atlas
-    AtlasRegion background = ScienceEngine.getTextureRegion(
-        "splash-screen/splash-background"); //$NON-NLS-1$
-    Image bgImage = new Image(background);
-    bgImage.setName(ScreenComponent.Background.name());
-    bgImage.setSize(ScreenComponent.Background.getWidth(), ScreenComponent.Background.getHeight());
-    // Background should be behind everything else on stage.
-    // TODO: set up with other screen components and ensure it is first inserted actor.
-    if (stage.getActors().size > 0) {
-      stage.getRoot().addActorBefore(stage.getActors().get(0), bgImage);
-    } else {
-      stage.addActor(bgImage);
-    }
-  }
-
-  private void setupScreenComponents(Stage stage) {
+  private void setupBasicScreen(Stage stage) {
+    if (stage.getRoot().findActor(BASIC_SCREEN) != null) return;
+    Group basicScreen = new Group();
+    basicScreen.setName(BASIC_SCREEN);
+    stage.addActor(basicScreen);
     // Register stage components
     for (ScreenComponent screenComponent: ScreenComponent.values()) {
       if (!screenComponent.isInAllScreens()) continue;
       Actor component = addScreenComponent(screenComponent, stage, getSkin());
-      stage.addActor(component);
+      basicScreen.addActor(component);
       if ((component instanceof Table) && !(component instanceof Button)) { // Place the center
         Table t = (Table) component;
         float x = screenComponent.getX(t.getPrefWidth()) + t.getPrefWidth() / 2;
@@ -145,7 +129,17 @@ public abstract class AbstractScreen implements Screen {
   }
 
   private Actor addScreenComponent(ScreenComponent screenComponent, Stage stage, Skin skin) {
-    switch (screenComponent) { 
+    switch (screenComponent) {
+      case TopBar:
+        Image topBar = new Image(ScreenUtils.createTexture(
+            screenComponent.getWidth(), screenComponent.getHeight(), skin.getColor("separator")));
+        topBar.setName(screenComponent.name());
+        return topBar;
+      case BottomBar:
+        Image bottomBar = new Image(ScreenUtils.createTexture(
+            screenComponent.getWidth(), screenComponent.getHeight(), skin.getColor("separator")));
+        bottomBar.setName(screenComponent.name());
+        return bottomBar;
       case User: { 
         String text = ScienceEngine.getUserName();
         Table table = new Table(skin);
@@ -201,12 +195,6 @@ public abstract class AbstractScreen implements Screen {
     return null;
   }
 
-  public void layoutScreen(Stage stage) {
-    if (stage.getRoot().findActor(ScreenComponent.Title.name()) != null) return;
-    setupBackground(stage);
-    setupScreenComponents(stage);
-  }
-  
   protected Table getTable() {
     if (table == null) {
       table = new Table(getSkin());
@@ -232,7 +220,7 @@ public abstract class AbstractScreen implements Screen {
     // Catch menu key to prevent onscreen keyboard coming up
     Gdx.input.setCatchMenuKey(true);
     if (needsLayout()) {
-      layoutScreen(stage);
+      setupBasicScreen(stage);
     }
   }
 

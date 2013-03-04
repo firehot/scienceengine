@@ -2,7 +2,7 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -40,7 +40,6 @@ public class SplashScreen extends AbstractScreen {
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(true);
     }
-    ScienceEngine.loadAtlas("image-atlases/pages.atlas");
   }
 
   @Override
@@ -52,7 +51,6 @@ public class SplashScreen extends AbstractScreen {
   public void show() {
     super.show();
 
-    ScienceEngine.assetManager.finishLoading();
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
     
@@ -82,8 +80,8 @@ public class SplashScreen extends AbstractScreen {
                 Actions.delay(0.5f), 
                 Actions.fadeOut(1f))));
 
-    // retrieve the splash image's region from the atlas
-    AtlasRegion splashRegion = ScienceEngine.getTextureRegion("splash-screen/splash-image"); //$NON-NLS-1$
+    // retrieve the splash image
+    TextureRegion splashRegion = new TextureRegion(new Texture("image-atlases/splash.jpg")); //$NON-NLS-1$
 
     // We create the splash image actor; its size is set when the
     // resize() method gets called

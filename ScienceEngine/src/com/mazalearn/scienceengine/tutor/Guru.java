@@ -158,7 +158,7 @@ public class Guru extends Group implements ITutor {
     excludedActors.clear();
     excludedActors.add(dashboard);
     for (Actor actor: science2DController.getView().getActors()) {
-      if (actor.isVisible() && actor != this && !ScreenComponent.Background.name().equals(actor.getName())) {
+      if (actor.isVisible() && actor != this) {
         excludedActors.add(actor);
       }
     }

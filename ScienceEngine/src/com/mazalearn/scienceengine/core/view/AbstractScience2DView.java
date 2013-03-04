@@ -188,6 +188,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         ((Science2DActor) actor).prepareActor();
       }
     }
+    // TODO: Bring BasicView to top. Add help, modelcontrols, gobutton to BasicView
     // Bring view controls to top
     this.addActor(viewControls);
     // Bring model controls to top and position
@@ -196,6 +197,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     this.addActor(goButton);
     // Bring back button to top
     this.addActor(findActor(ScreenComponent.Back.name()));
+    // Bring help to top
+    this.addActor(findActor(ScreenComponent.Help.name()));
   }
 
   public void setupControls() {
@@ -245,6 +248,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     ScreenComponent sc = ScreenComponent.Help;
     helpImage.setPosition(sc.getX(), sc.getY());
     helpImage.setSize(sc.getWidth(), sc.getHeight());
+    helpImage.setName(ScreenComponent.Help.name());
     this.addActor(helpImage);
   }
   

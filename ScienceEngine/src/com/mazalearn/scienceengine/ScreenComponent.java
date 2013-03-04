@@ -7,6 +7,8 @@ import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ScreenComponent implements IComponentType, IHelpComponent {
+  TopBar(XAlign.LEFT, 0, YAlign.TOP, 0, 800, 30, Color.BLACK, true, false),
+  BottomBar(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 20, Color.BLACK, true, false),
   Background(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
   Dashboard(XAlign.CENTER, 0, YAlign.TOP, -3, 0, 0, Color.BLACK, false, false),
   ShoppingCart(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 50, Color.BLACK, false, false),
@@ -22,7 +24,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   GoButtonDown(XAlign.CENTER, 0, YAlign.TOP, -30, 0, 0, Color.CLEAR, false, false),
   NextButton(XAlign.CENTER, 108, YAlign.TOP, -50, 0, 0, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 800, 0, Color.YELLOW, false, false),
-  McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, Color.YELLOW, false, false),
+  McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, Color.YELLOW, false, false), 
   ;
   
   enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800); 

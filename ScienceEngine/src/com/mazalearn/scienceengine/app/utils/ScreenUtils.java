@@ -112,11 +112,11 @@ public class ScreenUtils {
     Pixmap.setBlending(b);
   }
 
-  public static TextureRegion createTexture(int width, int height, Color color) {
+  public static TextureRegion createTexture(float width, float height, Color color) {
     Pixmap pixmap = new Pixmap(1, 1 , Pixmap.Format.RGBA8888);
     pixmap.setColor(color);
     pixmap.fillRectangle(0, 0, 1, 1);
-    TextureRegion textureRegion = new TextureRegion(new Texture(pixmap), width, height);
+    TextureRegion textureRegion = new TextureRegion(new Texture(pixmap), (int) width, (int) height);
     pixmap.dispose();
     return textureRegion;
   }
