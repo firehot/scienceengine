@@ -1,13 +1,12 @@
 package com.mazalearn.scienceengine.domains.electromagnetism;
 
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.AbstractScience2DController;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -56,11 +55,10 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return super.createActor(type, viewSpec, body);
     }
     
-    String textureFilename = componentType.getTextureFilename();
+    String textureFilename = componentType.getTextureName();
     if (textureFilename == null) return null;
 
-    TextureRegion textureRegion = 
-        new TextureRegion(ScienceEngine.assetManager.get(textureFilename, Texture.class));
+    TextureRegion textureRegion = ScienceEngine.getTextureRegion(textureFilename);
     
     switch (componentType) {
     case Ammeter:

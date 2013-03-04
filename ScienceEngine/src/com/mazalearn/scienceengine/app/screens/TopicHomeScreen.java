@@ -268,8 +268,8 @@ public class TopicHomeScreen extends AbstractScreen {
 
   private void setLastActiveLevel(ScrollPane activitiesPane) {
     int lastActiveLevel = profile.getLastActivity() - 1;
-    if (lastActiveLevel >= 0) {
-      Image userImage = new Image(new Texture("images/user.png"));
+    if (lastActiveLevel >= 0 && lastActiveLevel < topic.getNumLevels()) {
+      Image userImage = new Image(ScienceEngine.getTextureRegion("user"));
       ScreenComponent.scalePosition(userImage, 2, THUMBNAIL_HEIGHT / 2);
       activityThumbs[lastActiveLevel].addActor(userImage);
       activitiesPane.layout();
@@ -308,10 +308,10 @@ public class TopicHomeScreen extends AbstractScreen {
       Image play = null;
       ClickListener clickListener = null;
       if (type.equals("video")) { //$NON-NLS-1$
-        play = new Image(new Texture("images/videoplay.png")); //$NON-NLS-1$
+        play = new Image(ScienceEngine.getTextureRegion("videoplay")); //$NON-NLS-1$
         play.addListener(clickListener = new VideoPlayListener(fileName, url));
       } else if (type.equals("web")) { //$NON-NLS-1$
-        play = new Image(new Texture("images/browser.png")); //$NON-NLS-1$
+        play = new Image(ScienceEngine.getTextureRegion("browser")); //$NON-NLS-1$
         play.addListener(clickListener = new BrowseUrlListener(url));
       }
       resource.addListener(clickListener);

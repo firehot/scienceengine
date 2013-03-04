@@ -1,12 +1,12 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -15,11 +15,11 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
 public class CurrentCoilActor extends Science2DActor {
   private final CurrentCoil currentCoil;
   private static TextureRegion commutatorNone = 
-      new TextureRegion(new Texture("images/currentcoil_nocommutator.png"));
+      ScienceEngine.getTextureRegion("currentcoil_nocommutator");
   private static TextureRegion commutatorAc = 
-      new TextureRegion(new Texture("images/currentcoil_accommutator.png"));
+      ScienceEngine.getTextureRegion("currentcoil_accommutator");
   private static TextureRegion commutatorDc = 
-      new TextureRegion(new Texture("images/currentcoil_dccommutator.png"));
+      ScienceEngine.getTextureRegion("currentcoil_dccommutator");
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
    

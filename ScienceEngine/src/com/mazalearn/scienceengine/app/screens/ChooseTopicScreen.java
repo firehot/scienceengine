@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.app.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -65,7 +66,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     ScrollPane flickScrollPane = new ScrollPane(table, getSkin());
     table.setFillParent(false);
     table.defaults().fill();
-    Texture overlayLock = new Texture("images/lock.png");
+    TextureRegion overlayLock = ScienceEngine.getTextureRegion("lock");
     for (final Topic topic: Topic.values()) {
       final boolean lock = !topic.equals(Topic.Electromagnetism);
       Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic.name(), 1);

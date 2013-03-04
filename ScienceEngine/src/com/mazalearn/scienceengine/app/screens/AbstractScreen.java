@@ -5,11 +5,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -25,8 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.view.ViewControls;
@@ -101,10 +98,11 @@ public abstract class AbstractScreen implements Screen {
     return font;
   }
 
-  public TextureAtlas getAtlas() {
-    return scienceEngine.getAtlas();
+  public void loadSplashAtlas() {
+    ScienceEngine.loadAtlas("image-atlases/pages.atlas");
+    ScienceEngine.assetManager.finishLoading();
   }
-
+  
   protected void setTitle(String titleString) {
     Actor title = stage.getRoot().findActor(ScreenComponent.Title.name());
     if (title != null) {
@@ -115,7 +113,7 @@ public abstract class AbstractScreen implements Screen {
   private void setupBackground(Stage stage) {
     setBackgroundColor(ScreenComponent.Background.getColor());
     // retrieve the splash image's region from the atlas
-    AtlasRegion background = getAtlas().findRegion(
+    AtlasRegion background = ScienceEngine.getTextureRegion(
         "splash-screen/splash-background"); //$NON-NLS-1$
     Image bgImage = new Image(background);
     bgImage.setName(ScreenComponent.Background.name());
@@ -152,7 +150,7 @@ public abstract class AbstractScreen implements Screen {
         String text = ScienceEngine.getUserName();
         Table table = new Table(skin);
         table.setName(screenComponent.name());
-        Image image = new Image(new Texture("images/user.png"));
+        Image image = new Image(ScienceEngine.getTextureRegion("user"));
         image.setSize(screenComponent.getWidth(), screenComponent.getHeight());
         table.add(image)
             .width(screenComponent.getWidth())
@@ -177,7 +175,7 @@ public abstract class AbstractScreen implements Screen {
       case Back: {
         TextButton backButton = 
             new TextButton(ScienceEngine.getMsg().getString("ViewControls.Back"), getSkin()); //$NON-NLS-1$
-        Drawable image = new TextureRegionDrawable(new TextureRegion(new Texture("images/back.png")));
+        Drawable image = new TextureRegionDrawable(ScienceEngine.getTextureRegion("back"));
         TextButton.TextButtonStyle style = new TextButtonStyle(image, image, image);
         style.font = skin.getFont("default-font");
         backButton.setStyle(style);

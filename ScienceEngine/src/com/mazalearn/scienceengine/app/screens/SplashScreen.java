@@ -40,6 +40,7 @@ public class SplashScreen extends AbstractScreen {
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(true);
     }
+    ScienceEngine.loadAtlas("image-atlases/pages.atlas");
   }
 
   @Override
@@ -51,6 +52,7 @@ public class SplashScreen extends AbstractScreen {
   public void show() {
     super.show();
 
+    ScienceEngine.assetManager.finishLoading();
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
     
@@ -81,7 +83,7 @@ public class SplashScreen extends AbstractScreen {
                 Actions.fadeOut(1f))));
 
     // retrieve the splash image's region from the atlas
-    AtlasRegion splashRegion = getAtlas().findRegion("splash-screen/splash-image"); //$NON-NLS-1$
+    AtlasRegion splashRegion = ScienceEngine.getTextureRegion("splash-screen/splash-image"); //$NON-NLS-1$
 
     // We create the splash image actor; its size is set when the
     // resize() method gets called

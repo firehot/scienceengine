@@ -37,8 +37,8 @@ public class StatesOfMatterController extends AbstractScience2DController {
 
     final TextureRegion[] textureRegion = {
         new TextureRegion(new Texture(pixmap)),
-        new TextureRegion(new Texture("images/iceberg.jpg")),
-        new TextureRegion(new Texture("images/fire-texture.jpg")),            
+        ScienceEngine.getTextureRegion("iceberg")),
+        ScienceEngine.getTextureRegion("fire-texture")),            
     };
     pixmap.dispose();
     final Image heatingControl = new Image(textureRegion[0], Scaling.stretch);

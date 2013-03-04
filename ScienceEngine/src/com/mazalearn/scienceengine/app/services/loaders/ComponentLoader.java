@@ -57,7 +57,7 @@ public class ComponentLoader {
   private void loadComponent(OrderedMap<String, ?> component, boolean create) {
     String type = (String) component.get("type");
     String viewSpec = (String) component.get("viewspec");
-    Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type);
+    Gdx.app.log(ScienceEngine.LOG, "Loading component: " + type + " " + viewSpec);
     if (type == null) return;
     long startTime = System.currentTimeMillis();
     

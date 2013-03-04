@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,7 +16,6 @@ import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.statesofmatter.StatesOfMatterController;
 import com.mazalearn.scienceengine.domains.waves.WaveController;
 
@@ -71,7 +69,7 @@ public class ActivityScreen extends AbstractScreen {
   @Override
   protected void goBack() {
     // Stop tutoring if it was in progress
-    science2DController.getGuru().endTutoring();
+    science2DController.getView().tutoring(false);
     TopicHomeScreen topicHomeScreen = 
         new TopicHomeScreen(scienceEngine, topic);
     profile.setCurrentActivity(0);
@@ -99,26 +97,11 @@ public class ActivityScreen extends AbstractScreen {
       return;
     }
     // Guru resources
-    ScienceEngine.assetManager.load("images/greenballoon.png", Texture.class);
-    ScienceEngine.assetManager.load("images/redballoon.png", Texture.class);
-    ScienceEngine.assetManager.load("images/check.png", Texture.class);
-    ScienceEngine.assetManager.load("images/cross.png", Texture.class);
+    ScienceEngine.loadAtlas("data/guru/pack.atlas");
+//    ScienceEngine.getAtlas("data/guru/pack.atlas");
     
-    // TODO: Move assets inside appropriate view - automatically infer if possile.
-    // TODO: Load corresponding atlas and use
-    // ScienceEngine.assetManager.load("images/electromagnetism/pack.atlas", TextureAtlas.class);
-    ScienceEngine.assetManager.load("images/coppercoils-back.png", Texture.class);
-    ScienceEngine.assetManager.load("images/coppercoils-front2.png", Texture.class);
-    ScienceEngine.assetManager.load("images/brush.png", Texture.class);
-    ScienceEngine.assetManager.load("images/engine.png", Texture.class);
-    ScienceEngine.assetManager.load("images/wheel.png", Texture.class);
-    
-    for (ComponentType componentType: ComponentType.values()) {
-      String textureFilename = componentType.getTextureFilename();
-      if (textureFilename != null && !textureFilename.equals("")) {
-        ScienceEngine.assetManager.load(textureFilename, Texture.class);
-      }
-    }
+    ScienceEngine.loadAtlas("data/" + topic.name() + "/pack.atlas");
+//    ScienceEngine.getAtlas("data/" + topic.name() + "/pack.atlas");
     AsyncLevelLoader.LevelLoaderParameter parameter = new AsyncLevelLoader.LevelLoaderParameter();
     parameter.science2DController = science2DController;
     ScienceEngine.assetManager.load(fileName, IScience2DController.class, parameter);

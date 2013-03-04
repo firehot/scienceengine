@@ -2,7 +2,7 @@
 level:8,
 description:"Creating an AC  motor by tuning the frequency to match rotation",
 components:[
-{type:"Image",viewspec:"images/brush.png",x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},
+{type:"Image",viewspec:"brush",x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"HorseshoeMagnet", x:175, y:30.8,originX:175.0,originY:192.0,width:350.0,height:256.0,visible:true,rotation:0,move:"None",bodytype:false},
 {type:"CurrentSource",x:342.6001,y:320.59995,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"CurrentCoil",x:282.86517,y:226.54425,originX:64.0,originY:16.0,width:128.0,height:32.0,visible:true,rotation:0.0,move:"Rotate",bodytype:true},

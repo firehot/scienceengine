@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.core.view;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -29,7 +28,7 @@ public class ViewControls extends Table implements IControl {
     this.setName("ViewControls");
     messages = ScienceEngine.getMsg();
     this.defaults().fill();
-    Image image = new Image(new Texture("images/settings.png"));
+    Image image = new Image(ScienceEngine.getTextureRegion("settings"));
     ScreenComponent.scalePositionAndSize(image, 0, 0, VIEW_BUTTON_HEIGHT, VIEW_BUTTON_HEIGHT);
     Button imageButton = new TextButton("", skin, "body");
     imageButton.addActor(image);

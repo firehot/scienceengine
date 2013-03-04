@@ -1,8 +1,8 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -11,12 +11,9 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet.MagnetT
 
 public class MagnetActor extends Science2DActor {
   private final Magnet magnet;
-  private static Texture ferrite = 
-      new Texture("images/ferrite.png");
-  private static Texture smco = 
-      new Texture("images/smco.png");;
-  private static Texture neodymium = 
-          new Texture("images/neodymium.png");
+  private static TextureRegion ferrite = ScienceEngine.getTextureRegion("ferrite");
+  private static TextureRegion smco = ScienceEngine.getTextureRegion("smco");;
+  private static TextureRegion neodymium = ScienceEngine.getTextureRegion("neodymium");
     
   
   public MagnetActor(Science2DBody body, TextureRegion textureRegion) {
@@ -36,13 +33,13 @@ public class MagnetActor extends Science2DActor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    Texture texture = null;
+    TextureRegion textureRegion = null;
     switch(MagnetType.valueOf(magnet.getMagnetType())) {
-    case Ferrite: texture = ferrite; break;
-    case Smco: texture = smco; break;
-    case Neodymium: texture = neodymium; break;
+    case Ferrite: textureRegion = ferrite; break;
+    case Smco: textureRegion = smco; break;
+    case Neodymium: textureRegion = neodymium; break;
     }
-    this.getTextureRegion().setTexture(texture);
+    this.getTextureRegion().setRegion(textureRegion);
     super.draw(batch, parentAlpha);
   }
 }

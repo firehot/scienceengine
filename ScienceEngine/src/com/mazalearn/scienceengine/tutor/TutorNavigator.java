@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.tutor;
 import java.util.Collection;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.utils.Format;
@@ -40,7 +40,7 @@ public class TutorNavigator extends Group {
   private ITutor activeTutor;
   private Group tutorsPanel;
   private Button nextButton;
-
+  
   public TutorNavigator(Collection<ITutor> tutors, final Guru guru, Skin skin) {
     super();
     this.tutors = tutors;
@@ -57,7 +57,7 @@ public class TutorNavigator extends Group {
     tutorsPanel.addActor(createTutorsPane(tutors, guru, skin));
     tutorsPanel.setVisible(false);
     addActor(tutorsPanel);
-    userImage = new Image(new Texture("images/user.png"));
+    userImage = new Image(ScienceEngine.getTextureRegion("user"));
     ClickListener clickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         if (tutorsPanel.isVisible()) {
@@ -105,7 +105,7 @@ public class TutorNavigator extends Group {
       Label timeLabel = tutorTimeLabels[count++];
       timeLabel.setText(Format.formatTime(tutor.getTimeSpent()));
       if (tutor.getAttemptPercent() == 100) {
-        Image status = new Image(new Texture("images/check.png"));
+        Image status = new Image(ScienceEngine.getTextureRegion("check"));
         TextButton tutorButton = (TextButton) findActor(tutor.getId());
         tutorButton.addActor(status);
         ScreenComponent.scalePositionAndSize(status, 70, TUTOR_HEIGHT - 64, 60, 60);

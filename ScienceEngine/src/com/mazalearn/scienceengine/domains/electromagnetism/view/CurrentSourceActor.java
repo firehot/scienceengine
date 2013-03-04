@@ -1,8 +1,8 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -10,7 +10,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource;
 
 public class CurrentSourceActor extends Science2DActor {
   private static TextureRegion current = 
-      new TextureRegion(new Texture("images/current.png"));
+      ScienceEngine.getTextureRegion("current");
   private CurrentSource currentSource;
   public CurrentSourceActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);

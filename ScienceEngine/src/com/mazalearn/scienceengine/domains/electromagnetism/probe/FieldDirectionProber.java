@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.ProbeImage;
@@ -29,7 +30,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};
     
-    userField = new Image(new TextureRegion(new Texture("images/fieldarrow-yellow.png")));
+    userField = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
     userField.setVisible(false);
     userField.setWidth(userField.getWidth() * 2);
     userField.setHeight(userField.getHeight() * 2);

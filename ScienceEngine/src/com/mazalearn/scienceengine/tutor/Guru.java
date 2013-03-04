@@ -11,7 +11,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -63,7 +62,7 @@ public class Guru extends Group implements ITutor {
   private TutorGroup rootTutor;
   private TutorNavigator tutorNavigator;
   private McqActor mcqActor;
-
+  
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
     this.science2DController = science2DController;
@@ -81,11 +80,11 @@ public class Guru extends Group implements ITutor {
     this.configGenerator = new ConfigGenerator();
     this.modelControls = science2DController.getModelControls();
     this.viewControls = science2DController.getViewControls();
-     
-    this.successImage = new SuccessFailureImage(ScienceEngine.assetManager.get("images/greenballoon.png", Texture.class), skin, true);
-    this.failureImage = new SuccessFailureImage(ScienceEngine.assetManager.get("images/redballoon.png", Texture.class), skin, false);
-    this.correctImage = new ScoreImage(ScienceEngine.assetManager.get("images/check.png", Texture.class), skin);
-    this.wrongImage = new ScoreImage(ScienceEngine.assetManager.get("images/cross.png", Texture.class), skin);
+    
+    this.successImage = new SuccessFailureImage(ScienceEngine.getTextureRegion("greenballoon"), skin, true);
+    this.failureImage = new SuccessFailureImage(ScienceEngine.getTextureRegion("redballoon"), skin, false);
+    this.correctImage = new ScoreImage(ScienceEngine.getTextureRegion("check"), skin);
+    this.wrongImage = new ScoreImage(ScienceEngine.getTextureRegion("cross"), skin);
     
     addActor(successImage);
     addActor(failureImage);
@@ -267,7 +266,7 @@ public class Guru extends Group implements ITutor {
   }
   
   public void doChallengeAnimation(final ITutor tutor) {
-    final Image challenge = new Image(new Texture("images/challenge.png"));
+    final Image challenge = new Image(ScienceEngine.getTextureRegion("challenge"));
     challenge.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2,
         ScreenComponent.VIEWPORT_HEIGHT - 60);
     challenge.setSize(256, 256);

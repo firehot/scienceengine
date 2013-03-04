@@ -164,7 +164,7 @@ public abstract class AbstractScience2DController implements
       science2DActor.setPositionFromViewCoords(false);
       return science2DActor;      
     case Image:
-      Actor actor = new Image(ScienceEngine.assetManager.get(viewSpec, Texture.class));
+      Actor actor = new Image(ScienceEngine.getTextureRegion(viewSpec));
       actor.setName(viewSpec);
       return actor;
     }

@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -23,12 +22,12 @@ public class ScienceTrainActor extends Group {
     setName(ComponentType.ScienceTrain.name());
     body.setActive(true);
     this.science2DView = science2DView;
-    Image engine = new Image(ScienceEngine.assetManager.get("images/engine.png", Texture.class));
+    Image engine = new Image(ScienceEngine.getTextureRegion("engine"));
     addActor(engine);
     engine.setSize(180, 35);
     // Add wheels to the engine
     for (int i = 0; i < NUM_ENGINE_WHEELS; i++) {
-      Image wheel = new Image(ScienceEngine.assetManager.get("images/wheel.png", Texture.class));
+      Image wheel = new Image(ScienceEngine.getTextureRegion("wheel"));
       wheel.setPosition(i * 40, -20);
       wheel.setSize(25, 25);
       wheel.setOrigin(wheel.getWidth()/2, wheel.getWidth()/2);

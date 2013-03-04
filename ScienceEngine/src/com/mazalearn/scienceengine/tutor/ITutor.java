@@ -102,11 +102,6 @@ public interface ITutor {
    */
   float getTimeSpent();
 
-  /**
-   * @return completion percent on this tutor.
-   * For a non-group tutor, this is 0 or 100.
-   * For a group tutor, this is the percentage of children which are complete.
-   */
   float getNumAttempts();
 
   /**
@@ -122,6 +117,11 @@ public interface ITutor {
    */
   public void userReadyToFinish();
 
+  /**
+   * @return attempted percent on this tutor.
+   * For a non-group tutor, this is 0 or 100.
+   * For a group tutor, this is the percentage of children which are complete.
+   */
   float getAttemptPercent();
 
   public State getState();

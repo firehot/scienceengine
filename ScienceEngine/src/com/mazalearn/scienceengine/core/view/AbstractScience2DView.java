@@ -5,9 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -114,13 +112,14 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     } else {
       ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
     }
-    isTutoringInProgress = tutoringOn;
 
     if (tutoringOn) {
+      isTutoringInProgress = true;
       // Reinitialize level
       science2DController.reset();
       science2DController.getGuru().beginTutoring();
-    } else {
+    } else if (isTutoringInProgress) {
+      isTutoringInProgress = false;
       science2DController.getGuru().endTutoring();
       // Reinitialize level
       science2DController.reset();
@@ -195,6 +194,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     this.addActor(modelControls);
     // Bring go button to top
     this.addActor(goButton);
+    // Bring back button to top
+    this.addActor(findActor(ScreenComponent.Back.name()));
   }
 
   public void setupControls() {
@@ -221,7 +222,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
 
   private void addHelpButton() {
-    Image helpImage = new Image(new Texture("images/help.png"));
+    Image helpImage = new Image(ScienceEngine.getTextureRegion("help"));
     helpImage.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x1, float y1) {
@@ -248,9 +249,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
   
   private void addGoButton() {
-    Drawable up = new TextureRegionDrawable(new TextureRegion(new Texture("images/go1-up.png")));
-    Drawable down = new TextureRegionDrawable(new TextureRegion(new Texture("images/go1-down.png")));
-    goButton = new Button(up, down, down);
+    Drawable go = new TextureRegionDrawable(ScienceEngine.getTextureRegion("go"));
+    goButton = new Button(go);
     ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
     goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
     goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());

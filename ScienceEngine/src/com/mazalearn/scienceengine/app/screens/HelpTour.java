@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.app.screens;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -124,11 +123,11 @@ public class HelpTour extends Group {
     if (backButton != null) // TODO: required for level editor only - why?
     stage.addActor(backButton);
     
-    Image arrow = new Image(new Texture("images/fieldarrow-yellow.png"));
+    Image arrow = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
     arrow.setSize(arrow.getWidth() * 1.5f, arrow.getHeight() * 1.5f);
     addActor(arrow);
     
-    Image closeImage = new Image(new Texture("images/close.png"));
+    Image closeImage = new Image(ScienceEngine.getTextureRegion("close"));
     ScreenComponent.scaleSize(closeImage, closeImage.getWidth() * 0.5f, closeImage.getHeight() * 0.5f);
     closeImage.addListener(new ClickListener() {
       @Override 

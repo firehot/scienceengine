@@ -4,30 +4,30 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ComponentType implements IComponentType {
-  BarMagnet("images/barmagnet.png"),
-  CurrentSource("images/currentsource.png"),
-  Compass("images/compass.png"),
-  ElectroMagnet("images/electromagnet-base.png"),
-  Lightbulb("images/lightbulb.png"),
-  FieldMeter("images/arrow.png"),
-  PickupCoil("images/coppercoils-front1.png"),
-  Wire("images/currentwire-up.png"),
-  Ammeter("images/ammeter.png"), 
-  HorseshoeMagnet("images/horseshoemagnet.png"),
-  CurrentCoil("images/currentcoil_nocommutator.png"), 
-  Drawing("images/draw.png"), 
-  ScienceTrain("images/engine.png"), 
-  Dynamo("images/copperwire.png"),
-  Magnet("images/neodymium.png");
+  BarMagnet("barmagnet"),
+  CurrentSource("currentsource"),
+  Compass("compass"),
+  ElectroMagnet("electromagnet-base"),
+  Lightbulb("lightbulb"),
+  FieldMeter("arrow"),
+  PickupCoil("coppercoils-front1"),
+  Wire("currentwire-up"),
+  Ammeter("ammeter"), 
+  HorseshoeMagnet("horseshoemagnet"),
+  CurrentCoil("currentcoil_nocommutator"), 
+  Drawing("draw"), 
+  ScienceTrain("engine"), 
+  Dynamo("copperwire"),
+  Magnet("neodymium");
   
-  private String textureFilename;
+  private String textureName;
   
   private ComponentType(String textureFilename) {
-    this.textureFilename = textureFilename;
+    this.textureName = textureFilename;
   }
   
-  public String getTextureFilename() {
-    return textureFilename;
+  public String getTextureName() {
+    return textureName;
   }
   
   public String toString() {

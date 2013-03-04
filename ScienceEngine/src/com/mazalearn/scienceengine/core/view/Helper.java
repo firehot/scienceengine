@@ -28,7 +28,7 @@ public class Helper extends Group {
     super();
     this.setPosition(0, 0);
     this.setName("Help");
-    this.helpIcon = new Image(new Texture("images/help.png"));
+    this.helpIcon = new Image(ScienceEngine.getTextureRegion("help.png"));
     helpIcon.setSize(48, 48);
     helpIcon.setPosition(x, y);
     this.helpBox = new TextButton("Helptext", skin);

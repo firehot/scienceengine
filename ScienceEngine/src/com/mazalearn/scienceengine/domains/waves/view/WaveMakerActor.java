@@ -1,9 +1,8 @@
 package com.mazalearn.scienceengine.domains.waves.view;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.waves.model.WaveBox.Ball;
@@ -14,7 +13,7 @@ public class WaveMakerActor extends Science2DActor {
   private int ballDiameter;
 
   public WaveMakerActor(Science2DBody hand, final Ball ball, float originX, float originY) {
-    super(hand, new TextureRegion(new Texture("image-atlases/hand-pointer1.png")));
+    super(hand, ScienceEngine.getTextureRegion("hand-pointer"));
     this.originX = originX;
     this.originY = originY;
     this.ball = ball;

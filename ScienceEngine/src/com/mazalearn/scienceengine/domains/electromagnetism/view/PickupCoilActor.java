@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,7 +10,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 
 public class PickupCoilActor extends Science2DActor {
   private static TextureRegion coil = 
-      new TextureRegion(ScienceEngine.assetManager.get("images/coppercoils-front2.png", Texture.class));
+      new TextureRegion(ScienceEngine.getTextureRegion("coppercoils-front2"));
   private static int COIL_OFFSET = 35;
   private PickupCoil pickupCoil;
   public PickupCoilActor(PickupCoil pickupCoil, TextureRegion textureRegion) {

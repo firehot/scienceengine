@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -67,8 +67,9 @@ public class Abstractor extends AbstractTutor {
     configTable.setName("Configs");
     ScreenComponent.scalePosition(configTable, 150, 325);
     this.addActor(configTable);
+
+    TextureRegion shoppingCartTexture = ScienceEngine.getTextureRegion("shoppingcart");
     // TODO: Create cart as a screencomponent
-    Texture shoppingCartTexture = new Texture("images/shoppingcart.png");
     final Image cart = new Image(shoppingCartTexture);
     cart.setSize(ScreenComponent.ShoppingCart.getWidth(), ScreenComponent.ShoppingCart.getHeight());
     cart.setPosition(ScreenComponent.ShoppingCart.getX(), 

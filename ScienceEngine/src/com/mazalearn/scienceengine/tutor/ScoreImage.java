@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -14,8 +15,8 @@ final class ScoreImage extends Image {
   private String message;
   private BitmapFont font;
 
-  ScoreImage(Texture texture, Skin skin) {
-    super(texture);
+  ScoreImage(TextureRegion textureRegion, Skin skin) {
+    super(textureRegion);
     this.setVisible(false);
     ScreenComponent.scaleSize(this, getWidth() * 2, getHeight() * 2);
     font = skin.getFont("default-font");

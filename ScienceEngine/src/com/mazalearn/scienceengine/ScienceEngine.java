@@ -1,8 +1,10 @@
 package com.mazalearn.scienceengine;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.badlogic.gdx.Game;
@@ -14,6 +16,8 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
@@ -63,7 +67,7 @@ public class ScienceEngine extends Game {
 
   private String uri;
 
-  private TextureAtlas atlas;
+  private static Map<String, TextureAtlas> atlasMap = new HashMap<String, TextureAtlas>();
 
 
   private static Science2DBody selectedBody;
@@ -106,13 +110,6 @@ public class ScienceEngine extends Game {
     return skin;
   }
   
-  public TextureAtlas getAtlas() {
-    if (atlas == null) {
-      atlas = new TextureAtlas(Gdx.files.internal("image-atlases/pages.atlas")); //$NON-NLS-1$
-    }
-    return atlas;
-  }
-
   // IPlatformAdapter interface
   
   public void setPlatformAdapter(IPlatformAdapter platformAdapter) {
@@ -147,6 +144,7 @@ public class ScienceEngine extends Game {
     assetManager = new AssetManager();
     assetManager.setLoader(IScience2DController.class, 
         new AsyncLevelLoader(new InternalFileHandleResolver()));
+    loadAtlas("data/core/pack.atlas");
 
     //if (DEV_MODE != DevMode.PRODUCTION) {
       // create the helper objects
@@ -254,8 +252,9 @@ public class ScienceEngine extends Game {
     soundManager.dispose();
     if (skin != null)
       skin.dispose();
-    if (atlas != null)
-      atlas.dispose();
+    if (atlasMap != null)
+      for (TextureAtlas a: atlasMap.values())
+        a.dispose();
   }
 
   @Override
@@ -263,9 +262,9 @@ public class ScienceEngine extends Game {
     super.pause();
     Gdx.app.log(ScienceEngine.LOG, "Pausing engine");
 
-    // For some reason, skin and atlas do not survive pause
+    // For some reason, skin and atlasMap do not survive pause
     skin = null;
-    atlas = null;
+    atlasMap = null;
   }
   
   @Override
@@ -409,5 +408,23 @@ public class ScienceEngine extends Game {
 
   public static long getLogicalTime() {
     return logicalTime;
+  }
+  
+  public static void loadAtlas(String path) {
+    assetManager.load(path, TextureAtlas.class);
+    atlasMap.put(path, new TextureAtlas(Gdx.files.internal(path))); //$NON-NLS-1$
+  }
+
+  public static void unloadAtlas(String path) {
+    atlasMap.put(path, null);
+    assetManager.unload(path);
+  }
+
+  public static AtlasRegion getTextureRegion(String name) {
+    for (TextureAtlas atlas: atlasMap.values()) {
+      AtlasRegion textureRegion = atlas.findRegion(name);
+      if (textureRegion != null) return textureRegion;
+    }
+    return null;
   }
 }

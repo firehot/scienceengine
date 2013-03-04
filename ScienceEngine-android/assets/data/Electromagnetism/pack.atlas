@@ -1,0 +1,208 @@
+
+pack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ferrite
+  rotate: false
+  xy: 1, 733
+  size: 512, 256
+  orig: 512, 256
+  offset: 0, 0
+  index: -1
+neodymium
+  rotate: false
+  xy: 1, 475
+  size: 512, 256
+  orig: 512, 256
+  offset: 0, 0
+  index: -1
+smco
+  rotate: false
+  xy: 1, 217
+  size: 512, 256
+  orig: 512, 256
+  offset: 0, 0
+  index: -1
+copperwire
+  rotate: false
+  xy: 515, 733
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+horseshoemagnet
+  rotate: false
+  xy: 515, 475
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+coppercoils
+  rotate: false
+  xy: 773, 733
+  size: 128, 256
+  orig: 128, 256
+  offset: 0, 0
+  index: -1
+engine
+  rotate: false
+  xy: 1, 87
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+barmagnet
+  rotate: false
+  xy: 515, 409
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+coppercoils-back
+  rotate: false
+  xy: 773, 475
+  size: 64, 256
+  orig: 64, 256
+  offset: 0, 0
+  index: -1
+coppercoils-front1
+  rotate: false
+  xy: 903, 733
+  size: 64, 256
+  orig: 64, 256
+  offset: 0, 0
+  index: -1
+coppercoils-front2
+  rotate: false
+  xy: 839, 475
+  size: 64, 256
+  orig: 64, 256
+  offset: 0, 0
+  index: -1
+electromagnet
+  rotate: false
+  xy: 259, 87
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+greenballoon
+  rotate: false
+  xy: 515, 279
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+redballoon
+  rotate: false
+  xy: 645, 279
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ammeter
+  rotate: false
+  xy: 773, 409
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+currentsource
+  rotate: false
+  xy: 389, 87
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+electromagnet-base
+  rotate: false
+  xy: 775, 279
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+electromagnet-coil
+  rotate: false
+  xy: 905, 603
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+compass
+  rotate: false
+  xy: 1, 53
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+currentcoil_accommutator
+  rotate: false
+  xy: 515, 245
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+currentcoil_dccommutator
+  rotate: false
+  xy: 1, 19
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+currentcoil_nocommutator
+  rotate: false
+  xy: 131, 53
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+lightbulb
+  rotate: false
+  xy: 905, 537
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+wheel
+  rotate: false
+  xy: 841, 343
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+arrow
+  rotate: false
+  xy: 645, 245
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+brush
+  rotate: false
+  xy: 515, 227
+  size: 64, 16
+  orig: 64, 16
+  offset: 0, 0
+  index: -1
+currentwire-down
+  rotate: false
+  xy: 455, 183
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+currentwire-up
+  rotate: false
+  xy: 969, 957
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+current
+  rotate: false
+  xy: 1, 1
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1

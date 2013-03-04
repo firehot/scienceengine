@@ -27,11 +27,11 @@ public class Hinter extends Group {
 /*
   static {
     Image image;
-    SCIENTISTS.add(image = new Image(new Texture("images/edison.png")));
+    SCIENTISTS.add(image = new Image(ScienceEngine.getTextureRegion("edison")));
     image.setName("Thomas Alva Edison");
-    SCIENTISTS.add(image = new Image(new Texture("images/oersted.png")));
+    SCIENTISTS.add(image = new Image(ScienceEngine.getTextureRegion("oersted.png")));
     image.setName("Hans Christian Oersted");
-    SCIENTISTS.add(image = new Image(new Texture("images/faraday.png")));
+    SCIENTISTS.add(image = new Image(ScienceEngine.getTextureRegion("faraday.png")));
     image.setName("Michael Faraday");
   } */
   

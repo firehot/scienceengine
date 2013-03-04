@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -17,8 +18,8 @@ final class SuccessFailureImage extends Image {
   private final boolean success;
   private BitmapFont font;
 
-  SuccessFailureImage(Texture texture, Skin skin, boolean success) {
-    super(texture);
+  SuccessFailureImage(TextureRegion textureRegion, Skin skin, boolean success) {
+    super(textureRegion);
     this.setVisible(false);
     ScreenComponent.scaleSize(this, getWidth(), getHeight());
     this.success = success;

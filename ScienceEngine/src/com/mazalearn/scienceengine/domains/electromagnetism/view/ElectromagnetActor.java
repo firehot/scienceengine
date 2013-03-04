@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -12,7 +13,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
 
 public class ElectromagnetActor extends Science2DActor {
   private static TextureRegion coil = 
-      new TextureRegion(new Texture("images/electromagnet-coil.png"));
+      ScienceEngine.getTextureRegion("electromagnet-coil");
   private static float COIL_WIDTH = ElectroMagnet.DISPLAY_WIDTH;
   private ElectroMagnet electromagnet;
   public ElectromagnetActor(Science2DBody body, TextureRegion textureRegion) {

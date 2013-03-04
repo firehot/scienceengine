@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -43,8 +43,8 @@ public class ParameterProber extends AbstractScience2DProber {
 
   protected IModelConfig<?> probeConfig;
   
-  private Image createResultImage(String path, float x, float y) {
-    Image image = new Image(new Texture(path));
+  private Image createResultImage(TextureRegion textureRegion, float x, float y) {
+    Image image = new Image(textureRegion);
     image.setVisible(false);
     ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
     image.setPosition(x - image.getWidth() / 2, y - image.getHeight() / 2);
@@ -52,8 +52,8 @@ public class ParameterProber extends AbstractScience2DProber {
     return image;
   }
     
-  private Image createResultImage(String path, float scale) {
-    Image image = new Image(new Texture(path));
+  private Image createResultImage(TextureRegion textureRegion, float scale) {
+    Image image = new Image(textureRegion);
     ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
     image.setVisible(false);
     image.setSize(image.getWidth() * scale, image.getHeight() * scale);
@@ -135,11 +135,11 @@ public class ParameterProber extends AbstractScience2DProber {
       image.setX(ScreenComponent.VIEWPORT_WIDTH / 2 - image.getWidth() / 2 - ScreenComponent.getScaledX(50));
       image.setY(ScreenComponent.VIEWPORT_HEIGHT / 2 - image.getHeight() / 2);
       
-      Image clockwise = createResultImage("images/clockwise.png", 
+      Image clockwise = createResultImage(ScienceEngine.getTextureRegion("clockwise"), 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
-      Image dontCare = createResultImage("images/cross.png", 
+      Image dontCare = createResultImage(ScienceEngine.getTextureRegion("cross"), 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
-      Image antiClockwise = createResultImage("images/anticlockwise.png", 
+      Image antiClockwise = createResultImage(ScienceEngine.getTextureRegion("anticlockwise"), 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
   
       imageListener = new ClickResult(doneCallback, new Image[] {clockwise, antiClockwise, dontCare},
@@ -158,13 +158,13 @@ public class ParameterProber extends AbstractScience2DProber {
       image.setX(ScreenComponent.getScaledX(700) - image.getWidth()/2);
       image.setY(ScreenComponent.getScaledY(250) - image.getHeight()/2);
      
-      Image decrease = createResultImage("images/fieldarrow.png", 2);
+      Image decrease = createResultImage(ScienceEngine.getTextureRegion("fieldarrow"), 2);
       decrease.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);
       decrease.setRotation(180);
-      Image dontCare = createResultImage("images/cross.png", 1);
+      Image dontCare = createResultImage(ScienceEngine.getTextureRegion("cross"), 1);
       dontCare.setPosition(image.getX() + image.getWidth() / 2 - dontCare.getWidth()/2, 
           image.getY() + image.getHeight() / 2 - dontCare.getHeight()/2);
-      Image increase = createResultImage("images/fieldarrow.png", 2);
+      Image increase = createResultImage(ScienceEngine.getTextureRegion("fieldarrow"), 2);
       increase.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);
 
       imageListener = new ClickResult(doneCallback, new Image[] {decrease, increase, dontCare},
