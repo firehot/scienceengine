@@ -60,6 +60,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   private final int canonicalWidth;
   private final int canonicalHeight;
   private float x, y, width, height;
+  public static final String BASIC_SCREEN = "BasicScreen";
   public static final int PIXELS_PER_M = 8;
   
   static float X_SCALE = 1;

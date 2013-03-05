@@ -121,11 +121,14 @@ public class TutorNavigator extends Group {
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
     goal.setText(activeTutor.getGoal());
+    /*
+     * TODO: setting color of goal causes the color to tint entire screen.
     if (activeTutor.getGroupType() != GroupType.None) { 
       goal.setColor(activeTutor.getGroupType().getColor());
     } else {
       goal.setColor(activeTutor.getParentTutor().getGroupType().getColor());
     }
+    */
     goal.addAction(Actions.sequence(
         Actions.alpha(0),
         Actions.alpha(1, 2)));

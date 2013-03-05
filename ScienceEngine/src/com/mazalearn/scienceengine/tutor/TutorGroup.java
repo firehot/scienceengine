@@ -44,6 +44,10 @@ public class TutorGroup extends AbstractTutor {
       if (getAttemptPercent() == 100) {
         super.systemReadyToFinish(true);
         doSuccessActions();
+        // No user input required for group tutors - simulate it.
+        // TODO: Does not seem elegant. clean up.
+        guru.showNextButton(false);
+        guru.getActiveTutor().userReadyToFinish();
         return;
       }
       // Goto first tutor which has not been successfully done
@@ -90,8 +94,6 @@ public class TutorGroup extends AbstractTutor {
     }
     currentTutor = childTutors.get(tutorIndex);
     super.prepareToTeach(currentTutor);
-    // No user input required for group tutors
-    state = State.UserFinished;
   }
   
   @Override

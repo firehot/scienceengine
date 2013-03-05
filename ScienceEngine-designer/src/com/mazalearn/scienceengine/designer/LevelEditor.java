@@ -180,21 +180,6 @@ public class LevelEditor extends Stage {
       }      
     });
     menu.add(button).pad(10);
-    button = new TextButton("Thumbnail", skin);
-    button.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        // Render screen - then we will save its screen
-        modelControls.refresh();
-        modelControls.act(0);
-        screen.clearScreen(Color.BLACK);
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
-        takeSnapshot(originalStage, science2DController.getTopic().name(),
-            science2DController.getLevel(), 0, 0, width, height);
-      }      
-    });
-    menu.add(button).pad(10);
     button = new TextButton("Load", skin);
     button.addListener(new ClickListener() {
       @Override

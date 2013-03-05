@@ -8,6 +8,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -42,6 +43,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   private List<IModelConfig<?>> viewCommands;
   private ViewControls viewControls;
   private Button goButton;
+  private Group basicScreen;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -188,30 +190,28 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         ((Science2DActor) actor).prepareActor();
       }
     }
-    // TODO: Bring BasicView to top. Add help, modelcontrols, gobutton to BasicView
-    // Bring view controls to top
-    this.addActor(viewControls);
-    // Bring model controls to top and position
-    this.addActor(modelControls);
-    // Bring go button to top
-    this.addActor(goButton);
-    // Bring back button to top
-    this.addActor(findActor(ScreenComponent.Back.name()));
-    // Bring help to top
-    this.addActor(findActor(ScreenComponent.Help.name()));
+    // Bring BasicScreen controls to top.
+    this.addActor(basicScreen);
   }
 
   public void setupControls() {
+    basicScreen = (Group) findActor(ScreenComponent.BASIC_SCREEN);
+    if (basicScreen == null) {
+      basicScreen = new Group();
+      basicScreen.setName(ScreenComponent.BASIC_SCREEN);
+      this.addActor(basicScreen);
+    }
     // Create view and model controls
     this.viewControls = new ActivityViewControls(science2DController, skin);
-    this.addActor(viewControls);
+    basicScreen.addActor(viewControls);
 
     this.modelControls = new ModelControls(science2DModel, skin);
-    this.addActor(modelControls);
+    basicScreen.addActor(modelControls);
     
-    addGoButton();
+    this.goButton = createGoButton();
+    basicScreen.addActor(goButton);
     // Help icon
-    addHelpButton();
+    basicScreen.addActor(createHelpActor());
 
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
@@ -224,7 +224,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     return modelControls;
   }
 
-  private void addHelpButton() {
+  private Actor createHelpActor() {
     Image helpImage = new Image(ScienceEngine.getTextureRegion("help"));
     helpImage.addListener(new ClickListener() {
       @Override
@@ -249,12 +249,12 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     helpImage.setPosition(sc.getX(), sc.getY());
     helpImage.setSize(sc.getWidth(), sc.getHeight());
     helpImage.setName(ScreenComponent.Help.name());
-    this.addActor(helpImage);
+    return helpImage;
   }
   
-  private void addGoButton() {
+  private Button createGoButton() {
     Drawable go = new TextureRegionDrawable(ScienceEngine.getTextureRegion("go"));
-    goButton = new Button(go);
+    final Button goButton = new Button(go);
     ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
     goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
     goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
@@ -270,7 +270,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       }
     });
     
-    this.addActor(goButton);
+    return goButton;
   }
 
   @Override

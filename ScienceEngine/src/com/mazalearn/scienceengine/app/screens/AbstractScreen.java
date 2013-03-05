@@ -33,7 +33,6 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
  * The base class for all scienceEngine screens.
  */
 public abstract class AbstractScreen implements Screen {
-  private static final String BASIC_SCREEN = "BasicScreen";
   protected final ScienceEngine scienceEngine;
   protected Stage stage;
 
@@ -108,14 +107,18 @@ public abstract class AbstractScreen implements Screen {
   }
 
   private void setupBasicScreen(Stage stage) {
-    if (stage.getRoot().findActor(BASIC_SCREEN) != null) return;
-    Group basicScreen = new Group();
-    basicScreen.setName(BASIC_SCREEN);
-    stage.addActor(basicScreen);
+    Group basicScreen = (Group) stage.getRoot().findActor(ScreenComponent.BASIC_SCREEN);
+    if (basicScreen == null) {
+      basicScreen = new Group();
+      basicScreen.setName(ScreenComponent.BASIC_SCREEN);
+      stage.addActor(basicScreen);
+    } else if (basicScreen.findActor(ScreenComponent.Title.name()) != null) {
+      return;
+    }
     // Register stage components
     for (ScreenComponent screenComponent: ScreenComponent.values()) {
       if (!screenComponent.isInAllScreens()) continue;
-      Actor component = addScreenComponent(screenComponent, stage, getSkin());
+      Actor component = createScreenComponent(screenComponent, stage, getSkin());
       basicScreen.addActor(component);
       if ((component instanceof Table) && !(component instanceof Button)) { // Place the center
         Table t = (Table) component;
@@ -128,18 +131,14 @@ public abstract class AbstractScreen implements Screen {
     }
   }
 
-  private Actor addScreenComponent(ScreenComponent screenComponent, Stage stage, Skin skin) {
+  private Actor createScreenComponent(ScreenComponent screenComponent, Stage stage, Skin skin) {
     switch (screenComponent) {
       case TopBar:
-        Image topBar = new Image(ScreenUtils.createTexture(
-            screenComponent.getWidth(), screenComponent.getHeight(), skin.getColor("separator")));
-        topBar.setName(screenComponent.name());
-        return topBar;
       case BottomBar:
-        Image bottomBar = new Image(ScreenUtils.createTexture(
+        Image bar = new Image(ScreenUtils.createTexture(
             screenComponent.getWidth(), screenComponent.getHeight(), skin.getColor("separator")));
-        bottomBar.setName(screenComponent.name());
-        return bottomBar;
+        bar.setName(screenComponent.name());
+        return bar;
       case User: { 
         String text = ScienceEngine.getUserName();
         Table table = new Table(skin);
@@ -233,16 +232,12 @@ public abstract class AbstractScreen implements Screen {
   @Override
   public void render(float delta) {
     stage.act(delta);
-    clearScreen(backgroundColor);
+    Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     stage.draw();
     if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
       Table.drawDebug(stage);
     }
-  }
-
-  public void clearScreen(Color color) {
-    Gdx.gl.glClearColor(color.r, color.g, color.b, color.a);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
   }
 
   @Override
@@ -279,14 +274,6 @@ public abstract class AbstractScreen implements Screen {
 
   public Skin getSkin() {
     return scienceEngine.getSkin();
-  }
-
-  public Color getBackgroundColor() {
-    return backgroundColor;
-  }
-
-  public void setBackgroundColor(Color backgroundColor) {
-    this.backgroundColor = backgroundColor;
   }
 
   // Adds all assets required for this screen to reduce load timeLimit
