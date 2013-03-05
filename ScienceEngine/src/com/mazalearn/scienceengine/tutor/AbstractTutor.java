@@ -30,6 +30,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private Profile profile;
   private float timeSpent;
   protected int numAttempts;
+  private float numSuccesses;
   protected boolean success;
   protected State state = State.Constructed;
 
@@ -65,6 +66,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.timeSpent = profile.getTimeSpent(id);
     this.numAttempts = (int) profile.getNumAttempts(id);
+    this.numSuccesses = (int) profile.getNumSuccesses(id);
     Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", NumAttempts: " + numAttempts);
     this.setVisible(false);
 
@@ -112,7 +114,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     if (state != State.Finished) return;
     Gdx.app.log(ScienceEngine.LOG, "finish: " + getId());
     this.setVisible(false);
-    
+    if (success) numSuccesses++;
     recordStats();
     guru.setActiveTutor(parent);
     parent.systemReadyToFinish(true);
@@ -121,6 +123,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private void recordStats() {
     profile.setNumAttempts(id, getNumAttempts());
     profile.setTimeSpent(id, getTimeSpent());
+    profile.setNumSuccesses(id, getNumSuccesses());
   }
 
   protected void setSuccessPoints(int points) {
@@ -163,7 +166,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
 
 
-  public int getSuccessScore() {
+  public int getSuccessPoints() {
     return successPoints;
   }
   
@@ -205,7 +208,12 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public float getAttemptPercent() {
+  public float getNumSuccesses() {
+    return numSuccesses;
+  }
+  
+  @Override
+  public float getPercentAttempted() {
     return numAttempts == 0 ? 0 : 100;
   }
   

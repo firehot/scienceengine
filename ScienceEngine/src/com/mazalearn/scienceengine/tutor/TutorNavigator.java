@@ -104,7 +104,7 @@ public class TutorNavigator extends Group {
     for (final ITutor tutor: this.tutors) {
       Label timeLabel = tutorTimeLabels[count++];
       timeLabel.setText(Format.formatTime(tutor.getTimeSpent()));
-      if (tutor.getAttemptPercent() == 100) {
+      if (tutor.getPercentAttempted() == 100) {
         Image status = new Image(ScienceEngine.getTextureRegion("check"));
         TextButton tutorButton = (TextButton) findActor(tutor.getId());
         tutorButton.addActor(status);

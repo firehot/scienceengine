@@ -35,8 +35,10 @@ import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 /**
- * Cycles through the eligible childTutors - probing the user with each one.
- * This is the root of the tutor hierarchy.
+ * Root of the tutor hierarchy, handles all the tutors under management of a root tutor.
+ * Provides various services to the tutors - showing success, failure, correct, wrong
+ * group animations for challenge, rapidfire.
+ * Provides a TutorNavigator service for random access to tutors.
  * 
  * @author sridhar
  * 
@@ -104,10 +106,6 @@ public class Guru extends Group implements ITutor {
   
   public ITutor getActiveTutor() {
     return activeTutor;
-  }
-
-  public float getActiveTime() {
-    return activeTimer.getActiveTime();
   }
 
   public ITutor getRootTutor() {
@@ -229,11 +227,9 @@ public class Guru extends Group implements ITutor {
   @Override
   public void act(float dt) {
     super.act(dt);
-    if (Math.round(ScienceEngine.getTime()) % 2 != 0) return;
-    if (activeTutor != null) {
-      if (!hinter.hasHint()) {
-        hinter.setHint(activeTutor.getHint());
-      }
+    if (Math.round(ScienceEngine.getTime()) % 10 != 0) return;
+    if (activeTutor != null && !hinter.hasHint()) {
+      hinter.setHint(activeTutor.getHint());
     }
   }
   
@@ -456,12 +452,17 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public float getAttemptPercent() {
-    return rootTutor.getAttemptPercent();
+  public float getPercentAttempted() {
+    return rootTutor.getPercentAttempted();
   }
   
   @Override
   public State getState() {
     return rootTutor.getState();
+  }
+
+  @Override
+  public float getNumSuccesses() {
+    return rootTutor.getNumSuccesses();
   }
 }

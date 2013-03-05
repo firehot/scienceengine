@@ -46,7 +46,7 @@ public class McqTutor extends AbstractTutor {
       success &= (answerMask.charAt(permutation[i]) == '1') == optionButtons[i].isChecked();
     }
     if (success) {
-      guru.showSuccess(getSuccessScore());
+      guru.showSuccess(getSuccessPoints());
       super.finish();
     } else {
       for (int i = 0; i < answerMask.length(); i++) {

@@ -146,7 +146,7 @@ public class Abstractor extends AbstractTutor {
       }
       return;
     }
-    guru.showCorrect(getSuccessScore());
+    guru.showCorrect(getSuccessPoints());
     super.systemReadyToFinish(true);
   }
 

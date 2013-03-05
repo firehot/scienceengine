@@ -40,18 +40,17 @@ public class TutorGroup extends AbstractTutor {
     }
     // Move on to next stage
     if (++tutorIndex == childTutors.size()) {
-      if (getAttemptPercent() == 100) {
+      if (getPercentAttempted() == 100) {
+        this.success = true;
+        // No user input required for group tutors
+        this.state = State.UserFinished;
         super.systemReadyToFinish(true);
         doSuccessActions();
-        // No user input required for group tutors - simulate it.
-        // TODO: Does not seem elegant. clean up.
-        guru.showNextButton(false);
-        guru.getActiveTutor().userReadyToFinish();
         return;
       }
       // Goto first tutor which has not been successfully done
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getAttemptPercent() < 100) {
+        if (childTutors.get(tutorIndex).getPercentAttempted() < 100) {
           break;
         }
       }
@@ -150,17 +149,27 @@ public class TutorGroup extends AbstractTutor {
   public float getNumAttempts() {
     int numAttempted = 0;
     for (ITutor child: childTutors) {
-      if (child.getAttemptPercent() > 0) numAttempted++;
+      if (child.getNumAttempts() > 0) numAttempted++;
     }
     return numAttempted;
   }
   
   @Override
-  public float getAttemptPercent() {
+  public float getPercentAttempted() {
     float attemptPercent = 0;
     for (ITutor child: childTutors) {
-      attemptPercent += child.getAttemptPercent();
+      attemptPercent += child.getPercentAttempted();
     }
     return attemptPercent / childTutors.size();
   }
+
+  @Override
+  public float getNumSuccesses() {
+    int numSuccesses = 0;
+    for (ITutor child: childTutors) {
+      if (child.getNumSuccesses() > 0) numSuccesses++;
+    }
+    return numSuccesses;
+  }
+  
 }

@@ -19,15 +19,15 @@ import com.mazalearn.scienceengine.ScienceEngine;
 public class Profile implements Serializable {
 
   private static final String DRAWING_PNG = "DrawingPng";
-  private static final String ATTEMPT_PERCENT = "attemptPercent";
-  private static final String CORRECT_PERCENT = "correctPercent";
-  private static final String TIME_SPENT = "timeSpent";
-  private static final String POINTS_EARNED = "pointsEarned";
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
   private static final String TOPIC = "topic";
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
+  private static final String NUM_ATTEMPTS = "numAttempts";
+  private static final String NUM_SUCCESSES = "numSucceses";
+  private static final String PERCENT_ATTEMPTED = "attemptPercent";
+  private static final String TIME_SPENT = "timeSpent";
   private HashMap<Topic, HashMap<String, Float>> topicStats;
   private HashMap<String, String> properties;
   private HashMap<String, Float> currentTopicStats;
@@ -137,15 +137,6 @@ public class Profile implements Serializable {
     return s == null ? "" : s;
   }
 
-  public float getTimeSpent(String tutorId) {
-    return getTimeSpent(getCurrentActivity(), tutorId);
-  }
-  
-  public float getTimeSpent(int activity, String tutorId) {
-    Float timeSpent = (Float) currentTopicStats.get(makeTutorKey(activity, tutorId, TIME_SPENT));
-    return timeSpent == null ? 0 : timeSpent;
-  }
-
   private String makeTutorKey(int activity, String tutorId, String key) {
     return activity + "$" + tutorId + "$" + key;
   }
@@ -154,11 +145,13 @@ public class Profile implements Serializable {
     return makeTutorKey(getCurrentActivity(), tutorId, key);
   }
 
-  public void setTimeSpent(String tutorId, float timeSpent) {
-    saveStat(makeTutorKey(tutorId, TIME_SPENT), timeSpent);
+  private float getStat(int activity, String tutorId, String key) {
+    Float value = currentTopicStats.get(makeTutorKey(activity, tutorId, key));
+    return value == null ? 0 : value;
   }
 
-  private void saveStat(String tutorKey, Float value) {
+  private void saveStat(String tutorId, String key, Float value) {
+    String tutorKey = makeTutorKey(tutorId, key);
     if (currentTopicStats.get(tutorKey) == value) return;
     currentTopicStats.put(tutorKey, value);
     save();
@@ -168,18 +161,58 @@ public class Profile implements Serializable {
     ScienceEngine.getPreferencesManager().saveProfile();
   }
 
+  public float getTimeSpent(String tutorId) {
+    return getStat(getCurrentActivity(), tutorId, TIME_SPENT);
+  }
+  
+  public float getTimeSpent(int activity, String tutorId) {
+    return getStat(activity, tutorId, TIME_SPENT);
+  }
+
+  public void setTimeSpent(String tutorId, float timeSpent) {
+    saveStat(tutorId, TIME_SPENT, timeSpent);
+  }
+
+  /**
+   * Get num attempts for this tutorId
+   * @param tutorId
+   * @return
+   */
+  public float getNumAttempts(String tutorId) {
+    return getStat(getCurrentActivity(), tutorId, NUM_ATTEMPTS);
+  }
+  
+  public float getNumAttempts(int activity, String tutorId) {
+    return getStat(activity, tutorId, NUM_ATTEMPTS);
+  }
+
+  public void setNumAttempts(String tutorId, float numAttempts) {
+    saveStat(tutorId, NUM_ATTEMPTS, numAttempts);
+  }
+
+  public float getNumSuccesses(String tutorId) {
+    return getStat(getCurrentActivity(), tutorId, NUM_SUCCESSES);
+  }
+
+  public float getNumSuccesses(int activity, String tutorId) {
+    return getStat(activity, tutorId, NUM_SUCCESSES);
+  }
+
+  public void setNumSuccesses(String tutorId, float numSucceses) {
+    saveStat(tutorId, NUM_SUCCESSES, numSucceses);
+  }
+
   /**
    * Get percent attempted for this tutorId
    * @param tutorId
    * @return
    */
-  public float getNumAttempts(String tutorId) {
-    return getPercentAttempted(getCurrentActivity(), tutorId);
+  public float getPercentAttempted(String tutorId) {
+    return getStat(getCurrentActivity(), tutorId, PERCENT_ATTEMPTED);
   }
   
   public float getPercentAttempted(int activity, String tutorId) {
-    Float status = currentTopicStats.get(makeTutorKey(activity, tutorId, ATTEMPT_PERCENT));
-    return status == null ? 0 : status;
+    return getStat(activity, tutorId, PERCENT_ATTEMPTED);
   }
 
 
@@ -187,39 +220,8 @@ public class Profile implements Serializable {
     HashMap<String, Float> topicProps = topicStats.get(topic);
     if (topicProps == null) return 0;
     
-    Float status = topicProps.get(makeTutorKey(level, id, ATTEMPT_PERCENT));
+    Float status = topicProps.get(makeTutorKey(level, id, PERCENT_ATTEMPTED));
     return status == null ? 0 : status;
-  }
-
-  public void setNumAttempts(String tutorId, float percent) {
-    saveStat(makeTutorKey(tutorId, ATTEMPT_PERCENT), percent);
-  }
-
-  /**
-   * Get points earned for this tutorId
-   * @param tutorId
-   * @return
-   */
-  public float getPointsEarned(String tutorId) {
-    return getPercentAttempted(getCurrentActivity(), tutorId);
-  }
-  
-  public float getPointsEarned(int activity, String tutorId) {
-    Float status = currentTopicStats.get(makeTutorKey(activity, tutorId, POINTS_EARNED));
-    return status == null ? 0 : status;
-  }
-
-
-  public float getPointsEarned(Topic topic, int level, String id) {
-    HashMap<String, Float> topicProps = topicStats.get(topic);
-    if (topicProps == null) return 0;
-    
-    Float status = topicProps.get(makeTutorKey(level, id, POINTS_EARNED));
-    return status == null ? 0 : status;
-  }
-
-  public void setPointsEarned(String tutorId, float points) {
-    saveStat(makeTutorKey(tutorId, POINTS_EARNED), points);
   }
 
   public void setDrawingPng(byte[] drawingPngBytes) {

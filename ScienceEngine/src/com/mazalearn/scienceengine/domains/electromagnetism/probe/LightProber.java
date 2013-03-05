@@ -32,7 +32,7 @@ public class LightProber extends AbstractScience2DProber {
   public void act(float delta) {
     super.act(delta);
     if (lightbulbActor != null && lightbulbActor.withinLightRegion(image.getX(), image.getY())) {
-      guru.showCorrect(getSuccessScore());
+      guru.showCorrect(getSuccessPoints());
       systemReadyToFinish(true);
     }
   }

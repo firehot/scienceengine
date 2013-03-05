@@ -117,7 +117,7 @@ public class ParameterProber extends AbstractScience2DProber {
       // No failure exit.
       return;
     }
-    guru.showCorrect(getSuccessScore());
+    guru.showCorrect(getSuccessPoints());
     super.systemReadyToFinish(true);
   }
 

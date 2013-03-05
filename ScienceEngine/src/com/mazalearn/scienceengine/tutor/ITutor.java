@@ -92,17 +92,9 @@ public interface ITutor {
   public ITutor getParentTutor();
 
   /**
-   * Add to the time taken in this tutor
-   * @param timeTaken
+   * @return Current state of the tutor
    */
-  void addTimeSpent(float timeTaken);
-
-  /**
-   * @return time spent on this tutor
-   */
-  float getTimeSpent();
-
-  float getNumAttempts();
+  public State getState();
 
   /**
    * Tutor can delegate to a child tutor or another component for part of 
@@ -118,11 +110,30 @@ public interface ITutor {
   public void userReadyToFinish();
 
   /**
+   * Add to the time taken in this tutor. This is always cumulative.
+   * @param timeTaken
+   */
+  void addTimeSpent(float timeTaken);
+
+  /**
+   * @return time spent on this tutor
+   */
+  float getTimeSpent();
+
+  /**
+   * @return number of attempts on this tutor.
+   */
+  float getNumAttempts();
+
+  /**
+   * @return number of successful attempts on this tutor.
+   */
+  float getNumSuccesses();
+
+  /**
    * @return attempted percent on this tutor.
    * For a non-group tutor, this is 0 or 100.
-   * For a group tutor, this is the percentage of children which are complete.
+   * For a group tutor, this is the percentage of children attempted.
    */
-  float getAttemptPercent();
-
-  public State getState();
+  float getPercentAttempted();
 }
