@@ -15,15 +15,14 @@ import com.mazalearn.scienceengine.core.lang.Variable;
 public class TutorGroup extends AbstractTutor {
   
   private List<ITutor> childTutors = Collections.emptyList();
+  private ITutor currentTutor;
   
   private float[] tutorBeginTime;
   private int tutorIndex = -1;
 
   private Expr successActions;
-
   private Set<Variable> variables;
 
-  private ITutor currentTutor;
 
     
   public TutorGroup(IScience2DController science2DController, ITutor parent,

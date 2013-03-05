@@ -9,7 +9,6 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 public enum ScreenComponent implements IComponentType, IHelpComponent {
   TopBar(XAlign.LEFT, 0, YAlign.TOP, 0, 800, 30, Color.BLACK, true, false),
   BottomBar(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 20, Color.BLACK, true, false),
-  Background(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 480, Color.BLACK, false, false),
   Dashboard(XAlign.CENTER, 0, YAlign.TOP, -3, 0, 0, Color.BLACK, false, false),
   ShoppingCart(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 50, Color.BLACK, false, false),
   Prober(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
