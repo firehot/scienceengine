@@ -144,7 +144,7 @@ public class ScienceEngine extends Game {
     assetManager = new AssetManager();
     assetManager.setLoader(IScience2DController.class, 
         new AsyncLevelLoader(new InternalFileHandleResolver()));
-    loadAtlas("data/core/pack.atlas");
+    loadAtlas("images/core/pack.atlas");
 
     //if (DEV_MODE != DevMode.PRODUCTION) {
       // create the helper objects

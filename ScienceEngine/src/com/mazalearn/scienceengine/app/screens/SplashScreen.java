@@ -81,7 +81,7 @@ public class SplashScreen extends AbstractScreen {
                 Actions.fadeOut(1f))));
 
     // retrieve the splash image
-    TextureRegion splashRegion = new TextureRegion(new Texture("image-atlases/splash.jpg")); //$NON-NLS-1$
+    TextureRegion splashRegion = new TextureRegion(new Texture("images/splash.jpg")); //$NON-NLS-1$
 
     // We create the splash image actor; its size is set when the
     // resize() method gets called

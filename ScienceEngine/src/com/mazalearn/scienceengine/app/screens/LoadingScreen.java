@@ -36,7 +36,7 @@ public class LoadingScreen extends AbstractScreen {
       Gdx.graphics.setContinuousRendering(true);
     }
     // Tell the assetManager to load assets for the loading screen
-    ScienceEngine.assetManager.load("image-atlases/loading.pack",
+    ScienceEngine.assetManager.load("images/loading.pack",
         TextureAtlas.class);
     // Wait until they are finished loading
     ScienceEngine.assetManager.finishLoading();
@@ -55,7 +55,7 @@ public class LoadingScreen extends AbstractScreen {
 
     // Get our textureatlas from the assetManager
     TextureAtlas atlas = ScienceEngine.assetManager.get(
-        "image-atlases/loading.pack", TextureAtlas.class);
+        "images/loading.pack", TextureAtlas.class);
 
     // Grab the regions from the atlas and create some images
     logo = new Image(atlas.findRegion("libgdx-logo"));
@@ -146,7 +146,7 @@ public class LoadingScreen extends AbstractScreen {
   public void hide() {
     super.hide();
     // Dispose the loading assets as we no longer need them
-    ScienceEngine.assetManager.unload("image-atlases/loading.pack");
+    ScienceEngine.assetManager.unload("images/loading.pack");
   }
 
   @Override

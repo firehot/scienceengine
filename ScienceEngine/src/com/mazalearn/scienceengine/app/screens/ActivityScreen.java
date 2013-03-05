@@ -97,9 +97,9 @@ public class ActivityScreen extends AbstractScreen {
       return;
     }
     // Guru resources
-    ScienceEngine.loadAtlas("data/guru/pack.atlas");
+    ScienceEngine.loadAtlas("images/guru/pack.atlas");
     // Topic resources
-    ScienceEngine.loadAtlas("data/" + topic.name() + "/pack.atlas");
+    ScienceEngine.loadAtlas("images/" + topic.name() + "/pack.atlas");
     AsyncLevelLoader.LevelLoaderParameter parameter = new AsyncLevelLoader.LevelLoaderParameter();
     parameter.science2DController = science2DController;
     ScienceEngine.assetManager.load(fileName, IScience2DController.class, parameter);

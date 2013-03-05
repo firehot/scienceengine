@@ -42,7 +42,7 @@ ne\ScienceEngine\libs\gdx.jar com.badlogic.gdx.tools.imagepacker.TexturePacker2
 currentcoil
  */
     rotationFrames = new TextureRegion[NUM_FRAMES];
-    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/electromagnetism/currentcoil/pack.atlas"));
+    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/Electromagnetism/currentcoil/pack.atlas"));
     for (int i = 0; i < NUM_FRAMES; i++) {
       String num = String.valueOf(i);
       rotationFrames[i] = atlas.findRegion("000".substring(0, 3 - num.length()) + num + '0');
