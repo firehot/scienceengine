@@ -42,13 +42,18 @@ public class McqTutor extends AbstractTutor {
   public void finish() {
     if (state != State.Finished) return;
     boolean success = true;
+    int failureTracker = 0;
     for (int i = 0; i < answerMask.length(); i++) {
-      success &= (answerMask.charAt(permutation[i]) == '1') == optionButtons[i].isChecked();
+      if ((answerMask.charAt(permutation[i]) == '1') != optionButtons[i].isChecked()) {
+        success = false;
+        failureTracker += 1 << (permutation[i] * 3);
+      }
     }
     if (success) {
       guru.showSuccess(getSuccessPoints());
       super.finish();
     } else {
+      this.stats.failureTracker += failureTracker;
       for (int i = 0; i < answerMask.length(); i++) {
         if (answerMask.charAt(permutation[i]) == '1') {
           optionButtons[i].addAction(

@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.loaders.ComponentLoader;
 import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -18,8 +17,6 @@ public abstract class AbstractTutor extends Group implements ITutor {
 
   protected Array<?> components;
   protected Array<?> configs;
-  private int failurePoints;
-  private int successPoints;
   private String[] hints;
   private String goal;
   protected IScience2DController science2DController;
@@ -27,12 +24,11 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected final Guru guru;
   private GroupType groupType = GroupType.None;
   private String id;
-  private Profile profile;
-  private float timeSpent;
-  protected int numAttempts;
-  private float numSuccesses;
   protected boolean success;
+  protected TutorStats stats;
   protected State state = State.Constructed;
+  private int successPoints;
+  private int failurePoints;
 
   /**
    * State Machine
@@ -63,11 +59,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.failurePoints = failurePoints;
     this.hints = hints;
     this.guru = science2DController.getGuru();
-    this.profile = ScienceEngine.getPreferencesManager().getProfile();
-    this.timeSpent = profile.getTimeSpent(id);
-    this.numAttempts = (int) profile.getNumAttempts(id);
-    this.numSuccesses = (int) profile.getNumSuccesses(id);
-    Gdx.app.log(ScienceEngine.LOG, id + ", Time spent: " + timeSpent + ", NumAttempts: " + numAttempts);
+    this.stats = new TutorStats(id);
     this.setVisible(false);
 
   }
@@ -114,27 +106,32 @@ public abstract class AbstractTutor extends Group implements ITutor {
     if (state != State.Finished) return;
     Gdx.app.log(ScienceEngine.LOG, "finish: " + getId());
     this.setVisible(false);
-    if (success) numSuccesses++;
+    if (success) stats.numSuccesses++;
     recordStats();
     guru.setActiveTutor(parent);
     parent.systemReadyToFinish(true);
   }
 
   private void recordStats() {
-    profile.setNumAttempts(id, getNumAttempts());
-    profile.setTimeSpent(id, getTimeSpent());
-    profile.setNumSuccesses(id, getNumSuccesses());
+    // Update all stats
+    stats.timeSpent = getTimeSpent();
+    stats.numAttempts = getNumAttempts();
+    stats.numSuccesses = getNumSuccesses();
+    stats.failureTracker = getFailureTracker();
+    stats.percentAttempted = getPercentAttempted();
+    
+    stats.save();
   }
 
   protected void setSuccessPoints(int points) {
-    successPoints = points;
+    this.successPoints = points;
   }
 
   @Override
   public void teach() {
     Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
     this.setVisible(true);
-    this.numAttempts++;
+    this.stats.numAttempts++;
     state = State.Teaching;
   }
   
@@ -194,27 +191,32 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void addTimeSpent(float delta) {
-    this.timeSpent += delta;
+    this.stats.timeSpent += delta;
   }
   
   @Override
   public float getTimeSpent() {
-    return timeSpent;
+    return stats.timeSpent;
   }
   
   @Override
   public float getNumAttempts() {
-    return numAttempts;
+    return stats.numAttempts;
   }
   
   @Override
   public float getNumSuccesses() {
-    return numSuccesses;
+    return stats.numSuccesses;
   }
   
   @Override
   public float getPercentAttempted() {
-    return numAttempts == 0 ? 0 : 100;
+    return stats.numAttempts == 0 ? 0 : 100;
+  }
+  
+  @Override
+  public float getFailureTracker() {
+    return stats.failureTracker;
   }
   
   @Override

@@ -131,6 +131,17 @@ public interface ITutor {
   float getNumSuccesses();
 
   /**
+   * @return number tracking the failures and type of failures.
+   * Failure is expressed as XXXXXX 
+   * Each X is the count MOD 8 that particular option was incorrectly checked
+   *    either separately or in conjunction with other incorrect options.
+   *    option is counted from left to right, starting with 0. (reversed octal)
+   * The number of X's is the number of multiple choice options.
+   * This does not accumulate at non-leaf levels.
+   */
+  float getFailureTracker();
+
+  /**
    * @return attempted percent on this tutor.
    * For a non-group tutor, this is 0 or 100.
    * For a group tutor, this is the percentage of children attempted.

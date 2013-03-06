@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 public class McqActor extends Group {
   private static final int MAX_OPTIONS = 6;
@@ -70,7 +70,7 @@ public class McqActor extends Group {
     this.optionButtons = new TextButton[MAX_OPTIONS];
     McqActor.OptionListener listener = new OptionListener(optionButtons); 
     for (int i = 0; i < MAX_OPTIONS; i++) {
-      TextButton optionButton = TopicHomeScreen.createTextButton("", 
+      TextButton optionButton = ScreenUtils.createTextButton("", 
           ScreenComponent.McqOption.getX(ScreenComponent.getScaledX(400)), 
           y - ScreenComponent.getScaledY(30 * 2 * i), 
           400, 30,

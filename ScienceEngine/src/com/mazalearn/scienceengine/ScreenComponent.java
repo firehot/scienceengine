@@ -22,7 +22,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   ShoppingCart(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 50, Color.BLACK, false, false),
   Prober(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
   NextButton(XAlign.CENTER, 108, YAlign.TOP, -50, 0, 0, Color.CLEAR, false, false), 
-  Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 800, 0, Color.YELLOW, false, false),
+  Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, Color.YELLOW, false, false),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, Color.YELLOW, false, false), 
   ;
   

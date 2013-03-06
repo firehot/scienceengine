@@ -172,4 +172,8 @@ public class TutorGroup extends AbstractTutor {
     return numSuccesses;
   }
   
+  @Override
+  public float getFailureTracker() {
+    return 0;
+  }
 }

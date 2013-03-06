@@ -135,8 +135,8 @@ public abstract class AbstractScreen implements Screen {
     switch (screenComponent) {
       case TopBar:
       case BottomBar:
-        Image bar = new Image(ScreenUtils.createTexture(
-            screenComponent.getWidth(), screenComponent.getHeight(), skin.getColor("separator")));
+        Image bar = new Image(ScreenUtils.createTextureRegion(
+            screenComponent.getWidth(), screenComponent.getHeight(), skin.getColor("bar")));
         bar.setName(screenComponent.name());
         return bar;
       case User: { 

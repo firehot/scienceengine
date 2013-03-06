@@ -20,7 +20,9 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.tutor.Guru;
+import com.mazalearn.scienceengine.tutor.TutorStats;
 
 public class ChooseTopicScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 242;
@@ -70,7 +72,8 @@ public class ChooseTopicScreen extends AbstractScreen {
     for (final Topic topic: Topic.values()) {
       final boolean lock = !topic.equals(Topic.Electromagnetism);
       Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic.name(), 1);
-      TextButton topicThumb = TopicHomeScreen.createImageButton(levelThumbnail, getSkin());
+      TextButton topicThumb = 
+          ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin());
       if (lock) {
         Image lockImage = new Image(overlayLock);
         lockImage.setPosition(THUMBNAIL_WIDTH / 2 - lockImage.getWidth() / 2,
@@ -78,7 +81,7 @@ public class ChooseTopicScreen extends AbstractScreen {
         topicThumb.addActor(lockImage);
       } else {
         int progressPercentage = findTopicProgressPercentage(topic);
-        TopicHomeScreen.createProgressPercentageBar(getSkin().get(LabelStyle.class),
+        ScreenUtils.createProgressPercentageBar(getSkin().get(LabelStyle.class),
             topicThumb, progressPercentage, THUMBNAIL_WIDTH);
       }
       topicThumb.addListener(new ClickListener() {
@@ -120,7 +123,8 @@ public class ChooseTopicScreen extends AbstractScreen {
     int numLevels = topic.getNumLevels();
     int percent = 0;
     for (int level = 1; level <= numLevels; level++) {
-      percent += profile.getPercentAttempted(topic, level, Guru.ID);
+      TutorStats stats = new TutorStats(topic, level, Guru.ID);
+      percent += stats.percentAttempted;
     }
     return Math.round(percent * 100 / (100f * numLevels));
   }

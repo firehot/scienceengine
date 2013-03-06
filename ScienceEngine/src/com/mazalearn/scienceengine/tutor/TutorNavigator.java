@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.tutor.ITutor.GroupType;
@@ -31,7 +30,8 @@ public class TutorNavigator extends Group {
   private static final float TUTOR_WIDTH = 200;
   private static final float TUTOR_HEIGHT = 150;
   Color c = new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.5f);
-  TextureRegion gray = ScreenUtils.createTexture(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
+  TextureRegion gray = 
+      ScreenUtils.createTextureRegion(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
   private TextButton activeTutorButton;
   private Label[] tutorTimeLabels;
   private final Collection<ITutor> tutors;
@@ -70,14 +70,20 @@ public class TutorNavigator extends Group {
         getStage().addActor(TutorNavigator.this);
       }
     };
-    goal = new TextButton("This is a very long long long test goal" + 
-        "This is a very long long long test goal", skin);
+  /*  TextureRegion goalTexture = ScreenUtils.createTextureRegion(
+        ScreenComponent.Goal.getWidth(), 
+        ScreenComponent.Goal.getHeight(),
+        Color.GREEN);
+    goal = ScreenUtils.createImageButton(goalTexture, skin); */
+    goal = new TextButton("", skin);
+    goal.setWidth(ScreenComponent.Goal.getWidth());
+    goal.setHeight(ScreenComponent.Goal.getHeight());
     goal.getLabel().setWrap(true);
     goal.addListener(clickListener);
     addActor(goal);
     this.setVisible(false);
     // Create a button NEXT for learner to click when ready to move on.
-    createNextButton(skin);    
+    createNextButton(skin);
   }
 
   private void createNextButton(Skin skin) {
@@ -164,16 +170,16 @@ public class TutorNavigator extends Group {
       
       LabelStyle labelBackground = new LabelStyle(skin.get(LabelStyle.class));
       labelBackground.background = 
-          new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, new Color(61f/255, 83f/255, 58f/255, 1)));
+          new TextureRegionDrawable(ScreenUtils.createTextureRegion(20, 20, new Color(61f/255, 83f/255, 58f/255, 1)));
 
       // Time spent
       tutorTimeLabels[count] = 
-          TopicHomeScreen.createLabel("", 0, TUTOR_HEIGHT - 30,
+          ScreenUtils.createLabel("", 0, TUTOR_HEIGHT - 30,
               50, 30, labelBackground);
       tutorButton.addActor(tutorTimeLabels[count++]);
       
       // Count
-      tutorButton.addActor(TopicHomeScreen.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
+      tutorButton.addActor(ScreenUtils.createLabel(String.valueOf(count), TUTOR_WIDTH - 20, 
           TUTOR_HEIGHT - 30, 20, 30, labelBackground));
       ScreenComponent.scaleSize(tutorButton, TUTOR_WIDTH, TUTOR_HEIGHT);
       if (tutor.getGroupType() != GroupType.None) { 

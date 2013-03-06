@@ -11,10 +11,20 @@ import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 
 public class ScreenUtils {
 
@@ -112,13 +122,60 @@ public class ScreenUtils {
     Pixmap.setBlending(b);
   }
 
-  public static TextureRegion createTexture(float width, float height, Color color) {
+  public static TextureRegion createTextureRegion(float width, float height, Color color) {
     Pixmap pixmap = new Pixmap(1, 1 , Pixmap.Format.RGBA8888);
     pixmap.setColor(color);
     pixmap.fillRectangle(0, 0, 1, 1);
     TextureRegion textureRegion = new TextureRegion(new Texture(pixmap), (int) width, (int) height);
     pixmap.dispose();
     return textureRegion;
+  }
+
+  public static Label createLabel(String text, 
+      float x, float y, float width, float height, LabelStyle labelStyle) {
+    Label nameLabel = new Label(text, labelStyle);
+    nameLabel.setWrap(true);
+    nameLabel.setAlignment(Align.center, Align.center);
+    ScreenComponent.scalePositionAndSize(nameLabel, x, y, width, height);
+    return nameLabel;
+  }
+
+  public static TextButton createImageButton(TextureRegion textureRegion, Skin skin) {
+    TextureRegionDrawable image = 
+        new TextureRegionDrawable(textureRegion);
+    TextButton activityThumb = new TextButton("", skin) {
+      @Override
+      public void drawBackground(SpriteBatch batch, float parentAlpha) {
+        getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
+      }
+    };
+    activityThumb.setBackground(image);
+    return activityThumb;
+  }
+
+  public static TextButton createTextButton(String text, 
+      float x, float y, float width, float height, TextButtonStyle textButtonStyle) {
+    TextButton button = new TextButton(text, textButtonStyle);
+    button.getLabel().setWrap(true);
+    button.getLabel().setAlignment(Align.center, Align.center);
+    ScreenComponent.scaleSize(button, width, height);
+    button.setPosition(x, y);
+    return button;
+  }
+
+  public static void createProgressPercentageBar(LabelStyle labelStyle,
+      TextButton thumbnail, float percent, int width) {
+    TextureRegion bar = createTextureRegion(10, 10, Color.GRAY);
+    Image fullBar = new Image(bar);
+    ScreenComponent.scalePositionAndSize(fullBar, 10, 20, width - 20, 10);
+    thumbnail.addActor(fullBar);
+    Image successBar = new Image(createTextureRegion(10, 10, Color.RED));
+    ScreenComponent.scalePositionAndSize(successBar, 10, 20, percent * (width - 20) / 100f, 10);
+    thumbnail.addActor(successBar);
+    Label percentLabel = new Label(String.valueOf(Math.round(percent)) + "%", labelStyle);
+    percentLabel.setAlignment(Align.center, Align.center);
+    ScreenComponent.scalePositionAndSize(percentLabel, 5, 12, 40, 20);
+    thumbnail.addActor(percentLabel);
   }
 
 }

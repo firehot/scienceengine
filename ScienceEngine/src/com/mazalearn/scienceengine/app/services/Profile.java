@@ -3,11 +3,13 @@ package com.mazalearn.scienceengine.app.services;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.tutor.TutorStats;
 
 /**
  * The learner's profile.
@@ -28,6 +30,7 @@ public class Profile implements Serializable {
   private static final String NUM_SUCCESSES = "numSucceses";
   private static final String PERCENT_ATTEMPTED = "attemptPercent";
   private static final String TIME_SPENT = "timeSpent";
+  private static final String FAILURE_TRACKER = "failureTracker";
   private HashMap<Topic, HashMap<String, Float>> topicStats;
   private HashMap<String, String> properties;
   private HashMap<String, Float> currentTopicStats;
@@ -145,8 +148,9 @@ public class Profile implements Serializable {
     return makeTutorKey(getCurrentActivity(), tutorId, key);
   }
 
-  private float getStat(int activity, String tutorId, String key) {
-    Float value = currentTopicStats.get(makeTutorKey(activity, tutorId, key));
+  private float getStat(Topic topic, int activity, String tutorId, String key) {
+    HashMap<String, Float> topicStat = topicStats.get(topic);
+    Float value = topicStat.get(makeTutorKey(activity, tutorId, key));
     return value == null ? 0 : value;
   }
 
@@ -159,69 +163,6 @@ public class Profile implements Serializable {
   
   public void save() {
     ScienceEngine.getPreferencesManager().saveProfile();
-  }
-
-  public float getTimeSpent(String tutorId) {
-    return getStat(getCurrentActivity(), tutorId, TIME_SPENT);
-  }
-  
-  public float getTimeSpent(int activity, String tutorId) {
-    return getStat(activity, tutorId, TIME_SPENT);
-  }
-
-  public void setTimeSpent(String tutorId, float timeSpent) {
-    saveStat(tutorId, TIME_SPENT, timeSpent);
-  }
-
-  /**
-   * Get num attempts for this tutorId
-   * @param tutorId
-   * @return
-   */
-  public float getNumAttempts(String tutorId) {
-    return getStat(getCurrentActivity(), tutorId, NUM_ATTEMPTS);
-  }
-  
-  public float getNumAttempts(int activity, String tutorId) {
-    return getStat(activity, tutorId, NUM_ATTEMPTS);
-  }
-
-  public void setNumAttempts(String tutorId, float numAttempts) {
-    saveStat(tutorId, NUM_ATTEMPTS, numAttempts);
-  }
-
-  public float getNumSuccesses(String tutorId) {
-    return getStat(getCurrentActivity(), tutorId, NUM_SUCCESSES);
-  }
-
-  public float getNumSuccesses(int activity, String tutorId) {
-    return getStat(activity, tutorId, NUM_SUCCESSES);
-  }
-
-  public void setNumSuccesses(String tutorId, float numSucceses) {
-    saveStat(tutorId, NUM_SUCCESSES, numSucceses);
-  }
-
-  /**
-   * Get percent attempted for this tutorId
-   * @param tutorId
-   * @return
-   */
-  public float getPercentAttempted(String tutorId) {
-    return getStat(getCurrentActivity(), tutorId, PERCENT_ATTEMPTED);
-  }
-  
-  public float getPercentAttempted(int activity, String tutorId) {
-    return getStat(activity, tutorId, PERCENT_ATTEMPTED);
-  }
-
-
-  public float getPercentAttempted(Topic topic, int level, String id) {
-    HashMap<String, Float> topicProps = topicStats.get(topic);
-    if (topicProps == null) return 0;
-    
-    Float status = topicProps.get(makeTutorKey(level, id, PERCENT_ATTEMPTED));
-    return status == null ? 0 : status;
   }
 
   public void setDrawingPng(byte[] drawingPngBytes) {
@@ -239,5 +180,28 @@ public class Profile implements Serializable {
     } catch (UnsupportedEncodingException e) {
       return new byte[0];
     }
+  }
+
+  public void loadStats(TutorStats stats, Topic topic, int activity, String tutorId) {
+    stats.timeSpent = getStat(topic, activity, tutorId, TIME_SPENT);
+    stats.numAttempts = getStat(topic, activity, tutorId, NUM_ATTEMPTS);
+    stats.numSuccesses = getStat(topic, activity, tutorId, NUM_SUCCESSES);
+    stats.failureTracker = getStat(topic, activity, tutorId, FAILURE_TRACKER);
+    stats.percentAttempted = getStat(topic, activity, tutorId, PERCENT_ATTEMPTED);
+    Gdx.app.log(ScienceEngine.LOG, stats.toString());
+  }
+
+  /**
+   * Save stats for current topic, current activity.
+   * @param stats
+   * @param tutorId
+   */
+  public void saveStats(TutorStats stats, String tutorId) {
+    saveStat(tutorId, TIME_SPENT, stats.timeSpent);
+    saveStat(tutorId, NUM_ATTEMPTS, stats.numAttempts);
+    saveStat(tutorId, NUM_SUCCESSES, stats.numSuccesses);
+    saveStat(tutorId, FAILURE_TRACKER, stats.failureTracker);
+    saveStat(tutorId, PERCENT_ATTEMPTED, stats.percentAttempted);
+    Gdx.app.log(ScienceEngine.LOG, stats.toString());
   }
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,10 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -36,6 +33,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.tutor.Guru;
+import com.mazalearn.scienceengine.tutor.TutorStats;
 
 /**
  * Activity Home screen - shows all activity numLevels for that topic.
@@ -165,7 +163,7 @@ public class TopicHomeScreen extends AbstractScreen {
     
     LabelStyle blueBackground = new LabelStyle(getSkin().get(LabelStyle.class));
     blueBackground.background = 
-        new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, Color.BLUE));
+        new TextureRegionDrawable(ScreenUtils.createTextureRegion(20, 20, Color.BLUE));
 
     for (int level = 1; level <= topic.getNumLevels(); level++) {
       String activityName = getMsg().getString(topic + "." + level + ".Name");
@@ -176,18 +174,20 @@ public class TopicHomeScreen extends AbstractScreen {
       } else {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
-      TextButton activityThumb = createImageButton(new Texture(pixmap), getSkin());
+      TextButton activityThumb = 
+          ScreenUtils.createImageButton(new TextureRegion(new Texture(pixmap)), getSkin());
       
       // Name Label
-      activityThumb.addActor(createLabel(activityName, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground));
+      activityThumb.addActor(ScreenUtils.createLabel(activityName, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground));
       // Level Label
-      activityThumb.addActor(createLabel(String.valueOf(level), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
+      activityThumb.addActor(ScreenUtils.createLabel(String.valueOf(level), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
       // Progress bar
-      float percent = profile.getPercentAttempted(level, Guru.ID);
-      createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
+      TutorStats stats = new TutorStats(topic, level, Guru.ID);
+      float percent = stats.percentAttempted;
+      ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
       // Timespent label
-      String timeSpent = Format.formatTime(profile.getTimeSpent(level, Guru.ID));
-      activityThumb.addActor(createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 50, 30, blueBackground));
+      String timeSpent = Format.formatTime(stats.timeSpent);
+      activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 50, 30, blueBackground));
 
       final int iLevel = level;
       activityThumb.addListener(new ClickListener() {
@@ -211,61 +211,6 @@ public class TopicHomeScreen extends AbstractScreen {
     return activitiesPane;
   }
 
-  // Used from ChooseTopic screen
-  // TODO: move to common place
-  public static TextButton createImageButton(Texture texture, Skin skin) {
-    TextureRegionDrawable image = 
-        new TextureRegionDrawable(new TextureRegion(texture));
-    TextButton activityThumb = new TextButton("", skin) {
-      @Override
-      public void drawBackground(SpriteBatch batch, float parentAlpha) {
-        getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
-      }
-    };
-    activityThumb.setBackground(image);
-    return activityThumb;
-  }
-
-  // Used from Tutor Navigator
-  // TODO: Move to common place
-  public static Label createLabel(String text, 
-      float x, float y, float width, float height, LabelStyle labelStyle) {
-    Label nameLabel = new Label(text, labelStyle);
-    nameLabel.setWrap(true);
-    nameLabel.setAlignment(Align.center, Align.center);
-    ScreenComponent.scalePositionAndSize(nameLabel, x, y, width, height);
-    return nameLabel;
-  }
-
-  // Used from Tutor Navigator
-  // TODO: Move to common place
-  public static TextButton createTextButton(String text, 
-      float x, float y, float width, float height, TextButtonStyle textButtonStyle) {
-    TextButton button = new TextButton(text, textButtonStyle);
-    button.getLabel().setWrap(true);
-    button.getLabel().setAlignment(Align.center, Align.center);
-    ScreenComponent.scaleSize(button, width, height);
-    button.setPosition(x, y);
-    return button;
-  }
-
-  // Also used from ChooseTopicScreen.
-  // TODO: Move to common area.
-  public static void createProgressPercentageBar(LabelStyle labelStyle,
-      TextButton thumbnail, float percent, int width) {
-    TextureRegion bar = ScreenUtils.createTexture(10, 10, Color.GRAY);
-    Image fullBar = new Image(bar);
-    ScreenComponent.scalePositionAndSize(fullBar, 10, 20, width - 20, 10);
-    thumbnail.addActor(fullBar);
-    Image successBar = new Image(ScreenUtils.createTexture(10, 10, Color.RED));
-    ScreenComponent.scalePositionAndSize(successBar, 10, 20, percent * (width - 20) / 100f, 10);
-    thumbnail.addActor(successBar);
-    Label percentLabel = new Label(String.valueOf(Math.round(percent)) + "%", labelStyle);
-    percentLabel.setAlignment(Align.center, Align.center);
-    ScreenComponent.scalePositionAndSize(percentLabel, 5, 12, 40, 20);
-    thumbnail.addActor(percentLabel);
-  }
-
   private void setLastActiveLevel(ScrollPane activitiesPane) {
     int lastActiveLevel = profile.getLastActivity() - 1;
     if (lastActiveLevel >= 0 && lastActiveLevel < topic.getNumLevels()) {
@@ -285,7 +230,7 @@ public class TopicHomeScreen extends AbstractScreen {
     ScrollPane resourcePane = new ScrollPane(resourcesTable, getSkin());
     LabelStyle blackBackground = new LabelStyle(getSkin().get(LabelStyle.class));
     blackBackground.background = 
-        new TextureRegionDrawable(ScreenUtils.createTexture(20, 20, Color.BLACK));
+        new TextureRegionDrawable(ScreenUtils.createTextureRegion(20, 20, Color.BLACK));
     
     for (int i = 0; i < resources.size; i++) {
       Table resource = new Table(getSkin());
