@@ -33,8 +33,7 @@ public interface ITutor {
     Reviewer(Color.MAGENTA),
     FieldMagnitudeProber(Color.RED),
     FieldDirectionProber(Color.RED),
-    LightProber(Color.RED),
-    None(Color.CLEAR);
+    LightProber(Color.RED);
     
     Color color;
 

@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -86,7 +87,9 @@ public class TutorNavigator extends Group {
   }
 
   private void createNextButton(Skin skin) {
-    nextButton = new TextButton("Next", skin, "body");
+    TextButtonStyle style = new TextButtonStyle(skin.get("body", TextButtonStyle.class));
+    style.font = skin.getFont(ScreenComponent.getFont(2));
+    nextButton = new TextButton("Next", style);
     nextButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         nextButton.setVisible(false);

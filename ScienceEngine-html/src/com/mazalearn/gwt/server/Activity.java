@@ -3,6 +3,7 @@ package com.mazalearn.gwt.server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,6 @@ public class Activity {
     public String type;
     public String id;
     public String goal;
-    public String group;
     Tutor[] childtutors;
     public transient float timeSpent = 0;
     public transient float numAttempts = 0;
@@ -66,6 +66,7 @@ public class Activity {
   Tutor[] tutors;
   public transient List<Tutor> leafTutors;
   private transient Topic topic;
+  private static final List<String> GROUP_TYPES = Arrays.asList(new String[] {"Challenge", "RapidFire", "Guide"});
   
   public static Activity load(ServletContext servletContext, Topic topic, int activityLevel) {
     String json;
@@ -101,10 +102,10 @@ public class Activity {
     if (tutors == null) return;
     
     for (Tutor child: tutors) {
-      if (child.group == null || child.group.equals("None")) {
-        leafTutors.add(child);
-      } else {
+      if (GROUP_TYPES.contains(child.type)) {
         collectLeafTutors(child.childtutors, leafTutors);
+      } else {
+        leafTutors.add(child);
       }
     }
   }

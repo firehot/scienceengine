@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
@@ -26,9 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;

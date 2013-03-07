@@ -190,13 +190,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
     X_SCALE = VIEWPORT_WIDTH / (float) CANONICAL_VIEWPORT_WIDTH;
     Y_SCALE = VIEWPORT_HEIGHT / (float) CANONICAL_VIEWPORT_HEIGHT;
     int fontSize = Math.round(Math.min(X_SCALE, Y_SCALE) * CANONICAL_FONT_SIZE);
-    FontSize = AVAILABLE_FONT_SIZES[AVAILABLE_FONT_SIZES.length - 1];
-    for (int i = 1; i < AVAILABLE_FONT_SIZES.length; i++) {
-      if (AVAILABLE_FONT_SIZES[i-1] < fontSize && fontSize <= AVAILABLE_FONT_SIZES[i]) {
-        FontSize = AVAILABLE_FONT_SIZES[i];
-        break;
-      }
-    }
+    FontSize = selectFontSize(fontSize);
     for (ScreenComponent sc: values()) {
       sc.width = sc.canonicalWidth * X_SCALE;
       sc.height = sc.canonicalHeight * Y_SCALE;
@@ -204,11 +198,21 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
       sc.y = sc.getY(sc.height);
     }
   }
+
+  private static int selectFontSize(int fontSize) {
+    for (int i = 1; i < AVAILABLE_FONT_SIZES.length; i++) {
+      if (AVAILABLE_FONT_SIZES[i-1] < fontSize && fontSize <= AVAILABLE_FONT_SIZES[i]) {
+        return AVAILABLE_FONT_SIZES[i];
+      }
+    }
+    return AVAILABLE_FONT_SIZES[AVAILABLE_FONT_SIZES.length - 1];
+  }
   
   // should be called only after setSize has been called
-  public static String getFont() {
+  public static String getFont(int relativeScaling) {
+    int fontsize = selectFontSize(FontSize * relativeScaling);
     Gdx.app.log(ScienceEngine.LOG, "Font chosen size: " + FontSize);
-    return "font" + String.valueOf(FontSize);
+    return "font" + String.valueOf(fontsize);
   }
 
   @Override

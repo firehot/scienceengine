@@ -15,15 +15,15 @@ import com.mazalearn.scienceengine.core.model.Parameter;
 
 public abstract class AbstractTutor extends Group implements ITutor {
 
-  protected Array<?> components;
-  protected Array<?> configs;
-  private String[] hints;
-  private String goal;
+  protected final Array<?> components;
+  protected final Array<?> configs;
+  private final String[] hints;
+  private final String goal;
   protected IScience2DController science2DController;
   protected final ITutor parent;
   protected final Guru guru;
-  private Type type = Type.None;
-  private String id;
+  private final Type type;
+  private final String id;
   protected boolean success;
   protected TutorStats stats;
   protected State state = State.Constructed;
