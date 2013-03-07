@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -126,7 +127,8 @@ public abstract class AbstractScreen implements Screen {
         float y = screenComponent.getY(t.getPrefHeight()) + t.getPrefHeight() / 2;
         component.setPosition(x, y);
       } else { // Place the left bottom corner
-        component.setPosition(screenComponent.getX(), screenComponent.getY());
+        component.setPosition(screenComponent.getX(component.getWidth()), 
+            screenComponent.getY(component.getHeight()));
       }
     }
   }
@@ -156,6 +158,9 @@ public abstract class AbstractScreen implements Screen {
          });
         return table;
       }
+      case Logo:
+        Image logo = new Image(new Texture("images/logo.png"));
+        return logo;
       case Status: 
       case Title: {
         Table table = new Table(skin);
