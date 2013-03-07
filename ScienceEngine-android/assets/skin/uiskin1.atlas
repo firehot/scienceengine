@@ -64,7 +64,7 @@ default-round
   orig: 12, 20
   offset: 0, 0
   index: -1
-white-round-down
+mcq-round-down
   rotate: false
   xy: 78, 7
   size: 12, 20
@@ -72,7 +72,7 @@ white-round-down
   orig: 12, 20
   offset: 0, 0
   index: -1
-white-round
+mcq-round
   rotate: false
   xy: 91, 7
   size: 12, 20

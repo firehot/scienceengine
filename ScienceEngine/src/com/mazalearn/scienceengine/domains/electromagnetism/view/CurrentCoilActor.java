@@ -37,8 +37,7 @@ public class CurrentCoilActor extends Science2DActor {
     this.font = font;
 /**
  * in directory electromangetism
- * java -cp c:\Users\sridhar\gdx-tools.jar;c:\Users\sridhar\git\scienceengi
-ne\ScienceEngine\libs\gdx.jar com.badlogic.gdx.tools.imagepacker.TexturePacker2
+ * java -cp c:\Users\sridhar\gdx-tools.jar;c:\Users\sridhar\git\scienceengine\ScienceEngine\libs\gdx.jar com.badlogic.gdx.tools.imagepacker.TexturePacker2
 currentcoil
  */
     rotationFrames = new TextureRegion[NUM_FRAMES];

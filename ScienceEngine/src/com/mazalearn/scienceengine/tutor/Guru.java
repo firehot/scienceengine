@@ -194,11 +194,11 @@ public class Guru extends Group implements ITutor {
     wrongImage.show(String.valueOf(-score));
   }
   
-  public void showFailure(int score, IDoneCallback doneCallback) {
+  public void showFailure(int score) {
     addActor(failureImage); // bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
     //dashboard.addScore(-score);
-    failureImage.show(String.valueOf(-score), doneCallback);
+    failureImage.show("Oops!");
   }
 
   public void showCorrect(int score) {
@@ -213,7 +213,7 @@ public class Guru extends Group implements ITutor {
     addActor(successImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
     dashboard.addScore(score);
-    successImage.show(String.valueOf(score), null);
+    successImage.show(String.valueOf(score));
     hinter.clearHint();
   }
   
@@ -299,10 +299,10 @@ public class Guru extends Group implements ITutor {
 
   public void doRapidFireAnimation(final ITutor tutor) {
     final LabelStyle large = new LabelStyle(skin.get(LabelStyle.class));
-    BitmapFont font = skin.getFont("font80");
+    BitmapFont font = skin.getFont(ScreenComponent.getFont(2.5f));
     large.font = font;
     final TextButton start = new TextButton("RapidFire", skin);
-    start.setSize(350, 100);
+    start.setSize(250, 70);
     start.setColor(Color.YELLOW);
     start.getLabel().setStyle(large);
     start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
@@ -316,7 +316,7 @@ public class Guru extends Group implements ITutor {
               @Override
               public boolean act(float delta) {
                 start.setText("3");
-                start.setSize(100, 100);
+                start.setSize(70, 70);
                 start.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - start.getWidth() / 2,
                     ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
                 return true;

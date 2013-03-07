@@ -23,6 +23,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   ShoppingCart(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 50, Color.BLACK, false, false),
   Prober(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 450, Color.CLEAR, false, false),
   NextButton(XAlign.CENTER, 108, YAlign.TOP, -70, 0, 0, Color.CLEAR, false, false), 
+  Explanation(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, Color.YELLOW, false, false),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, Color.YELLOW, false, false), 
   ;
@@ -210,8 +211,8 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   }
   
   // should be called only after setSize has been called
-  public static String getFont(int relativeScaling) {
-    int fontsize = selectFontSize(FontSize * relativeScaling);
+  public static String getFont(float relativeScaling) {
+    int fontsize = selectFontSize(Math.round(FontSize * relativeScaling));
     Gdx.app.log(ScienceEngine.LOG, "Font chosen size: " + FontSize);
     return "font" + String.valueOf(fontsize);
   }

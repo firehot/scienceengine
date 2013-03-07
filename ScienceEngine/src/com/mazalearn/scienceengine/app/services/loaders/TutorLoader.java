@@ -67,8 +67,9 @@ class TutorLoader {
   private AbstractTutor makeMcqTutor(OrderedMap<String, ?> tutorObj,
       McqTutor mcqTutor) {
     String answerMask = (String) tutorObj.get("answermask");
+    String explanation = (String) tutorObj.get("explanation");
     String[] options = loadStringArray("options", tutorObj);
-    mcqTutor.initialize(options, answerMask);
+    mcqTutor.initialize(options, explanation, answerMask);
     return mcqTutor;
   }
 

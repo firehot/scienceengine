@@ -20,6 +20,7 @@ public class McqTutor extends AbstractTutor {
   private int[] permutation;
 
   private List<String> optionList;
+  private String explanation;
 
   public McqTutor(IScience2DController science2DController, Type tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
@@ -32,14 +33,8 @@ public class McqTutor extends AbstractTutor {
   }
   
   @Override
-  public void systemReadyToFinish(boolean success) {
-    if (state == State.SystemFinished && this.success == success) return;
-    super.systemReadyToFinish(success);
-    guru.showNextButton(true);
-  }
-  
-  @Override
-  public void userReadyToFinish() {
+  public void systemReadyToFinish(boolean ignored) {
+    if (state == State.SystemFinished) return;
     success = true;
     int failureTracker = 0;
     for (int i = 0; i < answerMask.length(); i++) {
@@ -50,35 +45,32 @@ public class McqTutor extends AbstractTutor {
     }
     if (success) {
       guru.showSuccess(getSuccessPoints());
-      super.userReadyToFinish();
     } else {
       this.stats.failureTracker += failureTracker;
-      for (int i = 0; i < answerMask.length(); i++) {
-        if (answerMask.charAt(permutation[i]) == '1') {
-          optionButtons[i].addAction(
-              Actions.repeat(-1, 
-                  Actions.sequence(
-                      Actions.alpha(0, 0.5f),
-                      Actions.alpha(1, 0.5f),
-                      Actions.delay(1))));
-        }
-      }
-      guru.showFailure(getFailurePoints(), new IDoneCallback() {
-        @Override
-        public void done(boolean success) {
-          McqTutor.super.userReadyToFinish();
-        }      
-      });
+      guru.showFailure(getFailurePoints());
     }
+    // Flash correct options.
+    for (int i = 0; i < answerMask.length(); i++) {
+      if (answerMask.charAt(permutation[i]) == '1') {
+        optionButtons[i].addAction(
+            Actions.repeat(-1, 
+                Actions.sequence(
+                    Actions.alpha(0, 0.5f),
+                    Actions.alpha(1, 0.5f),
+                    Actions.delay(1))));
+      }
+    }
+    super.systemReadyToFinish(success);
   }
-
+  
   /**
    * Initialize this tutor
    * @param options
    * @param answerMask - sequence of truth value of options - true = 1, false = 0
    */
-  public void initialize(String[] options, String answerMask) {
+  public void initialize(String[] options, String explanation, String answerMask) {
     this.answerMask = answerMask;
+    this.explanation = explanation;
     this.optionList = Arrays.asList(options);
     this.permutation = Utils.shuffle(optionList);
     
@@ -99,7 +91,7 @@ public class McqTutor extends AbstractTutor {
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);
     McqActor mcqActor = guru.getMcqActor();
-    optionButtons = mcqActor.setUp(this, optionList, singleAnswer);
+    optionButtons = mcqActor.setUp(this, optionList, explanation, singleAnswer);
     addActor(mcqActor);
   }
 }
