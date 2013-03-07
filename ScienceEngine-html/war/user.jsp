@@ -51,7 +51,8 @@
         // Set chart options
         var options = {'title':'Progress: Time Spent',
                        'width':400,
-                       'height':300};
+                       'height':300,
+                       chartArea:{left:0,top:0}};
 
         // Instantiate and draw the chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
@@ -65,14 +66,21 @@
     <div id="chart_div"></div>
 
 <%
-  String userEmail = request.getParameter("userEmail");
+    String userEmail = request.getParameter("userEmail");
     if (userEmail == null) {
       userEmail = "DemoUser@mazalearn.com";
     }
+
     Topic topic = Topic.Electromagnetism;
     try {
       topic = Topic.valueOf(request.getParameter("topic"));
     } catch(Exception ignored) {};
+    
+    int activityLevel = 1;
+    try {
+      activityLevel = Integer.parseInt(request.getParameter("activity"));
+    } catch (Exception ignored) {};
+    
     pageContext.setAttribute("userEmail", userEmail);
     pageContext.setAttribute("topic", topic);
     UserService userService = UserServiceFactory.getUserService();
@@ -95,34 +103,43 @@
       <table>
         <tr><td>User</td><td>${fn:escapeXml(userEmail)}</td></tr>
       </table>
+    <p>
+    <%= topic.name() %>
+    <img src='/assets/data/<%= topic.name() + "/" + activityLevel + ".png" %>' width=400>
    
 <%
    String domainStatsStr = ((Text) profile.getProperty(topic.name())).getValue();
    Type statsType = new TypeToken<Map<String, Float>>() {}.getType();
    Map<String, Float> stats = new Gson().fromJson(domainStatsStr, statsType);
-   Activity activity1 = Activity.load(getServletContext(), "/assets/data/" + topic.name() + "/1.json");
-   activity1.populateStats(stats);
+   Activity activity = Activity.load(getServletContext(), topic, activityLevel);
+   activity.populateStats(stats);
    %>
-    <p>
-    <%= topic.name() %>
-    <img src="/assets/data/<%= topic.name() %>/1.png" width=400>
     <table border="1">
      <tr>
         <td>Goal</td>
         <td>Time Spent</td>
-        <td>% Complete</td>
+        <td>Num Attempts</td>
+        <td>Num Successes</td>
+        <td>Failure Tracker</td>
+        <td>% Attempted</td>
      </tr>
 <%
      String json = "[";
      String delimiter = "";
-     for (Tutor tutor: activity1.getTutors()) {
-       json += delimiter + "['" + tutor.id + "'," + tutor.timeSpent + "]";
-       delimiter = ",";
+     for (Tutor tutor: activity.getTutors()) {
+       if (tutor.type.equals("KnowledgeUnit")) {
+         json += delimiter + "['" + tutor.id + "'," + tutor.timeSpent + "]";
+         delimiter = ",";
+       }
+       
 %>
        <tr>
          <td><%= tutor.goal %></td>
          <td><%= tutor.timeSpent %></td>
-         <td><%=tutor.completionPercent%></td>
+         <td><%= tutor.numAttempts %></td>
+         <td><%= tutor.numSuccesses %></td>
+         <td><%= tutor.failureTracker %></td>
+         <td><%= tutor.percentAttempted %></td>
        </tr>
 <%       
      }

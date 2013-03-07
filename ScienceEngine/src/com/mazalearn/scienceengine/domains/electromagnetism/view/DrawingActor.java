@@ -116,13 +116,15 @@ public class DrawingActor extends Science2DActor {
     this.viewSpec = name;
     this.shapeRenderer = new ShapeRenderer();
     // snapshot will contain image of coach + 2 wheels
-    try {
+    // TODO: Problems with GWT and does not work anyway
+/*    try {
       Profile profile = ScienceEngine.getPreferencesManager().getProfile();
       byte[] bytes = profile.getDrawingPng();
       this.snapshot = new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
     } catch (IOException e) {
       this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
-    }    
+    }  */  
+    this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
     this.coachTexture = new Texture(snapshot);
     this.coach = new Coach(coachTexture, skin);
     this.removeListener(getListeners().get(0));

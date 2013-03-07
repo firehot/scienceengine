@@ -1,5 +1,6 @@
 package com.mazalearn.gwt.server;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,22 +16,71 @@ public class Activity {
     public String id;
     public String goal;
     public String group;
-    Tutor[] childTutors;
-    public transient float completionPercent;
-    public transient float timeSpent;
+    Tutor[] childtutors;
+    public transient float timeSpent = 0;
+    public transient float numAttempts = 0;
+    public transient float numSuccesses = 0;
+    public transient float failureTracker = 0;
+    public transient float percentAttempted = 0;
+    private static final String NUM_ATTEMPTS = "numAttempts";
+    private static final String NUM_SUCCESSES = "numSucceses";
+    private static final String PERCENT_ATTEMPTED = "percentAttempted";
+    private static final String TIME_SPENT = "timeSpent";
+    private static final String FAILURE_TRACKER = "failureTracker";
+    
+    private String makeTutorKey(int activity, String tutorId, String key) {
+      return activity + "$" + tutorId + "$" + key;
+    }
+
+    private float getStat(Map<String, Float> stats, int activity, String key) {
+      String statKey = makeTutorKey(activity, id, key);
+      Float statValue = stats.get(statKey);
+      statValue = statValue == null ? 0f : Math.round(statValue);
+      return statValue;
+      
+    }
+    public void loadStats(Map<String, Float> stats, Topic topic, int activityLevel) {
+      timeSpent = getStat(stats, activityLevel, TIME_SPENT);
+      numAttempts = getStat(stats, activityLevel, NUM_ATTEMPTS);
+      numSuccesses = getStat(stats, activityLevel, NUM_SUCCESSES);
+      failureTracker = getStat(stats, activityLevel, FAILURE_TRACKER);
+      percentAttempted = getStat(stats, activityLevel, PERCENT_ATTEMPTED);
+      // printStats(topic, activityLevel);
+    }
+    
+    private void printStats(Topic topic, int activityLevel) {
+      String str = "Topic: " + topic.name() +
+          " Level: " + activityLevel + 
+          " Tutor: " + id + 
+          ", Time spent: " + timeSpent + 
+          ", NumAttempts: " + numAttempts +
+          ", numSuccesses: " + numSuccesses +
+          ", failureTracker: " + failureTracker + 
+          ", percentAttempted: " + percentAttempted;
+      System.out.println(str);     
+    }
   };
   String description;
   String name;
   int level;
   Tutor[] tutors;
   public transient List<Tutor> leafTutors;
+  private transient Topic topic;
   
-  public static Activity load(ServletContext servletContext, String fileName) {
+  public static Activity load(ServletContext servletContext, Topic topic, int activityLevel) {
     String json;
+    String fileName = "/assets/data/" + topic.name() + "/" + activityLevel + ".json";
     InputStream inp = servletContext.getResourceAsStream(fileName);
     java.util.Scanner s = new java.util.Scanner(inp).useDelimiter("\\A");
     json = s.hasNext() ? s.next() : "";
+    try {
+      inp.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    System.out.println(fileName + ": loading json");
     Activity activity = new Gson().fromJson(json, Activity.class);
+    activity.topic = topic;
     activity.leafTutors = new ArrayList<Tutor>();
     collectLeafTutors(activity.tutors, activity.leafTutors);
     return activity;
@@ -41,13 +91,9 @@ public class Activity {
   }
   
   public void populateStats(Map<String, Float> stats) {
+    System.out.println("Populating stats");
     for (Tutor tutor: leafTutors) {
-      String successPercentKey = "1$" + tutor.id + "$attemptPercent";
-      String timeSpentKey = "1$" + tutor.id + "$timeSpent";
-      Float successPercent = stats.get(successPercentKey);
-      tutor.completionPercent = successPercent == null ? 0 : successPercent;
-      Float timeSpent = stats.get(timeSpentKey);
-      tutor.timeSpent = timeSpent == null ? 0 : Math.round(timeSpent);
+      tutor.loadStats(stats, topic, level);
     }  
   }
 
@@ -58,7 +104,7 @@ public class Activity {
       if (child.group == null || child.group.equals("None")) {
         leafTutors.add(child);
       } else {
-        collectLeafTutors(child.childTutors, leafTutors);
+        collectLeafTutors(child.childtutors, leafTutors);
       }
     }
   }

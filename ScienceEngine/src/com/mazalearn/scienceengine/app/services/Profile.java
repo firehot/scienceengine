@@ -28,7 +28,7 @@ public class Profile implements Serializable {
   private static final String USER_NAME = "username";
   private static final String NUM_ATTEMPTS = "numAttempts";
   private static final String NUM_SUCCESSES = "numSucceses";
-  private static final String PERCENT_ATTEMPTED = "attemptPercent";
+  private static final String PERCENT_ATTEMPTED = "percentAttempted";
   private static final String TIME_SPENT = "timeSpent";
   private static final String FAILURE_TRACKER = "failureTracker";
   private HashMap<Topic, HashMap<String, Float>> topicStats;
