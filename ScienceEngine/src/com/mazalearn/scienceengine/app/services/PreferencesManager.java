@@ -127,6 +127,7 @@ public class PreferencesManager {
   }
   
   public void syncProfiles() {
+    Gdx.app.log(ScienceEngine.LOG, "Syncing Profiles");
     Map<String, String> postParams = new HashMap<String, String>();
     String syncProfilesString = getPrefs().getString(SYNC_PROFILES);
     if (syncProfilesString.length() == 0) return;
