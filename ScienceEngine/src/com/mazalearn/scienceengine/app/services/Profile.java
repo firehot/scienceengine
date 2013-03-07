@@ -28,7 +28,7 @@ public class Profile implements Serializable {
   private static final String USER_NAME = "username";
   private static final String NUM_ATTEMPTS = "numAttempts";
   private static final String NUM_SUCCESSES = "numSucceses";
-  private static final String PERCENT_ATTEMPTED = "percentAttempted";
+  private static final String PERCENT_PROGRESS = "percentProgress";
   private static final String TIME_SPENT = "timeSpent";
   private static final String FAILURE_TRACKER = "failureTracker";
   private HashMap<Topic, HashMap<String, Float>> topicStats;
@@ -161,7 +161,6 @@ public class Profile implements Serializable {
     String tutorKey = makeTutorKey(tutorId, key);
     if (currentTopicStats.get(tutorKey) == value) return;
     currentTopicStats.put(tutorKey, value);
-    save();
   }
   
   public void save() {
@@ -190,7 +189,7 @@ public class Profile implements Serializable {
     stats.numAttempts = getStat(topic, activity, tutorId, NUM_ATTEMPTS);
     stats.numSuccesses = getStat(topic, activity, tutorId, NUM_SUCCESSES);
     stats.failureTracker = getStat(topic, activity, tutorId, FAILURE_TRACKER);
-    stats.percentAttempted = getStat(topic, activity, tutorId, PERCENT_ATTEMPTED);
+    stats.percentProgress = getStat(topic, activity, tutorId, PERCENT_PROGRESS);
     Gdx.app.log(ScienceEngine.LOG, stats.toString());
   }
 
@@ -204,7 +203,8 @@ public class Profile implements Serializable {
     saveStat(tutorId, NUM_ATTEMPTS, stats.numAttempts);
     saveStat(tutorId, NUM_SUCCESSES, stats.numSuccesses);
     saveStat(tutorId, FAILURE_TRACKER, stats.failureTracker);
-    saveStat(tutorId, PERCENT_ATTEMPTED, stats.percentAttempted);
+    saveStat(tutorId, PERCENT_PROGRESS, stats.percentProgress);
+    save();
     Gdx.app.log(ScienceEngine.LOG, stats.toString());
   }
 }

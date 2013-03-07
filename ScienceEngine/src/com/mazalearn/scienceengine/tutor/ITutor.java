@@ -76,7 +76,9 @@ public interface ITutor {
   public void checkProgress();
 
   /**
-   * Called when a teaching session is completed
+   * End the teaching session.
+   * May be called even when userReadyToFinish and systemReadyToFinish have
+   * not been called - indicating premature exit.
    */
   public void finish();
   
@@ -154,5 +156,5 @@ public interface ITutor {
    * For a non-group tutor, this is 0 or 100.
    * For a group tutor, this is the percentage of children attempted.
    */
-  float getPercentAttempted();
+  float getPercentProgress();
 }

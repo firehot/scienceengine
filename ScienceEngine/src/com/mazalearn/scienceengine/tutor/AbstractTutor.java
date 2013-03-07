@@ -71,11 +71,13 @@ public abstract class AbstractTutor extends Group implements ITutor {
     if (state == State.SystemFinished && this.success == success) return;
     Gdx.app.log(ScienceEngine.LOG, "System ready to finish: " + getGoal());
     this.success = success;
-    state = (state == State.UserFinished) ? State.Finished : State.SystemFinished;
-    if (state == State.SystemFinished) {
+    if (state == State.UserFinished) {
+      state = State.Finished;
+      finish();
+    } else {
+      state = State.SystemFinished;
       guru.showNextButton(true);
     }
-    finish();
   }
   
   /**
@@ -99,19 +101,26 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void userReadyToFinish() { // Assumed to be always success
     Gdx.app.log(ScienceEngine.LOG, "User has finished");
     guru.showNextButton(false);
-    state = (state == State.SystemFinished) ? State.Finished : State.UserFinished;
-    finish();
+    if (state == State.SystemFinished) {
+      state = State.Finished;
+      finish();
+    } else {
+      state = State.UserFinished;
+    }
   }
   
   @Override
   public void finish() {
-    if (state != State.Finished) return;
     Gdx.app.log(ScienceEngine.LOG, "finish: " + getId());
     this.setVisible(false);
     if (success) stats.numSuccesses++;
     recordStats();
     guru.setActiveTutor(parent);
-    parent.systemReadyToFinish(true);
+    if (state == State.Finished) { 
+      parent.systemReadyToFinish(true);
+    } else {
+      parent.finish();
+    }
   }
 
   private void recordStats() {
@@ -120,7 +129,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     stats.numAttempts = getNumAttempts();
     stats.numSuccesses = getNumSuccesses();
     stats.failureTracker = getFailureTracker();
-    stats.percentAttempted = getPercentAttempted();
+    stats.percentProgress = getPercentProgress();
     
     stats.save();
   }
@@ -133,6 +142,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void teach() {
     Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
     this.setVisible(true);
+    success = false;
     this.stats.numAttempts++;
     state = State.Teaching;
   }
@@ -208,8 +218,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public float getPercentAttempted() {
-    return stats.numAttempts == 0 ? 0 : 100;
+  public float getPercentProgress() {
+    return stats.numSuccesses == 0 ? 0 : 100;
   }
   
   @Override

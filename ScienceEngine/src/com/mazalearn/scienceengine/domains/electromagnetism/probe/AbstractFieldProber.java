@@ -50,7 +50,6 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
       guru.showWrong(getFailurePoints());
       // TODO: equate success and failure scores
     }
-    if (!success) return; // NO Failure exit
 
     if (netSuccesses >= 2) {
       super.systemReadyToFinish(true);

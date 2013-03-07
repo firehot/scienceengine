@@ -40,19 +40,20 @@ public class TutorGroup extends AbstractTutor {
     }
     // Move on to next stage
     if (++tutorIndex == childTutors.size()) {
-      if (getPercentAttempted() == 100) {
+      // Goto first tutor which has not been successfully done, if any
+      for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
+        if (childTutors.get(tutorIndex).getPercentProgress() < 100) {
+          break;
+        }
+      }
+      // If all children done, we are ready to finish
+      if (tutorIndex == childTutors.size()) {
         this.success = true;
         // No user input required for group tutors
         this.state = State.UserFinished;
         super.systemReadyToFinish(true);
         doSuccessActions();
         return;
-      }
-      // Goto first tutor which has not been successfully done
-      for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getPercentAttempted() < 100) {
-          break;
-        }
       }
     }
     currentTutor = childTutors.get(tutorIndex);
@@ -155,12 +156,12 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public float getPercentAttempted() {
-    float attemptPercent = 0;
+  public float getPercentProgress() {
+    float percentProgress = 0;
     for (ITutor child: childTutors) {
-      attemptPercent += child.getPercentAttempted();
+      percentProgress += child.getPercentProgress();
     }
-    return attemptPercent / childTutors.size();
+    return percentProgress / childTutors.size();
   }
 
   @Override

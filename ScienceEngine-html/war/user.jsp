@@ -139,7 +139,7 @@
          <td><%= tutor.numAttempts %></td>
          <td><%= tutor.numSuccesses %></td>
          <td><%= tutor.failureTracker %></td>
-         <td><%= tutor.percentAttempted %></td>
+         <td><%=tutor.percentProgress%></td>
        </tr>
 <%       
      }

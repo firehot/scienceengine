@@ -124,7 +124,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     int percent = 0;
     for (int level = 1; level <= numLevels; level++) {
       TutorStats stats = new TutorStats(topic, level, Guru.ID);
-      percent += stats.percentAttempted;
+      percent += stats.percentProgress;
     }
     return Math.round(percent * 100 / (100f * numLevels));
   }

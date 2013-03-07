@@ -172,8 +172,8 @@ public class Guru extends Group implements ITutor {
   public void endTutoring() {
     Gdx.app.log(ScienceEngine.LOG, "End Tutoring: " + getId());
     // Reinitialize current prober, if any
-    activeTutor.systemReadyToFinish(false);
-    activeTutor.userReadyToFinish();
+    activeTutor.finish();
+ 
     setActiveTutor(this);
     dashboard.setVisible(false);
     tutorNavigator.setVisible(false);
@@ -258,7 +258,7 @@ public class Guru extends Group implements ITutor {
     stats.numAttempts = getNumAttempts();
     stats.numSuccesses = getNumSuccesses();
     stats.failureTracker = getFailureTracker();
-    stats.percentAttempted = getPercentAttempted();
+    stats.percentProgress = getPercentProgress();
     
     stats.save();
   }
@@ -286,7 +286,7 @@ public class Guru extends Group implements ITutor {
                     ScreenComponent.VIEWPORT_HEIGHT / 2 - challenge.getHeight() / 2, 3),
                 Actions.sizeTo(256, 256, 3),
                 Actions.rotateBy(360, 3)),
-            Actions.delay(3),
+            Actions.delay(1),
             new Action() {
               @Override
               public boolean act(float delta) {
@@ -461,8 +461,8 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public float getPercentAttempted() {
-    return rootTutor.getPercentAttempted();
+  public float getPercentProgress() {
+    return rootTutor.getPercentProgress();
   }
   
   @Override

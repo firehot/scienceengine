@@ -21,10 +21,10 @@ public class Activity {
     public transient float numAttempts = 0;
     public transient float numSuccesses = 0;
     public transient float failureTracker = 0;
-    public transient float percentAttempted = 0;
+    public transient float percentProgress = 0;
     private static final String NUM_ATTEMPTS = "numAttempts";
     private static final String NUM_SUCCESSES = "numSucceses";
-    private static final String PERCENT_ATTEMPTED = "percentAttempted";
+    private static final String PERCENT_PROGRESS = "percentProgress";
     private static final String TIME_SPENT = "timeSpent";
     private static final String FAILURE_TRACKER = "failureTracker";
     
@@ -44,7 +44,7 @@ public class Activity {
       numAttempts = getStat(stats, activityLevel, NUM_ATTEMPTS);
       numSuccesses = getStat(stats, activityLevel, NUM_SUCCESSES);
       failureTracker = getStat(stats, activityLevel, FAILURE_TRACKER);
-      percentAttempted = getStat(stats, activityLevel, PERCENT_ATTEMPTED);
+      percentProgress = getStat(stats, activityLevel, PERCENT_PROGRESS);
       // printStats(topic, activityLevel);
     }
     
@@ -56,8 +56,8 @@ public class Activity {
           ", NumAttempts: " + numAttempts +
           ", numSuccesses: " + numSuccesses +
           ", failureTracker: " + failureTracker + 
-          ", percentAttempted: " + percentAttempted;
-      System.out.println(str);     
+          ", percentProgress: " + percentProgress;
+      System.out.println(str);
     }
   };
   String description;
@@ -66,7 +66,8 @@ public class Activity {
   Tutor[] tutors;
   public transient List<Tutor> leafTutors;
   private transient Topic topic;
-  private static final List<String> GROUP_TYPES = Arrays.asList(new String[] {"Challenge", "RapidFire", "Guide"});
+  private static final List<String> GROUP_TYPES = 
+      Arrays.asList(new String[] {"Challenge", "RapidFire", "Guide"});
   
   public static Activity load(ServletContext servletContext, Topic topic, int activityLevel) {
     String json;

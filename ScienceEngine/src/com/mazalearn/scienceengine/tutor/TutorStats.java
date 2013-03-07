@@ -9,7 +9,7 @@ public class TutorStats {
   public float numAttempts;
   public float numSuccesses;
   public float failureTracker;
-  public float percentAttempted;
+  public float percentProgress;
   private Profile profile;
   private String tutorId;
   private int level;
@@ -43,6 +43,6 @@ public class TutorStats {
         ", NumAttempts: " + numAttempts +
         ", numSuccesses: " + numSuccesses +
         ", failureTracker: " + failureTracker + 
-        ", percentAttempted: " + percentAttempted;
+        ", percentProgress: " + percentProgress;
   }
 }

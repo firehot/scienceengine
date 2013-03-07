@@ -39,9 +39,8 @@ public class McqTutor extends AbstractTutor {
   }
   
   @Override
-  public void finish() {
-    if (state != State.Finished) return;
-    boolean success = true;
+  public void userReadyToFinish() {
+    success = true;
     int failureTracker = 0;
     for (int i = 0; i < answerMask.length(); i++) {
       if ((answerMask.charAt(permutation[i]) == '1') != optionButtons[i].isChecked()) {
@@ -51,7 +50,7 @@ public class McqTutor extends AbstractTutor {
     }
     if (success) {
       guru.showSuccess(getSuccessPoints());
-      super.finish();
+      super.userReadyToFinish();
     } else {
       this.stats.failureTracker += failureTracker;
       for (int i = 0; i < answerMask.length(); i++) {
@@ -67,7 +66,7 @@ public class McqTutor extends AbstractTutor {
       guru.showFailure(getFailurePoints(), new IDoneCallback() {
         @Override
         public void done(boolean success) {
-          McqTutor.super.finish();
+          McqTutor.super.userReadyToFinish();
         }      
       });
     }
