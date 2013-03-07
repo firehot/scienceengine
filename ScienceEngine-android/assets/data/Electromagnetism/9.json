@@ -12,9 +12,8 @@ components:[
 ],
 circuits:[["Lightbulb","Dynamo"]],
 tutors: [
-  {type: "TutorGroup",
+  {type: "Guide",
    id: "Science Train",
-   group:"Guide",
    goal: "Catch the Science Train - Light up your own coach",
    success:200,
    timelimit: 300,
@@ -68,9 +67,8 @@ tutors: [
               ],
             postcondition: "1 = 1"},
        ]},
-       {type: "TutorGroup",
+       {type: "RapidFire",
        id: "Multiple Choice Questions",
-       group: "RapidFire",
        goal: "RapidFire Quiz",
        childtutors: [
           {type: "MCQ1",

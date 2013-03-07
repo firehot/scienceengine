@@ -14,8 +14,7 @@ configs:[
 {name:"CurrentSource.CurrentDirection",permitted:true,value:true},
 {name:"ElectroMagnet.CoilLoops",permitted:true,value:1.0}],
 tutors:[
-      {type: "TutorGroup",
-       group:"Guide",
+      {type: "Guide",
        id: "Compass and Electromagnet",
        goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
@@ -29,10 +28,9 @@ tutors:[
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          success: 1000,
          components:[{type:"Compass", visible: true}]
-         }],
+         }]
        },
-       {type: "TutorGroup",
-        group: "Guide",
+       {type: "Guide",
         id: "Magnetic Field",
        goal: "Understand the magnetic field around the electromagnet",
        postcondition: "FieldMeter.Count >= 10",
@@ -44,38 +42,37 @@ tutors:[
           id: "Magnetic Field",
           goal: "Touch the screen in many places around the electromagnet to see the field.",
          postcondition: "FieldMeter.Count >= 10",
-         success: 250,
+         success: 250
          },
           {type: "KnowledgeUnit",
           id: "Move Electromagnet",
           goal: "Move the electromagnet. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(ElectroMagnet.Move) >= 1",
-         success: 250,
+         success: 250
          },
          {type: "KnowledgeUnit",
           id: "Current Direction Change",
           goal: "Change the current direction. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentDirection) >= 1",
          components:[{type:"CurrentSource", pin: true}],
-         success: 250,
+         success: 250
          },
          {type: "KnowledgeUnit",
           id: "Max Current Change",
           goal: "Change the max current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
          components:[{type:"CurrentSource", pin: true}],
-         success: 250,
+         success: 250
          },
          {type: "KnowledgeUnit",
           id: "AC Current and Field",
           goal: "Change the current type to AC. See how the field changes",
          components:[{type:"CurrentSource", pin: true}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentType) >= 1",
-         success: 250,
+         success: 250
          }
        ]},       
-       {type: "TutorGroup",
-        group: "Challenge",
+       {type: "Challenge",
         id: "Magnetic Field Challenge",
        goal: "Understand the magnetic field around the electromagnet",
        childtutors: [
@@ -85,7 +82,7 @@ tutors:[
             timelimit: 10,
             success: 100,
             failure: 50,
-            components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
+            components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}]
             }, 
             {type:"FieldDirectionProber",
             id: "Field Direction",
@@ -93,12 +90,11 @@ tutors:[
             timelimit: 10,
             success: 100,
             failure: 50,
-            components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}],
+            components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}]
             }
         ]},
-       {type: "TutorGroup",
+       {type: "RapidFire",
        id: "Multiple Choice Questions",
-       group: "RapidFire",
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ1",

@@ -1,5 +1,5 @@
 {name:"Electromagnetism",level:6,description:"Induction of Current in coil by ElectroMagnet",
-components:[{type:"Image",viewspec:"images/coppercoils-back.png",x:300.0,y:64.0,originX:0.0,originY:0.0,width:64.0,height:256.0,visible:true,rotation:0.0,move:"None"},
+components:[{type:"Image",viewspec:"coppercoils-back",x:300.0,y:64.0,originX:0.0,originY:0.0,width:64.0,height:256.0,visible:true,rotation:0.0,move:"None"},
 {type:"CurrentSource",x:271.0,y:135.0,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None"},
 {type:"ElectroMagnet",x:237.97548,y:132.02454,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"Move"},
 {type:"PickupCoil",x:335,y:63.000008,originX:32.0,originY:128.0,width:64.0,height:256.0,visible:true,rotation:0.0,move:"Move"},
@@ -7,7 +7,7 @@ components:[{type:"Image",viewspec:"images/coppercoils-back.png",x:300.0,y:64.0,
 {type:"Ammeter",x:400.0,y:338.0,originX:64.0,originY:32.0,width:128.0,height:64.0,visible:true,rotation:0.0},
 {type: "Environment", move: "None", params:[{name:"RoomTemperature"},{name:"EarthMagneticField"}]},
 ],
-groups:[["PickupCoil","Ammeter","Lightbulb", "images/coppercoils-back.png"],["ElectroMagnet","CurrentSource"]],
+groups:[["PickupCoil","Ammeter","Lightbulb", "coppercoils-back"],["ElectroMagnet","CurrentSource"]],
 circuits:[["CurrentSource","ElectroMagnet"],["PickupCoil","Ammeter","Lightbulb"]],
 configs:[
 {name:"CurrentSource.CurrentType",permitted:false,value:"DC"},
@@ -19,9 +19,8 @@ configs:[
 {name:"Ammeter.MaxCurrent",permitted:true},
 ],
 tutors: [
-  {type: "TutorGroup",
+  {type: "Guide",
    id: "Induced Current",
-   group:"Guide",
    goal: "Explore how induced current changes with change of different parameters.",
    success: 200,
    timelimit: 300,
@@ -62,8 +61,7 @@ tutors: [
            postcondition: "Count(CurrentSource.MaxCurrent) > 1 and Max(PickupCoil.Current) > 0.5",
            success: 250}
    ]},
-  {type: "TutorGroup",
-   group:"Challenge",
+  {type: "Challenge",
    id: "Induced Current Challenge",
    goal: "Explore how induced current changes with change of different parameters.",
    childtutors:[
@@ -92,9 +90,8 @@ tutors: [
                  parameter:"Environment.EarthMagneticField", 
                  resultType:"None"}
      ]},  
-       {type: "TutorGroup",
+       {type: "RapidFire",
        id: "Multiple Choice Questions",
-       group: "RapidFire",
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",

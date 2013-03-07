@@ -2,10 +2,9 @@
 components:[
 ],
 tutors: [
-       {type: "TutorGroup",
-       id: "Multiple Choice Questions",
-       group: "RapidFire",
-       goal: "RapidFire Review",
+       {type: "Reviewer",
+       id: "Review Quiz",
+       goal: "RapidFire Review Quiz",
        childtutors: []
        }
 ]

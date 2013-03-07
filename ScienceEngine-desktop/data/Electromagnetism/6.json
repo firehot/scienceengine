@@ -19,9 +19,8 @@ configs:[
 {name:"Ammeter.MaxCurrent",permitted:true},
 ],
 tutors: [
-  {type: "TutorGroup",
+  {type: "Guide",
    id: "Induced Current",
-   group:"Guide",
    goal: "Explore how induced current changes with change of different parameters.",
    success: 200,
    timelimit: 300,
@@ -62,8 +61,7 @@ tutors: [
            postcondition: "Count(CurrentSource.MaxCurrent) > 1 and Max(PickupCoil.Current) > 0.5",
            success: 250}
    ]},
-  {type: "TutorGroup",
-   group:"Challenge",
+  {type: "Challenge",
    id: "Induced Current Challenge",
    goal: "Explore how induced current changes with change of different parameters.",
    childtutors:[
@@ -92,9 +90,8 @@ tutors: [
                  parameter:"Environment.EarthMagneticField", 
                  resultType:"None"}
      ]},  
-       {type: "TutorGroup",
+       {type: "RapidFire",
        id: "Multiple Choice Questions",
-       group: "RapidFire",
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",

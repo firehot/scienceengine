@@ -2,7 +2,7 @@
 level:7,
 description:"Creating a DC  motor by using commutator",
 components:[
-{type:"Image",viewspec:"images/brush.png", x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},
+{type:"Image",viewspec:"brush", x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"HorseshoeMagnet", x:175, y:30.8,originX:175.0,originY:192.0,width:350.0,height:256.0,visible:true,rotation:0,move:"None",bodytype:false},
 {type:"CurrentSource",x:342.6001,y:320.59995,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None",bodytype:false},
 {type:"CurrentCoil",x:282.86517,y:226.54425,originX:64.0,originY:16.0,width:128.0,height:32.0,visible:true,rotation:0.0,move:"Rotate",bodytype:true},
@@ -20,20 +20,19 @@ configs:[
 {name:"CurrentCoil.RotationVelocity", permitted:false, value:2}
 ],
 tutors: [
-  {type: "TutorGroup",
-   group: "Guide",
+  {type: "Guide",
    id: "Magnet and Motor",
    goal: "Make number of revolutions of the motor +5 by configuring only the magnet",
    success:200,
    timelimit: 300,
    configs:[{name: "CurrentCoil.CommutatorType", permitted: false, value:"Connector"},
             {name: "CurrentSource.CurrentDirection", permitted: false, value: false},
-            {name:"CurrentCoil.RotationDataType", permitted:true, value:"NumRevolutions"},
+            {name:"CurrentCoil.RotationDataType", permitted:true, value:"NumRevolutions"}
    ],
    childtutors:[{type: "KnowledgeUnit",
              id: "Flip Horseshoe Magnet to Rotate",
              components:[{type:"HorseshoeMagnet", pin: true}],
-             goal: "Flip the horseshoe magnet and see how it affects the rotation of the coil. Give the coil a starting push.", 
+             goal: "Flip the horseshoe magnet and see how it affects the coil. Give the coil a starting push.", 
              postcondition: "CurrentCoil.AngularVelocity <> 0 and CurrentCoil.RotationData <> 0 and Count(HorseshoeMagnet.Flip) >= 2"},
             {type: "KnowledgeUnit",
              id: "Flip Horseshoe Magnet at the right time",
@@ -45,10 +44,9 @@ tutors: [
              id: "Sustain revolutions by flipping Magnet",
              components:[{type:"HorseshoeMagnet", pin: true}],
              goal: "Make sure number of revolutions is increasing.",
-             postcondition: "CurrentCoil.RotationData >= 5"},
+             postcondition: "CurrentCoil.RotationData >= 5"}
    ]},
-   {type: "TutorGroup",
-    group: "Guide",
+   {type: "Guide",
     id: "Current and Motor",
    goal: "Now, make number of revolutions of the motor +10 by configuring only the current source.",
    success:200,
@@ -56,7 +54,7 @@ tutors: [
    configs:[{name: "CurrentCoil.CommutatorType", permitted: false, value:"Connector"},
             {name: "HorseshoeMagnet.Flip", permitted: false, value: false},
             {name: "CurrentSource.CurrentDirection", permitted: true, value: false},
-            {name:"CurrentCoil.RotationDataType", permitted:true, value:"NumRevolutions"},
+            {name:"CurrentCoil.RotationDataType", permitted:true, value:"NumRevolutions"}
    ],
    childtutors:[{type: "KnowledgeUnit",
               id: "Change current direction to rotate",
@@ -75,9 +73,8 @@ tutors: [
               components:[{type:"CurrentSource", pin: true}],
               postcondition: "CurrentCoil.RotationData >= 10"}
    ]},
-   {type: "TutorGroup",
+   {type: "Challenge",
     id: "Motor Challenge",
-    group:"Challenge",
     goal: "Understand how a DC Motor works",
     childtutors:[
        {type:"ParameterProber",
@@ -111,15 +108,14 @@ tutors: [
             configs: [
             {name:"Environment.RoomTemperature", permitted: false},
             {name:"CurrentCoil.RotationDataType",permitted: false},
-            {name:"CurrentCoil.CommutatorType",permitted:false},
+            {name:"CurrentCoil.CommutatorType",permitted:false}
             ],
             parameters: ["HorseshoeMagnet.MagnetStrength", "CurrentSource.MaxCurrent"],
             success: 5000
-            },
+            }
        ]},
-       {type: "TutorGroup",
+       {type: "RapidFire",
        id: "Multiple Choice Questions",
-       group: "RapidFire",
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",

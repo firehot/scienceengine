@@ -19,9 +19,8 @@ configs:[
 {name:"CurrentSource.1.CurrentDirection",permitted:true,value:true}
 ],
 tutors:[
-      {type: "TutorGroup",
+      {type: "Guide",
        id: "Wires and Compass",
-       group: "Guide",
        goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
@@ -34,10 +33,9 @@ tutors:[
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          components:[{type:"Compass", visible: true}],
          success: 1000
-         }],
+         }]
        },
-       {type: "TutorGroup",
-       group: "Guide",
+       {type: "Guide",
        id: "Magnetic Field",
        goal: "Understand the magnetic field around the wires.",
        postcondition: "FieldMeter.Count >= 10",
@@ -87,9 +85,8 @@ tutors:[
          success: 200
          }
        ]},       
-       {type: "TutorGroup",
+       {type: "Challenge",
         id: "Magnetic Field Challenge",
-        group: "Challenge",
         goal: "Understand the magnetic field around the wires.",
         childtutors: [
            {type: "FieldMagnitudeProber",
@@ -113,9 +110,8 @@ tutors:[
             failure: 50
             }
         ]},
-       {type: "TutorGroup",
+       {type: "RapidFire",
        id: "Multiple Choice Questions",
-       group: "RapidFire",
        goal: "RapidFire Quiz",
       childtutors: [
          {type: "MCQ1",
@@ -154,6 +150,6 @@ tutors:[
                    "attract, then repel each other"],
           answermask: "1000"
           }
-     ]},
+     ]}
    ]
 }

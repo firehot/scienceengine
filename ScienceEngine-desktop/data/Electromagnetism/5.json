@@ -16,8 +16,7 @@ configs:[
 {name:"Ammeter.MaxCurrent",permitted:true},
 ],
 tutors: [
-       {type: "TutorGroup",
-        group: "Guide",
+       {type: "Guide",
         id: "Induced Current",
         goal: "Understand how current is induced by a bar magnet in a coil",
         success: 200,
@@ -60,8 +59,7 @@ tutors: [
            components:[{type:"Environment", pin: false},{type:"BarMagnet", pin: true}],
            success: 250}
    ]},
-       {type: "TutorGroup",
-        group: "Challenge",
+       {type: "Challenge",
         id: "Induced Current Challenge",
         goal: "Understand how current is induced by a bar magnet in a coil",
         childtutors:[
@@ -85,15 +83,14 @@ tutors: [
                 goal:"Select those variables in the shopping cart which affect the magnitude of induced current. You have 3 tries.",
                 configs: [{name: "BarMagnet.MovementMode", permitted: false, value:"Rotate"},
                           {name: "BarMagnet.RotationAngle", permitted: false, value:0},
-                          {name: "BarMagnet.RotationVelocity", permitted: true},
+                          {name: "BarMagnet.RotationVelocity", permitted: true}
                          ],
                 parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],
                 success: 5000
                 }
          ]},
-       {type: "TutorGroup",
+       {type: "RapidFire",
        id: "Multiple Choice Questions",
-       group: "RapidFire",
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ",
