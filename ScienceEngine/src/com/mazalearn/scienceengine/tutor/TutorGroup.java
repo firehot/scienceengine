@@ -88,7 +88,7 @@ public class TutorGroup extends AbstractTutor {
     if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
       // Find out where we last left off.
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getNumAttempts() < 1) break;
+        if (childTutors.get(tutorIndex).getPercentProgress() < 100) break;
       }
       if (tutorIndex == childTutors.size()) tutorIndex = 0;
     }
