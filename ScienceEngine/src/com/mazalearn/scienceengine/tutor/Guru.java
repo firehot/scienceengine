@@ -109,7 +109,7 @@ public class Guru extends Group implements ITutor {
 
   public ITutor getRootTutor() {
     if (rootTutor == null) {
-      this.rootTutor = new TutorGroup(science2DController, this, goal, ROOT_ID,
+      this.rootTutor = new TutorGroup(science2DController, Type.Guide, this, goal, ROOT_ID,
           null, null, 0, 0, null);
       this.addActor(rootTutor);      
     }
@@ -117,7 +117,7 @@ public class Guru extends Group implements ITutor {
   }
   
   public void initialize(List<ITutor> childTutors) {
-    rootTutor.initialize(GroupType.Guide.name(), childTutors, null);
+    rootTutor.initialize(childTutors, null);
     List<ITutor> tutors = new ArrayList<ITutor>();
     Set<String> tutorIds = new HashSet<String>();
     collectLeafTutors(rootTutor, tutors, tutorIds);
@@ -375,8 +375,8 @@ public class Guru extends Group implements ITutor {
   }
   
   @Override
-  public GroupType getGroupType() {
-    return GroupType.Root;
+  public Type getType() {
+    return Type.Root;
   }
   
   @Override

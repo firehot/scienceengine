@@ -12,16 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
-import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
@@ -31,7 +31,6 @@ import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.KnowledgeUnit;
 import com.mazalearn.scienceengine.tutor.McqTutor;
 import com.mazalearn.scienceengine.tutor.ParameterProber;
-import com.mazalearn.scienceengine.tutor.Reviewer;
 import com.mazalearn.scienceengine.tutor.TutorGroup;
 
 public abstract class AbstractScience2DController implements
@@ -174,20 +173,23 @@ public abstract class AbstractScience2DController implements
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String id,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    if ("MCQ1".equals(type)) {
-      return new McqTutor(this, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints, true);
-    } else if ("MCQ".equals(type)) {
-      return new McqTutor(this, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints, false);
-    } else if ("ParameterProber".equals(type)) {
-      return new ParameterProber(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
-    } else if ("TutorGroup".equals(type)) {
-      return new TutorGroup(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
-    } else if ("Reviewer".equals(type)) {
-      return new Reviewer(this, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
-    } else if ("KnowledgeUnit".equals(type)) {
-      return new KnowledgeUnit(this, parent, goal, id, components, configs, deltaSuccessScore, hints);
-    } else if ("Abstractor".equals(type)) {
-      return new Abstractor(this, parent, goal, id, components, configs, skin, 
+    ITutor.Type tutorType = ITutor.Type.valueOf(type);
+    switch (tutorType) {
+    case MCQ1:
+      return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints, true);
+    case MCQ:
+      return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints, false);
+    case ParameterProber:
+      return new ParameterProber(this, tutorType, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    case Challenge:
+    case RapidFire:
+    case Guide:
+    case Reviewer:
+      return new TutorGroup(this, tutorType, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    case KnowledgeUnit:
+      return new KnowledgeUnit(this, tutorType, parent, goal, id, components, configs, deltaSuccessScore, hints);
+    case Abstractor:
+      return new Abstractor(this, tutorType, parent, goal, id, components, configs, skin, 
           science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore, hints);
     }
     Gdx.app.error(ScienceEngine.LOG, "Could not load Tutor: " + type);

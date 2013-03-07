@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.probe;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,9 +21,9 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private Vector2[] points, bFields;
 
   public FieldDirectionProber(final IScience2DController science2DController,
-      final ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
+      Type tutorType, final ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    super(science2DController, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    super(science2DController, tutorType, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     
     this.points = new Vector2[] { new Vector2()};
     this.bFields = new Vector2[] { new Vector2()};

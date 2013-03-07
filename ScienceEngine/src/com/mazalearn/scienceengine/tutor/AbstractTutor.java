@@ -22,7 +22,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected IScience2DController science2DController;
   protected final ITutor parent;
   protected final Guru guru;
-  private GroupType groupType = GroupType.None;
+  private Type type = Type.None;
   private String id;
   protected boolean success;
   protected TutorStats stats;
@@ -37,6 +37,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
    *                                      |                                                      |
    *                                      |----<-----------------------<----------------------<--|
    * @param science2DController 
+   * @param tutorType 
    * @param parent
    * @param goal
    * @param id
@@ -47,8 +48,9 @@ public abstract class AbstractTutor extends Group implements ITutor {
    * @param hints
    */
   public AbstractTutor(IScience2DController science2DController,
-      ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
+      Type tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
       int successPoints, int failurePoints, String[] hints) {
+    this.type = tutorType;
     this.parent = parent;
     this.science2DController = science2DController;
     this.goal = goal;
@@ -176,14 +178,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
   }
   
   @Override
-  public GroupType getGroupType() {
-    return groupType;
+  public Type getType() {
+    return type;
   }
   
-  public void setGroupType(GroupType groupType) {
-    this.groupType = groupType;
-  }
-
   @Override
   public List<ITutor> getChildTutors() {
     return null;

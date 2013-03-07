@@ -15,9 +15,9 @@ public class KnowledgeUnit extends AbstractTutor {
   private String when;
   
   public KnowledgeUnit(IScience2DController science2DController,
-      ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
+      Type tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
       int successPoints, String[] hints) {
-    super(science2DController, parent, goal, id, components, configs, successPoints, 0, hints);
+    super(science2DController, tutorType, parent, goal, id, components, configs, successPoints, 0, hints);
     
   }
 

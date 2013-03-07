@@ -12,11 +12,10 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
 import com.mazalearn.scienceengine.tutor.Abstractor;
 import com.mazalearn.scienceengine.tutor.ITutor;
-import com.mazalearn.scienceengine.tutor.ITutor.GroupType;
+import com.mazalearn.scienceengine.tutor.ITutor.Type;
 import com.mazalearn.scienceengine.tutor.KnowledgeUnit;
 import com.mazalearn.scienceengine.tutor.McqTutor;
 import com.mazalearn.scienceengine.tutor.ParameterProber;
-import com.mazalearn.scienceengine.tutor.Reviewer;
 import com.mazalearn.scienceengine.tutor.TutorGroup;
 
 class TutorLoader {
@@ -41,23 +40,16 @@ class TutorLoader {
     String[] hints = loadStringArray("hints", tutorObj);
     AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, id,
         components, configs, (int) successPoints, (int) failurePoints, hints);
-    if (tutor instanceof McqTutor) {
-      return makeMcqTutor(tutorObj, (McqTutor) tutor);
-    }
-    if (tutor instanceof ParameterProber) {
-      return makeParameterProber(tutorObj, (ParameterProber) tutor);
-    }
-    if (tutor instanceof Reviewer) {
-      return makeReviewer(tutorObj, (Reviewer) tutor);
-    }
-    if (tutor instanceof TutorGroup) {
-      return makeTutorGroup(tutorObj, (TutorGroup) tutor);
-    }
-    if (tutor instanceof Abstractor) {
-      return makeAbstractor(tutorObj, (Abstractor) tutor);
-    }
-    if (tutor instanceof KnowledgeUnit) {
-      return makeKnowledgeUnit(tutorObj, (KnowledgeUnit) tutor);
+    switch (tutor.getType()) {
+    case MCQ1:
+    case MCQ: return makeMcqTutor(tutorObj, (McqTutor) tutor);
+    case ParameterProber: return makeParameterProber(tutorObj, (ParameterProber) tutor);
+    case Reviewer: return makeReviewer(tutorObj, (TutorGroup) tutor);
+    case Challenge:
+    case RapidFire:
+    case Guide: return makeTutorGroup(tutorObj, (TutorGroup) tutor);
+    case Abstractor: return makeAbstractor(tutorObj, (Abstractor) tutor);
+    case KnowledgeUnit: return makeKnowledgeUnit(tutorObj, (KnowledgeUnit) tutor);
     }
     return tutor;
   }
@@ -81,17 +73,15 @@ class TutorLoader {
   }
 
   private AbstractTutor makeTutorGroup(OrderedMap<String, ?> tutorObj, TutorGroup tutorGroup) {
-    String groupType = (String) tutorObj.get("group");
     Array<?> childTutorsObj = (Array<?>) tutorObj.get("childtutors");
     List<ITutor> childTutors = loadChildTutors(tutorGroup, childTutorsObj);
     String successActions = (String) tutorObj.get("successactions");
-    tutorGroup.initialize(groupType, childTutors, successActions);
+    tutorGroup.initialize(childTutors, successActions);
     return tutorGroup;
   }
 
   @SuppressWarnings("unchecked")
-  private AbstractTutor makeReviewer(OrderedMap<String, ?> tutorObj, Reviewer reviewer) {
-    String groupType = (String) tutorObj.get("group");
+  private AbstractTutor makeReviewer(OrderedMap<String, ?> tutorObj, TutorGroup reviewer) {
     Gdx.app.log(ScienceEngine.LOG, "Loading Reviewer");
     List<ITutor> reviewTutors = new ArrayList<ITutor>();
     // Assumption: Current level is the review level
@@ -100,7 +90,7 @@ class TutorLoader {
       Array<?> tutorsObj = (Array<?>) rootElem.get("tutors");
       for (int i = 0; i < tutorsObj.size; i++) {
         OrderedMap<String, ?> groupTutorsObj = (OrderedMap<String, ?>) tutorsObj.get(i);
-        if (GroupType.RapidFire.name().equals(groupTutorsObj.get("group"))) {
+        if (Type.RapidFire.name().equals(groupTutorsObj.get("type"))) {
           Array<?> childTutorsObj = (Array<?>) groupTutorsObj.get("childtutors");
           List<ITutor> childTutors = loadChildTutors(reviewer, childTutorsObj);
           reviewTutors.addAll(childTutors);
@@ -108,7 +98,7 @@ class TutorLoader {
       }
     }
     String successActions = (String) tutorObj.get("successactions");
-    reviewer.initialize(groupType, reviewTutors, successActions);
+    reviewer.initialize(reviewTutors, successActions);
     return reviewer;
   }
 

@@ -21,11 +21,11 @@ public class McqTutor extends AbstractTutor {
 
   private List<String> optionList;
 
-  public McqTutor(IScience2DController science2DController, ITutor parent,
+  public McqTutor(IScience2DController science2DController, Type tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
       Skin skin, int successPoints, int failurePoints, String[] hints,
       boolean singleAnswer) {
-    super(science2DController, parent, goal, id, 
+    super(science2DController, tutorType, parent, goal, id, 
         components, configs, successPoints, failurePoints, hints);
     this.singleAnswer = singleAnswer;
     this.setSize(ScreenComponent.Prober.getWidth(), ScreenComponent.Prober.getHeight());

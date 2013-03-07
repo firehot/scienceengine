@@ -20,16 +20,25 @@ public interface ITutor {
     Constructed, Initialized, PreparedToTeach, Teaching, SystemFinished, UserFinished, Finished;
   };
   
-  enum GroupType {
+  enum Type {
     Root(Color.CLEAR), 
     Guide(Color.YELLOW), 
     Challenge(Color.RED), 
-    RapidFire(Color.MAGENTA), 
+    RapidFire(Color.MAGENTA),
+    MCQ1(Color.MAGENTA),
+    MCQ(Color.MAGENTA),
+    KnowledgeUnit(Color.YELLOW),
+    ParameterProber(Color.RED),
+    Abstractor(Color.RED),
+    Reviewer(Color.MAGENTA),
+    FieldMagnitudeProber(Color.RED),
+    FieldDirectionProber(Color.RED),
+    LightProber(Color.RED),
     None(Color.CLEAR);
     
     Color color;
 
-    private GroupType(Color color) {
+    private Type(Color color) {
       this.color = color;
     }
     
@@ -77,9 +86,9 @@ public interface ITutor {
    */
   public List<ITutor> getChildTutors();
   /**
-   * @return grouptype of this tutor
+   * @return type of this tutor
    */
-  public GroupType getGroupType();
+  public Type getType();
 
   /**
    * @return id of tutor - this must be unique within the level. 

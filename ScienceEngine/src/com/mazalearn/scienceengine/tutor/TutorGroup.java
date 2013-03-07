@@ -25,10 +25,10 @@ public class TutorGroup extends AbstractTutor {
 
 
     
-  public TutorGroup(IScience2DController science2DController, ITutor parent,
+  public TutorGroup(IScience2DController science2DController, Type tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs, 
       int successPoints, int failurePoints, String[] hints) {
-    super(science2DController, parent, goal, id, components, configs, successPoints, failurePoints, hints);
+    super(science2DController, tutorType, parent, goal, id, components, configs, successPoints, failurePoints, hints);
   }
   
   @Override
@@ -68,8 +68,9 @@ public class TutorGroup extends AbstractTutor {
     tutorBeginTime[tutorIndex] = ScienceEngine.getTime();
     ScienceEngine.setProbeMode(false);
     currentTutor.prepareToTeach(null);
-    switch(currentTutor.getGroupType()) {
+    switch(currentTutor.getType()) {
     case Challenge: guru.doChallengeAnimation(currentTutor); break;
+    case Reviewer:
     case RapidFire: guru.doRapidFireAnimation(currentTutor); break;
     default: currentTutor.teach(); break;
     }
@@ -100,13 +101,12 @@ public class TutorGroup extends AbstractTutor {
     currentTutor.checkProgress();
   }
   
-  public void initialize(String groupType, List<ITutor> childTutors, String successActionsString) {
-    this.setGroupType(GroupType.valueOf(groupType));
+  public void initialize(List<ITutor> childTutors, String successActionsString) {
     this.childTutors = childTutors;
     for (ITutor childTutor: childTutors) {
       this.addActor((AbstractTutor) childTutor);
     }
-    if (getGroupType() == GroupType.RapidFire) {
+    if (getType() == Type.RapidFire) {
       // Shuffle child tutors
       Utils.shuffle(childTutors);
     }
@@ -126,7 +126,7 @@ public class TutorGroup extends AbstractTutor {
 
   @Override
   public List<ITutor> getChildTutors() {
-    if (getGroupType() == GroupType.RapidFire) return null;
+    if (getType() == Type.RapidFire || getType() == Type.Reviewer) return null;
     return childTutors;
   }
   
