@@ -37,6 +37,9 @@ public class Profile implements Serializable {
 
   public Profile() {
     topicStats = new HashMap<Topic, HashMap<String, Float>>();
+    for (Topic topic: Topic.values()) {
+      topicStats.put(topic, new HashMap<String, Float>());
+    }
     properties = new HashMap<String, String>();
   }
 
