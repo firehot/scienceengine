@@ -167,15 +167,7 @@ tutors: [
                    "voltage in rubber much greater", 
                    "voltage is the same",
                    "no voltage at all in rubber"],
-          answermask: "0001"
-          },
-        {type: "MCQ1",
-          id: "5.10",
-          goal:"How does the voltage induced upon two equal coils, one made of copper and one made of rubber, differ?",
-         options:["voltage in copper much greater", 
-                   "voltage in rubber much greater", 
-                   "voltage is the same",
-                   "no voltage at all in rubber"],
+          explanation: "Since rubber is an insulator and does not carry current, it is not affected by magnetic fields",
           answermask: "0001"
           },
         {type: "MCQ1",

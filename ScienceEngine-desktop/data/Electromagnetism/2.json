@@ -139,6 +139,7 @@ tutors:[
                    "a magnetic field", 
                    "magnetic as well as electric fields",
                    "none of these"],
+          explanation: "Electric charges interact with electric fields. Since a moving electric charge causes a magnetic field, it will interact with magnetic fields",
           answermask: "0010"
           },
          {type: "MCQ1",
@@ -152,7 +153,7 @@ tutors:[
           },
          {type: "MCQ1",
           id: "2.6",
-          goal:"Surrounding every moving electron is",
+          goal:"The magnetic field lines around an infinite wire carrying current - ",
           options:["extend radially from the wire", 
                    "circle the wire in closed loops", 
                    "extend radially from the wire as well as circle the wire in closed loops",
@@ -186,6 +187,7 @@ tutors:[
                    "cobalt", 
                    "nickel",
                    "copper"],
+          explanation: "Iron, cobalt and nickel are ferro-magnetic. Copper is not.",
           answermask: "0001"
           }
       ]}
