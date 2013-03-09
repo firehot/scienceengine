@@ -2,6 +2,8 @@ package com.mazalearn.scienceengine;
 
 import java.io.File;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -89,5 +91,14 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   @Override
   public boolean supportsLanguage() {
     return true;
+  }
+  
+  public String getUserEmail() {
+    for (Account a: AccountManager.get(application).getAccountsByType("com.google")) {
+      if (a.name.contains("@gmail.com")) {
+        return a.name;
+      }
+    }    
+    return "";
   }
 }

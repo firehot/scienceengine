@@ -53,12 +53,16 @@ public class Security {
       public void w(String tag, String msg) { System.out.println("Warning: " + tag + " " + msg); }
     }
     
-    public static String getPublicKey() {
+    public static String getPublicKey() { // android
       String publicKey = "";
       for (int i = PKEY.length - 1; i >= 0; i--) {
         publicKey += PKEY[i];
       }
       return publicKey;
+    }
+    
+    public static String getSharedSecret() {
+      return "7fe8416d9b944427b80dda95d2a5fb33"; // ios
     }
     
     private static final Logger Log = new Logger();
