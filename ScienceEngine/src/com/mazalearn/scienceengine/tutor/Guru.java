@@ -311,7 +311,7 @@ public class Guru extends Group implements ITutor {
     this.addActor(start);
     start.addAction(
         Actions.sequence(
-            Actions.alpha(0, 2),
+            Actions.alpha(0, 1),
             new Action() {
               @Override
               public boolean act(float delta) {
@@ -325,7 +325,7 @@ public class Guru extends Group implements ITutor {
             Actions.repeat(3, 
                 Actions.sequence(
                     Actions.alpha(1),
-                    Actions.alpha(0, 1),
+                    Actions.alpha(0.5f, 0.5f),
                     new Action() {
                       @Override
                       public boolean act(float delta) {

@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -14,7 +15,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public class McqTutor extends AbstractTutor {
 
-  private TextButton[] optionButtons;
+  private ButtonGroup optionsGroup;
   private String answerMask;
   private boolean singleAnswer;
   private int[] permutation;
@@ -37,8 +38,9 @@ public class McqTutor extends AbstractTutor {
     if (state == State.SystemFinished) return;
     success = true;
     int failureTracker = 0;
+    Array<Button> optionButtons = optionsGroup.getButtons();
     for (int i = 0; i < answerMask.length(); i++) {
-      if ((answerMask.charAt(permutation[i]) == '1') != optionButtons[i].isChecked()) {
+      if ((answerMask.charAt(permutation[i]) == '1') != optionButtons.get(i).isChecked()) {
         success = false;
         failureTracker += 1 << (permutation[i] * 3);
       }
@@ -52,7 +54,7 @@ public class McqTutor extends AbstractTutor {
     // Flash correct options.
     for (int i = 0; i < answerMask.length(); i++) {
       if (answerMask.charAt(permutation[i]) == '1') {
-        optionButtons[i].addAction(
+        optionButtons.get(i).addAction(
             Actions.repeat(-1, 
                 Actions.sequence(
                     Actions.alpha(0, 0.5f),
@@ -91,7 +93,7 @@ public class McqTutor extends AbstractTutor {
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);
     McqActor mcqActor = guru.getMcqActor();
-    optionButtons = mcqActor.setUp(this, optionList, explanation, singleAnswer);
+    optionsGroup = mcqActor.setUp(this, optionList, explanation, singleAnswer);
     addActor(mcqActor);
   }
 }

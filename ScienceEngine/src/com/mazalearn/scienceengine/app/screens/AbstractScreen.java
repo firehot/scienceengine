@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,7 +36,6 @@ public abstract class AbstractScreen implements Screen {
   protected final ScienceEngine scienceEngine;
   protected Stage stage;
 
-  private static BitmapFont font;
   private Table table;
   private Color backgroundColor = Color.BLACK;
 
@@ -92,14 +90,6 @@ public abstract class AbstractScreen implements Screen {
   protected abstract void goBack();
 
   // Lazily loaded collaborators
-
-  public BitmapFont getSmallFont() {
-    if (font == null) {
-      font = ScienceEngine.getPlatformAdapter().getScaledFont(10);
-    }
-    return font;
-  }
-
   protected void setTitle(String titleString) {
     Actor title = stage.getRoot().findActor(ScreenComponent.Title.name());
     if (title != null) {

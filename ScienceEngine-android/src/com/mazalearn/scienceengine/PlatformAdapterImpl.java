@@ -12,7 +12,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.FreeTypeComplexFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.services.IMessage;
 
@@ -65,20 +64,6 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
     return true;
   }
 
-  @Override
-  public BitmapFont getScaledFont(int pointSize) {
-    FileHandle fontFileHandle = Gdx.files.internal("skin/Roboto-Regular.ttf");
-    StringBuilder characters = new StringBuilder();
-    for (char c = 0; c <= 127; c++) {
-      characters.append(c);
-    }
-    FreeTypeFontGenerator generator = 
-        new FreeTypeFontGenerator(fontFileHandle);
-    BitmapFont font = generator.generateFont(pointSize, characters.toString(), false);
-    generator.dispose();
-    return font;
-  }
-  
   private static final String HINDI_TTF = "Lohit-Devanagari.ttf"; // "aksharhindi.ttf";
   private static final String KANNADA_TTF = "Lohit-Kannada.ttf"; // "aksharkannada.ttf";
   

@@ -38,9 +38,6 @@ public interface IPlatformAdapter {
   // return platform for this adapter
   public Platform getPlatform();
 
-  // Scale font: Possible to do better with Freetype on some platforms
-  public BitmapFont getScaledFont(int pointSize);
-
   // New font load not possible without Freetype support.
   public BitmapFont loadFont(Skin skin, String language);
 
@@ -58,5 +55,8 @@ public interface IPlatformAdapter {
 
   public void takeSnapshot(Stage stage, String topic, int level, int x, int y,
       int width, int height);
+  
+  // Get unique ID for this installation
+  public String getInstallationId();
 }
 

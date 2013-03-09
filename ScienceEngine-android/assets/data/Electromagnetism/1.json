@@ -201,7 +201,8 @@ tutors:[
                    "actually stronger than the original magnet", 
                    "half as strong as the original magnet",
                    "no longer magnetic"],
-          answermask: "1000"
+          answermask: "0100",
+          explanation: "Magnet strength is approximately proportional to the length of the magnet"
           },
          {type: "MCQ1",
           id: "1.13",

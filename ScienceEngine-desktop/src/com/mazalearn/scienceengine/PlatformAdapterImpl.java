@@ -65,6 +65,7 @@ class PlatformAdapterImpl extends NonWebPlatformAdapter {
     return false;
   }
 
+  /*
   @Override
   public BitmapFont getScaledFont(int pointSize) {
     FileHandle fontFileHandle = Gdx.files.internal("skin/Roboto-Regular.ttf");
@@ -77,7 +78,7 @@ class PlatformAdapterImpl extends NonWebPlatformAdapter {
     BitmapFont font = generator.generateFont(pointSize, characters.toString(), false);
     generator.dispose();
     return font;
-  }
+  } */
 
   private static final String HINDI_TTF = "Lohit-Devanagari.ttf"; // "aksharhindi.ttf";
   private static final String KANNADA_TTF = "Lohit-Kannada.ttf"; // "aksharkannada.ttf";

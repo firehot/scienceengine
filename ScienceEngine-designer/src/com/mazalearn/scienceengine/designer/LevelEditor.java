@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
@@ -325,7 +326,7 @@ public class LevelEditor extends Stage {
     int top = Gdx.graphics.getHeight() + 5;
     SpriteBatch batch = getSpriteBatch();
     batch.begin();
-    BitmapFont font = screen.getSmallFont();
+    BitmapFont font = screen.getSkin().getFont(ScreenComponent.getFont(0.5f));
     font.setColor(fontColor);
     font.draw(batch, "LEVEL Editor", 5, top - 15 * 0);
     font.draw(batch,

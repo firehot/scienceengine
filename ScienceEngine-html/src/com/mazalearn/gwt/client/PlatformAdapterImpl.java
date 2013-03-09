@@ -117,4 +117,9 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     }
   }
   
+  @Override
+  public String getInstallationId() {
+    return ScienceEngine.getUserEmail(); // Fallback to user being the device for GWT
+  }
+
 }

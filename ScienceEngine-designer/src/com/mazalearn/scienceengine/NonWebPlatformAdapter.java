@@ -103,4 +103,11 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   public void takeSnapshot(Stage stage, String topic, int level, int x, int y, int width, int height) {
     LevelEditor.takeSnapshot(stage, topic, level, x, y, width, height);
   }
+
+  @Override
+  public String getInstallationId() {
+    return Installation.id();
+  }
+
+  
 }

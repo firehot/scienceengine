@@ -14,9 +14,10 @@ import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
+// TODO: Make this abstract and remove dummy methods.
+// Problem with IOS where this is used by default in startup phase.
 public class AbstractPlatformAdapter implements IPlatformAdapter {
 
-  private static final float DEFAULT_FONT_SIZE = 15f;
   protected IMessage messages;
   private Platform platform;
 
@@ -71,17 +72,6 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   }
 
   @Override
-  public BitmapFont getScaledFont(int pointSize) {
-    FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
-    Skin  skin = new Skin(skinFile);
-    skin.add("en", skin.getFont("default-font"));
-    getMsg().setFont(skin);
-    BitmapFont font = skin.getFont("default-font");
-    font.setScale(pointSize / DEFAULT_FONT_SIZE);
-    return font;
-  }
-
-  @Override
   public BitmapFont loadFont(Skin skin, String language) {
     return skin.getFont("en");
   }
@@ -115,4 +105,10 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   @Override
   public void takeSnapshot(Stage stage, String topic, int level, int x, int y, int width, int height) {
   }
+  
+  @Override
+  public String getInstallationId() {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
 }

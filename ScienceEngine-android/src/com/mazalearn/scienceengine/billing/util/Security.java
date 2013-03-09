@@ -37,19 +37,28 @@ public class Security {
     private static final String TAG = "IABUtil/Security";
 
     private static final String[] PKEY = {
-        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtUGnJIJrOJ5e0VB1gbH9UmU1",
-        "J1SJa5xyEXVL5IE4bOZapojcbSYHlxuv6+aAv9a6mkNTdgLRXOgLwbNzNjGN/dCDj5jpO",
-        "s1/cxQ49WpdkMWHFmEMGC+mDlj1oZbi+q31tF+X0TZTQK8zlWgycbliuy130COh5ip6vn",
-        "eJDjJ+/5JQlev1d0j8ZjeXb1RbK1wYY81Z/I+RyQXXOL3JO6Sf7NN3xIKFjulujei3apD",
-        "uJgwp409Kgy8/7X1xoDoLIekGZ7i0NuVliFGjIUVc0+TP39ehyiT/z93zjd7kilWJaNQJ",
-        "5/w6c2e2Lgx279PlQCjl6IfgvK5LQJrfUsdvu3m/JQIDAQAB"};
+      "5/w6c2e2Lgx279PlQCjl6IfgvK5LQJrfUsdvu3m/JQIDAQAB",
+      "uJgwp409Kgy8/7X1xoDoLIekGZ7i0NuVliFGjIUVc0+TP39ehyiT/z93zjd7kilWJaNQJ",
+      "eJDjJ+/5JQlev1d0j8ZjeXb1RbK1wYY81Z/I+RyQXXOL3JO6Sf7NN3xIKFjulujei3apD",
+      "s1/cxQ49WpdkMWHFmEMGC+mDlj1oZbi+q31tF+X0TZTQK8zlWgycbliuy130COh5ip6vn",
+      "J1SJa5xyEXVL5IE4bOZapojcbSYHlxuv6+aAv9a6mkNTdgLRXOgLwbNzNjGN/dCDj5jpO",
+      "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtUGnJIJrOJ5e0VB1gbH9UmU1",
+    };
     private static final String KEY_FACTORY_ALGORITHM = "RSA";
     private static final String SIGNATURE_ALGORITHM = "SHA1withRSA";
 
     public static class Logger {
-      public void i(String tag, String msg) {}
-      public void e(String tag, String msg) {}
-      public void w(String tag, String msg) {}
+      public void i(String tag, String msg) { System.out.println("Info: " + tag + " " + msg); }
+      public void e(String tag, String msg) { System.out.println("Error: " + tag + " " + msg); }
+      public void w(String tag, String msg) { System.out.println("Warning: " + tag + " " + msg); }
+    }
+    
+    public static String getPublicKey() {
+      String publicKey = "";
+      for (int i = PKEY.length - 1; i >= 0; i--) {
+        publicKey += PKEY[i];
+      }
+      return publicKey;
     }
     
     private static final Logger Log = new Logger();

@@ -31,6 +31,8 @@ public class Profile implements Serializable {
   private static final String PERCENT_PROGRESS = "percentProgress";
   private static final String TIME_SPENT = "timeSpent";
   private static final String FAILURE_TRACKER = "failureTracker";
+  private static final String INSTALL_ID = "install_id";
+  
   private HashMap<Topic, HashMap<String, Float>> topicStats;
   private HashMap<String, String> properties;
   private HashMap<String, Float> currentTopicStats;
@@ -41,6 +43,7 @@ public class Profile implements Serializable {
       topicStats.put(topic, new HashMap<String, Float>());
     }
     properties = new HashMap<String, String>();
+    properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
   }
 
   public void setUserEmail(String userEmail) {
@@ -83,6 +86,7 @@ public class Profile implements Serializable {
     properties = json.readValue("properties", HashMap.class, String.class, jsonData);
     if (properties == null) {
       properties = new HashMap<String,String>();
+      properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
     }
     
     Object topicObj = json.readValue("topics", OrderedMap.class, OrderedMap.class, jsonData);
