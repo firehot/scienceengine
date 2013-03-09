@@ -33,7 +33,7 @@ public class Abstractor extends AbstractTutor {
   private Image[] life = new Image[3];
   private int numLivesLeft = 3;
   
-  public Abstractor(final IScience2DController science2DController, Type tutorType, ITutor parent, String goal, 
+  public Abstractor(final IScience2DController science2DController, TutorType tutorType, ITutor parent, String goal, 
       String name, Array<?> components, Array<?> configs, Skin skin, 
       ModelControls modelControls, int successPoints,
       int failurePoints, String[] hints) {

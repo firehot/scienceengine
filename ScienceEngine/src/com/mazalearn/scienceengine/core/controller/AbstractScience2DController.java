@@ -32,6 +32,7 @@ import com.mazalearn.scienceengine.tutor.KnowledgeUnit;
 import com.mazalearn.scienceengine.tutor.McqTutor;
 import com.mazalearn.scienceengine.tutor.ParameterProber;
 import com.mazalearn.scienceengine.tutor.TutorGroup;
+import com.mazalearn.scienceengine.tutor.TutorType;
 
 public abstract class AbstractScience2DController implements
     IScience2DController {
@@ -173,7 +174,13 @@ public abstract class AbstractScience2DController implements
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String id,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    ITutor.Type tutorType = ITutor.Type.valueOf(type);
+    TutorType tutorType;
+    try {
+      tutorType = TutorType.valueOf(type);
+    } catch(IllegalArgumentException e) {
+      Gdx.app.error(ScienceEngine.LOG, "Could not recognize Tutor: " + type);
+      return null;
+    }
     switch (tutorType) {
     case MCQ1:
       return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, deltaSuccessScore, deltaFailureScore, hints, true);
@@ -192,7 +199,7 @@ public abstract class AbstractScience2DController implements
       return new Abstractor(this, tutorType, parent, goal, id, components, configs, skin, 
           science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore, hints);
     }
-    Gdx.app.error(ScienceEngine.LOG, "Could not load Tutor: " + type);
+    Gdx.app.error(ScienceEngine.LOG, "Could not create Tutor: " + type);
     return null;
   }
 

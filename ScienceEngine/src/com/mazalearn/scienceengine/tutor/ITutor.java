@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.tutor;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 
 /**
  * A Tutor can be a guide, a prober or an abstractor.
@@ -20,30 +21,8 @@ public interface ITutor {
     Constructed, Initialized, PreparedToTeach, Teaching, SystemFinished, UserFinished, Finished;
   };
   
-  enum Type {
-    Root(Color.CLEAR), 
-    Guide(Color.YELLOW), 
-    Challenge(Color.RED), 
-    RapidFire(Color.MAGENTA),
-    MCQ1(Color.MAGENTA),
-    MCQ(Color.MAGENTA),
-    KnowledgeUnit(Color.YELLOW),
-    ParameterProber(Color.RED),
-    Abstractor(Color.RED),
-    Reviewer(Color.MAGENTA),
-    FieldMagnitudeProber(Color.RED),
-    FieldDirectionProber(Color.RED),
-    LightProber(Color.RED);
-    
-    Color color;
-
-    private Type(Color color) {
-      this.color = color;
-    }
-    
-    public Color getColor() {
-      return color;
-    }
+  public interface ITutorType extends IComponentType {
+    public Color getColor();
   }
   
   /**
@@ -86,10 +65,11 @@ public interface ITutor {
    * @return list of child tutors or null if no children.
    */
   public List<ITutor> getChildTutors();
+  
   /**
    * @return type of this tutor
    */
-  public Type getType();
+  public ITutorType getType();
 
   /**
    * @return id of tutor - this must be unique within the level. 

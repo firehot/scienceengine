@@ -23,7 +23,7 @@ public class McqTutor extends AbstractTutor {
   private List<String> optionList;
   private String explanation;
 
-  public McqTutor(IScience2DController science2DController, Type tutorType, ITutor parent,
+  public McqTutor(IScience2DController science2DController, TutorType tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
       Skin skin, int successPoints, int failurePoints, String[] hints,
       boolean singleAnswer) {

@@ -15,7 +15,7 @@ public class LightProber extends AbstractScience2DProber {
   private Image image;
   private LightbulbActor lightbulbActor;
   
-  public LightProber(IScience2DController science2DController, Type tutorType, ITutor parent,
+  public LightProber(IScience2DController science2DController, ITutorType tutorType, ITutor parent,
       String goal, String name, Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     super(science2DController, tutorType, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
 /*            "Light intensity increases when more current is induced in the coil.",

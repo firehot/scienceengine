@@ -21,7 +21,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private Vector2[] points, bFields;
 
   public FieldDirectionProber(final IScience2DController science2DController,
-      Type tutorType, final ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
+      ITutorType tutorType, final ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     super(science2DController, tutorType, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     

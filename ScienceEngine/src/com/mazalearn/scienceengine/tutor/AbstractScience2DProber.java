@@ -20,7 +20,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   private Vector2 localPoint = new Vector2();
 
   public AbstractScience2DProber(IScience2DController science2DController,
-      Type tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
+      ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
       int successPoints, int failurePoints, String[] hints) {
     super(science2DController, tutorType, parent, goal, id, components, configs, successPoints, failurePoints, hints);
     // A prober covers almost the entire screen and allows user to interact only with probes

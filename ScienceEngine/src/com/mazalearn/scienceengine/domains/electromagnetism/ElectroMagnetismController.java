@@ -18,6 +18,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirectionProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.probe.LightProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.probe.TutorType;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.AmmeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentCoilActor;
@@ -97,7 +98,12 @@ public class ElectroMagnetismController extends AbstractScience2DController {
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String name,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     // TODO: tutorType should be an IComponent and be domain based
-    ITutor.Type tutorType = ITutor.Type.valueOf(type);
+    TutorType tutorType;
+    try {
+      tutorType = TutorType.valueOf(type);
+    } catch(IllegalArgumentException e) {
+      return super.createTutor(parent, type, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    }
     switch (tutorType) {
     case FieldMagnitudeProber:
       return new FieldMagnitudeProber(this, tutorType, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
@@ -106,6 +112,6 @@ public class ElectroMagnetismController extends AbstractScience2DController {
     case LightProber:
       return new LightProber(this, tutorType, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     }
-    return super.createTutor(parent, type, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+    return null;
   }
 }

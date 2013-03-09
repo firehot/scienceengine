@@ -51,7 +51,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector2[] bFields;
 
   public FieldMagnitudeProber(IScience2DController science2DController,
-      Type tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
+      ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
       int deltaSuccessScore, int deltaFailureScore, String[] hints) {
     super(science2DController, tutorType, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     

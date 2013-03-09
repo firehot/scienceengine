@@ -109,7 +109,7 @@ public class Guru extends Group implements ITutor {
 
   public ITutor getRootTutor() {
     if (rootTutor == null) {
-      this.rootTutor = new TutorGroup(science2DController, Type.Guide, this, goal, ROOT_ID,
+      this.rootTutor = new TutorGroup(science2DController, TutorType.Guide, this, goal, ROOT_ID,
           null, null, 0, 0, null);
       this.addActor(rootTutor);      
     }
@@ -375,8 +375,8 @@ public class Guru extends Group implements ITutor {
   }
   
   @Override
-  public Type getType() {
-    return Type.Root;
+  public TutorType getType() {
+    return TutorType.Root;
   }
   
   @Override

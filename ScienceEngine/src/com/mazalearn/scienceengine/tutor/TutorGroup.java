@@ -11,6 +11,7 @@ import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
+import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public class TutorGroup extends AbstractTutor {
   
@@ -25,7 +26,7 @@ public class TutorGroup extends AbstractTutor {
 
 
     
-  public TutorGroup(IScience2DController science2DController, Type tutorType, ITutor parent,
+  public TutorGroup(IScience2DController science2DController, TutorType tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs, 
       int successPoints, int failurePoints, String[] hints) {
     super(science2DController, tutorType, parent, goal, id, components, configs, successPoints, failurePoints, hints);
@@ -69,11 +70,14 @@ public class TutorGroup extends AbstractTutor {
     tutorBeginTime[tutorIndex] = ScienceEngine.getTime();
     ScienceEngine.setProbeMode(false);
     currentTutor.prepareToTeach(null);
-    switch(currentTutor.getType()) {
-    case Challenge: guru.doChallengeAnimation(currentTutor); break;
-    case Reviewer:
-    case RapidFire: guru.doRapidFireAnimation(currentTutor); break;
-    default: currentTutor.teach(); break;
+    
+    IComponentType tutorType = currentTutor.getType();
+    if (tutorType == TutorType.Challenge) {
+      guru.doChallengeAnimation(currentTutor);
+    } else if (tutorType == TutorType.RapidFire || tutorType == TutorType.Reviewer) {
+      guru.doRapidFireAnimation(currentTutor);
+    } else {
+      currentTutor.teach();
     }
   }
 
@@ -107,7 +111,7 @@ public class TutorGroup extends AbstractTutor {
     for (ITutor childTutor: childTutors) {
       this.addActor((AbstractTutor) childTutor);
     }
-    if (getType() == Type.RapidFire) {
+    if (getType() == TutorType.RapidFire) {
       // Shuffle child tutors
       Utils.shuffle(childTutors);
     }
@@ -127,7 +131,7 @@ public class TutorGroup extends AbstractTutor {
 
   @Override
   public List<ITutor> getChildTutors() {
-    if (getType() == Type.RapidFire || getType() == Type.Reviewer) return null;
+    if (getType() == TutorType.RapidFire || getType() == TutorType.Reviewer) return null;
     return childTutors;
   }
   
