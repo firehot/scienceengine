@@ -100,7 +100,6 @@ public class ElectroMagnetismController extends AbstractScience2DController {
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String name,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    // TODO: tutorType should be an IComponent and be domain based
     TutorType tutorType;
     try {
       tutorType = TutorType.valueOf(type);

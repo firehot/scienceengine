@@ -46,6 +46,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   }
 
   // find a config by name
+  // TODO: optimize this
   public IModelConfig<?> getConfig(String configName) {
     for (IModelConfig<?> config: getAllConfigs()) {
       if (config.getName().equals(configName)) {
@@ -266,7 +267,6 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
         }
       } else if (name.lastIndexOf(".") != -1) {
         // Ignores unknown variables.
-        // TODO: Cleanup User.Next which we use to indicate userinput
         int pos = name.lastIndexOf(".");
         String componentName = name.substring(0, pos);
         String property = name.substring(pos + 1);
