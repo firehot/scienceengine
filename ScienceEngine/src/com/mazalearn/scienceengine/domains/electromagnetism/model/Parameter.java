@@ -25,7 +25,7 @@ public enum Parameter implements IParameter {
   AreaOrientation, 
   Width, 
   Color, 
-  PoleType;
+  MonopoleType;
   
   private Parameter() {
   }

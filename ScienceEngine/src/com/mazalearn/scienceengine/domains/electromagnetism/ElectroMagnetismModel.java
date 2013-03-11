@@ -20,7 +20,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.HorseshoeMagne
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Pole;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Monopole;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Wire;
 
@@ -55,7 +55,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case Magnet: return new Magnet(x, y, rotation);
     case Lightbulb: return new Lightbulb(x, y, rotation);
     case PickupCoil: return new PickupCoil(x, y, rotation, 2E7f);
-    case Pole: return new Pole(x, y, rotation);
+    case Monopole: return new Monopole(x, y, rotation);
     case ScienceTrain: return new ScienceTrain(x, y, rotation);
     case Wire: return new Wire(x, y, rotation);
     }

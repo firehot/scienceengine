@@ -6,26 +6,25 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil.CommutatorType;
 
 /**
- * Pole is the model of a virtual magnetic pole.
+ * Monopole is the model of a virtual magnetic pole.
  * It reacts to direction as well as strength of the field at the point
  * <p/>
  * 
  * @author sridhar
  */
-public class Pole extends Science2DBody {
+public class Monopole extends Science2DBody {
 
   // Magnetic Field acting on pole
   private Vector2 fieldVector = new Vector2(), force = new Vector2();
   // type of commutator connector
-  public enum PoleType { NorthPole, SouthPole};
+  public enum MonopoleType { NorthPole, SouthPole};
   
-  private PoleType poleType = PoleType.NorthPole;
+  private MonopoleType monopoleType = MonopoleType.NorthPole;
   
-  public Pole(float x, float y, float angle) {
-    super(ComponentType.Pole, x, y, angle);
+  public Monopole(float x, float y, float angle) {
+    super(ComponentType.Monopole, x, y, angle);
     getBody().setType(BodyType.DynamicBody);
     FixtureDef fixtureDef = new FixtureDef();
     CircleShape circleShape = new CircleShape();
@@ -42,15 +41,15 @@ public class Pole extends Science2DBody {
   public void initializeConfigs() {
     super.initializeConfigs();
     configs.add(new AbstractModelConfig<String>(this, 
-        Parameter.PoleType, PoleType.values()) {
-      public String getValue() { return poleType.name(); }
-      public void setValue(String value) { poleType = PoleType.valueOf(value); }
+        Parameter.MonopoleType, MonopoleType.values()) {
+      public String getValue() { return monopoleType.name(); }
+      public void setValue(String value) { monopoleType = MonopoleType.valueOf(value); }
       public boolean isPossible() { return isActive(); }
     });
   }
   
-  public PoleType getPoleType() {
-    return poleType;
+  public MonopoleType getPoleType() {
+    return monopoleType;
   }
   
   @Override
@@ -61,9 +60,9 @@ public class Pole extends Science2DBody {
   @Override
   public void singleStep(float dt) {
     super.singleStep(dt);
-    if (poleType == PoleType.NorthPole) {
+    if (monopoleType == MonopoleType.NorthPole) {
       force.set(fieldVector.x, fieldVector.y);
-    } else { // South Pole
+    } else { // South Monopole
       force.set(-fieldVector.x, -fieldVector.y);
     }
     applyForce(force, getWorldCenter());

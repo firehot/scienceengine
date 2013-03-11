@@ -20,7 +20,7 @@ configs:[
 ],
 tutors:[
       {type: "Guide",
-       id: "Wires and Compass",
+       id: "G2.1",
        goal: "Make the compass go through one complete rotation",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
        success: 1000,
@@ -36,7 +36,7 @@ tutors:[
          }]
        },
        {type: "Guide",
-        id: "Magnetic Field",
+        id: "G2.2",
        goal: "Understand the magnetic field around the wire",
        postcondition: "FieldMeter.Count >= 10",
        components:[{type:"Compass", visible: false}, 
@@ -46,14 +46,14 @@ tutors:[
        timelimit: 180,
        childtutors: [
          {type: "KnowledgeUnit",
-         id: "Move Wire",
+         id: "G2.3",
          goal: "Move the wire and see how the field changes",
          hints: ["To see the field, click on the screen around the wires"],
          postcondition: "FieldMeter.Count >= 10 and Count(Wire.1.Move) >= 1",
          success: 200
          },
          {type: "KnowledgeUnit",
-         id: "Max Current Change",
+         id: "G2.4",
          goal: "Change max DC current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
          components:[{type:"CurrentSource.1", pin: true}],
@@ -61,7 +61,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-         id: "Current Direction Change",
+         id: "G2.5",
          goal: "Change DC current direction. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentDirection) >=  1",
@@ -69,7 +69,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-         id: "AC: Max Current Change",
+         id: "G2.6",
          goal: "Change max AC current. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
@@ -77,7 +77,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-         id: "AC: Frequency Change",
+         id: "G2.7",
          goal: "Change AC current frequency. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentFrequency) >= 1",
@@ -86,7 +86,7 @@ tutors:[
          }
        ]},       
        {type: "Guide",
-       id: "Magnetic Field",
+       id: "G2.8",
        goal: "Understand the magnetic field around two wires.",
        postcondition: "FieldMeter.Count >= 10",
        components:[{type:"Compass", visible: false},
@@ -97,7 +97,7 @@ tutors:[
        timelimit: 180,
        childtutors: [
          {type: "KnowledgeUnit",
-          id: "Move Wires",
+          id: "G2.9",
           goal: "Move first wire 1 and then wire 2. Observe how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC"},
                    {name:"CurrentSource.2.CurrentType", value:"DC"}],
@@ -105,7 +105,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-          id: "Wire1 Max Current Change",
+          id: "G2.10",
           goal: "Change max DC current for CurrentSource 1. See how the field changes",
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
@@ -113,7 +113,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-          id: "Wire1 Current Direction Change",
+          id: "G2.11",
           goal: "Change DC current direction for CurrentSource 1. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentDirection) >= 1",
@@ -121,7 +121,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-          id: "AC: Wire1 Max Current Change",
+          id: "G2.12",
           goal: "Change max AC current for CurrentSource 1. See how the field changes.",
           configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
@@ -129,7 +129,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-          id: "AC: Wire1 Current Frequency Change",
+          id: "G2.13",
           configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
           goal: "Change AC current frequency for CurrentSource 1. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentFrequency) >= 1",
@@ -137,7 +137,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-           id: "AC: Wire2 Max Current Change",
+           id: "G2.14",
           goal: "Change max AC current for Current Source 2. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"AC"},
                    {name:"CurrentSource.2.CurrentType", value:"AC"} ],
@@ -146,7 +146,7 @@ tutors:[
          success: 200
          },
          {type: "KnowledgeUnit",
-           id: "AC: Wire2 Max Current Change",
+           id: "G2.15",
           goal: "Change AC current frequency for Current Source 2. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"AC"},
                    {name:"CurrentSource.2.CurrentType", value:"AC"} ],
@@ -156,11 +156,11 @@ tutors:[
          }
        ]},       
        {type: "Challenge",
-        id: "Magnetic Field Challenge",
+        id: "C2",
         goal: "Understand the magnetic field around the wires.",
         childtutors: [
            {type: "FieldMagnitudeProber",
-            id: "Field Magnitude",
+            id: "C2.1",
             goal: "Touch one of the two ? where the magnetic field is stronger",
             hints: ["The field is the sum of the fields of the two wires.",
                     "The field is stronger if the current strength is larger"],
@@ -170,7 +170,7 @@ tutors:[
             failure: 50
             }, 
             {type:"FieldDirectionProber",
-            id: "Field Direction",
+            id: "C2.2",
             goal: "Touch the ? and Drag in the direction of the magnetic field",
             hints: ["The direction of the field is the direction in which a free North Pole would move if placed at that point.",
                     "The direction of the field is where the North of a compass needle in that location would point."],
@@ -185,7 +185,7 @@ tutors:[
        goal: "RapidFire Quiz",
       childtutors: [
          {type: "MCQ1",
-          id: "3.1",
+          id: "R3.1",
           goal:"As the distance from the current carrying wire increases the strength of the magnetic field",
           options:["increases", 
                    "decreases", 
@@ -194,7 +194,7 @@ tutors:[
           answermask: "0100"
           },
          {type: "MCQ1",
-          id: "3.2",
+          id: "R3.2",
           goal:"Two infinite current carrying wires with current in the same direction will",
           options:["Repel each other", 
                    "Attract each other", 
@@ -203,7 +203,7 @@ tutors:[
           answermask: "0100"
           },
          {type: "MCQ1",
-          id: "3.3",
+          id: "R3.3",
           goal:"The magnetic fields at a point due to multiple wires carrying current",
           options:["will all add up", 
                    "will cancel each other out", 
@@ -213,7 +213,7 @@ tutors:[
           answermask: "1000"
           },
          {type: "MCQ1",
-          id: "3.4",
+          id: "R3.4",
           goal:"Two parallel wires carrying opposite direction currents will",
           options:["be attracted to each other", 
                    "repel each other", 
@@ -222,7 +222,7 @@ tutors:[
           answermask: "1000"
           },
          {type: "MCQ1",
-          id: "3.8",
+          id: "R3.8",
           goal:"What condition is necessary for an electric charge to have a magnetic field around it?",
           options:["it must be in a copper wire", 
                    "it must be isolated from the opposite charge", 
@@ -232,7 +232,7 @@ tutors:[
           answermask: "00100"
           },
          {type: "MCQ1",
-          id: "3.6",
+          id: "R3.6",
           goal:"The magnetic field lines around an infinite wire carrying current - ",
           options:["extend radially from the wire", 
                    "circle the wire in closed loops", 
@@ -241,7 +241,7 @@ tutors:[
           answermask: "0100"
           },
          {type: "MCQ",
-          id: "3.5",
+          id: "R3.5",
           goal:"The direction of magnetic field at a point near an infinite current carrying wire",
           options:["Curl right hand into a fist placed along the wire with thumb in direction of current. The magnetic field is given by the curling fingers.", 
                    "Is tangential to a circle drawn to touch the point with center at the wire", 

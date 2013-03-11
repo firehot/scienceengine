@@ -30,7 +30,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.PoleActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.MonopoleActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
@@ -87,8 +87,8 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new PickupCoilActor((PickupCoil) body, textureRegion);
     case ScienceTrain:
       return new ScienceTrainActor(body, science2DView, skin);
-    case Pole:
-      return new PoleActor(body, textureRegion);
+    case Monopole:
+      return new MonopoleActor(body, textureRegion);
     case Wire:
       return new WireActor(body);
     case Compass:

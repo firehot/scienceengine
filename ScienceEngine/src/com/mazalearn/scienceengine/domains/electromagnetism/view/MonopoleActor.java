@@ -10,19 +10,19 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Pole;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Pole.PoleType;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Monopole;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Monopole.MonopoleType;
 
-public class PoleActor extends Science2DActor {
-  private final Pole pole;
+public class MonopoleActor extends Science2DActor {
+  private final Monopole monopole;
   private Image fieldArrow;
   Vector2 lastTouch = new Vector2(), currentTouch = new Vector2();
   private TextureRegion textureSouthPole;
   private TextureRegion textureNorthPole;
     
-  public PoleActor(Science2DBody body, TextureRegion textureRegion) {
+  public MonopoleActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
-    this.pole = (Pole) body;
+    this.monopole = (Monopole) body;
     this.removeListener(getListeners().get(0)); // help listener
     this.removeListener(getListeners().get(0)); // move, rotate listener
     fieldArrow = new Image(ScienceEngine.getTextureRegion("arrow"));
@@ -41,10 +41,11 @@ public class PoleActor extends Science2DActor {
         currentTouch.sub(lastTouch);
         // Set Magnetic field based on drag position relative to touchdown point
         fieldArrow.setRotation(currentTouch.angle());
+        // TODO: Put maxlimit on size.
         fieldArrow.setSize(currentTouch.len(), currentTouch.len());
         fieldArrow.setOrigin(0,  fieldArrow.getHeight() / 2);
         fieldArrow.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 2 - fieldArrow.getHeight() / 2);
-        pole.setField(currentTouch);
+        monopole.setField(currentTouch);
       }
       
       @Override
@@ -54,7 +55,7 @@ public class PoleActor extends Science2DActor {
         fieldArrow.setSize(0, 0);
         fieldArrow.setOrigin(0, 0);
         currentTouch.set(0, 0);
-        pole.setField(currentTouch);
+        monopole.setField(currentTouch);
       }
     });
   }
@@ -94,7 +95,7 @@ public class PoleActor extends Science2DActor {
     fieldArrow.layout();
     fieldArrow.draw(batch, parentAlpha);
     this.getTextureRegion().setRegion(
-        pole.getPoleType() == PoleType.NorthPole ? textureNorthPole : textureSouthPole);
+        monopole.getPoleType() == MonopoleType.NorthPole ? textureNorthPole : textureSouthPole);
     super.draw(batch, parentAlpha);
   }
 }
