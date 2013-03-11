@@ -3,10 +3,10 @@ package com.mazalearn.scienceengine;
 
 public enum Topic {
   Field,
-  BarMagnet, Wire, TwoWires, ElectroMagnet,
+  BarMagnet, TwoWires, ElectroMagnet,
   BarMagnetInduction, ElectroMagnetInduction,
   DCMotor, ACMotor, ScienceTrain, EMReview,
-  Electromagnetism(Field, BarMagnet, Wire, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
+  Electromagnetism(Field, BarMagnet, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
       ACMotor, ScienceTrain, EMReview),
   SOM, StatesOfMatter(SOM), 
   W, Waves(W);
