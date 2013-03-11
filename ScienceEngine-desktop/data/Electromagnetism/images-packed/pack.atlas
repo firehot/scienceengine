@@ -5,204 +5,218 @@ filter: Nearest,Nearest
 repeat: none
 ferrite
   rotate: false
-  xy: 1, 733
+  xy: 1, 767
   size: 512, 256
   orig: 512, 256
   offset: 0, 0
   index: -1
 neodymium
   rotate: false
-  xy: 1, 475
+  xy: 1, 509
   size: 512, 256
   orig: 512, 256
   offset: 0, 0
   index: -1
 smco
   rotate: false
-  xy: 1, 217
+  xy: 1, 251
   size: 512, 256
   orig: 512, 256
   offset: 0, 0
   index: -1
 copperwire
   rotate: false
-  xy: 515, 733
+  xy: 515, 767
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 horseshoemagnet
   rotate: false
-  xy: 515, 475
+  xy: 515, 509
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 coppercoils
   rotate: false
-  xy: 773, 733
+  xy: 773, 767
   size: 128, 256
   orig: 128, 256
   offset: 0, 0
   index: -1
 engine
   rotate: false
-  xy: 1, 87
+  xy: 1, 121
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 barmagnet
   rotate: false
-  xy: 515, 409
+  xy: 515, 443
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
 coppercoils-back
   rotate: false
-  xy: 773, 475
+  xy: 773, 509
   size: 64, 256
   orig: 64, 256
   offset: 0, 0
   index: -1
 coppercoils-front1
   rotate: false
-  xy: 903, 733
+  xy: 903, 767
   size: 64, 256
   orig: 64, 256
   offset: 0, 0
   index: -1
 coppercoils-front2
   rotate: false
-  xy: 839, 475
+  xy: 839, 509
   size: 64, 256
   orig: 64, 256
   offset: 0, 0
   index: -1
+northpole
+  rotate: false
+  xy: 515, 291
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+southpole
+  rotate: false
+  xy: 259, 99
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
 electromagnet
   rotate: false
-  xy: 259, 87
+  xy: 667, 313
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 greenballoon
   rotate: false
-  xy: 515, 279
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-redballoon
-  rotate: false
-  xy: 645, 279
+  xy: 411, 121
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ammeter
   rotate: false
-  xy: 773, 409
+  xy: 773, 443
   size: 128, 64
   orig: 128, 64
   offset: 0, 0
   index: -1
+redballoon
+  rotate: false
+  xy: 797, 313
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 currentsource
   rotate: false
-  xy: 389, 87
+  xy: 905, 637
   size: 64, 128
   orig: 64, 128
   offset: 0, 0
   index: -1
 electromagnet-base
   rotate: false
-  xy: 775, 279
-  size: 64, 128
-  orig: 64, 128
-  offset: 0, 0
-  index: -1
-electromagnet-coil
-  rotate: false
-  xy: 905, 603
+  xy: 905, 507
   size: 64, 128
   orig: 64, 128
   offset: 0, 0
   index: -1
 compass
   rotate: false
-  xy: 1, 53
+  xy: 1, 87
   size: 128, 32
   orig: 128, 32
   offset: 0, 0
   index: -1
 currentcoil_accommutator
   rotate: false
-  xy: 515, 245
+  xy: 515, 257
   size: 128, 32
   orig: 128, 32
   offset: 0, 0
   index: -1
+electromagnet-coil
+  rotate: false
+  xy: 541, 127
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
 currentcoil_dccommutator
   rotate: false
-  xy: 1, 19
+  xy: 1, 53
   size: 128, 32
   orig: 128, 32
   offset: 0, 0
   index: -1
 currentcoil_nocommutator
   rotate: false
-  xy: 131, 53
+  xy: 1, 19
   size: 128, 32
   orig: 128, 32
   offset: 0, 0
   index: -1
+brush
+  rotate: false
+  xy: 1, 1
+  size: 64, 16
+  orig: 64, 16
+  offset: 0, 0
+  index: -1
 lightbulb
   rotate: false
-  xy: 905, 537
+  xy: 131, 55
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel
   rotate: false
-  xy: 841, 343
+  xy: 607, 191
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 arrow
   rotate: false
-  xy: 645, 245
+  xy: 131, 21
   size: 64, 32
   orig: 64, 32
   offset: 0, 0
   index: -1
-brush
+current
   rotate: false
-  xy: 515, 227
-  size: 64, 16
-  orig: 64, 16
+  xy: 67, 1
+  size: 32, 16
+  orig: 32, 16
   offset: 0, 0
   index: -1
 currentwire-down
   rotate: false
-  xy: 455, 183
+  xy: 645, 257
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 currentwire-up
   rotate: false
-  xy: 969, 957
+  xy: 969, 991
   size: 32, 32
   orig: 32, 32
-  offset: 0, 0
-  index: -1
-current
-  rotate: false
-  xy: 1, 1
-  size: 32, 16
-  orig: 32, 16
   offset: 0, 0
   index: -1

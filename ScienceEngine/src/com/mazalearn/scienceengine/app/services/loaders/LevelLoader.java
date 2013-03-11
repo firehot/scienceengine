@@ -27,7 +27,7 @@ public class LevelLoader {
   private IScience2DModel science2DModel;
   private ModelControls modelControls;
   private ViewControls viewControls;
-  private int level;
+  private Topic level;
   private OrderedMap<String, ?> rootElem;
   private ComponentLoader componentLoader;
   private TutorLoader tutorLoader;
@@ -51,14 +51,14 @@ public class LevelLoader {
   public OrderedMap<String, ?> getJsonFromFile() {
     Gdx.app.log(ScienceEngine.LOG, "Opening level json file");
     Topic topic = science2DController.getTopic();
-    int level = science2DController.getLevel();
+    Topic level = science2DController.getLevel();
     rootElem = getJsonFromFile(topic, level);
     return rootElem;
   }
 
   @SuppressWarnings("unchecked")
-  public static OrderedMap<String, ?> getJsonFromFile(Topic topic, int level) {
-    FileHandle file = LevelUtil.getLevelFile(topic.name(), ".json", level);
+  public static OrderedMap<String, ?> getJsonFromFile(Topic topic, Topic level) {
+    FileHandle file = LevelUtil.getLevelFile(topic, level, ".json");
     if (file == null) {
       Gdx.app.error(ScienceEngine.LOG, "Could not open level json file");
       return null;

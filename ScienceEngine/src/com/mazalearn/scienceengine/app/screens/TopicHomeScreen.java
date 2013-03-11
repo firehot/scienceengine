@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.app.screens;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -119,7 +121,7 @@ public class TopicHomeScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    if (profile.getCurrentActivity() != 0) {
+    if (profile.getCurrentActivity() != null) {
       gotoActivityLevel(profile.getCurrentActivity());
       return;
     }
@@ -159,15 +161,17 @@ public class TopicHomeScreen extends AbstractScreen {
     activities.setName("Activity Levels");
     ScrollPane activitiesPane = new ScrollPane(activities, getSkin(), "thumbs");
     activitiesPane.setFadeScrollBars(false);
-    activityThumbs = new TextButton[topic.getNumLevels()];
+    activityThumbs = new TextButton[topic.getChildren().length];
     
     LabelStyle blueBackground = new LabelStyle(getSkin().get(LabelStyle.class));
     blueBackground.background = 
         new TextureRegionDrawable(ScreenUtils.createTextureRegion(20, 20, Color.BLUE));
 
-    for (int level = 1; level <= topic.getNumLevels(); level++) {
+    int numTopics = 0;
+    for (Topic level: topic.getChildren()) {
+      numTopics++;
       String activityName = getMsg().getString(topic + "." + level + ".Name");
-      String filename = LevelUtil.getLevelFilename(topic.name(), ".png", level);
+      String filename = LevelUtil.getLevelFilename(topic, level, ".png");
       Pixmap pixmap;
       if (ScienceEngine.assetManager.isLoaded(filename)) {
         pixmap = ScienceEngine.assetManager.get(filename, Pixmap.class);
@@ -180,7 +184,7 @@ public class TopicHomeScreen extends AbstractScreen {
       // Name Label
       activityThumb.addActor(ScreenUtils.createLabel(activityName, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground));
       // Level Label
-      activityThumb.addActor(ScreenUtils.createLabel(String.valueOf(level), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
+      activityThumb.addActor(ScreenUtils.createLabel(String.valueOf(numTopics), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
       // Progress bar
       TutorStats stats = new TutorStats(topic, level, Guru.ID);
       float percent = stats.percentProgress;
@@ -189,14 +193,14 @@ public class TopicHomeScreen extends AbstractScreen {
       String timeSpent = Format.formatTime(stats.timeSpent);
       activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 50, 30, blueBackground));
 
-      final int iLevel = level;
+      final Topic iLevel = level;
       activityThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           gotoActivityLevel(iLevel);
         }
       });
-      activityThumbs[level - 1] = activityThumb;
+      activityThumbs[numTopics - 1] = activityThumb;
       ScreenComponent.scaleSize(activityThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       activities
           .add(activityThumb)
@@ -212,13 +216,17 @@ public class TopicHomeScreen extends AbstractScreen {
   }
 
   private void setLastActiveLevel(ScrollPane activitiesPane) {
-    int lastActiveLevel = profile.getLastActivity() - 1;
-    if (lastActiveLevel >= 0 && lastActiveLevel < topic.getNumLevels()) {
+    Topic lastActiveLevel = profile.getLastActivity();
+    if (lastActiveLevel != null) {
       Image userImage = new Image(ScienceEngine.getTextureRegion("user"));
       ScreenComponent.scalePosition(userImage, 2, THUMBNAIL_HEIGHT / 2);
-      activityThumbs[lastActiveLevel].addActor(userImage);
-      activitiesPane.layout();
-      activitiesPane.setScrollX(ScreenComponent.getScaledX(THUMBNAIL_WIDTH) * lastActiveLevel);
+      
+      int idx = Arrays.asList(topic.getChildren()).indexOf(lastActiveLevel);
+      if (idx != -1) {
+        activityThumbs[idx].addActor(userImage);
+        activitiesPane.layout();
+        activitiesPane.setScrollX(ScreenComponent.getScaledX(THUMBNAIL_WIDTH) * idx);
+      }
     }
   }
 
@@ -296,10 +304,10 @@ public class TopicHomeScreen extends AbstractScreen {
   }
 
 
-  private void gotoActivityLevel(final int iLevel) {
+  private void gotoActivityLevel(final Topic level) {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     AbstractScreen activityLevelScreen = 
-        new ActivityScreen(scienceEngine, topic, iLevel);
+        new ActivityScreen(scienceEngine, topic, level);
     // Set loading screen
     scienceEngine.setScreen(new LoadingScreen(scienceEngine, activityLevelScreen));
   }
@@ -321,8 +329,8 @@ public class TopicHomeScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
-    for (int level = 1; level <= topic.getNumLevels(); level++) {
-      String filename = LevelUtil.getLevelFilename(topic.name(), ".png", level);
+    for (Topic childTopic: topic.getChildren()) {
+      String filename = LevelUtil.getLevelFilename(topic, childTopic, ".png");
       ScienceEngine.assetManager.load(filename, Pixmap.class);
     }
   }

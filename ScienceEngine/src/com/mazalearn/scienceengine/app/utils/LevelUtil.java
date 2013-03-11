@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.mazalearn.scienceengine.Topic;
 
 public class LevelUtil {
 
-  public static Texture getLevelThumbnail(String topic, int level) {
+  public static Texture getLevelThumbnail(Topic topicArea, Topic topic, int level) {
     FileHandle screenFile = 
-        LevelUtil.getLevelFile(topic, ".png", level);      
+        LevelUtil.getLevelFile(topicArea, topic, ".png");      
     Pixmap pixmap;
     try {
       pixmap = new Pixmap(screenFile);
@@ -33,13 +34,13 @@ public class LevelUtil {
     return 1 << (int) Math.ceil(Math.log(value) / Math.log(2));
   }
 
-  public static FileHandle getLevelFile(String topic, String extension, int level) {
-    return Gdx.files.internal(getLevelFilename(topic, extension, level));
+  public static FileHandle getLevelFile(Topic topicArea, Topic topic, String extension) {
+    return Gdx.files.internal(getLevelFilename(topicArea, topic, extension));
   }
 
-  public static String getLevelFilename(String topic,
-      String extension, int level) {
-    return "data/" + topic + "/" + level + extension;
+  public static String getLevelFilename(Topic topicArea, Topic topic,
+      String extension) {
+    return "data/" + topicArea.name() + "/" + topic.name() + extension;
   }
 
 }

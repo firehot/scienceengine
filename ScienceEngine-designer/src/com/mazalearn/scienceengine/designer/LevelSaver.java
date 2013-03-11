@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -22,7 +23,7 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
 
 public class LevelSaver {
   
-  private int level;
+  private Topic level;
   private IScience2DController science2DController;
   private IScience2DView science2DView;
   private IScience2DModel science2DModel;
@@ -37,7 +38,7 @@ public class LevelSaver {
   
   public void save() throws IOException {
     FileHandle file = 
-        LevelUtil.getLevelFile(science2DController.getTopic().name(), ".json", level);
+        LevelUtil.getLevelFile(science2DController.getTopic(), level, ".json");
     file = Gdx.files.external(file.path());
     FileWriter writer = new FileWriter(file.file());
     JsonWriter jsonWriter = new JsonWriter(writer);

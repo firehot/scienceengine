@@ -1,8 +1,5 @@
 package com.mazalearn.scienceengine.core.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -11,9 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.HelpTour;
-import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
@@ -104,7 +98,7 @@ public class ActivityViewControls extends ViewControls {
       public void dragStop (InputEvent event, float x, float y, int pointer) {
         getStage().getRoot().removeActor(snapshotter);
         ScienceEngine.getPlatformAdapter().takeSnapshot(getStage(), 
-            science2DController.getTopic().name(), science2DController.getLevel(),
+            science2DController.getTopic(), science2DController.getLevel(),
             (int)snapshotter.getX(), (int)snapshotter.getY(), 
             (int)snapshotter.getWidth(), (int)snapshotter.getHeight());
       }

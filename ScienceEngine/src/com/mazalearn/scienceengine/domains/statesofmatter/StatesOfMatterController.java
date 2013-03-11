@@ -21,7 +21,7 @@ public class StatesOfMatterController extends AbstractScience2DController {
   private StatesOfMatterView statesOfMatterView;
   ModelControls modelControls;
   
-  public StatesOfMatterController(int level, int width, int height, Skin skin) {
+  public StatesOfMatterController(Topic level, int width, int height, Skin skin) {
     super(Topic.StatesOfMatter, level, skin);
     statesOfMatterModel = new StatesOfMatterModel(N);
     statesOfMatterModel.reset();

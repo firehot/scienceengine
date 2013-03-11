@@ -17,7 +17,7 @@ public interface IScience2DController {
   public IScience2DModel getModel();
   public ModelControls getModelControls();
   public Topic getTopic();
-  int getLevel();
+  public Topic getLevel();
   /**
    * Reloads the level, reinitializing all components and configurations
    */

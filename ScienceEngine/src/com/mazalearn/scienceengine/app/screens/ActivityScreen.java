@@ -28,21 +28,21 @@ public class ActivityScreen extends AbstractScreen {
   private Profile profile;
   private Topic topic;
   @SuppressWarnings("unused")
-  private int activityLevel;
+  private Topic activityLevel;
 
-  public ActivityScreen(ScienceEngine scienceEngine, Topic topic, int activityLevel) {
+  public ActivityScreen(ScienceEngine scienceEngine, Topic topic, Topic level) {
     super(scienceEngine, null);
     this.topic = topic;
-    this.activityLevel = activityLevel;
-    String fileName = LevelUtil.getLevelFilename(topic.name(), ".json", activityLevel);
+    this.activityLevel = level;
+    String fileName = LevelUtil.getLevelFilename(topic, level, ".json");
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       ScienceEngine.assetManager.unload(fileName);
     }
     this.science2DController = 
-        createTopicController(topic, activityLevel, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+        createTopicController(topic, level, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     IScience2DView science2DView = science2DController.getView();
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    profile.setCurrentActivity(activityLevel);
+    profile.setCurrentActivity(level);
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
@@ -72,12 +72,12 @@ public class ActivityScreen extends AbstractScreen {
     science2DController.getView().tutoring(false);
     TopicHomeScreen topicHomeScreen = 
         new TopicHomeScreen(scienceEngine, topic);
-    profile.setCurrentActivity(0);
+    profile.setCurrentActivity(null);
     scienceEngine.setScreen(new LoadingScreen(scienceEngine, topicHomeScreen));
   }
   
   public IScience2DController createTopicController(
-      Topic topic, int level, int width, int height) {
+      Topic topic, Topic level, int width, int height) {
     switch (topic) {
     case StatesOfMatter: 
       return new StatesOfMatterController(level, width, height, getSkin());
@@ -91,8 +91,8 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
-    String fileName = LevelUtil.getLevelFilename(topic.name(), 
-        ".json", science2DController.getLevel());
+    String fileName = LevelUtil.getLevelFilename(topic, 
+        science2DController.getLevel(), ".json");
     if (ScienceEngine.assetManager.isLoaded(fileName)) {
       return;
     }

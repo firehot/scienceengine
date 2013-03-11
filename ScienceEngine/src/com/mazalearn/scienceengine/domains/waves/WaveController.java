@@ -29,7 +29,7 @@ public class WaveController extends AbstractScience2DController {
   private TextureRegion ballTextureBlue;
   private WaveView waveView;
 
-  public WaveController(int level, int width, int height, Skin skin) {
+  public WaveController(Topic level, int width, int height, Skin skin) {
     super(Topic.Waves, level, skin);
     this.waveModel = new WaveModel(NUM_BALLS);;
     waveView = new WaveView(width, height, waveModel, skin, this);

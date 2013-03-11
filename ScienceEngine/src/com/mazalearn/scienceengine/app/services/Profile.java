@@ -40,6 +40,7 @@ public class Profile implements Serializable {
   public Profile() {
     topicStats = new HashMap<Topic, HashMap<String, Float>>();
     for (Topic topic: Topic.values()) {
+      if (topic.getChildren().length == 0) continue;
       topicStats.put(topic, new HashMap<String, Float>());
     }
     properties = new HashMap<String, String>();
@@ -50,7 +51,7 @@ public class Profile implements Serializable {
     properties.put(USER_EMAIL, userEmail);
   }
 
-  public void setCurrentActivity(int level) {
+  public void setCurrentActivity(Topic level) {
     String activity = properties.get(ACTIVITY);
     if (String.valueOf(level).equals(activity)) return;
     
@@ -60,21 +61,27 @@ public class Profile implements Serializable {
   }
   
   /**
-   * Retrieves the ID of the next playable level.
-   * Stupid ligbdx converts ints to floats when writing json.
+   * Retrieves the ID of the current level.
    */
-  public int getCurrentActivity() {
-    String levelFloatStr = properties.get(ACTIVITY);
-    return  levelFloatStr == null ? 0 : Math.round(Float.valueOf(levelFloatStr));
+  public Topic getCurrentActivity() {
+    String levelStr = properties.get(ACTIVITY);
+    try {
+      return Topic.valueOf(levelStr);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
   }
 
   /**
-   * Retrieves the ID of the next playable level.
-   * Stupid ligbdx converts ints to floats when writing json.
+   * Retrieves the ID of the previous active level.
    */
-  public int getLastActivity() {
-    String levelFloatStr = properties.get(LAST_ACTIVITY);
-    return  levelFloatStr == null ? 0 : Math.round(Float.valueOf(levelFloatStr));
+  public Topic getLastActivity() {
+    String levelStr = properties.get(LAST_ACTIVITY);
+    try {
+      return Topic.valueOf(levelStr);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
   }
 
   // Serializable implementation
@@ -92,6 +99,7 @@ public class Profile implements Serializable {
     Object topicObj = json.readValue("topics", OrderedMap.class, OrderedMap.class, jsonData);
     topicStats = new HashMap<Topic, HashMap<String, Float>>();
     for (Topic topic: Topic.values()) {
+      if (topic.getChildren().length == 0) continue;
       HashMap<String, Float> stats = json.readValue(topic.name(), HashMap.class, Float.class, topicObj);
       if (stats == null) {
         stats = new HashMap<String, Float>();
@@ -147,22 +155,18 @@ public class Profile implements Serializable {
     return s == null ? "" : s;
   }
 
-  private String makeTutorKey(int activity, String tutorId, String key) {
-    return activity + "$" + tutorId + "$" + key;
+  private String makeTutorKey(Topic level, String tutorId, String key) {
+    return level + "$" + tutorId + "$" + key;
   }
 
-  private String makeTutorKey(String tutorId, String key) {
-    return makeTutorKey(getCurrentActivity(), tutorId, key);
-  }
-
-  private float getStat(Topic topic, int activity, String tutorId, String key) {
+  private float getStat(Topic topic, Topic level, String tutorId, String key) {
     HashMap<String, Float> topicStat = topicStats.get(topic);
-    Float value = topicStat.get(makeTutorKey(activity, tutorId, key));
+    Float value = topicStat.get(makeTutorKey(level, tutorId, key));
     return value == null ? 0 : value;
   }
 
   private void saveStat(String tutorId, String key, Float value) {
-    String tutorKey = makeTutorKey(tutorId, key);
+    String tutorKey = makeTutorKey(getCurrentActivity(), tutorId, key);
     if (currentTopicStats.get(tutorKey) == value) return;
     currentTopicStats.put(tutorKey, value);
   }
@@ -188,12 +192,12 @@ public class Profile implements Serializable {
     }
   }
 
-  public void loadStats(TutorStats stats, Topic topic, int activity, String tutorId) {
-    stats.timeSpent = getStat(topic, activity, tutorId, TIME_SPENT);
-    stats.numAttempts = getStat(topic, activity, tutorId, NUM_ATTEMPTS);
-    stats.numSuccesses = getStat(topic, activity, tutorId, NUM_SUCCESSES);
-    stats.failureTracker = getStat(topic, activity, tutorId, FAILURE_TRACKER);
-    stats.percentProgress = getStat(topic, activity, tutorId, PERCENT_PROGRESS);
+  public void loadStats(TutorStats stats, Topic topic, Topic level, String tutorId) {
+    stats.timeSpent = getStat(topic, level, tutorId, TIME_SPENT);
+    stats.numAttempts = getStat(topic, level, tutorId, NUM_ATTEMPTS);
+    stats.numSuccesses = getStat(topic, level, tutorId, NUM_SUCCESSES);
+    stats.failureTracker = getStat(topic, level, tutorId, FAILURE_TRACKER);
+    stats.percentProgress = getStat(topic, level, tutorId, PERCENT_PROGRESS);
     Gdx.app.log(ScienceEngine.LOG, stats.toString());
   }
 

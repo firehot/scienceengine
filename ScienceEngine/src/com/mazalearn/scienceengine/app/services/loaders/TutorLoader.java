@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
@@ -91,7 +92,8 @@ class TutorLoader {
     Gdx.app.log(ScienceEngine.LOG, "Loading Reviewer");
     List<ITutor> reviewTutors = new ArrayList<ITutor>();
     // Assumption: Current level is the review level
-    for (int level = 1; level < science2DController.getLevel(); level++) {
+    for (Topic level: science2DController.getTopic().getChildren()) {
+      if (level == science2DController.getLevel()) break;
       OrderedMap<String, ?> rootElem = LevelLoader.getJsonFromFile(science2DController.getTopic(), level);
       Array<?> tutorsObj = (Array<?>) rootElem.get("tutors");
       for (int i = 0; i < tutorsObj.size; i++) {

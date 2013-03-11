@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.electromagnetism.probe;
+package com.mazalearn.scienceengine.domains.electromagnetism.tutor;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;

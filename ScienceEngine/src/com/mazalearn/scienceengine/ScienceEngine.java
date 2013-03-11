@@ -17,14 +17,13 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
-import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
+import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
@@ -205,8 +204,8 @@ public class ScienceEngine extends Game {
             iLevel = Integer.parseInt(queryParts[0].substring("level=".length()));
           }
         }
-        if (iLevel != null) {
-          return new ActivityScreen(this, topic, iLevel);
+        if (iLevel != null && iLevel >= 0 && iLevel < topic.getChildren().length) {
+          return new ActivityScreen(this, topic, topic.getChildren()[iLevel]);
         }
         return new TopicHomeScreen(this, topic);
       }

@@ -70,8 +70,10 @@ public class ChooseTopicScreen extends AbstractScreen {
     table.defaults().fill();
     TextureRegion overlayLock = ScienceEngine.getTextureRegion("lock");
     for (final Topic topic: Topic.values()) {
+      // Ignore leaf level topics
+      if (topic.getChildren().length == 0) continue;
       final boolean lock = !topic.equals(Topic.Electromagnetism);
-      Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic.name(), 1);
+      Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic, topic.getChildren()[0], 1);
       TextButton topicThumb = 
           ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin());
       if (lock) {
@@ -120,13 +122,14 @@ public class ChooseTopicScreen extends AbstractScreen {
   
   private int findTopicProgressPercentage(Topic topic) {
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    int numLevels = topic.getNumLevels();
-    int percent = 0;
-    for (int level = 1; level <= numLevels; level++) {
-      TutorStats stats = new TutorStats(topic, level, Guru.ID);
+    float percent = 0;
+    int numTopics = 0;
+    for (Topic childTopic: topic.getChildren()) {
+      TutorStats stats = new TutorStats(topic, childTopic, Guru.ID);
       percent += stats.percentProgress;
+      numTopics++;
     }
-    return Math.round(percent * 100 / (100f * numLevels));
+    return Math.round(percent * 100 / (100f * numTopics));
   }
 
   @Override

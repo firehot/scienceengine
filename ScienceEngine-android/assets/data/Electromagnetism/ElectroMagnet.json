@@ -151,6 +151,7 @@ tutors:[
                    "it is three times stronger",
                    "it doesn't change",
                    "it is 1/9 as strong"],
+          explanation: "Magnetic field intensity increases in direction proportion to the number of loops of wire",
           answermask: "00100"
           },
          {type: "MCQ1",
@@ -160,6 +161,7 @@ tutors:[
                    "the solenoid with 10 A of current",
                    "the solenoid with 100 A of current",
                    "the solenoid with 0.1 A of current"],
+          explanation: "Magnetic field intensity increases in direction proportion to the current",
           answermask: "0010"
           },
          {type: "MCQ1",
@@ -169,6 +171,7 @@ tutors:[
                    "solenoid with 100 loops",
                    "solenoid with 10 loops",
                    "solenoid with 1000 loops"],
+          explanation: "Magnetic field intensity increases in direction proportion to the number of loops of wire",
           answermask: "0001"
           },
          {type: "MCQ1",
@@ -178,6 +181,7 @@ tutors:[
                    "around a current carrying loop",
                    "outside a current carrying solenoid ",
                    "inside a current carrying solenoid"],
+          explanation: "The central inner region of a solenoid has a uniform magnetic field",
           answermask: "0001"
           }
         ]

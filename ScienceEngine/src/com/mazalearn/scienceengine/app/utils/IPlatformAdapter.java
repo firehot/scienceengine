@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -53,7 +54,7 @@ public interface IPlatformAdapter {
   public void httpPost(String path, String contentType, Map<String, String> params,
       byte[] data);
 
-  public void takeSnapshot(Stage stage, String topic, int level, int x, int y,
+  public void takeSnapshot(Stage stage, Topic topicArea, Topic level, int x, int y,
       int width, int height);
   
   // Get unique ID for this installation

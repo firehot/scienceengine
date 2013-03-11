@@ -18,7 +18,8 @@ public enum ComponentType implements IComponentType {
   Drawing("draw"), 
   ScienceTrain("engine"), 
   Dynamo("copperwire"),
-  Magnet("neodymium");
+  Magnet("neodymium"), 
+  Pole("northpole");
   
   private String textureName;
   

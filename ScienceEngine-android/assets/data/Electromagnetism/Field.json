@@ -1,0 +1,16 @@
+{name:"Electromagnetism",level:11,description:"Magnetic Field and Magnetic monopole",
+components:[
+{type:"Pole",x:281.0,y:130.0,originX:15,originY:15,width:30.0,height:30,visible:true,rotation:0.0, bodytype: true},
+],
+configs:[
+],
+tutors:[
+       {type: "Guide",
+        id: "G1",
+        goal: "Basic Field",
+        postcondition: "1 = 1",
+        success: 100,
+        timelimit: 120,
+       }
+  ]
+}

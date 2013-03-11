@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
@@ -120,9 +121,9 @@ public class LevelEditor extends Stage {
     titleTable.defaults().fill();
     titleTable.add(science2DController.getTopic().name()).pad(10);
     final SelectBox level = 
-        new SelectBox(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, 
+        new SelectBox(science2DController.getTopic().getChildren(), 
             screen.getSkin());
-    level.setSelection(science2DController.getLevel());
+    level.setSelection(science2DController.getLevel().name());
     /*
     level.addListener(new ChangeListener() {
       @Override
@@ -212,9 +213,9 @@ public class LevelEditor extends Stage {
   /**
    * Take screenshot, convert to a thumbnail and save to the level file as png.
    */
-  public static void takeSnapshot(Stage stage, String topic, int level, int x, int y, int width, int height) {
+  public static void takeSnapshot(Stage stage, Topic topicArea, Topic topic, int x, int y, int width, int height) {
     FileHandle screenFile = 
-        LevelUtil.getLevelFile(topic, ".png", level);
+        LevelUtil.getLevelFile(topicArea, topic, ".png");
     screenFile = Gdx.files.external(screenFile.path());
     stage.draw();
     Pixmap screenShot = ScreenUtils.getScreenshot(x, y, width, 

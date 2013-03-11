@@ -12,18 +12,17 @@ public class TutorStats {
   public float percentProgress;
   private Profile profile;
   private String tutorId;
-  private int level;
-  private Topic topic;
+  private Topic topic, level;
   
   public TutorStats(String tutorId) {
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.tutorId = tutorId;
-    this.level = profile.getCurrentActivity();
     this.topic = profile.getCurrentTopic();
+    this.level = profile.getCurrentActivity();
     profile.loadStats(this, topic, level, tutorId);
   }
   
-  public TutorStats(Topic topic, int level, String tutorId) {
+  public TutorStats(Topic topic, Topic level, String tutorId) {
     this.profile = ScienceEngine.getPreferencesManager().getProfile();
     this.topic = topic;
     this.level = level;
@@ -37,7 +36,6 @@ public class TutorStats {
   
   public String toString() {
     return "Topic: " + topic.name() +
-        " Level: " + level + 
         " Tutor: " + tutorId + 
         ", Time spent: " + timeSpent + 
         ", NumAttempts: " + numAttempts +

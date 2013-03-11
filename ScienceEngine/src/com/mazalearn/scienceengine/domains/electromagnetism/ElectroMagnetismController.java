@@ -15,10 +15,10 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldDirectionProber;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.FieldMagnitudeProber;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.LightProber;
-import com.mazalearn.scienceengine.domains.electromagnetism.probe.TutorType;
+import com.mazalearn.scienceengine.domains.electromagnetism.tutor.FieldDirectionProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.tutor.FieldMagnitudeProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.tutor.LightProber;
+import com.mazalearn.scienceengine.domains.electromagnetism.tutor.TutorType;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.AmmeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentCoilActor;
@@ -30,6 +30,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.PoleActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
@@ -39,7 +40,7 @@ import com.mazalearn.scienceengine.tutor.ITutor;
  * Electromagnetism Topic
  */
 public class ElectroMagnetismController extends AbstractScience2DController {
-  public ElectroMagnetismController(int level, int width, int height, Skin skin) {
+  public ElectroMagnetismController(Topic level, int width, int height, Skin skin) {
     super(Topic.Electromagnetism, level, skin);
     AbstractScience2DModel emModel = new ElectroMagnetismModel();
     AbstractScience2DView emView = 
@@ -66,28 +67,30 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new AmmeterActor(body, textureRegion);
     case BarMagnet:
       return new BarMagnetActor(body, textureRegion, science2DView.getFont());
-    case Lightbulb:
-      return new LightbulbActor((Lightbulb) body, textureRegion);
-    case PickupCoil:
-      return new PickupCoilActor((PickupCoil) body, textureRegion);
-    case FieldMeter:
-      return new FieldMeterActor(body, textureRegion);
     case CurrentCoil:
       return new CurrentCoilActor(body, science2DView.getFont());
     case CurrentSource:
       return new CurrentSourceActor(body, textureRegion);
-    case Wire:
-      return new WireActor(body);
-    case ElectroMagnet:
-      return new ElectromagnetActor(body, textureRegion);
     case Drawing:
       return new DrawingActor(body, textureRegion, viewSpec, science2DView.getFont(), skin);
     case Dynamo:
       return new DynamoActor(body, textureRegion);
+    case ElectroMagnet:
+      return new ElectromagnetActor(body, textureRegion);
+    case FieldMeter:
+      return new FieldMeterActor(body, textureRegion);
+    case Lightbulb:
+      return new LightbulbActor((Lightbulb) body, textureRegion);
     case Magnet:
       return new MagnetActor(body, textureRegion);
+    case PickupCoil:
+      return new PickupCoilActor((PickupCoil) body, textureRegion);
     case ScienceTrain:
       return new ScienceTrainActor(body, science2DView, skin);
+    case Pole:
+      return new PoleActor(body, textureRegion);
+    case Wire:
+      return new WireActor(body);
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);

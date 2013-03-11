@@ -43,10 +43,10 @@ public abstract class AbstractScience2DController implements
   protected IScience2DView science2DView;
   protected Skin skin;
   private Topic topic;
-  private int level;
+  private Topic level;
   private Guru guru;
 
-  protected AbstractScience2DController(Topic topic, int level, Skin skin) {
+  protected AbstractScience2DController(Topic topic, Topic level, Skin skin) {
     this.topic = topic;
     this.level = level;
     this.skin = skin;
@@ -72,7 +72,7 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
-  public int getLevel() {
+  public Topic getLevel() {
     return level;
   }
   

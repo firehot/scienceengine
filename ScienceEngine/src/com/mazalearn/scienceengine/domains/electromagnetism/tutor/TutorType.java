@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.electromagnetism.probe;
+package com.mazalearn.scienceengine.domains.electromagnetism.tutor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.mazalearn.scienceengine.tutor.ITutor.ITutorType;

@@ -1,16 +1,24 @@
 package com.mazalearn.scienceengine;
 
+
 public enum Topic {
-  Electromagnetism(10), StatesOfMatter(1), Waves(1);
+  Field,
+  BarMagnet, Wire, TwoWires, ElectroMagnet,
+  BarMagnetInduction, ElectroMagnetInduction,
+  DCMotor, ACMotor, ScienceTrain, EMReview,
+  Electromagnetism(Field, BarMagnet, Wire, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
+      ACMotor, ScienceTrain, EMReview),
+  SOM, StatesOfMatter(SOM), 
+  W, Waves(W);
 
-  private int numLevels;
+  private Topic[] childTopics;
 
-  Topic(int numLevels) {
-    this.numLevels = numLevels;
+  Topic(Topic... topics) {
+    this.childTopics = topics;
   }
   
-  public int getNumLevels() {
-    return numLevels;
+  public Topic[] getChildren() {
+    return childTopics;
   }
 
 }
