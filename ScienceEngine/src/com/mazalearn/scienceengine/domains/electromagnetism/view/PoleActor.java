@@ -1,41 +1,34 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
-import java.util.List;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter.FieldSample;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Pole;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Pole.PoleType;
 
 public class PoleActor extends Science2DActor {
   private final Pole pole;
-  private Vector2 pos = new Vector2();
   private Image fieldArrow;
+  Vector2 lastTouch = new Vector2(), currentTouch = new Vector2();
+  private TextureRegion textureSouthPole;
+  private TextureRegion textureNorthPole;
     
   public PoleActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     this.pole = (Pole) body;
     this.removeListener(getListeners().get(0)); // help listener
     this.removeListener(getListeners().get(0)); // move, rotate listener
-    fieldArrow = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
+    fieldArrow = new Image(ScienceEngine.getTextureRegion("arrow"));
+    this.textureNorthPole = ScienceEngine.getTextureRegion("northpole");
+    this.textureSouthPole = ScienceEngine.getTextureRegion("southpole");
     this.addListener(new ClickListener() {
-      Vector2 lastTouch = new Vector2(), currentTouch = new Vector2();
       @Override
       public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         lastTouch.set(x, y);
@@ -47,17 +40,35 @@ public class PoleActor extends Science2DActor {
         currentTouch.set(x, y);
         currentTouch.sub(lastTouch);
         // Set Magnetic field based on drag position relative to touchdown point
-        pole.applyForce(currentTouch, pole.getWorldCenter());
         fieldArrow.setRotation(currentTouch.angle());
         fieldArrow.setSize(currentTouch.len(), currentTouch.len());
         fieldArrow.setOrigin(0,  fieldArrow.getHeight() / 2);
         fieldArrow.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 2 - fieldArrow.getHeight() / 2);
+        pole.setField(currentTouch);
       }
       
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        // No more field
+        fieldArrow.setRotation(0);
+        fieldArrow.setSize(0, 0);
+        fieldArrow.setOrigin(0, 0);
+        currentTouch.set(0, 0);
+        pole.setField(currentTouch);
       }
     });
+  }
+  
+  @Override
+  public void act(float delta) {
+    super.act(delta);
+    // Wrap around
+    if (getX() < 0 || getX() > ScreenComponent.VIEWPORT_WIDTH || 
+        getY() < 0 || getY() > ScreenComponent.VIEWPORT_HEIGHT) {
+      setX((getX() + ScreenComponent.VIEWPORT_WIDTH) % ScreenComponent.VIEWPORT_WIDTH);
+      setY((getY() + ScreenComponent.VIEWPORT_HEIGHT) % ScreenComponent.VIEWPORT_HEIGHT);
+      this.setPositionFromViewCoords(false);
+    }
   }
   
   @Override
@@ -80,8 +91,10 @@ public class PoleActor extends Science2DActor {
       batch.draw(getTextureRegion(), pos.x, pos.y, 
           originX, originY, getWidth() * magnitude, getHeight() * magnitude, 1, 1, rotation);
     }*/
-    super.draw(batch, parentAlpha);
     fieldArrow.layout();
     fieldArrow.draw(batch, parentAlpha);
+    this.getTextureRegion().setRegion(
+        pole.getPoleType() == PoleType.NorthPole ? textureNorthPole : textureSouthPole);
+    super.draw(batch, parentAlpha);
   }
 }
