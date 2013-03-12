@@ -4,58 +4,36 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Monopole;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Monopole.MonopoleType;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Charge;
 
 public class ChargeActor extends Science2DActor {
-  private final Monopole monopole;
-  private Image fieldArrow;
+  protected static final float SCALE = -0.05f;
+  private final Charge charge;
   Vector2 lastTouch = new Vector2(), currentTouch = new Vector2();
-  private TextureRegion textureSouthPole;
-  private TextureRegion textureNorthPole;
+  private static TextureRegion textureNegative = ScienceEngine.getTextureRegion("negative");;
+  private static TextureRegion texturePositive = ScienceEngine.getTextureRegion("positive");
     
   public ChargeActor(Science2DBody body, TextureRegion textureRegion) {
-    super(body, textureRegion);
-    this.monopole = (Monopole) body;
+    super(body, new TextureRegion(textureRegion));
+    this.charge = (Charge) body;
     this.removeListener(getListeners().get(0)); // help listener
-    //this.removeListener(getListeners().get(0)); // move, rotate listener
-    fieldArrow = new Image(ScienceEngine.getTextureRegion("arrow"));
-    this.textureNorthPole = ScienceEngine.getTextureRegion("northpole");
-    this.textureSouthPole = ScienceEngine.getTextureRegion("southpole");
     this.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        lastTouch.set(x, y);
+        lastTouch.set(event.getStageX(), event.getStageY());
         return true;
       }
       
       @Override
-      public void touchDragged(InputEvent event, float x, float y, int pointer) {
-        currentTouch.set(x, y);
-        currentTouch.sub(lastTouch);
-        // Set Magnetic field based on drag position relative to touchdown point
-        fieldArrow.setRotation(currentTouch.angle());
-        // TODO: Put maxlimit on size.
-        fieldArrow.setSize(currentTouch.len(), currentTouch.len());
-        fieldArrow.setOrigin(0,  fieldArrow.getHeight() / 2);
-        fieldArrow.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 2 - fieldArrow.getHeight() / 2);
-        monopole.setBField(currentTouch);
-      }
-      
-      @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        // No more field
-        fieldArrow.setRotation(0);
-        fieldArrow.setSize(0, 0);
-        fieldArrow.setOrigin(0, 0);
-        currentTouch.set(0, 0);
-        monopole.setBField(currentTouch);
+        // Get negative of movement vector
+        lastTouch.sub(event.getStageX(), event.getStageY()).mul(SCALE);
+        charge.setLinearVelocity(lastTouch);
       }
     });
   }
@@ -74,10 +52,8 @@ public class ChargeActor extends Science2DActor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    fieldArrow.layout();
-    fieldArrow.draw(batch, parentAlpha);
     this.getTextureRegion().setRegion(
-        monopole.getPoleType() == MonopoleType.NorthPole ? textureNorthPole : textureSouthPole);
+        charge.getStrength() >= 0 ? texturePositive : textureNegative);
     super.draw(batch, parentAlpha);
   }
 }

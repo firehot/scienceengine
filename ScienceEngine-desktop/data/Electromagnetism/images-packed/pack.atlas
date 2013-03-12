@@ -234,3 +234,17 @@ field-up
   orig: 32, 32
   offset: 0, 0
   index: -1
+negative
+  rotate: false
+  xy: 969, 957
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+positive
+  rotate: false
+  xy: 197, 53
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

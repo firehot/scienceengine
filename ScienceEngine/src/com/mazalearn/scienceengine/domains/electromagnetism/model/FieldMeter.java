@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -25,7 +26,8 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 public class FieldMeter extends Science2DBody implements IMagneticField.Consumer {
 
   // A reusable vector
-  private Vector2 fieldVector = new Vector2(), samplePoint = new Vector2();
+  private Vector3 fieldVector = new Vector3();
+  private Vector2 samplePoint = new Vector2(), bField = new Vector2();
   
   public static class FieldSample {
     public float x, y, angle, magnitude;
@@ -70,8 +72,9 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   public void setPositionAndAngle(Vector2 position, float angle) {
     super.setPositionAndAngle(position, angle);
     getModel().getBField(getPosition(), fieldVector /* output */);
+    bField.set(fieldVector.x, fieldVector.y);
     addFieldSample(getPosition().x, getPosition().y, 
-        fieldVector.angle() * MathUtils.degreesToRadians, fieldVector.len());
+        bField.angle() * MathUtils.degreesToRadians, bField.len());
   }
   
   @Override
@@ -93,7 +96,7 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   }
 
   @Override
-  public void setBField(Vector2 bField) {
+  public void setBField(Vector3 bField) {
     fieldVector.set(bField);
   }
   
@@ -107,8 +110,9 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
     for (FieldSample fieldSample: fieldSamples) {
       samplePoint.set(fieldSample.x, fieldSample.y);
       getModel().getBField(samplePoint, fieldVector /* output */);
-      fieldSample.angle = fieldVector.angle() * MathUtils.degreesToRadians;
-      fieldSample.magnitude = fieldVector.len();
+      bField.set(fieldVector.x, fieldVector.y);
+      fieldSample.angle = bField.angle() * MathUtils.degreesToRadians;
+      fieldSample.magnitude = bField.len();
     }
   }
 }

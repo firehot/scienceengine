@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -17,6 +18,7 @@ public class Compass extends Science2DBody {
 
   // A reusable vector
   private Vector2 fieldVector = new Vector2();
+  private Vector3 bField = new Vector3();
   
   /**
    * @param emField
@@ -36,7 +38,8 @@ public class Compass extends Science2DBody {
   
   @Override
   public void singleStep(float dt) {
-    getModel().getBField(getPosition(), fieldVector /* output */);
+    getModel().getBField(getPosition(), bField /* output */);
+    fieldVector.set(bField.x, bField.y);
     float angle = fieldVector.angle() * MathUtils.degreesToRadians;
     setPositionAndAngle(getPosition(), angle);
     super.singleStep(dt);

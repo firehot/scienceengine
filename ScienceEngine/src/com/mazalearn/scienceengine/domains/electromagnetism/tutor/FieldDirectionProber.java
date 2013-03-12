@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.tutor;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -18,7 +19,9 @@ import com.mazalearn.scienceengine.tutor.ProbeImage;
 // doubts on shielding - not yet addressed
 public class FieldDirectionProber extends AbstractFieldProber {
   private final Image image, userField;
-  private Vector2[] points, bFields;
+  private Vector2[] points;
+  private Vector2 bField2 = new Vector2();
+  private Vector3[] bFields;
 
   public FieldDirectionProber(final IScience2DController science2DController,
       ITutorType tutorType, final ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
@@ -26,7 +29,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
     super(science2DController, tutorType, parent, goal, id, components, configs, deltaSuccessScore, deltaFailureScore, hints);
     
     this.points = new Vector2[] { new Vector2()};
-    this.bFields = new Vector2[] { new Vector2()};
+    this.bFields = new Vector3[] { new Vector3()};
     
     userField = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
     userField.setVisible(false);
@@ -56,7 +59,8 @@ public class FieldDirectionProber extends AbstractFieldProber {
       
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        final boolean success = Math.abs(userField.getRotation() - bFields[0].angle()) < TOLERANCE * 100;
+        bField2.set(bFields[0].x, bFields[0].y); // Ignoring z
+        final boolean success = Math.abs(userField.getRotation() - bField2.angle()) < TOLERANCE * 100;
         fieldMeterActor.setVisible(true);
         userField.addAction(Actions.sequence(Actions.delay(2f),
             new Action() {

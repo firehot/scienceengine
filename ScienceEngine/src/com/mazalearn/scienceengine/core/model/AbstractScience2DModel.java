@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -31,7 +32,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   private List<List<ICurrent.CircuitElement>> circuits;
   List<IMagneticField.Producer> emProducers;
   List<IMagneticField.Consumer> emConsumers;
-  Vector2 bField = new Vector2(), totalBField = new Vector2();
+  Vector3 bField = new Vector3(), totalBField = new Vector3();
 
   public AbstractScience2DModel() {
     super();
@@ -115,15 +116,14 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     }
   }
 
-  public void getBField(Vector2 location, Vector2 totalBField) {
-    totalBField.set(0, 0);
+  public void getBField(Vector2 location, Vector3 totalBField) {
+    totalBField.set(0, 0, 0);
     for (IMagneticField.Producer producer: emProducers) {
       if (!producer.isActive()) continue;
       // Disallow position identical to producer itself.
       if (producer.getPosition().equals(location)) continue;
       producer.getBField(location, bField);
-      totalBField.x += bField.x;
-      totalBField.y += bField.y;
+      totalBField.add(bField);
     }
   }
 

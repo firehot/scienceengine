@@ -21,6 +21,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.tutor.LightProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.tutor.TutorType;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.AmmeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.ChargeActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentSourceActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
@@ -92,6 +93,8 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new ScienceTrainActor(body, science2DView, skin);
     case Monopole:
       return new MonopoleActor(body, textureRegion);
+    case Charge:
+      return new ChargeActor(body, textureRegion);
     case Wire:
       return new WireActor(body);
     case Compass:

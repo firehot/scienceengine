@@ -4,6 +4,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
@@ -18,6 +19,7 @@ public abstract class AbstractMagnet extends Science2DBody
   private static final float TOLERANCE = 0.1f;
   private float width, height;
   private float strength;
+  private final Vector2 bField = new Vector2();
 
   /**
    * Sole constructor
@@ -70,7 +72,7 @@ public abstract class AbstractMagnet extends Science2DBody
    * @param outputVector - B-field is written here if provided, may be null
    * @return the B-field vector, outputVector if it was provided
    */
-  public Vector2 getBField(final Vector2 p, Vector2 outputVector) {
+  public Vector3 getBField(final Vector2 p, Vector3 outputVector) {
     /*
      * Our models are based a magnet located at the origin, with the north pole
      * pointing down the positive x-axis. The point we receive is in global 2D
@@ -80,18 +82,19 @@ public abstract class AbstractMagnet extends Science2DBody
     Vector2 localPoint = this.getLocalPoint(p);
     
     // get strength in magnet's local coordinate frame
-    getBFieldRelative(localPoint, outputVector);
+    getBFieldRelative(localPoint, bField);
 
     // Adjust the field vector to match the magnet's angle.
-    outputVector.rotate(getAngle() * MathUtils.radiansToDegrees);
+    bField.rotate(getAngle() * MathUtils.radiansToDegrees);
 
     // Clamp magnitude to magnet strength.
     // TODO: why do we need to do this?
     float magnetStrength = getStrength();
-    if (outputVector.len() > Math.abs(magnetStrength)) {
-      outputVector.nor().mul(Math.abs(magnetStrength));
+    if (bField.len() > Math.abs(magnetStrength)) {
+      bField.nor().mul(Math.abs(magnetStrength));
     }
 
+    outputVector.set(bField.x, bField.y, 0);
     return outputVector;
   }
 

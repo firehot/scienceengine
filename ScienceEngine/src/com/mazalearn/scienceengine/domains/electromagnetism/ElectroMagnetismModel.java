@@ -8,6 +8,7 @@ import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Ammeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.BarMagnet;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.Charge;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
@@ -58,6 +59,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case Lightbulb: return new Lightbulb(x, y, rotation);
     case PickupCoil: return new PickupCoil(x, y, rotation, 2E7f);
     case Monopole: return new Monopole(x, y, rotation);
+    case Charge: return new Charge(x, y, rotation);
     case ScienceTrain: return new ScienceTrain(x, y, rotation);
     case Wire: return new Wire(x, y, rotation);
     }

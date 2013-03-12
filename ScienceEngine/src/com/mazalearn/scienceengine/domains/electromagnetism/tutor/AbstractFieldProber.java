@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.tutor;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -11,7 +12,7 @@ import com.mazalearn.scienceengine.tutor.AbstractScience2DProber;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
 public abstract class AbstractFieldProber extends AbstractScience2DProber {
-  private final Vector2 modelPos = new Vector2();
+  private final Vector2 modelPos = new Vector2(), bField2 = new Vector2();
   protected FieldMeter fieldMeter;
   protected Science2DActor fieldMeterActor;
   private int netSuccesses;
@@ -26,17 +27,18 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     }
   }
   
-  protected void createFieldMeterSamples(Vector2[] points, Vector2[] bFields) {
+  protected void createFieldMeterSamples(Vector2[] points, Vector3[] bFields) {
     fieldMeter.reset();
     for (int i = 0; i < points.length; i++) {
+      bField2.set(bFields[i].x, bFields[i].y); // Ignoring z
       fieldMeter.addFieldSample(points[i].x / ScreenComponent.PIXELS_PER_M, 
           points[i].y /  ScreenComponent.PIXELS_PER_M, 
-          bFields[i].angle() * MathUtils.degreesToRadians, 
-          bFields[i].len());
+          bField2.angle() * MathUtils.degreesToRadians, 
+          bField2.len());
     }
   }
   
-  protected void getBField(Vector2 viewPos, Vector2 bField) {
+  protected void getBField(Vector2 viewPos, Vector3 bField) {
     modelPos.set(viewPos).mul(1f / ScreenComponent.PIXELS_PER_M);
     science2DController.getModel().getBField(modelPos, bField /* output */);
   }

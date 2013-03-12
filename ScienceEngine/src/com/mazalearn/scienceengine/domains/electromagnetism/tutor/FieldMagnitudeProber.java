@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.tutor;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -48,7 +49,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private final Image imageCorrect, imageWrong;
   // Temporary vectors
   private Vector2[] points;
-  private Vector2[] bFields;
+  private Vector3[] bFields;
 
   public FieldMagnitudeProber(IScience2DController science2DController,
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
@@ -60,7 +61,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     imageWrong = new ProbeImage();
     imageWrong.addListener(new ClickResult(false));
     this.points = new Vector2[] { new Vector2(), new Vector2()};
-    this.bFields = new Vector2[] { new Vector2(), new Vector2()};
+    this.bFields = new Vector3[] { new Vector3(), new Vector3()};
     this.addActor(imageCorrect);
     this.addActor(imageWrong);
   }
@@ -108,7 +109,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     return false;
   }
   
-  protected boolean arePointsAcceptable(Vector2[] points, Vector2[] bFields) {
+  protected boolean arePointsAcceptable(Vector2[] points, Vector3[] bFields) {
     getBField(points[0], bFields[0]);
     getBField(points[1], bFields[1]);
     if (haveSimilarMagnitudes(bFields[0].len(), bFields[1].len())) return false;

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.lang.Variable;
@@ -27,7 +28,7 @@ public interface IScience2DModel {
   // notify of a field change
   public void notifyFieldChange();
   // get magnetic field at a specific position
-  public void getBField(Vector2 position, Vector2 fieldVector /* output */);
+  public void getBField(Vector2 position, Vector3 fieldVector /* output */);
   
   // Current related interface methods
   // Get list of circuits - each circuit is a list of science2dbodies

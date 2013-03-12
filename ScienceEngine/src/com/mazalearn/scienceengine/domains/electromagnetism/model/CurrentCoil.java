@@ -4,6 +4,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -28,6 +29,7 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
   private CommutatorType commutatorType = CommutatorType.Disconnected;
   // Field acting on the wire
   private Vector2 forceVector = new Vector2(), pos = new Vector2();
+  private Vector3 bField = new Vector3();
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
   private enum RotationDataType {
@@ -114,8 +116,8 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
     // Force is given by B * i * l 
     // magnetic field * current * length
     // Direction is given by Fleming's left hand rule
-    getModel().getBField(getPosition(), forceVector /* output */);
-    forceVector.mul(getCurrent()).mul(OUTPUT_SCALE);
+    getModel().getBField(getPosition(), bField /* output */);
+    forceVector.set(bField.x, bField.y).mul(getCurrent()).mul(OUTPUT_SCALE);
     forceVector.set(forceVector.y, -forceVector.x);
     applyForce(forceVector, getWorldPoint(pos.set(-width / 2, 0)));
     super.singleStep(dt);

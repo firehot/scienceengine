@@ -14,7 +14,7 @@ public enum Parameter implements IParameter {
   MovementMode,
   CommutatorType,
   CoilLoops,
-  Flip, 
+  Flip,
   RotationDataType, 
   RotationData, 
   Count, 
@@ -26,7 +26,8 @@ public enum Parameter implements IParameter {
   Width, 
   Color, 
   MonopoleType, 
-  FieldStrength;
+  FieldStrengthX, FieldStrengthY, FieldStrengthZ, 
+  ChargeStrength;
   
   private Parameter() {
   }

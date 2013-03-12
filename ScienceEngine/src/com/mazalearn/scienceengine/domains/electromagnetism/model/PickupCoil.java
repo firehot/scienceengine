@@ -3,6 +3,7 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -33,7 +34,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
   private Vector2 samplePoints[]; // B-field sample points
   private float calibrationEmf;
 
-  private Vector2 sampleBField;
+  private Vector3 sampleBField;
   private int numberOfLoops;
   private float wireWidth;
   private float current;
@@ -62,7 +63,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
     this.biggestAbsEmf = 0.0f;
 
     // Reusable objects
-    this.sampleBField = new Vector2();
+    this.sampleBField = new Vector3();
   }
 
   /**

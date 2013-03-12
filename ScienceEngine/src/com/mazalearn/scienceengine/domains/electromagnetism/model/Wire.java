@@ -3,9 +3,9 @@
 package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.ICurrent;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -23,6 +23,7 @@ public class Wire extends Science2DBody implements IMagneticField.Producer, ICur
   private float current;
   // Field acting on the wire
   private Vector2 forceVector = new Vector2();
+  private Vector3 bField = new Vector3();
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
 
@@ -61,13 +62,13 @@ public class Wire extends Science2DBody implements IMagneticField.Producer, ICur
   }
 
   @Override
-  public Vector2 getBField(Vector2 location, Vector2 bField) {
+  public Vector3 getBField(Vector2 location, Vector3 bField) {
     Vector2 localPoint = getLocalPoint(location);
     // field = constant * current / distance
     float magnitude = OUTPUT_SCALE * current / localPoint.len();
     localPoint.nor();
     // Current towards me is +
-    bField.set(-localPoint.y, localPoint.x).mul(magnitude);
+    bField.set(-localPoint.y, localPoint.x, 0).mul(magnitude);
     return bField;
   }
   
@@ -76,8 +77,8 @@ public class Wire extends Science2DBody implements IMagneticField.Producer, ICur
     // Force is given by B * i * l 
     // magnetic field * current * length
     // Direction is given by Fleming's left hand rule
-    getModel().getBField(getPosition(), forceVector /* output */);
-    forceVector.mul(getCurrent()).mul(0.01f); // TODO: tune multiplier
+    getModel().getBField(getPosition(), bField /* output */);
+    forceVector.set(bField.x, bField.y).mul(getCurrent()).mul(0.01f); // TODO: tune multiplier
     applyForce(forceVector, getWorldCenter());
   }
   

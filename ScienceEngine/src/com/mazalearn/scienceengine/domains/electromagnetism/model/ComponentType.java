@@ -20,7 +20,8 @@ public enum ComponentType implements IComponentType {
   Dynamo("copperwire"),
   Magnet("neodymium"), 
   Monopole("northpole"), 
-  BField("arrow");
+  BField("arrow"), 
+  Charge("positive");
   
   private String textureName;
   
