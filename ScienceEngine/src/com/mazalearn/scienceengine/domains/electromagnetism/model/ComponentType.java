@@ -19,7 +19,8 @@ public enum ComponentType implements IComponentType {
   ScienceTrain("engine"), 
   Dynamo("copperwire"),
   Magnet("neodymium"), 
-  Monopole("northpole");
+  Monopole("northpole"), 
+  BField("arrow");
   
   private String textureName;
   
@@ -32,7 +33,7 @@ public enum ComponentType implements IComponentType {
   }
   
   public String toString() {
-    return ScienceEngine.getMsg().getString("Name." + name());  
+    return ScienceEngine.getMsg().getString("Name." + name());
   }
   
   public static ComponentType valueOf(IComponentType cType) {

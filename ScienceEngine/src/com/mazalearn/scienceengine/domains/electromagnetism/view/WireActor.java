@@ -22,7 +22,7 @@ public class WireActor extends Science2DActor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     this.getTextureRegion().setRegion(
-        currentWire.getCurrent() < 0 ? currentWireUp : currentWireDown);
+        currentWire.getCurrent() > 0 ? currentWireUp : currentWireDown);
     super.draw(batch, parentAlpha);
   }
 }

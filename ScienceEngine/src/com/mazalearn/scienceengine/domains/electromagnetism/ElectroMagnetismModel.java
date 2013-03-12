@@ -15,6 +15,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Dynamo;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.BField;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.HorseshoeMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
@@ -51,6 +52,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case Dynamo: return new Dynamo(x, y, rotation);
     case ElectroMagnet: return new ElectroMagnet(x, y, rotation);
     case FieldMeter: return new FieldMeter(x, y, rotation);
+    case BField: return new BField(x, y, rotation);
     case HorseshoeMagnet: return new HorseshoeMagnet(x, y, rotation);
     case Magnet: return new Magnet(x, y, rotation);
     case Lightbulb: return new Lightbulb(x, y, rotation);

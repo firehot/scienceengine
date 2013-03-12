@@ -45,6 +45,15 @@ public abstract class AbstractMagnet extends Science2DBody
     }
   }
 
+  public void setAngle(float angle) {
+    if (Math.abs(getAngle() - angle) > TOLERANCE) {
+       setPositionAndAngle(getPosition(), angle);
+       if (getModel() != null) {
+         getModel().notifyFieldChange();
+       }
+    }
+  }
+
   /**
    * Gets the magnitude of the magnet's strength, in Gauss.
    * 
@@ -54,14 +63,6 @@ public abstract class AbstractMagnet extends Science2DBody
     return this.strength;
   }
   
-  public float getAngle() {
-    return super.getAngle();
-  }
-  
-  public void setAngle(float angle) {
-    setPositionAndAngle(getPosition(), angle);
-  }
-
   /**
    * Gets the B-field vector at a point in the global 2D space.
    * 

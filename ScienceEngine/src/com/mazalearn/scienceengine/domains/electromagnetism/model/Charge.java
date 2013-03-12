@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * 
  * @author sridhar
  */
-public class Monopole extends Science2DBody implements IMagneticField.Consumer {
+public class Charge extends Science2DBody implements IMagneticField.Consumer {
 
   // Magnetic Field acting on pole
   private Vector2 fieldVector = new Vector2(), force = new Vector2();
@@ -24,7 +24,7 @@ public class Monopole extends Science2DBody implements IMagneticField.Consumer {
   
   private MonopoleType monopoleType = MonopoleType.NorthPole;
   
-  public Monopole(float x, float y, float angle) {
+  public Charge(float x, float y, float angle) {
     super(ComponentType.Monopole, x, y, angle);
     getBody().setType(BodyType.DynamicBody);
     FixtureDef fixtureDef = new FixtureDef();
@@ -71,7 +71,8 @@ public class Monopole extends Science2DBody implements IMagneticField.Consumer {
 
   @Override
   public void setBField(Vector2 magneticField) {
-    fieldVector.set(magneticField);   
+    fieldVector.set(magneticField);
+    
   }
 
   @Override

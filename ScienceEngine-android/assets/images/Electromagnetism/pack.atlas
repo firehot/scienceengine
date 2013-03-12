@@ -220,3 +220,17 @@ currentwire-up
   orig: 32, 32
   offset: 0, 0
   index: -1
+field-down
+  rotate: false
+  xy: 197, 87
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+field-up
+  rotate: false
+  xy: 607, 157
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

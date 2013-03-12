@@ -26,6 +26,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentSourceAc
 import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.DynamoActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ElectromagnetActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.BFieldActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MagnetActor;
@@ -79,6 +80,8 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new ElectromagnetActor(body, textureRegion);
     case FieldMeter:
       return new FieldMeterActor(body, textureRegion);
+    case BField:
+      return new BFieldActor(body, textureRegion);
     case Lightbulb:
       return new LightbulbActor((Lightbulb) body, textureRegion);
     case Magnet:

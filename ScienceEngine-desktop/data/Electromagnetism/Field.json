@@ -1,8 +1,12 @@
 {name:"Electromagnetism",level:11,description:"Magnetic Field and Magnetic monopoles",
 components:[
+{type:"FieldGrid",x:0,y:0,originX:15,originY:7.5,width:30.0,height:15,visible:true,rotation:0.0},
 {type:"Monopole",x:281.0,y:130.0,originX:15,originY:15,width:30.0,height:30,visible:true,rotation:0.0, bodytype: true},
 ],
-configs:[ {name: "Monopole.MonopoleType", permitted:true}
+configs:[ 
+  {name: "Monopole.MonopoleType", permitted:true},
+  {name: "FieldGrid.FieldStrength", permitted:true},
+  {name: "FieldGrid.RotationAngle", permitted:true},
 ],
 tutors:[
        {type: "Guide",
