@@ -63,7 +63,7 @@ public class LevelSaver {
   
   private void writeConfigs(JsonWriter jsonWriter) throws IOException {
     jsonWriter.array("configs");
-    for (final IModelConfig<?> config : science2DModel.getAllConfigs()) {
+    for (final IModelConfig<?> config : science2DModel.getAllConfigs().values()) {
       jsonWriter.object()
           .set("name", config.getName())
           .set("permitted", config.isPermitted())

@@ -41,7 +41,7 @@ public class LightProber extends AbstractScience2DProber {
   public void teach() {
     super.teach();
     science2DController.getGuru().setupProbeConfigs(
-        science2DController.getModel().getAllConfigs(), true);
+        science2DController.getModel().getAllConfigs().values(), true);
     generateProbePoints(points);
     image.setX(points[0].x - image.getWidth()/2);
     image.setY(points[0].y - image.getHeight()/2);

@@ -81,7 +81,7 @@ public class Abstractor extends AbstractTutor {
     });
     this.addActor(cart);
     List<CheckBox> checkBoxList = new ArrayList<CheckBox>();
-    for (final IModelConfig<?> config: science2DModel.getAllConfigs()) {
+    for (final IModelConfig<?> config: science2DModel.getAllConfigs().values()) {
       if (config.isPossible() && config.isPermitted() && config.getBody() != null) {
         final CheckBox configCheckBox = new CheckBox(config.getName(), skin);
         configCheckBox.setName(config.getName());

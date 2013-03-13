@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.tutor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -350,7 +351,7 @@ public class Guru extends Group implements ITutor {
     rootTutor.prepareToTeach(null);
   }
 
-  public void setupProbeConfigs(List<IModelConfig<?>> configs, boolean enableControls) {
+  public void setupProbeConfigs(Collection<IModelConfig<?>> configs, boolean enableControls) {
     configGenerator.generateConfig(configs);
     modelControls.syncWithModel(); // Force sync with model
     modelControls.refresh();

@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.domains.statesofmatter;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
@@ -33,7 +34,7 @@ public class StatesOfMatterModel extends AbstractScience2DModel {
   }
 
   @Override
-  public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
+  public void initializeConfigs(Map<String, IModelConfig<?>> modelConfigs) {
   }
 
   @Override

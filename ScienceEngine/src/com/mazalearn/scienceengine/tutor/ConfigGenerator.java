@@ -1,6 +1,6 @@
 package com.mazalearn.scienceengine.tutor;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -8,12 +8,14 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 public class ConfigGenerator {
   
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public void generateConfig(List<IModelConfig<?>> modelConfigs) {
+  public void generateConfig(Collection<IModelConfig<?>> modelConfigs) {
     for (IModelConfig<?> config: modelConfigs) {
       if (config.hasProbeMode()) {
         config.setProbeMode();
         continue;
       }
+      // TODO: should we allow unpermitted configs to be changed below?
+      if (!config.isPossible() || !config.isPermitted()) continue;
       switch(config.getType()) {
       case LIST:
         IModelConfig<String> listConfig = (IModelConfig<String>) config;

@@ -26,8 +26,8 @@ public class BFieldActor extends Science2DActor {
     this.bField = (BField) body;
     this.removeListener(getListeners().get(0)); // help listener
     this.removeListener(getListeners().get(0)); // move, rotate listener
-    this.textureUp = ScienceEngine.getTextureRegion("currentwire-up");
-    this.textureDown = ScienceEngine.getTextureRegion("currentwire-down");
+    this.textureUp = ScienceEngine.getTextureRegion("field-up");
+    this.textureDown = ScienceEngine.getTextureRegion("field-down");
   }
   
   @Override
@@ -53,7 +53,7 @@ public class BFieldActor extends Science2DActor {
     float originY = height / 2;
     float bFieldZ = bField.getBFieldZ();
     float rotation =  bFieldZ == 0 ? (bField.getAngle() * MathUtils.radiansToDegrees) % 360 : 0;
-    TextureRegion textureRegion = bFieldZ == 0 ? getTextureRegion() : (bFieldZ < 0 ? textureUp : textureDown);
+    TextureRegion textureRegion = bFieldZ == 0 ? getTextureRegion() : (bFieldZ > 0 ? textureUp : textureDown);
     // Sample uniformly on X and Y axis and show fields at those points
     for (float x = 0; x < ScreenComponent.VIEWPORT_WIDTH; x += X_SPACE) {
       for (float y = 0; y < ScreenComponent.VIEWPORT_WIDTH; y += Y_SPACE) {

@@ -1,12 +1,13 @@
 package com.mazalearn.scienceengine.domains.electromagnetism;
 
-import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Ammeter;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.BField;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.BarMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Charge;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Compass;
@@ -16,13 +17,12 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Dynamo;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.BField;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.HorseshoeMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Monopole;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Wire;
 
@@ -79,7 +79,7 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
   }
   
   @Override
-  public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
+  public void initializeConfigs(Map<String, IModelConfig<?>> modelConfigs) {
   }
   
 }

@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.core.controller;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -7,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
@@ -16,10 +19,25 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 public class SliderControl implements IControl {
   private final IModelConfig<Float> property;
   private final Slider slider;
+  private static final float DELTA = 5;
   
-  public SliderControl(final IModelConfig<Float> property, Skin skin, String styleName) {
-    this.slider = new Slider(property.getLow(), property.getHigh(), 
-        (property.getHigh() - property.getLow())/10, false, skin);
+  public SliderControl(final IModelConfig<Float> property, final Skin skin, String styleName) {
+    if (property.getLow() < 0 && property.getHigh() > 0) {
+      // Add a 0 bar to the slider
+      this.slider = new Slider(property.getLow(), property.getHigh(), 
+          (property.getHigh() - property.getLow())/10, false, skin) {
+        BitmapFont font = skin.getFont(ScreenComponent.getFont(1));
+        public void draw(SpriteBatch batch, float parentAlpha) {
+          super.draw(batch, parentAlpha);
+          // Show 0 in slider at right place
+          float w0 = - property.getLow() / (property.getHigh() - property.getLow()) * getWidth();
+          font.draw(batch, "I", getX() + w0, getY() + DELTA * 4);
+        }
+      };
+    } else {
+      this.slider = new Slider(property.getLow(), property.getHigh(), 
+          (property.getHigh() - property.getLow())/10, false, skin);
+    };
     this.property = property;
     syncWithModel();
     slider.setName(property.getName());

@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.domains.waves;
 
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -65,7 +66,7 @@ public class WaveModel extends AbstractScience2DModel {
   }
 
   @Override
-  public void initializeConfigs(List<IModelConfig<?>> modelConfigs) {
+  public void initializeConfigs(Map<String, IModelConfig<?>> modelConfigs) {
   }
   
 }

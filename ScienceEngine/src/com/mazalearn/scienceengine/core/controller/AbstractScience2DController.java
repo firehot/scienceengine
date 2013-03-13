@@ -113,12 +113,13 @@ public abstract class AbstractScience2DController implements
     if (guru == null) {
       Stage stage = (Stage) science2DView;
       guru = new Guru(skin, this, this.getTitle());
+      // TODO: use BasicScreen instead
       // Move control Panel to top - so it will be above others
       stage.getRoot().addActor(modelControls);
       // Move back button to top also - so it will be accessible
       Actor backButton = stage.getRoot().findActor(ScreenComponent.Back.name());
       if (backButton != null) // TODO: required only for level editor - why?
-      stage.getRoot().addActor(backButton);
+        stage.getRoot().addActor(backButton);
       // Add guru before modelcontrols so that controls are accessible.
       stage.getRoot().addActorBefore(modelControls, guru);
     }

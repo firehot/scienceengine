@@ -3,8 +3,9 @@ package com.mazalearn.scienceengine.core.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -25,7 +26,8 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   protected World box2DWorld;
   protected List<Science2DBody> bodies = new ArrayList<Science2DBody>(); 
   // Configs at model level itself - possibly affecting multiple bodies
-  private List<IModelConfig<?>> modelConfigs;
+  private Map<String, IModelConfig<?>> modelConfigs;
+  private Map<String, IModelConfig<?>> allConfigs;
 
   private boolean isEnabled = true;
   protected int numStepsPerView = 1;
@@ -47,14 +49,8 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   }
 
   // find a config by name
-  // TODO: optimize this
   public IModelConfig<?> getConfig(String configName) {
-    for (IModelConfig<?> config: getAllConfigs()) {
-      if (config.getName().equals(configName)) {
-        return config;
-      }
-    }
-    return null;
+    return getAllConfigs().get(configName);
   }
 
   @Override
@@ -187,19 +183,21 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     }
   }
 
-  public List<IModelConfig<?>> getAllConfigs() {
-    List<IModelConfig<?>> allConfigs = new ArrayList<IModelConfig<?>>();
+  public Map<String, IModelConfig<?>> getAllConfigs() {
+    if (allConfigs != null) return allConfigs;
+    
+    allConfigs = new HashMap<String, IModelConfig<?>>();
     if (modelConfigs == null) {
-      modelConfigs = new ArrayList<IModelConfig<?>>();
+      modelConfigs = new HashMap<String, IModelConfig<?>>();
       initializeConfigs(modelConfigs);
     }
-    allConfigs.addAll(modelConfigs);
+    allConfigs.putAll(modelConfigs);
     for (Science2DBody body: bodies) {
-      if (body.isActive()) {
-        allConfigs.addAll(body.getConfigs());
+      for (IModelConfig<?> config: body.getConfigs()) {
+        allConfigs.put(config.getName(), config);
       }
     }
-    return Collections.unmodifiableList(allConfigs);
+    return allConfigs;
   }
   
   @Override
@@ -216,7 +214,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     return box2DWorld;
   }
 
-  public abstract void initializeConfigs(List<IModelConfig<?>> modelConfigs);
+  public abstract void initializeConfigs(Map<String, IModelConfig<?>> modelConfigs);
 
   protected Science2DBody createScience2DBody(String componentTypeName,
       float x, float y, float rotation) {
@@ -233,6 +231,8 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
     for (Science2DBody body: bodies) {
       body.reset();
     }
+    // Ensure that allConfigs will get recalculated.
+    allConfigs = null;
   }
 
   @Override

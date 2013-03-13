@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.core.model;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -16,7 +17,7 @@ public interface IScience2DModel {
   // Simulate steps of the model. delta is timeLimit since last invocation.
   public void simulateSteps(float delta);
   // Get all configs of the model
-  public List<IModelConfig<?>> getAllConfigs();
+  public Map<String, IModelConfig<?>> getAllConfigs();
   // Box2D World corresponding to model
   public World getBox2DWorld();
   // enable (or disable) the model to progress in simulate steps

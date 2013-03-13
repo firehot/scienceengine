@@ -23,7 +23,7 @@ public class Charge extends Science2DBody implements IMagneticField.Consumer {
   private Vector3 fieldVector = new Vector3(), velocity = new Vector3();
   private Vector2 force = new Vector2();
   // charge
-  private float charge = 1;
+  private float charge = 5;
   
   public Charge(float x, float y, float angle) {
     super(ComponentType.Charge, x, y, angle);
@@ -56,7 +56,6 @@ public class Charge extends Science2DBody implements IMagneticField.Consumer {
   
   public void setStrength(float strength) {
     this.charge = strength;
-    System.out.println(strength);
   }
   
   @Override
@@ -67,9 +66,9 @@ public class Charge extends Science2DBody implements IMagneticField.Consumer {
   @Override
   public void singleStep(float dt) {
     super.singleStep(dt);
-    // -q(V x B)
+    // q(V x B)
     velocity.set(getLinearVelocity().x, getLinearVelocity().y, 0).crs(fieldVector);
-    force.set(velocity.x, velocity.y).mul(-charge);
+    force.set(velocity.x, velocity.y).mul(charge * 0.01f);
     applyForce(force, getWorldCenter());
   }
 

@@ -77,7 +77,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   public void teach() {
     super.teach();
     science2DController.getGuru().setupProbeConfigs(
-        science2DController.getModel().getAllConfigs(), false);
+        science2DController.getModel().getAllConfigs().values(), false);
     // Generate two random points P1, P2 in unit circle.
     // If P0.r ~ P1.r AND (P0.x ~ P1.x) OR (P0.y ~ P1.y) try again
     // Scale P0.x, P1.x by magnet width*2 and P0.y, P1.y by magnet height*2

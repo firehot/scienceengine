@@ -268,7 +268,7 @@ public class LevelEditor extends Stage {
     configTable.clear();
     configTable.add("Configs");
     configTable.row();
-    for (final IModelConfig<?> config: science2DModel.getAllConfigs()) {
+    for (final IModelConfig<?> config: science2DModel.getAllConfigs().values()) {
       if (config.isPossible()) {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
         configTable.add(configCheckbox).left();

@@ -91,7 +91,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
   public void teach() {
     super.teach();
     science2DController.getGuru().setupProbeConfigs(
-        science2DController.getModel().getAllConfigs(), false);
+        science2DController.getModel().getAllConfigs().values(), false);
     generateProbePoints(points);
     getBField(points[0], bFields[0]);
     createFieldMeterSamples(points, bFields);
