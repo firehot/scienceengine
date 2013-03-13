@@ -24,6 +24,7 @@ public class Charge extends Science2DBody implements IMagneticField.Consumer {
   private Vector2 force = new Vector2();
   // charge
   private float charge = 5;
+  private float velocityMagnitude = 0;
   
   public Charge(float x, float y, float angle) {
     super(ComponentType.Charge, x, y, angle);
@@ -62,13 +63,24 @@ public class Charge extends Science2DBody implements IMagneticField.Consumer {
   public void reset() {
     super.reset();
     fieldVector.set(0, 0, 0);
+    setLinearVelocity(0, 0);
   }
+  
+  public void setLinearVelocity(Vector2 v) {
+    super.setLinearVelocity(v);
+    velocityMagnitude = v.len();
+  }
+  
   @Override
   public void singleStep(float dt) {
     super.singleStep(dt);
     // q(V x B)
+    force.set(getLinearVelocity());
+    if (force.len() == 0) return;
+    // Renormalize velocity - otherwise we get serious integration round-off errors.
+    super.setLinearVelocity(force.mul(velocityMagnitude / force.len()));
     velocity.set(getLinearVelocity().x, getLinearVelocity().y, 0).crs(fieldVector);
-    force.set(velocity.x, velocity.y).mul(charge * 0.01f);
+    force.set(velocity.x, velocity.y).mul(charge);
     applyForce(force, getWorldCenter());
   }
 
