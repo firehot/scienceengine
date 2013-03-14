@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.domains.statesofmatter;
 
-import java.util.List;
 import java.util.Map;
 
 import com.mazalearn.scienceengine.core.controller.IModelConfig;

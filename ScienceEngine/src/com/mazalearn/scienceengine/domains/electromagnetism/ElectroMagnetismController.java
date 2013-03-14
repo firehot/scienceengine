@@ -27,12 +27,11 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentSourceAc
 import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.DynamoActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ElectromagnetActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.BFieldActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MagnetActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MonopoleActor;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
@@ -81,8 +80,6 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new ElectromagnetActor(body, textureRegion);
     case FieldMeter:
       return new FieldMeterActor(body, textureRegion);
-    case BField:
-      return new BFieldActor(body, textureRegion);
     case Lightbulb:
       return new LightbulbActor((Lightbulb) body, textureRegion);
     case Magnet:
@@ -97,6 +94,7 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new ChargeActor(body, textureRegion);
     case Wire:
       return new WireActor(body);
+    case BField:
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);

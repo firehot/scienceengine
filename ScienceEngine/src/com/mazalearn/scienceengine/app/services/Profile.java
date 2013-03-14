@@ -7,8 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.tutor.TutorStats;
 
 /**

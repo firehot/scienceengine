@@ -1,19 +1,16 @@
 package com.mazalearn.scienceengine.domains.waves;
 
-import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.math.Vector2;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.domains.waves.model.Boundary;
 import com.mazalearn.scienceengine.domains.waves.model.ComponentType;
-import com.mazalearn.scienceengine.domains.waves.model.WaveMaker;
 import com.mazalearn.scienceengine.domains.waves.model.WaveBox;
 import com.mazalearn.scienceengine.domains.waves.model.WaveBox.Ball;
+import com.mazalearn.scienceengine.domains.waves.model.WaveMaker;
 
 public class WaveModel extends AbstractScience2DModel {
 

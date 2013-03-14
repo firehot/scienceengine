@@ -23,6 +23,7 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
   private static final String NUM_REVOLUTIONS = "NumRevolutions";
   private static final String ANGLE = "Angle";
   private static final String ANGULAR_VELOCITY = "AngularVelocity";
+  private static final String VELOCITY = "Velocity";
   protected World box2DWorld;
   protected List<Science2DBody> bodies = new ArrayList<Science2DBody>(); 
   // Configs at model level itself - possibly affecting multiple bodies
@@ -272,7 +273,9 @@ public abstract class AbstractScience2DModel implements IScience2DModel {
         String property = name.substring(pos + 1);
         Science2DBody body = findBody(componentName);
         if (body != null) {
-          if (property.equals(ANGULAR_VELOCITY)) {
+          if (property.equals(VELOCITY)) {
+            v.setValue(body.getLinearVelocity().len());
+          } else if (property.equals(ANGULAR_VELOCITY)) {
             v.setValue(body.getAngularVelocity());
           } else if (property.equals(ANGLE)) {
             v.setValue(body.getAngle());

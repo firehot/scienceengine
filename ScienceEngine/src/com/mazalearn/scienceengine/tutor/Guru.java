@@ -149,14 +149,18 @@ public class Guru extends Group implements ITutor {
     dashboard.resetScore();
     dashboard.setVisible(true);
     tutorNavigator.setVisible(true);
-    getStage().addActor(this); // bring Guru to top
+    // bring Guru to top
+    Group root = getStage().getRoot();
+    root.addActorBefore(this, root.findActor(ScreenComponent.BASIC_SCREEN));
 
     // Collect actors to be excluded from probe points.
     // These are the visible actors.
     excludedActors.clear();
     excludedActors.add(dashboard);
     for (Actor actor: science2DController.getView().getActors()) {
-      if (actor.isVisible() && actor != this) {
+      // actor is visible and does not span entire screen
+      if (actor.isVisible() && (actor.hit(0, 0, true) == null || 
+          actor.hit(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, true) == null)) {
         excludedActors.add(actor);
       }
     }

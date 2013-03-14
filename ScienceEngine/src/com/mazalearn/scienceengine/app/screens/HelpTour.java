@@ -98,7 +98,8 @@ public class HelpTour extends Group {
                 currentComponent = 0;
               } else {
                 IHelpComponent helpComponent = helpComponents.get(currentComponent++);
-                text = ScienceEngine.getMsg().getString("Help." + helpComponent.getName()) + "\n\n\n";
+                text = ScienceEngine.getMsg().getString("Name." + helpComponent.getName()) + "\n" +
+                    ScienceEngine.getMsg().getString("Help." + helpComponent.getName()) + "\n\n\n";
                 pos.set(helpComponent.getX() + helpComponent.getWidth() / 2, 
                     helpComponent.getY() + helpComponent.getHeight() / 2).sub(CENTER_POS);
                 arrow.setVisible(true);

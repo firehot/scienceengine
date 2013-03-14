@@ -30,7 +30,7 @@ public class McqTutor extends AbstractTutor {
     super(science2DController, tutorType, parent, goal, id, 
         components, configs, successPoints, failurePoints, hints);
     this.singleAnswer = singleAnswer;
-    this.setSize(ScreenComponent.Prober.getWidth(), ScreenComponent.Prober.getHeight());
+    this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }
   
   @Override

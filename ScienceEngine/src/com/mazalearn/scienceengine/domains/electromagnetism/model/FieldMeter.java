@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -25,17 +26,31 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  */
 public class FieldMeter extends Science2DBody implements IMagneticField.Consumer {
 
+  private static final float X_SPACE = 150;
+  private static final float Y_SPACE = 150;
   // A reusable vector
   private Vector3 fieldVector = new Vector3();
   private Vector2 samplePoint = new Vector2(), bField = new Vector2();
+  public enum SampleMode {User, Uniform};
+  private SampleMode sampleMode = SampleMode.User;
   
+  // Represent field at a point (x,y) using polar coords (magnitude, theta, phi)
   public static class FieldSample {
-    public float x, y, angle, magnitude;
-    public FieldSample(float x, float y, float angle, float magnitude) {
+    public float x, y, theta, magnitude;
+    public int phi; // phi will be -1 (down), 0 (xy plane), +1 (up)
+    /**
+     * Constructor
+     * @param x
+     * @param y
+     * @param theta - in radians
+     * @param magnitude
+     */
+    public FieldSample(float x, float y, float theta, float magnitude, int phi) {
       this.x = x;
       this.y = y;
-      this.angle = angle;
+      this.theta = theta;
       this.magnitude = magnitude;
+      this.phi = phi;
     }
   }
   
@@ -66,15 +81,19 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
       public boolean isMeter() { return true; }
       public boolean isPossible() { return isActive(); }
     });
+    configs.add(new AbstractModelConfig<String>(this, 
+        Parameter.SampleMode, SampleMode.values()) {
+      public String getValue() { return sampleMode.name(); }
+      public void setValue(String value) { setSampleMode(value); }
+      public boolean isPossible() { return false; /* only internal use */}
+    });
   }
 
   @Override
   public void setPositionAndAngle(Vector2 position, float angle) {
     super.setPositionAndAngle(position, angle);
     getModel().getBField(getPosition(), fieldVector /* output */);
-    bField.set(fieldVector.x, fieldVector.y);
-    addFieldSample(getPosition().x, getPosition().y, 
-        bField.angle() * MathUtils.degreesToRadians, bField.len());
+    addFieldSample(getPosition().x, getPosition().y, fieldVector);
   }
   
   @Override
@@ -87,8 +106,10 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
     return fieldVector.len();
   }
 
-  public void addFieldSample(float x, float y, float angle, float bfield) {
-    fieldSamples.add(new FieldSample(x, y, angle, bfield));
+  public void addFieldSample(float x, float y, Vector3 fieldVector) {
+    bField.set(fieldVector.x, fieldVector.y);
+    fieldSamples.add(new FieldSample(x, y, bField.angle() * MathUtils.degreesToRadians, 
+        fieldVector.len(), (int) Math.signum(fieldVector.z)));
   }
 
   public List<FieldSample> getFieldSamples() {
@@ -110,9 +131,34 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
     for (FieldSample fieldSample: fieldSamples) {
       samplePoint.set(fieldSample.x, fieldSample.y);
       getModel().getBField(samplePoint, fieldVector /* output */);
-      bField.set(fieldVector.x, fieldVector.y);
-      fieldSample.angle = bField.angle() * MathUtils.degreesToRadians;
-      fieldSample.magnitude = bField.len();
+      if (fieldVector.z == 0) {
+        bField.set(fieldVector.x, fieldVector.y);
+        fieldSample.theta = bField.angle() * MathUtils.degreesToRadians;
+      }
+      fieldSample.phi = (int) Math.signum(fieldVector.z);
+      fieldSample.magnitude = fieldVector.len();
     }
+  }
+
+  private void setSampleMode(String value) {
+    sampleMode = SampleMode.valueOf(value);
+    fieldSamples.clear();
+    switch (sampleMode) {
+    case User:
+      break;
+    case Uniform:
+      // Sample uniformly on X and Y axis and show fields at those points
+      for (float x = 0; x < ScreenComponent.VIEWPORT_WIDTH + X_SPACE; x += X_SPACE) {
+        for (float y = 0; y < ScreenComponent.VIEWPORT_WIDTH + Y_SPACE; y += Y_SPACE) {
+          addFieldSample(x / ScreenComponent.PIXELS_PER_M, y / ScreenComponent.PIXELS_PER_M,
+              Vector3.Zero);
+        }
+      }
+      break;
+    }
+  }
+
+  public SampleMode getSampleMode() {
+    return sampleMode;
   }
 }

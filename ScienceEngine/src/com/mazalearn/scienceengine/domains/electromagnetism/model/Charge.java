@@ -74,11 +74,12 @@ public class Charge extends Science2DBody implements IMagneticField.Consumer {
   @Override
   public void singleStep(float dt) {
     super.singleStep(dt);
-    // q(V x B)
-    force.set(getLinearVelocity());
-    if (force.len() == 0) return;
+    if (getLinearVelocity().len() == 0) return;
     // Renormalize velocity - otherwise we get serious integration round-off errors.
+    // force is used as a temporary vector variable for renormalization.
+    force.set(getLinearVelocity());
     super.setLinearVelocity(force.mul(velocityMagnitude / force.len()));
+    // Now find and apply the force: q(V x B)
     velocity.set(getLinearVelocity().x, getLinearVelocity().y, 0).crs(fieldVector);
     force.set(velocity.x, velocity.y).mul(charge);
     applyForce(force, getWorldCenter());

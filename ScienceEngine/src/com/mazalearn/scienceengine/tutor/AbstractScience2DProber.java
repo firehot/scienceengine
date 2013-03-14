@@ -7,11 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
-// TODO: REmove dependence on domains.COmponentTyep above
 
 public abstract class AbstractScience2DProber extends AbstractTutor {
 
@@ -23,9 +21,8 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
       int successPoints, int failurePoints, String[] hints) {
     super(science2DController, tutorType, parent, goal, id, components, configs, successPoints, failurePoints, hints);
-    // A prober covers almost the entire screen and allows user to interact only with probes
-    // or with control buttons
-    this.setSize(ScreenComponent.Prober.getWidth(), ScreenComponent.Prober.getHeight());
+    // A prober covers the entire screen
+    this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }
   
   private boolean areTooClose(Vector2[] points) {
@@ -39,8 +36,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
       // Translate to local coordinates of actor
       localPoint.set(stagePoint);
       actor.stageToLocalCoordinates(localPoint);
-      if (actor.hit(localPoint.x, localPoint.y, true) != null && 
-          !ComponentType.FieldMeter.name().equals(actor.getName())) {
+      if (actor.hit(localPoint.x, localPoint.y, true) != null) {
         return true;
       }
       // Since space in side table will not get hit, we check explicitly

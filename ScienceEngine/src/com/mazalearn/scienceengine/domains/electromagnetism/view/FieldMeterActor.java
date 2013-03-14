@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,19 +17,28 @@ import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter.FieldSample;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter.SampleMode;
 
 public class FieldMeterActor extends Science2DActor {
   private final FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
-    
+  private TextureRegion[] textureRegions;
+  
   public FieldMeterActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
+    this.textureRegions = new TextureRegion[] {
+        ScienceEngine.getTextureRegion("field-down"),
+        textureRegion,
+        ScienceEngine.getTextureRegion("field-up")};
+    
     this.removeListener(getListeners().get(0)); // help listener
     this.removeListener(getListeners().get(0)); // move, rotate listener
+    
     this.addListener(new ClickListener() {   
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        if (fieldMeter.getSampleMode() == SampleMode.Uniform) return;
         super.touchUp(event, x, y, pointer, button);
         ScienceEngine.selectBody(fieldMeter, (IScience2DView) getStage());
         // Move field sampler here and convert to model coords
@@ -44,12 +52,7 @@ public class FieldMeterActor extends Science2DActor {
   public Actor hit (float x, float y, boolean touchable) {
     if (touchable && this.getTouchable() != Touchable.enabled) return null;
     // If nothing else hits, and fieldmeter is present, it shows a hit.
-    // We exclude the top title and bottom status bars
-    // Operate directly on input coords since x,y received here are wrt FieldMeter
-    // and hence irrelevant
-    getStage().screenToStageCoordinates(pos.set(Gdx.input.getX(), Gdx.input.getY()));
-    return pos.y >= ScreenComponent.getScaledY(20) && 
-        pos.y < ScreenComponent.VIEWPORT_HEIGHT - ScreenComponent.getScaledY(30) ? this : null;
+    return this;
   }
 
   @Override
@@ -68,8 +71,9 @@ public class FieldMeterActor extends Science2DActor {
       float originY = magnitude * getHeight() / 2;
       // Bottom of arrow position
       pos.sub(originX, originY);
-      float rotation =  (fieldSample.angle * MathUtils.radiansToDegrees) % 360;
-      batch.draw(getTextureRegion(), pos.x, pos.y, 
+      float rotation =  (fieldSample.theta * MathUtils.radiansToDegrees) % 360;
+      TextureRegion textureRegion = textureRegions[fieldSample.phi + 1];
+      batch.draw(textureRegion, pos.x, pos.y, 
           originX, originY, getWidth() * magnitude, getHeight() * magnitude, 1, 1, rotation);
     }
   }
