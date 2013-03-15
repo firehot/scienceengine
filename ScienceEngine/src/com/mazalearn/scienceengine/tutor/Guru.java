@@ -47,7 +47,7 @@ public class Guru extends Group implements ITutor {
   public static final String ID = "Guru";
   public static final String ROOT_ID = "Root";
   protected Dashboard dashboard;
-  private TimeTracker activeTimer;
+  private TimeTracker timeTracker;
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final ModelControls modelControls;
   private final ConfigGenerator configGenerator;
@@ -96,12 +96,10 @@ public class Guru extends Group implements ITutor {
     hinter = new Hinter(skin);
     this.addActor(hinter);
     
-    activeTimer = new TimeTracker(this, "0", skin);
-    activeTimer.setPosition(5, 5);
-    this.addActor(activeTimer);
-
+    timeTracker = (TimeTracker) science2DController.getView().findActor(ScreenComponent.Timer.name());
     this.setVisible(false);
     activeTutor = this;
+    timeTracker.setActiveTutor(this);
   }
   
   public ITutor getActiveTutor() {
@@ -147,8 +145,6 @@ public class Guru extends Group implements ITutor {
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutoring.name());
     dashboard.resetScore();
-    dashboard.setVisible(true);
-    tutorNavigator.setVisible(true);
     // bring Guru to top
     Group root = getStage().getRoot();
     root.addActorBefore(root.findActor(ScreenComponent.CORE_GROUP), this);
@@ -179,8 +175,6 @@ public class Guru extends Group implements ITutor {
     activeTutor.finish();
  
     setActiveTutor(this);
-    dashboard.setVisible(false);
-    tutorNavigator.setVisible(false);
     
     ScienceEngine.setProbeMode(false);
     // Clear event log
@@ -224,6 +218,7 @@ public class Guru extends Group implements ITutor {
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
     tutorNavigator.setActiveTutor(activeTutor);
+    timeTracker.setActiveTutor(activeTutor);
     hinter.clearHint();
   }
   
@@ -350,7 +345,7 @@ public class Guru extends Group implements ITutor {
 
   @Override
   public void prepareToTeach(ITutor childTutor) {
-    this.setVisible(false);
+    this.setVisible(true);
     rootTutor.prepareToTeach(null);
   }
 

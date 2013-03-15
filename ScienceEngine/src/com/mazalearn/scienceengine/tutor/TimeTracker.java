@@ -6,20 +6,23 @@ import com.mazalearn.scienceengine.app.utils.Format;
 
 public class TimeTracker extends Label {
   private float activeTime;
-  private Guru guru;
+  private ITutor activeTutor;
   
-  public TimeTracker(Guru guru, CharSequence text, Skin skin) {
+  public TimeTracker(CharSequence text, Skin skin) {
     super(text, skin);
-    this.guru = guru;
+  }
+  
+  public void setActiveTutor(ITutor activeTutor) {
+    this.activeTutor = activeTutor;
   }
 
   @Override
   public void act(float delta) {
-    if (!guru.isVisible()) return;
+    if (!isVisible()) return;
     activeTime += delta;
     this.setText(Format.formatTime(activeTime));
     // Cost it to the active Tutor
-    guru.getActiveTutor().addTimeSpent(delta);
+    activeTutor.addTimeSpent(delta);
   }
 
   public float getActiveTime() {

@@ -81,7 +81,6 @@ public class TutorNavigator extends Group {
     goal.getLabel().setWrap(true);
     goal.addListener(clickListener);
     addActor(goal);
-    this.setVisible(false);
     // Create a button NEXT for learner to click when ready to move on.
     createNextButton(skin);
   }

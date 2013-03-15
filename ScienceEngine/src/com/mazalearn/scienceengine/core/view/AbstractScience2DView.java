@@ -29,6 +29,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.tutor.TimeTracker;
 
 public class AbstractScience2DView extends Stage implements IScience2DView {
 
@@ -212,7 +213,12 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     basicScreen.addActor(goButton);
     // Help icon
     basicScreen.addActor(createHelpActor());
-
+    // Add Timer
+    Actor timeTracker = new TimeTracker("0", skin);
+    timeTracker.setPosition(5, 5);
+    timeTracker.setName(ScreenComponent.Timer.name());
+    basicScreen.addActor(timeTracker);
+    
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
       ScienceEngine.displayStatusMessage(this, 
@@ -260,13 +266,12 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
-        isTutoringInProgress = !isTutoringInProgress;
-        ScreenComponent goButtonTo = 
-            isTutoringInProgress ? ScreenComponent.GoButtonDown : ScreenComponent.GoButtonUp;
+        isTutoringInProgress = true;
+        ScreenComponent goButtonDown = ScreenComponent.GoButtonDown;
         goButton.addAction(Actions.parallel(
-            Actions.moveTo(goButtonTo.getX(), goButtonTo.getY(), 1),
-            Actions.sizeTo(goButtonTo.getWidth(), goButtonTo.getHeight(), 1)));
-        tutoring(isTutoringInProgress);
+            Actions.moveTo(goButtonDown.getX(), goButtonDown.getY(), 1),
+            Actions.sizeTo(goButtonDown.getWidth(), goButtonDown.getHeight(), 1)));
+        tutoring(true);
       }
     });
     

@@ -110,7 +110,12 @@ public abstract class AbstractScreen implements Screen {
     for (ScreenComponent screenComponent: ScreenComponent.values()) {
       if (!screenComponent.isInAllScreens()) continue;
       Actor component = createScreenComponent(screenComponent, stage, getSkin());
-      basicScreen.addActor(component);
+      if (screenComponent.getZIndex() != -1) {
+        // Add at the zIndex
+        basicScreen.addActorAt(screenComponent.getZIndex(), component);        
+      } else {
+        basicScreen.addActor(component);
+      }
       if ((component instanceof Table) && !(component instanceof Button)) { // Place the center
         Table t = (Table) component;
         float x = screenComponent.getX(t.getPrefWidth()) + t.getPrefWidth() / 2;
