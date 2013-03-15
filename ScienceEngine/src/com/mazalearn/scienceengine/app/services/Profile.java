@@ -56,7 +56,7 @@ public class Profile implements Serializable {
     if (level == activity) return;
     
     properties.put(LAST_ACTIVITY, activity != null ? activity.name() : "");
-    properties.put(ACTIVITY, level.name());
+    properties.put(ACTIVITY, level != null ? level.name() : "");
     save();
   }
   
@@ -179,7 +179,7 @@ public class Profile implements Serializable {
 
   public void setDrawingPng(byte[] drawingPngBytes) {
     try {
-      properties.put(DRAWING_PNG, new String(drawingPngBytes, "US_ASCII"));
+      properties.put(DRAWING_PNG, new String(drawingPngBytes, "US-ASCII"));
     } catch (UnsupportedEncodingException ignored) {
     }
     save();
