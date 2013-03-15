@@ -280,9 +280,6 @@ public class ScienceEngine extends Game {
   }
 
   public static IPlatformAdapter getPlatformAdapter() {
-	if (platformAdapter == null) {
-		platformAdapter = new AbstractPlatformAdapter(Platform.IOS);
-	}
     return platformAdapter;  
   }
 

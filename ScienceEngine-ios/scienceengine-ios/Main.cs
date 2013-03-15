@@ -21,9 +21,12 @@ namespace scienceengineios
 		UIWindow window;
 		WebViewController webViewController;
 
-		public IosPlatformAdapter (UIWindow window, WebViewController webViewController): base(IPlatformAdapter.Platform.IOS) {
-			this.window = window;
-			this.webViewController = webViewController;
+		public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
+		}
+		
+		public void setWindowAndWebViewController(UIWindow window, WebViewController webViewController) {
+      this.window = window;
+      this.webViewController = webViewController;
 		}
 
 		public override void browseURL (string url)
@@ -51,6 +54,7 @@ namespace scienceengineios
 		public partial class AppDelegate : IOSApplication {
 			static UIWindow webViewWindow;
 			static ScienceEngine scienceEngine;
+			static PlatformAdapter iosAdapter;
 			static WebViewController webViewController;
 			static UINavigationController navigationController;
 
@@ -69,12 +73,14 @@ namespace scienceengineios
 				// If you have defined a view, add it here:
 				//webViewWindow.AddSubview (navigationController.View);
 				webViewWindow.RootViewController = navigationController;
-				scienceEngine.setPlatformAdapter (new IosPlatformAdapter(webViewWindow, webViewController));
+				iosAdapter.setWindowAndWebViewController(webViewWindow, webViewController);
 				return result;
 			}
 			internal static ScienceEngine getScienceEngine () {
 				scienceEngine = new ScienceEngine ("");
 				ScienceEngine.DEV_MODE = ScienceEngine.DevMode.PRODUCTION;
+				iosAdapter = new IosPlatformAdapter();
+				scienceEngine.setPlatformAdapter(iosAdapter);
 				return scienceEngine;
 			}
 			internal static IOSApplicationConfiguration getConfig() {

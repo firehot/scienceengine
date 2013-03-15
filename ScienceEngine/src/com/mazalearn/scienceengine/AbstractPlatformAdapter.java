@@ -1,11 +1,9 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
-import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,9 +12,7 @@ import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
-// TODO: Make this abstract and remove dummy methods.
-// Problem with IOS where this is used by default in startup phase.
-public class AbstractPlatformAdapter implements IPlatformAdapter {
+public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
 
   protected IMessage messages;
   private Platform platform;
@@ -77,38 +73,11 @@ public class AbstractPlatformAdapter implements IPlatformAdapter {
   }
 
   @Override
-  public void getBytes(Pixmap pixmap, byte[] lines) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public void putBytes(Pixmap pixmap, byte[] lines) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public byte[] getPngBytes(Pixmap snapshot) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
   public boolean supportsLanguage() {
     return false;
   }
 
   @Override
-  public void httpPost(String path, String contentType, Map<String, String> params,
-      byte[] data){
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
   public void takeSnapshot(Stage stage, Topic topicArea, Topic level, int x, int y, int width, int height) {
   }
-  
-  @Override
-  public String getInstallationId() {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
 }
