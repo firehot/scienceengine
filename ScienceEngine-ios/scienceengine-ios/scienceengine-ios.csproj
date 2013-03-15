@@ -173,33 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.html">
-      <Link>data\Electromagnetism\1.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\2.html">
-      <Link>data\Electromagnetism\2.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\3.html">
-      <Link>data\Electromagnetism\3.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\4.html">
-      <Link>data\Electromagnetism\4.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\5.html">
-      <Link>data\Electromagnetism\5.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\6.html">
-      <Link>data\Electromagnetism\6.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\7.html">
-      <Link>data\Electromagnetism\7.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\lock.png">
-      <Link>images\lock.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\ammeter.png">
-      <Link>images\ammeter.png</Link>
-    </Content>
     <Content Include="..\launch_1024x768.png">
       <Link>launch_1024x768.png</Link>
     </Content>
@@ -219,74 +192,11 @@
     <Content Include="icon_57x57.png" />
     <Content Include="icon_72x72.png" />
     <None Include="scienceengineios-1.0.plist" />
-    <Content Include="..\..\ScienceEngine-android\assets\images\engine.png">
-      <Link>images\engine.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\shoppingcart.png">
-      <Link>images\shoppingcart.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\wheel.png">
-      <Link>images\wheel.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnetism\currentcoil\pack.atlas">
-      <Link>images\electromagnetism\currentcoil\pack.atlas</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnetism\currentcoil\pack.png">
-      <Link>images\electromagnetism\currentcoil\pack.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\draw.png">
-      <Link>images\draw.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Messages.properties">
-      <Link>data\Messages.properties</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\ferrite.png">
-      <Link>images\ferrite.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\neodymium.png">
-      <Link>images\neodymium.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\smco.png">
-      <Link>images\smco.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\copperwire.png">
-      <Link>images\copperwire.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\sound\click.mp3">
-      <Link>sound\click.mp3</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\8.html">
-      <Link>data\Electromagnetism\8.html</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\9.html">
-      <Link>data\Electromagnetism\9.html</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\music\level.mp3">
       <Link>music\level.mp3</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\music\menu.mp3">
       <Link>music\menu.mp3</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\back.png">
-      <Link>images\back.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\splashbackground.png">
-      <Link>image-atlases\splashbackground.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\close.png">
-      <Link>images\close.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\go-down.png">
-      <Link>images\go-down.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\go-up.png">
-      <Link>images\go-up.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\settings.png">
-      <Link>images\settings.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\user.png">
-      <Link>images\user.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\skin\arial-12.fnt">
       <Link>skin\arial-12.fnt</Link>
@@ -325,8 +235,203 @@
       <Link>skin\uiskin1.png</Link>
     </Content>
     <None Include="convert.properties" />
-    <Content Include="..\..\ScienceEngine-android\assets\images\check.png">
-      <Link>images\check.png</Link>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-80.fnt">
+      <Link>skin\arial-80.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-80.png">
+      <Link>skin\arial-80.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\loading.pack">
+      <Link>images\loading.pack</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\loading.png">
+      <Link>images\loading.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\logo.png">
+      <Link>images\logo.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\splash.jpg">
+      <Link>images\splash.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\Electromagnetism\pack.atlas">
+      <Link>images\Electromagnetism\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\Electromagnetism\pack.png">
+      <Link>images\Electromagnetism\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\Electromagnetism\currentcoil\pack.atlas">
+      <Link>images\Electromagnetism\currentcoil\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\Electromagnetism\currentcoil\pack.png">
+      <Link>images\Electromagnetism\currentcoil\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\StatesOfMatter\pack.atlas">
+      <Link>images\StatesOfMatter\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\StatesOfMatter\pack.png">
+      <Link>images\StatesOfMatter\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\Waves\pack.atlas">
+      <Link>images\Waves\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\Waves\pack.png">
+      <Link>images\Waves\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\core\pack.atlas">
+      <Link>images\core\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\core\pack.png">
+      <Link>images\core\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\guru\pack.atlas">
+      <Link>images\guru\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\guru\pack.png">
+      <Link>images\guru\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism.json">
+      <Link>data\Electromagnetism.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\IResourceBuilder.jav">
+      <Link>data\IResourceBuilder.jav</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Messages.properties">
+      <Link>data\Messages.properties</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Messages_hi.properties">
+      <Link>data\Messages_hi.properties</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Messages_ka.properties">
+      <Link>data\Messages_ka.properties</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\ResourceBundleResourceBuilder.jav">
+      <Link>data\ResourceBundleResourceBuilder.jav</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter.json">
+      <Link>data\StatesOfMatter.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Waves.json">
+      <Link>data\Waves.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\.gitignore">
+      <Link>data\bfield\.gitignore</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_external_far.csv">
+      <Link>data\bfield\BX_external_far.csv</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_external_near.csv">
+      <Link>data\bfield\BX_external_near.csv</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_internal.csv">
+      <Link>data\bfield\BX_internal.csv</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_external_far.csv">
+      <Link>data\bfield\BY_external_far.csv</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_external_near.csv">
+      <Link>data\bfield\BY_external_near.csv</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_internal.csv">
+      <Link>data\bfield\BY_internal.csv</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\README.txt">
+      <Link>data\bfield\README.txt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\celebrate.mp3">
+      <Link>sound\celebrate.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\challenge.mp3">
+      <Link>sound\challenge.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\click.mp3">
+      <Link>sound\click.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\failure.mp3">
+      <Link>sound\failure.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\rapidfire.mp3">
+      <Link>sound\rapidfire.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\success.mp3">
+      <Link>sound\success.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ACMotor.json">
+      <Link>data\Electromagnetism\ACMotor.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ACMotor.png">
+      <Link>data\Electromagnetism\ACMotor.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnet.json">
+      <Link>data\Electromagnetism\BarMagnet.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnet.png">
+      <Link>data\Electromagnetism\BarMagnet.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnetInduction.json">
+      <Link>data\Electromagnetism\BarMagnetInduction.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnetInduction.png">
+      <Link>data\Electromagnetism\BarMagnetInduction.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\DCMotor.json">
+      <Link>data\Electromagnetism\DCMotor.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\DCMotor.png">
+      <Link>data\Electromagnetism\DCMotor.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\EMReview.json">
+      <Link>data\Electromagnetism\EMReview.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\EMReview.png">
+      <Link>data\Electromagnetism\EMReview.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnet.json">
+      <Link>data\Electromagnetism\ElectroMagnet.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnet.png">
+      <Link>data\Electromagnetism\ElectroMagnet.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnetInduction.json">
+      <Link>data\Electromagnetism\ElectroMagnetInduction.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnetInduction.png">
+      <Link>data\Electromagnetism\ElectroMagnetInduction.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Field.json">
+      <Link>data\Electromagnetism\Field.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Field.png">
+      <Link>data\Electromagnetism\Field.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ScienceTrain.json">
+      <Link>data\Electromagnetism\ScienceTrain.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ScienceTrain.png">
+      <Link>data\Electromagnetism\ScienceTrain.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\TwoWires.json">
+      <Link>data\Electromagnetism\TwoWires.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\TwoWires.png">
+      <Link>data\Electromagnetism\TwoWires.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Wire.json">
+      <Link>data\Electromagnetism\Wire.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Wire.png">
+      <Link>data\Electromagnetism\Wire.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\SOM.json">
+      <Link>data\StatesOfMatter\SOM.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\SOM.png">
+      <Link>data\StatesOfMatter\SOM.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Waves\W.json">
+      <Link>data\Waves\W.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Waves\W.png">
+      <Link>data\Waves\W.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -336,118 +441,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="data\" />
-    <Folder Include="image-atlases\" />
-    <Folder Include="images\" />
     <Folder Include="skin\" />
-    <Folder Include="sound\" />
     <Folder Include="music\" />
+    <Folder Include="images\" />
+    <Folder Include="data\" />
+    <Folder Include="sound\" />
+    <Folder Include="data\Electromagnetism\" />
+    <Folder Include="data\StatesOfMatter\" />
+    <Folder Include="data\Waves\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism.json">
-      <Link>data\Electromagnetism.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter.json">
-      <Link>data\StatesOfMatter.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Waves.json">
-      <Link>data\Waves.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.json">
-      <Link>data\Electromagnetism\1.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\2.json">
-      <Link>data\Electromagnetism\2.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\3.json">
-      <Link>data\Electromagnetism\3.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\4.json">
-      <Link>data\Electromagnetism\4.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\5.json">
-      <Link>data\Electromagnetism\5.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\6.json">
-      <Link>data\Electromagnetism\6.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\7.json">
-      <Link>data\Electromagnetism\7.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\8.json">
-      <Link>data\Electromagnetism\8.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\9.json">
-      <Link>data\Electromagnetism\9.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\1.json">
-      <Link>data\StatesOfMatter\1.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Waves\1.json">
-      <Link>data\Waves\1.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_external_far.csv">
-      <Link>data\bfield\BX_external_far.csv</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_external_near.csv">
-      <Link>data\bfield\BX_external_near.csv</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BX_internal.csv">
-      <Link>data\bfield\BX_internal.csv</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_external_far.csv">
-      <Link>data\bfield\BY_external_far.csv</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_external_near.csv">
-      <Link>data\bfield\BY_external_near.csv</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\BY_internal.csv">
-      <Link>data\bfield\BY_internal.csv</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\bfield\README.txt">
-      <Link>data\bfield\README.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\loading.pack">
-      <Link>image-atlases\loading.pack</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\pages.atlas">
-      <Link>image-atlases\pages.atlas</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\splash.psd">
-      <Link>image-atlases\splash.psd</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils.xcf">
-      <Link>images\coppercoils.xcf</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentsource">
-      <Link>images\currentsource</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\skin\Lohit-Devanagari.ttf">
       <Link>skin\Lohit-Devanagari.ttf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -472,213 +475,6 @@
       <Link>skin\uiskin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\sound\celebrate.mp3">
-      <Link>sound\celebrate.mp3</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\sound\failure.mp3">
-      <Link>sound\failure.mp3</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\sound\success.mp3">
-      <Link>sound\success.mp3</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\1.png">
-      <Link>data\Electromagnetism\1.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\2.png">
-      <Link>data\Electromagnetism\2.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\3.png">
-      <Link>data\Electromagnetism\3.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\4.png">
-      <Link>data\Electromagnetism\4.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\5.png">
-      <Link>data\Electromagnetism\5.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\6.png">
-      <Link>data\Electromagnetism\6.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\7.png">
-      <Link>data\Electromagnetism\7.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\8.png">
-      <Link>data\Electromagnetism\8.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\9.png">
-      <Link>data\Electromagnetism\9.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\1.png">
-      <Link>data\StatesOfMatter\1.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Waves\1.png">
-      <Link>data\Waves\1.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\hand-pointer.png">
-      <Link>image-atlases\hand-pointer.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\hand-pointer1.png">
-      <Link>image-atlases\hand-pointer1.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\loading.png">
-      <Link>image-atlases\loading.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\pages.png">
-      <Link>image-atlases\pages.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\scienceengine.jpg">
-      <Link>image-atlases\scienceengine.jpg</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\image-atlases\splash.jpg">
-      <Link>image-atlases\splash.jpg</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\ampere.png">
-      <Link>images\ampere.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\anticlockwise.png">
-      <Link>images\anticlockwise.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\arrow.png">
-      <Link>images\arrow.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\barmagnet.png">
-      <Link>images\barmagnet.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\bose.png">
-      <Link>images\bose.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\browser.png">
-      <Link>images\browser.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\brush.png">
-      <Link>images\brush.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\clockwise.png">
-      <Link>images\clockwise.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\compass.png">
-      <Link>images\compass.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils-back.png">
-      <Link>images\coppercoils-back.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils-front1.png">
-      <Link>images\coppercoils-front1.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils-front2.png">
-      <Link>images\coppercoils-front2.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\coppercoils.png">
-      <Link>images\coppercoils.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\cross.png">
-      <Link>images\cross.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\current.png">
-      <Link>images\current.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoil_accommutator.png">
-      <Link>images\currentcoil_accommutator.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoil_dccommutator.png">
-      <Link>images\currentcoil_dccommutator.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoil_nocommutator.png">
-      <Link>images\currentcoil_nocommutator.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentsource.png">
-      <Link>images\currentsource.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentwire-down.png">
-      <Link>images\currentwire-down.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentwire-up.png">
-      <Link>images\currentwire-up.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\cvraman.png">
-      <Link>images\cvraman.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\edison.png">
-      <Link>images\edison.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\einstein.png">
-      <Link>images\einstein.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnet-base.png">
-      <Link>images\electromagnet-base.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnet-coil.png">
-      <Link>images\electromagnet-coil.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\electromagnet.png">
-      <Link>images\electromagnet.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\environment.jpg">
-      <Link>images\environment.jpg</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\faraday.png">
-      <Link>images\faraday.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\fieldarrow-yellow.png">
-      <Link>images\fieldarrow-yellow.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\fieldarrow.png">
-      <Link>images\fieldarrow.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\fire-texture.jpg">
-      <Link>images\fire-texture.jpg</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\galileo.png">
-      <Link>images\galileo.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\galvani.png">
-      <Link>images\galvani.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\greenballoon.png">
-      <Link>images\greenballoon.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\help.png">
-      <Link>images\help.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\horseshoemagnet.png">
-      <Link>images\horseshoemagnet.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\iceberg.jpg">
-      <Link>images\iceberg.jpg</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\lightbulb.png">
-      <Link>images\lightbulb.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\mariecurie.png">
-      <Link>images\mariecurie.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\newton.png">
-      <Link>images\newton.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\oersted.png">
-      <Link>images\oersted.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\pivot.png">
-      <Link>images\pivot.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\questionmark.png">
-      <Link>images\questionmark.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\rectangle_coil.png">
-      <Link>images\rectangle_coil.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\redballoon.png">
-      <Link>images\redballoon.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\simplemagnet.png">
-      <Link>images\simplemagnet.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\videoplay.png">
-      <Link>images\videoplay.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\skin\uiskin.png">
       <Link>skin\uiskin.png</Link>
     </Content>
@@ -687,9 +483,6 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\skin\arial-15.fnt">
       <Link>skin\arial-15.fnt</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\currentcoilsheet.png">
-      <Link>images\currentcoilsheet.png</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

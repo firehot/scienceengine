@@ -52,11 +52,11 @@ public class Profile implements Serializable {
   }
 
   public void setCurrentActivity(Topic level) {
-    String activity = properties.get(ACTIVITY);
-    if (String.valueOf(level).equals(activity)) return;
+    Topic activity = getCurrentActivity();
+    if (level == activity) return;
     
-    properties.put(LAST_ACTIVITY, activity);
-    properties.put(ACTIVITY, String.valueOf(level));
+    properties.put(LAST_ACTIVITY, activity != null ? activity.name() : "");
+    properties.put(ACTIVITY, level.name());
     save();
   }
   
@@ -65,6 +65,7 @@ public class Profile implements Serializable {
    */
   public Topic getCurrentActivity() {
     String levelStr = properties.get(ACTIVITY);
+    if (levelStr == null) return null;
     try {
       return Topic.valueOf(levelStr);
     } catch (IllegalArgumentException e) {
@@ -77,6 +78,7 @@ public class Profile implements Serializable {
    */
   public Topic getLastActivity() {
     String levelStr = properties.get(LAST_ACTIVITY);
+    if (levelStr == null) return null;
     try {
       return Topic.valueOf(levelStr);
     } catch (IllegalArgumentException e) {

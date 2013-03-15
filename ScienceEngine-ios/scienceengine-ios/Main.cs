@@ -54,7 +54,7 @@ namespace scienceengineios
 		public partial class AppDelegate : IOSApplication {
 			static UIWindow webViewWindow;
 			static ScienceEngine scienceEngine;
-			static PlatformAdapter iosAdapter;
+			static IosPlatformAdapter iosAdapter;
 			static WebViewController webViewController;
 			static UINavigationController navigationController;
 

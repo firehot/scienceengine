@@ -15,11 +15,14 @@ public class Installation {
     
     FileHandle installation = Gdx.files.external(INSTALLATION);
     try {
+      Gdx.app.log(ScienceEngine.LOG, "Checking for installation file");
       if (!installation.exists()) {
+      	Gdx.app.log(ScienceEngine.LOG, "Creating installation file");
         FileWriter out = new FileWriter(installation.file());
         out.write(UUID.randomUUID().toString());
         out.close();
       }
+  	  Gdx.app.log(ScienceEngine.LOG, "Reading installation file");     
       sID = installation.readString();
     } catch (Exception e) {
       throw new RuntimeException(e);
