@@ -84,7 +84,6 @@ public class ProfileServlet extends HttpServlet {
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
     ds.put(user);
-    System.out.println(profileEntity);
   }
   
   public String getUserProfile(String userEmail) 
@@ -122,7 +121,6 @@ public class ProfileServlet extends HttpServlet {
     String json = "{ properties:" + properties + ",topics:" + topics + "}";
     System.out.println(json);
     String profileStringBase64 = Base64.encode(json);
-    System.out.println("<" + profileStringBase64 +">");
     return profileStringBase64;
   }
 }
