@@ -188,7 +188,7 @@ public class Profile implements Serializable {
   public byte[] getDrawingPng() {
     String png = properties.get(DRAWING_PNG);
     try {
-      return png == null ? new byte[0] : png.getBytes("US_ASCII");
+      return png == null ? new byte[0] : png.getBytes("US-ASCII");
     } catch (UnsupportedEncodingException e) {
       return new byte[0];
     }
