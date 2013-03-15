@@ -29,7 +29,6 @@ public class ProfileServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     System.out.println("Received post: " + request.getContentLength());
-    response.getWriter().append("Post received");
     String userEmail = request.getHeader(USER_EMAIL);
     System.out.println("User: " + userEmail);
     BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
@@ -37,6 +36,13 @@ public class ProfileServlet extends HttpServlet {
     bis.read(profileBytes);
     saveUserProfile(userEmail, profileBytes);
     bis.close();
+  }
+  
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+    String userEmail = request.getParameter(USER_EMAIL);
+    System.out.println("Received get: " + userEmail);
+    response.getWriter().append(getUserProfile(userEmail));
   }
   
   static class Profile {
@@ -80,5 +86,32 @@ public class ProfileServlet extends HttpServlet {
     System.out.println(profileEntity);
   }
   
-
+  public String getUserProfile(String userEmail) 
+      throws IllegalStateException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
+    Entity user;
+    try {
+      user = ds.get(key);
+    } catch (EntityNotFoundException e) {
+      return null;
+    }
+    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
+    if (profileEntity == null) return null;
+    
+    StringBuilder profileStr = new StringBuilder("{");
+    String delimiter = "";
+    for (Map.Entry<String, Object> property: profileEntity.getProperties().entrySet()) {
+      if (property.getValue() instanceof Text) {
+        profileStr.append(delimiter + property.getKey() + ":" + ((Text) property.getValue()).getValue());
+      } else {
+        profileStr.append(delimiter + property.getKey() + ":" + property.getValue());
+      }
+      delimiter = ",";
+    }
+    profileStr.append("}");
+    System.out.println(profileStr);
+    String profileStringBase64 = Base64.encode(profileStr.toString());
+    return profileStringBase64;
+  }
 }

@@ -88,10 +88,10 @@ public class Guru extends Group implements ITutor {
     this.correctImage = new ScoreImage(ScienceEngine.getTextureRegion("check"), skin);
     this.wrongImage = new ScoreImage(ScienceEngine.getTextureRegion("cross"), skin);
     
-    addActor(successImage);
-    addActor(failureImage);
-    addActor(correctImage);
-    addActor(wrongImage);
+    this.addActor(successImage);
+    this.addActor(failureImage);
+    this.addActor(correctImage);
+    this.addActor(wrongImage);
     
     hinter = new Hinter(skin);
     this.addActor(hinter);
@@ -151,10 +151,9 @@ public class Guru extends Group implements ITutor {
     tutorNavigator.setVisible(true);
     // bring Guru to top
     Group root = getStage().getRoot();
-    root.addActorBefore(this, root.findActor(ScreenComponent.BASIC_SCREEN));
+    root.addActorBefore(root.findActor(ScreenComponent.CORE_GROUP), this);
 
-    // Collect actors to be excluded from probe points.
-    // These are the visible actors.
+    // Collect visible actors to be excluded from probe points.
     excludedActors.clear();
     excludedActors.add(dashboard);
     for (Actor actor: science2DController.getView().getActors()) {

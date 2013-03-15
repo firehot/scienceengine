@@ -195,10 +195,10 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   }
 
   public void setupControls() {
-    basicScreen = (Group) findActor(ScreenComponent.BASIC_SCREEN);
+    basicScreen = (Group) findActor(ScreenComponent.CORE_GROUP);
     if (basicScreen == null) {
       basicScreen = new Group();
-      basicScreen.setName(ScreenComponent.BASIC_SCREEN);
+      basicScreen.setName(ScreenComponent.CORE_GROUP);
       this.addActor(basicScreen);
     }
     // Create view and model controls

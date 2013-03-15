@@ -118,11 +118,9 @@ public class HelpTour extends Group {
   public HelpTour(final Stage stage, Skin skin, String contents, List<IHelpComponent> iHelpComponents) {
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
-    stage.addActor(this);
-    // Move backbutton to top
-    Actor backButton = stage.getRoot().findActor(ScreenComponent.Back.name());
-    if (backButton != null) // TODO: required for level editor only - why?
-    stage.addActor(backButton);
+    // Add below Basic Screen
+    Actor basicScreen = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
+    stage.getRoot().addActorBefore(basicScreen, this);
     
     Image arrow = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
     arrow.setSize(arrow.getWidth() * 1.5f, arrow.getHeight() * 1.5f);

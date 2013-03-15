@@ -52,15 +52,16 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
   
   @Override
-  public void httpPost(String path, String contentType, Map<String, String> params, byte[] data) {
+  public String httpPost(String path, String contentType, Map<String, String> params, byte[] data) {
     String hostPort = ScienceEngine.getHostPort();
     String host = hostPort.substring(0, hostPort.indexOf(":"));
     int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
+    String responseStr = null;
     try {
       Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
       if (socket == null) {
         Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + "/" + path);
-        return;
+        return null;
       }
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
@@ -72,7 +73,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       byte[] response = new byte[1000];
       socket.getInputStream().read(response);
       wr.close();
-      String responseStr = new String(response);
+      responseStr = new String(response);
       Gdx.app.log(ScienceEngine.LOG, "Response " + responseStr);
       String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
       if (!firstLine.contains("200")) {
@@ -83,6 +84,42 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       e.printStackTrace();
       throw new GdxRuntimeException(e);
     }
+    return responseStr;
+  }
+
+  @Override
+  public String httpGet(String path) {
+    String hostPort = ScienceEngine.getHostPort();
+    String host = hostPort.substring(0, hostPort.indexOf(":"));
+    int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
+    String responseStr = null;
+    try {
+      Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
+      if (socket == null) {
+        Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + "/" + path);
+        return null;
+      }
+      DataOutputStream wr = 
+          new DataOutputStream(socket.getOutputStream());
+      wr.writeBytes("GET " + path + " HTTP/1.0\r\n");
+      wr.flush();
+      Gdx.app.log(ScienceEngine.LOG, "Get " + path);
+      byte[] response = new byte[8000];
+      socket.getInputStream().read(response);
+      wr.close();
+      responseStr = new String(response);
+      Gdx.app.log(ScienceEngine.LOG, "Response " + responseStr);
+      String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
+      if (!firstLine.contains("200")) {
+        throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
+      }
+      responseStr = responseStr.substring(firstLine.length() + 1);
+    } catch (Exception e) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
+      e.printStackTrace();
+      throw new GdxRuntimeException(e);
+    }
+    return responseStr;
   }
 
   private String makeHeaderString(String path, String contentType,
@@ -108,6 +145,4 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   public String getInstallationId() {
     return Installation.id();
   }
-
-  
 }

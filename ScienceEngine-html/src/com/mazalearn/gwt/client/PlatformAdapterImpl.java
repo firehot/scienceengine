@@ -90,10 +90,9 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   }
   
   @Override
-  public void httpPost(String path, String contentType, Map<String, String> params, byte[] data) {
+  public String httpPost(String path, String contentType, Map<String, String> params, byte[] data) {
     String url = ScienceEngine.getHostPort() + "/" + path;
     RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
-
     try {
       builder.setHeader("Content-Type", contentType); // "application/x-www-form-urlencoded");
       for (Map.Entry<String, String> entry: params.entrySet()) {
@@ -115,6 +114,30 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
       e.printStackTrace();
       throw new GdxRuntimeException(e);
     }
+    return null;
+  }
+  
+  @Override
+  public String httpGet(String path) {
+    String url = ScienceEngine.getHostPort() + "/" + path;
+    RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+    try {
+      builder.sendRequest("", new RequestCallback() {
+
+        @Override
+        public void onError(Request request, Throwable exception) {
+        }
+
+        @Override
+        public void onResponseReceived(Request request, Response response) {
+        }
+      });
+    } catch (RequestException e) {
+      Gdx.app.log(ScienceEngine.LOG, "Could not get " + url);
+      e.printStackTrace();
+      throw new GdxRuntimeException(e);
+    }
+    return null;
   }
   
   @Override

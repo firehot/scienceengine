@@ -113,11 +113,10 @@ public abstract class AbstractScience2DController implements
     if (guru == null) {
       Stage stage = (Stage) science2DView;
       guru = new Guru(skin, this, this.getTitle());
-      stage.addActor(guru);
       // Bring basic Screen to top.
       // Three layers - components, guru, basicscreen.
-      Actor basicScreen = stage.getRoot().findActor(ScreenComponent.BASIC_SCREEN);
-      stage.addActor(basicScreen);
+      Actor basicScreen = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
+      stage.getRoot().addActorBefore(basicScreen, guru);
     }
     return guru;
   }
@@ -136,6 +135,7 @@ public abstract class AbstractScience2DController implements
     if (actor == null) return null;
     
     Stage stage = (Stage) science2DView;
+    // TODO: All components of activity should be in ACTIVITY group.
     stage.addActor(actor);
     return actor;
   }

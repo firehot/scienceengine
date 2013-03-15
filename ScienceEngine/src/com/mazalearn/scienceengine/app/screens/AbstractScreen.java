@@ -98,10 +98,10 @@ public abstract class AbstractScreen implements Screen {
   }
 
   private void setupBasicScreen(Stage stage) {
-    Group basicScreen = (Group) stage.getRoot().findActor(ScreenComponent.BASIC_SCREEN);
+    Group basicScreen = (Group) stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
     if (basicScreen == null) {
       basicScreen = new Group();
-      basicScreen.setName(ScreenComponent.BASIC_SCREEN);
+      basicScreen.setName(ScreenComponent.CORE_GROUP);
       stage.addActor(basicScreen);
     } else if (basicScreen.findActor(ScreenComponent.Title.name()) != null) {
       return;

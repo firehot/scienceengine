@@ -67,7 +67,7 @@ public class TutorNavigator extends Group {
         // Bring tutor navigator to top and make tutorsPanel visible
         tutorsPanel.setVisible(true);
         show(activeTutor);
-        getStage().addActor(TutorNavigator.this);
+        guru.addActor(TutorNavigator.this);
       }
     };
   /*  TextureRegion goalTexture = ScreenUtils.createTextureRegion(

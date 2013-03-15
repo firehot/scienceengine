@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.tutor.AbstractScience2DProber;
 import com.mazalearn.scienceengine.tutor.ITutor;
@@ -25,7 +26,7 @@ public class LightProber extends AbstractScience2DProber {
             "If the magnet is stronger, more current will be induced." */
     image = new ProbeImage();
     this.addActor(image);
-    this.lightbulbActor = (LightbulbActor) science2DController.getView().findActor("Lightbulb");
+    this.lightbulbActor = (LightbulbActor) science2DController.getView().findActor(ComponentType.Lightbulb.name());
   }
   
   @Override

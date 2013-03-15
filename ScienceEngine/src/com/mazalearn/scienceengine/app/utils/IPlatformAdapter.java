@@ -51,7 +51,7 @@ public interface IPlatformAdapter {
   // Does platform support language change?
   public boolean supportsLanguage();
 
-  public void httpPost(String path, String contentType, Map<String, String> params,
+  public String httpPost(String path, String contentType, Map<String, String> params,
       byte[] data);
 
   public void takeSnapshot(Stage stage, Topic topicArea, Topic level, int x, int y,
@@ -59,5 +59,7 @@ public interface IPlatformAdapter {
   
   // Get unique ID for this installation
   public String getInstallationId();
+
+  public String httpGet(String path);
 }
 

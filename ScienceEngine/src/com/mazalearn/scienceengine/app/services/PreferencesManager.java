@@ -75,17 +75,29 @@ public class PreferencesManager {
     if (userEmail == null || userEmail.length() == 0) {
       userEmail = "DemoUser@mazalearn.com";
     }
+    // Retrieve from local file system
     String profileAsText = getPrefs().getString(userEmail);
     if (profileAsText != null && profileAsText.length() > 0) {
       // decode the contents - base64 encoded
       profileAsText = Base64Coder.decodeString(profileAsText);
       profile = new Json().fromJson(Profile.class, profileAsText);
-    } else { // Create a new Profile
-      profile = new Profile();
-      profile.setUserEmail(userEmail);
-      profile.setUserName(userEmail.substring(0, userEmail.indexOf("@")));
-      saveProfile();
+      return profile;
     }
+    // Retrieve from server if available
+    profileAsText = ScienceEngine.getPlatformAdapter().httpGet("/profile?useremail=" + userEmail);
+    if (profileAsText != null && profileAsText.length() > 0) {
+      // decode the contents - base64 encoded
+      profileAsText = Base64Coder.decodeString(profileAsText);
+      profile = new Json().fromJson(Profile.class, profileAsText);
+      return profile;
+    }
+    
+    // Create a new Profile
+    profile = new Profile();
+    profile.setUserEmail(userEmail);
+    profile.setUserName(userEmail.substring(0, userEmail.indexOf("@")));
+    saveProfile();
+
     return profile;
   }
 
@@ -107,6 +119,7 @@ public class PreferencesManager {
   }
   
   public void saveProfile() {
+    // TODO: should not be Case sensitive for user email 
     // convert the given profile to text
     String profileAsText = new Json().toJson(profile);
     Gdx.app.log(ScienceEngine.LOG, "Saving Profile - " + profileAsText);

@@ -68,6 +68,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     }
     // above only in level 9
 
+    // TODO: should be added In ACTIVITY group
     for (List<CircuitElement> circuit: science2DModel.getCircuits()) {
       this.addActor(new CircuitActor(circuit));
     }

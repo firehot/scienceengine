@@ -32,6 +32,7 @@ public class Profile implements Serializable {
   private static final String TIME_SPENT = "timeSpent";
   private static final String FAILURE_TRACKER = "failureTracker";
   private static final String INSTALL_ID = "install_id";
+  private static final String LAST_UPDATED = "last_updated";
   
   private HashMap<Topic, HashMap<String, Float>> topicStats;
   private HashMap<String, String> properties;
@@ -174,6 +175,7 @@ public class Profile implements Serializable {
   }
   
   public void save() {
+    properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
     ScienceEngine.getPreferencesManager().saveProfile();
   }
 
