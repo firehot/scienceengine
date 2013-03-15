@@ -8,7 +8,7 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public enum ScreenComponent implements IComponentType, IHelpComponent {
   TopBar(XAlign.LEFT, 0, YAlign.TOP, 0, 800, 30, 0, Color.BLACK, true, false),
-  BottomBar(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 0, 20, Color.BLACK, true, false),
+  BottomBar(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 20, 0, Color.BLACK, true, false),
   Title(XAlign.CENTER, 0, YAlign.TOP, -10, 0, 0, -1, Color.WHITE, true, false),
   Status(XAlign.CENTER, 0, YAlign.BOTTOM, 10, 0, 0, -1, Color.WHITE, true, false),
   User(XAlign.RIGHT, -20, YAlign.TOP, -2, 20, 30, -1, Color.WHITE, true, false),

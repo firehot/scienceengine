@@ -43,6 +43,7 @@ public class ProfileServlet extends HttpServlet {
     String userEmail = request.getParameter(USER_EMAIL);
     System.out.println("Received get: " + userEmail);
     response.getWriter().append(getUserProfile(userEmail));
+    response.getWriter().close();
   }
   
   static class Profile {
@@ -94,24 +95,34 @@ public class ProfileServlet extends HttpServlet {
     try {
       user = ds.get(key);
     } catch (EntityNotFoundException e) {
-      return null;
+      return "";
     }
     EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
-    if (profileEntity == null) return null;
+    if (profileEntity == null) return "";
     
-    StringBuilder profileStr = new StringBuilder("{");
-    String delimiter = "";
+    System.out.println(profileEntity);
+    StringBuilder properties = new StringBuilder("{");
+    StringBuilder topics = new StringBuilder("{");
+    String propDelimiter = "", topicDelimiter = "";
     for (Map.Entry<String, Object> property: profileEntity.getProperties().entrySet()) {
-      if (property.getValue() instanceof Text) {
-        profileStr.append(delimiter + property.getKey() + ":" + ((Text) property.getValue()).getValue());
+      Object value = property.getValue();
+      if (value instanceof Text) {
+        String s = ((Text) value).getValue();
+        if (!"null".equals(s)) {
+          topics.append(topicDelimiter + property.getKey() + ":" + s);
+          topicDelimiter = ",";
+        }
       } else {
-        profileStr.append(delimiter + property.getKey() + ":" + property.getValue());
+        properties.append(propDelimiter + property.getKey() + ":\"" + value + "\"");
+        propDelimiter = ",";
       }
-      delimiter = ",";
     }
-    profileStr.append("}");
-    System.out.println(profileStr);
-    String profileStringBase64 = Base64.encode(profileStr.toString());
+    properties.append("}");
+    topics.append("}");
+    String json = "{ properties:" + properties + ",topics:" + topics + "}";
+    System.out.println(json);
+    String profileStringBase64 = Base64.encode(json);
+    System.out.println("<" + profileStringBase64 +">");
     return profileStringBase64;
   }
 }

@@ -101,7 +101,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       }
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
-      wr.writeBytes("GET " + path + " HTTP/1.0\r\n");
+      wr.writeBytes("GET " + path + " HTTP/1.0\r\n\r\n");
       wr.flush();
       Gdx.app.log(ScienceEngine.LOG, "Get " + path);
       byte[] response = new byte[8000];
@@ -113,13 +113,20 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       if (!firstLine.contains("200")) {
         throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
       }
-      responseStr = responseStr.substring(firstLine.length() + 1);
+      responseStr = getResponseBody(responseStr);
+      Gdx.app.log(ScienceEngine.LOG, "<" + responseStr + ">" + responseStr.length());
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
       e.printStackTrace();
-      throw new GdxRuntimeException(e);
+      return "";
     }
     return responseStr;
+  }
+  
+  private String getResponseBody(String str) {
+    int pos = str.indexOf("\r\n\r\n");
+    if (pos == -1) return "";
+    return str.substring(pos).replace("\r\n", "").trim();
   }
 
   private String makeHeaderString(String path, String contentType,
