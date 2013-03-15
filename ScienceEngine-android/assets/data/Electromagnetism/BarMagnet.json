@@ -91,7 +91,7 @@ tutors:[
         ]
         },
        {type: "RapidFire",
-       id: "Multiple Choice Questions",
+       id: "R1",
        goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ1",
@@ -227,16 +227,6 @@ tutors:[
           answermask: "00100"
           },
          {type: "*MCQ1",
-          id: "1.14",
-          goal:"What is the main difference between electric charges and magnetic poles?",
-          options:["electric charges can be isolated, magnetic poles cannot be isolated", 
-                   "electric charges cannot be isolated, magnetic poles can be isolated", 
-                   "electric charges both attract and repel, magnetic poles only attract",
-                   "electric charges both attract and repel, magnetic poles only repel",
-                   "magnetic poles both attract and repel, electric charges only repel"],
-          answermask: "10000"
-          },
-         {type: "*MCQ1",
           id: "1.15",
           goal:"What would happen if you broke a bar magnet into 8 pieces?",
           options:["you would have 8 half magnets", 
@@ -265,16 +255,6 @@ tutors:[
                    "Magnet B",
                    "All magnets have the same strength"],
           answermask: "0000"
-          },
-         {type: "MCQ1",
-          id: "1.18",
-          ref: ["G1.2"],
-          goal:"The region around a magnet in which magnetic forces act is called the",
-          options:["magnetic field", 
-                   "pole", 
-                   "domain",
-                   "solenoid"],
-          answermask: "1000"
           },
          {type: "*MCQ1",
           id: "1.19",
@@ -324,15 +304,6 @@ tutors:[
                    "in fours"],
           explanation: "Magnetic poles cannot be isolated and always occur together as north and south poles.",
           answermask: "0010"
-          },
-         {type: "*MCQ1",
-          id: "1.24",
-          goal:"Magnetic poles are similar to electric charges because ...",
-          options:["like poles repel and opposite poles attract", 
-                   "the magnetic force is equal to the electric force", 
-                   "the number of magnetic domains responsible for the poles is conserved",
-                   "the mass of the magnetized particle is conserved"],
-          answermask: "1000"
           },
          {type: "MCQ",
           id: "1.25",
