@@ -178,6 +178,15 @@ public class Profile implements Serializable {
     properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
     ScienceEngine.getPreferencesManager().saveProfile();
   }
+  
+  public long getLastUpdated() {
+    try {
+      String lastUpdated = properties.get(LAST_UPDATED);
+      return Long.parseLong(lastUpdated);
+    } catch (IllegalArgumentException e) {
+      return 0;
+    }
+  }
 
   public void setDrawingPng(byte[] drawingPngBytes) {
     try {

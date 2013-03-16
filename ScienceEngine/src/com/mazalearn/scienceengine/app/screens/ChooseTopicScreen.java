@@ -73,7 +73,7 @@ public class ChooseTopicScreen extends AbstractScreen {
       // Ignore leaf level topics
       if (topic.getChildren().length == 0) continue;
       final boolean lock = !topic.equals(Topic.Electromagnetism);
-      Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic, topic.getChildren()[0], 1);
+      Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic, topic.getCanonicalChild(), 1);
       TextButton topicThumb = 
           ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin());
       if (lock) {

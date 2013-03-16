@@ -108,13 +108,13 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       socket.getInputStream().read(response);
       wr.close();
       responseStr = new String(response);
-      Gdx.app.log(ScienceEngine.LOG, "Response " + responseStr);
+      Gdx.app.log(ScienceEngine.LOG, "Response received: " + responseStr.length());
       String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
       if (!firstLine.contains("200")) {
         throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
       }
       responseStr = getResponseBody(responseStr);
-      Gdx.app.log(ScienceEngine.LOG, "<" + responseStr + ">" + responseStr.length());
+      Gdx.app.log(ScienceEngine.LOG, "Response length = " + responseStr.length());
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
       e.printStackTrace();

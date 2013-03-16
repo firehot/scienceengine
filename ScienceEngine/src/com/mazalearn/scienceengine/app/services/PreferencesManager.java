@@ -77,18 +77,30 @@ public class PreferencesManager {
     }
     // Retrieve from local file system
     String profileAsText = getPrefs().getString(userEmail);
+    Profile localProfile = null;
     if (profileAsText != null && profileAsText.length() > 0) {
       // decode the contents - base64 encoded
       profileAsText = Base64Coder.decodeString(profileAsText);
-      profile = new Json().fromJson(Profile.class, profileAsText);
-      return profile;
+      localProfile = new Json().fromJson(Profile.class, profileAsText);
     }
     // Retrieve from server if available
+    Profile serverProfile = null;
     profileAsText = ScienceEngine.getPlatformAdapter().httpGet("/profile?useremail=" + userEmail);
     if (profileAsText != null && profileAsText.length() > 0) {
       // decode the contents - base64 encoded
       profileAsText = Base64Coder.decodeString(profileAsText);
-      profile = new Json().fromJson(Profile.class, profileAsText);
+      serverProfile = new Json().fromJson(Profile.class, profileAsText);
+    }
+    if (localProfile != null && serverProfile != null) {
+      // Choose latest profile as active
+      // TODO: Merge profiles ??
+      profile = localProfile.getLastUpdated() >= serverProfile.getLastUpdated() ? localProfile : serverProfile;
+      return profile;
+    } else if (localProfile != null) {
+      profile = localProfile;
+      return profile;
+    } else if (serverProfile != null) {
+      profile = serverProfile;
       return profile;
     }
     
