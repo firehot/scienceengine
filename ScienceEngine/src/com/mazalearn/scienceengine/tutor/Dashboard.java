@@ -11,6 +11,7 @@ class Dashboard extends Table {
   Label scoreLabel;
   int score;
 
+  // TODO: Make dashboard visible
   Dashboard(Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {

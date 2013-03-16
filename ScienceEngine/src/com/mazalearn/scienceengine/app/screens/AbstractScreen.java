@@ -98,23 +98,23 @@ public abstract class AbstractScreen implements Screen {
   }
 
   private void setupBasicScreen(Stage stage) {
-    Group basicScreen = (Group) stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
-    if (basicScreen == null) {
-      basicScreen = new Group();
-      basicScreen.setName(ScreenComponent.CORE_GROUP);
-      stage.addActor(basicScreen);
-    } else if (basicScreen.findActor(ScreenComponent.Title.name()) != null) {
+    Group coreGroup = (Group) stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
+    if (coreGroup == null) {
+      coreGroup = new Group();
+      coreGroup.setName(ScreenComponent.CORE_GROUP);
+      stage.addActor(coreGroup);
+    } else if (coreGroup.findActor(ScreenComponent.Title.name()) != null) {
       return;
     }
-    // Register stage components
+    // Create core group components
     for (ScreenComponent screenComponent: ScreenComponent.values()) {
       if (!screenComponent.isInAllScreens()) continue;
       Actor component = createScreenComponent(screenComponent, stage, getSkin());
       if (screenComponent.getZIndex() != -1) {
         // Add at the zIndex
-        basicScreen.addActorAt(screenComponent.getZIndex(), component);        
+        coreGroup.addActorAt(screenComponent.getZIndex(), component);        
       } else {
-        basicScreen.addActor(component);
+        coreGroup.addActor(component);
       }
       if ((component instanceof Table) && !(component instanceof Button)) { // Place the center
         Table t = (Table) component;
