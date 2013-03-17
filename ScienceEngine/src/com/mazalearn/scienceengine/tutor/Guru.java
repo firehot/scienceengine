@@ -33,6 +33,7 @@ import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ModelControls;
+import com.mazalearn.scienceengine.core.view.Scoreboard;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 /**
  * Root of the tutor hierarchy, handles all the tutors under management of a root tutor.
@@ -46,7 +47,7 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
 public class Guru extends Group implements ITutor {
   public static final String ID = "Guru";
   public static final String ROOT_ID = "Root";
-  protected Dashboard dashboard;
+  protected Scoreboard scoreboard;
   private TimeTracker timeTracker;
   private List<Actor> excludedActors = new ArrayList<Actor>();
   private final ModelControls modelControls;
@@ -67,6 +68,7 @@ public class Guru extends Group implements ITutor {
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
+    this.setName(ScreenComponent.TUTOR_GROUP);
     this.science2DController = science2DController;
     this.goal = goal;
     this.skin = skin;
@@ -75,8 +77,6 @@ public class Guru extends Group implements ITutor {
     this.setSize(0, 0);
     
     this.stats = new TutorStats(ID);
-    this.dashboard = new Dashboard(skin);
-    this.addActor(dashboard);
     
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
@@ -96,7 +96,8 @@ public class Guru extends Group implements ITutor {
     hinter = new Hinter(skin);
     this.addActor(hinter);
     
-    timeTracker = (TimeTracker) science2DController.getView().findActor(ScreenComponent.Timer.name());
+    this.scoreboard = (Scoreboard) science2DController.getView().findActor(ScreenComponent.Scoreboard.name());;
+    timeTracker = (TimeTracker) science2DController.getView().findActor(ScreenComponent.TimeTracker.name());
     this.setVisible(false);
     activeTutor = this;
     timeTracker.setActiveTutor(this);
@@ -144,14 +145,14 @@ public class Guru extends Group implements ITutor {
     // Mark start of Tutoring in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutoring.name());
-    dashboard.resetScore();
+    scoreboard.resetScore();
     // bring Guru to top
     Group root = getStage().getRoot();
     root.addActorBefore(root.findActor(ScreenComponent.CORE_GROUP), this);
 
     // Collect visible actors to be excluded from probe points.
     excludedActors.clear();
-    excludedActors.add(dashboard);
+    excludedActors.add(scoreboard);
     for (Actor actor: science2DController.getView().getActors()) {
       // actor is visible and does not span entire screen
       if (actor.isVisible() && (actor.hit(0, 0, true) == null || 
@@ -188,21 +189,21 @@ public class Guru extends Group implements ITutor {
   public void showWrong(int score) {
     addActor(wrongImage); // Bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
-    dashboard.addScore(-score);
+    scoreboard.addScore(-score);
     wrongImage.show(String.valueOf(-score));
   }
   
   public void showFailure(int score) {
     addActor(failureImage); // bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
-    //dashboard.addScore(-score);
+    //scoreboard.addScore(-score);
     failureImage.show("Oops!");
   }
 
   public void showCorrect(int score) {
     addActor(correctImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
-    dashboard.addScore(score);
+    scoreboard.addScore(score);
     correctImage.show(String.valueOf(score));
     hinter.clearHint();
   }
@@ -210,7 +211,7 @@ public class Guru extends Group implements ITutor {
   public void showSuccess(int score) {
     addActor(successImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
-    dashboard.addScore(score);
+    scoreboard.addScore(score);
     successImage.show(String.valueOf(score));
     hinter.clearHint();
   }
@@ -477,5 +478,9 @@ public class Guru extends Group implements ITutor {
   @Override
   public float getFailureTracker() {
     return 0;
+  }
+
+  public Skin getSkin() {
+    return skin;
   }
 }

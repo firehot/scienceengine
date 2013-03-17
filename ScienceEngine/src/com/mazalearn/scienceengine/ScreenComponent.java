@@ -19,13 +19,13 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 32, 32, -1, Color.CLEAR, true, false),
   GoButtonUp(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 60, 60, -1, Color.CLEAR, false, true),
   GoButtonDown(XAlign.CENTER, 0, YAlign.TOP, -30, 0, 0, -1, Color.CLEAR, false, false),
-  Dashboard(XAlign.CENTER, 0, YAlign.TOP, -3, 0, 0, -1, Color.BLACK, false, false),
+  Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, -15, 0, 0, -1, Color.BLACK, false, false),
   ShoppingCart(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 50, -1, Color.BLACK, false, false),
   NextButton(XAlign.CENTER, 108, YAlign.TOP, -70, 0, 0, -1, Color.CLEAR, false, false), 
   Explanation(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, -1, Color.YELLOW, false, false),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, -1, Color.YELLOW, false, false), 
-  Timer(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 
+  TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 
   ;
   
   enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800); 

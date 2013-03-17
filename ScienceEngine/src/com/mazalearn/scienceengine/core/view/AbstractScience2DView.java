@@ -44,7 +44,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   private List<IModelConfig<?>> viewCommands;
   private ViewControls viewControls;
   private Button goButton;
-  private Group basicScreen;
+  private Group coreGroup;
+  private Group activityGroup;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -191,33 +192,38 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         ((Science2DActor) actor).prepareActor();
       }
     }
-    // Bring BasicScreen controls to top.
-    this.addActor(basicScreen);
+    // Bring CoreGroup to top.
+    this.addActor(coreGroup);
   }
 
   public void setupControls() {
-    basicScreen = (Group) findActor(ScreenComponent.CORE_GROUP);
-    if (basicScreen == null) {
-      basicScreen = new Group();
-      basicScreen.setName(ScreenComponent.CORE_GROUP);
-      this.addActor(basicScreen);
+    activityGroup = new Group();
+    activityGroup.setName(ScreenComponent.ACTIVITY_GROUP);
+    this.addActor(activityGroup);
+
+    coreGroup = (Group) findActor(ScreenComponent.CORE_GROUP);
+    if (coreGroup == null) {
+      coreGroup = new Group();
+      coreGroup.setName(ScreenComponent.CORE_GROUP);
+      this.addActor(coreGroup);
     }
     // Create view and model controls
     this.viewControls = new ActivityViewControls(science2DController, skin);
-    basicScreen.addActor(viewControls);
+    coreGroup.addActor(viewControls);
 
     this.modelControls = new ModelControls(science2DModel, skin);
-    basicScreen.addActor(modelControls);
+    activityGroup.addActor(modelControls);
     
     this.goButton = createGoButton();
-    basicScreen.addActor(goButton);
+    coreGroup.addActor(goButton);
     // Help icon
-    basicScreen.addActor(createHelpActor());
-    // Add Timer
+    coreGroup.addActor(createHelpActor());
+    // Add TimeTracker
     Actor timeTracker = new TimeTracker("0", skin);
-    timeTracker.setPosition(5, 5);
-    timeTracker.setName(ScreenComponent.Timer.name());
-    basicScreen.addActor(timeTracker);
+    coreGroup.addActor(timeTracker);
+    // Add scoreboard
+    Actor scoreboard = new Scoreboard(skin);
+    coreGroup.addActor(scoreboard);
     
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {

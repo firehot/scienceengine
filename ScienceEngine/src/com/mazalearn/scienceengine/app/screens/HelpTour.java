@@ -119,8 +119,8 @@ public class HelpTour extends Group {
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     // Add below Basic Screen
-    Actor basicScreen = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
-    stage.getRoot().addActorBefore(basicScreen, this);
+    Actor coreGroup = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
+    stage.getRoot().addActorBefore(coreGroup, this);
     
     Image arrow = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
     arrow.setSize(arrow.getWidth() * 1.5f, arrow.getHeight() * 1.5f);

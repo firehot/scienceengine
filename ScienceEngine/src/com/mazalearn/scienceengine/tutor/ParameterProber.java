@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -141,7 +142,6 @@ public class ParameterProber extends AbstractScience2DProber {
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
       Image antiClockwise = createResultImage(ScienceEngine.getTextureRegion("anticlockwise"), 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
-  
       imageListener = new ClickResult(doneCallback, new Image[] {clockwise, antiClockwise, dontCare},
           new ClickResult.StateMapper() {
         @Override
@@ -182,9 +182,14 @@ public class ParameterProber extends AbstractScience2DProber {
         case Direct: imageListener.setResult(1); break;
         case Inverse: imageListener.setResult(0); break;
       }
-      this.addActor(decrease);
-      this.addActor(increase);
-      this.addActor(dontCare);      
+      //this.addActor(decrease);
+      //this.addActor(increase);
+      //this.addActor(dontCare); 
+      Table list = new Table(guru.getSkin());
+      list.add(decrease).width(200).height(200);
+      list.add(dontCare);
+      list.add(increase);
+      this.addActor(list);
     }
     this.addActor(image);
     image.addListener(imageListener);   

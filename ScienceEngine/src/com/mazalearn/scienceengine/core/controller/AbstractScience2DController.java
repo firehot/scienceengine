@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -114,9 +115,9 @@ public abstract class AbstractScience2DController implements
       Stage stage = (Stage) science2DView;
       guru = new Guru(skin, this, this.getTitle());
       // Bring basic Screen to top.
-      // Three layers - components, guru, basicscreen.
-      Actor basicScreen = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
-      stage.getRoot().addActorBefore(basicScreen, guru);
+      // Three layers - components, tutor, core.
+      Actor coreGroup = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
+      stage.getRoot().addActorBefore(coreGroup, guru);
     }
     return guru;
   }
@@ -134,9 +135,8 @@ public abstract class AbstractScience2DController implements
     }
     if (actor == null) return null;
     
-    Stage stage = (Stage) science2DView;
-    // TODO: All components of activity should be in ACTIVITY group.
-    stage.addActor(actor);
+    Group activityGroup = (Group) science2DView.findActor(ScreenComponent.ACTIVITY_GROUP);
+    activityGroup.addActor(actor);
     return actor;
   }
   

@@ -74,7 +74,7 @@ public abstract class AbstractScreen implements Screen {
 
   public void setStage(Stage stage) {
     this.stage = stage;
-    setupBasicScreen(stage);
+    setupCoreGroup(stage);
     Gdx.input.setInputProcessor(stage);    
   }
 
@@ -97,7 +97,7 @@ public abstract class AbstractScreen implements Screen {
     }
   }
 
-  private void setupBasicScreen(Stage stage) {
+  private void setupCoreGroup(Stage stage) {
     Group coreGroup = (Group) stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
     if (coreGroup == null) {
       coreGroup = new Group();
@@ -219,7 +219,7 @@ public abstract class AbstractScreen implements Screen {
     // Catch menu key to prevent onscreen keyboard coming up
     Gdx.input.setCatchMenuKey(true);
     if (needsLayout()) {
-      setupBasicScreen(stage);
+      setupCoreGroup(stage);
     }
   }
 
