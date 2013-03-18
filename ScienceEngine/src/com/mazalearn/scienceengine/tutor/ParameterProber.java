@@ -5,9 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -56,7 +60,7 @@ public class ParameterProber extends AbstractScience2DProber {
   private Image createResultImage(TextureRegion textureRegion, float scale) {
     Image image = new Image(textureRegion);
     ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
-    image.setVisible(false);
+    //image.setVisible(false);
     image.setSize(image.getWidth() * scale, image.getHeight() * scale);
     image.setOrigin(0, image.getHeight() / 2);
     return image;
@@ -154,46 +158,53 @@ public class ParameterProber extends AbstractScience2DProber {
       this.addActor(clockwise);
       this.addActor(antiClockwise);
       this.addActor(dontCare);      
+      image.addListener(imageListener);   
+
     } else {
       image.setX(ScreenComponent.getScaledX(700) - image.getWidth()/2);
       image.setY(ScreenComponent.getScaledY(250) - image.getHeight()/2);
+      //Actor actor = science2DController.getModelControls().findActor(probeConfig.getName());
+      //image.setPosition(actor.getX(), actor.getY());
      
-      Image decrease = createResultImage(ScienceEngine.getTextureRegion("fieldarrow"), 2);
-      decrease.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);
-      decrease.setRotation(180);
-      Image dontCare = createResultImage(ScienceEngine.getTextureRegion("cross"), 1);
-      dontCare.setPosition(image.getX() + image.getWidth() / 2 - dontCare.getWidth()/2, 
-          image.getY() + image.getHeight() / 2 - dontCare.getHeight()/2);
-      Image increase = createResultImage(ScienceEngine.getTextureRegion("fieldarrow"), 2);
-      increase.setPosition(image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 3);
-
-      imageListener = new ClickResult(doneCallback, new Image[] {decrease, increase, dontCare},
-          new ClickResult.StateMapper() {
-        @Override
-        public int map(float x, float y) {
-          if (x < image.getWidth() / 2 && y > image.getHeight() / 2) return 0;
-          if (x > image.getWidth() / 2 && y > image.getHeight() / 2) return 1;
-          return 2;
-        }
-      });
+      AtlasRegion arrow = ScienceEngine.getTextureRegion("fieldarrow");
+      final Image decrease = createResultImage(new TextureRegion(arrow, arrow.getRegionX() + arrow.getRegionWidth(), 
+          arrow.getRegionY(), -arrow.getRegionWidth(), arrow.getRegionHeight()), 2);
+      final Image dontCare = createResultImage(ScienceEngine.getTextureRegion("cross"), 1);
+      final Image increase = createResultImage(arrow, 2);
 
       switch (this.resultType) {
         case None: imageListener.setResult(2); break;
         case Direct: imageListener.setResult(1); break;
         case Inverse: imageListener.setResult(0); break;
       }
-      //this.addActor(decrease);
-      //this.addActor(increase);
-      //this.addActor(dontCare); 
       Table list = new Table(guru.getSkin());
-      list.setFillParent(true);
-      list.add(decrease).width(200).height(200);
-      list.add(dontCare).width(200).height(200);
-      list.add(increase).width(200).height(200);
+      list.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          if (event.getTarget() == increase) {
+            systemReadyToFinish(ParameterProber.this.resultType == ResultType.Direct);
+          } else if (event.getTarget() == decrease) {
+            systemReadyToFinish(ParameterProber.this.resultType == ResultType.Inverse);
+          } else if (event.getTarget() == dontCare) {
+            systemReadyToFinish(ParameterProber.this.resultType == ResultType.None);
+          }
+        }
+      });
+      list.setPosition(image.getX() - 100, image.getY());
+      list.add("Decrease"); list.add(decrease).width(50).height(50).right(); list.row();
+      decrease.addAction(Actions.repeat(-1, 
+          Actions.sequence(
+              Actions.sizeTo(0, 50),
+              Actions.sizeTo(50, 50, 2))));
+      list.add("No Effect"); list.add(dontCare).width(50).height(50).center(); list.row();
+      list.add("Increase"); list.add(increase).width(50).height(50).left(); list.row();
+      increase.addAction(Actions.repeat(-1, 
+          Actions.sequence(
+              Actions.sizeTo(100, 50, 2),
+              Actions.sizeTo(50, 50, 2))));
       this.addActor(list);
     }
     this.addActor(image);
-    image.addListener(imageListener);   
 
     if (resultExprString == null) return;
     Parser parser = new Parser();
