@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -160,6 +162,18 @@ public class ScreenUtils {
     button.getLabel().setAlignment(Align.center, Align.center);
     ScreenComponent.scaleSize(button, width, height);
     button.setPosition(x, y);
+    return button;
+  }
+
+  public static TextButton createCheckBox(String text, 
+      float x, float y, float width, float height, CheckBoxStyle checkBoxStyle) {
+    CheckBox button = new CheckBox(text, checkBoxStyle);
+    button.getLabel().setWrap(true);
+    button.getLabel().setAlignment(Align.center, Align.center);
+    ScreenComponent.scaleSize(button, width, height);
+    button.setPosition(x, y);
+    button.getCell(button.getImage()).width(button.getImage().getWidth() * 2).height(button.getImage().getHeight() * 2);
+    button.getCell(button.getLabel()).width(button.getWidth() - button.getImage().getWidth() * 2);
     return button;
   }
 

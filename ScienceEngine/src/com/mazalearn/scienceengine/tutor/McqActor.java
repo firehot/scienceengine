@@ -27,6 +27,7 @@ public class McqActor extends Group {
   private ITutor tutor;
   private TextButton explanation;
   private ButtonGroup optionButtons;
+  private final CheckBoxStyle radioButtonStyle, checkBoxStyle;
   
   private static class OptionListener extends ClickListener {
     
@@ -54,6 +55,8 @@ public class McqActor extends Group {
     createExplanationArea(skin);
     createSubmitButton(skin);
     this.optionListener = createListener(skin, submitButton);
+    this.radioButtonStyle = skin.get("mcq-radio", CheckBoxStyle.class);
+    this.checkBoxStyle = skin.get("mcq-check", CheckBoxStyle.class);
   }
 
   private void createExplanationArea(Skin skin) {
@@ -75,7 +78,7 @@ public class McqActor extends Group {
     optionButtons = new ButtonGroup();
     McqActor.OptionListener listener = new OptionListener(submitButton); 
     for (int i = 0; i < MAX_OPTIONS; i++) {
-      TextButton optionButton = ScreenUtils.createTextButton("", 
+      TextButton optionButton = ScreenUtils.createCheckBox("", 
           ScreenComponent.McqOption.getX(ScreenComponent.getScaledX(400)), 
           y - ScreenComponent.getScaledY(30 * 2 * i), 
           400, 30,
@@ -98,6 +101,7 @@ public class McqActor extends Group {
       TextButton optionButton = (TextButton) buttons.get(i);
       optionButton.setChecked(false);
       optionButton.clearActions();
+      optionButton.setStyle(singleAnswer ? radioButtonStyle : checkBoxStyle);
       Color c = optionButton.getColor();
       optionButton.setColor(c.r, c.g, c.b, 1);
       if (i < optionList.size()) {

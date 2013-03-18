@@ -186,9 +186,10 @@ public class ParameterProber extends AbstractScience2DProber {
       //this.addActor(increase);
       //this.addActor(dontCare); 
       Table list = new Table(guru.getSkin());
+      list.setFillParent(true);
       list.add(decrease).width(200).height(200);
-      list.add(dontCare);
-      list.add(increase);
+      list.add(dontCare).width(200).height(200);
+      list.add(increase).width(200).height(200);
       this.addActor(list);
     }
     this.addActor(image);

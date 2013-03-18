@@ -118,6 +118,34 @@ check-on
   orig: 14, 14
   offset: 0, 0
   index: -1
+mcq-check-on
+  rotate: false
+  xy: 104, 2
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+mcq-check-off
+  rotate: false
+  xy: 119, 2
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+mcq-radio-on
+  rotate: false
+  xy: 134, 2
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+mcq-radio-off
+  rotate: false
+  xy: 149, 2
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
 tree-minus
   rotate: false
   xy: 119, 35
