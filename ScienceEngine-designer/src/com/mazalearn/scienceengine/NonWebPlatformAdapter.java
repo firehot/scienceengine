@@ -104,7 +104,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       wr.writeBytes("GET " + path + " HTTP/1.0\r\n\r\n");
       wr.flush();
       Gdx.app.log(ScienceEngine.LOG, "Get " + path);
-      byte[] response = new byte[8000];
+      byte[] response = new byte[20000];
       socket.getInputStream().read(response);
       wr.close();
       responseStr = new String(response);

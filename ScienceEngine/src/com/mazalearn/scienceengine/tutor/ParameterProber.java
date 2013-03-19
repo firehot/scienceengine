@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -22,6 +23,7 @@ import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.lang.SyntaxException;
 import com.mazalearn.scienceengine.core.lang.Variable;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.SizeAction;
 
 // outcome = function of parameter
 // doubts on how parameter change affects outcome
@@ -47,6 +49,9 @@ public class ParameterProber extends AbstractScience2DProber {
   private Set<Variable> resultExprVariables;
 
   protected IModelConfig<?> probeConfig;
+  private Vector2 coords = new Vector2();
+  private Table changeChoices;
+  private Image delta;
   
   private Image createResultImage(TextureRegion textureRegion, float x, float y) {
     Image image = new Image(textureRegion);
@@ -57,15 +62,6 @@ public class ParameterProber extends AbstractScience2DProber {
     return image;
   }
     
-  private Image createResultImage(TextureRegion textureRegion, float scale) {
-    Image image = new Image(textureRegion);
-    ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
-    //image.setVisible(false);
-    image.setSize(image.getWidth() * scale, image.getHeight() * scale);
-    image.setOrigin(0, image.getHeight() / 2);
-    return image;
-  }
-  
   @Override 
   public void finish() {
     ScienceEngine.clearPins();
@@ -84,6 +80,8 @@ public class ParameterProber extends AbstractScience2DProber {
   
   @Override
   public void prepareToTeach(ITutor childTutor) {
+    ScienceEngine.setProbeMode(true);
+    ScienceEngine.pin(probeConfig.getBody(), true);
     super.prepareToTeach(childTutor);
     image.setVisible(false);
     ScienceEngine.clearPins();
@@ -99,14 +97,23 @@ public class ParameterProber extends AbstractScience2DProber {
       science2DController.getModel().bindParameterValues(resultExprVariables);
       imageListener.setResult(resultExpr.bvalue() ? 0 : 1);
     } else {
-      science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
-      ScienceEngine.pin(probeConfig.getBody(), true);
+      float middle = (probeConfig.getLow() + probeConfig.getHigh()) / 2;
+      ((IModelConfig<Float>)probeConfig).setValue(middle);
       ScienceEngine.selectParameter(probeConfig.getBody(), probeConfig.getParameter(), 
-          probeConfig.getLow(), (IScience2DView) getStage());
+          middle, (IScience2DView) getStage());
+      Table actor = (Table) science2DController.getModelControls().findActor(probeConfig.getName());
+      coords.set(actor.getPrefWidth() / 2 - image.getWidth() / 2, 
+          actor.getPrefHeight() / 2 - image.getHeight() / 2);
+      actor.localToStageCoordinates(coords);
+      image.setPosition(coords.x, coords.y);
+      delta.setPosition(coords.x + image.getWidth(), coords.y + delta.getHeight() / 2);
+      changeChoices.setPosition(image.getX() - 140, image.getY() + 30);
+      // TODO: Not sure why below line is required - without it, modelcontrols disappears.
+      ScienceEngine.pin(probeConfig.getBody(), true);
+      science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
     }
     ScienceEngine.selectBody(null, science2DController.getView());
     image.setVisible(true);
-    ScienceEngine.setProbeMode(true);
   }
   
   @Override
@@ -142,67 +149,57 @@ public class ParameterProber extends AbstractScience2DProber {
       
       Image clockwise = createResultImage(ScienceEngine.getTextureRegion("clockwise"), 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
-      Image dontCare = createResultImage(ScienceEngine.getTextureRegion("cross"), 
-          image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
       Image antiClockwise = createResultImage(ScienceEngine.getTextureRegion("anticlockwise"), 
           image.getX() + image.getWidth() / 2, image.getY() + image.getHeight() / 2);
-      imageListener = new ClickResult(doneCallback, new Image[] {clockwise, antiClockwise, dontCare},
+      imageListener = new ClickResult(doneCallback, new Image[] {clockwise, antiClockwise},
           new ClickResult.StateMapper() {
         @Override
         public int map(float x, float y) {
-          if (x < image.getWidth() / 2 && y > 0) return 0;
-          if (x > image.getWidth() / 2&& y > 0) return 1;
-          return 2;
-        }
+          return (x < image.getWidth() / 2) ? 0 : 1;
+         }
       });
       this.addActor(clockwise);
       this.addActor(antiClockwise);
-      this.addActor(dontCare);      
       image.addListener(imageListener);   
 
     } else {
-      image.setX(ScreenComponent.getScaledX(700) - image.getWidth()/2);
-      image.setY(ScreenComponent.getScaledY(250) - image.getHeight()/2);
-      //Actor actor = science2DController.getModelControls().findActor(probeConfig.getName());
-      //image.setPosition(actor.getX(), actor.getY());
      
       AtlasRegion arrow = ScienceEngine.getTextureRegion("fieldarrow");
-      final Image decrease = createResultImage(new TextureRegion(arrow, arrow.getRegionX() + arrow.getRegionWidth(), 
-          arrow.getRegionY(), -arrow.getRegionWidth(), arrow.getRegionHeight()), 2);
-      final Image dontCare = createResultImage(ScienceEngine.getTextureRegion("cross"), 1);
-      final Image increase = createResultImage(arrow, 2);
+      final Image decrease = new Image(new TextureRegion(arrow, arrow.getRegionX() + arrow.getRegionWidth(), 
+          arrow.getRegionY(), -arrow.getRegionWidth(), arrow.getRegionHeight()));
+      final Image dontCare = new Image(ScienceEngine.getTextureRegion("cross"));
+      final Image increase = new Image(arrow);
+      delta = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
 
-      switch (this.resultType) {
-        case None: imageListener.setResult(2); break;
-        case Direct: imageListener.setResult(1); break;
-        case Inverse: imageListener.setResult(0); break;
-      }
-      Table list = new Table(guru.getSkin());
-      list.addListener(new ClickListener() {
+      changeChoices = new Table(guru.getSkin());
+      changeChoices.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
+          boolean success = false;
           if (event.getTarget() == increase) {
-            systemReadyToFinish(ParameterProber.this.resultType == ResultType.Direct);
+            success = ParameterProber.this.resultType == ResultType.Direct;
+            systemReadyToFinish(success);
           } else if (event.getTarget() == decrease) {
-            systemReadyToFinish(ParameterProber.this.resultType == ResultType.Inverse);
+            success = ParameterProber.this.resultType == ResultType.Inverse;
+            systemReadyToFinish(success);
           } else if (event.getTarget() == dontCare) {
-            systemReadyToFinish(ParameterProber.this.resultType == ResultType.None);
+            success = ParameterProber.this.resultType == ResultType.None;
+            systemReadyToFinish(success);
           }
+          changeChoices.setVisible(!success);
         }
       });
-      list.setPosition(image.getX() - 100, image.getY());
-      list.add("Decrease"); list.add(decrease).width(50).height(50).right(); list.row();
-      decrease.addAction(Actions.repeat(-1, 
+      changeChoices.add("Decreases"); changeChoices.add(decrease).width(50).height(50).right(); changeChoices.row();
+      changeChoices.add("Is Unaffected"); changeChoices.add(dontCare).width(50).height(50).center(); changeChoices.row();
+      changeChoices.add("Increases"); changeChoices.add(increase).width(50).height(50).left(); changeChoices.row();
+      delta.addAction( 
+          Actions.forever(
           Actions.sequence(
-              Actions.sizeTo(0, 50),
-              Actions.sizeTo(50, 50, 2))));
-      list.add("No Effect"); list.add(dontCare).width(50).height(50).center(); list.row();
-      list.add("Increase"); list.add(increase).width(50).height(50).left(); list.row();
-      increase.addAction(Actions.repeat(-1, 
-          Actions.sequence(
-              Actions.sizeTo(100, 50, 2),
-              Actions.sizeTo(50, 50, 2))));
-      this.addActor(list);
+             SizeAction.sizeTo(0, 30, 0),
+             SizeAction.sizeTo(50, 30, 2)
+              )));
+      this.addActor(changeChoices);
+      this.addActor(delta);
     }
     this.addActor(image);
 

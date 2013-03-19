@@ -41,7 +41,7 @@ class ClickResult extends ClickListener {
   @Override
   public void touchDragged(InputEvent event, float x, float y, int pointer) {
     for (Image image: stateImages) {
-      //image.setVisible(false);
+      image.setVisible(false);
     }
     stateImages[stateMapper.map(x, y)].setVisible(true);
   }

@@ -48,9 +48,8 @@ public class ModelControls extends Table {
   
   public void refresh() {
     registerModelConfigs(modelControlPanel);
-    ScreenComponent sc = ScreenComponent.ModelControls;
-    setPosition(sc.getX(getPrefWidth()) + getPrefWidth() / 2,
-        sc.getY(getPrefHeight()) + getPrefHeight() / 2);
+    this.invalidate();
+    this.validate();
   }
   
   private IParameter asParameter(final Science2DBody body) {
@@ -64,6 +63,14 @@ public class ModelControls extends Table {
         return body.toString();
       }
     };
+  }
+  
+  @Override
+  public void validate() {
+    super.validate();
+    ScreenComponent sc = ScreenComponent.ModelControls;
+    setPosition(sc.getX(getPrefWidth()) + getPrefWidth() / 2,
+        sc.getY(getPrefHeight()) + getPrefHeight() / 2);
   }
   
   @SuppressWarnings("rawtypes")
@@ -94,6 +101,7 @@ public class ModelControls extends Table {
         this.controllers.add(bodyController);
         // Indent controls for body a little to the right.
         Table bodyControlPanel = new Table(skin);
+        bodyControlPanel.setName(body.name());
         modelControlPanel.add(bodyControlPanel).padLeft(15);
         modelControlPanel.row();
         for (IModelConfig modelConfig: body.getConfigs()) {

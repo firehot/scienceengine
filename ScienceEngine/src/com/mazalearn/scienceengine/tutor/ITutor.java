@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 public interface ITutor {
 
   enum State {
-    Constructed, Initialized, PreparedToTeach, Teaching, SystemFinished, UserFinished, Finished;
+    Constructed, Initialized, PreparedToTeach, Teaching, SystemFinished, UserFinished, Finished, Aborted;
   };
   
   public interface ITutorType extends IComponentType {
@@ -137,4 +137,9 @@ public interface ITutor {
    * For a group tutor, this is the percentage of children attempted.
    */
   float getPercentProgress();
+
+  /**
+   * Abort current tutor - in whatever state it is.
+   */
+  public void abort();
 }

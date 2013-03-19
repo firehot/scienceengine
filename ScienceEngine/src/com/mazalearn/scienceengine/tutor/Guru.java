@@ -34,6 +34,7 @@ import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.Scoreboard;
+import com.mazalearn.scienceengine.core.view.SizeAction;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 /**
  * Root of the tutor hierarchy, handles all the tutors under management of a root tutor.
@@ -241,6 +242,9 @@ public class Guru extends Group implements ITutor {
   public void finish() {
     hinter.setHint(null);
     recordStats();
+    if (rootTutor.getState() == State.Aborted) {
+      return;
+    }
     if (!rootTutor.isSuccess()) {
       science2DController.getView().done(false);
       this.setVisible(false);
@@ -274,17 +278,15 @@ public class Guru extends Group implements ITutor {
     final Image challenge = new Image(ScienceEngine.getTextureRegion("challenge"));
     challenge.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2,
         ScreenComponent.VIEWPORT_HEIGHT - 60);
-    challenge.setSize(256, 256);
+    challenge.setSize(32, 32);
     soundManager.play(ScienceEngineSound.CHALLENGE);
-    // TODO: Why does sizeTo animation not work below? Once it works, remove initial sizing to 256, 256
     this.addActor(challenge);
     challenge.addAction(
         Actions.sequence(
-            // Actions.sizeTo(256, 256),
             Actions.parallel(
-                Actions.moveTo(ScreenComponent.VIEWPORT_WIDTH / 2 - challenge.getWidth() / 2, 
-                    ScreenComponent.VIEWPORT_HEIGHT / 2 - challenge.getHeight() / 2, 3),
-                Actions.sizeTo(256, 256, 3),
+                Actions.moveTo(ScreenComponent.VIEWPORT_WIDTH / 2 - 256 / 2, 
+                    ScreenComponent.VIEWPORT_HEIGHT / 2 - 256 / 2, 3),
+                SizeAction.sizeTo(256, 256, 3),
                 Actions.rotateBy(360, 3)),
             Actions.delay(1),
             new Action() {
@@ -406,7 +408,7 @@ public class Guru extends Group implements ITutor {
   }
 
   public void goTo(ITutor tutor) {
-    activeTutor.prepareToTeach(null); // Disable active Tutor
+    activeTutor.abort();
     ScienceEngine.setProbeMode(false);
     setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     // ??? why above series ??? 
@@ -425,6 +427,10 @@ public class Guru extends Group implements ITutor {
   @Override
   public ITutor getParentTutor() {
     return null;
+  }
+  
+  @Override
+  public void abort() {
   }
 
   @Override

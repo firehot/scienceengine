@@ -118,11 +118,18 @@ public abstract class AbstractTutor extends Group implements ITutor {
     guru.setActiveTutor(parent);
     if (state == State.Finished) { 
       parent.systemReadyToFinish(true);
+    } else if (state == State.Aborted) {
+      parent.abort();
     } else {
       parent.finish();
     }
   }
 
+  @Override
+  public void abort() {
+    this.state = State.Aborted;
+    finish();
+  }
   private void recordStats() {
     // Update all stats
     stats.timeSpent = getTimeSpent();
@@ -157,7 +164,9 @@ public abstract class AbstractTutor extends Group implements ITutor {
     Gdx.app.log(ScienceEngine.LOG, "Prepare to Teach: " + getId());
     new ComponentLoader(science2DController).loadComponents(components, false);
     ConfigLoader.loadConfigs(configs, science2DController.getModel());
-    science2DController.getModelControls().refresh();
+    if (getChildTutors() == null) {
+      science2DController.getModelControls().refresh();
+    }
     state = State.PreparedToTeach;
     
     this.setVisible(false);

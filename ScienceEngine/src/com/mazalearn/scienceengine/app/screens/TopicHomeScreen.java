@@ -191,7 +191,7 @@ public class TopicHomeScreen extends AbstractScreen {
       ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
       // Timespent label
       String timeSpent = Format.formatTime(stats.timeSpent);
-      activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 50, 30, blueBackground));
+      activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 60, 30, blueBackground));
 
       final Topic iLevel = level;
       activityThumb.addListener(new ClickListener() {
