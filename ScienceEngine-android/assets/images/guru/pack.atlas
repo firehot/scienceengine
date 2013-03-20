@@ -3,86 +3,93 @@ pack.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+idea
+  rotate: false
+  xy: 1, 149
+  size: 300, 355
+  orig: 300, 355
+  offset: 0, 0
+  index: -1
 challenge
   rotate: false
-  xy: 1, 215
+  xy: 303, 248
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 explanation
   rotate: false
-  xy: 1, 85
+  xy: 1, 19
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 anticlockwise
   rotate: false
-  xy: 259, 343
+  xy: 561, 376
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 clockwise
   rotate: false
-  xy: 259, 213
+  xy: 691, 376
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 greenballoon
   rotate: false
-  xy: 389, 343
+  xy: 821, 376
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 redballoon
   rotate: false
-  xy: 389, 213
+  xy: 561, 246
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 shoppingcart
   rotate: false
-  xy: 519, 343
+  xy: 691, 246
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 check
   rotate: false
-  xy: 1, 19
+  xy: 951, 440
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 cross
   rotate: false
-  xy: 259, 147
+  xy: 303, 182
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 questionmark
   rotate: false
-  xy: 519, 277
+  xy: 821, 310
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 fieldarrow-yellow
   rotate: false
-  xy: 649, 455
+  xy: 1, 1
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
   index: -1
 fieldarrow
   rotate: false
-  xy: 1, 1
+  xy: 259, 131
   size: 32, 16
   orig: 32, 16
   offset: 0, 0

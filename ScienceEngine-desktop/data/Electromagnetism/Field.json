@@ -157,22 +157,27 @@ tutors:[
           id: "C1.4",
             goal:"Select variables which affect the rotation of the charge and press Done.\nYou have 3 tries.",
             configs: [
-            {name:"Charge.ChargeStrength", permitted: false},
-            {name:"BField.FieldStrengthZ",permitted: false},
-            {name:"Charge.Velocity",permitted:false}
+            {name:"Charge.ChargeStrength", permitted: true},
+            {name:"BField.FieldStrengthZ",permitted: true},
+            {name:"BField.FieldStrengthX",permitted: false},
+            {name:"BField.FieldStrengthY",permitted: false},
+            {name:"Charge.Velocity",permitted:true}
             ],
-            parameters: ["HorseshoeMagnet.MagnetStrength", "CurrentSource.MaxCurrent"],
+            components:[{type:"Charge", visible: true, pin: true}, {type:"Monopole", visible:false} ],
+            parameters: ["Charge.ChargeStrength", "Charge.Velocity", "BField.FieldStrengthZ"],
             success: 5000},
          {type: "Abstractor", 
           id: "C1.5",
             goal:"Select variables which affect the movement of a magnetic monopole and press Done.\nYou have 3 tries.",
             configs: [
-            {name:"Monopole.MagnetStrength", permitted: false},
-            {name:"Monopole.MonopoleType", permitted: false},
-            {name:"BField.FieldStrengthX",permitted: false},
-            {name:"BField.FieldStrengthY",permitted: false}
+            {name:"Monopole.MagnetStrength", permitted: true},
+            {name:"Monopole.MonopoleType", permitted: true},
+            {name:"BField.FieldStrengthX",permitted: true},
+            {name:"BField.FieldStrengthZ",permitted: false},
+            {name:"BField.FieldStrengthY",permitted: true}
             ],
-            parameters: ["HorseshoeMagnet.MagnetStrength", "CurrentSource.MaxCurrent"],
+            components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
+            parameters: ["Monopole.MagnetStrength", "Monopole.MonopoleType","BFIeld.FIeldStrengthX","BField.FieldStrengthY"],
             success: 5000
         }],
        },

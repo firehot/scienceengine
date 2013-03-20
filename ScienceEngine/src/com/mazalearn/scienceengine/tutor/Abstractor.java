@@ -65,21 +65,10 @@ public class Abstractor extends AbstractTutor {
   private void createConfigTable(IScience2DModel science2DModel, Skin skin) {
     configTable = new Table(skin);
     configTable.setName("Configs");
-    ScreenComponent.scalePosition(configTable, 150, 325);
+    ScreenComponent.scalePosition(configTable, 150, 380);
     this.addActor(configTable);
 
-    TextureRegion shoppingCartTexture = ScienceEngine.getTextureRegion("shoppingcart");
-    // TODO: Create cart as a screencomponent
-    final Image cart = new Image(shoppingCartTexture);
-    cart.setSize(ScreenComponent.ShoppingCart.getWidth(), ScreenComponent.ShoppingCart.getHeight());
-    cart.setPosition(ScreenComponent.ShoppingCart.getX(), 
-        ScreenComponent.ShoppingCart.getY());
-    cart.addListener(new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
-        configTable.setVisible(!configTable.isVisible());
-      }      
-    });
-    this.addActor(cart);
+    TextureRegion ideaTexture = ScienceEngine.getTextureRegion("idea");
     List<CheckBox> checkBoxList = new ArrayList<CheckBox>();
     for (final IModelConfig<?> config: science2DModel.getAllConfigs().values()) {
       if (config.isPossible() && config.isPermitted() && config.getBody() != null) {
@@ -107,9 +96,10 @@ public class Abstractor extends AbstractTutor {
     }
     // Add lives to table
     for (int i = 0; i < 3; i++) {
-      life[i] = new Image(shoppingCartTexture);
-      life[i].setSize(ScreenComponent.ShoppingCart.getWidth() / 2, ScreenComponent.ShoppingCart.getHeight() / 2);
-      configTable.add(life[i]).width(ScreenComponent.ShoppingCart.getWidth() / 2);
+      life[i] = new Image(ideaTexture);
+      life[i].setSize(ScreenComponent.Idea.getWidth() / 2,
+          ScreenComponent.Idea.getHeight() / 2);
+      configTable.add(life[i]).width(ScreenComponent.Idea.getWidth() / 2);
     }
     configTable.add(createDoneButton(skin)).fill();
     configTable.row();
