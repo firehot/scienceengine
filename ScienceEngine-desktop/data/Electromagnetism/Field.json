@@ -135,7 +135,10 @@ tutors:[
            success: 100,
            failure: 50,
            parameter:"Charge.ChargeStrength",
-           result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)"
+           result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)",
+           components:[{type:"Charge", visible: true, pin: true}],
+           configs:[{name:"FieldMeter.SampleMode", value:"Uniform"},
+                    {name:"BField.FieldStrengthZ", value: 5} ]
           },
           {type:"ParameterProber",
            id: "C1.3",
@@ -145,7 +148,10 @@ tutors:[
            success: 100,
            failure: 50,
            parameter:"BField.FieldStrengthZ",
-           result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)"
+           result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)",
+           components:[{type:"Charge", visible: true, pin: true}],
+           configs:[{name:"FieldMeter.SampleMode", value:"Uniform"},
+                    {name:"BField.FieldStrengthZ", value: 5}]
           },
          {type: "Abstractor", 
           id: "C1.4",
