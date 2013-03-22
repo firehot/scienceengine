@@ -10,6 +10,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 /**
@@ -133,7 +134,7 @@ public class PreferencesManager {
   public void saveProfile() {
     // TODO: should not be Case sensitive for user email 
     // convert the given profile to text
-    String profileAsText = new Json().toJson(profile);
+    String profileAsText = new Json(OutputType.json).toJson(profile);
     Gdx.app.log(ScienceEngine.LOG, "Saving Profile - " + profileAsText);
     profileAsText = Base64Coder.encodeString(profileAsText);
     String userEmail = getPrefs().getString(PREF_USER_EMAIL);

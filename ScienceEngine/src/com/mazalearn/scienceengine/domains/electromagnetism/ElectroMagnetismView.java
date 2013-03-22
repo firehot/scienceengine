@@ -1,15 +1,14 @@
 package com.mazalearn.scienceengine.domains.electromagnetism;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -26,11 +25,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 
 public class ElectroMagnetismView extends AbstractScience2DView {
-  private static final String USER_EMAIL = "useremail";
-  private static final String USER_NAME = "username";
-  private static final String CURRENT = "current";
-  private static final String COLOR = "color";
-  private static final String PLATFORM = "platform";
 
   private Dynamo dynamo;
   private Magnet magnet;
@@ -57,7 +51,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   
   @Override
   public void prepareView() {
-    // Below are only in level 9
+    // Below are only in science train level
     dynamo = (Dynamo) science2DModel.findBody(ComponentType.Dynamo);
     magnet = (Magnet) science2DModel.findBody(ComponentType.Magnet);
     lightbulb = (Lightbulb) science2DModel.findBody(ComponentType.Lightbulb);
@@ -66,11 +60,12 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     if (scienceTrainActor != null) {
       scienceTrainActor.reset();
     }
-    // above only in level 9
+    // above only in science train level
 
-    // TODO: should be added In ACTIVITY group
+
+    Group activityGroup = (Group) findActor(ScreenComponent.ACTIVITY_GROUP);
     for (List<CircuitElement> circuit: science2DModel.getCircuits()) {
-      this.addActor(new CircuitActor(circuit));
+      activityGroup.addActor(new CircuitActor(circuit));
     }
     super.prepareView();
   }
@@ -79,12 +74,12 @@ public class ElectroMagnetismView extends AbstractScience2DView {
   public void initializeCommands(List<IModelConfig<?>> commands) {
     super.initializeCommands(commands);
     commands.add(new AbstractModelConfig<String>("Upload") { //$NON-NLS-1$ //$NON-NLS-2$
-      public void doCommand() { uploadToServer(); }
+      public void doCommand() { saveInProfile(); }
       public boolean isPossible() { return true; }
     });
   }
   
-  private void uploadToServer() {
+  private void saveInProfile() {
     float current = Math.round(dynamo.getMaxCurrent());
     Color color = lightbulb.getColor();
 
@@ -110,23 +105,9 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     // Save drawing png in profile
     Profile profile = ScienceEngine.getPreferencesManager().getProfile();
     byte[] drawingPngBytes = drawingActor.getDrawingPng();
-    profile.setDrawingPng(drawingPngBytes);
-    // Post drawing, color and current to server
-    Map<String, String> postParams = new HashMap<String, String>();
-    postParams.put(USER_EMAIL, ScienceEngine.getUserEmail());
-    postParams.put(USER_NAME, ScienceEngine.getUserName());
-    postParams.put(CURRENT, String.valueOf(current));
-    postParams.put(COLOR, rgba(color));
-    postParams.put(PLATFORM, ScienceEngine.getPlatformAdapter().getPlatform().name());
-    try {
-      ScienceEngine.getPlatformAdapter().httpPost("upload", 
-          "application/octet-stream", postParams, drawingPngBytes);
-      ScienceEngine.displayStatusMessage(this, "Uploaded to MazaLearn - See www.mazalearn.com/train.html");
-    } catch(GdxRuntimeException e) {
-      e.printStackTrace();
-      ScienceEngine.displayStatusMessage(this, "Network Problem: Failed to upload to MazaLearn");
-    }
-    
+    // Save drawing, current and color in profile
+    profile.setDrawingPng(drawingPngBytes, String.valueOf(current), rgba(color));
+    ScienceEngine.displayStatusMessage(this, "Uploading to MazaLearn - See www.mazalearn.com/train.html");    
   }
 
   private String rgba(Color color) {

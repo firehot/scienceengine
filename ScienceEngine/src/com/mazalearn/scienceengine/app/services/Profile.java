@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -33,6 +34,8 @@ public class Profile implements Serializable {
   private static final String FAILURE_TRACKER = "failureTracker";
   private static final String INSTALL_ID = "install_id";
   private static final String LAST_UPDATED = "last_updated";
+  private static final String CURRENT = "current";
+  private static final String COLOR = "color";
   
   private HashMap<Topic, HashMap<String, Float>> topicStats;
   private HashMap<String, String> properties;
@@ -143,7 +146,11 @@ public class Profile implements Serializable {
   
   public Topic getCurrentTopic() {
     String s = properties.get(TOPIC);
-    return s == null || s.length() == 0 ? null : Topic.valueOf(s);
+    try {
+      return s == null || s.length() == 0 ? null : Topic.valueOf(s);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
   }
 
   public void setUserName(String name) {
@@ -190,11 +197,11 @@ public class Profile implements Serializable {
     }
   }
 
-  public void setDrawingPng(byte[] drawingPngBytes) {
-    try {
-      properties.put(DRAWING_PNG, new String(drawingPngBytes, "US-ASCII"));
-    } catch (UnsupportedEncodingException ignored) {
-    }
+  public void setDrawingPng(byte[] drawingPngBytes, String current, String color) {
+    Gdx.app.error(ScienceEngine.LOG, " bytes = " + drawingPngBytes.length);
+    properties.put(DRAWING_PNG, new String(Base64Coder.encode(drawingPngBytes)));
+    properties.put(CURRENT, current);
+    properties.put(COLOR, color);
     save();
   }
   

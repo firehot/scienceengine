@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -34,7 +35,7 @@ public class UserCoachesServlet extends HttpServlet {
       new FilterPredicate(UploadServlet.COLOR, FilterOperator.NOT_EQUAL, null);
 
     // Use class Query to assemble a query
-    Query q = new Query("User").setFilter(colorPresentFilter);
+    Query q = new Query("User"); // .setFilter(colorPresentFilter);
 
     // Use PreparedQuery interface to retrieve results
     PreparedQuery pq = datastore.prepare(q);
@@ -43,10 +44,16 @@ public class UserCoachesServlet extends HttpServlet {
     String jsonStr = "[";
     boolean firstCoach = true;
     for (Entity user : pq.asIterable()) {
-      String color = (String) user.getProperty(UploadServlet.COLOR);
-      String userName = (String) user.getProperty(UploadServlet.USER_NAME);
-      String current = String.format("%2.2f", (Double) user.getProperty(UploadServlet.CURRENT));
+      EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(ProfileServlet.PROFILE);
+      if (profileEntity == null) continue;
+      if (profileEntity.getProperty(UploadServlet.COLOR) == null) continue;
+      if (profileEntity.getProperty(UploadServlet.CURRENT) == null) continue;
+      String color = (String) profileEntity.getProperty(UploadServlet.COLOR);
+      String userName = (String) profileEntity.getProperty(UploadServlet.USER_NAME);
+      float currentValue = Float.parseFloat((String) profileEntity.getProperty(UploadServlet.CURRENT));
+      String current = String.format("%2.2f", currentValue);
       String userEmail = user.getKey().getName();
+      System.out.println(userEmail);
       if (!firstCoach) {
         jsonStr += ",";
       }

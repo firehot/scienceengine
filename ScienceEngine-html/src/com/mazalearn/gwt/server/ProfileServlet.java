@@ -2,6 +2,7 @@ package com.mazalearn.gwt.server;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.badlogic.gdx.Gdx;
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
@@ -19,12 +22,14 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
+import com.mazalearn.scienceengine.ScienceEngine;
 
 @SuppressWarnings("serial")
 public class ProfileServlet extends HttpServlet {
 
-  private static final String PROFILE = "Profile";
+  static final String PROFILE = "Profile";
   static final String USER_EMAIL = "useremail";
+  static final String DRAWING_PNG = "DrawingPng";
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -69,6 +74,7 @@ public class ProfileServlet extends HttpServlet {
     int count = profileStringJson.length();
     while (profileStringJson.charAt(--count) == 0);
     Gson gson = new Gson();
+    System.out.println(profileStringJson.substring(0, count + 1));
     Profile profile = gson.fromJson(profileStringJson.substring(0, count+1), Profile.class);
     
     EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
@@ -77,7 +83,14 @@ public class ProfileServlet extends HttpServlet {
       user.setProperty(PROFILE, profileEntity);
     }
     for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
-      profileEntity.setProperty(entry.getKey(), entry.getValue());
+      if (entry.getKey().equals(DRAWING_PNG)) {
+        if (entry.getValue() != null) {
+          byte[] bytes = Base64.decode(entry.getValue());
+          profileEntity.setProperty(entry.getKey(), new Blob(bytes));
+        }
+      } else {
+        profileEntity.setProperty(entry.getKey(), entry.getValue());
+      }
     }
     for (Map.Entry<String, Map<String, Float>> topicStats: profile.topics.entrySet()) {
       String jsonStats = gson.toJson(topicStats.getValue());
@@ -88,16 +101,7 @@ public class ProfileServlet extends HttpServlet {
   
   public String getUserProfile(String userEmail) 
       throws IllegalStateException {
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
-    Entity user;
-    try {
-      user = ds.get(key);
-    } catch (EntityNotFoundException e) {
-      return "";
-    }
-    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
-    if (profileEntity == null) return "";
+    EmbeddedEntity profileEntity = retrieveUserProfile(userEmail);
     
     System.out.println(profileEntity);
     StringBuilder properties = new StringBuilder("{");
@@ -111,7 +115,7 @@ public class ProfileServlet extends HttpServlet {
           topics.append(topicDelimiter + property.getKey() + ":" + s);
           topicDelimiter = ",";
         }
-      } else {
+      } else if (!property.getKey().equals(DRAWING_PNG)){
         properties.append(propDelimiter + property.getKey() + ":\"" + value + "\"");
         propDelimiter = ",";
       }
@@ -122,5 +126,18 @@ public class ProfileServlet extends HttpServlet {
     System.out.println(json);
     String profileStringBase64 = Base64.encode(json);
     return profileStringBase64;
+  }
+
+  public static EmbeddedEntity retrieveUserProfile(String userEmail) {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
+    Entity user;
+    try {
+      user = ds.get(key);
+    } catch (EntityNotFoundException e) {
+      return null;
+    }
+    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
+    return profileEntity;
   }
 }
