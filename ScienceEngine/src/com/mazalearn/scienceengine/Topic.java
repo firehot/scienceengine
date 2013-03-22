@@ -1,21 +1,38 @@
 package com.mazalearn.scienceengine;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public enum Topic {
-  Field,
-  BarMagnet, TwoWires, ElectroMagnet,
-  BarMagnetInduction, ElectroMagnetInduction,
-  DCMotor, ACMotor, ScienceTrain, EMReview,
-  Electromagnetism(BarMagnet, Field, BarMagnet, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
+  Field(101),
+  BarMagnet(102), TwoWires(103), ElectroMagnet(104),
+  BarMagnetInduction(105), ElectroMagnetInduction(106),
+  DCMotor(107), ACMotor(108), ScienceTrain(109), EMReview(110),
+  Electromagnetism(1, BarMagnet, Field, BarMagnet, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
       ACMotor, ScienceTrain, EMReview),
-  SOM, StatesOfMatter(SOM, SOM), 
-  W, Waves(W, W);
+  SOM(201), StatesOfMatter(2, SOM, SOM), 
+  W(301), Waves(3, W, W);
 
-  private Topic[] childTopics;
-  private Topic canonicalChild;
+  private final Topic[] childTopics;
+  private final Topic canonicalChild;
+  private final int topicId;
+  private static Map<Integer, Topic> idToTopicMap = new HashMap<Integer, Topic>();
 
-  Topic(Topic... childTopics) {
+  static {
+    for (Topic topic: values()) {
+      idToTopicMap.put(topic.getTopicId(), topic);
+    }
+  }
+  /**
+   * Constructor
+   * @param topicId - numerical id for topic used for stats
+   * @param childTopics - canonicalchild as first followed by all child topics in order
+   */
+  Topic(int topicId, Topic... childTopics) {
+    this.topicId = topicId;
     if (childTopics.length == 0) {
+      this.canonicalChild = null;
       this.childTopics = childTopics;
       return;
     }
@@ -34,4 +51,11 @@ public enum Topic {
     return childTopics;
   }
 
+  public int getTopicId() {
+    return topicId;
+  }
+  
+  public Topic idToTopic(int topicId) {
+    return idToTopicMap.get(topicId);
+  }
 }

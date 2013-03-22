@@ -19,7 +19,7 @@
 
 <%@ page import="com.mazalearn.gwt.server.Activity" %>
 <%@ page import="com.mazalearn.gwt.server.Activity.Tutor" %>
-<%@ page import="com.mazalearn.gwt.server.Topic" %>
+<%@ page import="com.mazalearn.scienceengine.Topic" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -76,9 +76,9 @@
       topic = Topic.valueOf(request.getParameter("topic"));
     } catch(Exception ignored) {};
     
-    int activityLevel = 1;
+    Topic activityLevel = Topic.BarMagnet;
     try {
-      activityLevel = Integer.parseInt(request.getParameter("activity"));
+      activityLevel = Topic.valueOf(request.getParameter("activity"));
     } catch (Exception ignored) {};
     
     pageContext.setAttribute("userEmail", userEmail);

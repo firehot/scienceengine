@@ -45,9 +45,6 @@ public class Abstractor extends AbstractTutor {
     this.setSize(0, 0);
   }
   
-  /* (non-Javadoc)
-   * @see com.mazalearn.scienceengine.tutor.AbstractTutor#reinitialize(float, float, float, float)
-   */
   @Override
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);

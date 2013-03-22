@@ -194,6 +194,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     }
     // Bring CoreGroup to top.
     this.addActor(coreGroup);
+    // Bring model controls above all other components in activity group
+    activityGroup.addActor(modelControls);
   }
 
   public void setupControls() {

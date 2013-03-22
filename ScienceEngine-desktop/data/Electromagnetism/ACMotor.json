@@ -1,5 +1,4 @@
 {name:"Electromagnetism",
-level:8,
 description:"Creating an AC  motor by tuning the frequency to match rotation",
 components:[
 {type:"Image",viewspec:"brush",x:323.0,y:233.0,originX:0.0,originY:0.0,width:48.0,height:16.0,visible:true,rotation:0.0,move:"None",bodytype:false},

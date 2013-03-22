@@ -1,4 +1,4 @@
-{name:"Electromagnetism",level:11,description:"Magnetic Field and Magnetic monopoles",
+{name:"Electromagnetism",description:"Magnetic Field and Magnetic monopoles",
 components:[
 {type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0},
 {type:"BField",x:0,y:0,originX:10,originY:5,width:20.0,height:10,visible:true,rotation:0.0, pin:true},

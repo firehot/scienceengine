@@ -1,5 +1,7 @@
 package com.mazalearn.gwt.server;
 
+import com.mazalearn.scienceengine.Topic;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -62,14 +64,14 @@ public class Activity {
   };
   String description;
   String name;
-  int level;
+  int activityId;
   Tutor[] tutors;
   public transient List<Tutor> leafTutors;
   private transient Topic topic;
   private static final List<String> GROUP_TYPES = 
       Arrays.asList(new String[] {"Challenge", "RapidFire", "Guide"});
   
-  public static Activity load(ServletContext servletContext, Topic topic, int activityLevel) {
+  public static Activity load(ServletContext servletContext, Topic topic, Topic activityLevel) {
     String json;
     String fileName = "/assets/data/" + topic.name() + "/" + activityLevel + ".json";
     InputStream inp = servletContext.getResourceAsStream(fileName);
@@ -83,6 +85,7 @@ public class Activity {
     System.out.println(fileName + ": loading json");
     Activity activity = new Gson().fromJson(json, Activity.class);
     activity.topic = topic;
+    activity.activityId = activityLevel.getTopicId();
     activity.leafTutors = new ArrayList<Tutor>();
     collectLeafTutors(activity.tutors, activity.leafTutors);
     return activity;
@@ -95,7 +98,7 @@ public class Activity {
   public void populateStats(Map<String, Float> stats) {
     System.out.println("Populating stats");
     for (Tutor tutor: leafTutors) {
-      tutor.loadStats(stats, topic, level);
+      tutor.loadStats(stats, topic, activityId);
     }  
   }
 

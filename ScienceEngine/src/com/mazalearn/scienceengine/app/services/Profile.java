@@ -123,7 +123,9 @@ public class Profile implements Serializable {
     json.writeObjectStart("topics");
     for (Topic topic: Topic.values()) {
       HashMap<String,?> props = topicStats.get(topic);
-      json.writeValue(topic.name(), props);
+      if (props != null) {
+        json.writeValue(topic.name(), props);
+      }
     }
     json.writeObjectEnd();
   }
@@ -159,7 +161,7 @@ public class Profile implements Serializable {
   }
 
   private String makeTutorKey(Topic level, String tutorId, String key) {
-    return level + "$" + tutorId + "$" + key;
+    return level.getTopicId() + "$" + tutorId + "$" + key;
   }
 
   private float getStat(Topic topic, Topic level, String tutorId, String key) {
