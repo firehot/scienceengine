@@ -126,7 +126,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     int numTopics = 0;
     for (Topic childTopic: topic.getChildren()) {
       TutorStats stats = new TutorStats(topic, childTopic, Guru.ID);
-      percent += stats.percentProgress;
+      percent += stats.stats[TutorStats.PERCENT_PROGRESS];
       numTopics++;
     }
     return Math.round(percent * 100 / (100f * numTopics));

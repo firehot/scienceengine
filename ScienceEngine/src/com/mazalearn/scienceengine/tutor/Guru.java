@@ -258,11 +258,11 @@ public class Guru extends Group implements ITutor {
 
   private void recordStats() {
     // Update all stats
-    stats.timeSpent = getTimeSpent();
-    stats.numAttempts = getNumAttempts();
-    stats.numSuccesses = getNumSuccesses();
-    stats.failureTracker = getFailureTracker();
-    stats.percentProgress = getPercentProgress();
+    stats.stats[TutorStats.TIME_SPENT] = getTimeSpent();
+    stats.stats[TutorStats.NUM_ATTEMPTS] = getNumAttempts();
+    stats.stats[TutorStats.NUM_SUCCESSES] = getNumSuccesses();
+    stats.stats[TutorStats.FAILURE_TRACKER] = getFailureTracker();
+    stats.stats[TutorStats.PERCENT_PROGRESS] = getPercentProgress();
     
     stats.save();
   }

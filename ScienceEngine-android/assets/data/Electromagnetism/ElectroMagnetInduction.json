@@ -1,4 +1,4 @@
-{name:"Electromagnetism",level:6,description:"Induction of Current in coil by ElectroMagnet",
+{name:"Electromagnetism",description:"Induction of Current in coil by ElectroMagnet",
 components:[{type:"Image",viewspec:"coppercoils-back",x:300.0,y:64.0,originX:0.0,originY:0.0,width:64.0,height:256.0,visible:true,rotation:0.0,move:"None"},
 {type:"CurrentSource",x:271.0,y:135.0,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None"},
 {type:"ElectroMagnet",x:237.97548,y:132.02454,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"Move"},

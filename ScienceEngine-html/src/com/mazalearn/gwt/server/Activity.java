@@ -1,7 +1,5 @@
 package com.mazalearn.gwt.server;
 
-import com.mazalearn.scienceengine.Topic;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,53 +10,37 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import com.google.gson.Gson;
+import com.mazalearn.scienceengine.Topic;
 
 public class Activity {
   public static class Tutor {
+    private static final int NUM_STATS = 5;
     public String type;
     public String id;
     public String goal;
     Tutor[] childtutors;
-    public transient float timeSpent = 0;
-    public transient float numAttempts = 0;
-    public transient float numSuccesses = 0;
-    public transient float failureTracker = 0;
-    public transient float percentProgress = 0;
-    private static final String NUM_ATTEMPTS = "numAttempts";
-    private static final String NUM_SUCCESSES = "numSucceses";
-    private static final String PERCENT_PROGRESS = "percentProgress";
-    private static final String TIME_SPENT = "timeSpent";
-    private static final String FAILURE_TRACKER = "failureTracker";
+    public transient float[] stats = new float[NUM_STATS];
+    public static final int NUM_ATTEMPTS = 0;
+    public static final int NUM_SUCCESSES = 1;
+    public static final int PERCENT_PROGRESS = 2;
+    public static final int TIME_SPENT = 3;
+    public static final int FAILURE_TRACKER = 4;
     
-    private String makeTutorKey(int activity, String tutorId, String key) {
-      return activity + "$" + tutorId + "$" + key;
-    }
-
-    private float getStat(Map<String, Float> stats, int activity, String key) {
-      String statKey = makeTutorKey(activity, id, key);
-      Float statValue = stats.get(statKey);
-      statValue = statValue == null ? 0f : Math.round(statValue);
-      return statValue;
-      
-    }
-    public void loadStats(Map<String, Float> stats, Topic topic, int activityLevel) {
-      timeSpent = getStat(stats, activityLevel, TIME_SPENT);
-      numAttempts = getStat(stats, activityLevel, NUM_ATTEMPTS);
-      numSuccesses = getStat(stats, activityLevel, NUM_SUCCESSES);
-      failureTracker = getStat(stats, activityLevel, FAILURE_TRACKER);
-      percentProgress = getStat(stats, activityLevel, PERCENT_PROGRESS);
+    public void loadStats(Map<String, float[]> stats, Topic topic, int activityLevel) {
+      String statKey = activityLevel + "$" + id;
+      float[] statValues = stats.get(statKey);
+      if (statValues != null) this.stats = statValues;
       // printStats(topic, activityLevel);
     }
     
     private void printStats(Topic topic, int activityLevel) {
       String str = "Topic: " + topic.name() +
-          " Level: " + activityLevel + 
           " Tutor: " + id + 
-          ", Time spent: " + timeSpent + 
-          ", NumAttempts: " + numAttempts +
-          ", numSuccesses: " + numSuccesses +
-          ", failureTracker: " + failureTracker + 
-          ", percentProgress: " + percentProgress;
+          ", Time spent: " + stats[TIME_SPENT] + 
+          ", NumAttempts: " + stats[NUM_ATTEMPTS] +
+          ", numSuccesses: " + stats[NUM_SUCCESSES] +
+          ", failureTracker: " + stats[FAILURE_TRACKER] + 
+          ", percentProgress: " + stats[PERCENT_PROGRESS];
       System.out.println(str);
     }
   };
@@ -95,7 +77,7 @@ public class Activity {
     return leafTutors;
   }
   
-  public void populateStats(Map<String, Float> stats) {
+  public void populateStats(Map<String, float[]> stats) {
     System.out.println("Populating stats");
     for (Tutor tutor: leafTutors) {
       tutor.loadStats(stats, topic, activityId);

@@ -1,4 +1,4 @@
-{name:"Electromagnetism",level:9,description:"Catch the Science Train - Light up your own coach.",
+{name:"Electromagnetism",description:"Catch the Science Train - Light up your own coach.",
 components:[
 {type:"Drawing",x:30.0,y:40,originX:170.0,originY:100.0,width:420.0,height:256.0,
                 visible:false,rotation:0.0,move:"None",bodytype:false,viewspec:"Coach"},

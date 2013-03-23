@@ -179,7 +179,7 @@ tutors:[
             components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
             parameters: ["Monopole.MagnetStrength", "Monopole.MonopoleType","BFIeld.FIeldStrengthX","BField.FieldStrengthY"],
             success: 5000
-        }],
+        }]
        },
        {type: "RapidFire",
        id: "R1",

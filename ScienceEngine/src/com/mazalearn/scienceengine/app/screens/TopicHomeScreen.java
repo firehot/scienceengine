@@ -187,10 +187,10 @@ public class TopicHomeScreen extends AbstractScreen {
       activityThumb.addActor(ScreenUtils.createLabel(String.valueOf(numTopics), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
       // Progress bar
       TutorStats stats = new TutorStats(topic, level, Guru.ID);
-      float percent = stats.percentProgress;
+      float percent = stats.stats[TutorStats.PERCENT_PROGRESS];
       ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
       // Timespent label
-      String timeSpent = Format.formatTime(stats.timeSpent);
+      String timeSpent = Format.formatTime(stats.stats[TutorStats.TIME_SPENT]);
       activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 60, 30, blueBackground));
 
       final Topic iLevel = level;

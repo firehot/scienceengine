@@ -1,4 +1,4 @@
-{name:"Electromagnetism",level:11,description:"Magnetic Field and Magnetic monopoles",
+{name:"Electromagnetism",description:"Magnetic Field and Magnetic monopoles",
 components:[
 {type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0},
 {type:"BField",x:0,y:0,originX:10,originY:5,width:20.0,height:10,visible:true,rotation:0.0, pin:true},
@@ -136,8 +136,9 @@ tutors:[
            failure: 50,
            parameter:"Charge.ChargeStrength",
            result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)",
-           components:[{type:"Charge", visible: true}],
-           configs:[{name:"FieldMeter.SampleMode", value:"User"}]
+           components:[{type:"Charge", visible: true, pin: true}],
+           configs:[{name:"FieldMeter.SampleMode", value:"Uniform"},
+                    {name:"BField.FieldStrengthZ", value: 5} ]
           },
           {type:"ParameterProber",
            id: "C1.3",
@@ -148,31 +149,37 @@ tutors:[
            failure: 50,
            parameter:"BField.FieldStrengthZ",
            result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)",
-           components:[{type:"Charge", visible: true}],
-           configs:[{name:"FieldMeter.SampleMode", value:"User"}]
+           components:[{type:"Charge", visible: true, pin: true}],
+           configs:[{name:"FieldMeter.SampleMode", value:"Uniform"},
+                    {name:"BField.FieldStrengthZ", value: 5}]
           },
          {type: "Abstractor", 
           id: "C1.4",
             goal:"Select variables which affect the rotation of the charge and press Done.\nYou have 3 tries.",
             configs: [
-            {name:"Charge.ChargeStrength", permitted: false},
-            {name:"BField.FieldStrengthZ",permitted: false},
-            {name:"Charge.Velocity",permitted:false}
+            {name:"Charge.ChargeStrength", permitted: true},
+            {name:"BField.FieldStrengthZ",permitted: true},
+            {name:"BField.FieldStrengthX",permitted: false},
+            {name:"BField.FieldStrengthY",permitted: false},
+            {name:"Charge.Velocity",permitted:true}
             ],
-            parameters: ["HorseshoeMagnet.MagnetStrength", "CurrentSource.MaxCurrent"],
+            components:[{type:"Charge", visible: true, pin: true}, {type:"Monopole", visible:false} ],
+            parameters: ["Charge.ChargeStrength", "Charge.Velocity", "BField.FieldStrengthZ"],
             success: 5000},
          {type: "Abstractor", 
           id: "C1.5",
             goal:"Select variables which affect the movement of a magnetic monopole and press Done.\nYou have 3 tries.",
             configs: [
-            {name:"Monopole.MagnetStrength", permitted: false},
-            {name:"Monopole.MonopoleType", permitted: false},
-            {name:"BField.FieldStrengthX",permitted: false},
-            {name:"BField.FieldStrengthY",permitted: false}
+            {name:"Monopole.MagnetStrength", permitted: true},
+            {name:"Monopole.MonopoleType", permitted: true},
+            {name:"BField.FieldStrengthX",permitted: true},
+            {name:"BField.FieldStrengthZ",permitted: false},
+            {name:"BField.FieldStrengthY",permitted: true}
             ],
-            parameters: ["HorseshoeMagnet.MagnetStrength", "CurrentSource.MaxCurrent"],
+            components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
+            parameters: ["Monopole.MagnetStrength", "Monopole.MonopoleType","BFIeld.FIeldStrengthX","BField.FieldStrengthY"],
             success: 5000
-        }],
+        }]
        },
        {type: "RapidFire",
        id: "R1",
@@ -190,7 +197,7 @@ tutors:[
           },
          {type: "MCQ1",
           id: "R1.2",
-          ref: ["G1.1"],
+          ref: ["G1.2"],
           goal:"The region around a magnet in which magnetic forces act is called the",
           options:["magnetic field", 
                    "pole", 
@@ -200,55 +207,12 @@ tutors:[
           },
          {type: "MCQ1",
           id: "R1.3",
-          ref: ["G1.1", "G2.1", "G2.3", "C1.1"],
-          goal:"Magnetic field lines of force at any point represent the direction in which ",
-          options:["a free North pole would move",
-                   "a free South pole would move",
-                   "a free positive charge would move",
-                   "a free negative charge would move"],
-          answermask: "1000"
-          },
-         {type: "MCQ",
-          id: "R1.4",
-          ref: ["G2.1", "G2.2"],
-          goal:"The force on a magnetic monopole in a field increases when ",
-          options:["the strength of the monopole increases",
-                   "the strength of the magnetic field decreases",
-                   "the strength of the monopole decreases",
-                   "the strength of the magnetic field increases"],
-          answermask: "1001"
-          },
-         {type: "MCQ1",
-          id: "R1.5",
           goal:"Magnetic poles are similar to electric charges because ...",
-          options:["like poles or charges repel and opposite poles or charges attract", 
+          options:["like poles repel and opposite poles attract", 
                    "the magnetic force is equal to the electric force", 
                    "the number of magnetic domains responsible for the poles is conserved",
                    "the mass of the magnetized particle is conserved"],
           answermask: "1000"
-          },
-         {type: "MCQ",
-          id: "R1.6",
-          ref: ["G3.1", "G3.2", "G3.3"],
-          goal:"The force on a charge in a magnetic field increases when ",
-          options:["the strength of the charge increases",
-                   "the strength of the magnetic field decreases",
-                   "the strength of the charge decreases",
-                   "the velocity of the charge increases",
-                   "the velocity of the charge decreases",
-                   "the strength of the magnetic field increases"],
-          answermask: "100101"
-          },
-         {type: "MCQ1",
-          id: "R1.7",
-          ref: ["C1.2", "C1.3"],
-          goal:"The direction of force on a moving positive charge in a magnetic field is given by ",
-          options:["Fleming's Left Hand Rule",
-                   "Fleming's Right Hand Rule",
-                   "Faraday's law",
-                   "Coulomb's law",
-                   "Newton's rule"],
-          answermask: "10000"
           }
           ]
        }

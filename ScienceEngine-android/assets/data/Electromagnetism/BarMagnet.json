@@ -1,4 +1,4 @@
-{name:"Electromagnetism",level:1,description:"Magnetic Field of a Bar Magnet",
+{name:"Electromagnetism",description:"Magnetic Field of a Bar Magnet",
 components:[
 {type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0},
 {type:"BarMagnet",x:186.99762,y:208.00957,originX:128.0,originY:32.0,width:256.0,height:64.0,visible:true,rotation:0.0, move: "Move"},
@@ -135,16 +135,6 @@ tutors:[
                    "attracted by the South pole of any other magnet",
                    "repelled by the South pole of any other magnet"],
           answermask: "0110"
-          },
-         {type: "MCQ",
-          id: "R1.5",
-          ref: ["G1.2", "G1.3", "G1.4", "C1.2"],
-          goal:"Magnetic field lines of force ",
-          options:["go away from the North pole", 
-                   "go towards the South pole", 
-                   "represent the direction at any point, in which a free North pole would move",
-                   "represent the direction at any point, in which a free South pole would move"],
-          answermask: "1110"
           },
          {type: "*MCQ",
           id: "R1.6",

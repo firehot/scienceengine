@@ -5,11 +5,13 @@ import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.Profile;
 
 public class TutorStats {
-  public float timeSpent;
-  public float numAttempts;
-  public float numSuccesses;
-  public float failureTracker;
-  public float percentProgress;
+  public static final int NUM_ATTEMPTS = 0;
+  public static final int NUM_SUCCESSES = 1;
+  public static final int PERCENT_PROGRESS = 2;
+  public static final int TIME_SPENT = 3;
+  public static final int FAILURE_TRACKER = 4;
+  private static final int NUM_STATS = 5;
+  public float[] stats = new float[NUM_STATS];
   private Profile profile;
   private String tutorId;
   private Topic topic, level;
@@ -37,10 +39,10 @@ public class TutorStats {
   public String toString() {
     return "Topic: " + topic.name() +
         " Tutor: " + tutorId + 
-        ", Time spent: " + timeSpent + 
-        ", NumAttempts: " + numAttempts +
-        ", numSuccesses: " + numSuccesses +
-        ", failureTracker: " + failureTracker + 
-        ", percentProgress: " + percentProgress;
+        ", Time spent: " + stats[TIME_SPENT] + 
+        ", NumAttempts: " + stats[NUM_ATTEMPTS] +
+        ", numSuccesses: " + stats[NUM_SUCCESSES] +
+        ", failureTracker: " + stats[FAILURE_TRACKER] + 
+        ", percentProgress: " + stats[PERCENT_PROGRESS];
   }
 }

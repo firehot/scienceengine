@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.app.services;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -27,25 +26,20 @@ public class Profile implements Serializable {
   private static final String TOPIC = "topic";
   private static final String USER_EMAIL = "useremail";
   private static final String USER_NAME = "username";
-  private static final String NUM_ATTEMPTS = "numAttempts";
-  private static final String NUM_SUCCESSES = "numSucceses";
-  private static final String PERCENT_PROGRESS = "percentProgress";
-  private static final String TIME_SPENT = "timeSpent";
-  private static final String FAILURE_TRACKER = "failureTracker";
   private static final String INSTALL_ID = "install_id";
   private static final String LAST_UPDATED = "last_updated";
   private static final String CURRENT = "current";
   private static final String COLOR = "color";
   
-  private HashMap<Topic, HashMap<String, Float>> topicStats;
+  private HashMap<Topic, HashMap<String, float[]>> topicStats;
   private HashMap<String, String> properties;
-  private HashMap<String, Float> currentTopicStats;
+  private HashMap<String, float[]> currentTopicStats;
 
   public Profile() {
-    topicStats = new HashMap<Topic, HashMap<String, Float>>();
+    topicStats = new HashMap<Topic, HashMap<String, float[]>>();
     for (Topic topic: Topic.values()) {
       if (topic.getChildren().length == 0) continue;
-      topicStats.put(topic, new HashMap<String, Float>());
+      topicStats.put(topic, new HashMap<String, float[]>());
     }
     properties = new HashMap<String, String>();
     properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
@@ -103,12 +97,12 @@ public class Profile implements Serializable {
     }
     
     Object topicObj = json.readValue("topics", OrderedMap.class, OrderedMap.class, jsonData);
-    topicStats = new HashMap<Topic, HashMap<String, Float>>();
+    topicStats = new HashMap<Topic, HashMap<String, float[]>>();
     for (Topic topic: Topic.values()) {
       if (topic.getChildren().length == 0) continue;
-      HashMap<String, Float> stats = json.readValue(topic.name(), HashMap.class, Float.class, topicObj);
+      HashMap<String, float[]> stats = json.readValue(topic.name(), HashMap.class, float[].class, topicObj);
       if (stats == null) {
-        stats = new HashMap<String, Float>();
+        stats = new HashMap<String, float[]>();
       }
       topicStats.put(topic, stats);
     }
@@ -138,7 +132,7 @@ public class Profile implements Serializable {
     properties.put(TOPIC, topic != null ? topic.name() : null);
     currentTopicStats = topicStats.get(topic);
     if (currentTopicStats == null) {
-      currentTopicStats = new HashMap<String, Float>();
+      currentTopicStats = new HashMap<String, float[]>();
       topicStats.put(topic, currentTopicStats);
     }
     save();
@@ -167,22 +161,10 @@ public class Profile implements Serializable {
     return s == null ? "" : s;
   }
 
-  private String makeTutorKey(Topic level, String tutorId, String key) {
-    return level.getTopicId() + "$" + tutorId + "$" + key;
+  private String makeTutorKey(Topic level, String tutorId) {
+    return level.getTopicId() + "$" + tutorId;
   }
 
-  private float getStat(Topic topic, Topic level, String tutorId, String key) {
-    HashMap<String, Float> topicStat = topicStats.get(topic);
-    Float value = topicStat.get(makeTutorKey(level, tutorId, key));
-    return value == null ? 0 : value;
-  }
-
-  private void saveStat(String tutorId, String key, Float value) {
-    String tutorKey = makeTutorKey(getCurrentActivity(), tutorId, key);
-    if (currentTopicStats.get(tutorKey) == value) return;
-    currentTopicStats.put(tutorKey, value);
-  }
-  
   public void save() {
     properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
     ScienceEngine.getPreferencesManager().saveProfile();
@@ -207,19 +189,13 @@ public class Profile implements Serializable {
   
   public byte[] getDrawingPng() {
     String png = properties.get(DRAWING_PNG);
-    try {
-      return png == null ? new byte[0] : png.getBytes("US-ASCII");
-    } catch (UnsupportedEncodingException e) {
-      return new byte[0];
-    }
+    return png == null ? new byte[0] : Base64Coder.decode(png);
   }
 
   public void loadStats(TutorStats stats, Topic topic, Topic level, String tutorId) {
-    stats.timeSpent = getStat(topic, level, tutorId, TIME_SPENT);
-    stats.numAttempts = getStat(topic, level, tutorId, NUM_ATTEMPTS);
-    stats.numSuccesses = getStat(topic, level, tutorId, NUM_SUCCESSES);
-    stats.failureTracker = getStat(topic, level, tutorId, FAILURE_TRACKER);
-    stats.percentProgress = getStat(topic, level, tutorId, PERCENT_PROGRESS);
+    HashMap<String, float[]> topicStat = topicStats.get(topic);
+    float[] s = topicStat.get(makeTutorKey(level, tutorId));
+    if (s != null) stats.stats = s;
     Gdx.app.log(ScienceEngine.LOG, stats.toString());
   }
 
@@ -229,11 +205,8 @@ public class Profile implements Serializable {
    * @param tutorId
    */
   public void saveStats(TutorStats stats, String tutorId) {
-    saveStat(tutorId, TIME_SPENT, stats.timeSpent);
-    saveStat(tutorId, NUM_ATTEMPTS, stats.numAttempts);
-    saveStat(tutorId, NUM_SUCCESSES, stats.numSuccesses);
-    saveStat(tutorId, FAILURE_TRACKER, stats.failureTracker);
-    saveStat(tutorId, PERCENT_PROGRESS, stats.percentProgress);
+    String tutorKey = makeTutorKey(getCurrentActivity(), tutorId);
+    currentTopicStats.put(tutorKey, stats.stats);
     save();
     Gdx.app.log(ScienceEngine.LOG, stats.toString());
   }

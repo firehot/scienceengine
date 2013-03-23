@@ -2,7 +2,6 @@ package com.mazalearn.gwt.server;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.badlogic.gdx.Gdx;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -22,7 +20,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
-import com.mazalearn.scienceengine.ScienceEngine;
 
 @SuppressWarnings("serial")
 public class ProfileServlet extends HttpServlet {
@@ -53,7 +50,7 @@ public class ProfileServlet extends HttpServlet {
   
   static class Profile {
     Map<String, String> properties;
-    Map<String, Map<String, Float>> topics;
+    Map<String, Map<String, float[]>> topics;
   }
 
   public void saveUserProfile(String userEmail, byte[] profileBytes) 
@@ -92,7 +89,7 @@ public class ProfileServlet extends HttpServlet {
         profileEntity.setProperty(entry.getKey(), entry.getValue());
       }
     }
-    for (Map.Entry<String, Map<String, Float>> topicStats: profile.topics.entrySet()) {
+    for (Map.Entry<String, Map<String, float[]>> topicStats: profile.topics.entrySet()) {
       String jsonStats = gson.toJson(topicStats.getValue());
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
@@ -102,6 +99,7 @@ public class ProfileServlet extends HttpServlet {
   public String getUserProfile(String userEmail) 
       throws IllegalStateException {
     EmbeddedEntity profileEntity = retrieveUserProfile(userEmail);
+    if (profileEntity == null) return "";
     
     System.out.println(profileEntity);
     StringBuilder properties = new StringBuilder("{");
@@ -129,6 +127,13 @@ public class ProfileServlet extends HttpServlet {
   }
 
   public static EmbeddedEntity retrieveUserProfile(String userEmail) {
+    Entity user = retrieveUser(userEmail);
+    if (user == null) return null;
+    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
+    return profileEntity;
+  }
+
+  public static Entity retrieveUser(String userEmail) {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
     Entity user;
@@ -137,7 +142,6 @@ public class ProfileServlet extends HttpServlet {
     } catch (EntityNotFoundException e) {
       return null;
     }
-    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
-    return profileEntity;
+    return user;
   }
 }

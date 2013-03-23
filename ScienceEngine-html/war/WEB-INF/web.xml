@@ -25,6 +25,7 @@
   <security-constraint>
     <web-resource-collection>
         <url-pattern>/user</url-pattern>
+        <url-pattern>/delprofile</url-pattern>
     </web-resource-collection>
     <auth-constraint>
         <role-name>admin</role-name>
@@ -41,6 +42,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>UserProfileDeleteServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.UserProfileDeleteServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>ScienceEngineServlet</servlet-name>
     <servlet-class>com.mazalearn.gwt.server.ScienceEngineServlet</servlet-class>
   </servlet>
@@ -48,11 +54,6 @@
   <servlet>
     <servlet-name>ProfileServlet</servlet-name>
     <servlet-class>com.mazalearn.gwt.server.ProfileServlet</servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>UploadServlet</servlet-name>
-    <servlet-class>com.mazalearn.gwt.server.UploadServlet</servlet-class>
   </servlet>
 
   <servlet>
@@ -82,8 +83,8 @@
     <url-pattern>/train.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>UploadServlet</servlet-name>
-    <url-pattern>/upload</url-pattern>
+    <servlet-name>UserProfileDeleteServlet</servlet-name>
+    <url-pattern>/delprofile</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ProfileServlet</servlet-name>

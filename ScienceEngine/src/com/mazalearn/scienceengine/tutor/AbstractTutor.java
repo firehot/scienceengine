@@ -113,7 +113,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void finish() {
     Gdx.app.log(ScienceEngine.LOG, "finish: " + getId());
     this.setVisible(false);
-    if (success) stats.numSuccesses++;
+    if (success) stats.stats[TutorStats.NUM_SUCCESSES]++;
     recordStats();
     guru.setActiveTutor(parent);
     if (state == State.Finished) { 
@@ -130,13 +130,14 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.state = State.Aborted;
     finish();
   }
+  
   private void recordStats() {
     // Update all stats
-    stats.timeSpent = getTimeSpent();
-    stats.numAttempts = getNumAttempts();
-    stats.numSuccesses = getNumSuccesses();
-    stats.failureTracker = getFailureTracker();
-    stats.percentProgress = getPercentProgress();
+    stats.stats[TutorStats.TIME_SPENT] = getTimeSpent();
+    stats.stats[TutorStats.NUM_ATTEMPTS] = getNumAttempts();
+    stats.stats[TutorStats.NUM_SUCCESSES] = getNumSuccesses();
+    stats.stats[TutorStats.FAILURE_TRACKER] = getFailureTracker();
+    stats.stats[TutorStats.PERCENT_PROGRESS] = getPercentProgress();
     
     stats.save();
   }
@@ -150,7 +151,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
     this.setVisible(true);
     success = false;
-    this.stats.numAttempts++;
+    this.stats.stats[TutorStats.NUM_ATTEMPTS]++;
     state = State.Teaching;
   }
   
@@ -208,32 +209,32 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void addTimeSpent(float delta) {
-    this.stats.timeSpent += delta;
+    this.stats.stats[TutorStats.TIME_SPENT] += delta;
   }
   
   @Override
   public float getTimeSpent() {
-    return stats.timeSpent;
+    return stats.stats[TutorStats.TIME_SPENT];
   }
   
   @Override
   public float getNumAttempts() {
-    return stats.numAttempts;
+    return stats.stats[TutorStats.NUM_ATTEMPTS];
   }
   
   @Override
   public float getNumSuccesses() {
-    return stats.numSuccesses;
+    return stats.stats[TutorStats.NUM_SUCCESSES];
   }
   
   @Override
   public float getPercentProgress() {
-    return stats.numSuccesses == 0 ? 0 : 100;
+    return stats.stats[TutorStats.NUM_SUCCESSES] == 0 ? 0 : 100;
   }
   
   @Override
   public float getFailureTracker() {
-    return stats.failureTracker;
+    return stats.stats[TutorStats.FAILURE_TRACKER];
   }
   
   @Override

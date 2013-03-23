@@ -76,7 +76,7 @@
       topic = Topic.valueOf(request.getParameter("topic"));
     } catch(Exception ignored) {};
     
-    Topic activityLevel = Topic.BarMagnet;
+    Topic activityLevel = Topic.Field;
     try {
       activityLevel = Topic.valueOf(request.getParameter("activity"));
     } catch (Exception ignored) {};
@@ -109,8 +109,8 @@
    
 <%
    String domainStatsStr = ((Text) profile.getProperty(topic.name())).getValue();
-   Type statsType = new TypeToken<Map<String, Float>>() {}.getType();
-   Map<String, Float> stats = new Gson().fromJson(domainStatsStr, statsType);
+   Type statsType = new TypeToken<Map<String, float[]>>() {}.getType();
+   Map<String, float[]> stats = new Gson().fromJson(domainStatsStr, statsType);
    Activity activity = Activity.load(getServletContext(), topic, activityLevel);
    activity.populateStats(stats);
    %>
@@ -128,18 +128,18 @@
      String delimiter = "";
      for (Tutor tutor: activity.getTutors()) {
        if (tutor.type.equals("KnowledgeUnit")) {
-         json += delimiter + "['" + tutor.id + "'," + tutor.timeSpent + "]";
+         json += delimiter + "['" + tutor.id + "'," + tutor.stats[Activity.Tutor.TIME_SPENT] + "]";
          delimiter = ",";
        }
        
 %>
        <tr>
          <td><%= tutor.goal %></td>
-         <td><%= tutor.timeSpent %></td>
-         <td><%= tutor.numAttempts %></td>
-         <td><%= tutor.numSuccesses %></td>
-         <td><%= tutor.failureTracker %></td>
-         <td><%=tutor.percentProgress%></td>
+         <td><%= Math.round(tutor.stats[Activity.Tutor.TIME_SPENT]) %></td>
+         <td><%= Math.round(tutor.stats[Activity.Tutor.NUM_ATTEMPTS]) %></td>
+         <td><%= Math.round(tutor.stats[Activity.Tutor.NUM_SUCCESSES]) %></td>
+         <td><%= Math.round(tutor.stats[Activity.Tutor.FAILURE_TRACKER]) %></td>
+         <td><%= Math.round(tutor.stats[Activity.Tutor.PERCENT_PROGRESS]) %></td>
        </tr>
 <%       
      }
