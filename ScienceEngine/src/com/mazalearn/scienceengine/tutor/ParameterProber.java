@@ -50,7 +50,7 @@ public class ParameterProber extends AbstractScience2DProber {
 
   protected IModelConfig<?> probeConfig;
   private Vector2 coords = new Vector2();
-  private Table changeChoices;
+  private Table changeOptions;
   private Image delta;
   
   private Image createResultImage(TextureRegion textureRegion, float x, float y) {
@@ -107,7 +107,7 @@ public class ParameterProber extends AbstractScience2DProber {
       actor.localToStageCoordinates(coords);
       image.setPosition(coords.x, coords.y);
       delta.setPosition(coords.x + image.getWidth(), coords.y + delta.getHeight() / 2);
-      changeChoices.setPosition(image.getX() - 140, image.getY() + 30);
+      changeOptions.setPosition(image.getX() - 140, image.getY() + 30);
       // TODO: Not sure why below line is required - without it, modelcontrols disappears.
       ScienceEngine.pin(probeConfig.getBody(), true);
       science2DController.getGuru().setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), false);
@@ -163,16 +163,25 @@ public class ParameterProber extends AbstractScience2DProber {
       image.addListener(imageListener);   
 
     } else {
-     
+      delta = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
+      delta.addAction( 
+          Actions.forever(
+          Actions.sequence(
+             SizeAction.sizeTo(0, 30, 0),
+             SizeAction.sizeTo(50, 30, 2)
+              )));
+
       AtlasRegion arrow = ScienceEngine.getTextureRegion("fieldarrow");
       final Image decrease = new Image(new TextureRegion(arrow, arrow.getRegionX() + arrow.getRegionWidth(), 
           arrow.getRegionY(), -arrow.getRegionWidth(), arrow.getRegionHeight()));
       final Image dontCare = new Image(ScienceEngine.getTextureRegion("cross"));
       final Image increase = new Image(arrow);
-      delta = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
+      changeOptions = new Table(guru.getSkin());
+      changeOptions.add("Decreases"); changeOptions.add(decrease).width(50).height(50).right(); changeOptions.row();
+      changeOptions.add("Is Unaffected"); changeOptions.add(dontCare).width(50).height(50).center(); changeOptions.row();
+      changeOptions.add("Increases"); changeOptions.add(increase).width(50).height(50).left(); changeOptions.row();
 
-      changeChoices = new Table(guru.getSkin());
-      changeChoices.addListener(new ClickListener() {
+      changeOptions.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           boolean success = false;
@@ -186,19 +195,10 @@ public class ParameterProber extends AbstractScience2DProber {
             success = ParameterProber.this.resultType == ResultType.None;
             systemReadyToFinish(success);
           }
-          changeChoices.setVisible(!success);
+          changeOptions.setVisible(!success);
         }
       });
-      changeChoices.add("Decreases"); changeChoices.add(decrease).width(50).height(50).right(); changeChoices.row();
-      changeChoices.add("Is Unaffected"); changeChoices.add(dontCare).width(50).height(50).center(); changeChoices.row();
-      changeChoices.add("Increases"); changeChoices.add(increase).width(50).height(50).left(); changeChoices.row();
-      delta.addAction( 
-          Actions.forever(
-          Actions.sequence(
-             SizeAction.sizeTo(0, 30, 0),
-             SizeAction.sizeTo(50, 30, 2)
-              )));
-      this.addActor(changeChoices);
+      this.addActor(changeOptions);
       this.addActor(delta);
     }
     this.addActor(image);

@@ -177,7 +177,7 @@ tutors:[
             {name:"BField.FieldStrengthY",permitted: true}
             ],
             components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
-            parameters: ["Monopole.MagnetStrength", "Monopole.MonopoleType","BFIeld.FIeldStrengthX","BField.FieldStrengthY"],
+            parameters: ["Monopole.MagnetStrength", "Monopole.MonopoleType","BField.FieldStrengthX","BField.FieldStrengthY"],
             success: 5000
         }]
        },
