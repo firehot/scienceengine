@@ -172,11 +172,9 @@ public class ParameterProber extends AbstractScience2DProber {
              SizeAction.sizeTo(50, 30, 2)
               )));
 
-      AtlasRegion arrow = ScienceEngine.getTextureRegion("fieldarrow");
-      final Image decrease = new Image(new TextureRegion(arrow, arrow.getRegionX() + arrow.getRegionWidth(), 
-          arrow.getRegionY(), -arrow.getRegionWidth(), arrow.getRegionHeight()));
+      final Image decrease = new Image(ScienceEngine.getTextureRegion("fieldarrow-left"));
       final Image dontCare = new Image(ScienceEngine.getTextureRegion("cross"));
-      final Image increase = new Image(arrow);
+      final Image increase = new Image(ScienceEngine.getTextureRegion("fieldarrow"));
       changeOptions = new Table(guru.getSkin());
       changeOptions.add("Decreases"); changeOptions.add(decrease).width(50).height(50).right(); changeOptions.row();
       changeOptions.add("Is Unaffected"); changeOptions.add(dontCare).width(50).height(50).center(); changeOptions.row();

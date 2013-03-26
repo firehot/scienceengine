@@ -155,7 +155,7 @@ tutors:[
           },
          {type: "Abstractor", 
           id: "C1.4",
-            goal:"Select variables which affect the rotation of the charge and press Done.\nYou have 3 tries.",
+            goal:"Select how increase in each variable affects rotation speed of a charge.\nYou have 3 tries.",
             configs: [
             {name:"Charge.ChargeStrength", permitted: true},
             {name:"BField.FieldStrengthZ",permitted: true},
@@ -164,20 +164,20 @@ tutors:[
             {name:"Charge.Velocity",permitted:true}
             ],
             components:[{type:"Charge", visible: true, pin: true}, {type:"Monopole", visible:false} ],
-            parameters: ["Charge.ChargeStrength", "Charge.Velocity", "BField.FieldStrengthZ"],
+            parameters: ["+Charge.ChargeStrength", "+Charge.Velocity", "+BField.FieldStrengthZ"],
             success: 5000},
          {type: "Abstractor", 
           id: "C1.5",
-            goal:"Select variables which affect the movement of a magnetic monopole and press Done.\nYou have 3 tries.",
+            goal:"Select how increase in each variable affects force on a magnetic monopole.\nYou have 3 tries.",
             configs: [
             {name:"Monopole.MagnetStrength", permitted: true},
-            {name:"Monopole.MonopoleType", permitted: true},
+            {name:"Monopole.MonopoleType", permitted: false},
             {name:"BField.FieldStrengthX",permitted: true},
             {name:"BField.FieldStrengthZ",permitted: false},
             {name:"BField.FieldStrengthY",permitted: true}
             ],
             components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
-            parameters: ["Monopole.MagnetStrength", "Monopole.MonopoleType","BFIeld.FIeldStrengthX","BField.FieldStrengthY"],
+            parameters: ["+Monopole.MagnetStrength", "+BFIeld.FIeldStrengthX","+BField.FieldStrengthY"],
             success: 5000
         }]
        },

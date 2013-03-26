@@ -1,21 +1,20 @@
 package com.mazalearn.scienceengine.tutor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -30,9 +29,10 @@ public class Abstractor extends AbstractTutor {
   private Table configTable;
   private ModelControls modelControls;
   private Skin skin;
-  private Set<String> correctParameters;
+  private Map<String, Integer> correctParameters;
   private Image[] life = new Image[3];
   private int numLivesLeft = 3;
+  private TextureRegionDrawable increase, decrease, noeffect;
   
   public Abstractor(final IScience2DController science2DController, TutorType tutorType, ITutor parent, String goal, 
       String name, Array<?> components, Array<?> configs, Skin skin, 
@@ -44,6 +44,9 @@ public class Abstractor extends AbstractTutor {
     /* Abstractor allows user to interact with bodies on screen as well as its
        own GUI. But does not directly interact - hence size 0.  */
     this.setSize(0, 0);
+    decrease = new TextureRegionDrawable(ScienceEngine.getTextureRegion("fieldarrow-left"));
+    noeffect = new TextureRegionDrawable(ScienceEngine.getTextureRegion("cross"));
+    increase = new TextureRegionDrawable(ScienceEngine.getTextureRegion("fieldarrow"));
   }
   
   @Override
@@ -63,7 +66,7 @@ public class Abstractor extends AbstractTutor {
   private void createConfigTable(IScience2DModel science2DModel, Skin skin) {
     configTable = new Table(skin);
     configTable.setName("Configs");
-    ScreenComponent.scalePosition(configTable, 150, 380);
+    ScreenComponent.scalePosition(configTable, 200, 340);
     this.addActor(configTable);
 
     TextureRegion ideaTexture = ScienceEngine.getTextureRegion("idea");
@@ -76,44 +79,57 @@ public class Abstractor extends AbstractTutor {
     // Shuffle parameters
     Utils.shuffle(configList);
     // Add parameters to table
+    final ChangeOptions changeOptions = new ChangeOptions(guru, decrease, noeffect, increase);
+    this.addActor(changeOptions);
+    TextureRegion question = ScienceEngine.getTextureRegion("questionmark");
     for (final IModelConfig<?> config: configList) {
-      final CheckBox configCheckBox = new CheckBox(config.getName(), skin);
-      configCheckBox.setName(config.getName());
-      configCheckBox.setChecked(false);
-      configCheckBox.addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-          if (configCheckBox.isChecked()) {
-            ScienceEngine.pin(config.getBody(), true);
-          }
-          modelControls.refresh();
-        }
+      configTable.add(config.getName()).left();
+      final Image image = new Image(question);
+      image.setName(config.getName());
+      configTable.add(image).width(30).height(30);
+      image.addListener(new ClickListener() {
+        public void clicked (InputEvent event, float x, float y) {
+          image.setVisible(false);
+          changeOptions.setPosition(event.getStageX(), event.getStageY());
+          changeOptions.setImage(image);
+          changeOptions.setVisible(true);
+        }        
       });
-      configTable.add(configCheckBox).left().colspan(4);
       configTable.row();      
     }
     // Add lives to table
+    Table lifeTable = new Table(skin);
     for (int i = 0; i < 3; i++) {
       life[i] = new Image(ideaTexture);
       life[i].setSize(ScreenComponent.Idea.getWidth() / 2,
           ScreenComponent.Idea.getHeight() / 2);
-      configTable.add(life[i]).width(ScreenComponent.Idea.getWidth() / 2);
+      lifeTable.add(life[i]).width(ScreenComponent.Idea.getWidth() / 2);
     }
-    configTable.add(createDoneButton(skin)).fill();
+    configTable.add(lifeTable).fill().spaceTop(20);
+    configTable.add(createDoneButton(skin)).fill().spaceTop(20);
     configTable.row();
   }
   
-  private Actor createChangeOptions() {
-    AtlasRegion arrow = ScienceEngine.getTextureRegion("fieldarrow");
-    final Image decrease = new Image(new TextureRegion(arrow, arrow.getRegionX() + arrow.getRegionWidth(), 
-        arrow.getRegionY(), -arrow.getRegionWidth(), arrow.getRegionHeight()));
-    final Image dontCare = new Image(ScienceEngine.getTextureRegion("cross"));
-    final Image increase = new Image(arrow);
-    Table changeOptions = new Table(guru.getSkin());
-    changeOptions.add("Decreases"); changeOptions.add(decrease).width(50).height(50).right(); changeOptions.row();
-    changeOptions.add("Is Unaffected"); changeOptions.add(dontCare).width(50).height(50).center(); changeOptions.row();
-    changeOptions.add("Increases"); changeOptions.add(increase).width(50).height(50).left(); changeOptions.row();
-    return changeOptions;
+  private static class ChangeOptions extends Table {
+    Image img;
+    public ChangeOptions(Guru guru, TextureRegionDrawable... options) {
+      super(guru.getSkin());
+      for (TextureRegionDrawable option: options) {
+        final Image opt = new Image(); opt.setDrawable(option);
+        opt.addListener(new ClickListener() {
+          public void clicked (InputEvent event, float x, float y) {
+            img.setDrawable(opt.getDrawable());
+            img.setVisible(true);
+            ChangeOptions.this.setVisible(false);
+          }              
+        });
+        this.add(opt).width(30).height(30).left();
+      }
+    }
+    
+    public void setImage(Image image) {
+      this.img = image;
+    }
   }
 
   private TextButton createDoneButton(Skin skin) {
@@ -122,12 +138,14 @@ public class Abstractor extends AbstractTutor {
     doneButton.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {
-        Set<String> chosenParameters = new HashSet<String>();
+        Map<String, Integer> chosenParameters = new HashMap<String, Integer>();
         for (Actor actor: configTable.getChildren()) {
-          if (!(actor instanceof CheckBox)) continue;
-          CheckBox checkBox = (CheckBox) actor;
-          if (checkBox.isChecked()) {
-            chosenParameters.add(checkBox.getName());
+          if (!(actor instanceof Image)) continue;
+          Image image = (Image) actor;
+          if (image.getDrawable() == increase) {
+            chosenParameters.put(image.getName(), 1);
+          } else if (image.getDrawable() == decrease) {
+            chosenParameters.put(image.getName(), -1);
           }
         }
         boolean success = correctParameters.equals(chosenParameters);
@@ -157,11 +175,8 @@ public class Abstractor extends AbstractTutor {
     modelControls.refresh();
   }
 
-  public void initialize(String[] parameters) {
-    correctParameters = new HashSet<String>();
-    for (String parameter: parameters) {
-      correctParameters.add(parameter);
-    }
+  public void initialize(Map<String, Integer> parameters) {
+    correctParameters = parameters;
   }
 
 }

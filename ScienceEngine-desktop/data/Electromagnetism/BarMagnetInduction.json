@@ -80,12 +80,12 @@ tutors: [
                      resultType:"None"},
            {type: "Abstractor", 
                 id: "Variables affecting Induced Current",
-                goal:"Select those variables in the shopping cart which affect the magnitude of induced current. You have 3 tries.",
+                goal:"Select how increase in each variable affects induced current.\nYou have 3 tries.",
                 configs: [{name: "BarMagnet.MovementMode", permitted: false, value:"Rotate"},
                           {name: "BarMagnet.RotationAngle", permitted: false, value:0},
                           {name: "BarMagnet.RotationVelocity", permitted: true}
                          ],
-                parameters: ["BarMagnet.MagnetStrength", "BarMagnet.RotationVelocity", "PickupCoil.CoilLoops"],
+                parameters: ["+BarMagnet.MagnetStrength", "+BarMagnet.RotationVelocity", "+PickupCoil.CoilLoops"],
                 success: 5000
                 }
          ]},

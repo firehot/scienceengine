@@ -1,7 +1,9 @@
 package com.mazalearn.scienceengine.app.services.loaders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
@@ -113,9 +115,18 @@ class TutorLoader {
   private AbstractTutor makeAbstractor(OrderedMap<String, ?> tutorObj,
       Abstractor abstractor) {
     Array<?> parametersObj = (Array<?>) tutorObj.get("parameters");
-    String[] parameters = parametersObj == null ? new String[]{} : new String[parametersObj.toArray().length];
-    for (int i = 0; i < parameters.length; i++) {
-      parameters[i] = (String) parametersObj.get(i);
+    Map<String, Integer> parameters = new HashMap<String, Integer>();
+    if (parametersObj != null) {
+      for (int i = 0; i < parametersObj.toArray().length; i++) {
+        String parameter = (String) parametersObj.get(i);
+        if (parameter.charAt(0) == '-') {
+          parameters.put(parameter.substring(1), -1);
+        } else if (parameter.charAt(0) == '+') {
+          parameters.put(parameter.substring(1), 1);
+        } else {
+          parameters.put(parameter, 1); // default is increase
+        }
+      }
     }
     abstractor.initialize(parameters);
     return abstractor;

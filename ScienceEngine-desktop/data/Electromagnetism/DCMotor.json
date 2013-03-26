@@ -103,13 +103,13 @@ tutors: [
                  result:"CurrentSource.CurrentDirection = HorseshoeMagnet.Flip"},
        {type: "Abstractor", 
         id: "Variables affecting rotation speed of Motor",
-            goal:"Select variables which affect the rotation speed of the motor and press Done.\nYou have 3 tries.",
+            goal:"Select how increase in each variable affects rotation speed of the motor.\nYou have 3 tries.",
             configs: [
             {name:"Environment.RoomTemperature", permitted: false},
             {name:"CurrentCoil.RotationDataType",permitted: false},
             {name:"CurrentCoil.CommutatorType",permitted:false}
             ],
-            parameters: ["HorseshoeMagnet.MagnetStrength", "CurrentSource.MaxCurrent"],
+            parameters: ["+HorseshoeMagnet.MagnetStrength", "+CurrentSource.MaxCurrent"],
             success: 5000
             }
        ]},

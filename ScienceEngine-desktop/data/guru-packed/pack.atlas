@@ -52,13 +52,6 @@ redballoon
   orig: 128, 128
   offset: 0, 0
   index: -1
-shoppingcart
-  rotate: false
-  xy: 693, 251
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
 check
   rotate: false
   xy: 953, 445
@@ -75,21 +68,28 @@ cross
   index: -1
 questionmark
   rotate: false
-  xy: 823, 315
+  xy: 693, 315
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-fieldarrow-yellow
+fieldarrow-left
   rotate: false
   xy: 1, 1
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
   index: -1
-fieldarrow
+fieldarrow-yellow
   rotate: false
   xy: 259, 131
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+fieldarrow
+  rotate: false
+  xy: 953, 427
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
