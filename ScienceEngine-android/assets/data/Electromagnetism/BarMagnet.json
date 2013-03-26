@@ -92,7 +92,7 @@ tutors:[
         },
        {type: "RapidFire",
        id: "R1",
-       goal: "RapidFire Review",
+       goal: "RapidFire Quiz",
        childtutors: [
          {type: "MCQ1",
           id: "R1.1",
@@ -186,7 +186,7 @@ tutors:[
                    "both of these"],
           answermask: "100"
           },
-         {type: "MCQ1",
+         {type: "*MCQ1",
           id: "1.11",
           goal:"Compared to the huge force that attracts an iron nail to a strong magnet, the force that the nail exerts on the magnet is",
           options:["relatively small", 
@@ -285,7 +285,7 @@ tutors:[
                    "a nonmagnetic piece of metal that is free to rotate"],
           answermask: "0010"
           },
-         {type: "MCQ1",
+         {type: "*MCQ1",
           id: "1.23",
           goal:"Magnetic poles always occur",
           options:["alone", 
