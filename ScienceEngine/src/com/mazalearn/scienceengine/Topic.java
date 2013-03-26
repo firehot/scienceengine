@@ -8,9 +8,9 @@ public enum Topic {
   Field(101),
   BarMagnet(102), TwoWires(103), ElectroMagnet(104),
   BarMagnetInduction(105), ElectroMagnetInduction(106),
-  DCMotor(107), ACMotor(108), ScienceTrain(109), EMReview(110),
+  DCMotor(107), ScienceTrain(109), EMReview(108),
   Electromagnetism(1, BarMagnet, Field, BarMagnet, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
-      ACMotor, ScienceTrain, EMReview),
+      EMReview, ScienceTrain),
   SOM(201), StatesOfMatter(2, SOM, SOM), 
   W(301), Waves(3, W, W);
 

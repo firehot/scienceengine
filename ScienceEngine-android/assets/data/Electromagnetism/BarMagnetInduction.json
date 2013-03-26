@@ -128,9 +128,9 @@ tutors: [
           goal:"Thrust a magnet into a coil of wire and the coil",
           options:["becomes an electromagnet", 
                    "has a current in it", 
-                   "both of these",
-                   "neither of these"],
-          answermask: "0100"
+                   "has a current in it and becomes an electromagnet",
+                   "does not have current in it, nor becomes an electromagnet"],
+          answermask: "0010"
           },
         {type: "MCQ1",
           id: "5.5",
@@ -161,22 +161,31 @@ tutors: [
           answermask: "00100"
           },
         {type: "MCQ1",
-          id: "5.9",
+          id: "5.8",
           goal:"How does the voltage induced upon two equal coils, one made of copper and one made of rubber, differ?",
-         options:["voltage in copper much greater", 
-                   "voltage in rubber much greater", 
+         options:["voltage in copper is much greater", 
+                   "voltage in rubber is much greater", 
                    "voltage is the same",
                    "no voltage at all in rubber"],
           explanation: "Since rubber is an insulator and does not carry current, it is not affected by magnetic fields",
           answermask: "0001"
           },
         {type: "MCQ1",
-          id: "5.11",
+          id: "5.9",
           goal:"What would induce a greater electric current in a wire?",
          options:["adding more loops of wire", 
                    "removing loops of wire", 
                    "pulling the magnet out rather than pushing it in",
                    "pushing the magnet in rather than pulling it out"],
+          answermask: "1000"
+          },
+          {type: "MCQ",
+          id: "5.1",
+          goal:"Two bar magnets of strength 1T and 2T are thrust into a coil one at a time. The current induced in the coil is - ",
+          options:["larger for the 2T magnet", 
+                   "smaller for the 2T magnet", 
+                   "same for both magnets",
+                   "no current is induced. Current is induced only when magnets are pulled out."],
           answermask: "1000"
           }
         ]}

@@ -4,6 +4,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.Profile;
 
+// TODO: use tutorstats in html jsp also.
 public class TutorStats {
   public static final int NUM_ATTEMPTS = 0;
   public static final int NUM_SUCCESSES = 1;

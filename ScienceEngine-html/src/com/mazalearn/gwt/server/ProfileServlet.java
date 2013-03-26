@@ -56,7 +56,7 @@ public class ProfileServlet extends HttpServlet {
   public void saveUserProfile(String userEmail, byte[] profileBytes) 
       throws IllegalStateException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail.toLowerCase());
     Entity user;
     try {
       user = ds.get(key);
@@ -135,7 +135,7 @@ public class ProfileServlet extends HttpServlet {
 
   public static Entity retrieveUser(String userEmail) {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail.toLowerCase());
     Entity user;
     try {
       user = ds.get(key);

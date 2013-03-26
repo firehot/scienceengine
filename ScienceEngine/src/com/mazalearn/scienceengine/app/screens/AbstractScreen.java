@@ -75,7 +75,7 @@ public abstract class AbstractScreen implements Screen {
   public void setStage(Stage stage) {
     this.stage = stage;
     setupCoreGroup(stage);
-    Gdx.input.setInputProcessor(stage);    
+    Gdx.input.setInputProcessor(stage);
   }
 
   public Stage getStage() {

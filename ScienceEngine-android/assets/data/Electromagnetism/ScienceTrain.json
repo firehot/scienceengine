@@ -67,9 +67,9 @@ tutors: [
               ],
             postcondition: "1 = 1"},
        ]},
-       {type: "RapidFire",
+       {type: "*RapidFire",
        id: "Multiple Choice Questions",
-       goal: "RapidFire Quiz",
+       goal: "RapidFire Review",
        childtutors: [
           {type: "MCQ1",
           id: "9.1",

@@ -4,7 +4,7 @@ components:[
 tutors: [
        {type: "Reviewer",
        id: "Review Quiz",
-       goal: "RapidFire Review Quiz",
+       goal: "RapidFire Review",
        childtutors: []
        }
 ]

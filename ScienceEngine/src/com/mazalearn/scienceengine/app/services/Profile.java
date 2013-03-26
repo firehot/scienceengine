@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.tutor.TutorStats;
 
 /**
@@ -30,6 +31,7 @@ public class Profile implements Serializable {
   private static final String LAST_UPDATED = "last_updated";
   private static final String CURRENT = "current";
   private static final String COLOR = "color";
+  private static final String PLATFORM = "platform";
   
   private HashMap<Topic, HashMap<String, float[]>> topicStats;
   private HashMap<String, String> properties;
@@ -209,5 +211,9 @@ public class Profile implements Serializable {
     currentTopicStats.put(tutorKey, stats.stats);
     save();
     Gdx.app.log(ScienceEngine.LOG, stats.toString());
+  }
+
+  public void setPlatform(Platform platform) {
+    properties.put(PLATFORM, platform.name());
   }
 }

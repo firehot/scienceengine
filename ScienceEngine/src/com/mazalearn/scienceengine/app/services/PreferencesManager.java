@@ -26,7 +26,6 @@ public class PreferencesManager {
   private static final String PREF_MUSIC_ENABLED = "music.enabled";
   private static final String PREF_SOUND_ENABLED = "sound.enabled";
   // Active user
-  private static final String PREF_USER_EMAIL = "useremail";
   private static final String PREFS_NAME = "scienceengine";
   private Profile profile;
 
@@ -66,15 +65,15 @@ public class PreferencesManager {
   }
   
   public Profile loadProfile(String userEmail) {
-    getPrefs().putString(PREF_USER_EMAIL, userEmail);
+    getPrefs().putString(USER_EMAIL, userEmail.toLowerCase());
     getPrefs().flush();
     return retrieveProfile();
   }
 
   private Profile retrieveProfile() {
-    String userEmail = getPrefs().getString(PREF_USER_EMAIL);
+    String userEmail = getPrefs().getString(USER_EMAIL);
     if (userEmail == null || userEmail.length() == 0) {
-      userEmail = "DemoUser@mazalearn.com";
+      userEmail = "demouser@mazalearn.com";
     }
     // Retrieve from local file system
     String profileAsText = getPrefs().getString(userEmail);
@@ -92,24 +91,21 @@ public class PreferencesManager {
       profileAsText = Base64Coder.decodeString(profileAsText);
       serverProfile = new Json().fromJson(Profile.class, profileAsText);
     }
+    // Choose latest available profile or create a new one if none available
     if (localProfile != null && serverProfile != null) {
-      // Choose latest profile as active
       // TODO: Merge profiles ??
       profile = localProfile.getLastUpdated() >= serverProfile.getLastUpdated() ? localProfile : serverProfile;
-      return profile;
     } else if (localProfile != null) {
       profile = localProfile;
-      return profile;
     } else if (serverProfile != null) {
       profile = serverProfile;
-      return profile;
+    } else { // Create a new Profile
+      profile = new Profile();
+      profile.setUserEmail(userEmail);
+      profile.setUserName(userEmail.substring(0, userEmail.indexOf("@")));
+      saveProfile();
     }
-    
-    // Create a new Profile
-    profile = new Profile();
-    profile.setUserEmail(userEmail);
-    profile.setUserName(userEmail.substring(0, userEmail.indexOf("@")));
-    saveProfile();
+    profile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
 
     return profile;
   }
@@ -132,12 +128,11 @@ public class PreferencesManager {
   }
   
   public void saveProfile() {
-    // TODO: should not be Case sensitive for user email 
     // convert the given profile to text
     String profileAsText = new Json(OutputType.json).toJson(profile);
     Gdx.app.log(ScienceEngine.LOG, "Saving Profile - " + profileAsText);
     profileAsText = Base64Coder.encodeString(profileAsText);
-    String userEmail = getPrefs().getString(PREF_USER_EMAIL);
+    String userEmail = getPrefs().getString(USER_EMAIL);
     String savedProfile = getPrefs().getString(userEmail);
     // No need to save if already up to date
     if (profileAsText.equals(savedProfile)) return;

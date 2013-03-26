@@ -1,6 +1,8 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,6 +17,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
+import com.mazalearn.scienceengine.core.view.Science2DGestureDetector;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.domains.statesofmatter.StatesOfMatterController;
 import com.mazalearn.scienceengine.domains.waves.WaveController;
@@ -65,7 +68,17 @@ public class ActivityScreen extends AbstractScreen {
       Gdx.graphics.setContinuousRendering(true);
     }
   }
-
+  
+  @Override
+  
+  public void show() {
+    super.show();
+    IScience2DView science2DView = science2DController.getView();
+    InputProcessor gestureListener = new Science2DGestureDetector((Stage) science2DView);
+    Gdx.input.setInputProcessor(new InputMultiplexer(gestureListener, (Stage) science2DView));
+    Gdx.app.log(ScienceEngine.LOG, "Set gesture detector");
+  }
+  
   @Override
   protected void goBack() {
     // Stop tutoring if it was in progress

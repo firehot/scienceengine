@@ -30,20 +30,9 @@ public class Activity {
       String statKey = activityLevel + "$" + id;
       float[] statValues = stats.get(statKey);
       if (statValues != null) this.stats = statValues;
-      // printStats(topic, activityLevel);
-    }
-    
-    private void printStats(Topic topic, int activityLevel) {
-      String str = "Topic: " + topic.name() +
-          " Tutor: " + id + 
-          ", Time spent: " + stats[TIME_SPENT] + 
-          ", NumAttempts: " + stats[NUM_ATTEMPTS] +
-          ", numSuccesses: " + stats[NUM_SUCCESSES] +
-          ", failureTracker: " + stats[FAILURE_TRACKER] + 
-          ", percentProgress: " + stats[PERCENT_PROGRESS];
-      System.out.println(str);
-    }
+    }    
   };
+  
   String description;
   String name;
   int activityId;

@@ -36,7 +36,7 @@ public class Science2DActor extends Actor implements IHelpComponent {
   private TextureRegion textureRegion;
   private Vector2 viewPos = new Vector2(), box2DPos = new Vector2();
   protected Vector2 lastTouch = new Vector2();    // view coordinates
-  private boolean drag = false;
+  private boolean drag = false; // indicates 0th pointer touched.
   private Vector3 currentTouch = new Vector3();
   private float moveDistance;
 
@@ -59,6 +59,7 @@ public class Science2DActor extends Actor implements IHelpComponent {
     ClickListener touchLlistener = new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+        if (pointer != 0) return drag = false;
         switch(MovementMode.valueOf(getMovementMode())) {
         case None: return false;
         case Move: moveDistance = 0; drag = true; // fall thru
@@ -69,12 +70,14 @@ public class Science2DActor extends Actor implements IHelpComponent {
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
+        if (pointer != 0) return;
         // Get negative of movement vector
         if (drag) moveToCurrent();
       }
 
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        if (pointer != 0) return;
         switch(MovementMode.valueOf(getMovementMode())) {
         case None: return;
         case Move: 
@@ -108,6 +111,7 @@ public class Science2DActor extends Actor implements IHelpComponent {
     ClickListener helpListener = new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+        if (pointer != 0) return false;
         super.touchDown(event, localX, localY, pointer, button);
         ScienceEngine.selectBody(body, (IScience2DView) getStage());
         return false;
@@ -118,7 +122,7 @@ public class Science2DActor extends Actor implements IHelpComponent {
   
   private void moveToCurrent() {
     // Screen coords of current touch
-    currentTouch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+    currentTouch.set(Gdx.input.getX(0), Gdx.input.getY(0), 0);
     // Logical coords of current touch
     getStage().getCamera().unproject(currentTouch);
     // Get negative of movement vector

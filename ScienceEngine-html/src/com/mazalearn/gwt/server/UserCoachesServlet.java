@@ -45,6 +45,8 @@ public class UserCoachesServlet extends HttpServlet {
     boolean firstCoach = true;
     for (Entity user : pq.asIterable()) {
       EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(ProfileServlet.PROFILE);
+      String userEmail = user.getKey().getName();
+      System.out.println(userEmail);
       if (profileEntity == null) continue;
       if (profileEntity.getProperty(UploadServlet.COLOR) == null) continue;
       if (profileEntity.getProperty(UploadServlet.CURRENT) == null) continue;
@@ -52,8 +54,6 @@ public class UserCoachesServlet extends HttpServlet {
       String userName = (String) profileEntity.getProperty(UploadServlet.USER_NAME);
       float currentValue = Float.parseFloat((String) profileEntity.getProperty(UploadServlet.CURRENT));
       String current = String.format("%2.2f", currentValue);
-      String userEmail = user.getKey().getName();
-      System.out.println(userEmail);
       if (!firstCoach) {
         jsonStr += ",";
       }

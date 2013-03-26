@@ -263,7 +263,7 @@ public class ScienceEngine extends Game {
 
     // For some reason, skin and atlasMap do not survive pause
     skin = null;
-    atlasMap = null;
+//    atlasMap = null;
   }
   
   @Override

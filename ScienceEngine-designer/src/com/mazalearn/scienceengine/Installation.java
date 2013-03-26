@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine;
 
-import java.io.FileWriter;
 import java.util.UUID;
 
 import com.badlogic.gdx.Gdx;
@@ -8,7 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 public class Installation {
   private static String sID = null;
-  private static final String INSTALLATION = "INSTALLATION";
+  private static final String INSTALLATION = "data/INSTALLATION";
 
   public synchronized static String id() {
     if (sID != null) return sID;
@@ -18,9 +17,8 @@ public class Installation {
       Gdx.app.log(ScienceEngine.LOG, "Checking for installation file");
       if (!installation.exists()) {
       	Gdx.app.log(ScienceEngine.LOG, "Creating installation file");
-        FileWriter out = new FileWriter(installation.file());
-        out.write(ScienceEngine.getPlatformAdapter().getPlatform() + "\t" + UUID.randomUUID().toString());
-        out.close();
+        String id = ScienceEngine.getPlatformAdapter().getPlatform() + "\t" + UUID.randomUUID().toString();
+        installation.writeBytes(id.getBytes(), false);
       }
   	  Gdx.app.log(ScienceEngine.LOG, "Reading installation file");     
       sID = installation.readString();

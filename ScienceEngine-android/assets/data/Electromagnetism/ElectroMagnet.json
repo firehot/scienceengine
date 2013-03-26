@@ -183,6 +183,26 @@ tutors:[
                    "inside a current carrying solenoid"],
           explanation: "The central inner region of a solenoid has a uniform magnetic field",
           answermask: "0001"
+          },
+         {type: "MCQ1",
+          id: "4.10",
+          goal:"A compass placed near an electromagnet carrying alternating current",
+          options:["will point to North pole of earth", 
+                   "will keep oscillating",
+                   "will not be affected",
+                   "will point steadily in a direction parallel to the axis of the electromagnet coils"],
+          explanation: "The magnetic field direction changes with the current direction",
+          answermask: "0001"
+          },
+         {type: "MCQ1",
+          id: "4.11",
+          goal:"A solenoid is suspended so it can rotate freely from 2 wires. When current flows through the solenoid, ",
+          options:["it will swing to align in North South direction", 
+                   "will keep oscillating",
+                   "will not be affected",
+                   "it will swing to align in East West direction"],
+          explanation: "The solenoid becomes magnetic and swings to align with the Earth's magnetic field",
+          answermask: "0001"
           }
         ]
        }

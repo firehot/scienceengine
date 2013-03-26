@@ -92,7 +92,7 @@ tutors: [
      ]},  
        {type: "RapidFire",
        id: "Multiple Choice Questions",
-       goal: "RapidFire Quiz",
+       goal: "RapidFire Review",
        childtutors: [
          {type: "MCQ",
           id: "6.1",
@@ -123,7 +123,7 @@ tutors: [
                    "Ohm's Law"],
          answermask: "0100"
           },
-        {type: "MCQ1",
+        {type: "*MCQ1",
           id: "6.4",
           goal:"A device that uses electromagnetic induction to convert kinetic energy into electrical energy is called a(n)",
          options:["transformer", 
@@ -131,7 +131,7 @@ tutors: [
                    "generator"],
           answermask: "001"
           },
-        {type: "MCQ1",
+        {type: "*MCQ1",
           id: "6.5",
           goal:"Disconnect a small-voltage battery from a coil of many loops of wire, and a large voltage is produced by",
          options:["the large collapse in the magnetic field", 
@@ -140,7 +140,54 @@ tutors: [
                    "electrons already in the wire",
                    "the electric field between the battery terminals"],
           answermask: "10000"
-          }
+          },
+         {type: "MCQ",
+          id: "6.6",
+          goal:"When is Induced Current in a Pickupcoil due to an electromagnet larger?",
+          options:["Electromagnet has more coil loops", 
+                   "PickupCoil has more coil loops", 
+                   "Number of loops in PickupCoil matches number of loops in electromagnet",
+                   "Current in electromagnet is larger"],
+          answermask: "1101"
+          },
+         {type: "MCQ1",
+          id: "6.7",
+          goal:"Two electromagnets are thrust into a coil. Which will induce more current?",
+          options:["The electromagnet with more coil loops", 
+                   "The electromagnet with more current", 
+                   "The electromagnet with more loop area",
+                   "All of these"],
+          answermask: "0001"
+          },
+         {type: "MCQ1",
+          id: "6.8",
+          goal:"A rectangular coil of copper wire is rotated around an electromagnet. The direction of induced current changes once in each ",
+          options:["revolution", 
+                   "two revolutions", 
+                   "half revolution",
+                   "one-fourth revolution"],
+          answermask: "0010"
+          },
+         {type: "*MCQ",
+          id: "6.9",
+          goal:"A soft iron core is placed in the center of a solenoid. This is because",
+          options:["it concentrates the magnetic lines of force", 
+                   "it has better magnetic permeability than air", 
+                   "it makes the magnet stronger",
+                   "it adds weight to the solenoid making it stable"],
+          answermask: "1110"
+          },
+         {type: "*MCQ1",
+          id: "6.10",
+          goal:"Induced emf in a circuit ",
+          options:["decreases the magnetic flux through the circuit", 
+                   "increases the magnetic flux through the circuit", 
+                   "does not affect the magnetic flux through the circuit",
+                   "may increase or decrease the magnetic flux through the circuit"],
+          answermask: "0001",
+          explanation: "By Lenz's law, direction of induced emf opposes change in flux - if flux is increasing, it tries to decrease it and vice versa."
+          },
+          
           ]
        }
    ]

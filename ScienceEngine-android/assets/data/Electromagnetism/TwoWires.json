@@ -219,10 +219,10 @@ tutors:[
                    "repel each other", 
                    "not affect each other",
                    "attract, then repel each other"],
-          answermask: "1000"
+          answermask: "0100"
           },
          {type: "MCQ1",
-          id: "R3.8",
+          id: "R3.5",
           goal:"What condition is necessary for an electric charge to have a magnetic field around it?",
           options:["it must be in a copper wire", 
                    "it must be isolated from the opposite charge", 
@@ -241,13 +241,39 @@ tutors:[
           answermask: "0100"
           },
          {type: "MCQ",
-          id: "R3.5",
+          id: "R3.7",
           goal:"The direction of magnetic field at a point near an infinite current carrying wire",
           options:["Curl right hand into a fist placed along the wire with thumb in direction of current. The magnetic field is given by the curling fingers.", 
                    "Is tangential to a circle drawn to touch the point with center at the wire", 
                    "Given by Fleming's left hand rule",
                    "Given by Flemings right hand rule"],
           answermask: "1100"
+          },
+         {type: "MCQ1",
+          id: "R3.8",
+          goal:"Two identical parallel wires are carrying different currents in the same direction. The magnetic field around the wire - ",
+          options:["is larger for the wire with larger current", 
+                   "is smaller for the wire with larger current", 
+                   "is the same for both wires"],
+          answermask: "100"
+          },
+         {type: "MCQ1",
+          id: "R3.9",
+          goal:"For an infinite current carrying wire, the magnetic field around the wire ",
+          options:["is parallel to the wire", 
+                   "increases with distance from the wire", 
+                   "is in the direction of the current",
+                   "circles the wire"],
+          answermask: "0001"
+          },
+         {type: "MCQ",
+          id: "R3.10",
+          goal:"For a twisted pair of infinite wires carrying equal current in opposite directions, the magnetic field around the wires ",
+          options:["is negligible", 
+                   "increases with distance from the wire", 
+                   "cancels out",
+                   "decreases when current increases"],
+          answermask: "1010"
           }
      ]}
    ]
