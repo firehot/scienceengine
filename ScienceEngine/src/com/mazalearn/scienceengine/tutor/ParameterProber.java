@@ -87,6 +87,7 @@ public class ParameterProber extends AbstractScience2DProber {
     ScienceEngine.clearPins();
   }
   
+  @SuppressWarnings("unchecked")
   @Override
   public void teach() {
     super.teach();

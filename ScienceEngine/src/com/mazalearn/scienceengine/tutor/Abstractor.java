@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -66,29 +67,29 @@ public class Abstractor extends AbstractTutor {
     this.addActor(configTable);
 
     TextureRegion ideaTexture = ScienceEngine.getTextureRegion("idea");
-    List<CheckBox> checkBoxList = new ArrayList<CheckBox>();
+    List<IModelConfig<?>> configList = new ArrayList<IModelConfig<?>>();
     for (final IModelConfig<?> config: science2DModel.getAllConfigs().values()) {
       if (config.isPossible() && config.isPermitted() && config.getBody() != null) {
-        final CheckBox configCheckBox = new CheckBox(config.getName(), skin);
-        configCheckBox.setName(config.getName());
-        checkBoxList.add(configCheckBox);
-        configCheckBox.setChecked(false);
-        configCheckBox.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent event, float x, float y) {
-            if (configCheckBox.isChecked()) {
-              ScienceEngine.pin(config.getBody(), true);
-            }
-            modelControls.refresh();
-          }
-        });
+        configList.add(config);
       }
     }
     // Shuffle parameters
-    Utils.shuffle(checkBoxList);
+    Utils.shuffle(configList);
     // Add parameters to table
-    for (CheckBox checkBox: checkBoxList) {
-      configTable.add(checkBox).left().colspan(4);
+    for (final IModelConfig<?> config: configList) {
+      final CheckBox configCheckBox = new CheckBox(config.getName(), skin);
+      configCheckBox.setName(config.getName());
+      configCheckBox.setChecked(false);
+      configCheckBox.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          if (configCheckBox.isChecked()) {
+            ScienceEngine.pin(config.getBody(), true);
+          }
+          modelControls.refresh();
+        }
+      });
+      configTable.add(configCheckBox).left().colspan(4);
       configTable.row();      
     }
     // Add lives to table
@@ -100,6 +101,19 @@ public class Abstractor extends AbstractTutor {
     }
     configTable.add(createDoneButton(skin)).fill();
     configTable.row();
+  }
+  
+  private Actor createChangeOptions() {
+    AtlasRegion arrow = ScienceEngine.getTextureRegion("fieldarrow");
+    final Image decrease = new Image(new TextureRegion(arrow, arrow.getRegionX() + arrow.getRegionWidth(), 
+        arrow.getRegionY(), -arrow.getRegionWidth(), arrow.getRegionHeight()));
+    final Image dontCare = new Image(ScienceEngine.getTextureRegion("cross"));
+    final Image increase = new Image(arrow);
+    Table changeOptions = new Table(guru.getSkin());
+    changeOptions.add("Decreases"); changeOptions.add(decrease).width(50).height(50).right(); changeOptions.row();
+    changeOptions.add("Is Unaffected"); changeOptions.add(dontCare).width(50).height(50).center(); changeOptions.row();
+    changeOptions.add("Increases"); changeOptions.add(increase).width(50).height(50).left(); changeOptions.row();
+    return changeOptions;
   }
 
   private TextButton createDoneButton(Skin skin) {
