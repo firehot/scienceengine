@@ -7,10 +7,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.mazalearn.scienceengine.ScienceEngine;
 
 /**
@@ -72,34 +69,13 @@ public class PreferencesManager {
   private Profile retrieveProfile() {
     String userId = getProfileUserId();
     // Retrieve from local file system
-    String profileAsText = getPrefs().getString(userId);
-    Profile localProfile = null;
-    if (profileAsText != null && profileAsText.length() > 0) {
-      // decode the contents - base64 encoded
-      profileAsText = Base64Coder.decodeString(profileAsText);
-      localProfile = new Json().fromJson(Profile.class, profileAsText);
-    }
-    // Retrieve from server if available
-    Profile serverProfile = null;
-    profileAsText = ScienceEngine.getPlatformAdapter().httpGet("/profile?" + Profile.USER_ID + "=" + userId);
-    if (profileAsText != null && profileAsText.length() > 0) {
-      // decode the contents - base64 encoded
-      profileAsText = Base64Coder.decodeString(profileAsText);
-      serverProfile = new Json().fromJson(Profile.class, profileAsText);
-    }
-    // Choose latest available profile or create a new one if none available
-    if (localProfile != null && serverProfile != null) {
-      profile = Profile.merge(localProfile, serverProfile);
-      saveProfile();
-    } else if (localProfile != null) {
-      profile = localProfile;
-    } else if (serverProfile != null) {
-      profile = serverProfile;
-    } else { // Create a new Profile
-      profile = new Profile();
-      saveProfile();
-    }
+    String localProfileBase64 = getPrefs().getString(userId);
+    // Retrieve from server
+    String serverProfileBase64 = ScienceEngine.getPlatformAdapter().httpGet(
+        "/profile?" + Profile.USER_ID + "=" + userId);
+    profile = Profile.mergeProfiles(localProfileBase64, serverProfileBase64); 
     profile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
+    saveProfile();
 
     return profile;
   }
@@ -130,16 +106,18 @@ public class PreferencesManager {
   }
   
   public void saveProfile() {
+    saveProfile(profile);
+  }
+
+  private void saveProfile(Profile profile) {
     // convert the given profile to text
-    String profileAsText = new Json(OutputType.json).toJson(profile);
-    Gdx.app.log(ScienceEngine.LOG, "Saving Profile - " + profileAsText);
-    profileAsText = Base64Coder.encodeString(profileAsText);
+    String profileAsBase64 = profile.getBase64();
     String userId = getProfileUserId();
     String savedProfile = getPrefs().getString(userId);
     // No need to save if already up to date
-    if (profileAsText.equals(savedProfile)) return;
+    if (profileAsBase64.equals(savedProfile)) return;
     
-    getPrefs().putString(userId, profileAsText);
+    getPrefs().putString(userId, profileAsBase64);
     // Add to set of profiles which need to be synced to server
     String syncProfilesString = getSyncProfilesString();
     if (!syncProfilesString.startsWith(userId + "\n")) {
@@ -148,7 +126,7 @@ public class PreferencesManager {
     getPrefs().flush();
     Gdx.app.log(ScienceEngine.LOG, "Saved Profile - " + userId);
   }
-  
+
   public void syncProfiles() {
     Gdx.app.log(ScienceEngine.LOG, "Syncing Profiles");
     Map<String, String> postParams = new HashMap<String, String>();
@@ -157,17 +135,24 @@ public class PreferencesManager {
     
     String[] syncProfilesArray = syncProfilesString.split("\n");
     HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
-    for (String profileKey: syncProfiles) {
-      String encodedProfile = getPrefs().getString(profileKey);
-      postParams.put(Profile.USER_ID, profileKey);
+    for (String userId: syncProfiles) {
+      String localProfileBase64 = getPrefs().getString(userId);
+      postParams.put(Profile.USER_ID, userId);
       try {
-        // Post profile to server
-        ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
-            postParams, encodedProfile.getBytes());
-        Gdx.app.log(ScienceEngine.LOG, "Uploaded Profile to MazaLearn - " + profileKey);
+        // Post profile to server and get back updated.
+        String serverProfileBase64 =
+            ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
+                postParams, localProfileBase64.getBytes());
+        Profile profile = Profile.mergeProfiles(localProfileBase64, serverProfileBase64);
+        saveProfile(profile);
+        // push server updates (if any) into current active profile
+        if (userId.equals(getProfileUserId())) {
+          this.profile = profile;
+        }
+        Gdx.app.log(ScienceEngine.LOG, "Uploaded Profile to MazaLearn - " + userId);
       } catch(GdxRuntimeException e) {
         e.printStackTrace();
-        Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to upload - " + profileKey);
+        Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to upload - " + userId);
       }
     }
     setSyncProfilesString("");

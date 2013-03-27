@@ -25,20 +25,20 @@ import com.google.gson.Gson;
 public class ProfileServlet extends HttpServlet {
 
   public static final String PROFILE = "Profile";
-  public static final String USER_ID = "userid";
+  public static final String USER_ID = "userid"; // owner
   public static final String DRAWING_PNG = "DrawingPng";
   public static final String USER_NAME = "username";
   public static final String CURRENT = "current";
   public static final String COLOR = "color";
-  public static final String USER_EMAIL = "useremail";
-  public static final String SEX = "sex";
-  public static final String GRADE = "grade";
-  public static final String SCHOOL = "school";
-  public static final String CITY = "city";
-  public static final String COMMENTS = "comments";
-  public static final String REGN_DATE = "regndate";
+  public static final String USER_EMAIL = "useremail"; // param
+  public static final String SEX = "sex";  // owner
+  public static final String GRADE = "grade"; // owner
+  public static final String SCHOOL = "school"; // owner
+  public static final String CITY = "city";     // owner
+  public static final String COMMENTS = "comments"; // owner
+  public static final String REGN_DATE = "regndate"; // owner
   public static final String INSTALL_ID = "installid";
-  public static final String PIN = "pin";
+  public static final String PIN = "pin"; // readonly
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -50,12 +50,18 @@ public class ProfileServlet extends HttpServlet {
     bis.read(profileBytes);
     saveUserProfile(userId, profileBytes);
     bis.close();
+    writeProfileResponse(response, userId);
   }
   
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String userId = request.getParameter(USER_ID);
     System.out.println("Received get: " + userId);
+    writeProfileResponse(response, userId);
+  }
+
+  private void writeProfileResponse(HttpServletResponse response, String userId)
+      throws IOException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     response.getWriter().append(getUserProfileAsBase64(userId, ds));
     response.getWriter().close();
