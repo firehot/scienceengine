@@ -24,27 +24,40 @@ import com.google.gson.Gson;
 @SuppressWarnings("serial")
 public class ProfileServlet extends HttpServlet {
 
-  static final String PROFILE = "Profile";
-  static final String USER_EMAIL = "useremail";
-  static final String DRAWING_PNG = "DrawingPng";
+  public static final String PROFILE = "Profile";
+  public static final String USER_ID = "userid";
+  public static final String DRAWING_PNG = "DrawingPng";
+  public static final String USER_NAME = "username";
+  public static final String CURRENT = "current";
+  public static final String COLOR = "color";
+  public static final String USER_EMAIL = "useremail";
+  public static final String SEX = "sex";
+  public static final String GRADE = "grade";
+  public static final String SCHOOL = "school";
+  public static final String CITY = "city";
+  public static final String COMMENTS = "comments";
+  public static final String REGN_DATE = "regndate";
+  public static final String INSTALL_ID = "installid";
+  public static final String PIN = "pin";
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     System.out.println("Received post: " + request.getContentLength());
-    String userEmail = request.getHeader(USER_EMAIL);
-    System.out.println("User: " + userEmail);
+    String userId = request.getHeader(USER_ID);
+    System.out.println("UserId: " + userId);
     BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
     byte[] profileBytes = new byte[request.getContentLength()];
     bis.read(profileBytes);
-    saveUserProfile(userEmail, profileBytes);
+    saveUserProfile(userId, profileBytes);
     bis.close();
   }
   
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String userEmail = request.getParameter(USER_EMAIL);
-    System.out.println("Received get: " + userEmail);
-    response.getWriter().append(getUserProfile(userEmail));
+    String userId = request.getParameter(USER_ID);
+    System.out.println("Received get: " + userId);
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    response.getWriter().append(getUserProfileAsBase64(userId, ds));
     response.getWriter().close();
   }
   
@@ -53,17 +66,10 @@ public class ProfileServlet extends HttpServlet {
     Map<String, Map<String, float[]>> topics;
   }
 
-  public void saveUserProfile(String userEmail, byte[] profileBytes) 
+  public void saveUserProfile(String userId, byte[] profileBytes) 
       throws IllegalStateException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail.toLowerCase());
-    Entity user;
-    try {
-      user = ds.get(key);
-    } catch (EntityNotFoundException e) {
-      user = new Entity(User.class.getSimpleName(), userEmail);
-      ds.put(user);
-    }
+    Entity user = createOrGetUser(userId, ds);
     String profileStringBase64 = new String(profileBytes);
     String profileStringJson = new String(Base64.decode(profileStringBase64));
     
@@ -74,11 +80,7 @@ public class ProfileServlet extends HttpServlet {
     System.out.println(profileStringJson.substring(0, count + 1));
     Profile profile = gson.fromJson(profileStringJson.substring(0, count+1), Profile.class);
     
-    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
-    if (profileEntity == null) {
-      profileEntity = new EmbeddedEntity();
-      user.setProperty(PROFILE, profileEntity);
-    }
+    EmbeddedEntity profileEntity = createOrGetUserProfile(user);
     for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
       if (entry.getKey().equals(DRAWING_PNG)) {
         if (entry.getValue() != null) {
@@ -94,12 +96,44 @@ public class ProfileServlet extends HttpServlet {
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
     ds.put(user);
+    String userEmail = (String) profileEntity.getProperty(USER_EMAIL);
+    if (userId.equals(userEmail)) {
+      // Delete installation id based user, if any
+      user = retrieveUser((String) profileEntity.getProperty(INSTALL_ID), ds);
+      if (user != null) {
+        ds.delete(user.getKey());
+      }
+    }
+  }
+
+  public static EmbeddedEntity createOrGetUserProfile(Entity user) {
+    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
+    if (profileEntity == null) {
+      profileEntity = new EmbeddedEntity();
+      user.setProperty(PROFILE, profileEntity);
+    }
+    return profileEntity;
+  }
+
+  public static Entity createOrGetUser(String userId, DatastoreService ds) {
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userId.toLowerCase());
+    Entity user;
+    try {
+      user = ds.get(key);
+    } catch (EntityNotFoundException e) {
+      user = new Entity(User.class.getSimpleName(), userId.toLowerCase());
+      ds.put(user);
+    }
+    return user;
   }
   
-  public String getUserProfile(String userEmail) 
+  public String getUserProfileAsBase64(String userId, DatastoreService ds) 
       throws IllegalStateException {
-    EmbeddedEntity profileEntity = retrieveUserProfile(userEmail);
-    if (profileEntity == null) return "";
+    EmbeddedEntity profileEntity = retrieveUserProfile(userId, ds);
+    if (profileEntity == null) {
+      System.out.println("No user profile: " + userId);
+      return "";
+    }
     
     System.out.println(profileEntity);
     StringBuilder properties = new StringBuilder("{");
@@ -126,20 +160,21 @@ public class ProfileServlet extends HttpServlet {
     return profileStringBase64;
   }
 
-  public static EmbeddedEntity retrieveUserProfile(String userEmail) {
-    Entity user = retrieveUser(userEmail);
+  public static EmbeddedEntity retrieveUserProfile(String userId, DatastoreService ds) {
+    Entity user = retrieveUser(userId, ds);
     if (user == null) return null;
     EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
     return profileEntity;
   }
 
-  public static Entity retrieveUser(String userEmail) {
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail.toLowerCase());
+  public static Entity retrieveUser(String userId, DatastoreService ds) {
+    if (userId == null || userId.length() == 0) return null;
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userId.toLowerCase());
     Entity user;
     try {
       user = ds.get(key);
     } catch (EntityNotFoundException e) {
+      System.out.println("No such user: " + userId);
       return null;
     }
     return user;

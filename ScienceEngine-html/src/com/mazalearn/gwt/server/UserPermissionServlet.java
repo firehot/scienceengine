@@ -20,40 +20,40 @@ public class UserPermissionServlet extends HttpServlet {
 
   private static final String PERMISSIONS = "permissions";
 
-  public static boolean checkUserPermitted(String userEmail) throws IllegalStateException {
+  public static boolean checkUserPermitted(String userId) throws IllegalStateException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userId);
     Entity entity;
     try {
       entity = ds.get(key);
     } catch (EntityNotFoundException e) {
-      entity = new Entity(User.class.getSimpleName(), userEmail);
+      entity = new Entity(User.class.getSimpleName(), userId);
       ds.put(entity);
     }
     String permissions = (String) entity.getProperty(PERMISSIONS);
-    System.out.println("User " + userEmail + " permissions: " + permissions);
+    System.out.println("User " + userId + " permissions: " + permissions);
     return (permissions != null && permissions.contains("demo"));
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String userEmail = request.getParameter("userEmail");
+    String userId = request.getParameter(ProfileServlet.USER_ID);
     String permissions = request.getParameter(PERMISSIONS);
-    if (userEmail == null || permissions == null) {
-      response.getWriter().append("userEmail or permissions not found");
+    if (userId == null || permissions == null) {
+      response.getWriter().append("userId or permissions not found");
       return;
     }
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), userId);
     Entity entity;
     try {
       entity = ds.get(key);
     } catch (EntityNotFoundException e) {
-      entity = new Entity(User.class.getSimpleName(), userEmail);
+      entity = new Entity(User.class.getSimpleName(), userId);
     }
     entity.setProperty(PERMISSIONS, "demo");
     ds.put(entity);
     
-    response.getWriter().append("User: <" + userEmail + "> granted permissions: " + permissions);
+    response.getWriter().append("User: <" + userId + "> granted permissions: " + permissions);
   }
 }

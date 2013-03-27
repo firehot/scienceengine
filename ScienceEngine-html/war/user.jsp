@@ -19,6 +19,7 @@
 
 <%@ page import="com.mazalearn.gwt.server.Activity" %>
 <%@ page import="com.mazalearn.gwt.server.Activity.Tutor" %>
+<%@ page import="com.mazalearn.gwt.server.ProfileServlet" %>
 <%@ page import="com.mazalearn.scienceengine.Topic" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -66,9 +67,9 @@
     <div id="chart_div"></div>
 
 <%
-    String userEmail = request.getParameter("userEmail");
-    if (userEmail == null) {
-      userEmail = "DemoUser@mazalearn.com";
+    String userId = request.getParameter(ProfileServlet.USER_ID);
+    if (userId == null) {
+      userId = "demouser@mazalearn.com";
     }
 
     Topic topic = Topic.Electromagnetism;
@@ -81,23 +82,15 @@
       activityLevel = Topic.valueOf(request.getParameter("activity"));
     } catch (Exception ignored) {};
     
-    pageContext.setAttribute("userEmail", userEmail);
+    pageContext.setAttribute("userid", userId);
     pageContext.setAttribute("topic", topic);
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
 %>
 
 <%
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
-    Entity userEntity;
-    EmbeddedEntity profile;
-    try {
-      userEntity = datastore.get(key);
-      profile = (EmbeddedEntity) userEntity.getProperty("Profile");
-    } catch (EntityNotFoundException e) {
-      throw new RuntimeException("Could not find user: " + userEmail);
-    }
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    EmbeddedEntity profile = ProfileServlet.retrieveUserProfile(userId, ds);
 %>
 
       <table>
@@ -131,7 +124,6 @@
          json += delimiter + "['" + tutor.id + "'," + tutor.stats[Activity.Tutor.TIME_SPENT] + "]";
          delimiter = ",";
        }
-       
 %>
        <tr>
          <td><%= tutor.goal %></td>

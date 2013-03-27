@@ -24,10 +24,10 @@ public class UserProfileDeleteServlet extends HttpServlet {
   }
 
   public void deleteUserProfile(String userEmail) throws IllegalStateException {
-    Entity user = ProfileServlet.retrieveUser(userEmail);
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity user = ProfileServlet.retrieveUser(userEmail, ds);
     if (user != null) {
       user.setProperty(ProfileServlet.PROFILE, null);
-      DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
       ds.put(user);      
     }
   }

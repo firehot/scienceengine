@@ -128,7 +128,7 @@ public abstract class AbstractScreen implements Screen {
     }
   }
 
-  private Actor createScreenComponent(ScreenComponent screenComponent, Stage stage, Skin skin) {
+  private Actor createScreenComponent(ScreenComponent screenComponent, final Stage stage, Skin skin) {
     switch (screenComponent) {
       case TopBar:
       case BottomBar:
@@ -149,12 +149,19 @@ public abstract class AbstractScreen implements Screen {
         table.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+            new RegistrationDialog(getStage(), getSkin()).show(stage);
           }      
          });
         return table;
       }
       case Logo:
         Image logo = new Image(new Texture("images/logo.png"));
+        logo.addListener(new ClickListener() {
+          public void clicked (InputEvent event, float x, float y) {
+            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+            new AboutDialog(getSkin()).show(stage);
+          }
+        });
         return logo;
       case Status: 
       case Title: {

@@ -39,7 +39,7 @@ public class TutorStats {
   
   public String toString() {
     return "Topic: " + topic.name() +
-        " Tutor: " + tutorId + 
+        " TutorId: " + tutorId + 
         ", Time spent: " + stats[TIME_SPENT] + 
         ", NumAttempts: " + stats[NUM_ATTEMPTS] +
         ", numSuccesses: " + stats[NUM_SUCCESSES] +

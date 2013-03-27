@@ -60,7 +60,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     try {
       Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
       if (socket == null) {
-        Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + "/" + path);
+        Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + path);
         return null;
       }
       DataOutputStream wr = 
@@ -80,7 +80,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
         throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
       }
     } catch (Exception e) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
+      Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + path);
       e.printStackTrace();
       throw new GdxRuntimeException(e);
     }

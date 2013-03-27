@@ -19,7 +19,6 @@ import com.mazalearn.scienceengine.ScienceEngine;
  * Profile is per user - stored as a preference against email address of profile
  */
 public class PreferencesManager {
-  private static final String USER_EMAIL = "useremail";
   private static final String SYNC_PROFILES = "syncprofiles";
   // constants
   private static final String PREF_VOLUME = "volume";
@@ -64,19 +63,16 @@ public class PreferencesManager {
     getPrefs().flush();
   }
   
-  public Profile loadProfile(String userEmail) {
-    getPrefs().putString(USER_EMAIL, userEmail.toLowerCase());
+  public Profile loadProfile(String userId) {
+    getPrefs().putString(Profile.USER_ID, userId.toLowerCase());
     getPrefs().flush();
     return retrieveProfile();
   }
 
   private Profile retrieveProfile() {
-    String userEmail = getPrefs().getString(USER_EMAIL);
-    if (userEmail == null || userEmail.length() == 0) {
-      userEmail = "demouser@mazalearn.com";
-    }
+    String userId = getProfileUserId();
     // Retrieve from local file system
-    String profileAsText = getPrefs().getString(userEmail);
+    String profileAsText = getPrefs().getString(userId);
     Profile localProfile = null;
     if (profileAsText != null && profileAsText.length() > 0) {
       // decode the contents - base64 encoded
@@ -85,7 +81,7 @@ public class PreferencesManager {
     }
     // Retrieve from server if available
     Profile serverProfile = null;
-    profileAsText = ScienceEngine.getPlatformAdapter().httpGet("/profile?useremail=" + userEmail);
+    profileAsText = ScienceEngine.getPlatformAdapter().httpGet("/profile?" + Profile.USER_ID + "=" + userId);
     if (profileAsText != null && profileAsText.length() > 0) {
       // decode the contents - base64 encoded
       profileAsText = Base64Coder.decodeString(profileAsText);
@@ -93,21 +89,27 @@ public class PreferencesManager {
     }
     // Choose latest available profile or create a new one if none available
     if (localProfile != null && serverProfile != null) {
-      // TODO: Merge profiles ??
-      profile = localProfile.getLastUpdated() >= serverProfile.getLastUpdated() ? localProfile : serverProfile;
+      profile = Profile.merge(localProfile, serverProfile);
+      saveProfile();
     } else if (localProfile != null) {
       profile = localProfile;
     } else if (serverProfile != null) {
       profile = serverProfile;
     } else { // Create a new Profile
       profile = new Profile();
-      profile.setUserEmail(userEmail);
-      profile.setUserName(userEmail.substring(0, userEmail.indexOf("@")));
       saveProfile();
     }
     profile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
 
     return profile;
+  }
+
+  private String getProfileUserId() {
+    String userId = getPrefs().getString(Profile.USER_ID);
+    if (userId == null || userId.length() == 0) {
+      userId = ScienceEngine.getPlatformAdapter().getInstallationId();
+    }
+    return userId;
   }
 
   public Profile getProfile() {
@@ -132,19 +134,19 @@ public class PreferencesManager {
     String profileAsText = new Json(OutputType.json).toJson(profile);
     Gdx.app.log(ScienceEngine.LOG, "Saving Profile - " + profileAsText);
     profileAsText = Base64Coder.encodeString(profileAsText);
-    String userEmail = getPrefs().getString(USER_EMAIL);
-    String savedProfile = getPrefs().getString(userEmail);
+    String userId = getProfileUserId();
+    String savedProfile = getPrefs().getString(userId);
     // No need to save if already up to date
     if (profileAsText.equals(savedProfile)) return;
     
-    getPrefs().putString(userEmail, profileAsText);
+    getPrefs().putString(userId, profileAsText);
     // Add to set of profiles which need to be synced to server
     String syncProfilesString = getSyncProfilesString();
-    if (!syncProfilesString.startsWith(userEmail + "\n")) {
-      setSyncProfilesString(userEmail + "\n" + syncProfilesString);
+    if (!syncProfilesString.startsWith(userId + "\n")) {
+      setSyncProfilesString(userId + "\n" + syncProfilesString);
     }
     getPrefs().flush();
-    Gdx.app.log(ScienceEngine.LOG, "Saved Profile - " + userEmail);
+    Gdx.app.log(ScienceEngine.LOG, "Saved Profile - " + userId);
   }
   
   public void syncProfiles() {
@@ -157,7 +159,7 @@ public class PreferencesManager {
     HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
     for (String profileKey: syncProfiles) {
       String encodedProfile = getPrefs().getString(profileKey);
-      postParams.put(USER_EMAIL, profileKey);
+      postParams.put(Profile.USER_ID, profileKey);
       try {
         // Post profile to server
         ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 

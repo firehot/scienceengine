@@ -57,6 +57,16 @@
   </servlet>
 
   <servlet>
+    <servlet-name>RegistrationEmailServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.RegistrationEmailServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>RegistrationServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.RegistrationServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>UserImageServlet</servlet-name>
     <servlet-class>com.mazalearn.gwt.server.UserImageServlet</servlet-class>
   </servlet>
@@ -89,6 +99,14 @@
   <servlet-mapping>
     <servlet-name>ProfileServlet</servlet-name>
     <url-pattern>/profile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegistrationEmailServlet</servlet-name>
+    <url-pattern>/registrationemail</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegistrationServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>UserImageServlet</servlet-name>

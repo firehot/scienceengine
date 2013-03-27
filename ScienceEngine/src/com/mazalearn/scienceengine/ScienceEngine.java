@@ -17,6 +17,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
@@ -337,11 +338,11 @@ public class ScienceEngine extends Game {
       entityName = entityName.substring(0, entityName.indexOf("."));
     }
     String message = component + getMsg().getString("Help." + entityName);
-    displayStatusMessage(stage, message);
+    displayStatusMessage((Stage) stage, message);
   }
 
-  public static void displayStatusMessage(IScience2DView stage, String message) {
-    Label status = (Label) stage.findActor(ScreenComponent.Status.name());
+  public static void displayStatusMessage(Stage stage, String message) {
+    Label status = (Label) stage.getRoot().findActor(ScreenComponent.Status.name());
     if (status != null) // TODO: only for level editor - why?
     status.setText(message);
   }

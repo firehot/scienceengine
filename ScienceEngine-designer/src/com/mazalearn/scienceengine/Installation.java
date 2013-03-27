@@ -17,7 +17,7 @@ public class Installation {
       Gdx.app.log(ScienceEngine.LOG, "Checking for installation file");
       if (!installation.exists()) {
       	Gdx.app.log(ScienceEngine.LOG, "Creating installation file");
-        String id = ScienceEngine.getPlatformAdapter().getPlatform() + "\t" + UUID.randomUUID().toString();
+        String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + UUID.randomUUID().toString();
         installation.writeBytes(id.getBytes(), false);
       }
   	  Gdx.app.log(ScienceEngine.LOG, "Reading installation file");     

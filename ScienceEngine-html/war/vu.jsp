@@ -10,6 +10,8 @@
 
 <%@ page import="com.google.appengine.api.datastore.Key" %>
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
+
+<%@ page import="com.mazalearn.gwt.server.ProfileServlet" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -20,40 +22,19 @@
   <body>
 
 <%
-    String userEmail = request.getParameter("userEmail");
-    if (userEmail == null) {
-        userEmail = "default";
+    String userId = request.getParameter("e");
+    if (userId == null) {
+        userId = "Unknown User";
     }
-    pageContext.setAttribute("userEmail", userEmail);
-    UserService userService = UserServiceFactory.getUserService();
-    User user = userService.getCurrentUser();
-    if (user != null) {
-      pageContext.setAttribute("user", user);
-%>
-<p>Hello, ${fn:escapeXml(user.nickname)}! 
-<%
-    } else {
-%>
-<p>Hello!
 
-<%
-    }
 %>
 
-<%
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userEmail);
-    Entity entity;
-    try {
-      entity = datastore.get(key);
-    } catch (EntityNotFoundException e) {
-      entity = new Entity(User.class.getSimpleName(), userEmail);
-    }
-%>
-
-    <form action="/userprofile" method="post">
+    <form action="/register" method="post">
+      <input type="hidden" name="i" value=<%= request.getParameter("i") %> >
+      <input type="hidden" name="e" value=<%= request.getParameter("e") %> >
+      <input type="hidden" name="h" value=<%= request.getParameter("h") %> >
       <table>
-        <tr><td>Email</td><td>${fn:escapeXml(userEmail)}</td></tr>
+        <tr><td>Email</td><td><%= userId %></td></tr>
         <tr><td>Name</td><td><input name="username"></td></tr>
         <tr><td>Sex</td><td><input type="radio" name="sex" value="F">Female
                             <input type="radio" name="sex" value="M">Male
@@ -68,9 +49,9 @@
         <tr><td>School</td><td><input name="school"></td></tr>
         <tr><td>City</td><td><input name="city"></td></tr>
 	      <tr><td>Comments</td><td><textarea name="comments" rows="3" cols="60"></textarea></td></tr>
+        <tr><td>Registration PIN</td><td><input name="pin"></td></tr>
       </table>
-      <input type="hidden" name="userEmail" value="${fn:escapeXml(userEmail)}"/>
-      <div><input type="submit" value="Activate Account" /></div>
+      <div><input type="submit" value="Register" /></div>
     </form>
 
   </body>

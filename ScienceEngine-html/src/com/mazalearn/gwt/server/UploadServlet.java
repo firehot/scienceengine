@@ -20,27 +20,27 @@ import com.google.appengine.api.users.User;
 @SuppressWarnings("serial")
 public class UploadServlet extends HttpServlet {
 
-  static final String USER_EMAIL = "useremail";
-  static final String USER_NAME = "username";
-  static final String COACH_IMAGE = "coach";
-  static final String CURRENT = "current";
-  static final String COLOR = "color";
-  static final String PLATFORM = "platform";
+  private static final String USER_ID = "userid";
+  private static final String USER_NAME = "username";
+  private static final String CURRENT = "current";
+  private static final String COLOR = "color";
+  private static final String COACH_IMAGE = "coach";
+  private static final String PLATFORM = "platform";
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     System.out.println("Received post: " + request.getContentLength());
     response.getWriter().append("Post received");
-    String userEmail = request.getHeader(USER_EMAIL);
+    String userId = request.getHeader(USER_ID);
     String userName = request.getHeader(USER_NAME);
     String current = request.getHeader(CURRENT);
     String color = request.getHeader(COLOR);
     String platform = request.getHeader(PLATFORM);
-    System.out.println("User: " + userEmail + " current: " + current + " color:" + color);
+    System.out.println("User: " + userId + " current: " + current + " color:" + color);
     BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
     byte[] pngImage = new byte[request.getContentLength()];
     bis.read(pngImage);
-    saveUserImage(userEmail, userName, pngImage, current, color, platform);
+    saveUserImage(userId, userName, pngImage, current, color, platform);
     bis.close();
   }
 

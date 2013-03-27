@@ -28,7 +28,8 @@ public enum Parameter implements IParameter {
   MonopoleType, 
   FieldStrengthX, FieldStrengthY, FieldStrengthZ, 
   ChargeStrength, 
-  SampleMode;
+  SampleMode, 
+  Velocity;
   
   private Parameter() {
   }

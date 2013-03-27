@@ -103,7 +103,7 @@ public class Abstractor extends AbstractTutor {
       life[i] = new Image(ideaTexture);
       life[i].setSize(ScreenComponent.Idea.getWidth() / 2,
           ScreenComponent.Idea.getHeight() / 2);
-      lifeTable.add(life[i]).width(ScreenComponent.Idea.getWidth() / 2);
+      lifeTable.add(life[i]).width(ScreenComponent.Idea.getWidth());
     }
     configTable.add(lifeTable).fill().spaceTop(20);
     configTable.add(createDoneButton(skin)).fill().spaceTop(20);

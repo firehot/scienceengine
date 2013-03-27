@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class Hinter extends Group {
   private static List<Image> SCIENTISTS = new ArrayList<Image>();
@@ -86,7 +85,7 @@ public class Hinter extends Group {
     scientistIndex = MathUtils.random(0, SCIENTISTS.size() - 1);
     jumpingMode = false; // TODO: very irritating
     image = SCIENTISTS.get(scientistIndex);
-    ScienceEngine.displayStatusMessage((IScience2DView) getStage(), "Hint: " + hint);
+    ScienceEngine.displayStatusMessage(getStage(), "Hint: " + hint);
     image.setY(0);
   }
 
@@ -96,7 +95,7 @@ public class Hinter extends Group {
   
   public void clearHint() {
     this.hint = null;
-    ScienceEngine.displayStatusMessage((IScience2DView) getStage(), "");
+    ScienceEngine.displayStatusMessage(getStage(), "");
   }
 
 }

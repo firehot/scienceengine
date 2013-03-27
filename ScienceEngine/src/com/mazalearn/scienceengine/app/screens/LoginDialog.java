@@ -46,7 +46,7 @@ public class LoginDialog extends Dialog {
     email.setWidth(200);
     this.getContentTable().add(email).width(200);
     this.getContentTable().row();
-    Label emailUseNote = new Label("Activation link will be sent to this email address", skin);
+    Label emailUseNote = new Label("Registration link will be sent to this email address", skin);
     emailUseNote.setFontScale(0.9f);
     this.getContentTable().add(emailUseNote).colspan(2);
     this.getContentTable().row();
@@ -68,10 +68,6 @@ public class LoginDialog extends Dialog {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         profile = ScienceEngine.getPreferencesManager().loadProfile(email.getText());
-        if (!profile.getUserName().equals(name.getText())) {
-          profile.setUserName(name.getText());
-          profile.save();
-        }
         
         // Primitive validation
         if (!name.getText().matches("[a-zA-Z ]{2,30}") || !email.getText().contains("@")) {
@@ -102,23 +98,19 @@ public class LoginDialog extends Dialog {
   @Override
   public Dialog show(Stage stage) {
     String userEmail = ScienceEngine.getUserEmail();
+    // Force text input to simplify registration.
     if (ScienceEngine.getPlatformAdapter().getPlatform() == IPlatformAdapter.Platform.IOS){
       // Onscreen keyboard not showing in IOS - this is a workaround.
       Gdx.input.getTextInput(new TextInputListener() {
         @Override
         public void input(String email) {
           profile = ScienceEngine.getPreferencesManager().loadProfile(email);
-          String userName = email.substring(0, email.indexOf("@"));
-          if (!userName.equals(profile.getUserName())) {
-            profile.setUserName(userName);
-            profile.save();
-          }
           doneCallback.done(true);
         }
         
         @Override
         public void canceled() {}
-      }, "Enter email address", userEmail == null ? "" : userEmail);
+      }, "Enter email address for registration", userEmail == null ? "" : userEmail);
       return null;
     } else {
       setupDialog();      

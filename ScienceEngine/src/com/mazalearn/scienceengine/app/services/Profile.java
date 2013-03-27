@@ -25,13 +25,14 @@ public class Profile implements Serializable {
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
   private static final String TOPIC = "topic";
-  private static final String USER_EMAIL = "useremail";
+  public static final String USER_ID = "userid"; // value may be installationid or user email
   private static final String USER_NAME = "username";
-  private static final String INSTALL_ID = "install_id";
+  public static final String INSTALL_ID = "installid";
   private static final String LAST_UPDATED = "last_updated";
   private static final String CURRENT = "current";
   private static final String COLOR = "color";
   private static final String PLATFORM = "platform";
+  public static final String USER_EMAIL = "useremail";
   
   private HashMap<Topic, HashMap<String, float[]>> topicStats;
   private HashMap<String, String> properties;
@@ -45,10 +46,6 @@ public class Profile implements Serializable {
     }
     properties = new HashMap<String, String>();
     properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
-  }
-
-  public void setUserEmail(String userEmail) {
-    properties.put(USER_EMAIL, userEmail);
   }
 
   public void setCurrentActivity(Topic level) {
@@ -149,17 +146,13 @@ public class Profile implements Serializable {
     }
   }
 
-  public void setUserName(String name) {
-    properties.put(USER_NAME, name);
-  }
-
   public String getUserName() {
     String s = properties.get(USER_NAME);
     return s == null ? "" : s;
   }
 
   public String getUserEmail() {
-    String s = properties.get(USER_EMAIL);
+    String s = properties.get(USER_ID);
     return s == null ? "" : s;
   }
 
@@ -216,4 +209,19 @@ public class Profile implements Serializable {
   public void setPlatform(Platform platform) {
     properties.put(PLATFORM, platform.name());
   }
+
+  public String getInstallationId() {
+    return properties.get(INSTALL_ID);
+  }
+
+  public static Profile merge(Profile profile1, Profile profile2) {
+    if (profile1.getLastUpdated() >= profile2.getLastUpdated()) {
+      profile2.properties.putAll(profile1.properties);
+      return profile2;
+    } else {
+      profile1.properties.putAll(profile2.properties);
+      return profile1;
+    }
+  }
+
 }

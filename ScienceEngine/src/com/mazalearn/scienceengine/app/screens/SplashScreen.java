@@ -47,6 +47,12 @@ public class SplashScreen extends AbstractScreen {
     return false;
   }
 
+  private void enterApplication() {
+    // TODO: sync when login user changes otherwise not useful here.
+    ScienceEngine.getPreferencesManager().syncProfiles();
+    scienceEngine.setScreen(new ChooseTopicScreen(scienceEngine));
+  }
+
   @Override
   public void show() {
     super.show();
@@ -57,17 +63,20 @@ public class SplashScreen extends AbstractScreen {
     ClickListener startListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        boolean enterpriseInstall = false;
+        if (enterpriseInstall) {
           final Dialog loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
-            @Override
-            public void done(boolean success) {
-              // TODO: sync when idle or at a better place.
-              ScienceEngine.getPreferencesManager().syncProfiles();
-              scienceEngine.setScreen(new ChooseTopicScreen(scienceEngine));
-            }
-          });
-          loginDialog.show(stage);
+              @Override
+              public void done(boolean success) {
+                enterApplication();
+              }
+            });
+            loginDialog.show(stage);
+        } else {
+          enterApplication();
         }
-      };
+      }
+    };
 
     Label touchToStart = new Label("Touch to Start", scienceEngine.getSkin());
     touchToStart.setColor(Color.WHITE);
@@ -90,6 +99,9 @@ public class SplashScreen extends AbstractScreen {
     stage.addActor(touchToStart);
     splashImage.addListener(startListener);
     touchToStart.addListener(startListener);
+    
+    // Do a sync of all profiles here
+    ScienceEngine.getPreferencesManager().syncProfiles();    
   }
 
   @Override

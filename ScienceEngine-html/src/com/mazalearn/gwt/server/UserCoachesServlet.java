@@ -23,7 +23,7 @@ public class UserCoachesServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     System.out.println("UserCoaches");
-    response.setHeader("ContentType", "applicatn/json");
+    response.setHeader("ContentType", "application/json");
     response.getWriter().append(retrieveUserCoaches());
   }
   
@@ -32,7 +32,7 @@ public class UserCoachesServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Filter colorPresentFilter =
-      new FilterPredicate(UploadServlet.COLOR, FilterOperator.NOT_EQUAL, null);
+      new FilterPredicate(ProfileServlet.COLOR, FilterOperator.NOT_EQUAL, null);
 
     // Use class Query to assemble a query
     Query q = new Query("User"); // .setFilter(colorPresentFilter);
@@ -45,24 +45,24 @@ public class UserCoachesServlet extends HttpServlet {
     boolean firstCoach = true;
     for (Entity user : pq.asIterable()) {
       EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(ProfileServlet.PROFILE);
-      String userEmail = user.getKey().getName();
-      System.out.println(userEmail);
+      String userId = user.getKey().getName();
+      System.out.println(userId);
       if (profileEntity == null) continue;
-      if (profileEntity.getProperty(UploadServlet.COLOR) == null) continue;
-      if (profileEntity.getProperty(UploadServlet.CURRENT) == null) continue;
-      String color = (String) profileEntity.getProperty(UploadServlet.COLOR);
-      String userName = (String) profileEntity.getProperty(UploadServlet.USER_NAME);
-      float currentValue = Float.parseFloat((String) profileEntity.getProperty(UploadServlet.CURRENT));
+      if (profileEntity.getProperty(ProfileServlet.COLOR) == null) continue;
+      if (profileEntity.getProperty(ProfileServlet.CURRENT) == null) continue;
+      String color = (String) profileEntity.getProperty(ProfileServlet.COLOR);
+      String userName = (String) profileEntity.getProperty(ProfileServlet.USER_NAME);
+      float currentValue = Float.parseFloat((String) profileEntity.getProperty(ProfileServlet.CURRENT));
       String current = String.format("%2.2f", currentValue);
       if (!firstCoach) {
         jsonStr += ",";
       }
       firstCoach = false;
       jsonStr += "{";
-      jsonStr += "\"" + UploadServlet.USER_EMAIL + "\":\"" + userEmail + "\"";
-      jsonStr += ",\"" + UploadServlet.COLOR + "\":\"" + color + "\"";
-      jsonStr += ",\"" + UploadServlet.USER_NAME + "\":\"" + userName + "\"";
-      jsonStr += ",\"" + UploadServlet.CURRENT + "\":" + current;
+      jsonStr += "\"" + ProfileServlet.USER_ID + "\":\"" + userId + "\"";
+      jsonStr += ",\"" + ProfileServlet.COLOR + "\":\"" + color + "\"";
+      jsonStr += ",\"" + ProfileServlet.USER_NAME + "\":\"" + userName + "\"";
+      jsonStr += ",\"" + ProfileServlet.CURRENT + "\":" + current;
       jsonStr += "}\n";
     }
     
