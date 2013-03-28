@@ -173,8 +173,8 @@ public class TopicHomeScreen extends AbstractScreen {
       String activityName = getMsg().getString(topic + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(topic, level, ".png");
       Pixmap pixmap;
-      if (ScienceEngine.assetManager.isLoaded(filename)) {
-        pixmap = ScienceEngine.assetManager.get(filename, Pixmap.class);
+      if (ScienceEngine.getAssetManager().isLoaded(filename)) {
+        pixmap = ScienceEngine.getAssetManager().get(filename, Pixmap.class);
       } else {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
@@ -331,7 +331,7 @@ public class TopicHomeScreen extends AbstractScreen {
   public void addAssets() {
     for (Topic childTopic: topic.getChildren()) {
       String filename = LevelUtil.getLevelFilename(topic, childTopic, ".png");
-      ScienceEngine.assetManager.load(filename, Pixmap.class);
+      ScienceEngine.getAssetManager().load(filename, Pixmap.class);
     }
   }
 

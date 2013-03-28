@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.services.IMessage;
 
-class PlatformAdapterImpl extends NonWebPlatformAdapter {
+public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   
   public PlatformAdapterImpl(Platform platform) {
     super(platform);

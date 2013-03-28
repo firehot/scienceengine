@@ -33,6 +33,7 @@
       <input type="hidden" name="i" value=<%= request.getParameter("i") %> >
       <input type="hidden" name="e" value=<%= request.getParameter("e") %> >
       <input type="hidden" name="h" value=<%= request.getParameter("h") %> >
+      <input type="hidden" name="t" value=<%= request.getParameter("t") %> >
       <table>
         <tr><td>Email</td><td><%= userId %></td></tr>
         <tr><td>Name</td><td><input name="username"></td></tr>

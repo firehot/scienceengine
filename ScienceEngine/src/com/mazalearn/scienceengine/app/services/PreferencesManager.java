@@ -77,6 +77,7 @@ public class PreferencesManager {
     profile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
     if (profile.getUserEmail().length() > 0) {
       getPrefs().putString(Profile.USER_ID, profile.getUserEmail());
+      getPrefs().flush();
     }
     saveProfile();
 
@@ -151,6 +152,7 @@ public class PreferencesManager {
         // push server updates (if any) into current active profile
         if (userId.equals(getProfileUserId())) {
           this.profile = profile;
+          getPrefs().putString(Profile.USER_ID, profile.getUserEmail());
         }
         Gdx.app.log(ScienceEngine.LOG, "Uploaded Profile to MazaLearn - " + userId);
       } catch(GdxRuntimeException e) {

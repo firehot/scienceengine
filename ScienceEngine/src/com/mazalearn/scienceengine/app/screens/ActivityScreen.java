@@ -38,8 +38,8 @@ public class ActivityScreen extends AbstractScreen {
     this.topic = topic;
     this.activityLevel = level;
     String fileName = LevelUtil.getLevelFilename(topic, level, ".json");
-    if (ScienceEngine.assetManager.isLoaded(fileName)) {
-      ScienceEngine.assetManager.unload(fileName);
+    if (ScienceEngine.getAssetManager().isLoaded(fileName)) {
+      ScienceEngine.getAssetManager().unload(fileName);
     }
     this.science2DController = 
         createTopicController(topic, level, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
@@ -106,7 +106,7 @@ public class ActivityScreen extends AbstractScreen {
   public void addAssets() {
     String fileName = LevelUtil.getLevelFilename(topic, 
         science2DController.getLevel(), ".json");
-    if (ScienceEngine.assetManager.isLoaded(fileName)) {
+    if (ScienceEngine.getAssetManager().isLoaded(fileName)) {
       return;
     }
     // Guru resources
@@ -115,7 +115,7 @@ public class ActivityScreen extends AbstractScreen {
     ScienceEngine.loadAtlas("images/" + topic.name() + "/pack.atlas");
     AsyncLevelLoader.LevelLoaderParameter parameter = new AsyncLevelLoader.LevelLoaderParameter();
     parameter.science2DController = science2DController;
-    ScienceEngine.assetManager.load(fileName, IScience2DController.class, parameter);
+    ScienceEngine.getAssetManager().load(fileName, IScience2DController.class, parameter);
   }
 
 }

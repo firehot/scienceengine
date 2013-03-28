@@ -62,7 +62,7 @@ public class ScienceEngine extends Game {
   private static MusicManager musicManager;
   private static SoundManager soundManager;
   private static IPlatformAdapter platformAdapter;
-  public static AssetManager assetManager;
+  private static AssetManager assetManager;
   private static Skin skin;
 
   private String uri;
@@ -87,6 +87,10 @@ public class ScienceEngine extends Game {
   }
 
   public static PreferencesManager getPreferencesManager() {
+    // TODO: cleanup - below initialization added for testing
+    if (preferencesManager == null) {
+      preferencesManager = new PreferencesManager();
+    }
     return preferencesManager;
   }
 
@@ -142,7 +146,7 @@ public class ScienceEngine extends Game {
 
     // create the asset Manager
     assetManager = new AssetManager();
-    assetManager.setLoader(IScience2DController.class, 
+    getAssetManager().setLoader(IScience2DController.class, 
         new AsyncLevelLoader(new InternalFileHandleResolver()));
     loadAtlas("images/core/pack.atlas");
 
@@ -408,13 +412,13 @@ public class ScienceEngine extends Game {
   }
   
   public static void loadAtlas(String path) {
-    assetManager.load(path, TextureAtlas.class);
+    getAssetManager().load(path, TextureAtlas.class);
     atlasMap.put(path, new TextureAtlas(Gdx.files.internal(path))); //$NON-NLS-1$
   }
 
   public static void unloadAtlas(String path) {
     atlasMap.put(path, null);
-    assetManager.unload(path);
+    getAssetManager().unload(path);
   }
 
   public static AtlasRegion getTextureRegion(String name) {
@@ -423,5 +427,12 @@ public class ScienceEngine extends Game {
       if (textureRegion != null) return textureRegion;
     }
     return null;
+  }
+
+  public static AssetManager getAssetManager() {
+    if (assetManager == null) {
+      assetManager = new AssetManager();
+    }
+    return assetManager;
   }
 }

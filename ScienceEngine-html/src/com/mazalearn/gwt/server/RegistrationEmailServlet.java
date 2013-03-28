@@ -28,8 +28,8 @@ public class RegistrationEmailServlet extends HttpServlet {
       throws IOException, ServletException {
     System.out.println("Register - Received post: " + request.getContentLength());
     response.getWriter().append("Post received");
-    String userEmail = request.getHeader(USER_EMAIL);
-    String installId = request.getHeader(INSTALL_ID);
+    String userEmail = request.getHeader(USER_EMAIL).toLowerCase();
+    String installId = request.getHeader(INSTALL_ID).toLowerCase();
     System.out.println("User: " + userEmail + " id: " + installId);
     sendUserEmail(userEmail, installId);
   }
@@ -38,11 +38,13 @@ public class RegistrationEmailServlet extends HttpServlet {
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);
 
+    long timeEmailSent = System.currentTimeMillis();
     String msgBody = "Welcome to Science Engine\nTo complete registration please visit: \n" +
         "http://www.mazalearn.com/vu.jsp" + 
         "?i=" + installId + 
-        "&e=" + userEmail + 
-        "&h=" + getHash(installId, userEmail) + 
+        "&e=" + userEmail +
+        "&t=" + timeEmailSent + 
+        "&h=" + getHash(installId, userEmail, timeEmailSent) + 
         "\n\n-MazaLearn";
 
     try {
@@ -63,10 +65,10 @@ public class RegistrationEmailServlet extends HttpServlet {
     }    
   }
 
-  public static String getHash(String installId, String userEmail) {
+  public static String getHash(String installId, String userEmail, long timeEmailSent) {
     try { 
       MessageDigest md = MessageDigest.getInstance("MD5");
-      String msg = installId + SALT + userEmail;
+      String msg = installId + SALT + userEmail + SALT + timeEmailSent;
       return Base64.encode(md.digest(msg.getBytes("US-ASCII")));
     } catch (Exception ex) { 
     }

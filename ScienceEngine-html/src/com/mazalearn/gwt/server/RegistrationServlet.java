@@ -18,14 +18,22 @@ import com.google.appengine.api.datastore.Entity;
 @SuppressWarnings("serial")
 public class RegistrationServlet extends HttpServlet {
 
+  private static final long EXPIRY_TIME_MS = 7 * 24 * 3600 * 1000; // 7 days
+
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String userEmail = request.getParameter("e");
     String installId = request.getParameter("i");
     String hash = request.getParameter("h");
+    long timeEmailSent = Long.parseLong(request.getParameter("t"));
     System.out.println("Register User: " + userEmail + " id: " + installId);
 
-    if (!RegistrationEmailServlet.getHash(installId, userEmail).equals(hash)) {
+    if (System.currentTimeMillis() - timeEmailSent > EXPIRY_TIME_MS) {
+      response.getWriter().append("Registration email has expired");
+      return;
+    }
+    
+    if (!RegistrationEmailServlet.getHash(installId, userEmail, timeEmailSent).equals(hash)) {
       response.getWriter().append("Invalid registration info for: " + installId + " " + userEmail);
       return;
     }
@@ -52,7 +60,8 @@ public class RegistrationServlet extends HttpServlet {
       return;       
     }
     
-    EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user);
+    user.setProperty(ProfileServlet.PROFILE_ID, userEmail);
+    EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user, true);
     
     profile.setProperty(ProfileServlet.USER_NAME, request.getParameter(ProfileServlet.USER_NAME));
     profile.setProperty(ProfileServlet.USER_ID, userEmail);
@@ -66,7 +75,7 @@ public class RegistrationServlet extends HttpServlet {
     profile.setProperty(ProfileServlet.REGN_DATE, dateFormat.format(date));
     ds.put(user);
 
-    Entity user1 = ProfileServlet.createOrGetUser(userEmail, ds);
+    Entity user1 = ProfileServlet.createOrGetUser(userEmail, ds, true);
     user1.setPropertiesFrom(user);
     ds.put(user1);
     response.getWriter().append("Registered: " + userEmail);

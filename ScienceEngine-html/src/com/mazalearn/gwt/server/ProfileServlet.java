@@ -39,6 +39,8 @@ public class ProfileServlet extends HttpServlet {
   public static final String REGN_DATE = "regndate"; // owner
   public static final String INSTALL_ID = "installid";
   public static final String PIN = "pin"; // readonly
+  // The profileId in a user entity forwards to the right profile.
+  public static final String PROFILE_ID = "profileid"; // registration is the owner
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -48,21 +50,31 @@ public class ProfileServlet extends HttpServlet {
     BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
     byte[] profileBytes = new byte[request.getContentLength()];
     bis.read(profileBytes);
-    saveUserProfile(userId, profileBytes);
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    saveUserProfile(userId, profileBytes, ds);
     bis.close();
-    writeProfileResponse(response, userId);
+    writeProfileResponse(response, userId, ds);
+    if (userId.indexOf("@") != -1) {
+      // TODO: this is an expensive way of doing - double retrieve and delete.
+      // Delete installation id based user, if any
+      EmbeddedEntity profileEntity = retrieveUserProfile(userId, ds);
+      Entity user = retrieveUser((String) profileEntity.getProperty(INSTALL_ID), ds);
+      if (user != null) {
+        ds.delete(user.getKey());
+      }
+    }
   }
   
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String userId = request.getParameter(USER_ID);
     System.out.println("Received get: " + userId);
-    writeProfileResponse(response, userId);
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    writeProfileResponse(response, userId, ds);
   }
 
-  private void writeProfileResponse(HttpServletResponse response, String userId)
+  private void writeProfileResponse(HttpServletResponse response, String userId, DatastoreService ds)
       throws IOException {
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     response.getWriter().append(getUserProfileAsBase64(userId, ds));
     response.getWriter().close();
   }
@@ -72,10 +84,9 @@ public class ProfileServlet extends HttpServlet {
     Map<String, Map<String, float[]>> topics;
   }
 
-  public void saveUserProfile(String userId, byte[] profileBytes) 
+  public void saveUserProfile(String userId, byte[] profileBytes, DatastoreService ds) 
       throws IllegalStateException {
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Entity user = createOrGetUser(userId, ds);
+    Entity user = createOrGetUser(userId, ds, true);
     String profileStringBase64 = new String(profileBytes);
     String profileStringJson = new String(Base64.decode(profileStringBase64));
     
@@ -86,7 +97,7 @@ public class ProfileServlet extends HttpServlet {
     System.out.println(profileStringJson.substring(0, count + 1));
     Profile profile = gson.fromJson(profileStringJson.substring(0, count+1), Profile.class);
     
-    EmbeddedEntity profileEntity = createOrGetUserProfile(user);
+    EmbeddedEntity profileEntity = createOrGetUserProfile(user, true);
     for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
       if (entry.getKey().equals(DRAWING_PNG)) {
         if (entry.getValue() != null) {
@@ -102,32 +113,34 @@ public class ProfileServlet extends HttpServlet {
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
     ds.put(user);
-    if (userId.indexOf("@") != -1) {
-      // Delete installation id based user, if any
-      user = retrieveUser((String) profileEntity.getProperty(INSTALL_ID), ds);
-      if (user != null) {
-        ds.delete(user.getKey());
-      }
-    }
   }
 
-  public static EmbeddedEntity createOrGetUserProfile(Entity user) {
+  public static EmbeddedEntity createOrGetUserProfile(Entity user, boolean create) {
+    if (user == null) return null;
     EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
-    if (profileEntity == null) {
+    if (create && profileEntity == null) {
       profileEntity = new EmbeddedEntity();
       user.setProperty(PROFILE, profileEntity);
     }
     return profileEntity;
   }
 
-  public static Entity createOrGetUser(String userId, DatastoreService ds) {
+  public static Entity createOrGetUser(String userId, DatastoreService ds, boolean create) {
+    if (userId == null || userId.length() == 0) return null;
     Key key = KeyFactory.createKey(User.class.getSimpleName(), userId.toLowerCase());
-    Entity user;
+    Entity user = null;
     try {
       user = ds.get(key);
+      String profileId = (String) user.getProperty(PROFILE_ID);
+      if (profileId != null && profileId.length() > 0) {
+        key = KeyFactory.createKey(User.class.getSimpleName(), profileId);
+        user = ds.get(key);
+      }
     } catch (EntityNotFoundException e) {
-      user = new Entity(User.class.getSimpleName(), userId.toLowerCase());
-      ds.put(user);
+      if (create && user == null) {
+        user = new Entity(User.class.getSimpleName(), userId.toLowerCase());
+        ds.put(user);
+      }
     }
     return user;
   }
@@ -166,22 +179,11 @@ public class ProfileServlet extends HttpServlet {
   }
 
   public static EmbeddedEntity retrieveUserProfile(String userId, DatastoreService ds) {
-    Entity user = retrieveUser(userId, ds);
-    if (user == null) return null;
-    EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
-    return profileEntity;
+    Entity user = createOrGetUser(userId, ds, false);
+    return createOrGetUserProfile(user, false);
   }
 
   public static Entity retrieveUser(String userId, DatastoreService ds) {
-    if (userId == null || userId.length() == 0) return null;
-    Key key = KeyFactory.createKey(User.class.getSimpleName(), userId.toLowerCase());
-    Entity user;
-    try {
-      user = ds.get(key);
-    } catch (EntityNotFoundException e) {
-      System.out.println("No such user: " + userId);
-      return null;
-    }
-    return user;
+    return createOrGetUser(userId, ds, false);
   }
 }

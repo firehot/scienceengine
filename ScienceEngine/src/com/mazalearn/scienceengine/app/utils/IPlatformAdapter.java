@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 public interface IPlatformAdapter {
 
   // Platform - required for utf-8/iso-8859 in characters
-  enum Platform { Desktop, Android, AndroidEmulator, GWT, IOS};
+  public enum Platform { Desktop, Android, AndroidEmulator, GWT, IOS};
   
   // Show url in any browser
   public void browseURL(String url);

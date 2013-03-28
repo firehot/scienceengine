@@ -36,10 +36,10 @@ public class LoadingScreen extends AbstractScreen {
       Gdx.graphics.setContinuousRendering(true);
     }
     // Tell the assetManager to load assets for the loading screen
-    ScienceEngine.assetManager.load("images/loading.pack",
+    ScienceEngine.getAssetManager().load("images/loading.pack",
         TextureAtlas.class);
     // Wait until they are finished loading
-    ScienceEngine.assetManager.finishLoading();
+    ScienceEngine.getAssetManager().finishLoading();
     // Add everything to be loaded to asset manager
     nextScreen.addAssets();
   }
@@ -54,7 +54,7 @@ public class LoadingScreen extends AbstractScreen {
     super.show();
 
     // Get our textureatlas from the assetManager
-    TextureAtlas atlas = ScienceEngine.assetManager.get(
+    TextureAtlas atlas = ScienceEngine.getAssetManager().get(
         "images/loading.pack", TextureAtlas.class);
 
     // Grab the regions from the atlas and create some images
@@ -123,13 +123,13 @@ public class LoadingScreen extends AbstractScreen {
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     // Load some, will return true if done loading
-    if (ScienceEngine.assetManager.update()) {
+    if (ScienceEngine.getAssetManager().update()) {
       scienceEngine.setScreen(nextScreen);
     }
 
     // Interpolate the percentage to make it more smooth
     percent = Interpolation.linear.apply(percent,
-        ScienceEngine.assetManager.getProgress(), 0.1f);
+        ScienceEngine.getAssetManager().getProgress(), 0.1f);
 
     // Update positions (and size) to match the percentage
     loadingBarHidden.setX(startX + endX * percent);
@@ -146,7 +146,7 @@ public class LoadingScreen extends AbstractScreen {
   public void hide() {
     super.hide();
     // Dispose the loading assets as we no longer need them
-    ScienceEngine.assetManager.unload("images/loading.pack");
+    ScienceEngine.getAssetManager().unload("images/loading.pack");
   }
 
   @Override

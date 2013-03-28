@@ -51,7 +51,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
 
     if (netSuccesses >= 2) {
       super.systemReadyToFinish(true);
-    } else {
+    } else if (success) {
       teach();
     }
   }

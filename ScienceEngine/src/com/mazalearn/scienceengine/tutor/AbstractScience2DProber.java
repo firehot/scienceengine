@@ -1,6 +1,8 @@
 package com.mazalearn.scienceengine.tutor;
 
 
+import java.util.List;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -31,8 +33,9 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
         (approxEquals(points[0].x, points[1].x) || approxEquals(points[0].y, points[1].y));
   }
 
-  private boolean isInsideExcludedActor(Vector2 stagePoint) {
-    for (Actor actor: science2DController.getGuru().getExcludedActors()) {
+  // protected for testing
+  protected boolean isInsideExcludedActor(Vector2 stagePoint, List<Actor> excludedActors) {
+    for (Actor actor: excludedActors) {
       // Translate to local coordinates of actor
       localPoint.set(stagePoint);
       actor.stageToLocalCoordinates(localPoint);
@@ -60,6 +63,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   // Then checked for being outside of excluded actors
   // Then checked for being too close to each other
   protected void generateProbePoints(Vector2[] points) {
+    List<Actor> excludedActors = science2DController.getGuru().getExcludedActors();
     do {
       for (int i = 0; i < points.length; i++) {
         Vector2 point = points[i];
@@ -71,7 +75,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
           point.y *= getHeight() * 0.8f;
           // Move point to [0.1 x width, 0.9 x width],[0.1 x height,0.9 x height]
           point.add(getX() + 0.1f * getWidth(), getY() + 0.1f * getHeight());
-        } while (isInsideExcludedActor(point));
+        } while (isInsideExcludedActor(point, excludedActors));
       }
     } while (areTooClose(points));    
   }
