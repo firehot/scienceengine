@@ -102,8 +102,7 @@ public class ProfileServlet extends HttpServlet {
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
     ds.put(user);
-    String userEmail = (String) profileEntity.getProperty(USER_EMAIL);
-    if (userId.equals(userEmail)) {
+    if (userId.indexOf("@") != -1) {
       // Delete installation id based user, if any
       user = retrieveUser((String) profileEntity.getProperty(INSTALL_ID), ds);
       if (user != null) {

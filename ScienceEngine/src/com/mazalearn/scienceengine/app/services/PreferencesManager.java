@@ -75,6 +75,9 @@ public class PreferencesManager {
         "/profile?" + Profile.USER_ID + "=" + userId);
     profile = Profile.mergeProfiles(localProfileBase64, serverProfileBase64); 
     profile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
+    if (profile.getUserEmail().length() > 0) {
+      getPrefs().putString(Profile.USER_ID, profile.getUserEmail());
+    }
     saveProfile();
 
     return profile;
@@ -139,7 +142,7 @@ public class PreferencesManager {
       String localProfileBase64 = getPrefs().getString(userId);
       postParams.put(Profile.USER_ID, userId);
       try {
-        // Post profile to server and get back updated.
+        // Post profile to server and get back updated server profile
         String serverProfileBase64 =
             ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
                 postParams, localProfileBase64.getBytes());
