@@ -119,20 +119,30 @@ public class AbstractScience2DProberTest {
 
   @Test
   public void testIsInsideExcludedActor_table() {
+    /**
+     *     150,150
+     * X~~~~X
+     * |  x | 
+     * X~~~~X
+     * 50,50
+     */
     Image image = new Image();
     image.setSize(100, 100);
     ((Stage) science2DView).addActor(image);
     
     Table table = new Table(scienceEngine.getSkin());
     table.setPosition(100, 100);
-    table.add(image);
+    table.add(image).width(100).height(100).center();
     List<Actor> actors =  Arrays.asList(new Actor[] { table });
     for (Actor actor: actors) {
       ((Stage) science2DView).addActor(actor);
     }
-    image.invalidateHierarchy();
+    //image.invalidateHierarchy();
     table.validate();
     Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(60, 60), actors));
     Assert.assertFalse(prober.isInsideExcludedActor(localPoint.set(10, 10),  actors));
+    image.setSize(10, 10); // Much smaller than table cell now
+    table.validate();
+    Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(60, 60), actors));
   }
 }

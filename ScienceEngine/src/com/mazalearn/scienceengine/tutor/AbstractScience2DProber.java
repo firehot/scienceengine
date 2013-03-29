@@ -48,7 +48,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
         float actorWidth = ((Table) actor).getPrefWidth();
         float actorHeight = ((Table) actor).getPrefHeight();
         if (stagePoint.x >= actor.getX() - actorWidth/ 2 && stagePoint.x <= actor.getX() + actorWidth/2 &&
-            stagePoint.y <= actor.getY() - actorHeight/2 && stagePoint.y >= actor.getY() + actorHeight/2) {
+            stagePoint.y >= actor.getY() - actorHeight/2 && stagePoint.y <= actor.getY() + actorHeight/2) {
           return true;
         }
       }
