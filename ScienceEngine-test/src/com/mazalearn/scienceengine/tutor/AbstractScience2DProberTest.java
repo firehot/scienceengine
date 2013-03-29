@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine.tutor;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.PlatformAdapterImpl;
@@ -21,18 +23,22 @@ import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
+import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.domains.electromagnetism.tutor.FieldMagnitudeProber;
 import com.mazalearn.scienceengine.domains.electromagnetism.tutor.TutorType;
 
 public class AbstractScience2DProberTest {
 
   private static ScienceEngine scienceEngine;
+  private static IScience2DView science2DView;
+  private static IScience2DController science2DController;
   private static LwjglApplication app;
   private Vector2 localPoint = new Vector2();
   private AbstractScience2DProber prober;
 
   public AbstractScience2DProberTest() {
-    prober = new FieldMagnitudeProber(new DummyController(),
+    prober = new FieldMagnitudeProber(science2DController,
       TutorType.FieldMagnitudeProber, null, "goal", "id", null, null,
       0, 0, new String[] {});
   }
@@ -54,6 +60,8 @@ public class AbstractScience2DProberTest {
       @Override
       public void run() {
         ScienceEngine.loadAtlas("images/guru/pack.atlas");
+        science2DController = new DummyController();
+        science2DView = science2DController.getView();
       }    
     });
     ScienceEngine.getAssetManager().finishLoading();
@@ -67,27 +75,64 @@ public class AbstractScience2DProberTest {
   }
 
   @Test
-  public void testIsInsideExcludedActorSimple() {
+  public void testIsInsideExcludedActor_simple() {
+    /**
+     *       100,100
+     * |~~~~|
+     * |    |
+     * 0,0~~
+     */
     Image image = new Image();
     image.setPosition(0, 0);
     image.setSize(100, 100);
-    Actor[] actors = new Actor[] { image };
-    Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(0, 0), Arrays.asList(actors)));
-    Assert.assertFalse(prober.isInsideExcludedActor(localPoint.set(200, 50), Arrays.asList(actors)));
+    List<Actor> actors =  Arrays.asList(new Actor[] { image });
+    for (Actor actor: actors) {
+      ((Stage) science2DView).addActor(actor);
+    }
+    Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(0, 0), actors));
+    Assert.assertFalse(prober.isInsideExcludedActor(localPoint.set(200, 50), actors));
   }
 
   @Test
-  public void testIsInsideExcludedActorTable() {
+  public void testIsInsideExcludedActor_2Actors() {
+    /**
+     *     100,100        300,100
+     * X~~~~X~~~~~~~~~~X~~~~X
+     * |    |          |    | 
+     * X~~~~X~~~~~~~~~~X~~~~X
+     * 0,0            200,0
+     */
+    Image image1 = new Image();
+    image1.setPosition(0, 0);
+    image1.setSize(100, 100);
+    Image image2 = new Image();
+    image2.setPosition(200, 0);
+    image2.setSize(100, 100);
+    List<Actor> actors =  Arrays.asList(new Actor[] { image1, image2 });
+    for (Actor actor: actors) {
+      ((Stage) science2DView).addActor(actor);
+    }
+    Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(50, 50), actors));
+    Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(250, 50), actors));
+    Assert.assertFalse(prober.isInsideExcludedActor(localPoint.set(150, 50), actors));
+  }
+
+  @Test
+  public void testIsInsideExcludedActor_table() {
     Image image = new Image();
     image.setSize(100, 100);
+    ((Stage) science2DView).addActor(image);
     
     Table table = new Table(scienceEngine.getSkin());
     table.setPosition(100, 100);
     table.add(image);
+    List<Actor> actors =  Arrays.asList(new Actor[] { table });
+    for (Actor actor: actors) {
+      ((Stage) science2DView).addActor(actor);
+    }
     image.invalidateHierarchy();
     table.validate();
-    Actor[] actors = new Actor[] { table };
-    Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(60, 60), Arrays.asList(actors)));
-    Assert.assertFalse(prober.isInsideExcludedActor(localPoint.set(10, 10), Arrays.asList(actors)));
+    Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(60, 60), actors));
+    Assert.assertFalse(prober.isInsideExcludedActor(localPoint.set(10, 10),  actors));
   }
 }

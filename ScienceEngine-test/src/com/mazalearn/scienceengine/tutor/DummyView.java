@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 
-public class DummyView implements IScience2DView {
+public class DummyView extends Stage implements IScience2DView {
 
   @Override
   public void done(boolean success) {
