@@ -100,9 +100,11 @@ public class Guru extends Group implements ITutor {
     
     this.scoreboard = (Scoreboard) science2DController.getView().findActor(ScreenComponent.Scoreboard.name());;
     timeTracker = (TimeTracker) science2DController.getView().findActor(ScreenComponent.TimeTracker.name());
+    if (timeTracker != null) {
+      timeTracker.setActiveTutor(this);
+    }
     this.setVisible(false);
     activeTutor = this;
-    timeTracker.setActiveTutor(this);
   }
   
   public ITutor getActiveTutor() {

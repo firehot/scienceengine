@@ -75,7 +75,7 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   }
 
   @Override
-  public byte[] getPngBytes(Pixmap snapshot) {
+  public byte[] pixmap2Bytes(Pixmap snapshot) {
     try {
       return PngWriter.write(snapshot);
     } catch (IOException e) {
@@ -143,6 +143,11 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   @Override
   public String getInstallationId() {
     return ScienceEngine.getUserEmail(); // Fallback to user being the device for GWT
+  }
+
+  @Override
+  public Pixmap bytes2Pixmap(byte[] pngBytes) {
+    return null; // Dont know how to do this for GWT
   }
 
 }

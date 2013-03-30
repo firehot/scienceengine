@@ -58,6 +58,8 @@ public class ScreenUtils {
     int sw = Math.round(currentTouch.x) - sx;
     int sh = Math.round(currentTouch.y) - sy;
     Gdx.gl.glPixelStorei(GL10.GL_PACK_ALIGNMENT, 1);
+    Blending b = Pixmap.getBlending();
+    Pixmap.setBlending(Blending.None);
   
     Pixmap screenShot = new Pixmap(sw, sh, Format.RGBA8888);
     Buffer pixels = screenShot.getPixels();
@@ -79,6 +81,7 @@ public class ScreenUtils {
     }
     flipY(scaledPic);
     Gdx.app.log(ScienceEngine.LOG, "Screenshot: " + newWidth + " x " + newHeight);
+    Pixmap.setBlending(b);
     return scaledPic;
   }
 
@@ -106,22 +109,21 @@ public class ScreenUtils {
   }
 
   private static void removeBlackAndYellow(Pixmap pixmap) {
-    // Make black color transparent
+    // Make black and yellow colors transparent
     int w = pixmap.getWidth();
     int h = pixmap.getHeight();
-    Blending b = Pixmap.getBlending();
     Pixmap.setBlending(Blending.None);
-    int c1rgba8888 = Color.rgba8888(Color.BLACK);
-    int c2rgba8888 = Color.rgba8888(Color.YELLOW);
+    int blackColor = Color.rgba8888(Color.BLACK);
+    int yellowColor = Color.rgba8888(Color.YELLOW);
     for (int i = 0; i < w; i++) {
       for (int j = 0; j < h; j++) {
-        int pixel = pixmap.getPixel(i, j);
-        if (pixel == c1rgba8888 || pixel == c2rgba8888) {
+        // Force alpha to 1 for comparison - not sure why alpha is changing for snapshot
+        int pixel = pixmap.getPixel(i, j) | 0xFF;
+        if (pixel == blackColor || pixel == yellowColor) {
           pixmap.drawPixel(i, j, 0);
         }
       }
     }
-    Pixmap.setBlending(b);
   }
 
   public static TextureRegion createTextureRegion(float width, float height, Color color) {

@@ -46,8 +46,10 @@ public interface IPlatformAdapter {
 
   public void putBytes(Pixmap pixmap, byte[] lines);
 
-  public byte[] getPngBytes(Pixmap snapshot);
+  public byte[] pixmap2Bytes(Pixmap snapshot);
 
+  public Pixmap bytes2Pixmap(byte[] pngBytes);
+  
   // Does platform support language change?
   public boolean supportsLanguage();
 

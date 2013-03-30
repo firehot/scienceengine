@@ -1,8 +1,11 @@
 package com.mazalearn.scienceengine.tutor;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -13,9 +16,12 @@ import com.mazalearn.scienceengine.core.view.ViewControls;
 public class DummyController implements IScience2DController {
   
   private IScience2DView science2DView;
+  private Guru guru;
+  private Skin skin;
 
-  public DummyController() {
+  public DummyController(Skin skin) {
     this.science2DView = new DummyView();
+    this.skin = skin;
   }
   
   @Override
@@ -55,9 +61,13 @@ public class DummyController implements IScience2DController {
 
   @Override
   public Guru getGuru() {
-    return null;
+    if (guru == null) {
+      Stage stage = (Stage) science2DView;
+      guru = new Guru(skin, this, this.getTitle());
+    }
+    return guru;
   }
-
+  
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal,
       String name, Array<?> components, Array<?> configs,

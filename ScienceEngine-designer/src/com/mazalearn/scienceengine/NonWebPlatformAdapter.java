@@ -8,6 +8,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -45,11 +46,21 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
   
   @Override
-  public byte[] getPngBytes(Pixmap snapshot) {
+  public byte[] pixmap2Bytes(Pixmap snapshot) {
     try {
       return PngWriter.generateImage(snapshot);
     } catch (IOException e) {
       throw new GdxRuntimeException(e);
+    }
+  }
+  
+  @Override 
+  public Pixmap bytes2Pixmap(byte[] bytes) {
+    try {
+      return new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
   }
   

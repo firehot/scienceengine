@@ -41,11 +41,11 @@ public class ScienceTrainActor extends Group {
     if (coachDrawing == null) return;
     if (coachDrawing.hasChangedSinceSnapshot()) {
       coachDrawing.takeSnapshot();
-      if (coach == null) {
-        coach = coachDrawing.getCoach();
-        coach.setPosition(-30 - coach.getWidth(), -20);
-        addActor(coach);
-      }
+    }
+    if (coach == null) {
+      coach = coachDrawing.getCoach();
+      coach.setPosition(-30 - coach.getWidth(), -20);
+      addActor(coach);
     }
     super.draw(batch, parentAlpha);
   }

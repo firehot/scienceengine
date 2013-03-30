@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -46,7 +47,7 @@ public class DrawingActor extends Science2DActor {
   private ShapeRenderer shapeRenderer;
   private BitmapFont font;
   private Texture coachTexture;
-  private boolean hasChangedSinceSnapshot = true; // Force an initial snapshot
+  private boolean hasChangedSinceSnapshot = false;
   private Pixmap snapshot;
   private Coach coach;
   private String viewSpec;
@@ -113,15 +114,13 @@ public class DrawingActor extends Science2DActor {
     this.viewSpec = name;
     this.shapeRenderer = new ShapeRenderer();
     // snapshot will contain image of coach + 2 wheels
-    // TODO: Problems with GWT and does not work anyway
-/*    try {
-      Profile profile = ScienceEngine.getPreferencesManager().getProfile();
-      byte[] bytes = profile.getDrawingPng();
-      this.snapshot = new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
-    } catch (IOException e) {
+    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    byte[] bytes = profile.getDrawingPng();
+    this.snapshot = ScienceEngine.getPlatformAdapter().bytes2Pixmap(bytes);
+    if (snapshot == null) {
       this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
-    }  */  
-    this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
+    }
+    hasChangedSinceSnapshot = false;
     this.coachTexture = new Texture(snapshot);
     this.coach = new Coach(coachTexture, skin);
     this.removeListener(getListeners().get(0));
@@ -245,6 +244,6 @@ public class DrawingActor extends Science2DActor {
   }
   
   public byte[] getDrawingPng() {
-    return ScienceEngine.getPlatformAdapter().getPngBytes(snapshot);
+    return ScienceEngine.getPlatformAdapter().pixmap2Bytes(snapshot);
   }
 }

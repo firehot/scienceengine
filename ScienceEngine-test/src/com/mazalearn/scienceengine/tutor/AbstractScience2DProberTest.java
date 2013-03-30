@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.tutor;
 
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,9 @@ import org.junit.Test;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -60,12 +64,13 @@ public class AbstractScience2DProberTest {
       @Override
       public void run() {
         ScienceEngine.loadAtlas("images/guru/pack.atlas");
-        science2DController = new DummyController();
+        science2DController = new DummyController(scienceEngine.getSkin());
         science2DView = science2DController.getView();
       }    
     });
     ScienceEngine.getAssetManager().finishLoading();
     Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    profile.setCurrentTopic(Topic.Electromagnetism);
     profile.setCurrentActivity(Topic.BarMagnet);
   }
 
@@ -91,6 +96,19 @@ public class AbstractScience2DProberTest {
     }
     Assert.assertTrue(prober.isInsideExcludedActor(localPoint.set(0, 0), actors));
     Assert.assertFalse(prober.isInsideExcludedActor(localPoint.set(200, 50), actors));
+  }
+
+  @Test
+  public void testDrawPng() {
+    Pixmap snapshot;
+    try {
+      Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+      byte[] bytes = profile.getDrawingPng();
+      snapshot = new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Could not load");
+    }
+    Image image = new Image(new Texture(snapshot));
   }
 
   @Test
