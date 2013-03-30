@@ -22,7 +22,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.tutor.Guru;
-import com.mazalearn.scienceengine.tutor.TutorStats;
+import com.mazalearn.scienceengine.tutor.ITutor;
 
 public class ChooseTopicScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 242;
@@ -125,8 +125,8 @@ public class ChooseTopicScreen extends AbstractScreen {
     float percent = 0;
     int numTopics = 0;
     for (Topic childTopic: topic.getChildren()) {
-      TutorStats stats = new TutorStats(topic, childTopic, Guru.ID);
-      percent += stats.stats[TutorStats.PERCENT_PROGRESS];
+      float[] stats = profile.getStats(topic, childTopic, Guru.ID);
+      percent += stats[ITutor.PERCENT_PROGRESS];
       numTopics++;
     }
     return Math.round(percent * 100 / (100f * numTopics));

@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.AggregatorFunction;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -65,7 +66,7 @@ public class Guru extends Group implements ITutor {
   private TutorGroup rootTutor;
   private TutorNavigator tutorNavigator;
   private McqActor mcqActor;
-  private TutorStats stats;
+  private Profile profile;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
@@ -77,7 +78,7 @@ public class Guru extends Group implements ITutor {
     // Guru has no direct user interaction - hence 0 size
     this.setSize(0, 0);
     
-    this.stats = new TutorStats(ID);
+    this.profile = ScienceEngine.getPreferencesManager().getProfile();
     
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();
@@ -256,15 +257,19 @@ public class Guru extends Group implements ITutor {
     this.setVisible(false);
   }
 
-  private void recordStats() {
-    // Update all stats
-    stats.stats[TutorStats.TIME_SPENT] = getTimeSpent();
-    stats.stats[TutorStats.NUM_ATTEMPTS] = getNumAttempts();
-    stats.stats[TutorStats.NUM_SUCCESSES] = getNumSuccesses();
-    stats.stats[TutorStats.FAILURE_TRACKER] = getFailureTracker();
-    stats.stats[TutorStats.PERCENT_PROGRESS] = getPercentProgress();
-    
-    stats.save();
+  @Override
+  public void recordStats() {
+    profile.saveStats(getStats(), ID);
+  }
+  
+  @Override
+  public float[] getStats() {
+    // All stats are from rootTutor
+    return rootTutor.getStats();
+  }
+  
+  public Profile getProfile() {
+    return profile;
   }
 
   // Prerequisite: childTutors.size() >= 1
@@ -438,16 +443,6 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public float getTimeSpent() {
-    return rootTutor.getTimeSpent();
-  }
-
-  @Override
-  public float getNumAttempts() {
-    return rootTutor.getNumAttempts();
-  }
-
-  @Override
   public void systemReadyToFinish(boolean success) {
   }
 
@@ -467,23 +462,8 @@ public class Guru extends Group implements ITutor {
   }
 
   @Override
-  public float getPercentProgress() {
-    return rootTutor.getPercentProgress();
-  }
-  
-  @Override
   public State getState() {
     return rootTutor.getState();
-  }
-
-  @Override
-  public float getNumSuccesses() {
-    return rootTutor.getNumSuccesses();
-  }
-  
-  @Override
-  public float getFailureTracker() {
-    return 0;
   }
 
   public Skin getSkin() {

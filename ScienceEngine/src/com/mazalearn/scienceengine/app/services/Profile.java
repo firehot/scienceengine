@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
-import com.mazalearn.scienceengine.tutor.TutorStats;
+import com.mazalearn.scienceengine.tutor.ITutor;
 
 /**
  * The learner's profile.
@@ -188,23 +188,24 @@ public class Profile implements Serializable {
     return png == null ? new byte[0] : Base64Coder.decode(png);
   }
 
-  public void loadStats(TutorStats stats, Topic topic, Topic level, String tutorId) {
+  public float[] getStats(Topic topic, Topic level, String tutorId) {
     HashMap<String, float[]> topicStat = topicStats.get(topic);
     float[] s = topicStat.get(makeTutorKey(level, tutorId));
-    if (s != null) stats.stats = s;
-    Gdx.app.log(ScienceEngine.LOG, stats.toString());
+    return (s != null) ? s : new float[ITutor.NUM_STATS];
   }
 
+  public float[] getStats(String tutorId) {
+    return getStats(getCurrentTopic(), getCurrentActivity(), tutorId);
+  }
   /**
    * Save stats for current topic, current activity.
    * @param stats
    * @param tutorId
    */
-  public void saveStats(TutorStats stats, String tutorId) {
+  public void saveStats(float[] stats, String tutorId) {
     String tutorKey = makeTutorKey(getCurrentActivity(), tutorId);
-    currentTopicStats.put(tutorKey, stats.stats);
+    currentTopicStats.put(tutorKey, stats);
     save();
-    Gdx.app.log(ScienceEngine.LOG, stats.toString());
   }
 
   public void setPlatform(Platform platform) {
@@ -257,5 +258,4 @@ public class Profile implements Serializable {
     String profileAsBase64 = Base64Coder.encodeString(profileAsText);
     return profileAsBase64;
   }
-
 }

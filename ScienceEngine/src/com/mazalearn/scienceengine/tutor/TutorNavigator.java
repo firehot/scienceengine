@@ -110,8 +110,8 @@ public class TutorNavigator extends Group {
     int count = 0;
     for (final ITutor tutor: this.tutors) {
       Label timeLabel = tutorTimeLabels[count++];
-      timeLabel.setText(Format.formatTime(tutor.getTimeSpent()));
-      if (tutor.getPercentProgress() == 100) {
+      timeLabel.setText(Format.formatTime(tutor.getStats()[ITutor.TIME_SPENT]));
+      if (tutor.getStats()[ITutor.PERCENT_PROGRESS] == 100) {
         Image status = new Image(ScienceEngine.getTextureRegion("check"));
         TextButton tutorButton = (TextButton) findActor(tutor.getId());
         tutorButton.addActor(status);

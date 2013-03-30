@@ -43,7 +43,7 @@ public class TutorGroup extends AbstractTutor {
     if (++tutorIndex == childTutors.size()) {
       // Goto first tutor which has not been successfully done, if any
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getPercentProgress() < 100) {
+        if (childTutors.get(tutorIndex).getStats()[ITutor.PERCENT_PROGRESS] < 100) {
           break;
         }
       }
@@ -92,7 +92,7 @@ public class TutorGroup extends AbstractTutor {
     if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
       // Find out where we last left off.
       for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
-        if (childTutors.get(tutorIndex).getPercentProgress() < 100) break;
+        if (childTutors.get(tutorIndex).getStats()[ITutor.PERCENT_PROGRESS] < 100) break;
       }
       if (tutorIndex == childTutors.size()) tutorIndex = 0;
     }
@@ -142,43 +142,24 @@ public class TutorGroup extends AbstractTutor {
   }
   
   @Override
-  public float getTimeSpent() {
+  public void recordStats() {
+    // Update all stats
     float timeSpent = 0;
-    for (ITutor child: childTutors) {
-      timeSpent += child.getTimeSpent();
-    }
-    return timeSpent;
-  }
-  
-  @Override
-  public float getNumAttempts() {
     int numAttempted = 0;
-    for (ITutor child: childTutors) {
-      if (child.getNumAttempts() > 0) numAttempted++;
-    }
-    return numAttempted;
-  }
-  
-  @Override
-  public float getPercentProgress() {
     float percentProgress = 0;
-    for (ITutor child: childTutors) {
-      percentProgress += child.getPercentProgress();
-    }
-    return percentProgress / childTutors.size();
-  }
-
-  @Override
-  public float getNumSuccesses() {
     int numSuccesses = 0;
     for (ITutor child: childTutors) {
-      if (child.getNumSuccesses() > 0) numSuccesses++;
+      timeSpent += child.getStats()[ITutor.TIME_SPENT];
+      if (child.getStats()[ITutor.NUM_ATTEMPTS] > 0) numAttempted++;
+      percentProgress += child.getStats()[ITutor.PERCENT_PROGRESS];
+      if (child.getStats()[ITutor.NUM_SUCCESSES] > 0) numSuccesses++;
     }
-    return numSuccesses;
-  }
-  
-  @Override
-  public float getFailureTracker() {
-    return 0;
+    stats[ITutor.TIME_SPENT] = timeSpent;   
+    stats[ITutor.NUM_ATTEMPTS] = numAttempted;
+    stats[ITutor.PERCENT_PROGRESS] = percentProgress / childTutors.size();
+    stats[ITutor.NUM_SUCCESSES] = numSuccesses;
+    
+    // Save stats into profile
+    guru.getProfile().saveStats(stats, getId());
   }
 }

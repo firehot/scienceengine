@@ -48,7 +48,7 @@ public class McqTutor extends AbstractTutor {
     if (success) {
       guru.showSuccess(getSuccessPoints());
     } else {
-      this.stats.stats[TutorStats.FAILURE_TRACKER] += failureTracker;
+      this.stats[ITutor.FAILURE_TRACKER] += failureTracker;
       guru.showFailure(getFailurePoints());
     }
     // Flash correct options.

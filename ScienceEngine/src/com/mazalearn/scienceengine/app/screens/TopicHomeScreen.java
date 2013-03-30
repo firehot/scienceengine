@@ -35,7 +35,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.tutor.Guru;
-import com.mazalearn.scienceengine.tutor.TutorStats;
+import com.mazalearn.scienceengine.tutor.ITutor;
 
 /**
  * Activity Home screen - shows all activity numLevels for that topic.
@@ -186,11 +186,11 @@ public class TopicHomeScreen extends AbstractScreen {
       // Level Label
       activityThumb.addActor(ScreenUtils.createLabel(String.valueOf(numTopics), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
       // Progress bar
-      TutorStats stats = new TutorStats(topic, level, Guru.ID);
-      float percent = stats.stats[TutorStats.PERCENT_PROGRESS];
+      float[] stats = profile.getStats(topic, level, Guru.ID);
+      float percent = stats[ITutor.PERCENT_PROGRESS];
       ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
       // Timespent label
-      String timeSpent = Format.formatTime(stats.stats[TutorStats.TIME_SPENT]);
+      String timeSpent = Format.formatTime(stats[ITutor.TIME_SPENT]);
       activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 60, 30, blueBackground));
 
       final Topic iLevel = level;

@@ -25,7 +25,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private final ITutorType tutorType;
   private final String id;
   protected boolean success;
-  protected TutorStats stats;
+  protected float[] stats;
   protected State state = State.Constructed;
   private int successPoints;
   private int failurePoints;
@@ -61,7 +61,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.failurePoints = failurePoints;
     this.hints = hints;
     this.guru = science2DController.getGuru();
-    this.stats = new TutorStats(id);
+    this.stats = guru.getProfile().getStats(id);
     this.setVisible(false);
 
   }
@@ -113,7 +113,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void finish() {
     Gdx.app.log(ScienceEngine.LOG, "finish: " + getId());
     this.setVisible(false);
-    if (success) stats.stats[TutorStats.NUM_SUCCESSES]++;
+    if (success) stats[ITutor.NUM_SUCCESSES]++;
     recordStats();
     guru.setActiveTutor(parent);
     if (state == State.Finished) { 
@@ -131,15 +131,16 @@ public abstract class AbstractTutor extends Group implements ITutor {
     finish();
   }
   
-  private void recordStats() {
+  @Override
+  public void recordStats() {
     // Update all stats
-    stats.stats[TutorStats.TIME_SPENT] = getTimeSpent();
-    stats.stats[TutorStats.NUM_ATTEMPTS] = getNumAttempts();
-    stats.stats[TutorStats.NUM_SUCCESSES] = getNumSuccesses();
-    stats.stats[TutorStats.FAILURE_TRACKER] = getFailureTracker();
-    stats.stats[TutorStats.PERCENT_PROGRESS] = getPercentProgress();
-    
-    stats.save();
+    stats[ITutor.PERCENT_PROGRESS] = stats[ITutor.NUM_SUCCESSES] == 0 ? 0 : 100;   
+    guru.getProfile().saveStats(stats, id);
+  }
+  
+  @Override
+  public float[] getStats() {
+    return stats;
   }
 
   protected void setSuccessPoints(int points) {
@@ -151,7 +152,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
     this.setVisible(true);
     success = false;
-    this.stats.stats[TutorStats.NUM_ATTEMPTS]++;
+    this.stats[ITutor.NUM_ATTEMPTS]++;
     state = State.Teaching;
   }
   
@@ -209,32 +210,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   
   @Override
   public void addTimeSpent(float delta) {
-    this.stats.stats[TutorStats.TIME_SPENT] += delta;
-  }
-  
-  @Override
-  public float getTimeSpent() {
-    return stats.stats[TutorStats.TIME_SPENT];
-  }
-  
-  @Override
-  public float getNumAttempts() {
-    return stats.stats[TutorStats.NUM_ATTEMPTS];
-  }
-  
-  @Override
-  public float getNumSuccesses() {
-    return stats.stats[TutorStats.NUM_SUCCESSES];
-  }
-  
-  @Override
-  public float getPercentProgress() {
-    return stats.stats[TutorStats.NUM_SUCCESSES] == 0 ? 0 : 100;
-  }
-  
-  @Override
-  public float getFailureTracker() {
-    return stats.stats[TutorStats.FAILURE_TRACKER];
+    this.stats[ITutor.TIME_SPENT] += delta;
   }
   
   @Override
