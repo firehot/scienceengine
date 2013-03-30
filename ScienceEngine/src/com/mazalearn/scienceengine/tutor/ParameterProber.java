@@ -125,11 +125,14 @@ public class ParameterProber extends AbstractScience2DProber {
     netSuccesses += success ? 1 : -1;
     if (!success) {
       guru.showWrong(getFailurePoints());
+      stats[ITutor.POINTS] -= getFailurePoints();
+      // TODO: Looks dangerous - what if same tutor invoked again? is it reset?
       setSuccessPoints(getFailurePoints()); // Equate isAttempted and failure scores
       // No failure exit.
       return;
     }
     guru.showCorrect(getSuccessPoints());
+    stats[ITutor.POINTS] += getSuccessPoints();
     super.systemReadyToFinish(true);
   }
 

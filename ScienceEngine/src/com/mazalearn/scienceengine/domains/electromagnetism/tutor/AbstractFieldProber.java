@@ -44,8 +44,10 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
     netSuccesses += success ? 1 : -1;
     if (success) {
       guru.showCorrect(getSuccessPoints());
+      stats[ITutor.POINTS] += getSuccessPoints();
     } else {
       guru.showWrong(getFailurePoints());
+      stats[ITutor.POINTS] -= getFailurePoints();
       // TODO: equate success and failure scores
     }
 

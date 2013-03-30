@@ -156,11 +156,10 @@ public class Guru extends Group implements ITutor {
 
     // Collect visible actors to be excluded from probe points.
     excludedActors.clear();
-    excludedActors.add(scoreboard);
+    excludedActors.add(tutorNavigator);
     for (Actor actor: science2DController.getView().getActors()) {
-      // actor is visible and does not span entire screen
-      if (actor.isVisible() && (actor.hit(0, 0, true) == null || 
-          actor.hit(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, true) == null)) {
+      // actor is visible
+      if (actor.isVisible()) {
         excludedActors.add(actor);
       }
     }

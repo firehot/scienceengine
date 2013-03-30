@@ -191,7 +191,16 @@ public class Profile implements Serializable {
   public float[] getStats(Topic topic, Topic level, String tutorId) {
     HashMap<String, float[]> topicStat = topicStats.get(topic);
     float[] s = topicStat.get(makeTutorKey(level, tutorId));
-    return (s != null) ? s : new float[ITutor.NUM_STATS];
+    
+    if (s == null) return new float[ITutor.NUM_STATS];
+    
+    if (s.length >= ITutor.NUM_STATS) return s;
+    
+    float[] stats = new float[ITutor.NUM_STATS];
+    for (int i = 0; i < s.length; i++) {
+      stats[i] = s[i];
+    }
+    return stats; 
   }
 
   public float[] getStats(String tutorId) {

@@ -148,16 +148,19 @@ public class TutorGroup extends AbstractTutor {
     int numAttempted = 0;
     float percentProgress = 0;
     int numSuccesses = 0;
+    float points = 0;
     for (ITutor child: childTutors) {
       timeSpent += child.getStats()[ITutor.TIME_SPENT];
       if (child.getStats()[ITutor.NUM_ATTEMPTS] > 0) numAttempted++;
       percentProgress += child.getStats()[ITutor.PERCENT_PROGRESS];
       if (child.getStats()[ITutor.NUM_SUCCESSES] > 0) numSuccesses++;
+      points += child.getStats()[ITutor.POINTS];
     }
     stats[ITutor.TIME_SPENT] = timeSpent;   
     stats[ITutor.NUM_ATTEMPTS] = numAttempted;
     stats[ITutor.PERCENT_PROGRESS] = percentProgress / childTutors.size();
     stats[ITutor.NUM_SUCCESSES] = numSuccesses;
+    stats[ITutor.POINTS] = points;
     
     // Save stats into profile
     guru.getProfile().saveStats(stats, getId());

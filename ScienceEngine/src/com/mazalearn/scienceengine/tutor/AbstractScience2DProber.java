@@ -37,10 +37,17 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   protected boolean isInsideExcludedActor(Vector2 stagePoint, List<Actor> excludedActors) {
     for (Actor actor: excludedActors) {
       // Translate to local coordinates of actor
-      localPoint.set(stagePoint);
-      actor.stageToLocalCoordinates(localPoint);
-      if (actor.hit(localPoint.x, localPoint.y, true) != null) {
-        return true;
+      actor.stageToLocalCoordinates(localPoint.set(stagePoint));
+      Actor hitActor = actor.hit(localPoint.x, localPoint.y, true);
+      if (hitActor != null) {
+        // If this actor spans entire screen, ignore it
+        hitActor.stageToLocalCoordinates(localPoint.set(0, 0));
+        boolean bottomLeftHit = hitActor.hit(localPoint.x, localPoint.y, true) == hitActor;
+        actor.stageToLocalCoordinates(localPoint.set(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT));
+        boolean topRightHit = hitActor.hit(localPoint.x, localPoint.y, true) == hitActor; 
+        if (!bottomLeftHit || !topRightHit) {
+          return true;
+        }
       }
       // Since space in side table will not get hit, we check explicitly
       // For a table, x and y are at center of table - not at bottom left
@@ -53,7 +60,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
         }
       }
       if (ScienceEngine.DEV_MODE == DevMode.DEBUG)
-        System.out.println(actor.getClass().getName() + 
+        System.out.println(actor.getClass().getName() + " " + actor.getName() + 
             " Stagepoint: " + stagePoint + " localpoint: " + localPoint);
     }
     return false;
