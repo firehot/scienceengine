@@ -103,6 +103,9 @@ public class Guru extends Group implements ITutor {
     if (timeTracker != null) {
       timeTracker.setActiveTutor(this);
     }
+    if (scoreboard != null) {
+      scoreboard.setTutor(this);
+    }
     this.setVisible(false);
     activeTutor = this;
   }
@@ -149,7 +152,6 @@ public class Guru extends Group implements ITutor {
     // Mark start of Tutoring in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutoring.name());
-    scoreboard.resetScore();
     // bring Guru to top
     Group root = getStage().getRoot();
     root.addActorBefore(root.findActor(ScreenComponent.CORE_GROUP), this);
@@ -192,21 +194,18 @@ public class Guru extends Group implements ITutor {
   public void showWrong(int score) {
     addActor(wrongImage); // Bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
-    scoreboard.addScore(-score);
     wrongImage.show(String.valueOf(-score));
   }
   
   public void showFailure(int score) {
     addActor(failureImage); // bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
-    //scoreboard.addScore(-score);
     failureImage.show("Oops!");
   }
 
   public void showCorrect(int score) {
     addActor(correctImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
-    scoreboard.addScore(score);
     correctImage.show(String.valueOf(score));
     hinter.clearHint();
   }
@@ -214,7 +213,6 @@ public class Guru extends Group implements ITutor {
   public void showSuccess(int score) {
     addActor(successImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
-    scoreboard.addScore(score);
     successImage.show(String.valueOf(score));
     hinter.clearHint();
   }

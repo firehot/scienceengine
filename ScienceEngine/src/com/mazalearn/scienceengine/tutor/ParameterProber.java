@@ -128,6 +128,7 @@ public class ParameterProber extends AbstractScience2DProber {
       stats[ITutor.POINTS] -= getFailurePoints();
       // TODO: Looks dangerous - what if same tutor invoked again? is it reset?
       setSuccessPoints(getFailurePoints()); // Equate isAttempted and failure scores
+      recordStats();
       // No failure exit.
       return;
     }

@@ -164,5 +164,6 @@ public class TutorGroup extends AbstractTutor {
     
     // Save stats into profile
     guru.getProfile().saveStats(stats, getId());
+    parent.recordStats();
   }
 }

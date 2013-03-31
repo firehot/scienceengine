@@ -161,6 +161,7 @@ public class Abstractor extends AbstractTutor {
       life[--numLivesLeft].getColor().a = 0.3f;
       guru.showWrong(getFailurePoints());
       stats[ITutor.POINTS] -= getFailurePoints();
+      recordStats();
       if (numLivesLeft == 0) {
         super.systemReadyToFinish(false);
       }

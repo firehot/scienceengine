@@ -6,10 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.tutor.ITutor;
 
 public class Scoreboard extends Table {
-  Label scoreLabel;
-  int score;
+  private Label scoreLabel;
+  private ITutor tutor;
 
   Scoreboard(Skin skin) {
     super(skin);
@@ -27,16 +28,14 @@ public class Scoreboard extends Table {
         ScreenComponent.Scoreboard.getY(getHeight()) + getHeight() / 2);
   }
 
-  public int getScore() {
-    return score;
-  }
-
-  public void addScore(int deltaScore) {
-    score += deltaScore;
-    scoreLabel.setText(String.valueOf(score));
+  @Override
+  public void act(float delta) {
+    if (tutor != null) {
+      scoreLabel.setText(String.valueOf(Math.round(tutor.getStats()[ITutor.POINTS])));
+    }
   }
   
-  public void resetScore() {
-    score = 0;
+  public void setTutor(ITutor tutor) {
+    this.tutor = tutor;
   }
 }

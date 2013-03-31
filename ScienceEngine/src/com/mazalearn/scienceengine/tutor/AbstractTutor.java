@@ -135,6 +135,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public void recordStats() {
     // Update all stats
     stats[ITutor.PERCENT_PROGRESS] = stats[ITutor.NUM_SUCCESSES] == 0 ? 0 : 100;   
+    parent.recordStats();
     guru.getProfile().saveStats(stats, id);
   }
   
@@ -174,6 +175,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.setVisible(false);
     guru.setActiveTutor(this);
     guru.showNextButton(false);
+    stats[ITutor.POINTS] = 0;
+    recordStats();
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
         Parameter.Tutor.name());
