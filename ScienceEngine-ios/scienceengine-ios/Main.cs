@@ -41,10 +41,12 @@ namespace scienceengineios
 			window.MakeKeyAndVisible();
 		}
 
-		public override void httpPost(string path, string contentType, java.util.Map paramset, byte[] data) {
+		public override string httpPost(string path, string contentType, java.util.Map paramset, byte[] data) {
 			try {
-			  base.httpPost(path, contentType, paramset, data);
-			} catch (System.Net.Sockets.SocketException ignore) {}
+			  return base.httpPost(path, contentType, paramset, data);
+			} catch (System.Net.Sockets.SocketException ignore) {
+				return "";
+			}
 		}
 	}
 
