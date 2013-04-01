@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.app.services;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
@@ -22,7 +23,8 @@ import com.mazalearn.scienceengine.tutor.ITutor;
  */
 public class Profile implements Serializable {
 
-  private static final String DRAWING_PNG = "DrawingPng";
+  private static final String COACH_PNG = "coachpng";
+  private static final String USER_PNG = "userpng";
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
   private static final String TOPIC = "topic";
@@ -175,17 +177,30 @@ public class Profile implements Serializable {
     }
   }
 
-  public void setDrawingPng(byte[] drawingPngBytes, String current, String color) {
-    Gdx.app.error(ScienceEngine.LOG, " bytes = " + drawingPngBytes.length);
-    properties.put(DRAWING_PNG, new String(Base64Coder.encode(drawingPngBytes)));
+  public void setCoachPixmap(Pixmap coachPixmap, String current, String color) {
+    byte[] coachPngBytes = ScienceEngine.getPlatformAdapter().pixmap2Bytes(coachPixmap);
+    Gdx.app.error(ScienceEngine.LOG, " bytes = " + coachPngBytes.length);
+    properties.put(COACH_PNG, new String(Base64Coder.encode(coachPngBytes)));
     properties.put(CURRENT, current);
     properties.put(COLOR, color);
     save();
   }
   
-  public byte[] getDrawingPng() {
-    String png = properties.get(DRAWING_PNG);
-    return png == null ? new byte[0] : Base64Coder.decode(png);
+  public Pixmap getCoachPixmap() {
+    String png = properties.get(COACH_PNG);
+    return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
+  }
+
+  public void setUserPixmap(Pixmap userPixmap) {
+    byte[] userPngBytes = ScienceEngine.getPlatformAdapter().pixmap2Bytes(userPixmap);
+    Gdx.app.error(ScienceEngine.LOG, " bytes = " + userPngBytes.length);
+    properties.put(USER_PNG, new String(Base64Coder.encode(userPngBytes)));
+    save();
+  }
+  
+  public Pixmap getUserPixmap() {
+    String png = properties.get(USER_PNG);
+    return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
   public float[] getStats(Topic topic, Topic level, String tutorId) {

@@ -15,9 +15,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
@@ -29,6 +33,7 @@ import com.mazalearn.scienceengine.app.services.EventLog;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
@@ -41,6 +46,8 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class ScienceEngine extends Game {
+  private static final String USER = "user";
+
   // constant useful for logging
   public static final String LOG = ScienceEngine.class.getName();
 
@@ -421,7 +428,14 @@ public class ScienceEngine extends Game {
     getAssetManager().unload(path);
   }
 
-  public static AtlasRegion getTextureRegion(String name) {
+  public static TextureRegion getTextureRegion(String name) {
+    if (USER.equals(name)) {
+      Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+      Pixmap userPixmap = profile.getUserPixmap();
+      if (userPixmap != null) {
+        return new TextureRegion(new Texture(userPixmap));
+      }
+    }
     for (TextureAtlas atlas: atlasMap.values()) {
       AtlasRegion textureRegion = atlas.findRegion(name);
       if (textureRegion != null) return textureRegion;

@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.core.view.DrawingActor;
 
 public class RegistrationDialog extends Dialog {
   
@@ -34,7 +35,7 @@ public class RegistrationDialog extends Dialog {
 
     final Label registration = new Label("", skin);
     profile = ScienceEngine.getPreferencesManager().getProfile();
-    boolean alreadyRegistered = profile.getUserEmail().length() > 0;
+    final boolean alreadyRegistered = profile.getUserEmail().length() > 0;
     if (alreadyRegistered) {
       registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.Registered") + profile.getUserEmail());
     } else {
@@ -52,27 +53,33 @@ public class RegistrationDialog extends Dialog {
     pin.setWidth(600);
     pin.setColor(Color.RED);
     
-    getContentTable().add(name).width(600).pad(10);
+    getContentTable().debug();
+    getContentTable().add(name).width(600).pad(10).colspan(2);
     getContentTable().row();
-    getContentTable().add(registration).width(600).pad(10);
+    getContentTable().add(registration).width(600).pad(10).colspan(2);
     getContentTable().row();
-    getContentTable().add(pin).width(600).center();
+    getContentTable().add(pin).width(600).center().colspan(2);
+    getContentTable().row();
+    final DrawingActor face = new DrawingActor(skin);
+    getContentTable().add(face).height(128).width(128).fill();
+    getContentTable().add(face.getFace()).height(128).width(128).fill();
 
     TextButton cancelButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Cancel"), skin);
     this.getButtonTable().add(cancelButton).width(150).center();
     
-    if (!alreadyRegistered) {
-      Button registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin);
-      registerButton.addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    Button registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin);
+    registerButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        profile.setUserPixmap(face.getPixmap());
+        if (!alreadyRegistered) {
           // Onscreen keyboard to collect registration email address
           getRegistrationEmail();
         }
-      });
-      this.getButtonTable().add(registerButton).width(150).center();
-    }
+      }
+    });
+    this.getButtonTable().add(registerButton).width(150).center();
   }
 
   private void getRegistrationEmail() {

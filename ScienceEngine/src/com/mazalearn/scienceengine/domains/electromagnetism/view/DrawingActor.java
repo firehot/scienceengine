@@ -115,8 +115,7 @@ public class DrawingActor extends Science2DActor {
     this.shapeRenderer = new ShapeRenderer();
     // snapshot will contain image of coach + 2 wheels
     Profile profile = ScienceEngine.getPreferencesManager().getProfile();
-    byte[] bytes = profile.getDrawingPng();
-    this.snapshot = ScienceEngine.getPlatformAdapter().bytes2Pixmap(bytes);
+    this.snapshot = profile.getCoachPixmap();
     if (snapshot == null) {
       this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);
     }
@@ -243,7 +242,7 @@ public class DrawingActor extends Science2DActor {
     return coach;
   }
   
-  public byte[] getDrawingPng() {
-    return ScienceEngine.getPlatformAdapter().pixmap2Bytes(snapshot);
+  public Pixmap getPixmap() {
+    return snapshot;
   }
 }

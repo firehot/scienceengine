@@ -103,7 +103,7 @@ public class AbstractScience2DProberTest {
     Pixmap snapshot;
     try {
       Profile profile = ScienceEngine.getPreferencesManager().getProfile();
-      byte[] bytes = profile.getDrawingPng();
+      byte[] bytes = profile.getCoachPixmap();
       snapshot = new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
     } catch (IOException e) {
       throw new IllegalArgumentException("Could not load");
