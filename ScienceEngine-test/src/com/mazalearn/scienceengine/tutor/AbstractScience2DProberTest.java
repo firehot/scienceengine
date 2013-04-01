@@ -99,19 +99,6 @@ public class AbstractScience2DProberTest {
   }
 
   @Test
-  public void testDrawPng() {
-    Pixmap snapshot;
-    try {
-      Profile profile = ScienceEngine.getPreferencesManager().getProfile();
-      byte[] bytes = profile.getCoachPixmap();
-      snapshot = new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Could not load");
-    }
-    Image image = new Image(new Texture(snapshot));
-  }
-
-  @Test
   public void testIsInsideExcludedActor_2Actors() {
     /**
      *     100,100        300,100
