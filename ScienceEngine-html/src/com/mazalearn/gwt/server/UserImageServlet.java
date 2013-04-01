@@ -34,7 +34,7 @@ public class UserImageServlet extends HttpServlet {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     EmbeddedEntity profileEntity = ProfileServlet.retrieveUserProfile(userEmail, ds);
     if (profileEntity != null) {
-      return (Blob) profileEntity.getProperty(ProfileServlet.DRAWING_PNG);
+      return (Blob) profileEntity.getProperty(ProfileServlet.COACH_PNG);
     }
     return null;
   }

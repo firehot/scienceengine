@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
@@ -26,7 +25,9 @@ public class ProfileServlet extends HttpServlet {
 
   public static final String PROFILE = "Profile";
   public static final String USER_ID = "userid"; // owner
-  public static final String DRAWING_PNG = "DrawingPng";
+  private static final String PNG = "png";
+  public static final String COACH_PNG = PNG + "coach";
+  public static final String USER_PNG = PNG + "user";
   public static final String USER_NAME = "username";
   public static final String CURRENT = "current";
   public static final String COLOR = "color";
@@ -99,10 +100,9 @@ public class ProfileServlet extends HttpServlet {
     
     EmbeddedEntity profileEntity = createOrGetUserProfile(user, true);
     for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
-      if (entry.getKey().equals(DRAWING_PNG)) {
+      if (entry.getKey().startsWith(PNG)) { // Too large and base64encoded - store as TEXT
         if (entry.getValue() != null) {
-          byte[] bytes = Base64.decode(entry.getValue());
-          profileEntity.setProperty(entry.getKey(), new Blob(bytes));
+          profileEntity.setProperty(entry.getKey(), new Text(entry.getValue()));
         }
       } else {
         profileEntity.setProperty(entry.getKey(), entry.getValue());
@@ -128,13 +128,14 @@ public class ProfileServlet extends HttpServlet {
   public static Entity createOrGetUser(String userId, DatastoreService ds, boolean create) {
     if (userId == null || userId.length() == 0) return null;
     Key key = KeyFactory.createKey(User.class.getSimpleName(), userId.toLowerCase());
-    Entity user = null;
+    Entity user = null, user1 = null;
     try {
       user = ds.get(key);
       String profileId = (String) user.getProperty(PROFILE_ID);
       if (profileId != null && profileId.length() > 0) {
         key = KeyFactory.createKey(User.class.getSimpleName(), profileId);
-        user = ds.get(key);
+        user1 = ds.get(key);
+        user = user1;
       }
     } catch (EntityNotFoundException e) {
       if (create && user == null) {
@@ -161,11 +162,14 @@ public class ProfileServlet extends HttpServlet {
       Object value = property.getValue();
       if (value instanceof Text) {
         String s = ((Text) value).getValue();
-        if (!"null".equals(s)) {
+        if (property.getKey().startsWith(PNG)) {
+          properties.append(propDelimiter + property.getKey() + ":\"" + s + "\"");
+          propDelimiter = ",";
+        } else if (!"null".equals(s)) {
           topics.append(topicDelimiter + property.getKey() + ":" + s);
           topicDelimiter = ",";
         }
-      } else if (!property.getKey().equals(DRAWING_PNG)){
+      } else {
         properties.append(propDelimiter + property.getKey() + ":\"" + value + "\"");
         propDelimiter = ",";
       }

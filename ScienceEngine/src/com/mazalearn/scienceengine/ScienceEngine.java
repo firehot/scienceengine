@@ -46,7 +46,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class ScienceEngine extends Game {
-  private static final String USER = "user";
+  public static final String USER = "user";
 
   // constant useful for logging
   public static final String LOG = ScienceEngine.class.getName();

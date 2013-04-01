@@ -57,7 +57,7 @@ public class TutorNavigator extends Group {
     tutorsPanel.addActor(createTutorsPane(tutors, guru, skin));
     tutorsPanel.setVisible(false);
     addActor(tutorsPanel);
-    userImage = new Image(ScienceEngine.getTextureRegion("user"));
+    userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     ClickListener clickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         if (tutorsPanel.isVisible()) {

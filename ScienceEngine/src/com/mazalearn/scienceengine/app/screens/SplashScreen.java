@@ -77,6 +77,9 @@ public class SplashScreen extends AbstractScreen {
         }
       }
     };
+    
+    Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+    userImage.setPosition(50, 50);
 
     Label touchToStart = new Label("Touch to Start", scienceEngine.getSkin());
     touchToStart.setColor(Color.WHITE);
@@ -97,6 +100,8 @@ public class SplashScreen extends AbstractScreen {
     SplashImage splashImage = new SplashImage(splashRegion);
     stage.addActor(splashImage);
     stage.addActor(touchToStart);
+    stage.addActor(userImage);
+    userImage.addListener(startListener); // TODO: should allow changing user here
     splashImage.addListener(startListener);
     touchToStart.addListener(startListener);
     

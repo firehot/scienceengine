@@ -165,9 +165,11 @@ public class DrawingActor extends Actor {
     shapeRenderer.setColor(Color.YELLOW);
     
     // Draw eye areas
+    /*
     shapeRenderer.rect(SCALED_EYE_OFFSET_X, SCALED_EYE_OFFSET_Y, SCALED_EYE_DIA, SCALED_EYE_DIA);
     shapeRenderer.rect(SCALED_FACE_WIDTH - SCALED_EYE_OFFSET_X - SCALED_EYE_DIA, SCALED_EYE_OFFSET_Y, 
         SCALED_EYE_DIA, SCALED_EYE_DIA);
+        */
     
     // Draw face area
     shapeRenderer.rect(0, 0, SCALED_FACE_WIDTH, SCALED_FACE_HEIGHT);

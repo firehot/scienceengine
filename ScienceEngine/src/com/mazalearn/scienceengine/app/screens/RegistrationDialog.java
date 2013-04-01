@@ -1,20 +1,13 @@
 package com.mazalearn.scienceengine.app.screens;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -22,13 +15,10 @@ import com.mazalearn.scienceengine.core.view.DrawingActor;
 
 public class RegistrationDialog extends Dialog {
   
-  private static final String DEMOUSER = "demouser@mazalearn.com";
-  private final Stage stage;
   private Profile profile;
 
-  public RegistrationDialog(Stage stage, final Skin skin) {
+  public RegistrationDialog(final Skin skin) {
     super("Registration", skin);
-    this.stage = stage;
     
     Label name = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), skin);
     name.setWidth(600);
@@ -44,66 +34,34 @@ public class RegistrationDialog extends Dialog {
     registration.setWidth(600);
     registration.setWrap(true);
 
-    String installationId = profile.getInstallationId();
-    // Show 4-digit PIN - we use last 4 digits of installation-id
-    // TODO: allow pin to be changed by user.
-    final Label pin = 
-        new Label(ScienceEngine.getMsg().getString("ScienceEngine.PIN") + ": " + 
-           installationId.substring(installationId.length() - 4), skin);
-    pin.setWidth(600);
-    pin.setColor(Color.RED);
-    
     getContentTable().debug();
     getContentTable().add(name).width(600).pad(10).colspan(2);
     getContentTable().row();
     getContentTable().add(registration).width(600).pad(10).colspan(2);
     getContentTable().row();
-    getContentTable().add(pin).width(600).center().colspan(2);
+    getContentTable().add("Draw your image").width(600).center().colspan(2);
     getContentTable().row();
     final DrawingActor face = new DrawingActor(skin);
     getContentTable().add(face).height(128).width(128).fill();
-    getContentTable().add(face.getFace()).height(128).width(128).fill();
+    Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+    getContentTable().add(image).height(128).width(128).fill();
 
     TextButton cancelButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Cancel"), skin);
     this.getButtonTable().add(cancelButton).width(150).center();
     
-    Button registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin);
+    Button registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Continue"), skin);
     registerButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         profile.setUserPixmap(face.getPixmap());
         if (!alreadyRegistered) {
-          // Onscreen keyboard to collect registration email address
-          getRegistrationEmail();
+          // Bring up registration form
+          ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + "/registration.jsp?" + 
+              Profile.INSTALL_ID + "=" + profile.getInstallationId().toLowerCase());
         }
       }
     });
     this.getButtonTable().add(registerButton).width(150).center();
-  }
-
-  private void getRegistrationEmail() {
-    Gdx.input.getTextInput(new TextInputListener() {
-      @Override
-      public void input(String email) {
-        if (DEMOUSER.equals(email.toLowerCase())) { // Try again
-          getRegistrationEmail();
-          return;
-        }
-        Map<String, String> postParams = new HashMap<String, String>();
-        postParams.put(Profile.USER_EMAIL, email);
-        postParams.put(Profile.INSTALL_ID, profile.getInstallationId().toLowerCase());
-        try {
-          ScienceEngine.getPlatformAdapter().httpPost("/registrationemail", "text", postParams, new byte[0]);
-        } catch (GdxRuntimeException e) {
-          Gdx.app.error(ScienceEngine.LOG, "Could not get proper server response");
-          ScienceEngine.displayStatusMessage(stage, 
-              "Server response improper: Could not register");
-        }
-      }
-      
-      @Override
-      public void canceled() {}
-    }, "Enter email address for registration", DEMOUSER);
   }
 }

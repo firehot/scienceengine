@@ -102,7 +102,7 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>RegistrationEmailServlet</servlet-name>
-    <url-pattern>/registrationemail</url-pattern>
+    <url-pattern>/re</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>RegistrationServlet</servlet-name>

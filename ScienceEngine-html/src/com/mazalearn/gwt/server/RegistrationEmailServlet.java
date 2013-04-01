@@ -1,78 +1,67 @@
 package com.mazalearn.gwt.server;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest; 
-import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.EmbeddedEntity;
+import com.google.appengine.api.datastore.Entity;
 
 @SuppressWarnings("serial")
 public class RegistrationEmailServlet extends HttpServlet {
 
   static final String USER_EMAIL = "useremail";
   static final String INSTALL_ID = "installid";
-  private static final String SALT = "imazalearne";
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    System.out.println("Register - Received post: " + request.getContentLength());
-    response.getWriter().append("Post received");
-    String userEmail = request.getHeader(USER_EMAIL).toLowerCase();
-    String installId = request.getHeader(INSTALL_ID).toLowerCase();
+    System.out.println("Register - Received get: " + request.getContentLength());
+    String userEmail = request.getParameter("e").toLowerCase();
+    String installId = request.getParameter("i").toLowerCase();
+    String userName = request.getParameter("n");
+    long timeEmailSent = Long.parseLong(request.getParameter("t"));
+    String hash = request.getParameter("h");
     System.out.println("User: " + userEmail + " id: " + installId);
-    sendUserEmail(userEmail, installId);
-  }
-
-  private void sendUserEmail(String userEmail, String installId) {
-    Properties properties = new Properties();
-    Session session = Session.getDefaultInstance(properties, null);
-
-    long timeEmailSent = System.currentTimeMillis();
-    String msgBody = "Welcome to Science Engine\nTo complete registration please visit: \n" +
-        "http://www.mazalearn.com/vu.jsp" + 
-        "?i=" + installId + 
-        "&e=" + userEmail +
-        "&t=" + timeEmailSent + 
-        "&h=" + getHash(installId, userEmail, timeEmailSent) + 
-        "\n\n-MazaLearn";
-
-    try {
-        Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("admin@mazalearn.com", "Mazalearn Admin"));
-        msg.addRecipient(Message.RecipientType.TO,
-                         new InternetAddress(userEmail, "User"));
-        msg.setSubject("Science Engine - Mazalearn.com account registration");
-        msg.setText(msgBody);
-        Transport.send(msg);
-
-    } catch (AddressException e) {
-        // ...
-    } catch (MessagingException e) {
-        // ...
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    }    
-  }
-
-  public static String getHash(String installId, String userEmail, long timeEmailSent) {
-    try { 
-      MessageDigest md = MessageDigest.getInstance("MD5");
-      String msg = installId + SALT + userEmail + SALT + timeEmailSent;
-      return Base64.encode(md.digest(msg.getBytes("US-ASCII")));
-    } catch (Exception ex) { 
+    if (System.currentTimeMillis() - timeEmailSent > RegistrationServlet.EXPIRY_TIME_MS) {
+      response.getWriter().append("Registration email has expired");
+      return;
     }
-    return null;
+    
+    if (!RegistrationServlet.getHash(installId, userEmail, userName, timeEmailSent).equals(hash)) {
+      response.getWriter().append("Invalid registration info for: " + installId + " " + userEmail);
+      return;
+    }
+    
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity user = ProfileServlet.retrieveUser(userEmail, ds);
+    if (user != null) { 
+      response.getWriter().append("Already registered?" + userEmail);
+      System.out.println("Already registered?" + installId + " " + userEmail);
+      return;
+    }
+    
+    user = ProfileServlet.retrieveUser(installId, ds);
+    if (user == null) {
+      response.getWriter().append("No such user: " + installId);
+      return;       
+    }
+    
+    user.setProperty(ProfileServlet.PROFILE_ID, userEmail);
+    EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user, true);
+    profile.setProperty(ProfileServlet.USER_NAME, userName);
+    profile.setProperty(ProfileServlet.USER_ID, userEmail);
+    
+    Entity user1 = ProfileServlet.createOrGetUser(userEmail, ds, true);
+    user1.setPropertiesFrom(user);
+    ds.put(user1);
+    ds.put(user);
+    response.getWriter().append("Registration Completed");
   }
+
 }
 

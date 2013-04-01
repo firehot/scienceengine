@@ -23,8 +23,9 @@ import com.mazalearn.scienceengine.tutor.ITutor;
  */
 public class Profile implements Serializable {
 
-  private static final String COACH_PNG = "coachpng";
-  private static final String USER_PNG = "userpng";
+  private static final String PNG = "png";
+  private static final String COACH_PNG = PNG + "coach";
+  private static final String USER_PNG = PNG + "user";
   private static final String ACTIVITY = "activity";
   private static final String LAST_ACTIVITY = "last_activity";
   private static final String TOPIC = "topic";

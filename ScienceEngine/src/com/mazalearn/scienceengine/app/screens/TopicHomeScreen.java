@@ -218,7 +218,7 @@ public class TopicHomeScreen extends AbstractScreen {
   private void setLastActiveLevel(ScrollPane activitiesPane) {
     Topic lastActiveLevel = profile.getLastActivity();
     if (lastActiveLevel != null) {
-      Image userImage = new Image(ScienceEngine.getTextureRegion("user"));
+      Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
       ScreenComponent.scalePosition(userImage, 2, THUMBNAIL_HEIGHT / 2);
       
       int idx = Arrays.asList(topic.getChildren()).indexOf(lastActiveLevel);

@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.tutor;
 
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,9 +11,6 @@ import org.junit.Test;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
