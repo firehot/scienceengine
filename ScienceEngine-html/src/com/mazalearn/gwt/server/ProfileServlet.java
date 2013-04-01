@@ -25,7 +25,7 @@ public class ProfileServlet extends HttpServlet {
 
   public static final String PROFILE = "Profile";
   public static final String USER_ID = "userid"; // owner
-  private static final String PNG = "png";
+  static final String PNG = "png";
   public static final String COACH_PNG = PNG + "coach";
   public static final String USER_PNG = PNG + "user";
   public static final String USER_NAME = "username";
