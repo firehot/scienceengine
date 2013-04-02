@@ -59,10 +59,9 @@ public class ProfileServlet extends HttpServlet {
       // TODO: this is an expensive way of doing - double retrieve and delete.
       // Delete installation id based user, if any
       EmbeddedEntity profileEntity = retrieveUserProfile(userId, ds);
-      Entity user = retrieveUser((String) profileEntity.getProperty(INSTALL_ID), ds);
-      if (user != null) {
-        ds.delete(user.getKey());
-      }
+      String installId = (String) profileEntity.getProperty(INSTALL_ID);
+      Key key = KeyFactory.createKey(User.class.getSimpleName(), installId.toLowerCase());
+      ds.delete(key);
     }
   }
   

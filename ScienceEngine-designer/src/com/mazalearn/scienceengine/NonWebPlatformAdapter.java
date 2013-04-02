@@ -128,7 +128,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       }
       responseStr = getResponseBody(responseStr);
     } catch (Exception e) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + "/" + path);
+      Gdx.app.log(ScienceEngine.LOG, "Could not get " + hostPort + "/" + path);
       e.printStackTrace();
       return "";
     }
