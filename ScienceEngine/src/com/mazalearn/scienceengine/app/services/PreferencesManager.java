@@ -24,13 +24,17 @@ public class PreferencesManager {
   // Active user
   private static final String PREFS_NAME = "scienceengine";
   private Profile profile;
+  private Preferences prefs;
 
   public PreferencesManager() {
     retrieveProfile();
   }
 
   protected Preferences getPrefs() {
-    return Gdx.app.getPreferences(PREFS_NAME);
+	  if (prefs == null) {
+		  prefs = Gdx.app.getPreferences(PREFS_NAME);
+	  }
+    return prefs;
   }
 
   public boolean isSoundEnabled() {
@@ -39,7 +43,6 @@ public class PreferencesManager {
 
   public void setSoundEnabled(boolean soundEffectsEnabled) {
     getPrefs().putBoolean(PREF_SOUND_ENABLED, soundEffectsEnabled);
-    getPrefs().flush();
   }
 
   public boolean isMusicEnabled() {
@@ -47,6 +50,7 @@ public class PreferencesManager {
   }
 
   public void setMusicEnabled(boolean musicEnabled) {
+	  getPrefs().flush();
     getPrefs().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
     getPrefs().flush();
   }
@@ -107,6 +111,7 @@ public class PreferencesManager {
   private void setSyncProfilesString(String s) {
     getPrefs().putString(SYNC_PROFILES, s);
     getPrefs().flush();
+    Gdx.app.log(ScienceEngine.LOG, "Set sync profile: " + getPrefs().getString(SYNC_PROFILES));
   }
   
   public void saveProfile() {
@@ -135,6 +140,7 @@ public class PreferencesManager {
     Gdx.app.log(ScienceEngine.LOG, "Syncing Profiles");
     Map<String, String> postParams = new HashMap<String, String>();
     String syncProfilesString = getPrefs().getString(SYNC_PROFILES);
+    Gdx.app.log(ScienceEngine.LOG, "Sync Profile: " + syncProfilesString);
     if (syncProfilesString.length() == 0) return;
     
     String[] syncProfilesArray = syncProfilesString.split("\n");

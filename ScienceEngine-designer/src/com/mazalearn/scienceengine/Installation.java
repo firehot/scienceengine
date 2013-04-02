@@ -1,27 +1,27 @@
 package com.mazalearn.scienceengine;
 
-import java.io.FileWriter;
+import java.util.Random;
 import java.util.UUID;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 public class Installation {
   private static String sID = null;
-
-  public synchronized static String id(Platform platform) {
+  private static final String INSTALLATION = "data/INSTALLATION";
+  public synchronized static String id() {
     if (sID != null) return sID;
     
-    FileHandle installation = Gdx.files.external(getInstallation(platform));
+    FileHandle installation = Gdx.files.external(INSTALLATION);
     try {
       Gdx.app.log(ScienceEngine.LOG, "Checking for installation file");
       if (!installation.exists()) {
       	Gdx.app.log(ScienceEngine.LOG, "Creating installation file");
-        FileWriter out = new FileWriter(installation.file());
-        String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + UUID.randomUUID().toString();
-        out.write(id);
-        out.close();
+        Random r = new Random();
+        UUID uuid = new UUID(r.nextLong(), r.nextLong());
+        String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + uuid.toString();
+        Gdx.app.log(ScienceEngine.LOG, "Installation id: " + id);
+        installation.writeBytes(id.getBytes(), false);
       }
   	  Gdx.app.log(ScienceEngine.LOG, "Reading installation file");     
       sID = installation.readString();
@@ -31,15 +31,4 @@ public class Installation {
     
     return sID;
   }
-
-  private static String getInstallation(Platform platform) {
-    switch (platform) {
-    case IOS: return "INSTALLATION";
-    case Desktop:
-    case Android:
-    case AndroidEmulator: return "data/INSTALLATION";
-    }
-    return null;
-  }
-
 }
