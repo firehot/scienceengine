@@ -71,7 +71,7 @@ public class SplashScreen extends AbstractScreen {
     
     Table userInfo = new Table(getSkin());
     Profile profile = ScienceEngine.getPreferencesManager().getProfile();
-    Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+    final Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     userInfo.add(profile.getUserName()).left();
     userInfo.add(userImage).width(60).height(60);
     userInfo.setPosition(100, 100);
@@ -109,7 +109,7 @@ public class SplashScreen extends AbstractScreen {
             });
             loginDialog.show(stage);
         } else {
-          new RegistrationDialog(getSkin()).show(stage);
+          new RegistrationDialog(getSkin(), userImage).show(stage);
         }
       }
     });

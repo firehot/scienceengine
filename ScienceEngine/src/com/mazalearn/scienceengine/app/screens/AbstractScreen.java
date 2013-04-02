@@ -140,7 +140,7 @@ public abstract class AbstractScreen implements Screen {
         String text = ScienceEngine.getUserName();
         Table table = new Table(skin);
         table.setName(screenComponent.name());
-        Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+        final Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
         image.setSize(screenComponent.getWidth(), screenComponent.getHeight());
         table.add(image)
             .width(screenComponent.getWidth())
@@ -149,7 +149,7 @@ public abstract class AbstractScreen implements Screen {
         table.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-            new RegistrationDialog(getSkin()).show(stage);
+            new RegistrationDialog(getSkin(), image).show(stage);
           }      
          });
         return table;

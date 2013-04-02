@@ -14,9 +14,9 @@ public class Main {
 		cfg.width = 1024; // 800;
 		cfg.height = 768; // 480;
 		
+    ScienceEngine.DEV_MODE = DevMode.DEBUG;
 		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "");
 		scienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.Desktop));
-		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     new LwjglApplication(scienceEngine, cfg) {
       @Override
       public void exit() {

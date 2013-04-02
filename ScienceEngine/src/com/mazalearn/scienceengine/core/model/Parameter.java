@@ -11,7 +11,8 @@ public enum Parameter implements IParameter {
   Move,
   NameOfSelectedBody, 
   Rotate, 
-  Tutor;
+  Tutor, 
+  RotationAngle;
   
   private Parameter() {
   }

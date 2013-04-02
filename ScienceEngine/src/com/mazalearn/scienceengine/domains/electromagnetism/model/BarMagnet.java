@@ -140,7 +140,7 @@ public class BarMagnet extends AbstractMagnet {
       public boolean isPossible() { return isActive(); }
     });
     configs.add(new AbstractModelConfig<Float>(this, 
-        Parameter.RotationAngle, 0f, MathUtils.PI * 2) {
+        com.mazalearn.scienceengine.core.model.Parameter.RotationAngle, 0f, MathUtils.PI * 2) {
       public Float getValue() { return getAngle(); }
       public void setValue(Float value) { setAngle(value); }
       public boolean isPossible() { return isActive(); }

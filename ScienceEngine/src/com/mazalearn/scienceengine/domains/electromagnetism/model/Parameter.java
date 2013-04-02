@@ -10,7 +10,6 @@ public enum Parameter implements IParameter {
   MaxCurrent,
   CurrentDirection,
   MagnetStrength,
-  RotationAngle,
   MovementMode,
   CommutatorType,
   CoilLoops,

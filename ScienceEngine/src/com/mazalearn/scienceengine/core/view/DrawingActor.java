@@ -28,14 +28,8 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 public class DrawingActor extends Actor {
   private static final int LINE_WIDTH = 4;
   private static final float SCALE = 2f;
-  private static final int EYE_DIA = 10;
   private static final int FACE_HEIGHT = 64;
   private static final int FACE_WIDTH = 64;
-  private static final int EYE_OFFSET_X = 15;
-  private static final int EYE_OFFSET_Y = 40;
-  private static float SCALED_EYE_DIA = SCALE * (EYE_DIA + 2);
-  private static float SCALED_EYE_OFFSET_X = SCALE * (EYE_OFFSET_X - 1);
-  private static float SCALED_EYE_OFFSET_Y = SCALE * (EYE_OFFSET_Y - 1);
   private static float SCALED_FACE_WIDTH = SCALE * FACE_WIDTH;
   private static float SCALED_FACE_HEIGHT = SCALE * FACE_HEIGHT;
   private Vector2 pos = new Vector2(), prevPos = new Vector2();
@@ -58,20 +52,8 @@ public class DrawingActor extends Actor {
       this.setSize(FACE_WIDTH, FACE_HEIGHT);
       face.setPosition(0, 0);
       
-      /*Image eye1 = new Image(new TextureRegion(coachTexture, EYE_OFFSET_X, EYE_OFFSET_Y, EYE_DIA, EYE_DIA));
-      eye1.setPosition(EYE_OFFSET_X, EYE_OFFSET_Y);
-      eye1.setOrigin(EYE_DIA/2, EYE_DIA/2);
-      eye1.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
-      
-      Image eye2 = new Image(new TextureRegion(coachTexture, FACE_WIDTH - EYE_OFFSET_X - EYE_DIA, EYE_OFFSET_Y, EYE_DIA, EYE_DIA));
-      eye2.setPosition(FACE_WIDTH - EYE_OFFSET_X - EYE_DIA, EYE_OFFSET_Y);
-      eye2.setOrigin(EYE_DIA/2, EYE_DIA/2);
-      eye2.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
-      */
       this.addActor(userCurrentLabel);
       this.addActor(face);
-      //this.addActor(eye1);
-      //this.addActor(eye2);
     }
   }
   
@@ -94,7 +76,7 @@ public class DrawingActor extends Actor {
     Profile profile = ScienceEngine.getPreferencesManager().getProfile();
     this.snapshot = profile.getUserPixmap();
     if (snapshot == null) {
-      this.snapshot = new Pixmap(FACE_WIDTH + EYE_DIA, FACE_HEIGHT, Format.RGBA8888);
+      this.snapshot = new Pixmap(FACE_WIDTH, FACE_HEIGHT, Format.RGBA8888);
     }
     hasChangedSinceSnapshot = false;
     this.faceTexture = new Texture(snapshot);
@@ -163,13 +145,6 @@ public class DrawingActor extends Actor {
     
     shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(Color.YELLOW);
-    
-    // Draw eye areas
-    /*
-    shapeRenderer.rect(SCALED_EYE_OFFSET_X, SCALED_EYE_OFFSET_Y, SCALED_EYE_DIA, SCALED_EYE_DIA);
-    shapeRenderer.rect(SCALED_FACE_WIDTH - SCALED_EYE_OFFSET_X - SCALED_EYE_DIA, SCALED_EYE_OFFSET_Y, 
-        SCALED_EYE_DIA, SCALED_EYE_DIA);
-        */
     
     // Draw face area
     shapeRenderer.rect(0, 0, SCALED_FACE_WIDTH, SCALED_FACE_HEIGHT);

@@ -162,8 +162,12 @@ public class ScienceEngine extends Game {
       fpsLogger = new FPSLogger();
     //}
     
-    DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
-    ScreenComponent.setSize(1024, 768); // displayMode.width, displayMode.height);
+    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+      ScreenComponent.setSize(1024, 768);
+    } else {
+      DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
+      ScreenComponent.setSize(displayMode.width, displayMode.height);
+    }
     resize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     SCIENCE_ENGINE = this;
   }

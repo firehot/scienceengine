@@ -109,7 +109,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     try {
       Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
       if (socket == null) {
-        Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + "/" + path);
+        Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + path);
         return null;
       }
       DataOutputStream wr = 
@@ -128,7 +128,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       }
       responseStr = getResponseBody(responseStr);
     } catch (Exception e) {
-      Gdx.app.log(ScienceEngine.LOG, "Could not get " + hostPort + "/" + path);
+      Gdx.app.log(ScienceEngine.LOG, "Could not get " + hostPort + path);
       e.printStackTrace();
       return "";
     }
