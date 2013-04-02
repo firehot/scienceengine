@@ -31,9 +31,12 @@
 
     <form action="/register" method="post">
       <input type="hidden" name="<%= ProfileServlet.INSTALL_ID %>" value=<%= request.getParameter(ProfileServlet.INSTALL_ID) %>>
+      <div style="background-color: black; width:64">
+        <img src='/userimage?userid=<%= userId %>&png=pnguser'>
+      </div>
       <table>
-        <tr><td>Email</td><td><input name="<%= ProfileServlet.USER_EMAIL %>"></td></tr>
-        <tr><td>Name</td><td><input name="<%= ProfileServlet.USER_NAME %>"></td></tr>
+        <tr><td>Email*</td><td><input name="<%= ProfileServlet.USER_EMAIL %>"></td></tr>
+        <tr><td>Name*</td><td><input name="<%= ProfileServlet.USER_NAME %>"></td></tr>
         <tr><td>Sex</td><td><input type="radio" name="<%= ProfileServlet.SEX %>" value="F">Female
                             <input type="radio" name="<%= ProfileServlet.SEX %>" value="M">Male
                             </td></tr>

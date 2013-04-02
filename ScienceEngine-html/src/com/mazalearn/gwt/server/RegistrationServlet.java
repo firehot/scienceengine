@@ -46,6 +46,15 @@ public class RegistrationServlet extends HttpServlet {
     EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user, true);
     
     String userEmail = request.getParameter(ProfileServlet.USER_EMAIL);
+    if (userEmail == null || !userEmail.contains("@")) {
+      response.getWriter().append("Improper email. Cannot register");
+      return;
+    }
+    String userName = request.getParameter(ProfileServlet.USER_NAME);
+    if (userName == null || userName.length() < 2) {
+      response.getWriter().append("Improper name. Cannot register");
+      return;
+    }
     profile.setProperty(ProfileServlet.SEX, request.getParameter(ProfileServlet.SEX));
     profile.setProperty(ProfileServlet.GRADE, request.getParameter(ProfileServlet.GRADE));
     profile.setProperty(ProfileServlet.SCHOOL, request.getParameter(ProfileServlet.SCHOOL));
@@ -56,9 +65,9 @@ public class RegistrationServlet extends HttpServlet {
     profile.setProperty(ProfileServlet.REGN_DATE, dateFormat.format(date));
     ds.put(user);
 
-    response.getWriter().append("Registered: " + userEmail);
-    sendUserEmail(userEmail, request.getParameter(ProfileServlet.USER_NAME), userId);
-    response.getWriter().append("\n\nEmail has been sent. Please click on URL in email to complete registration.");
+    response.getWriter().append("Registeration process started for: " + userEmail);
+    sendUserEmail(userEmail, userName, userId);
+    response.getWriter().append("<br><br>Email has been sent. <br>Please click on URL in email to complete registration.");
   }
 
   private void sendUserEmail(String userEmail, String userName, String installId) {

@@ -18,7 +18,7 @@ public class UserImageServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    System.out.println("Received get: " + request.getContentLength());
+    System.out.println("UserImage servlet - Received get: " + request.getContentLength());
     String userId = request.getParameter(ProfileServlet.USER_ID);
     String img = request.getParameter(ProfileServlet.PNG);
     System.out.println("UserId: " + userId);
@@ -36,7 +36,9 @@ public class UserImageServlet extends HttpServlet {
     EmbeddedEntity profileEntity = ProfileServlet.retrieveUserProfile(userEmail, ds);
     if (profileEntity != null) {
       Text coachPngBase64 = (Text) profileEntity.getProperty(img);
-      return Base64.decode(coachPngBase64.getValue());
+      if (coachPngBase64 != null) {
+        return Base64.decode(coachPngBase64.getValue());
+      }
     }
     return null;
   }

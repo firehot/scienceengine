@@ -9,10 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.tutor.IDoneCallback;
@@ -63,23 +65,16 @@ public class SplashScreen extends AbstractScreen {
     ClickListener startListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        boolean enterpriseInstall = false;
-        if (enterpriseInstall) {
-          final Dialog loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
-              @Override
-              public void done(boolean success) {
-                enterApplication();
-              }
-            });
-            loginDialog.show(stage);
-        } else {
-          enterApplication();
-        }
+        enterApplication();
       }
     };
     
+    Table userInfo = new Table(getSkin());
+    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
     Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
-    userImage.setPosition(50, 50);
+    userInfo.add(profile.getUserName()).left();
+    userInfo.add(userImage).width(60).height(60);
+    userInfo.setPosition(100, 100);
 
     Label touchToStart = new Label("Touch to Start", scienceEngine.getSkin());
     touchToStart.setColor(Color.WHITE);
@@ -100,8 +95,24 @@ public class SplashScreen extends AbstractScreen {
     SplashImage splashImage = new SplashImage(splashRegion);
     stage.addActor(splashImage);
     stage.addActor(touchToStart);
-    stage.addActor(userImage);
-    userImage.addListener(startListener); // TODO: should allow changing user here
+    stage.addActor(userInfo);
+    userInfo.addListener(new ClickListener() {
+      public void clicked (InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        boolean multipleUsers = false;
+        if (multipleUsers) {
+          final Dialog loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
+              @Override
+              public void done(boolean success) {
+                enterApplication();
+              }
+            });
+            loginDialog.show(stage);
+        } else {
+          new RegistrationDialog(getSkin()).show(stage);
+        }
+      }
+    });
     splashImage.addListener(startListener);
     touchToStart.addListener(startListener);
     

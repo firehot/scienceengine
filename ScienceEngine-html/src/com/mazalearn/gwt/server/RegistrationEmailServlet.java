@@ -38,21 +38,22 @@ public class RegistrationEmailServlet extends HttpServlet {
     }
     
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Entity user = ProfileServlet.retrieveUser(userEmail, ds);
-    if (user != null) { 
+    // User may exist but should not have profile
+    EmbeddedEntity profile = ProfileServlet.retrieveUserProfile(userEmail, ds);
+    if (profile != null) { 
       response.getWriter().append("Already registered?" + userEmail);
       System.out.println("Already registered?" + installId + " " + userEmail);
       return;
     }
     
-    user = ProfileServlet.retrieveUser(installId, ds);
+    Entity user = ProfileServlet.retrieveUser(installId, ds);
     if (user == null) {
       response.getWriter().append("No such user: " + installId);
       return;       
     }
     
     user.setProperty(ProfileServlet.PROFILE_ID, userEmail);
-    EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user, true);
+    profile = ProfileServlet.createOrGetUserProfile(user, true);
     profile.setProperty(ProfileServlet.USER_NAME, userName);
     profile.setProperty(ProfileServlet.USER_ID, userEmail);
     
@@ -60,6 +61,9 @@ public class RegistrationEmailServlet extends HttpServlet {
     user1.setPropertiesFrom(user);
     ds.put(user1);
     ds.put(user);
+    response.getWriter().append("<div style='background-color: black; width:64'>" + 
+        "<img src='/userimage?userid=" + userEmail +"&png=pnguser'>" +
+        "</div>");
     response.getWriter().append("Registration Completed");
   }
 
