@@ -17,6 +17,9 @@ public class Installation {
       Gdx.app.log(ScienceEngine.LOG, "Checking for installation file");
       if (!installation.exists()) {
       	Gdx.app.log(ScienceEngine.LOG, "Creating installation file");
+      	// Following does not work on IOS - mono. Hence the weaker workaround.
+        // String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + UUID.randomUUID().toString();
+      	
         Random r = new Random();
         UUID uuid = new UUID(r.nextLong(), r.nextLong());
         String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + uuid.toString();

@@ -33,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String userId = request.getParameter(ProfileServlet.INSTALL_ID);
+    String userId = request.getParameter(ProfileServlet.INSTALL_ID).toLowerCase();
     System.out.println("Register User: " + userId);
 
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
@@ -45,7 +45,7 @@ public class RegistrationServlet extends HttpServlet {
 
     EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user, true);
     
-    String userEmail = request.getParameter(ProfileServlet.USER_EMAIL);
+    String userEmail = request.getParameter(ProfileServlet.USER_EMAIL).toLowerCase();
     if (userEmail == null || !userEmail.contains("@")) {
       response.getWriter().append("Improper email. Cannot register");
       return;
@@ -65,7 +65,7 @@ public class RegistrationServlet extends HttpServlet {
     profile.setProperty(ProfileServlet.REGN_DATE, dateFormat.format(date));
     ds.put(user);
 
-    response.getWriter().append("Registeration process started for: " + userEmail);
+    response.getWriter().append("Registration in progress: " + userEmail);
     sendUserEmail(userEmail, userName, userId);
     response.getWriter().append("<br><br>Email has been sent. <br>Please click on URL in email to complete registration.");
   }
@@ -75,7 +75,7 @@ public class RegistrationServlet extends HttpServlet {
     Session session = Session.getDefaultInstance(properties, null);
 
     long timeEmailSent = System.currentTimeMillis();
-    String msgBody = "Welcome to Science Engine\nTo complete registration please visit: \n" +
+    String msgBody = "Welcome to Science Engine\nTo complete registration please click on link below: \n" +
         "http://www.mazalearn.com/re" + 
         "?i=" + installId + 
         "&e=" + userEmail +

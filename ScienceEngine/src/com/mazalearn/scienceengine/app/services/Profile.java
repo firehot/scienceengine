@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.SerializationException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
@@ -257,14 +258,24 @@ public class Profile implements Serializable {
     if (localProfileBase64 != null && localProfileBase64.length() > 0) {
       // decode the contents - base64 encoded
       String localProfileStr = Base64Coder.decodeString(localProfileBase64);
-      localProfile = new Json().fromJson(Profile.class, localProfileStr);
+      try {
+        localProfile = new Json().fromJson(Profile.class, localProfileStr);
+      } catch (SerializationException s) {
+        s.printStackTrace();
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + localProfileStr);
+      }
     }
     // Retrieve from server if available
     Profile serverProfile = null;
     if (serverProfileBase64 != null && serverProfileBase64.length() > 0) {
       // decode the contents - base64 encoded
       String serverProfileStr = Base64Coder.decodeString(serverProfileBase64);
-      serverProfile = new Json().fromJson(Profile.class, serverProfileStr);
+      try {
+        serverProfile = new Json().fromJson(Profile.class, serverProfileStr);
+      } catch (SerializationException s) {
+        s.printStackTrace();
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + serverProfileStr);
+      }
     }
     // Choose latest available profile or create a new one if none available
     if (localProfile != null && serverProfile != null) {

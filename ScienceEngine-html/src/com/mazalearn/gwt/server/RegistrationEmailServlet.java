@@ -64,7 +64,7 @@ public class RegistrationEmailServlet extends HttpServlet {
     response.getWriter().append("<div style='background-color: black; width:64'>" + 
         "<img src='/userimage?userid=" + userEmail +"&png=pnguser'>" +
         "</div>");
-    response.getWriter().append("Registration Completed");
+    response.getWriter().append("Registration Completed: Thank you, " + userEmail);
   }
 
 }
