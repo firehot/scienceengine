@@ -63,5 +63,7 @@ public interface IPlatformAdapter {
   public String getInstallationId();
 
   public String httpGet(String path);
+
+  public void executeAsync(Runnable runnable);
 }
 

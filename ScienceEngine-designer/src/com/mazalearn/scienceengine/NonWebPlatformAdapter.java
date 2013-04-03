@@ -169,4 +169,10 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   public String getInstallationId() {
     return Installation.id();
   }
+
+  @Override
+  public void executeAsync(Runnable runnable) {
+    Thread syncThread = new Thread(runnable, "syncthread");
+    syncThread.start();
+  }
 }

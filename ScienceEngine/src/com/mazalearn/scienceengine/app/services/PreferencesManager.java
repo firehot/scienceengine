@@ -179,8 +179,7 @@ public class PreferencesManager {
     String syncProfilesString = prefs.getString(SYNC_PROFILES);
     Gdx.app.log(ScienceEngine.LOG, "Sync Profile: " + syncProfilesString);
     if (syncProfilesString.length() == 0) return;
-    Thread syncThread = new Thread(new SyncProfiles(syncProfilesString, prefs), "syncthread");
-    syncThread.start();
+    ScienceEngine.getPlatformAdapter().executeAsync(new SyncProfiles(syncProfilesString, prefs));
     setSyncProfilesString("");
   }
 }

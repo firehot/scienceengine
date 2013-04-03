@@ -150,4 +150,14 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     return null; // Dont know how to do this for GWT
   }
 
+  @Override
+  public void executeAsync(Runnable runnable) {
+    /*
+    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+      public void execute() {
+         .. code here is executed using the timer technique.
+      }
+    });  */
+  }
+
 }
