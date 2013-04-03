@@ -254,31 +254,9 @@ public class Profile implements Serializable {
 
   public static Profile mergeProfiles(String localProfileBase64,
       String serverProfileBase64) {
-    Profile localProfile = null;
-    if (localProfileBase64 != null && localProfileBase64.length() > 0) {
-      // decode the contents - base64 encoded
-      String localProfileStr = Base64Coder.decodeString(localProfileBase64);
-      try {
-        localProfile = new Json().fromJson(Profile.class, localProfileStr);
-      } catch (SerializationException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + localProfileStr);
-      } catch (IllegalArgumentException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + localProfileStr);
-      }
-    }
+    Profile localProfile = fromBase64(localProfileBase64);
     // Retrieve from server if available
-    Profile serverProfile = null;
-    if (serverProfileBase64 != null && serverProfileBase64.length() > 0) {
-      // decode the contents - base64 encoded
-      String serverProfileStr = Base64Coder.decodeString(serverProfileBase64);
-      try {
-        serverProfile = new Json().fromJson(Profile.class, serverProfileStr);
-      } catch (SerializationException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + serverProfileStr);
-      } catch (IllegalArgumentException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + serverProfileStr);
-      }
-    }
+    Profile serverProfile = fromBase64(serverProfileBase64);
     // Choose latest available profile or create a new one if none available
     if (localProfile != null && serverProfile != null) {
       return merge(localProfile, serverProfile);
@@ -290,10 +268,34 @@ public class Profile implements Serializable {
     return new Profile();
   }
 
-  public String getBase64() {
+  private static Profile fromBase64(String profileBase64) {
+    Profile profile = null;
+    if (profileBase64 != null && profileBase64.length() > 0) {
+      // decode the contents - base64 encoded
+      String profileJson = Base64Coder.decodeString(profileBase64);
+      try {
+        profile = new Json().fromJson(Profile.class, profileJson);
+      } catch (SerializationException s) {
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + profileJson);
+      } catch (IllegalArgumentException s) {
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + profileJson);
+      }
+    }
+    return profile;
+  }
+
+  public String toBase64() {
     String profileAsText = new Json(OutputType.json).toJson(this);
     Gdx.app.log(ScienceEngine.LOG, "Saving Profile - " + profileAsText);
     String profileAsBase64 = Base64Coder.encodeString(profileAsText);
     return profileAsBase64;
+  }
+
+  public synchronized void mergeProfile(String otherProfileBase64) {
+    Profile otherProfile = fromBase64(otherProfileBase64);
+    if (otherProfile != null) {
+      otherProfile.properties.putAll(properties);
+      properties = otherProfile.properties;
+    }
   }
 }

@@ -115,13 +115,19 @@ public class PreferencesManager {
 
   private void saveProfile(Profile profile) {
     // convert the given profile to text
-    String profileAsBase64 = profile.getBase64();
+    String localProfileBase64 = profile.toBase64();
     String userId = getProfileUserId();
+    String serverProfileBase64 = prefs.getString("SERVER_" + userId);
+    if (serverProfileBase64 != null) {
+      profile.mergeProfile(serverProfileBase64);
+      prefs.remove("SERVER_" + userId);
+    }
+
     String savedProfile = prefs.getString(userId);
     // No need to save if already up to date
-    if (profileAsBase64.equals(savedProfile)) return;
+    if (localProfileBase64.equals(savedProfile)) return;
     
-    prefs.putString(userId, profileAsBase64);
+    prefs.putString(userId, localProfileBase64);
     markProfileDirty(userId);
     Gdx.app.log(ScienceEngine.LOG, "Saved Profile - " + userId);
   }
@@ -134,37 +140,47 @@ public class PreferencesManager {
     }
     prefs.flush();
   }
+  
+  private static class SyncProfiles implements Runnable {
+
+    private String syncProfilesString;
+    private Preferences prefs;
+    
+    public SyncProfiles(String syncProfilesString, Preferences prefs) {
+      this.prefs = prefs;
+      this.syncProfilesString = syncProfilesString;
+    }
+    @Override
+    public void run() {
+      Map<String, String> postParams = new HashMap<String, String>();
+      String[] syncProfilesArray = syncProfilesString.split("\n");
+      HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
+      for (String userId: syncProfiles) {
+        String localProfileBase64 = prefs.getString(userId);
+        postParams.put(Profile.USER_ID, userId);
+        try {
+          // Post profile to server and get back updated server profile
+          String serverProfileBase64 =
+              ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
+                  postParams, localProfileBase64.getBytes());
+          prefs.putString("SERVER_" + userId, serverProfileBase64);
+          Gdx.app.log(ScienceEngine.LOG, "Sync Profile to MazaLearn - " + userId);
+        } catch(GdxRuntimeException e) {
+          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+          Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to sync - " + userId);
+        }
+      }
+    }
+    
+  }
 
   public void syncProfiles() {
     Gdx.app.log(ScienceEngine.LOG, "Syncing Profiles");
-    Map<String, String> postParams = new HashMap<String, String>();
     String syncProfilesString = prefs.getString(SYNC_PROFILES);
     Gdx.app.log(ScienceEngine.LOG, "Sync Profile: " + syncProfilesString);
     if (syncProfilesString.length() == 0) return;
-    
-    String[] syncProfilesArray = syncProfilesString.split("\n");
-    HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
-    for (String userId: syncProfiles) {
-      String localProfileBase64 = prefs.getString(userId);
-      postParams.put(Profile.USER_ID, userId);
-      try {
-        // Post profile to server and get back updated server profile
-        String serverProfileBase64 =
-            ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
-                postParams, localProfileBase64.getBytes());
-        Profile profile = Profile.mergeProfiles(localProfileBase64, serverProfileBase64);
-        saveProfile(profile);
-        // push server updates (if any) into current active profile
-        if (userId.equals(getProfileUserId())) {
-          this.profile = profile;
-          prefs.putString(Profile.USER_ID, profile.getUserEmail());
-        }
-        Gdx.app.log(ScienceEngine.LOG, "Uploaded Profile to MazaLearn - " + userId);
-      } catch(GdxRuntimeException e) {
-        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
-        Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to upload - " + userId);
-      }
-    }
+    Thread syncThread = new Thread(new SyncProfiles(syncProfilesString, prefs), "syncthread");
+    syncThread.start();
     setSyncProfilesString("");
   }
 }
