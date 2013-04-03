@@ -122,7 +122,13 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
   
   private String getResponseBody(InputStream inputStream) throws IOException {
-    int numBytes = inputStream.read(responseBytes);
+    int numBytes = 0;
+    int readBytes = 0;
+    while (readBytes != -1) {
+      readBytes = inputStream.read(responseBytes, numBytes, responseBytes.length - numBytes);
+      numBytes += readBytes;
+    }
+    numBytes++; // compensating for -1 readBytes
     String responseStr = new String(responseBytes);
     Gdx.app.log(ScienceEngine.LOG, "Response received: " + numBytes);
     String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
