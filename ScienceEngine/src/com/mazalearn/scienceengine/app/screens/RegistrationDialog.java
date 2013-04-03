@@ -44,10 +44,11 @@ public class RegistrationDialog extends Dialog {
     getContentTable().add("Your new face");
     getContentTable().row();
     Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
-    getContentTable().add(image).height(128).width(128).fill();
+    getContentTable().add(image).height(DrawingActor.SCALED_FACE_HEIGHT).width(DrawingActor.SCALED_FACE_WIDTH).fill();
     final DrawingActor face = new DrawingActor(skin);
-    getContentTable().add(face).height(128).width(128).fill();
+    getContentTable().add(face).height(DrawingActor.SCALED_FACE_HEIGHT).width(DrawingActor.SCALED_FACE_WIDTH).fill();
     getContentTable().row();
+//    getContentTable().add(face.getFace());
 
     TextButton cancelButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Cancel"), skin);
     this.getButtonTable().add(cancelButton).width(150).center();

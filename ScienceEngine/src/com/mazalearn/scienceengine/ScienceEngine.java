@@ -277,9 +277,8 @@ public class ScienceEngine extends Game {
     super.pause();
     Gdx.app.log(ScienceEngine.LOG, "Pausing engine");
 
-    // For some reason, skin and atlasMap do not survive pause
+    // For some reason, skin does not survive pause
     skin = null;
-//    atlasMap = null;
   }
   
   @Override

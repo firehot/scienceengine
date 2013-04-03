@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import com.mazalearn.scienceengine.designer.PngWriter;
 public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   
   private static final String BODY_DELIMITER = "\r\n\r\n";
+  private static byte[] responseBytes = new byte[40000];
 
   public NonWebPlatformAdapter(Platform platform) {
     super(platform);
@@ -69,7 +71,6 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     String hostPort = ScienceEngine.getHostPort();
     String host = hostPort.substring(0, hostPort.indexOf(":"));
     int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
-    String responseStr = null;
     try {
       Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
       if (socket == null) {
@@ -83,21 +84,14 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       wr.write(data, 0, data.length);
       wr.flush();
       Gdx.app.log(ScienceEngine.LOG, "Posted to " + path + " bytes: " + data.length);
-      byte[] response = new byte[20000];
-      socket.getInputStream().read(response);
+      String responseStr = getResponseBody(socket.getInputStream());
       wr.close();
-      responseStr = new String(response);
-      Gdx.app.log(ScienceEngine.LOG, "Response length: " + responseStr.length());
-      String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
-      if (!firstLine.contains("200")) {
-        throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
-      }
+      return responseStr;
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + path);
       e.printStackTrace();
       throw new GdxRuntimeException(e);
     }
-    return getResponseBody(responseStr);
   }
 
   @Override
@@ -105,7 +99,6 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     String hostPort = ScienceEngine.getHostPort();
     String host = hostPort.substring(0, hostPort.indexOf(":"));
     int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
-    String responseStr = null;
     try {
       Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
       if (socket == null) {
@@ -117,30 +110,29 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       wr.writeBytes("GET " + path + " HTTP/1.0\r\n\r\n");
       wr.flush();
       Gdx.app.log(ScienceEngine.LOG, "Get " + path);
-      byte[] response = new byte[20000];
-      socket.getInputStream().read(response);
+      String responseStr = getResponseBody(socket.getInputStream());
       wr.close();
-      responseStr = new String(response);
-      Gdx.app.log(ScienceEngine.LOG, "Response received: " + responseStr.length());
-      String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
-      if (!firstLine.contains("200")) {
-        throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
-      }
-      responseStr = getResponseBody(responseStr);
+      return responseStr;
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not get " + hostPort + path);
       e.printStackTrace();
       return "";
     }
-    return responseStr;
   }
   
-  private String getResponseBody(String str) {
-    int pos = str.indexOf(BODY_DELIMITER);
+  private String getResponseBody(InputStream inputStream) throws IOException {
+    inputStream.read(responseBytes);
+    String responseStr = new String(responseBytes);
+    Gdx.app.log(ScienceEngine.LOG, "Response received: " + responseStr.length());
+    String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
+    if (!firstLine.contains("200")) {
+      throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
+    }
+    int pos = responseStr.indexOf(BODY_DELIMITER);
     if (pos == -1) return "";
-    str = str.substring(pos).replace("\r\n", "").trim();
-    Gdx.app.log(ScienceEngine.LOG, "Response length = " + str.length());
-    return str;
+    responseStr = responseStr.substring(pos).replace("\r\n", "").trim();
+    Gdx.app.log(ScienceEngine.LOG, "Response length = " + responseStr.length());
+    return responseStr;
   }
 
   private String makeHeaderString(String path, String contentType,

@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -27,11 +26,11 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 public class DrawingActor extends Actor {
   private static final int LINE_WIDTH = 4;
-  private static final float SCALE = 2f;
+  private static final int SCALE = 4;
   private static final int FACE_HEIGHT = 64;
   private static final int FACE_WIDTH = 64;
-  private static float SCALED_FACE_WIDTH = SCALE * FACE_WIDTH;
-  private static float SCALED_FACE_HEIGHT = SCALE * FACE_HEIGHT;
+  public static int SCALED_FACE_WIDTH = SCALE * FACE_WIDTH;
+  public static int SCALED_FACE_HEIGHT = SCALE * FACE_HEIGHT;
   private Vector2 pos = new Vector2(), prevPos = new Vector2();
   private ShapeRenderer shapeRenderer;
   private Texture faceTexture;
@@ -43,12 +42,12 @@ public class DrawingActor extends Actor {
   public static class Face extends Group {
     private Label userCurrentLabel;
     
-    private Face(Texture coachTexture, Skin skin) {
+    private Face(Texture faceTexture, Skin skin) {
       super();
       userCurrentLabel = new Label(ScienceEngine.getUserName(), skin);
       userCurrentLabel.setPosition(0, FACE_HEIGHT);
       
-      Image face = new Image(new TextureRegion(coachTexture, 0, 0, FACE_WIDTH, FACE_HEIGHT));
+      Image face = new Image(faceTexture);
       this.setSize(FACE_WIDTH, FACE_HEIGHT);
       face.setPosition(0, 0);
       

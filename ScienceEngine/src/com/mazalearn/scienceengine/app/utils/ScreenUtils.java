@@ -33,12 +33,12 @@ public class ScreenUtils {
   private static Vector3 currentTouch = new Vector3();
   /**
    * Get a screenshot.
-   * @param x - beginning x coordinate
-   * @param y - beginning y coordinate
-   * @param width - width
-   * @param height - height
-   * @param newWidth - width of new image
-   * @param newHeight - height of new image
+   * @param x - beginning x stage coordinate
+   * @param y - beginning y stage coordinate
+   * @param width - stage width
+   * @param height - stage height
+   * @param newWidth - width of new image in pixels
+   * @param newHeight - height of new image in pixels
    * @param stage 
    * @return screenshot as a pixmap
    */
