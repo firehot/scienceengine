@@ -107,9 +107,9 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       }
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
-      wr.writeBytes("GET " + path + " HTTP/1.0\r\n\r\n");
+      wr.writeBytes("GET " + hostPort + path + " HTTP/1.0\r\n\r\n");
       wr.flush();
-      Gdx.app.log(ScienceEngine.LOG, "GET " + path);
+      Gdx.app.log(ScienceEngine.LOG, "GET " + hostPort + path);
       String responseStr = getResponseBody(socket.getInputStream());
       wr.close();
       return responseStr;

@@ -76,7 +76,12 @@ public class ProfileServlet extends HttpServlet {
 
   private void writeProfileResponse(HttpServletResponse response, String userId, DatastoreService ds)
       throws IOException {
-    response.getWriter().append(getUserProfileAsBase64(userId, ds));
+    String responseStr = getUserProfileAsBase64(userId, ds);
+    if (responseStr.isEmpty()) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } else {
+      response.getWriter().append(responseStr);
+    }
     response.getWriter().close();
   }
   
