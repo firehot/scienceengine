@@ -242,33 +242,7 @@ public class Profile implements Serializable {
     return properties.get(INSTALL_ID);
   }
 
-  private static Profile merge(Profile profile1, Profile profile2) {
-    if (profile1.getLastUpdated() >= profile2.getLastUpdated()) {
-      profile2.properties.putAll(profile1.properties);
-      return profile2;
-    } else {
-      profile1.properties.putAll(profile2.properties);
-      return profile1;
-    }
-  }
-
-  public static Profile mergeProfiles(String localProfileBase64,
-      String serverProfileBase64) {
-    Profile localProfile = fromBase64(localProfileBase64);
-    // Retrieve from server if available
-    Profile serverProfile = fromBase64(serverProfileBase64);
-    // Choose latest available profile or create a new one if none available
-    if (localProfile != null && serverProfile != null) {
-      return merge(localProfile, serverProfile);
-    } else if (localProfile != null) {
-      return localProfile;
-    } else if (serverProfile != null) {
-      return serverProfile;
-    }
-    return new Profile();
-  }
-
-  private static Profile fromBase64(String profileBase64) {
+  public static Profile fromBase64(String profileBase64) {
     Profile profile = null;
     if (profileBase64 != null && profileBase64.length() > 0) {
       // decode the contents - base64 encoded
@@ -276,9 +250,9 @@ public class Profile implements Serializable {
       try {
         profile = new Json().fromJson(Profile.class, profileJson);
       } catch (SerializationException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + profileJson);
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + s.getMessage() + "\n" + profileJson);
       } catch (IllegalArgumentException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + profileJson);
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + s.getMessage() + "\n" + profileJson);
       }
     }
     return profile;

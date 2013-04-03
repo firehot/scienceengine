@@ -69,10 +69,10 @@ public class PreferencesManager {
     String userId = getProfileUserId();
     // Retrieve from local file system
     String localProfileBase64 = prefs.getString(userId);
-    // Retrieve from server
-    String serverProfileBase64 = ScienceEngine.getPlatformAdapter().httpGet(
-        "/profile?" + Profile.USER_ID + "=" + userId);
-    profile = Profile.mergeProfiles(localProfileBase64, serverProfileBase64); 
+    profile = Profile.fromBase64(localProfileBase64);
+    if (profile == null) {
+      profile = new Profile();
+    }
     profile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
     if (profile.getUserEmail().length() > 0) {
       prefs.putString(Profile.USER_ID, profile.getUserEmail());
