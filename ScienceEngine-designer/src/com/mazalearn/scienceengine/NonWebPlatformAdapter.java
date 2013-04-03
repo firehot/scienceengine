@@ -109,7 +109,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
           new DataOutputStream(socket.getOutputStream());
       wr.writeBytes("GET " + path + " HTTP/1.0\r\n\r\n");
       wr.flush();
-      Gdx.app.log(ScienceEngine.LOG, "Get " + path);
+      Gdx.app.log(ScienceEngine.LOG, "GET " + path);
       String responseStr = getResponseBody(socket.getInputStream());
       wr.close();
       return responseStr;
@@ -121,17 +121,17 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
   
   private String getResponseBody(InputStream inputStream) throws IOException {
-    inputStream.read(responseBytes);
+    int numBytes = inputStream.read(responseBytes);
     String responseStr = new String(responseBytes);
-    Gdx.app.log(ScienceEngine.LOG, "Response received: " + responseStr.length());
+    Gdx.app.log(ScienceEngine.LOG, "Response received: " + numBytes);
     String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
     if (!firstLine.contains("200")) {
       throw new IllegalStateException("Improper HTTP response:\n" + responseStr);
     }
     int pos = responseStr.indexOf(BODY_DELIMITER);
     if (pos == -1) return "";
-    responseStr = responseStr.substring(pos).replace("\r\n", "").trim();
-    Gdx.app.log(ScienceEngine.LOG, "Response length = " + responseStr.length());
+    responseStr = responseStr.substring(pos, numBytes).replace("\r\n", "").trim();
+    Gdx.app.log(ScienceEngine.LOG, "Response data length = " + responseStr.length());
     return responseStr;
   }
 

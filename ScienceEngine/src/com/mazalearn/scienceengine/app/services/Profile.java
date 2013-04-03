@@ -261,7 +261,8 @@ public class Profile implements Serializable {
       try {
         localProfile = new Json().fromJson(Profile.class, localProfileStr);
       } catch (SerializationException s) {
-        s.printStackTrace();
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + localProfileStr);
+      } catch (IllegalArgumentException s) {
         Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + localProfileStr);
       }
     }
@@ -273,7 +274,8 @@ public class Profile implements Serializable {
       try {
         serverProfile = new Json().fromJson(Profile.class, serverProfileStr);
       } catch (SerializationException s) {
-        s.printStackTrace();
+        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + serverProfileStr);
+      } catch (IllegalArgumentException s) {
         Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + serverProfileStr);
       }
     }

@@ -62,6 +62,7 @@ public class ProfileServlet extends HttpServlet {
       String installId = (String) profileEntity.getProperty(INSTALL_ID);
       Key key = KeyFactory.createKey(User.class.getSimpleName(), installId.toLowerCase());
       ds.delete(key);
+      System.out.println("Deleted: " + installId);
     }
   }
   
