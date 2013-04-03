@@ -33,34 +33,42 @@ public class RegistrationEmailServlet extends HttpServlet {
     }
     
     if (!RegistrationServlet.getHash(installId, userEmail, userName, timeEmailSent).equals(hash)) {
-      response.getWriter().append("Invalid registration info for: " + installId + " " + userEmail);
+      response.getWriter().append("Invalid registration info for: " + userEmail);
+      System.out.println("Invalid registration info for: " + installId + " " + userEmail + " " + userName + " " + timeEmailSent);
       return;
     }
     
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     // User may exist but should not have profile
-    EmbeddedEntity profile = ProfileServlet.retrieveUserProfile(userEmail, ds);
-    if (profile != null) { 
-      response.getWriter().append("Already registered?" + userEmail);
-      System.out.println("Already registered?" + installId + " " + userEmail);
+    EmbeddedEntity newUserProfile = ProfileServlet.retrieveUserProfile(userEmail, ds);
+    if (newUserProfile != null) { 
+      response.getWriter().append("Already registered. " + userEmail);
+      System.out.println("Already registered to: " + newUserProfile.getProperty(ProfileServlet.INSTALL_ID) + " " + userEmail);
       return;
     }
     
-    Entity user = ProfileServlet.retrieveUser(installId, ds);
-    if (user == null) {
+    Entity oldUser = ProfileServlet.retrieveUser(installId, ds);
+    if (oldUser == null) {
       response.getWriter().append("No such user: " + installId);
       return;       
     }
     
-    user.setProperty(ProfileServlet.PROFILE_ID, userEmail);
-    profile = ProfileServlet.createOrGetUserProfile(user, true);
-    profile.setProperty(ProfileServlet.USER_NAME, userName);
-    profile.setProperty(ProfileServlet.USER_ID, userEmail);
+    Entity newUser = ProfileServlet.createOrGetUser(userEmail, ds, true);
+    newUser.setPropertiesFrom(oldUser);
+    newUser.setProperty(ProfileServlet.OLD_USER_ID, installId);
     
-    Entity user1 = ProfileServlet.createOrGetUser(userEmail, ds, true);
-    user1.setPropertiesFrom(user);
-    ds.put(user1);
-    ds.put(user);
+    oldUser.setProperty(ProfileServlet.NEW_USER_ID, userEmail);
+
+    EmbeddedEntity oldUserProfile = ProfileServlet.createOrGetUserProfile(oldUser, true);
+    oldUserProfile.setProperty(ProfileServlet.USER_NAME, userName);
+    oldUserProfile.setProperty(ProfileServlet.USER_ID, userEmail);
+    
+    newUserProfile = new EmbeddedEntity();
+    newUserProfile.setPropertiesFrom(oldUserProfile);
+    newUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);
+    
+    ds.put(newUser);
+    ds.put(oldUser);
     response.getWriter().append("<div style='background-color: black; width:64'>" + 
         "<img src='/userimage?userid=" + userEmail +"&png=pnguser'>" +
         "</div>");

@@ -344,7 +344,7 @@ tutors:[
                    "decreases", 
                    "stays the same",
                    "not enough information to answer"],
-          answermask: "0100"
+          answermask: "1000"
           },
          {type: "MCQ1",
           id: "1.30",

@@ -41,7 +41,8 @@ public class ProfileServlet extends HttpServlet {
   public static final String INSTALL_ID = "installid";
   public static final String PIN = "pin"; // readonly
   // The profileId in a user entity forwards to the right profile.
-  public static final String PROFILE_ID = "profileid"; // registration is the owner
+  public static final String NEW_USER_ID = "newuserid"; // email verification is the owner
+  public static final String OLD_USER_ID = "olduserid"; // email verification is the owner
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -52,17 +53,17 @@ public class ProfileServlet extends HttpServlet {
     byte[] profileBytes = new byte[request.getContentLength()];
     bis.read(profileBytes);
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    saveUserProfile(userId, profileBytes, ds);
+    String oldUserId = saveUserProfile(userId, profileBytes, ds);
     bis.close();
     writeProfileResponse(response, userId, ds);
-    if (userId.indexOf("@") != -1) {
-      // TODO: this is an expensive way of doing - double retrieve and delete.
-      // Delete installation id based user, if any
-      EmbeddedEntity profileEntity = retrieveUserProfile(userId, ds);
-      String installId = (String) profileEntity.getProperty(INSTALL_ID);
-      Key key = KeyFactory.createKey(User.class.getSimpleName(), installId.toLowerCase());
+    // Delete old user, if any
+    if (oldUserId != null) {
+      Key key = KeyFactory.createKey(User.class.getSimpleName(), oldUserId.toLowerCase());
       ds.delete(key);
-      System.out.println("Deleted: " + installId);
+      System.out.println("Deleted: " + oldUserId);
+      Entity newUser = retrieveUser(userId, ds);
+      newUser.removeProperty(OLD_USER_ID);
+      ds.put(newUser);
     }
   }
   
@@ -90,7 +91,7 @@ public class ProfileServlet extends HttpServlet {
     Map<String, Map<String, float[]>> topics;
   }
 
-  public void saveUserProfile(String userId, byte[] profileBytes, DatastoreService ds) 
+  private String saveUserProfile(String userId, byte[] profileBytes, DatastoreService ds) 
       throws IllegalStateException {
     Entity user = createOrGetUser(userId, ds, true);
     String profileStringBase64 = new String(profileBytes);
@@ -118,6 +119,11 @@ public class ProfileServlet extends HttpServlet {
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
     ds.put(user);
+    // If retrieved user is for requested userid and not forwarded
+    if (userId.equals(user.getKey().getName())) {
+      return (String) user.getProperty(OLD_USER_ID);
+    }
+    return null;
   }
 
   public static EmbeddedEntity createOrGetUserProfile(Entity user, boolean create) {
@@ -136,7 +142,7 @@ public class ProfileServlet extends HttpServlet {
     Entity user = null, user1 = null;
     try {
       user = ds.get(key);
-      String profileId = (String) user.getProperty(PROFILE_ID);
+      String profileId = (String) user.getProperty(NEW_USER_ID);
       if (profileId != null && profileId.length() > 0) {
         key = KeyFactory.createKey(User.class.getSimpleName(), profileId);
         user1 = ds.get(key);
