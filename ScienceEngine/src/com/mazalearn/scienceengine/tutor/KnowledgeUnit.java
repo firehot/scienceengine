@@ -3,6 +3,8 @@ package com.mazalearn.scienceengine.tutor;
 import java.util.Collection;
 
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
@@ -26,7 +28,7 @@ public class KnowledgeUnit extends AbstractTutor {
     try {
       this.postCondition = parser.parseString(postConditionString);
     } catch (SyntaxException e) {
-      e.printStackTrace();
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
       throw new RuntimeException(e);
     }
     this.variables = parser.getVariables();

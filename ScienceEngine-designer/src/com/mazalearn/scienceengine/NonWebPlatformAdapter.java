@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
@@ -61,7 +62,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     try {
       return new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
     } catch (IOException e) {
-      e.printStackTrace();
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
       return null;
     }
   }
@@ -89,7 +90,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       return responseStr;
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + path);
-      e.printStackTrace();
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
       throw new GdxRuntimeException(e);
     }
   }
@@ -115,7 +116,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       return responseStr;
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not get " + hostPort + path);
-      e.printStackTrace();
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
       return "";
     }
   }

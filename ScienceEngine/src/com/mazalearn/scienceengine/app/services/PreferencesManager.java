@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
 /**
  * Handles the scienceEngine preferences.
@@ -160,7 +161,7 @@ public class PreferencesManager {
         }
         Gdx.app.log(ScienceEngine.LOG, "Uploaded Profile to MazaLearn - " + userId);
       } catch(GdxRuntimeException e) {
-        e.printStackTrace();
+        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
         Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to upload - " + userId);
       }
     }

@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.Dimension;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 
@@ -378,13 +380,13 @@ public class BarMagnet extends AbstractMagnet {
         }
       } catch (IOException e) {
         errorString = "could not read " + resourceName;
-        e.printStackTrace();
+        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
       } catch (NumberFormatException nfe) {
         errorString = "could not parse number in " + resourceName;
-        nfe.printStackTrace();
+        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) nfe.printStackTrace();
       } catch (ArrayIndexOutOfBoundsException be) {
         errorString = "more values than expected in " + resourceName;
-        be.printStackTrace();
+        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) be.printStackTrace();
       }
 
       if (errorString == null) {
