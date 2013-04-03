@@ -72,8 +72,9 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     String hostPort = ScienceEngine.getHostPort();
     String host = hostPort.substring(0, hostPort.indexOf(":"));
     int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
+    Socket socket = null;
     try {
-      Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
+      socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
       if (socket == null) {
         Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + path);
         return null;
@@ -92,6 +93,10 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + path);
       if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
       throw new GdxRuntimeException(e);
+    } finally {
+      if (socket != null) {
+        socket.dispose();
+      }
     }
   }
 
@@ -100,8 +105,9 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     String hostPort = ScienceEngine.getHostPort();
     String host = hostPort.substring(0, hostPort.indexOf(":"));
     int port = Integer.parseInt(hostPort.substring(hostPort.indexOf(":") + 1));
+    Socket socket = null;
     try {
-      Socket socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
+      socket = Gdx.net.newClientSocket(Protocol.TCP, host, port, null);
       if (socket == null) {
         Gdx.app.log(ScienceEngine.LOG, "Could not open socket to " + hostPort + path);
         return null;
@@ -118,18 +124,16 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       Gdx.app.log(ScienceEngine.LOG, "Could not get " + hostPort + path);
       if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
       return "";
+    } finally {
+      if (socket != null) {
+        socket.dispose();
+      }
     }
   }
   
   private String getResponseBody(InputStream inputStream) throws IOException {
-    int numBytes = 0;
-    int readBytes = 0;
-    while (readBytes != -1) {
-      readBytes = inputStream.read(responseBytes, numBytes, responseBytes.length - numBytes);
-      numBytes += readBytes;
-    }
-    numBytes++; // compensating for -1 readBytes
-    String responseStr = new String(responseBytes);
+    int numBytes = inputStream.read(responseBytes);
+    String responseStr = new String(responseBytes, 0, numBytes, "US-ASCII");
     Gdx.app.log(ScienceEngine.LOG, "Response received: " + numBytes);
     String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
     if (!firstLine.contains("200")) {
@@ -137,7 +141,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     }
     int pos = responseStr.indexOf(BODY_DELIMITER);
     if (pos == -1) return "";
-    responseStr = responseStr.substring(pos, numBytes).replace("\r\n", "").trim();
+    responseStr = responseStr.substring(pos).replace("\r\n", "").trim();
     Gdx.app.log(ScienceEngine.LOG, "Response data length = " + responseStr.length());
     return responseStr;
   }
