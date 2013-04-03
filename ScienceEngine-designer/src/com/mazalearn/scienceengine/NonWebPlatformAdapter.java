@@ -131,8 +131,14 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     }
   }
   
+  // NOt thread safe because of responseBytes
   private String getResponseBody(InputStream inputStream) throws IOException {
-    int numBytes = inputStream.read(responseBytes);
+    int numBytes = 0;
+    int count;
+    while ((count = inputStream.read(responseBytes, numBytes, 1024)) > 0) {
+      numBytes += count;
+      Gdx.app.debug(ScienceEngine.LOG, "Numbytes read: " + numBytes);
+    }
     String responseStr = new String(responseBytes, 0, numBytes, "US-ASCII");
     Gdx.app.log(ScienceEngine.LOG, "Response received: " + numBytes);
     String firstLine = responseStr.substring(0, responseStr.indexOf("\n"));
