@@ -2,6 +2,7 @@ package com.mazalearn.gwt.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -107,7 +108,7 @@ public class RegistrationServlet extends HttpServlet {
       MessageDigest md = MessageDigest.getInstance("MD5");
       String msg = installId + SALT + userEmail + SALT + userName + SALT + timeEmailSent;
       System.out.println(msg);
-      return Base64.encode(md.digest(msg.getBytes("US-ASCII")));
+      return URLEncoder.encode(new String(md.digest(msg.getBytes("US-ASCII")), "UTF-8"), "UTF-8");
     } catch (Exception ex) { 
     }
     return null;

@@ -1,6 +1,7 @@
 package com.mazalearn.gwt.server;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,9 +33,12 @@ public class RegistrationEmailServlet extends HttpServlet {
       return;
     }
     
-    if (!RegistrationServlet.getHash(installId, userEmail, userName, timeEmailSent).equals(hash)) {
+    String hash1 = URLEncoder.encode(hash, "UTF-8");
+    String hash2 = RegistrationServlet.getHash(installId, userEmail, userName, timeEmailSent);
+    if (!hash2.equals(hash1)) {
       response.getWriter().append("Invalid registration info for: " + userEmail);
       System.out.println("Invalid registration info for: " + installId + " " + userEmail + " " + userName + " " + timeEmailSent);
+      System.out.println("Hash1=<" + hash1 + "> Hash2=<" + hash2);
       return;
     }
     
@@ -53,22 +57,19 @@ public class RegistrationEmailServlet extends HttpServlet {
       return;       
     }
     
-    Entity newUser = ProfileServlet.createOrGetUser(userEmail, ds, true);
-    newUser.setPropertiesFrom(oldUser);
-    newUser.setProperty(ProfileServlet.OLD_USER_ID, installId);
-    
-    oldUser.setProperty(ProfileServlet.NEW_USER_ID, userEmail);
-
     EmbeddedEntity oldUserProfile = ProfileServlet.createOrGetUserProfile(oldUser, true);
     oldUserProfile.setProperty(ProfileServlet.USER_NAME, userName);
     oldUserProfile.setProperty(ProfileServlet.USER_ID, userEmail);
+    oldUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);
     
-    newUserProfile = new EmbeddedEntity();
-    newUserProfile.setPropertiesFrom(oldUserProfile);
-    newUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);
-    
+    Entity newUser = ProfileServlet.createOrGetUser(userEmail, ds, true);
+    newUser.setPropertiesFrom(oldUser);
+
+    newUser.setProperty(ProfileServlet.OLD_USER_ID, installId);
     ds.put(newUser);
+    oldUser.setProperty(ProfileServlet.NEW_USER_ID, userEmail);
     ds.put(oldUser);
+    
     response.getWriter().append("<div style='background-color: black; width:64'>" + 
         "<img src='/userimage?userid=" + userEmail +"&png=pnguser'>" +
         "</div>");
