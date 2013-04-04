@@ -114,7 +114,7 @@ public class DrawingActor extends Science2DActor {
     this.viewSpec = name;
     this.shapeRenderer = new ShapeRenderer();
     // snapshot will contain image of coach + 2 wheels
-    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     this.snapshot = profile.getCoachPixmap();
     if (snapshot == null) {
       this.snapshot = new Pixmap(COACH_WIDTH + WHEEL_DIA, COACH_HEIGHT, Format.RGBA8888);

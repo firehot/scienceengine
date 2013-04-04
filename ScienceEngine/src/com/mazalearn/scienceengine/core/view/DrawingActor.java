@@ -72,7 +72,7 @@ public class DrawingActor extends Actor {
   public DrawingActor(Skin skin) {
     this.shapeRenderer = new ShapeRenderer();
     // snapshot will contain image of face + 2 eyes
-    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     this.snapshot = profile.getUserPixmap();
     if (snapshot == null) {
       this.snapshot = new Pixmap(FACE_WIDTH, FACE_HEIGHT, Format.RGBA8888);

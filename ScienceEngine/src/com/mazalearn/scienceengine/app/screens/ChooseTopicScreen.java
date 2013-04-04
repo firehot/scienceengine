@@ -32,7 +32,7 @@ public class ChooseTopicScreen extends AbstractScreen {
 
   public ChooseTopicScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
-    profile = ScienceEngine.getPreferencesManager().getProfile();
+    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -121,7 +121,7 @@ public class ChooseTopicScreen extends AbstractScreen {
   }
   
   private int findTopicProgressPercentage(Topic topic) {
-    profile = ScienceEngine.getPreferencesManager().getProfile();
+    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     float percent = 0;
     int numTopics = 0;
     for (Topic childTopic: topic.getChildren()) {

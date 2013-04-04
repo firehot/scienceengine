@@ -78,7 +78,7 @@ public class Guru extends Group implements ITutor {
     // Guru has no direct user interaction - hence 0 size
     this.setSize(0, 0);
     
-    this.profile = ScienceEngine.getPreferencesManager().getProfile();
+    this.profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     
     this.soundManager = ScienceEngine.getSoundManager();
     this.configGenerator = new ConfigGenerator();

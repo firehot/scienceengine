@@ -65,7 +65,7 @@ public class AbstractScience2DProberTest {
       }    
     });
     ScienceEngine.getAssetManager().finishLoading();
-    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     profile.setCurrentTopic(Topic.Electromagnetism);
     profile.setCurrentActivity(Topic.BarMagnet);
   }

@@ -25,7 +25,7 @@ public class RegistrationDialog extends Dialog {
     name.setWidth(600);
 
     final Label registration = new Label("", skin);
-    profile = ScienceEngine.getPreferencesManager().getProfile();
+    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     final boolean alreadyRegistered = profile.getUserEmail().length() > 0;
     if (alreadyRegistered) {
       registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.Registered") + profile.getUserEmail());

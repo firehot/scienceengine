@@ -403,11 +403,11 @@ public class ScienceEngine extends Game {
   }
 
   public static String getUserEmail() {
-    return preferencesManager.getProfile().getUserEmail();
+    return preferencesManager.getActiveUserProfile().getUserEmail();
   }
 
   public static String getUserName() {
-    return preferencesManager.getProfile().getUserName();
+    return preferencesManager.getActiveUserProfile().getUserName();
   }
 
   public static String getHostPort() {
@@ -433,10 +433,12 @@ public class ScienceEngine extends Game {
 
   public static TextureRegion getTextureRegion(String name) {
     if (USER.equals(name)) {
-      Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+      Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
       Pixmap userPixmap = profile.getUserPixmap();
       if (userPixmap != null) {
-        return new TextureRegion(new Texture(userPixmap));
+        TextureRegion textureRegion = new TextureRegion(new Texture(userPixmap));
+        userPixmap.dispose();
+        return textureRegion;
       }
     }
     for (TextureAtlas atlas: atlasMap.values()) {

@@ -153,7 +153,7 @@ public class Profile implements Serializable {
 
   public String getUserName() {
     String s = properties.get(USER_NAME);
-    return s == null ? "" : s;
+    return s == null ? "Unregistered" : s;
   }
 
   public String getUserEmail() {
@@ -167,7 +167,7 @@ public class Profile implements Serializable {
 
   public void save() {
     properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
-    ScienceEngine.getPreferencesManager().saveProfile();
+    ScienceEngine.getPreferencesManager().saveUserProfile();
   }
   
   public long getLastUpdated() {

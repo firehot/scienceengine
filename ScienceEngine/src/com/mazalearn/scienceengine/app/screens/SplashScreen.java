@@ -2,22 +2,24 @@ package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.services.InstallProfile;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
-import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 /**
  * Shows a splash image and moves on to the next screen.
@@ -70,7 +72,7 @@ public class SplashScreen extends AbstractScreen {
     };
     
     Table userInfo = new Table(getSkin());
-    Profile profile = ScienceEngine.getPreferencesManager().getProfile();
+    Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     final Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     userInfo.add(profile.getUserName()).left();
     userInfo.add(userImage).width(60).height(60);
@@ -99,15 +101,45 @@ public class SplashScreen extends AbstractScreen {
     userInfo.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        boolean multipleUsers = false;
+        final PreferencesManager preferencesManager = ScienceEngine.getPreferencesManager();
+        InstallProfile installProfile = preferencesManager.getInstallProfile();
+        boolean multipleUsers = installProfile.getUserIds() != null;
         if (multipleUsers) {
-          final Dialog loginDialog = new LoginDialog(scienceEngine.getSkin(), new IDoneCallback() {
-              @Override
-              public void done(boolean success) {
+          Table userTable = new Table(getSkin());
+          userTable.setFillParent(false);
+          userTable.defaults().fill();
+          for (final String userId: installProfile.getUserIds()) {
+            final Profile userProfile = preferencesManager.getUserProfile(userId);
+            // precondition: this user has a name and pixmap
+            Label userLabel = new Label(userProfile.getUserName(), getSkin());
+            ClickListener listener = new ClickListener() {
+              public void clicked (InputEvent event, float x, float y) {
+                // change to selected user as active
+                preferencesManager.setActiveUserProfile(userProfile);
                 enterApplication();
               }
-            });
-            loginDialog.show(stage);
+            };
+            Pixmap userPixmap = userProfile.getUserPixmap();
+            Image userImage;
+            if (userPixmap != null) {
+              userImage = new Image(new Texture(userPixmap));
+              userPixmap.dispose();
+            } else {
+              userImage = new Image();
+            }
+            
+            userLabel.addListener(listener);
+            userImage.addListener(listener);
+            userTable.add(userLabel).center();
+            userTable.add(userImage).width(60).height(60);
+            userTable.row();
+            ScrollPane usersPane = new ScrollPane(userTable, getSkin());
+            usersPane.setPosition(50, 50);
+            usersPane.setSize(200, 150);
+            usersPane.setScrollingDisabled(true, false);
+
+            stage.addActor(usersPane);
+          }
         } else {
           new RegistrationDialog(getSkin(), userImage).show(stage);
         }

@@ -14,22 +14,25 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 /**
  * Handles the scienceEngine preferences.
  * Preferences are global across users.
- * Profile is per user - stored as a preference against email address of profile
+ * Profile is per user - stored as a preference against email address of userProfile
  */
 public class PreferencesManager {
+  private static final String SERVER_PROFILE_PREFIX = "SERVER_";
   private static final String SYNC_PROFILES = "syncprofiles";
+  private static final String INSTALL_PROFILE = "installprofile";
   // constants
   private static final String PREF_VOLUME = "volume";
   private static final String PREF_MUSIC_ENABLED = "music.enabled";
   private static final String PREF_SOUND_ENABLED = "sound.enabled";
   // Active user
   private static final String PREFS_NAME = "scienceengine";
-  private Profile profile;
+  private Profile userProfile;
   private Preferences prefs;
+  private InstallProfile installProfile;
 
   public PreferencesManager() {
     prefs = Gdx.app.getPreferences(PREFS_NAME);
-    retrieveProfile();
+    retrieveUserProfile();
   }
 
   public boolean isSoundEnabled() {
@@ -59,27 +62,32 @@ public class PreferencesManager {
     prefs.flush();
   }
   
-  public Profile loadProfile(String userId) {
-    prefs.putString(Profile.USER_ID, userId.toLowerCase());
+  // precondition: userprofile has an email
+  public void setActiveUserProfile(Profile userProfile) {
+    prefs.putString(Profile.USER_ID, userProfile.getUserEmail());
     prefs.flush();
-    return retrieveProfile();
+    this.userProfile = userProfile;
   }
 
-  private Profile retrieveProfile() {
+  private Profile retrieveUserProfile() {
     String userId = getProfileUserId();
-    // Retrieve from local file system
-    String localProfileBase64 = prefs.getString(userId);
-    profile = Profile.fromBase64(localProfileBase64);
+    userProfile = getUserProfile(userId);
+    userProfile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
+    if (userProfile.getUserEmail().length() > 0) {
+      prefs.putString(Profile.USER_ID, userProfile.getUserEmail());
+      prefs.flush();
+    }
+    saveUserProfile();
+
+    return userProfile;
+  }
+
+  public Profile getUserProfile(String userId) {
+    String profileBase64 = prefs.getString(userId);
+    Profile profile = Profile.fromBase64(profileBase64);
     if (profile == null) {
       profile = new Profile();
     }
-    profile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
-    if (profile.getUserEmail().length() > 0) {
-      prefs.putString(Profile.USER_ID, profile.getUserEmail());
-      prefs.flush();
-    }
-    saveProfile();
-
     return profile;
   }
 
@@ -91,11 +99,22 @@ public class PreferencesManager {
     return userId;
   }
 
-  public Profile getProfile() {
-    if (profile != null) {
-      return profile;
+  public Profile getActiveUserProfile() {
+    if (userProfile != null) {
+      return userProfile;
     }
-    return retrieveProfile();
+    return retrieveUserProfile();
+  }
+
+  public InstallProfile getInstallProfile() {
+    if (installProfile == null) {
+      installProfile = InstallProfile.fromBase64((String) prefs.getString(INSTALL_PROFILE));
+      if (installProfile == null) {
+        installProfile = new InstallProfile();
+        installProfile.save();
+      }
+    }
+    return installProfile;
   }
 
   private String getSyncProfilesString() {
@@ -106,21 +125,21 @@ public class PreferencesManager {
   private void setSyncProfilesString(String s) {
     prefs.putString(SYNC_PROFILES, s);
     prefs.flush();
-    Gdx.app.log(ScienceEngine.LOG, "Set sync profile: " + prefs.getString(SYNC_PROFILES));
+    Gdx.app.log(ScienceEngine.LOG, "Set sync userProfile: " + prefs.getString(SYNC_PROFILES));
   }
   
-  public void saveProfile() {
-    saveProfile(profile);
+  public void saveUserProfile() {
+    saveProfile(userProfile);
   }
 
   private void saveProfile(Profile profile) {
-    // convert the given profile to text
+    // convert the given userProfile to text
     String localProfileBase64 = profile.toBase64();
     String userId = getProfileUserId();
-    String serverProfileBase64 = prefs.getString("SERVER_" + userId);
+    String serverProfileBase64 = prefs.getString(SERVER_PROFILE_PREFIX + userId);
     if (serverProfileBase64 != null) {
       profile.mergeProfile(serverProfileBase64);
-      prefs.remove("SERVER_" + userId);
+      prefs.remove(SERVER_PROFILE_PREFIX + userId);
     }
 
     String savedProfile = prefs.getString(userId);
@@ -159,11 +178,11 @@ public class PreferencesManager {
         String localProfileBase64 = prefs.getString(userId);
         postParams.put(Profile.USER_ID, userId);
         try {
-          // Post profile to server and get back updated server profile
+          // Post userProfile to server and get back updated server userProfile
           String serverProfileBase64 =
               ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
                   postParams, localProfileBase64.getBytes());
-          prefs.putString("SERVER_" + userId, serverProfileBase64);
+          prefs.putString(SERVER_PROFILE_PREFIX + userId, serverProfileBase64);
           Gdx.app.log(ScienceEngine.LOG, "Sync Profile to MazaLearn - " + userId);
         } catch(GdxRuntimeException e) {
           if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
@@ -181,5 +200,10 @@ public class PreferencesManager {
     if (syncProfilesString.length() == 0) return;
     ScienceEngine.getPlatformAdapter().executeAsync(new SyncProfiles(syncProfilesString, prefs));
     setSyncProfilesString("");
+  }
+
+  public void saveInstallProfile() {
+    prefs.putString(INSTALL_PROFILE, installProfile.toBase64());
+    prefs.flush();
   }
 }

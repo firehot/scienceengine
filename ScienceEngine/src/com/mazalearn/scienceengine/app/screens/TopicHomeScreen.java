@@ -105,7 +105,7 @@ public class TopicHomeScreen extends AbstractScreen {
     super(scienceEngine);
     this.topic = topic;
     readTopicResourcesInfo();
-    profile = ScienceEngine.getPreferencesManager().getProfile();
+    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     profile.setCurrentTopic(topic);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);

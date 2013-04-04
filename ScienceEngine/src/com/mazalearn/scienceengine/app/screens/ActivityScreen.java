@@ -44,7 +44,7 @@ public class ActivityScreen extends AbstractScreen {
     this.science2DController = 
         createTopicController(topic, level, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     IScience2DView science2DView = science2DController.getView();
-    profile = ScienceEngine.getPreferencesManager().getProfile();
+    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     profile.setCurrentActivity(level);
     if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
       Stage levelEditor = 
