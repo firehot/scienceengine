@@ -28,6 +28,8 @@ public class InstallProfile implements Serializable {
   public static final String INSTALL_ID = "installid";
   public static final String INSTALL_NAME = "installname";
   private static final String LAST_UPDATED = "last_updated";
+  private static final String EXPIRY_DATE = "expirydate";
+  private static final String CONFIGURATION = "configuration";
   
   private HashMap<String, String> properties;
   private String[] userids;

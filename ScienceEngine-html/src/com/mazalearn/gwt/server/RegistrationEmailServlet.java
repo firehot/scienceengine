@@ -12,6 +12,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
+import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
 public class RegistrationEmailServlet extends HttpServlet {
@@ -34,7 +35,7 @@ public class RegistrationEmailServlet extends HttpServlet {
     }
     
     String hash1 = URLEncoder.encode(hash, "UTF-8");
-    String hash2 = RegistrationServlet.getHash(installId, userEmail, userName, timeEmailSent);
+    String hash2 = Crypter.saltedSha1Hash(installId + userEmail + userName + timeEmailSent, installId);
     if (!hash2.equals(hash1)) {
       response.getWriter().append("Invalid registration info for: " + userEmail);
       System.out.println("Invalid registration info for: " + installId + " " + userEmail + " " + userName + " " + timeEmailSent);

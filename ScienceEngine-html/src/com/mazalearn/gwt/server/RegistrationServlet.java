@@ -2,8 +2,6 @@ package com.mazalearn.gwt.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,12 +23,12 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
+import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
 public class RegistrationServlet extends HttpServlet {
 
   public static final long EXPIRY_TIME_MS = 7 * 24 * 3600 * 1000; // 7 days
-  private static final String SALT = "imazalearne";
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -82,7 +80,7 @@ public class RegistrationServlet extends HttpServlet {
         "&e=" + userEmail +
         "&n=" + userName +
         "&t=" + timeEmailSent + 
-        "&h=" + getHash(installId, userEmail, userName, timeEmailSent) + 
+        "&h=" + Crypter.saltedSha1Hash(installId + userEmail + userName + timeEmailSent, installId) + 
         "\n\n-MazaLearn";
 
     try {
@@ -101,17 +99,6 @@ public class RegistrationServlet extends HttpServlet {
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
     }    
-  }
-
-  public static String getHash(String installId, String userEmail, String userName, long timeEmailSent) {
-    try { 
-      MessageDigest md = MessageDigest.getInstance("MD5");
-      String msg = installId + SALT + userEmail + SALT + userName + SALT + timeEmailSent;
-      System.out.println(msg);
-      return URLEncoder.encode(new String(md.digest(msg.getBytes("US-ASCII")), "UTF-8"), "UTF-8");
-    } catch (Exception ex) { 
-    }
-    return null;
   }
 }
 
