@@ -243,10 +243,14 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     helpImage.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x1, float y1) {
+        // TODO: AbstractScience2DView should support getCoreGroup, getActivityGroup, getTutorGroup
+        Actor helpTour = AbstractScience2DView.this.findActor(ScreenComponent.HELP_TOUR.name());
+        if (helpTour != null) return;
         String description = ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
             science2DController.getLevel() + ".Description");
         List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
-        for (Actor actor: getActors()) {
+        Group activityGroup = (Group) findActor(ScreenComponent.ACTIVITY_GROUP);
+        for (Actor actor: activityGroup.getChildren()) {
           if ((actor instanceof Science2DActor)) {
             helpComponents.add((IHelpComponent) actor);
           }

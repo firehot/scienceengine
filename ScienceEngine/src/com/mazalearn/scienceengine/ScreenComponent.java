@@ -26,6 +26,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, -1, Color.YELLOW, false, false),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, -1, Color.YELLOW, false, false), 
   TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 
+  HELP_TOUR(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 
   ;
   
   enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800); 

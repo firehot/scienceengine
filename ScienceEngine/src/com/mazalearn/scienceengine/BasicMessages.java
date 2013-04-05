@@ -77,6 +77,10 @@ class BasicMessages implements IMessage {
     style2.font = font;
     CheckBoxStyle style3 = skin.get(CheckBoxStyle.class);
     style3.font = font;
+    style3 = skin.get("mcq-radio", CheckBoxStyle.class);
+    style3.font = font;
+    style3 = skin.get("mcq-check", CheckBoxStyle.class);
+    style3.font = font;
     SelectBoxStyle style4 = skin.get(SelectBoxStyle.class);
     style4.font = font;
     TextField.TextFieldStyle style5 = skin.get(TextField.TextFieldStyle.class);

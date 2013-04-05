@@ -118,11 +118,12 @@ public class HelpTour extends Group {
   public HelpTour(final Stage stage, Skin skin, String contents, List<IHelpComponent> iHelpComponents) {
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+    this.setName(ScreenComponent.HELP_TOUR.name());
     // Add below Basic Screen
     Actor coreGroup = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
-    stage.getRoot().addActorBefore(coreGroup, this);
+    stage.getRoot().addActorAfter(coreGroup, this);
     
-    Image arrow = new Image(ScienceEngine.getTextureRegion("fieldarrow-yellow"));
+    Image arrow = new Image(ScienceEngine.getTextureRegion("helparrow"));
     arrow.setSize(arrow.getWidth() * 1.5f, arrow.getHeight() * 1.5f);
     addActor(arrow);
     

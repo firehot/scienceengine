@@ -66,16 +66,23 @@ browser
   orig: 64, 64
   offset: 0, 0
   index: -1
-close
+helparrow
   rotate: false
   xy: 131, 245
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+close
+  rotate: false
+  xy: 261, 375
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fieldarrow-yellow
   rotate: false
-  xy: 261, 391
+  xy: 391, 521
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
