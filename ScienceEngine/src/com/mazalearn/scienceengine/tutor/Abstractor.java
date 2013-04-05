@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -32,7 +33,7 @@ public class Abstractor extends AbstractTutor {
   private Map<String, Integer> correctParameters;
   private Image[] life = new Image[3];
   private int numLivesLeft = 3;
-  private TextureRegionDrawable increase, decrease, noeffect;
+  private TextureRegionDrawable increase, decrease, noeffect, question;
   
   public Abstractor(final IScience2DController science2DController, TutorType tutorType, ITutor parent, String goal, 
       String name, Array<?> components, Array<?> configs, Skin skin, 
@@ -47,6 +48,7 @@ public class Abstractor extends AbstractTutor {
     decrease = new TextureRegionDrawable(ScienceEngine.getTextureRegion("fieldarrow-left"));
     noeffect = new TextureRegionDrawable(ScienceEngine.getTextureRegion("cross"));
     increase = new TextureRegionDrawable(ScienceEngine.getTextureRegion("fieldarrow"));
+    question = new TextureRegionDrawable(ScienceEngine.getTextureRegion("questionmark"));
   }
   
   @Override
@@ -79,9 +81,10 @@ public class Abstractor extends AbstractTutor {
     // Shuffle parameters
     Utils.shuffle(configList);
     // Add parameters to table
-    final ChangeOptions changeOptions = new ChangeOptions(guru, decrease, noeffect, increase);
+    TextButton submitButton = createSubmitButton(skin);
+    final ChangeOptions changeOptions = new ChangeOptions(guru, question, submitButton, 
+        configTable.getChildren(), decrease, noeffect, increase);
     this.addActor(changeOptions);
-    TextureRegion question = ScienceEngine.getTextureRegion("questionmark");
     for (final IModelConfig<?> config: configList) {
       configTable.add(config.getName()).left();
       final Image image = new Image(question);
@@ -106,13 +109,14 @@ public class Abstractor extends AbstractTutor {
       lifeTable.add(life[i]).width(ScreenComponent.Idea.getWidth());
     }
     configTable.add(lifeTable).fill().spaceTop(20);
-    configTable.add(createDoneButton(skin)).fill().spaceTop(20);
+    configTable.add(submitButton).fill().spaceTop(20);
     configTable.row();
   }
   
   private static class ChangeOptions extends Table {
     Image img;
-    public ChangeOptions(Guru guru, TextureRegionDrawable... options) {
+    public ChangeOptions(Guru guru, final TextureRegionDrawable question, 
+        final Button submitButton, final Array<Actor> choices, TextureRegionDrawable... options) {
       super(guru.getSkin());
       for (TextureRegionDrawable option: options) {
         final Image opt = new Image(); opt.setDrawable(option);
@@ -121,6 +125,16 @@ public class Abstractor extends AbstractTutor {
             img.setDrawable(opt.getDrawable());
             img.setVisible(true);
             ChangeOptions.this.setVisible(false);
+            boolean disableSubmit = false;
+            for (Actor actor: choices) {
+              if (!(actor instanceof Image)) continue;
+              Image image = (Image) actor;
+              if (image.getDrawable() == question) {
+                disableSubmit = true;
+                break;
+              }
+            }
+            submitButton.setDisabled(disableSubmit);
           }              
         });
         this.add(opt).width(30).height(30).left();
@@ -128,16 +142,20 @@ public class Abstractor extends AbstractTutor {
     }
     
     public void setImage(Image image) {
+      if (this.img != null) {
+        this.img.setVisible(true);
+      }
       this.img = image;
     }
   }
 
-  private TextButton createDoneButton(Skin skin) {
-    TextButton doneButton = new TextButton("Done", skin);
+  private TextButton createSubmitButton(Skin skin) {
+    final TextButton submitButton = new TextButton("Submit", skin);
 
-    doneButton.addListener(new ClickListener() {
+    submitButton.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {
+        if (submitButton.isDisabled()) return;
         Map<String, Integer> chosenParameters = new HashMap<String, Integer>();
         for (Actor actor: configTable.getChildren()) {
           if (!(actor instanceof Image)) continue;
@@ -152,7 +170,8 @@ public class Abstractor extends AbstractTutor {
         systemReadyToFinish(success);
       }
     });
-    return doneButton;
+    submitButton.setDisabled(true);
+    return submitButton;
   }
   
   @Override
