@@ -41,4 +41,6 @@ public interface IScience2DView extends IDoneCallback {
   public ModelControls getModelControls();
   // Get view controls for this view
   ViewControls getViewControls();
+  // show help
+  void showHelp();
 }

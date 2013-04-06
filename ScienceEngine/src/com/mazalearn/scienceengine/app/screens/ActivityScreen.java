@@ -77,6 +77,7 @@ public class ActivityScreen extends AbstractScreen {
     InputProcessor gestureListener = new Science2DGestureDetector((Stage) science2DView);
     Gdx.input.setInputProcessor(new InputMultiplexer(gestureListener, (Stage) science2DView));
     Gdx.app.log(ScienceEngine.LOG, "Set gesture detector");
+    science2DView.showHelp();
   }
   
   @Override

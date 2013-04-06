@@ -46,6 +46,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   private Button goButton;
   private Group coreGroup;
   private Group activityGroup;
+  private ClickListener helpListener;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -128,6 +129,11 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       // Reinitialize level
       science2DController.reset();
     }
+  }
+  
+  @Override
+  public void showHelp() {
+    helpListener.clicked(new InputEvent(), 0, 0);
   }
     
   @Override
@@ -218,8 +224,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     
     this.goButton = createGoButton();
     coreGroup.addActor(goButton);
-    // Help icon
-    coreGroup.addActor(createHelpActor());
+    Actor helpActor = createHelpActor();
+    coreGroup.addActor(helpActor);
     // Add TimeTracker
     Actor timeTracker = new TimeTracker("0", skin);
     coreGroup.addActor(timeTracker);
@@ -240,7 +246,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
 
   private Actor createHelpActor() {
     Image helpImage = new Image(ScienceEngine.getTextureRegion("help"));
-    helpImage.addListener(new ClickListener() {
+    helpListener = new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x1, float y1) {
         Actor helpTour = AbstractScience2DView.this.findActor(ScreenComponent.HELP_TOUR.name());
@@ -261,7 +267,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
         }
         new HelpTour(AbstractScience2DView.this, skin, description, helpComponents);
       }
-    });
+    };
+    helpImage.addListener(helpListener);
     ScreenComponent sc = ScreenComponent.Help;
     helpImage.setPosition(sc.getX(), sc.getY());
     helpImage.setSize(sc.getWidth(), sc.getHeight());
