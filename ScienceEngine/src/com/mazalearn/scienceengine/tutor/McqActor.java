@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.tutor;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -25,7 +24,6 @@ public class McqActor extends Group {
   private McqActor.OptionListener optionListener;
   private TextButton submitButton;
   private ITutor tutor;
-  private TextButton explanation;
   private ButtonGroup optionButtons;
   private final CheckBoxStyle radioButtonStyle, checkBoxStyle;
   
@@ -52,25 +50,10 @@ public class McqActor extends Group {
 
   public McqActor(Skin skin) {
     super();
-    createExplanationArea(skin);
     createSubmitButton(skin);
     this.optionListener = createListener(skin, submitButton);
     this.radioButtonStyle = skin.get("mcq-radio", CheckBoxStyle.class);
     this.checkBoxStyle = skin.get("mcq-check", CheckBoxStyle.class);
-  }
-
-  private void createExplanationArea(Skin skin) {
-    TextureRegion textureRegion = ScienceEngine.getTextureRegion("explanation");
-    explanation = ScreenUtils.createImageButton(textureRegion, skin);
-    explanation.getLabel().setWrap(true);
-    TextButtonStyle tbs = new TextButtonStyle(skin.get(TextButtonStyle.class));
-    tbs.fontColor = Color.BLACK;
-    explanation.setStyle(tbs);
-    explanation.setWidth(250);
-    explanation.setHeight(250);
-    explanation.setPosition(ScreenComponent.Explanation.getX(explanation.getWidth()),
-        ScreenComponent.Explanation.getY(explanation.getHeight()));
-    addActor(explanation);
   }
 
   private OptionListener createListener(Skin skin, TextButton submitButton) {
@@ -113,8 +96,6 @@ public class McqActor extends Group {
     }
     optionButtons.setMaxCheckCount(singleAnswer ? 1 : -1);
     submitButton.setVisible(false);
-    explanation.setText(reason != null ? reason : "");
-    explanation.setVisible(false);
     return optionButtons;
   }
   
@@ -125,9 +106,6 @@ public class McqActor extends Group {
     submitButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         submitButton.setVisible(false);
-        if (explanation.getText().length() > 0) {
-          explanation.setVisible(true);
-        }
         tutor.systemReadyToFinish(false);
       }
     });

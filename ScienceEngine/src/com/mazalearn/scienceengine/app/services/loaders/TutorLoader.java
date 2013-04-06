@@ -41,8 +41,9 @@ class TutorLoader {
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
     String[] hints = loadStringArray("hints", tutorObj);
+    String explanation = (String) tutorObj.get("explanation");
     AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, id,
-        components, configs, (int) successPoints, (int) failurePoints, hints);
+        components, configs, (int) successPoints, (int) failurePoints, hints, explanation);
     if (tutor == null) return null;
     
     if (tutor.getType() instanceof TutorType) {
@@ -75,9 +76,8 @@ class TutorLoader {
   private AbstractTutor makeMcqTutor(OrderedMap<String, ?> tutorObj,
       McqTutor mcqTutor) {
     String answerMask = (String) tutorObj.get("answermask");
-    String explanation = (String) tutorObj.get("explanation");
     String[] options = loadStringArray("options", tutorObj);
-    mcqTutor.initialize(options, explanation, answerMask);
+    mcqTutor.initialize(options, answerMask);
     return mcqTutor;
   }
 

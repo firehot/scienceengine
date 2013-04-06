@@ -103,20 +103,24 @@ public class ElectroMagnetismController extends AbstractScience2DController {
 
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String name,
-      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, 
+      String[] hints, String explanation) {
     TutorType tutorType;
     try {
       tutorType = TutorType.valueOf(type);
     } catch(IllegalArgumentException e) {
-      return super.createTutor(parent, type, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      return super.createTutor(parent, type, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints, explanation);
     }
     switch (tutorType) {
     case FieldMagnitudeProber:
-      return new FieldMagnitudeProber(this, tutorType, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      return new FieldMagnitudeProber(this, tutorType, parent, goal, name, components, 
+          configs, deltaSuccessScore, deltaFailureScore, hints, explanation);
     case FieldDirectionProber:
-      return new FieldDirectionProber(this, tutorType, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      return new FieldDirectionProber(this, tutorType, parent, goal, name, components, 
+          configs, deltaSuccessScore, deltaFailureScore, hints, explanation);
     case LightProber:
-      return new LightProber(this, tutorType, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      return new LightProber(this, tutorType, parent, goal, name, components, configs, 
+          deltaSuccessScore, deltaFailureScore, hints, explanation);
     }
     return null;
   }

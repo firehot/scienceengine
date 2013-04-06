@@ -94,7 +94,8 @@ public class Base64 {
 
           if (n++ >= 14) {
               n = 0;
-              buf.append ("\r\n");
+              // sridhar commented out - why break lines? 
+              // buf.append ("\r\n");
           }
       }
 

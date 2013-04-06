@@ -21,8 +21,9 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
 
   public AbstractScience2DProber(IScience2DController science2DController,
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
-      int successPoints, int failurePoints, String[] hints) {
-    super(science2DController, tutorType, parent, goal, id, components, configs, successPoints, failurePoints, hints);
+      int successPoints, int failurePoints, String[] hints, String explanation) {
+    super(science2DController, tutorType, parent, goal, id, components, configs, 
+        successPoints, failurePoints, hints, explanation);
     // A prober covers the entire screen
     this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }

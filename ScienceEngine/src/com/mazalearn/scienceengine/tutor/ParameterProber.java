@@ -73,8 +73,9 @@ public class ParameterProber extends AbstractScience2DProber {
     
   public ParameterProber(IScience2DController science2DController,
       TutorType tutorType, ITutor parent, String goal, String name, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
-    super(science2DController, tutorType, parent, goal, name, components, configs, deltaSuccessScore, deltaFailureScore, hints);
+      int deltaSuccessScore, int deltaFailureScore, String[] hints, String explanation) {
+    super(science2DController, tutorType, parent, goal, name, components, configs, 
+        deltaSuccessScore, deltaFailureScore, hints, explanation);
     this.image = new ProbeImage();
   }
   

@@ -21,14 +21,13 @@ public class McqTutor extends AbstractTutor {
   private int[] permutation;
 
   private List<String> optionList;
-  private String explanation;
 
   public McqTutor(IScience2DController science2DController, TutorType tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
       Skin skin, int successPoints, int failurePoints, String[] hints,
-      boolean singleAnswer) {
+      String explanation, boolean singleAnswer) {
     super(science2DController, tutorType, parent, goal, id, 
-        components, configs, successPoints, failurePoints, hints);
+        components, configs, successPoints, failurePoints, hints, explanation);
     this.singleAnswer = singleAnswer;
     this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }
@@ -70,9 +69,8 @@ public class McqTutor extends AbstractTutor {
    * @param options
    * @param answerMask - sequence of truth value of options - true = 1, false = 0
    */
-  public void initialize(String[] options, String explanation, String answerMask) {
+  public void initialize(String[] options, String answerMask) {
     this.answerMask = answerMask;
-    this.explanation = explanation;
     this.optionList = Arrays.asList(options);
     this.permutation = Utils.shuffle(optionList);
     
@@ -93,7 +91,7 @@ public class McqTutor extends AbstractTutor {
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);
     McqActor mcqActor = guru.getMcqActor();
-    optionsGroup = mcqActor.setUp(this, optionList, explanation, singleAnswer);
+    optionsGroup = mcqActor.setUp(this, optionList, getExplanation(), singleAnswer);
     addActor(mcqActor);
   }
 }

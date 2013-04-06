@@ -38,8 +38,9 @@ public class Abstractor extends AbstractTutor {
   public Abstractor(final IScience2DController science2DController, TutorType tutorType, ITutor parent, String goal, 
       String name, Array<?> components, Array<?> configs, Skin skin, 
       ModelControls modelControls, int successPoints,
-      int failurePoints, String[] hints) {
-    super(science2DController, tutorType, parent, goal, name, components, configs, successPoints, failurePoints, hints);
+      int failurePoints, String[] hints, String explanation) {
+    super(science2DController, tutorType, parent, goal, name, components, configs, 
+        successPoints, failurePoints, hints, explanation);
     this.skin = skin;
     this.modelControls = modelControls;
     /* Abstractor allows user to interact with bodies on screen as well as its

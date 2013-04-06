@@ -13,12 +13,14 @@ import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -27,6 +29,7 @@ import com.mazalearn.scienceengine.app.services.AggregatorFunction;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.IFunction;
@@ -67,6 +70,7 @@ public class Guru extends Group implements ITutor {
   private TutorNavigator tutorNavigator;
   private McqActor mcqActor;
   private Profile profile;
+  private TextButton explanation;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
@@ -97,6 +101,7 @@ public class Guru extends Group implements ITutor {
     
     hinter = new Hinter(skin);
     this.addActor(hinter);
+    this.addActor(explanation = createExplanation(skin));
     
     this.scoreboard = (Scoreboard) science2DController.getView().findActor(ScreenComponent.Scoreboard.name());;
     timeTracker = (TimeTracker) science2DController.getView().findActor(ScreenComponent.TimeTracker.name());
@@ -114,10 +119,24 @@ public class Guru extends Group implements ITutor {
     return activeTutor;
   }
 
+  private TextButton createExplanation(Skin skin) {
+    TextureRegion textureRegion = ScienceEngine.getTextureRegion("explanation");
+    TextButton explanation = ScreenUtils.createImageButton(textureRegion, skin);
+    explanation.getLabel().setWrap(true);
+    TextButtonStyle tbs = new TextButtonStyle(skin.get(TextButtonStyle.class));
+    tbs.fontColor = Color.BLACK;
+    explanation.setStyle(tbs);
+    explanation.setWidth(250);
+    explanation.setHeight(250);
+    explanation.setPosition(ScreenComponent.Explanation.getX(explanation.getWidth()),
+        ScreenComponent.Explanation.getY(explanation.getHeight()));
+    return explanation;
+  }
+
   public ITutor getRootTutor() {
     if (rootTutor == null) {
       this.rootTutor = new TutorGroup(science2DController, TutorType.Guide, this, goal, ROOT_ID,
-          null, null, 0, 0, null);
+          null, null, 0, 0, null, null);
       this.addActor(rootTutor);      
     }
     return rootTutor;
@@ -447,6 +466,14 @@ public class Guru extends Group implements ITutor {
 
   public void showNextButton(boolean show) {
     tutorNavigator.showNextButton(show);
+    if (show) {
+      if (activeTutor.getExplanation() != null) {
+        explanation.setText(activeTutor.getExplanation());
+        explanation.setVisible(true);
+      }
+    } else {
+      explanation.setVisible(false);
+    }
   }
 
   public McqActor getMcqActor() {
@@ -467,5 +494,10 @@ public class Guru extends Group implements ITutor {
 
   public Skin getSkin() {
     return skin;
+  }
+
+  @Override
+  public String getExplanation() {
+    return null;
   }
 }

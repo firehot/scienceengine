@@ -29,6 +29,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected State state = State.Constructed;
   private int successPoints;
   private int failurePoints;
+  private String explanation;
 
   /**
    * State Machine
@@ -49,7 +50,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
    */
   public AbstractTutor(IScience2DController science2DController,
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
-      int successPoints, int failurePoints, String[] hints) {
+      int successPoints, int failurePoints, String[] hints, String explanation) {
     this.tutorType = tutorType;
     this.parent = parent;
     this.science2DController = science2DController;
@@ -60,6 +61,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.successPoints = successPoints;
     this.failurePoints = failurePoints;
     this.hints = hints;
+    this.explanation = explanation;
     this.guru = science2DController.getGuru();
     this.stats = guru.getProfile().getStats(id);
     this.setVisible(false);
@@ -80,6 +82,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
     }
   }
   
+  @Override
+  public String getExplanation() {
+    return explanation;
+  }
   /**
    * Did this specific instance of the tutor end with success?
    * @return

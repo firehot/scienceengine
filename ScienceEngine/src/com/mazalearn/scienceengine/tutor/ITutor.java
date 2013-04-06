@@ -141,4 +141,10 @@ public interface ITutor {
    * Abort current tutor - in whatever state it is.
    */
   public void abort();
+
+  /**
+   * Explanation for the specific thing taught by tutor, if any - may be null
+   * @return
+   */
+  String getExplanation();
 }
