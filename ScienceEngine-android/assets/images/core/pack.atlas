@@ -3,51 +3,58 @@ pack.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+helpcloud
+  rotate: false
+  xy: 1, 581
+  size: 613, 423
+  orig: 613, 423
+  offset: 0, 0
+  index: -1
 rightscroll
   rotate: false
-  xy: 1, 327
+  xy: 1, 67
   size: 128, 512
   orig: 128, 512
   offset: 0, 0
   index: -1
 go
   rotate: false
-  xy: 131, 539
+  xy: 616, 704
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 help
   rotate: false
-  xy: 1, 197
+  xy: 131, 451
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 lock
   rotate: false
-  xy: 131, 409
+  xy: 131, 321
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 1, 67
+  xy: 261, 451
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 user
   rotate: false
-  xy: 131, 279
+  xy: 131, 191
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 videoplay
   rotate: false
-  xy: 261, 409
+  xy: 261, 321
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -61,28 +68,28 @@ back
   index: -1
 browser
   rotate: false
-  xy: 433, 775
+  xy: 616, 638
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 helparrow
   rotate: false
-  xy: 131, 245
-  size: 64, 32
-  orig: 64, 32
+  xy: 918, 974
+  size: 64, 30
+  orig: 64, 30
   offset: 0, 0
   index: -1
 close
   rotate: false
-  xy: 261, 375
+  xy: 391, 547
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fieldarrow-yellow
   rotate: false
-  xy: 391, 521
+  xy: 131, 173
   size: 32, 16
   orig: 32, 16
   offset: 0, 0

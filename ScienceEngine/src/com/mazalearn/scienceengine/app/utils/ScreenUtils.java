@@ -194,4 +194,19 @@ public class ScreenUtils {
     thumbnail.addActor(percentLabel);
   }
 
+  public static TextButton createImageMessageBox(Skin skin, String textureName) {
+    TextureRegion textureRegion = ScienceEngine.getTextureRegion(textureName);
+    TextButton explanation = createImageButton(textureRegion, skin);
+    explanation.getLabel().setWrap(true);
+    explanation.getCell(explanation.getLabel()).pad(80, 40, 70, 40);
+    TextButtonStyle tbs = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
+    tbs.fontColor = Color.BLACK;
+    explanation.setStyle(tbs);
+    explanation.setWidth(250);
+    explanation.setHeight(250);
+    explanation.setPosition(ScreenComponent.ImageMessageBox.getX(explanation.getWidth()),
+        ScreenComponent.ImageMessageBox.getY(explanation.getHeight()));
+    return explanation;
+  }
+
 }

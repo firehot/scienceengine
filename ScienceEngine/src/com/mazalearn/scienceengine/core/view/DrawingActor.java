@@ -25,7 +25,7 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 public class DrawingActor extends Actor {
-  private static final int LINE_WIDTH = 4;
+  private static final int LINE_WIDTH = 5;
   private static final int SCALE = 4;
   private static final int FACE_HEIGHT = 64;
   private static final int FACE_WIDTH = 64;

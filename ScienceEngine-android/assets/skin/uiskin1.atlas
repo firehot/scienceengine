@@ -64,6 +64,14 @@ default-round
   orig: 12, 20
   offset: 0, 0
   index: -1
+clear-round
+  rotate: false
+  xy: 60, 5
+  size: 12, 20
+  split: 5, 5, 5, 4
+  orig: 12, 20
+  offset: 0, 0
+  index: -1
 mcq-round-down
   rotate: false
   xy: 78, 7

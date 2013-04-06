@@ -143,7 +143,7 @@ public interface ITutor {
   public void abort();
 
   /**
-   * Explanation for the specific thing taught by tutor, if any - may be null
+   * ImageMessageBox for the specific thing taught by tutor, if any - may be null
    * @return
    */
   String getExplanation();

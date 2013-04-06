@@ -65,26 +65,22 @@ class BasicMessages implements IMessage {
     }
     skin.add(language, font);
   
-    TextButtonStyle style1 = skin.get(TextButtonStyle.class);
-    style1.font = font;
-    style1 = skin.get("toggle", TextButtonStyle.class);
-    style1.font = font;
-    style1 = skin.get("body", TextButtonStyle.class);
-    style1.font = font;
-    style1 = skin.get("mcq", TextButtonStyle.class);
-    style1.font = font;
-    LabelStyle style2 = skin.get(LabelStyle.class);
-    style2.font = font;
-    CheckBoxStyle style3 = skin.get(CheckBoxStyle.class);
-    style3.font = font;
-    style3 = skin.get("mcq-radio", CheckBoxStyle.class);
-    style3.font = font;
-    style3 = skin.get("mcq-check", CheckBoxStyle.class);
-    style3.font = font;
-    SelectBoxStyle style4 = skin.get(SelectBoxStyle.class);
-    style4.font = font;
-    TextField.TextFieldStyle style5 = skin.get(TextField.TextFieldStyle.class);
-    style5.font = font;
+    
+    for (TextButtonStyle style: skin.getAll(TextButtonStyle.class).values()) {
+      style.font = font;
+    }
+    for (LabelStyle style: skin.getAll(LabelStyle.class).values()) {
+      style.font = font;
+    }
+    for (CheckBoxStyle style: skin.getAll(CheckBoxStyle.class).values()) {
+      style.font = font;
+    }
+    for (SelectBoxStyle style: skin.getAll(SelectBoxStyle.class).values()) {
+      style.font = font;
+    }
+    for (TextField.TextFieldStyle style: skin.getAll(TextField.TextFieldStyle.class).values()) {
+      style.font = font;
+    }
     skin.add("default-font", font);
   }
 }

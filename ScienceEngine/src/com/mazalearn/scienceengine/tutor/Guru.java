@@ -13,14 +13,12 @@ import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -101,7 +99,7 @@ public class Guru extends Group implements ITutor {
     
     hinter = new Hinter(skin);
     this.addActor(hinter);
-    this.addActor(explanation = createExplanation(skin));
+    this.addActor(explanation = ScreenUtils.createImageMessageBox(skin, "explanation"));
     
     this.scoreboard = (Scoreboard) science2DController.getView().findActor(ScreenComponent.Scoreboard.name());;
     timeTracker = (TimeTracker) science2DController.getView().findActor(ScreenComponent.TimeTracker.name());
@@ -117,20 +115,6 @@ public class Guru extends Group implements ITutor {
   
   public ITutor getActiveTutor() {
     return activeTutor;
-  }
-
-  private TextButton createExplanation(Skin skin) {
-    TextureRegion textureRegion = ScienceEngine.getTextureRegion("explanation");
-    TextButton explanation = ScreenUtils.createImageButton(textureRegion, skin);
-    explanation.getLabel().setWrap(true);
-    TextButtonStyle tbs = new TextButtonStyle(skin.get(TextButtonStyle.class));
-    tbs.fontColor = Color.BLACK;
-    explanation.setStyle(tbs);
-    explanation.setWidth(250);
-    explanation.setHeight(250);
-    explanation.setPosition(ScreenComponent.Explanation.getX(explanation.getWidth()),
-        ScreenComponent.Explanation.getY(explanation.getHeight()));
-    return explanation;
   }
 
   public ITutor getRootTutor() {

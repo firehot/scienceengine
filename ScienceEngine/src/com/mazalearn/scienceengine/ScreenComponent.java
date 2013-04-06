@@ -22,7 +22,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, -15, 0, 0, -1, Color.BLACK, false, false),
   Idea(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 60, -1, Color.BLACK, false, false),
   NextButton(XAlign.CENTER, 108, YAlign.TOP, -70, 0, 0, -1, Color.CLEAR, false, false), 
-  Explanation(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, false), 
+  ImageMessageBox(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, -1, Color.YELLOW, false, false),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, -1, Color.YELLOW, false, false), 
   TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 

@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 public class HelpTour extends Group {
   
@@ -30,7 +31,7 @@ public class HelpTour extends Group {
   }
   
   public static class NextOnClick extends ClickListener {
-    protected static final int SCALE = 40;
+    protected static final int SCALE = 60;
     private final TextButton contentButton;
     private String content;
     int currentComponent = 0;
@@ -59,8 +60,8 @@ public class HelpTour extends Group {
       contentButton.setText(text);
       // Set size in a 3:1 aspect ratio
       float semiPerimeter = (float) Math.sqrt(text.length());
-      float h = semiPerimeter * SCALE / 3 + 30; // To hold Buttons
-      float w = semiPerimeter * SCALE * 3 / 4;
+      float h = semiPerimeter * SCALE / 4 + 30; // To hold Buttons
+      float w = semiPerimeter * SCALE * 3 / 4 + 40;
       ScreenComponent.scaleSize(contentButton, w, h);
       contentButton.setSize(w, h);
       contentButton.getLabel().setAlignment(Align.center, Align.left);
@@ -105,7 +106,7 @@ public class HelpTour extends Group {
                 arrow.setVisible(true);
                 arrow.setRotation(pos.angle());
                 arrow.setPosition(helpComponent.getX() + helpComponent.getWidth() / 2 - arrow.getWidth() * MathUtils.cosDeg(pos.angle()) * 2,
-                    helpComponent.getY() + helpComponent.getHeight() / 2 - arrow.getHeight() * MathUtils.sinDeg(pos.angle()) * 2);
+                    helpComponent.getY() + helpComponent.getHeight() / 2 - arrow.getHeight() * MathUtils.sinDeg(pos.angle()) * 4);
                 setContent(text, arrow.getX(), arrow.getY(), pos.angle());
               }
               return true;
@@ -121,7 +122,7 @@ public class HelpTour extends Group {
     this.setName(ScreenComponent.HELP_TOUR.name());
     // Add below Basic Screen
     Actor coreGroup = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
-    stage.getRoot().addActorAfter(coreGroup, this);
+    stage.getRoot().addActorBefore(coreGroup, this);
     
     Image arrow = new Image(ScienceEngine.getTextureRegion("helparrow"));
     arrow.setSize(arrow.getWidth() * 1.5f, arrow.getHeight() * 1.5f);
@@ -136,7 +137,8 @@ public class HelpTour extends Group {
       }      
     });
     contents = contents + "\n\n\n\n";
-    final TextButton contentButton = new TextButton(contents, skin);
+    final TextButton contentButton = ScreenUtils.createImageMessageBox(skin, "helpcloud");
+        //new TextButton(contents, skin);
     contentButton.getLabel().setWrap(true);
     contentButton.addListener(new DragListener() {
       public void touchDragged (InputEvent event, float x, float y, int pointer) {
