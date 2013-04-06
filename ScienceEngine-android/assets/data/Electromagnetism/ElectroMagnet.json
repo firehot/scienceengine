@@ -26,6 +26,7 @@ tutors:[
           goal: "Make the compass go through one complete rotation",
          hints: ["What happens to the compass when it moves around the electromagnet?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+         explanation: "A compass is a free magnet. Its North is attracted to the Electro Magnet's South pole",
          success: 1000,
          components:[{type:"Compass", visible: true}]
          }]
@@ -41,18 +42,21 @@ tutors:[
         {type: "KnowledgeUnit",
           id: "Magnetic Field",
           goal: "Touch the screen in many places around the electromagnet to see the field.",
+         explanation: "The field due to an Electromagnet is very similar to that due to a bar magnet",
          postcondition: "FieldMeter.Count >= 10",
          success: 250
          },
           {type: "KnowledgeUnit",
           id: "Move Electromagnet",
           goal: "Move the electromagnet. See how the field changes.",
+         explanation: "When the magnet moves, its magnetic field moves along with it.",
          postcondition: "FieldMeter.Count >= 10 and Count(ElectroMagnet.Move) >= 1",
          success: 250
          },
          {type: "KnowledgeUnit",
           id: "Current Direction Change",
           goal: "Change the current direction. See how the field changes.",
+         explanation: "When the current direction changes, the magnetic field also changes direction.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentDirection) >= 1",
          components:[{type:"CurrentSource", pin: true}],
          success: 250
@@ -60,6 +64,7 @@ tutors:[
          {type: "KnowledgeUnit",
           id: "Max Current Change",
           goal: "Change the max current. See how the field changes.",
+         explanation: "As the current increases, the strength of the magnetic field increases.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.MaxCurrent) >= 1",
          components:[{type:"CurrentSource", pin: true}],
          success: 250
@@ -67,6 +72,7 @@ tutors:[
          {type: "KnowledgeUnit",
           id: "AC Current and Field",
           goal: "Change the current type to AC. See how the field changes",
+         explanation: "When the current alternates, the electromagnet's magnetic field also alternates.",
          components:[{type:"CurrentSource", pin: true}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.CurrentType) >= 1",
          success: 250
@@ -80,6 +86,9 @@ tutors:[
             id: "Field Magnitude",
             goal: "Touch one of the two ? where the magnetic field is stronger",
             timelimit: 10,
+            hints: ["The field is stronger closer to the poles of the magnet",
+                    "The field is stronger if the current strength is larger"],
+            explanation: "The field is stronger closer to the poles of the magnet. The field also becomes stronger if the current strength is larger",
             success: 100,
             failure: 50,
             components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}]
@@ -90,6 +99,7 @@ tutors:[
             timelimit: 10,
             success: 100,
             failure: 50,
+            explanation: "The direction of the field arrow at a point is away from the North Pole and towards the South Pole of the magnet. The nearer pole affects it more.",
             components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}]
             }
         ]},

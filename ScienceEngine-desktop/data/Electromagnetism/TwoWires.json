@@ -31,6 +31,7 @@ tutors:[
           goal: "Make the compass go through one complete rotation",
          hints: ["What happens to the compass when it moves around the wire?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+         explanation: "As the compass goes around the wire, it indicates that the magnetic field keeps changing direction.",
          components:[{type:"Compass", visible: true}],
          success: 1000
          }]
@@ -50,6 +51,7 @@ tutors:[
          goal: "Move the wire and see how the field changes",
          hints: ["To see the field, click on the screen around the wires"],
          postcondition: "FieldMeter.Count >= 10 and Count(Wire.1.Move) >= 1",
+         explanation: "The magnetic field around the wire is in the form of concentric circles.",
          success: 200
          },
          {type: "KnowledgeUnit",
@@ -57,6 +59,7 @@ tutors:[
          goal: "Change max DC current. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
          components:[{type:"CurrentSource.1", pin: true}],
+         explanation: "The magnetic field gets stronger when current increases.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          success: 200
          },
@@ -64,6 +67,7 @@ tutors:[
          id: "G2.5",
          goal: "Change DC current direction. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
+         explanation: "The magnetic field reverses direction when current direction is changed.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentDirection) >=  1",
          components:[{type:"CurrentSource.1", pin: true}],
          success: 200
@@ -73,6 +77,7 @@ tutors:[
          goal: "Change max AC current. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
+         explanation: "As the current varies in magnitude and direction, the magnetic field due to the wire also varies.",
          components:[{type:"CurrentSource.1", pin: true}],
          success: 200
          },
@@ -81,6 +86,7 @@ tutors:[
          goal: "Change AC current frequency. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentFrequency) >= 1",
+         explanation: "The magnetic field around the wire varies with the same frequency as the current frequency.",
          components:[{type:"CurrentSource.1", pin: true}],
          success: 200
          }
@@ -102,6 +108,7 @@ tutors:[
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC"},
                    {name:"CurrentSource.2.CurrentType", value:"DC"}],
          postcondition: "FieldMeter.Count >= 10 and Count(Wire.1.Move) >= 1 and Count(Wire.2.Move) >= 1",
+         explanation: "The magnetic fields due to the two wires add up at each point.",
          success: 200
          },
          {type: "KnowledgeUnit",
@@ -110,6 +117,7 @@ tutors:[
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
          components:[{type:"CurrentSource.1", pin: true}, {type:"CurrentSource.2", pin: false}],
+         explanation: "When the current in one wire is increased, the magnetic field also increases.",
          success: 200
          },
          {type: "KnowledgeUnit",
@@ -117,6 +125,7 @@ tutors:[
           goal: "Change DC current direction for CurrentSource 1. See how the field changes.",
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentDirection) >= 1",
+         explanation: "When the current in one wire is reversed, its contribution to the magnetic field is also reversed.",
          components:[{type:"CurrentSource.1", pin: true}, {type:"CurrentSource.2", pin: false}],
          success: 200
          },
@@ -125,6 +134,7 @@ tutors:[
           goal: "Change max AC current for CurrentSource 1. See how the field changes.",
           configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.MaxCurrent) >= 1",
+         explanation: "When the current in one wire is alternating, its magnetic field alternates and adds to the magnetic field due to the other wire.",
          components:[{type:"CurrentSource.1", pin: true}, {type:"CurrentSource.2", pin: false}],
          success: 200
          },
@@ -133,6 +143,7 @@ tutors:[
           configs: [{name:"CurrentSource.1.CurrentType", value:"AC", permitted: false}],
           goal: "Change AC current frequency for CurrentSource 1. See how the field changes.",
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentFrequency) >= 1",
+         explanation: "The magnetic field for that wire alternates in tune with the changing frequency and adds to the magnetic field due to the other wire.",
          components:[{type:"CurrentSource.1", pin: true}, {type:"CurrentSource.2", pin: false}],
          success: 200
          },
@@ -165,6 +176,7 @@ tutors:[
             hints: ["The field is the sum of the fields of the two wires.",
                     "The field is stronger if the current strength is larger"],
             components:[{type:"Compass", visible: true},{type:"Wire.1", move:"None"},{type:"Wire.2",move:"None"}],
+            explanation: "The field at any point is the sum of the fields due to the two wires.",
             timelimit: 10,
             success: 100,
             failure: 50
@@ -219,10 +231,10 @@ tutors:[
                    "repel each other", 
                    "not affect each other",
                    "attract, then repel each other"],
-          answermask: "1000"
+          answermask: "0100"
           },
          {type: "MCQ1",
-          id: "R3.8",
+          id: "R3.5",
           goal:"What condition is necessary for an electric charge to have a magnetic field around it?",
           options:["it must be in a copper wire", 
                    "it must be isolated from the opposite charge", 
@@ -241,13 +253,39 @@ tutors:[
           answermask: "0100"
           },
          {type: "MCQ",
-          id: "R3.5",
+          id: "R3.7",
           goal:"The direction of magnetic field at a point near an infinite current carrying wire",
           options:["Curl right hand into a fist placed along the wire with thumb in direction of current. The magnetic field is given by the curling fingers.", 
                    "Is tangential to a circle drawn to touch the point with center at the wire", 
                    "Given by Fleming's left hand rule",
                    "Given by Flemings right hand rule"],
           answermask: "1100"
+          },
+         {type: "MCQ1",
+          id: "R3.8",
+          goal:"Two identical parallel wires are carrying different currents in the same direction. The magnetic field around the wire - ",
+          options:["is larger for the wire with larger current", 
+                   "is smaller for the wire with larger current", 
+                   "is the same for both wires"],
+          answermask: "100"
+          },
+         {type: "MCQ1",
+          id: "R3.9",
+          goal:"For an infinite current carrying wire, the magnetic field around the wire ",
+          options:["is parallel to the wire", 
+                   "increases with distance from the wire", 
+                   "is in the direction of the current",
+                   "circles the wire"],
+          answermask: "0001"
+          },
+         {type: "MCQ",
+          id: "R3.10",
+          goal:"For a twisted pair of infinite wires carrying equal current in opposite directions, the magnetic field around the wires ",
+          options:["is negligible", 
+                   "increases with distance from the wire", 
+                   "cancels out",
+                   "decreases when current increases"],
+          answermask: "1010"
           }
      ]}
    ]

@@ -24,7 +24,7 @@ tutors:[
          hints: ["What happens to the compass when it moves around the magnet?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
          success: 1000,
-         explanation: "A compass is a free magnet. Its North is attracted to the Bar Magnet's North pole",
+         explanation: "A compass is a free magnet. Its North is attracted to the Bar Magnet's South pole",
          components:[{type:"Compass", visible: true}]
          }]
        },
