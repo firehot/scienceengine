@@ -1,11 +1,8 @@
 package com.mazalearn.scienceengine.tutor;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -62,7 +59,6 @@ public class DummyController implements IScience2DController {
   @Override
   public Guru getGuru() {
     if (guru == null) {
-      Stage stage = (Stage) science2DView;
       guru = new Guru(skin, this, this.getTitle());
     }
     return guru;
@@ -71,7 +67,7 @@ public class DummyController implements IScience2DController {
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal,
       String name, Array<?> components, Array<?> configs,
-      int deltaSuccessScore, int deltaFailureScore, String[] hints) {
+      int deltaSuccessScore, int deltaFailureScore, String[] hints, String explanation) {
     return null;
   }
 

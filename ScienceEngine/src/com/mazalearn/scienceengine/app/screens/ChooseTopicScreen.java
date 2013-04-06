@@ -76,10 +76,11 @@ public class ChooseTopicScreen extends AbstractScreen {
       Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic, topic.getCanonicalChild(), 1);
       TextButton topicThumb = 
           ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin());
+      ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       if (lock) {
         Image lockImage = new Image(overlayLock);
-        lockImage.setPosition(THUMBNAIL_WIDTH / 2 - lockImage.getWidth() / 2,
-            THUMBNAIL_HEIGHT / 2 - lockImage.getHeight() / 2);
+        lockImage.setPosition(topicThumb.getWidth() / 2 - lockImage.getWidth() / 2,
+            topicThumb.getHeight() / 2 - lockImage.getHeight() / 2);
         topicThumb.addActor(lockImage);
       } else {
         int progressPercentage = findTopicProgressPercentage(topic);
@@ -107,7 +108,6 @@ public class ChooseTopicScreen extends AbstractScreen {
         }
 
       });
-      ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       Table levelTable = new Table(getSkin());
       levelTable.setName("Level");
       levelTable.add(topic.name());

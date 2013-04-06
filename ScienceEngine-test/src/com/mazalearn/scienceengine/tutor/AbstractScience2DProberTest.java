@@ -40,7 +40,7 @@ public class AbstractScience2DProberTest {
   public AbstractScience2DProberTest() {
     prober = new FieldMagnitudeProber(science2DController,
       TutorType.FieldMagnitudeProber, null, "goal", "id", null, null,
-      0, 0, new String[] {});
+      0, 0, new String[] {}, null);
   }
   
   @BeforeClass
