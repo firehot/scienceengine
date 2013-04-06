@@ -57,6 +57,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>InstallProfileServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.InstallProfileServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>RegistrationEmailServlet</servlet-name>
     <servlet-class>com.mazalearn.gwt.server.RegistrationEmailServlet</servlet-class>
   </servlet>
@@ -99,6 +104,10 @@
   <servlet-mapping>
     <servlet-name>ProfileServlet</servlet-name>
     <url-pattern>/profile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>InstallProfileServlet</servlet-name>
+    <url-pattern>/installprofile</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>RegistrationEmailServlet</servlet-name>

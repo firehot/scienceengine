@@ -33,7 +33,7 @@ public class Profile implements Serializable {
   public static final String USER_ID = "userid"; // readonly
   private static final String USER_NAME = "username"; // readonly
   public static final String INSTALL_ID = "installid";
-  private static final String LAST_UPDATED = "last_updated";
+  public static final String LAST_UPDATED = "last_updated";
   private static final String CURRENT = "current";
   private static final String COLOR = "color";
   private static final String PLATFORM = "platform";
@@ -231,7 +231,7 @@ public class Profile implements Serializable {
   public void saveStats(float[] stats, String tutorId) {
     String tutorKey = makeTutorKey(getCurrentActivity(), tutorId);
     currentTopicStats.put(tutorKey, stats);
-    save();
+    // save here makes it very slow -- save();
   }
 
   public void setPlatform(Platform platform) {

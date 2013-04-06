@@ -39,7 +39,7 @@ public class Crypter {
     return sha1Hash(id + SALT + toHash + id + SALT);
   }
 
-  public static String hexlate (byte[] bytes) {
+  private static String hexlate (byte[] bytes) {
     if (bytes == null) return "";
 
     int count = bytes.length;

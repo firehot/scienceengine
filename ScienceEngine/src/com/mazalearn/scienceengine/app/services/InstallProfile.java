@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.utils.Crypter;
 
 /**
  * The installation profile.
@@ -50,7 +51,7 @@ public class InstallProfile implements Serializable {
       properties = new HashMap<String,String>();
       properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
     }
-    userids = json.readValue("userids", String[].class, new String[]{}, jsonData);
+    userids = json.readValue("userids", String[].class, (String[]) null, jsonData);
   }
 
   @Override
@@ -100,20 +101,35 @@ public class InstallProfile implements Serializable {
     return properties.get(INSTALL_NAME);
   }
 
-  public static InstallProfile fromBase64(String profileBase64) {
-    InstallProfile profile = null;
-    if (profileBase64 != null && profileBase64.length() > 0) {
-      // decode the contents - base64 encoded
+  public static InstallProfile fromBase64(String profileBase64AndHash) {
+    InstallProfile installProfile = null;
+    if (profileBase64AndHash != null && profileBase64AndHash.length() > 0) {
+      // decode the contents - hash is last 40 bytes
+      String profileBase64 = profileBase64AndHash.substring(0, profileBase64AndHash.length() - 40);
+      String hashReceived = profileBase64AndHash.substring(profileBase64AndHash.length() - 40);
+      // Verify hash
+      String installId = ScienceEngine.getPlatformAdapter().getInstallationId();
+      String hashCalculated = Crypter.saltedSha1Hash(profileBase64, installId);
+      if (!hashCalculated.equals(hashReceived)) {
+        Gdx.app.error(ScienceEngine.LOG, "Hash mismatch: " + hashCalculated + " " + hashReceived);
+        return null;
+      }
       String profileJson = Base64Coder.decodeString(profileBase64);
       try {
-        profile = new Json().fromJson(InstallProfile.class, profileJson);
+        installProfile = new Json().fromJson(InstallProfile.class, profileJson);
+        // verify the installid
+        if (!installId.equals(installProfile.getInstallationId())) {
+          Gdx.app.error(ScienceEngine.LOG, "Install id mismatch");
+          return null;
+        }
+        
       } catch (SerializationException s) {
         Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + s.getMessage() + "\n" + profileJson);
       } catch (IllegalArgumentException s) {
         Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + s.getMessage() + "\n" + profileJson);
       }
     }
-    return profile;
+    return installProfile;
   }
 
   public String toBase64() {

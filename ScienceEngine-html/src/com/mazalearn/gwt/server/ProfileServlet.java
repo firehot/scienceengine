@@ -40,6 +40,7 @@ public class ProfileServlet extends HttpServlet {
   public static final String REGN_DATE = "regndate"; // owner
   public static final String INSTALL_ID = "installid";
   public static final String PIN = "pin"; // readonly
+  public static final String LAST_UPDATED = "last_updated";
   // The profileId in a user entity forwards to the right profile.
   public static final String NEW_USER_ID = "newuserid"; // email verification is the owner
   public static final String OLD_USER_ID = "olduserid"; // email verification is the owner

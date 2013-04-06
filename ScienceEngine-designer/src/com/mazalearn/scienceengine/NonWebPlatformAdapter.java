@@ -114,7 +114,12 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       }
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
-      wr.writeBytes("GET " + hostPort + path + " HTTP/1.0\r\n\r\n");
+      // TODO: why this anomaly between local and production servers? apphosting?
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) { 
+        wr.writeBytes("GET " + path + " HTTP/1.0\r\n\r\n");
+      } else {
+        wr.writeBytes("GET " + hostPort + path + " HTTP/1.0\r\n\r\n");
+      }
       wr.flush();
       Gdx.app.log(ScienceEngine.LOG, "GET " + hostPort + path);
       String responseStr = getResponseBody(socket.getInputStream());
@@ -123,7 +128,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not get " + hostPort + path);
       if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
-      return "";
+      throw new GdxRuntimeException(e);
     } finally {
       if (socket != null) {
         socket.dispose();
