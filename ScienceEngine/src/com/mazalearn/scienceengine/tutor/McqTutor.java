@@ -71,6 +71,9 @@ public class McqTutor extends AbstractTutor {
    */
   public void initialize(String[] options, String answerMask) {
     this.answerMask = answerMask;
+    for (int i = 0; i < options.length; i++) {
+      options[i] = options[i].substring(0,1).toUpperCase() + options[i].substring(1);
+    }
     this.optionList = Arrays.asList(options);
     this.permutation = Utils.shuffle(optionList);
     

@@ -38,7 +38,7 @@ public class FieldMeterActor extends Science2DActor {
     this.removeListener(getListeners().get(0)); // help listener
     this.removeListener(getListeners().get(0)); // move, rotate listener
     
-    this.addListener(new ClickListener() {   
+    this.addListener(new ClickListener() {      
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         if (fieldMeter.getSampleMode() == SampleMode.Uniform) return;

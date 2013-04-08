@@ -201,7 +201,16 @@ tutors: [
           answermask: "0001",
           explanation: "By Lenz's law, direction of induced emf opposes change in flux - if flux is increasing, it tries to decrease it and vice versa."
           },
-          
+         {type: "MCQ1",
+          id: "6.11",
+          goal:"If I stand on Earth and move a coil back and forth, what will happen?",
+          options:["current is induced in coil due to the Earth's magnetic field", 
+                   "coil becomes magnetic due to Earth's magnetic field", 
+                   "voltage is induced in the coil due to Earth's magnetic field",
+                   "no current or voltage is induced in the coil"],
+          answermask: "0001",
+          explanation: "Current is induced only where is a change in the magnetic flux passing through the coil."
+          }
           ]
        }
    ]

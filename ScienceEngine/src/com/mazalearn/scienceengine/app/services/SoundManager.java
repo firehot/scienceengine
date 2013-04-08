@@ -23,6 +23,7 @@ public class SoundManager implements
     FAILURE("sound/failure.mp3"),
     CELEBRATE("sound/celebrate.mp3"),
     RAPID_FIRE("sound/rapidfire.mp3"),
+    CHIME("sound/chime.mp3"),
     CHALLENGE("sound/challenge.mp3");
 
     private final String fileName;

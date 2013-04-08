@@ -192,7 +192,7 @@ tutors: [
           answermask: "1000"
           },
           {type: "MCQ",
-          id: "5.1",
+          id: "5.10",
           goal:"Two bar magnets of strength 1T and 2T are thrust into a coil one at a time. The current induced in the coil is - ",
           options:["larger for the 2T magnet", 
                    "smaller for the 2T magnet", 

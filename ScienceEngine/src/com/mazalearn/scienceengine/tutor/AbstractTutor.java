@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.ComponentLoader;
 import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -157,6 +158,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void teach() {
     Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
+    ScienceEngine.getSoundManager().play(ScienceEngineSound.CHIME);
     this.setVisible(true);
     success = false;
     this.stats[ITutor.NUM_ATTEMPTS]++;
