@@ -24,37 +24,44 @@ go
   orig: 300, 300
   offset: 0, 0
   index: -1
-help
+engine
   rotate: false
   xy: 131, 451
-  size: 128, 128
-  orig: 128, 128
+  size: 256, 128
+  orig: 256, 128
   offset: 0, 0
   index: -1
-lock
+help
   rotate: false
   xy: 131, 321
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-settings
+lock
   rotate: false
-  xy: 261, 451
+  xy: 389, 451
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-user
+settings
   rotate: false
   xy: 131, 191
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-videoplay
+user
   rotate: false
   xy: 261, 321
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+videoplay
+  rotate: false
+  xy: 261, 191
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -73,23 +80,30 @@ browser
   orig: 64, 64
   offset: 0, 0
   index: -1
+wheel
+  rotate: false
+  xy: 918, 940
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 helparrow
   rotate: false
-  xy: 918, 974
+  xy: 519, 549
   size: 64, 30
   orig: 64, 30
   offset: 0, 0
   index: -1
 close
   rotate: false
-  xy: 391, 547
+  xy: 131, 157
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fieldarrow-yellow
   rotate: false
-  xy: 131, 173
+  xy: 391, 433
   size: 32, 16
   orig: 32, 16
   offset: 0, 0

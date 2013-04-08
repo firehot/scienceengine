@@ -15,15 +15,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 public class HelpTour extends Group {
   
+  private static final Vector2 CENTER_POS = 
+      new Vector2(ScreenComponent.VIEWPORT_WIDTH / 2, ScreenComponent.VIEWPORT_HEIGHT / 2);
+  private static Vector2 pos = new Vector2();
+
   public interface IHelpComponent {
-    public String getName();
+    // Distinct localized name in the stage of this component
+    public String getLocalizedName();
+    // Component type of this component
+    public String getComponentType();
     public float getX();
     public float getY();
     public float getWidth();
@@ -36,12 +42,9 @@ public class HelpTour extends Group {
     private String content;
     int currentComponent = 0;
     private Image arrow;
-    private Vector2 pos = new Vector2();
     private Image closeImage;
     private TextButton nextButton;
     private List<IHelpComponent> helpComponents;
-    private static final Vector2 CENTER_POS = 
-        new Vector2(ScreenComponent.VIEWPORT_WIDTH / 2, ScreenComponent.VIEWPORT_HEIGHT / 2);
 
     public NextOnClick(List<IHelpComponent> iHelpComponents,
         TextButton contentButton, String content, Image arrow, TextButton nextButton, Image closeImage) {
@@ -68,8 +71,10 @@ public class HelpTour extends Group {
       // Put contentbutton on screen touching arrow based on quadrant
       int sx = (int) Math.signum(MathUtils.cosDeg(angle));
       int sy = (int) Math.signum(MathUtils.sinDeg(angle));
+      nextButton.setText(getMsg("HelpTour.Next"));
       if (arrowX == CENTER_POS.x && arrowY == CENTER_POS.y) {
         contentButton.setPosition(CENTER_POS.x - w / 2, CENTER_POS.y - h / 2);
+        nextButton.setText(getMsg("HelpTour.Help"));
       } else if (sx >= 0 && sy >= 0) {
         contentButton.setPosition(arrowX - w, arrowY - h);
       } else if (sx <= 0 && sy >= 0) {
@@ -99,21 +104,32 @@ public class HelpTour extends Group {
                 currentComponent = 0;
               } else {
                 IHelpComponent helpComponent = helpComponents.get(currentComponent++);
-                text = ScienceEngine.getMsg().getString("Name." + helpComponent.getName()) + "\n" +
-                    ScienceEngine.getMsg().getString("Help." + helpComponent.getName()) + "\n\n\n";
-                pos.set(helpComponent.getX() + helpComponent.getWidth() / 2, 
-                    helpComponent.getY() + helpComponent.getHeight() / 2).sub(CENTER_POS);
+                text = helpComponent.getLocalizedName() + "\n" +
+                    getMsg("Help." + helpComponent.getComponentType()) + "\n\n\n";                
+                float angle = repositionArrow(helpComponent, arrow);
                 arrow.setVisible(true);
-                arrow.setRotation(pos.angle());
-                arrow.setPosition(helpComponent.getX() + helpComponent.getWidth() / 2 - arrow.getWidth() * MathUtils.cosDeg(pos.angle()) * 2,
-                    helpComponent.getY() + helpComponent.getHeight() / 2 - arrow.getHeight() * MathUtils.sinDeg(pos.angle()) * 4);
-                setContent(text, arrow.getX(), arrow.getY(), pos.angle());
+                setContent(text, arrow.getX(), arrow.getY(), angle);
               }
               return true;
             }
           },
           Actions.alpha(1, 1)));
     }
+  }
+
+  private static float repositionArrow(IHelpComponent helpComponent, Actor arrow) {
+    pos.set(helpComponent.getX() + helpComponent.getWidth() / 2, 
+        helpComponent.getY() + helpComponent.getHeight() / 2).sub(CENTER_POS);
+    float angle = pos.angle();
+    pos.x = helpComponent.getX() + helpComponent.getWidth() / 2 - arrow.getWidth() * MathUtils.cosDeg(angle) * 1.5f;
+    pos.y = helpComponent.getY() + helpComponent.getHeight() / 2 - arrow.getHeight() * MathUtils.sinDeg(angle) * 4;
+    arrow.setRotation(angle);
+    arrow.setPosition(pos.x, pos.y);
+    return angle;
+  }
+
+  private static String getMsg(String msgId) {
+    return ScienceEngine.getMsg().getString(msgId);
   }
 
   public HelpTour(final Stage stage, Skin skin, String contents, List<IHelpComponent> iHelpComponents) {
@@ -138,17 +154,10 @@ public class HelpTour extends Group {
     });
     contents = contents + "\n\n\n\n";
     final TextButton contentButton = ScreenUtils.createImageMessageBox(skin, "helpcloud");
-        //new TextButton(contents, skin);
     contentButton.getLabel().setWrap(true);
-    contentButton.addListener(new DragListener() {
-      public void touchDragged (InputEvent event, float x, float y, int pointer) {
-        super.touchDragged(event, x, y, pointer);
-        contentButton.setPosition(contentButton.getX() + getDeltaX(), contentButton.getY() + getDeltaY());
-      }
-    });
     addActor(contentButton);
 
-    TextButton nextButton = new TextButton(ScienceEngine.getMsg().getString("Name.Next"), skin);
+    TextButton nextButton = new TextButton(getMsg("HelpTour.Next"), skin);
     nextButton.setPosition(5, 5);
     nextButton.addListener(new NextOnClick(iHelpComponents, contentButton, contents, arrow, nextButton, closeImage));
     

@@ -100,6 +100,7 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   public void reset() {
     super.reset();
     fieldSamples.clear();
+    setPositionAndAngle(getPosition(), getAngle());
   }
   
   public float getBField() {
@@ -154,6 +155,7 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
               Vector3.Zero);
         }
       }
+      notifyFieldChange();
       break;
     }
   }

@@ -8,8 +8,8 @@ components:[
 configs:[ 
   {name: "Monopole.MonopoleType", permitted:true},
   {name: "Monopole.MagnetStrength", permitted:true},
-  {name: "BField.FieldStrengthX", permitted:true},
-  {name: "BField.FieldStrengthY", permitted:true},
+  {name: "BField.FieldStrength", permitted:true, value: 5},
+  {name: "BField.FieldAngle", permitted:true},
   {name: "Charge.ChargeStrength", permitted:true},
   {name: "FieldMeter.SampleMode", value:"Uniform"},
 ],
@@ -24,10 +24,10 @@ tutors:[
        childtutors: [
          {type: "KnowledgeUnit",
           id: "G1.1",
-          goal: "Change Magnetic field strengths X and Y and observe direction of field",
+          goal: "Change Magnetic field strength and direction and observe direction of field",
          hints: ["What happens to the field when only one of X or Y is changed?"],
          explanation: "The magnetic field is composed of both X and Y components together",
-         postcondition: "Count(BField.FieldStrengthX) > 1 and Count(BField.FieldStrengthY) > 1",
+         postcondition: "Count(BField.FieldStrength) > 1 and Count(BField.FieldAngle) > 1",
          success: 1000
          }]
        },
@@ -41,16 +41,16 @@ tutors:[
        configs:[ 
          {name: "Monopole.MonopoleType", permitted:true},
          {name: "Monopole.MagnetStrength", permitted:true},
-         {name: "BField.FieldStrengthX", permitted:true},
-         {name: "BField.FieldStrengthY", permitted:true},
+         {name: "BField.FieldStrength", permitted:true},
+         {name: "BField.FieldAngle", permitted:true},
        ],
        childtutors: [
           {type: "KnowledgeUnit",
            id: "G2.1",
-           goal: "Change Field strength X and Y and see how monopole moves",
+           goal: "Change Field strength and direction and see how monopole moves",
            hints: ["A free north pole moves in the direction of the field"],
            explanation: "When the field strength increases, the force on the monopole increases",
-           postcondition: "Count(BField.FieldStrengthX) > 1",
+           postcondition: "Count(BField.FieldStrength) > 1 and Count(BField.FieldAngle) > 1",
            success: 1000
           },
           {type: "KnowledgeUnit",
@@ -82,16 +82,16 @@ tutors:[
         configs:[ 
           {name: "Monopole.MonopoleType", permitted:true},
           {name: "Monopole.MagnetStrength", permitted:true},
-          {name: "BField.FieldStrengthX", permitted:false, value: 0},
-          {name: "BField.FieldStrengthY", permitted:false, value: 0},
-          {name: "BField.FieldStrengthZ", permitted:true, value: 5},
+          {name: "BField.FieldStrength", permitted:true, value: 5},
+          {name: "BField.FieldAngle", permitted:false, value: 0},
+          {name: "BField.FieldUpDown", permitted:true, value: "Up"},
         ],
         childtutors: [
           {type: "KnowledgeUnit",
            id: "G3.1",
            goal: "Increase charge strength X and see how charge moves",
            hints: ["A stationary charge is not affected by a magnetic field"],
-           explanation: "The charge is not affected by the magnetic field.",
+           explanation: "A stationary charge is not affected by the magnetic field.",
            postcondition: "Count(Charge.ChargeStrength) > 1",
            success: 1000
           },
@@ -105,10 +105,10 @@ tutors:[
           },
           {type: "KnowledgeUnit",
            id: "G3.3",
-           goal: "Change the magnetic field strength Z and see how it affects the charge",
+           goal: "Change the magnetic field strength and see how it affects the charge",
            explanation: "A stronger magnetic field exerts a stronger force on a moving charge making it spin faster.",
            hints: ["A stronger magnetic field exerts a stronger force on a moving charge"],
-           postcondition: "Count(BField.FieldStrengthZ) > 1 and Charge.Velocity > 0",
+           postcondition: "Count(BField.FieldStrength) > 1 and Charge.Velocity > 0",
            success: 1000
           },
           {type: "KnowledgeUnit",
@@ -134,7 +134,7 @@ tutors:[
           success: 100,
           failure: 50,
           components:[{type:"Charge", visible: false}],
-          configs:[{name:"FieldMeter.SampleMode", value:"User"}]
+          configs:[{name:"FieldMeter.SampleMode", value:"User"} ]
           }, 
           {type:"ParameterProber",
            id: "C1.2",
@@ -145,10 +145,11 @@ tutors:[
            failure: 50,
            explanation: "Fleming's Left Hand Rule can be used to determine the direction of rotation of a positive charge in a magnetic field.",
            parameter:"Charge.ChargeStrength",
-           result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)",
-           components:[{type:"Charge", visible: true, pin: true}],
+           result:"(Charge.CurrentStrength > 0) = (BField.FieldUpDown = 'Up')",
+           components:[{type:"Charge", visible: true, pin: true}, {type: "Monopole", visible: false} ],
            configs:[{name:"FieldMeter.SampleMode", value:"Uniform"},
-                    {name:"BField.FieldStrengthZ", value: 5} ]
+                    {name:"BField.FieldUpDown", value: "Up"},
+                    { name: "Charge.Velocity", value: 0} ]
           },
           {type:"ParameterProber",
            id: "C1.3",
@@ -157,24 +158,24 @@ tutors:[
            resultType:"Spin",
            success: 100,
            failure: 50,
-           parameter:"BField.FieldStrengthZ",
-           result:"(Charge.CurrentStrength > 0) = (BField.FieldStrengthZ > 0)",
+           parameter:"BField.FieldUpDown",
+           result:"(Charge.CurrentStrength > 0) = (BField.FieldUpDown = 'Up')",
            components:[{type:"Charge", visible: true, pin: true}],
            configs:[{name:"FieldMeter.SampleMode", value:"Uniform"},
-                    {name:"BField.FieldStrengthZ", value: 5}]
+                    {name:"BField.FieldUpDown", value: "Up"}]
           },
          {type: "Abstractor", 
           id: "C1.4",
             goal:"Select how increase in each variable affects rotation speed of a charge.\nYou have 3 tries.",
             configs: [
             {name:"Charge.ChargeStrength", permitted: true},
-            {name:"BField.FieldStrengthZ",permitted: true},
-            {name:"BField.FieldStrengthX",permitted: false},
-            {name:"BField.FieldStrengthY",permitted: false},
+            {name:"BField.FieldUpDown",permitted: true},
+            {name:"BField.FieldStrength",permitted: true},
+            {name:"BField.FieldAngle",permitted: false},
             {name:"Charge.Velocity",permitted:true}
             ],
             components:[{type:"Charge", visible: true, pin: true}, {type:"Monopole", visible:false} ],
-            parameters: ["+Charge.ChargeStrength", "+Charge.Velocity", "+BField.FieldStrengthZ"],
+            parameters: ["+Charge.ChargeStrength", "+Charge.Velocity", "+BField.FieldUpDown"],
             success: 5000},
          {type: "Abstractor", 
           id: "C1.5",
@@ -182,12 +183,12 @@ tutors:[
             configs: [
             {name:"Monopole.MagnetStrength", permitted: true},
             {name:"Monopole.MonopoleType", permitted: false},
-            {name:"BField.FieldStrengthX",permitted: true},
-            {name:"BField.FieldStrengthZ",permitted: false},
-            {name:"BField.FieldStrengthY",permitted: true}
+            {name:"BField.FieldStrength", permitted: true},
+            {name:"BField.FieldUpDown", permitted: true},
+            {name:"BField.FieldAngle",permitted: false}
             ],
             components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
-            parameters: ["+Monopole.MagnetStrength", "+BField.FieldStrengthX","+BField.FieldStrengthY"],
+            parameters: ["+Monopole.MagnetStrength", "+BField.FieldStrength","+BField.FieldUpDown"],
             success: 5000
         }]
        },

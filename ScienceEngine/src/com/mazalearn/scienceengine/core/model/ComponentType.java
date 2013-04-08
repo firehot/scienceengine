@@ -8,7 +8,7 @@ public enum ComponentType implements IComponentType {
   Global, 
   Image;
   
-  public String toString() {
+  public String getLocalizedName() {
     return ScienceEngine.getMsg().getString("Name." + name());
   }
 }

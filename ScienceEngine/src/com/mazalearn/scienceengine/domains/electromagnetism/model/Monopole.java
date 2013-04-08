@@ -50,7 +50,7 @@ public class Monopole extends Science2DBody implements IMagneticField.Consumer {
     configs.add(new AbstractModelConfig<String>(this, 
         Parameter.MonopoleType, MonopoleType.values()) {
       public String getValue() { return monopoleType.name(); }
-      public void setValue(String value) { monopoleType = MonopoleType.valueOf(value); }
+      public void setValue(String name) { monopoleType = MonopoleType.valueOf(name); }
       public boolean isPossible() { return isActive(); }
     });
     configs.add(new AbstractModelConfig<Float>(this, 

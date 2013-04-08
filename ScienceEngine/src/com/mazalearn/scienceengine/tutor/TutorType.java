@@ -24,4 +24,8 @@ public enum TutorType implements ITutorType {
   public Color getColor() {
     return color;
   }
+  
+  public String getLocalizedName() {
+    return name();
+  }
 }

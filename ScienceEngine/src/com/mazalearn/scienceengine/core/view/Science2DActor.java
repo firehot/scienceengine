@@ -165,6 +165,26 @@ public class Science2DActor extends Actor implements IHelpComponent {
     return body.name();
   }
   
+  /**
+   * return name of the body associated with the actor
+   */
+  @Override
+  public String getLocalizedName() {
+    return body.getLocalizedName();
+  }
+  
+  /**
+   * return type of the body associated with the actor
+   */
+  @Override
+  public String getComponentType() {
+    return body.getComponentTypeName();
+  }
+  
+  protected void setTextureRegion(TextureRegion textureRegion) {
+    this.textureRegion = textureRegion;
+  }
+
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     if (drag) moveToCurrent();

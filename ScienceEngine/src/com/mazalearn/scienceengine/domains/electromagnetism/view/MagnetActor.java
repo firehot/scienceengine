@@ -39,7 +39,7 @@ public class MagnetActor extends Science2DActor {
     case Smco: textureRegion = smco; break;
     case Neodymium: textureRegion = neodymium; break;
     }
-    this.getTextureRegion().setRegion(textureRegion);
+    this.setTextureRegion(textureRegion);
     super.draw(batch, parentAlpha);
   }
 }

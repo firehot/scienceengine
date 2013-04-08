@@ -8,7 +8,7 @@ public enum ComponentType implements IComponentType {
   Boundary,
   WaveMaker;
   
-  public String toString() {
+  public String getLocalizedName() {
     return ScienceEngine.getMsg().getString("Name." + name());  
   }
   

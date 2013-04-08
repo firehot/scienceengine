@@ -35,7 +35,7 @@ public class MonopoleActor extends Science2DActor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    this.getTextureRegion().setRegion(
+    this.setTextureRegion(
         monopole.getPoleType() == MonopoleType.NorthPole ? textureNorthPole : textureSouthPole);
     super.draw(batch, parentAlpha);
   }

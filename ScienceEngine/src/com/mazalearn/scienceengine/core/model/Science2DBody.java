@@ -164,7 +164,7 @@ public class Science2DBody implements IBody {
   }
   
   // localized name of body
-  public String toString() {
+  public String getLocalizedName() {
     return componentType.toString() + (count == 0 ? "" : " " + count);
   }
 

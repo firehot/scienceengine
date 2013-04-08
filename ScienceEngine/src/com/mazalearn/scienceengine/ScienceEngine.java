@@ -345,7 +345,7 @@ public class ScienceEngine extends Game {
 
   private static void displayEntityStatus(Science2DBody body, String entityName, IScience2DView stage) {
     if (stage == null) return;
-    String component = body != null ? body.toString() + " - " : "";
+    String component = body != null ? body.getLocalizedName() + " - " : "";
     if (entityName.contains(".")) {
       entityName = entityName.substring(0, entityName.indexOf("."));
     }

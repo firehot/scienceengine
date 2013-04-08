@@ -25,7 +25,7 @@ public enum Parameter implements IParameter {
   Width, 
   Color, 
   MonopoleType, 
-  FieldStrengthX, FieldStrengthY, FieldStrengthZ, 
+  FieldStrength, FieldAngle, FieldUpDown, 
   ChargeStrength, 
   SampleMode, 
   Velocity;

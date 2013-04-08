@@ -52,7 +52,7 @@ public class ChargeActor extends Science2DActor {
   
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    this.getTextureRegion().setRegion(
+    this.setTextureRegion(
         charge.getStrength() >= 0 ? texturePositive : textureNegative);
     super.draw(batch, parentAlpha);
   }

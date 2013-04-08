@@ -33,7 +33,7 @@ public enum ComponentType implements IComponentType {
     return textureName;
   }
   
-  public String toString() {
+  public String getLocalizedName() {
     return ScienceEngine.getMsg().getString("Name." + name());
   }
   

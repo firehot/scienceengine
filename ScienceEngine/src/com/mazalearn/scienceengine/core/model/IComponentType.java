@@ -4,5 +4,5 @@ public interface IComponentType {
   // Canonical name: uses == 
   public String name();
   // localized version
-  public String toString();
+  public String getLocalizedName();
 }

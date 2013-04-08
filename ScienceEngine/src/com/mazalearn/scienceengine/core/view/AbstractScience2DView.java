@@ -224,6 +224,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     
     this.goButton = createGoButton();
     coreGroup.addActor(goButton);
+    
     Actor helpActor = createHelpActor();
     coreGroup.addActor(helpActor);
     // Add TimeTracker
@@ -284,7 +285,10 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
-        isTutoringInProgress = true;
+        // Ignore if HelpTour is in progress
+        Actor helpTour = AbstractScience2DView.this.findActor(ScreenComponent.HELP_TOUR.name());
+        if (helpTour != null) return;
+        
         ScreenComponent goButtonDown = ScreenComponent.GoButtonDown;
         goButton.addAction(Actions.parallel(
             Actions.moveTo(goButtonDown.getX(), goButtonDown.getY(), 1),

@@ -146,7 +146,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   
   public Color getColor() { return color; }
   
-  public String toString() {
+  public String getLocalizedName() {
     return ScienceEngine.getPlatformAdapter().getMsg().getString("Name." + name());  
   }
   
@@ -224,7 +224,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   }
 
   @Override
-  public String getName() {
+  public String getComponentType() {
     return name();
   }
 

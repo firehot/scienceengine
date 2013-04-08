@@ -196,17 +196,17 @@ public class ScreenUtils {
 
   public static TextButton createImageMessageBox(Skin skin, String textureName) {
     TextureRegion textureRegion = ScienceEngine.getTextureRegion(textureName);
-    TextButton explanation = createImageButton(textureRegion, skin);
-    explanation.getLabel().setWrap(true);
-    explanation.getCell(explanation.getLabel()).pad(80, 40, 70, 40);
+    TextButton message = createImageButton(textureRegion, skin);
+    message.getLabel().setWrap(true);
+    message.getCell(message.getLabel()).pad(80, 40, 70, 40);
     TextButtonStyle tbs = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
     tbs.fontColor = Color.BLACK;
-    explanation.setStyle(tbs);
-    explanation.setWidth(250);
-    explanation.setHeight(250);
-    explanation.setPosition(ScreenComponent.ImageMessageBox.getX(explanation.getWidth()),
-        ScreenComponent.ImageMessageBox.getY(explanation.getHeight()));
-    return explanation;
+    message.setStyle(tbs);
+    message.setWidth(250);
+    message.setHeight(250);
+    message.setPosition(ScreenComponent.ImageMessageBox.getX(message.getWidth()),
+        ScreenComponent.ImageMessageBox.getY(message.getHeight()));
+    return message;
   }
 
 }

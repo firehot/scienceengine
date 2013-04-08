@@ -7,7 +7,7 @@ public enum ComponentType implements IComponentType {
   MoleculeBox, 
   ColorPanel;
   
-  public String toString() {
+  public String getLocalizedName() {
     return ScienceEngine.getMsg().getString("Name." + name());  
   }
   
