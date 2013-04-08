@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -91,11 +92,13 @@ public class Abstractor extends AbstractTutor {
       final Image image = new Image(question);
       image.setName(config.getName());
       configTable.add(image).width(30).height(30);
+      final Label label = new Label("", skin);
+      configTable.add(label).width(30);
       image.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
           image.setVisible(false);
           changeOptions.setPosition(event.getStageX(), event.getStageY());
-          changeOptions.setImage(image);
+          changeOptions.setImageAndLabel(image, label);
           changeOptions.setVisible(true);
         }        
       });
@@ -116,8 +119,9 @@ public class Abstractor extends AbstractTutor {
   
   private static class ChangeOptions extends Table {
     Image img;
+    private Label label;
     public ChangeOptions(Guru guru, final TextureRegionDrawable question, 
-        final Button submitButton, final Array<Actor> choices, TextureRegionDrawable... options) {
+        final Button submitButton, final Array<Actor> choices, final TextureRegionDrawable... options) {
       super(guru.getSkin());
       for (TextureRegionDrawable option: options) {
         final Image opt = new Image(); opt.setDrawable(option);
@@ -125,6 +129,13 @@ public class Abstractor extends AbstractTutor {
           public void clicked (InputEvent event, float x, float y) {
             img.setDrawable(opt.getDrawable());
             img.setVisible(true);
+            if (img.getDrawable() == options[2]) {
+              label.setText("Increase");
+            } else if (img.getDrawable() == options[0]) {
+              label.setText("Decrease");            
+            } else if (img.getDrawable() == options[1]) {
+              label.setText("No Effect");
+            }
             ChangeOptions.this.setVisible(false);
             boolean disableSubmit = false;
             for (Actor actor: choices) {
@@ -142,11 +153,12 @@ public class Abstractor extends AbstractTutor {
       }
     }
     
-    public void setImage(Image image) {
+    public void setImageAndLabel(Image image, Label label) {
       if (this.img != null) {
         this.img.setVisible(true);
       }
       this.img = image;
+      this.label = label;
     }
   }
 

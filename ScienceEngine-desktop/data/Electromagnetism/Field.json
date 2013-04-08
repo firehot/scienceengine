@@ -25,8 +25,8 @@ tutors:[
          {type: "KnowledgeUnit",
           id: "G1.1",
           goal: "Change Magnetic field strength and direction and observe direction of field",
-         hints: ["What happens to the field when only one of X or Y is changed?"],
-         explanation: "The magnetic field is composed of both X and Y components together",
+         hints: ["What happens to the field when only one of strength or direction is changed?"],
+         explanation: "The magnetic field has a strength and a direction at each point.",
          postcondition: "Count(BField.FieldStrength) > 1 and Count(BField.FieldAngle) > 1",
          success: 1000
          }]
@@ -89,7 +89,7 @@ tutors:[
         childtutors: [
           {type: "KnowledgeUnit",
            id: "G3.1",
-           goal: "Increase charge strength X and see how charge moves",
+           goal: "Increase the charge strength and see how the charge moves",
            hints: ["A stationary charge is not affected by a magnetic field"],
            explanation: "A stationary charge is not affected by the magnetic field.",
            postcondition: "Count(Charge.ChargeStrength) > 1",
