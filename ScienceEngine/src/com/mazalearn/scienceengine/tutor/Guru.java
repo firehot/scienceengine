@@ -446,6 +446,7 @@ public class Guru extends Group implements ITutor {
 
   @Override
   public void systemReadyToFinish(boolean success) {
+    finish();
   }
 
   public void showNextButton(boolean show) {

@@ -2,8 +2,11 @@ package com.mazalearn.scienceengine.domains.electromagnetism.view;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -55,8 +58,43 @@ public class FieldMeterActor extends Science2DActor {
     return this;
   }
 
-  @Override
-  public void draw(SpriteBatch batch, float parentAlpha) {
+  public void draw1(SpriteBatch batch, float parentAlpha) {
+    ShapeRenderer shapeRenderer = new ShapeRenderer();
+    batch.end();
+    shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
+    List<FieldSample> fieldSamples = fieldMeter.getFieldSamples();
+    shapeRenderer.setColor(Color.GREEN);
+
+    // Reverse traversal - want to show the latest point first
+    for (int i = fieldSamples.size() - 1; i >= 0; i--) {
+      FieldSample fieldSample = fieldSamples.get(i);
+      // Magnitude is scaled logarmthmically as width and height of arrow
+      float magnitude = (float) Math.min(Math.log(1 + fieldSample.magnitude), 5);
+      // location of field meter center is the sample point
+      pos.set(fieldSample.x, fieldSample.y);
+      pos.mul(ScreenComponent.PIXELS_PER_M);
+      shapeRenderer.identity();
+      shapeRenderer.translate(pos.x, pos.y, 0);
+      // find half width and half height
+      float w = magnitude * getWidth() / 2;
+      float h = magnitude * getHeight() / 2;
+      // Bottom of arrow position
+      float rotation =  (fieldSample.theta * MathUtils.radiansToDegrees) % 360;
+      shapeRenderer.rotate(0, 1, 0, rotation);
+      shapeRenderer.begin(ShapeType.Box);
+      shapeRenderer.box(-w, -h, -h, w, h, h);
+      shapeRenderer.end();
+      shapeRenderer.translate(0, 0, 0);
+      shapeRenderer.begin(ShapeType.FilledCone);
+      shapeRenderer.rotate(0, 1, 0, 90);
+      shapeRenderer.filledCone(w, 0, 0, h, h/3f);
+      shapeRenderer.end();
+    }
+    batch.begin();
+  }
+
+    @Override
+    public void draw(SpriteBatch batch, float parentAlpha) {
     List<FieldSample> fieldSamples = fieldMeter.getFieldSamples();
     // Reverse traversal - want to show the latest point first
     for (int i = fieldSamples.size() - 1; i >= 0; i--) {

@@ -175,7 +175,7 @@ tutors:[
             {name:"Charge.Velocity",permitted:true}
             ],
             components:[{type:"Charge", visible: true, pin: true}, {type:"Monopole", visible:false} ],
-            parameters: ["+Charge.ChargeStrength", "+Charge.Velocity", "+BField.FieldUpDown"],
+            parameters: ["+Charge.ChargeStrength", "+Charge.Velocity", "+BField.FieldStrength"],
             success: 5000},
          {type: "Abstractor", 
           id: "C1.5",
@@ -188,7 +188,7 @@ tutors:[
             {name:"BField.FieldAngle",permitted: false}
             ],
             components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
-            parameters: ["+Monopole.MagnetStrength", "+BField.FieldStrength","+BField.FieldUpDown"],
+            parameters: ["+Monopole.MagnetStrength", "+BField.FieldStrength"],
             success: 5000
         }]
        },
