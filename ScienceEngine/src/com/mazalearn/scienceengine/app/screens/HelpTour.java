@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.AnimateAction;
 
 public class HelpTour extends Group {
   
@@ -45,6 +46,7 @@ public class HelpTour extends Group {
     private Image closeImage;
     private TextButton nextButton;
     private List<IHelpComponent> helpComponents;
+    private IHelpComponent helpComponent;
 
     public NextOnClick(List<IHelpComponent> iHelpComponents,
         TextButton contentButton, String content, Image arrow, TextButton nextButton, Image closeImage) {
@@ -102,8 +104,12 @@ public class HelpTour extends Group {
                 setContent(content, CENTER_POS.x, CENTER_POS.y, 0);
                 arrow.setVisible(false);
                 currentComponent = 0;
+                helpComponent = null;
               } else {
-                IHelpComponent helpComponent = helpComponents.get(currentComponent++);
+                if (helpComponent != null && helpComponent instanceof Actor) {
+                  ((Actor) helpComponent).clearActions();
+                }
+                helpComponent = helpComponents.get(currentComponent++);
                 text = helpComponent.getLocalizedName() + "\n" +
                     getMsg("Help." + helpComponent.getComponentType()) + "\n\n\n";                
                 float angle = repositionArrow(helpComponent, arrow);
@@ -125,6 +131,10 @@ public class HelpTour extends Group {
     pos.y = helpComponent.getY() + helpComponent.getHeight() / 2 - arrow.getHeight() * MathUtils.sinDeg(angle) * 4;
     arrow.setRotation(angle);
     arrow.setPosition(pos.x, pos.y);
+    if (helpComponent instanceof Actor) {
+      Actor a = (Actor) helpComponent;
+      a.addAction(AnimateAction.animate(a.getWidth(), a.getHeight()));
+    }
     return angle;
   }
 

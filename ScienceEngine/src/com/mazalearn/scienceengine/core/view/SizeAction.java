@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
 /**
  * Workaround for SizeTo action not working properly.
- * It does not do an invalidate of the actor.
+ * It was not doing an invalidate of the widget.
  * @author sridhar
  *
  */
@@ -14,7 +14,9 @@ public class SizeAction extends SizeToAction {
 
   protected void update (float percent) {
     super.update(percent);
-    ((Widget) actor).invalidate();
+    if (actor instanceof Widget) {
+      ((Widget) actor).invalidate();
+    }
   }
 
   static public SizeAction sizeTo(float x, float y, float duration) {

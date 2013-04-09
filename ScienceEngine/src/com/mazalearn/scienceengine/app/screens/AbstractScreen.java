@@ -27,6 +27,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.AnimateAction;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
