@@ -135,7 +135,6 @@ public class TutorGroup extends AbstractTutor {
 
   @Override
   public List<ITutor> getChildTutors() {
-    if (getType() == TutorType.RapidFire || getType() == TutorType.Reviewer) return null;
     return childTutors;
   }
   

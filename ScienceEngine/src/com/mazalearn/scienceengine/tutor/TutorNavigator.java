@@ -91,7 +91,7 @@ public class TutorNavigator extends Group {
   }
 
   private static void collectLeafTutors(ITutor tutor, Map<String, ITutor> tutors) {
-    if (tutor.getChildTutors() == null) { 
+    if (tutor.getChildTutors() == null || tutor.getType() == TutorType.RapidFire || tutor.getType() == TutorType.Reviewer) { 
       if (tutors.containsKey(tutor.getId())) {
         Gdx.app.error(ScienceEngine.LOG, "Duplicate Tutor ID: " + tutor.getId());
       }

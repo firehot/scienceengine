@@ -246,7 +246,7 @@ public class TutorHelper extends Group {
     tutorNavigator.showNextButton(show);
     if (show) {
       if (activeTutor.getExplanation() != null && activeTutor.getExplanation().length > 0) {
-        explanation.setExplanation(activeTutor.getExplanation());
+        explanation.setExplanation(activeTutor.getExplanation(), activeTutor.getRefs().length > 0);
         explanation.setVisible(true);
         addActor(explanation); // Bring to top
         addActor(tutorNavigator);

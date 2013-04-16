@@ -13,6 +13,7 @@ public class ExplanationBox extends ImageMessageBox {
   int current;
   String[] explanation;
   private TextButton reviseButton;
+  private boolean hasRevisionRefs;
   
   public ExplanationBox(final TutorHelper tutorHelper, Skin skin, String textureName) {
     super(skin, textureName, null);
@@ -57,16 +58,19 @@ public class ExplanationBox extends ImageMessageBox {
       setTextAndResize(currentText);
       reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight() * 0.8f);
     }
-    reviseButton.setVisible(true);
+    
+    reviseButton.setVisible(hasRevisionRefs);
   }
 
   /**
    * 
+   * @param hasRevisionRefs 
    * @param explanation, not null
    */
-  public void setExplanation(String[] explanation) {
+  public void setExplanation(String[] explanation, boolean hasRevisionRefs) {
     current = 0;
     this.explanation = explanation;
+    this.hasRevisionRefs = hasRevisionRefs;
     showExplanation();
   }
 }
