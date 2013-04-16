@@ -24,7 +24,6 @@ import com.mazalearn.scienceengine.app.services.AggregatorFunction;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.app.utils.ExplanationBox;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.lang.IFunction;
 import com.mazalearn.scienceengine.core.lang.Parser;

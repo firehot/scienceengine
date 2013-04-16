@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.utils;
+package com.mazalearn.scienceengine.tutor;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.tutor.TutorHelper;
 
 public class ExplanationBox extends ImageMessageBox {
 
@@ -53,10 +52,11 @@ public class ExplanationBox extends ImageMessageBox {
     if (textureRegion != null) {
       TextureRegionDrawable drawable = new TextureRegionDrawable(textureRegion);
       setImageAndResize(drawable);
+      reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight() * 1.1f);
     } else {
       setTextAndResize(currentText);
+      reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight() * 0.8f);
     }
-    reviseButton.setPosition(getWidth() * 0.1f, getHeight() * 0.8f);
     reviseButton.setVisible(true);
   }
 

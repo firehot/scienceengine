@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.utils;
+package com.mazalearn.scienceengine.tutor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
