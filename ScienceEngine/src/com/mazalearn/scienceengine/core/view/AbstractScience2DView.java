@@ -9,27 +9,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.screens.HelpTour;
-import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.app.screens.TutoringEndDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
-import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
-import com.mazalearn.scienceengine.tutor.TimeTracker;
 
 public class AbstractScience2DView extends Stage implements IScience2DView {
 
@@ -43,10 +32,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   // Commands at view level - possibly affecting multiple actors
   private List<IModelConfig<?>> viewCommands;
   private ViewControls viewControls;
-  private Button goButton;
-  private Group coreGroup;
   private Group activityGroup;
-  private ClickListener helpListener;
 
   public AbstractScience2DView( 
       IScience2DModel science2DModel, float width, float height, Skin skin, 
@@ -87,6 +73,8 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       ScienceEngine.getPlatformAdapter().showInternalURL(
           "data/" + science2DController.getTopic() + "/" + science2DController.getLevel() + ".html");
       tutoring(false);
+      // TODO: Each level should have own success/failure message. 
+      // Revision should have separate message and get treated as level?
       Dialog dialog = new TutoringEndDialog(this, skin, 
           ScienceEngine.getMsg().getString("Level.Success"));
       dialog.show(this);      
@@ -131,11 +119,6 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     }
   }
   
-  @Override
-  public void showHelp() {
-    helpListener.clicked(new InputEvent(), 0, 0);
-  }
-    
   @Override
   public boolean isTutoringInProgress() {
     return isTutoringInProgress;
@@ -199,109 +182,30 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       }
     }
     // Bring CoreGroup to top.
+    Group coreGroup = (Group) findActor(ScreenComponent.CORE_GROUP);
     this.addActor(coreGroup);
     // Bring model controls above all other components in activity group
     activityGroup.addActor(modelControls);
   }
-
+  
   public void setupControls() {
     activityGroup = new Group();
     activityGroup.setName(ScreenComponent.ACTIVITY_GROUP);
     this.addActor(activityGroup);
 
-    coreGroup = (Group) findActor(ScreenComponent.CORE_GROUP);
-    if (coreGroup == null) {
-      coreGroup = new Group();
-      coreGroup.setName(ScreenComponent.CORE_GROUP);
-      this.addActor(coreGroup);
-    }
     // Create view and model controls
     this.viewControls = new ActivityViewControls(science2DController, skin);
-    coreGroup.addActor(viewControls);
 
     this.modelControls = new ModelControls(science2DModel, skin);
     activityGroup.addActor(modelControls);
-    
-    this.goButton = createGoButton();
-    coreGroup.addActor(goButton);
-    
-    Actor helpActor = createHelpActor();
-    coreGroup.addActor(helpActor);
-    // Add TimeTracker
-    Actor timeTracker = new TimeTracker("0", skin);
-    coreGroup.addActor(timeTracker);
-    // Add scoreboard
-    Actor scoreboard = new Scoreboard(skin);
-    coreGroup.addActor(scoreboard);
-    
-    // If GWT, display a disclaimer about experiencing on a Tablet
-    if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
-      ScienceEngine.displayStatusMessage(this, 
-          "Partial Demo only. Best experienced on Android/iPad Tablet.");
-    }
   }
   
   public ModelControls getModelControls() {
     return modelControls;
   }
 
-  private Actor createHelpActor() {
-    Image helpImage = new Image(ScienceEngine.getTextureRegion("help"));
-    helpListener = new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x1, float y1) {
-        Actor helpTour = AbstractScience2DView.this.findActor(ScreenComponent.HELP_TOUR.name());
-        if (helpTour != null) return;
-        String description = ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
-            science2DController.getLevel() + ".Description");
-        List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
-        Group activityGroup = (Group) findActor(ScreenComponent.ACTIVITY_GROUP);
-        for (Actor actor: activityGroup.getChildren()) {
-          if ((actor instanceof Science2DActor)) {
-            helpComponents.add((IHelpComponent) actor);
-          }
-        }
-        for (ScreenComponent screenComponent: ScreenComponent.values()) {
-          if (screenComponent.showInHelpTour()) {
-            helpComponents.add(screenComponent);
-          }
-        }
-        new HelpTour(AbstractScience2DView.this, skin, description, helpComponents);
-      }
-    };
-    helpImage.addListener(helpListener);
-    ScreenComponent sc = ScreenComponent.Help;
-    helpImage.setPosition(sc.getX(), sc.getY());
-    helpImage.setSize(sc.getWidth(), sc.getHeight());
-    helpImage.setName(ScreenComponent.Help.name());
-    return helpImage;
-  }
-  
-  private Button createGoButton() {
-    Drawable go = new TextureRegionDrawable(ScienceEngine.getTextureRegion("go"));
-    final Button goButton = new Button(go);
-    ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
-    goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
-    goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
-    goButton.addListener(new ClickListener() {
-      @Override public void clicked(InputEvent event, float x, float y) {
-        // Ignore if HelpTour is in progress
-        Actor helpTour = AbstractScience2DView.this.findActor(ScreenComponent.HELP_TOUR.name());
-        if (helpTour != null) return;
-        
-        ScreenComponent goButtonDown = ScreenComponent.GoButtonDown;
-        goButton.addAction(Actions.parallel(
-            Actions.moveTo(goButtonDown.getX(), goButtonDown.getY(), 1),
-            Actions.sizeTo(goButtonDown.getWidth(), goButtonDown.getHeight(), 1)));
-        tutoring(true);
-      }
-    });
-    
-    return goButton;
-  }
-
   @Override
-  public void checkGuruProgress() {
+  public void checkActiveTutorProgress() {
     science2DController.getGuru().checkProgress();
   }
 

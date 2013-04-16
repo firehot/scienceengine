@@ -73,9 +73,9 @@ public class ParameterProber extends AbstractScience2DProber {
     
   public ParameterProber(IScience2DController science2DController,
       TutorType tutorType, ITutor parent, String goal, String name, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore, String[] hints, String explanation) {
+      int deltaSuccessScore, int deltaFailureScore, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, name, components, configs, 
-        deltaSuccessScore, deltaFailureScore, hints, explanation);
+        deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
     this.image = new ProbeImage();
   }
   
@@ -126,7 +126,7 @@ public class ParameterProber extends AbstractScience2DProber {
   public void systemReadyToFinish(boolean success) {
     netSuccesses += success ? 1 : -1;
     if (!success) {
-      guru.showWrong(getFailurePoints());
+      tutorHelper.showWrong(getFailurePoints());
       stats[ITutor.POINTS] -= getFailurePoints();
       // TODO: Looks dangerous - what if same tutor invoked again? is it reset?
       setSuccessPoints(getFailurePoints()); // Equate isAttempted and failure scores
@@ -134,7 +134,7 @@ public class ParameterProber extends AbstractScience2DProber {
       // No failure exit.
       return;
     }
-    guru.showCorrect(getSuccessPoints());
+    tutorHelper.showCorrect(getSuccessPoints());
     stats[ITutor.POINTS] += getSuccessPoints();
     super.systemReadyToFinish(true);
   }
@@ -147,6 +147,9 @@ public class ParameterProber extends AbstractScience2DProber {
     IDoneCallback doneCallback = new IDoneCallback() {
       @Override public void done(boolean success) {
         systemReadyToFinish(success);
+        if (success) {
+          image.setVisible(false);
+        }
       }
     };
     if (this.resultType == ResultType.Spin) {   
@@ -180,7 +183,7 @@ public class ParameterProber extends AbstractScience2DProber {
       final Image decrease = new Image(ScienceEngine.getTextureRegion("fieldarrow-left"));
       final Image dontCare = new Image(ScienceEngine.getTextureRegion("cross"));
       final Image increase = new Image(ScienceEngine.getTextureRegion("fieldarrow"));
-      changeOptions = new Table(guru.getSkin());
+      changeOptions = new Table(tutorHelper.getSkin());
       changeOptions.add("Decreases"); changeOptions.add(decrease).width(50).height(50).right(); changeOptions.row();
       changeOptions.add("Is Unaffected"); changeOptions.add(dontCare).width(50).height(50).center(); changeOptions.row();
       changeOptions.add("Increases"); changeOptions.add(increase).width(50).height(50).left(); changeOptions.row();

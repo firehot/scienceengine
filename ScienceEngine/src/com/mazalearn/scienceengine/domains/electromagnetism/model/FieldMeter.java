@@ -34,23 +34,27 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   public enum SampleMode {User, Uniform};
   private SampleMode sampleMode = SampleMode.User;
   
-  // Represent field at a point (x,y) using polar coords (magnitude, theta, phi)
+  // Represent field at a point (x,y) using spherical coords (magnitude, theta, phi)
   public static class FieldSample {
-    public float x, y, theta, magnitude;
-    public int phi; // phi will be -1 (down), 0 (xy plane), +1 (up)
+    public float x, y, magnitude, theta, phi;
     /**
      * Constructor
      * @param x
      * @param y
-     * @param theta - in radians
-     * @param magnitude
+     * @param fieldvector - in rectangular coordinates
      */
-    public FieldSample(float x, float y, float theta, float magnitude, int phi) {
+    public FieldSample(float x, float y, Vector3 fieldVector) {
       this.x = x;
       this.y = y;
-      this.theta = theta;
-      this.magnitude = magnitude;
-      this.phi = phi;
+      rectangular2spherical(this, fieldVector);
+    }
+    
+    public static void rectangular2spherical(FieldSample fieldSample, Vector3 fieldVector) {
+      if (fieldVector.x != 0 || fieldVector.y != 0) { // Avoid indeterminate theta
+        fieldSample.theta = (float) Math.atan(fieldVector.y / fieldVector.x);
+      }
+      fieldSample.magnitude = fieldVector.len();
+      fieldSample.phi = (float) Math.acos(fieldVector.z / fieldSample.magnitude) - MathUtils.PI / 2;
     }
   }
   
@@ -100,7 +104,7 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
   public void reset() {
     super.reset();
     fieldSamples.clear();
-    setPositionAndAngle(getPosition(), getAngle());
+    //setPositionAndAngle(getPosition(), getAngle());
   }
   
   public float getBField() {
@@ -109,8 +113,7 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
 
   public void addFieldSample(float x, float y, Vector3 fieldVector) {
     bField.set(fieldVector.x, fieldVector.y);
-    fieldSamples.add(new FieldSample(x, y, bField.angle() * MathUtils.degreesToRadians, 
-        fieldVector.len(), (int) Math.signum(fieldVector.z)));
+    fieldSamples.add(new FieldSample(x, y, fieldVector));
   }
 
   public List<FieldSample> getFieldSamples() {
@@ -132,12 +135,7 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
     for (FieldSample fieldSample: fieldSamples) {
       samplePoint.set(fieldSample.x, fieldSample.y);
       getModel().getBField(samplePoint, fieldVector /* output */);
-      if (fieldVector.z == 0) {
-        bField.set(fieldVector.x, fieldVector.y);
-        fieldSample.theta = bField.angle() * MathUtils.degreesToRadians;
-      }
-      fieldSample.phi = (int) Math.signum(fieldVector.z);
-      fieldSample.magnitude = fieldVector.len();
+      FieldSample.rectangular2spherical(fieldSample, fieldVector);
     }
   }
 

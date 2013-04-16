@@ -129,8 +129,8 @@ public class TopicHomeScreen extends AbstractScreen {
     Table table = super.getTable();
     table.debug();
     
-    String title = getMsg().getString("ScienceEngine." + topic) +
-        " - " + getMsg().getString("ScienceEngine.Activities"); //$NON-NLS-1$ //$NON-NLS-2$
+    String title = getMsg("ScienceEngine." + topic) +
+        " - " + getMsg("ScienceEngine.Activities"); //$NON-NLS-1$ //$NON-NLS-2$
     setTitle(title);
     
     final Actor activitiesPane = createActivitiesPane();
@@ -140,16 +140,16 @@ public class TopicHomeScreen extends AbstractScreen {
         table.add(activitiesPane).fill().width(ScreenComponent.VIEWPORT_WIDTH - 40);    
     table.row();
     final TextButton contentTypeButton = 
-        new TextButton(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"), getSkin(), "body");
+        new TextButton(getMsg("ScienceEngine.ResourcesOnTheInternet"), getSkin(), "body");
     contentTypeButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         if (contentTypeButton.isChecked()) {
           scrollPane.setWidget(resourcesPane);
-          contentTypeButton.setText(getMsg().getString("ScienceEngine.Activities"));
+          contentTypeButton.setText(getMsg("ScienceEngine.Activities"));
         } else {
           scrollPane.setWidget(activitiesPane);
-          contentTypeButton.setText(getMsg().getString("ScienceEngine.ResourcesOnTheInternet"));
+          contentTypeButton.setText(getMsg("ScienceEngine.ResourcesOnTheInternet"));
         }
       }
     });
@@ -170,7 +170,7 @@ public class TopicHomeScreen extends AbstractScreen {
     int numTopics = 0;
     for (Topic level: topic.getChildren()) {
       numTopics++;
-      String activityName = getMsg().getString(topic + "." + level + ".Name");
+      String activityName = getMsg(topic + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(topic, level, ".png");
       Pixmap pixmap;
       if (ScienceEngine.getAssetManager().isLoaded(filename)) {
@@ -276,7 +276,7 @@ public class TopicHomeScreen extends AbstractScreen {
       resource.add(new Label(duration, getSkin())).padLeft(10).width(40);
       resource.row();
       Label attributionLabel = 
-          new Label(getMsg().getString("ScienceEngine.From") + ": " + 
+          new Label(getMsg("ScienceEngine.From") + ": " + 
                     attribution + "\n\n\n" +  //$NON-NLS-1$ //$NON-NLS-2$
                     description, blackBackground);
       attributionLabel.setAlignment(Align.top, Align.left);

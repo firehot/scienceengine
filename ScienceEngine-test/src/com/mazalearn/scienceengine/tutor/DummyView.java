@@ -80,7 +80,7 @@ public class DummyView extends Stage implements IScience2DView {
   }
 
   @Override
-  public void checkGuruProgress() {
+  public void checkActiveTutorProgress() {
     // TODO Auto-generated method stub
     
   }

@@ -3,7 +3,7 @@ components:[
 ],
 tutors: [
        {type: "Reviewer",
-       id: "Review Quiz",
+       id: "Review Review",
        goal: "RapidFire Review",
        childtutors: []
        }

@@ -20,7 +20,7 @@ public class Snapshotter extends Actor {
   public void draw (SpriteBatch batch, float parentAlpha) {
     batch.end();
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
-    shapeRenderer.begin(ShapeType.Rectangle);
+    shapeRenderer.begin(ShapeType.Line);
     shapeRenderer.setColor(Color.GREEN);
     shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
     shapeRenderer.end();

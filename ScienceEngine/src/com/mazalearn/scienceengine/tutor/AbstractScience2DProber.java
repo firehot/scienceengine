@@ -21,9 +21,9 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
 
   public AbstractScience2DProber(IScience2DController science2DController,
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
-      int successPoints, int failurePoints, String[] hints, String explanation) {
+      int successPoints, int failurePoints, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, id, components, configs, 
-        successPoints, failurePoints, hints, explanation);
+        successPoints, failurePoints, hints, explanation, refs);
     // A prober covers the entire screen
     this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }
@@ -71,7 +71,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   // Then checked for being outside of excluded actors
   // Then checked for being too close to each other
   protected void generateProbePoints(Vector2[] points) {
-    List<Actor> excludedActors = science2DController.getGuru().getExcludedActors();
+    List<Actor> excludedActors = tutorHelper.getExcludedActors();
     do {
       for (int i = 0; i < points.length; i++) {
         Vector2 point = points[i];

@@ -143,8 +143,16 @@ public interface ITutor {
   public void abort();
 
   /**
-   * ImageMessageBox for the specific thing taught by tutor, if any - may be null
+   * Explanations for the specific thing taught by tutor, if any - may be empty
    * @return
    */
-  String getExplanation();
+  public String[] getExplanation();
+
+  /**
+   * References for prerequisite concepts taught by this tutor - may be empty
+   * @return
+   */
+  public String[] getRefs();
+
+  public void setParentTutor(ITutor tutor);
 }

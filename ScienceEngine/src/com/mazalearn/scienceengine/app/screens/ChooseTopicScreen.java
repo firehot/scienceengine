@@ -50,7 +50,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
 
-    String title = getMsg().getString("ScienceEngine.ChooseTopic");
+    String title = getMsg("ScienceEngine.ChooseTopic");
     setTitle(title);
 
     // retrieve the default table

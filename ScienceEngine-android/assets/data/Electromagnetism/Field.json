@@ -10,6 +10,7 @@ configs:[
   {name: "Monopole.MagnetStrength", permitted:true},
   {name: "BField.FieldStrength", permitted:true, value: 5},
   {name: "BField.FieldAngle", permitted:true},
+  {name: "BField.FieldUpDown", permitted: true},
   {name: "Charge.ChargeStrength", permitted:true},
   {name: "FieldMeter.SampleMode", value:"Uniform"},
 ],
@@ -26,7 +27,7 @@ tutors:[
           id: "G1.1",
           goal: "Change Magnetic field strength and direction and observe direction of field",
          hints: ["What happens to the field when only one of strength or direction is changed?"],
-         explanation: "The magnetic field has a strength and a direction at each point.",
+         explanation: ["The magnetic field has a strength and a direction at each point."],
          postcondition: "Count(BField.FieldStrength) > 1 and Count(BField.FieldAngle) > 1",
          success: 1000
          }]
@@ -49,7 +50,7 @@ tutors:[
            id: "G2.1",
            goal: "Change Field strength and direction and see how monopole moves",
            hints: ["A free north pole moves in the direction of the field"],
-           explanation: "When the field strength increases, the force on the monopole increases",
+           explanation: ["When the field strength increases, the force on the monopole increases"],
            postcondition: "Count(BField.FieldStrength) > 1 and Count(BField.FieldAngle) > 1",
            success: 1000
           },
@@ -58,7 +59,7 @@ tutors:[
            goal: "Change strength of monopole and see how it affects the movement",
            components:[{type:"Monopole", pin:true}],
            hints: ["The force exerted by the field on the monopole depends on monopole strength"],
-           explanation: "When the monopole strength increases, the force on the monopole increases",
+           explanation: ["When the monopole strength increases, the force on the monopole increases"],
            postcondition: "Count(Monopole.MagnetStrength) > 1",
            success: 1000
           },
@@ -67,7 +68,7 @@ tutors:[
            goal: "Change type of Monopole to South and see how monopole moves",
            components:[{type:"Monopole", pin:true}],
            hints: ["A free south pole moves opposite to the direction of the field"],
-           explanation: "A South monopole behaves as the opposite of a North monopole. It moves against the direction of the field.",
+           explanation: ["A South monopole behaves as the opposite of a North monopole. It moves against the direction of the field."],
            postcondition: "Count(Monopole.MonopoleType) >= 1",
            success: 1000
          }]
@@ -91,7 +92,7 @@ tutors:[
            id: "G3.1",
            goal: "Increase the charge strength and see how the charge moves",
            hints: ["A stationary charge is not affected by a magnetic field"],
-           explanation: "A stationary charge is not affected by the magnetic field.",
+           explanation: ["A stationary charge is not affected by the magnetic field."],
            postcondition: "Count(Charge.ChargeStrength) > 1",
            success: 1000
           },
@@ -99,14 +100,16 @@ tutors:[
            id: "G3.2",
            goal: "Pull the charge in some direction and see how it moves",
            hints: ["A magnetic field exerts force on a moving charge"],
-           explanation: "A magnetic field exerts force only on a moving charge, not on a stationary charge.",
+           explanation: ["A magnetic field exerts force only on a moving charge, not on a stationary charge.\nThe direction of force is given by Fleming's left hand rule.",
+                         "fleminglefthand",
+                         "Since the force is perpendicular to the charge motion (current), the charge moves in a circle."],
            postcondition: "Charge.Velocity > 0",
            success: 1000
           },
           {type: "KnowledgeUnit",
            id: "G3.3",
            goal: "Change the magnetic field strength and see how it affects the charge",
-           explanation: "A stronger magnetic field exerts a stronger force on a moving charge making it spin faster.",
+           explanation: ["A stronger magnetic field exerts a stronger force on a moving charge making it spin faster."],
            hints: ["A stronger magnetic field exerts a stronger force on a moving charge"],
            postcondition: "Count(BField.FieldStrength) > 1 and Charge.Velocity > 0",
            success: 1000
@@ -114,7 +117,7 @@ tutors:[
           {type: "KnowledgeUnit",
            id: "G3.4",
            goal: "Change charge to negative and see how it moves",
-           explanation: "A moving negative charge in a magnetic field spins in the opposite direction to a positive charge.",
+           explanation: ["A moving negative charge in a magnetic field spins in the opposite direction to a positive charge."],
            hints: ["The force on the charge depends on its magnitude and sign"],
            postcondition: "Count(Charge.ChargeStrength) >= 1",
            success: 1000
@@ -129,7 +132,7 @@ tutors:[
           id: "C1.1",
           hints: ["The North monopole moves in the direction of the field",
                   "The South monopole moves opposite to the direction of the field"],
-          explanation: "A north monopole moves in the direction of the field while a south monopole moves opposite to the direction of the field.",
+          explanation: ["A north monopole moves in the direction of the field while a south monopole moves opposite to the direction of the field."],
           timelimit: 10,
           success: 100,
           failure: 50,
@@ -143,7 +146,7 @@ tutors:[
            resultType:"Spin",
            success: 100,
            failure: 50,
-           explanation: "Fleming's Left Hand Rule can be used to determine the direction of rotation of a positive charge in a magnetic field.",
+           explanation: ["Fleming's Left Hand Rule can be used to determine the direction of rotation of a positive charge in a magnetic field."],
            parameter:"Charge.ChargeStrength",
            result:"(Charge.CurrentStrength > 0) = (BField.FieldUpDown = 'Up')",
            components:[{type:"Charge", visible: true, pin: true}, {type: "Monopole", visible: false} ],
@@ -194,7 +197,7 @@ tutors:[
        },
        {type: "RapidFire",
        id: "R1",
-       goal: "RapidFire Quiz",
+       goal: "RapidFire Review",
        childtutors: [
           {type: "MCQ1",
           id: "R1.1",

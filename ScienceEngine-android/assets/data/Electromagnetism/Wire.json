@@ -98,7 +98,7 @@ tutors:[
         ]},
        {type: "RapidFire",
        id: "Multiple Choice Questions",
-       goal: "RapidFire Quiz",
+       goal: "RapidFire Review",
        components: [ {type: "Wire", visible: false},
                      {type: "CurrentSource", visible: false},
                      {type: "Compass", visible: false},
@@ -139,7 +139,7 @@ tutors:[
                    "a magnetic field", 
                    "magnetic as well as electric fields",
                    "none of these"],
-          explanation: "Electric charges interact with electric fields. Since a moving electric charge causes a magnetic field, it will interact with magnetic fields",
+          explanation: ["Electric charges interact with electric fields. Since a moving electric charge causes a magnetic field, it will interact with magnetic fields"],
           answermask: "0010"
           },
          {type: "MCQ1",
@@ -187,7 +187,7 @@ tutors:[
                    "cobalt", 
                    "nickel",
                    "copper"],
-          explanation: "Iron, cobalt and nickel are ferro-magnetic. Copper is not.",
+          explanation: ["Iron, cobalt and nickel are ferro-magnetic. Copper is not."],
           answermask: "0001"
           }
       ]}

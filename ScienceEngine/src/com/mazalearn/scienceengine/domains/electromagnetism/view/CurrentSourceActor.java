@@ -20,12 +20,16 @@ public class CurrentSourceActor extends Science2DActor {
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
-    float scaledCurrent = currentSource.getCurrent() / CurrentSource.DEFAULT_MAX_CURRENT;
+    drawCurrent(batch, currentSource.getCurrent(), getX() + this.getWidth() * 0.7f,
+        getY() + this.getHeight()/2.35f);
+  }
+
+  public static void drawCurrent(SpriteBatch batch, float currentVal, float xpos, float ypos) {
+    float scaledCurrent = currentVal / CurrentSource.DEFAULT_MAX_CURRENT;
     float rotation = scaledCurrent >= 0 ? 90 : 270;
     float width = ScreenComponent.getScaledX(current.getRegionWidth() * Math.abs(scaledCurrent));
     float height = ScreenComponent.getScaledY(current.getRegionHeight());
-    batch.draw(current, getX() + this.getWidth() * 0.7f - height/2, 
-        getY() + this.getHeight()/2.35f, 0, height/2, width, height, 
+    batch.draw(current, xpos - height/2, ypos, 0, height/2, width, height, 
         1, 1, rotation);
   }
 }

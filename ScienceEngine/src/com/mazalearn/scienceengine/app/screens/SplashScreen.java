@@ -78,7 +78,7 @@ public class SplashScreen extends AbstractScreen {
     userInfo.add(userImage).width(60).height(60);
     userInfo.setPosition(100, 100);
 
-    Label touchToStart = new Label("Touch to Start", scienceEngine.getSkin());
+    Label touchToStart = new Label("Touch to Start", getSkin());
     touchToStart.setColor(Color.WHITE);
     touchToStart.setFontScale(2f);
     touchToStart.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - 120, ScreenComponent.VIEWPORT_HEIGHT / 2 - 80);
@@ -141,7 +141,7 @@ public class SplashScreen extends AbstractScreen {
             stage.addActor(usersPane);
           }
         } else {
-          new RegistrationDialog(getSkin(), userImage).show(stage);
+          new UserHomeDialog(getSkin(), userImage).show(stage);
         }
       }
     });

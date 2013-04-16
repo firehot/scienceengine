@@ -76,7 +76,7 @@ public class McqActor extends Group {
     return listener;
   }
   
-  public ButtonGroup setUp(ITutor tutor, List<String> optionList, String reason, boolean singleAnswer) {
+  public ButtonGroup setUp(ITutor tutor, List<String> optionList, boolean singleAnswer) {
     this.tutor = tutor;
     optionListener.setTutor(tutor);
     Array<Button> buttons = optionButtons.getButtons();

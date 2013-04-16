@@ -39,9 +39,9 @@ public class Abstractor extends AbstractTutor {
   public Abstractor(final IScience2DController science2DController, TutorType tutorType, ITutor parent, String goal, 
       String name, Array<?> components, Array<?> configs, Skin skin, 
       ModelControls modelControls, int successPoints,
-      int failurePoints, String[] hints, String explanation) {
+      int failurePoints, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, name, components, configs, 
-        successPoints, failurePoints, hints, explanation);
+        successPoints, failurePoints, hints, explanation, refs);
     this.skin = skin;
     this.modelControls = modelControls;
     /* Abstractor allows user to interact with bodies on screen as well as its
@@ -84,7 +84,7 @@ public class Abstractor extends AbstractTutor {
     Utils.shuffle(configList);
     // Add parameters to table
     TextButton submitButton = createSubmitButton(skin);
-    final ChangeOptions changeOptions = new ChangeOptions(guru, question, submitButton, 
+    final ChangeOptions changeOptions = new ChangeOptions(tutorHelper, question, submitButton, 
         configTable.getChildren(), decrease, noeffect, increase);
     this.addActor(changeOptions);
     for (final IModelConfig<?> config: configList) {
@@ -120,9 +120,9 @@ public class Abstractor extends AbstractTutor {
   private static class ChangeOptions extends Table {
     Image img;
     private Label label;
-    public ChangeOptions(Guru guru, final TextureRegionDrawable question, 
+    public ChangeOptions(TutorHelper tutorHelper, final TextureRegionDrawable question, 
         final Button submitButton, final Array<Actor> choices, final TextureRegionDrawable... options) {
-      super(guru.getSkin());
+      super(tutorHelper.getSkin());
       for (TextureRegionDrawable option: options) {
         final Image opt = new Image(); opt.setDrawable(option);
         opt.addListener(new ClickListener() {
@@ -191,7 +191,7 @@ public class Abstractor extends AbstractTutor {
   public void systemReadyToFinish(boolean success) {
     if (!success) {
       life[--numLivesLeft].getColor().a = 0.3f;
-      guru.showWrong(getFailurePoints());
+      tutorHelper.showWrong(getFailurePoints());
       stats[ITutor.POINTS] -= getFailurePoints();
       recordStats();
       if (numLivesLeft == 0) {
@@ -199,7 +199,7 @@ public class Abstractor extends AbstractTutor {
       }
       return;
     }
-    guru.showCorrect(getSuccessPoints());
+    tutorHelper.showCorrect(getSuccessPoints());
     stats[ITutor.POINTS] += getSuccessPoints();
     super.systemReadyToFinish(true);
   }

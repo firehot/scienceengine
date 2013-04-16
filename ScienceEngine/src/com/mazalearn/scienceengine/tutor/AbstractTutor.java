@@ -21,8 +21,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private final String[] hints;
   private final String goal;
   protected IScience2DController science2DController;
-  protected final ITutor parent;
-  protected final Guru guru;
+  protected ITutor parent;
+  protected final TutorHelper tutorHelper;
   private final ITutorType tutorType;
   private final String id;
   protected boolean success;
@@ -30,7 +30,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   protected State state = State.Constructed;
   private int successPoints;
   private int failurePoints;
-  private String explanation;
+  private String[] explanation;
+  private String[] refs;
 
   /**
    * State Machine
@@ -48,10 +49,12 @@ public abstract class AbstractTutor extends Group implements ITutor {
    * @param successPoints
    * @param failurePoints
    * @param hints
+   * @param refs 
+   * @param explanationImg 
    */
   public AbstractTutor(IScience2DController science2DController,
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
-      int successPoints, int failurePoints, String[] hints, String explanation) {
+      int successPoints, int failurePoints, String[] hints, String[] explanation, String[] refs) {
     this.tutorType = tutorType;
     this.parent = parent;
     this.science2DController = science2DController;
@@ -63,10 +66,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.failurePoints = failurePoints;
     this.hints = hints;
     this.explanation = explanation;
-    this.guru = science2DController.getGuru();
-    this.stats = guru.getProfile().getStats(id);
+    this.refs = refs;
+    this.tutorHelper = science2DController.getGuru().getTutorHelper();
+    this.stats = tutorHelper.getProfile().getStats(id);
     this.setVisible(false);
-
   }
 
   @Override
@@ -79,14 +82,15 @@ public abstract class AbstractTutor extends Group implements ITutor {
       finish();
     } else {
       state = State.SystemFinished;
-      guru.showNextButton(true);
+      tutorHelper.showNextButton(true);
     }
   }
   
   @Override
-  public String getExplanation() {
+  public String[] getExplanation() {
     return explanation;
   }
+  
   /**
    * Did this specific instance of the tutor end with success?
    * @return
@@ -107,7 +111,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void userReadyToFinish() { // Assumed to be always success
     Gdx.app.log(ScienceEngine.LOG, "User has finished");
-    guru.showNextButton(false);
+    tutorHelper.showNextButton(false);
     if (state == State.SystemFinished) {
       state = State.Finished;
       finish();
@@ -122,7 +126,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.setVisible(false);
     if (success) stats[ITutor.NUM_SUCCESSES]++;
     recordStats();
-    guru.setActiveTutor(parent);
+    tutorHelper.showNextButton(false);
+    tutorHelper.setActiveTutor(parent);
     if (state == State.Finished) { 
       parent.systemReadyToFinish(true);
     } else if (state == State.Aborted) {
@@ -143,7 +148,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     // Update all stats
     stats[ITutor.PERCENT_PROGRESS] = stats[ITutor.NUM_SUCCESSES] == 0 ? 0 : 100;   
     parent.recordStats();
-    guru.getProfile().saveStats(stats, id);
+    tutorHelper.getProfile().saveStats(stats, id);
   }
   
   @Override
@@ -181,8 +186,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
     state = State.PreparedToTeach;
     
     this.setVisible(false);
-    guru.setActiveTutor(this);
-    guru.showNextButton(false);
+    tutorHelper.setActiveTutor(this);
+    tutorHelper.showNextButton(false);
     stats[ITutor.POINTS] = 0;
     recordStats();
     // Mark start of tutor in event log
@@ -229,4 +234,13 @@ public abstract class AbstractTutor extends Group implements ITutor {
     return state;
   }
   
+  @Override
+  public void setParentTutor(ITutor parentTutor) {
+    this.parent = parentTutor;
+  }
+  
+  @Override
+  public String[] getRefs() {
+    return refs;
+  }
 }

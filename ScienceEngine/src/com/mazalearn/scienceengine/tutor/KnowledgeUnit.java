@@ -18,14 +18,14 @@ public class KnowledgeUnit extends AbstractTutor {
   
   public KnowledgeUnit(IScience2DController science2DController,
       TutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
-      int successPoints, String[] hints, String explanation) {
+      int successPoints, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, id, components, configs, 
-        successPoints, 0, hints, explanation);
+        successPoints, 0, hints, explanation, refs);
     
   }
 
   public void initialize(String when, String postConditionString) {
-    Parser parser = guru.createParser();
+    Parser parser = tutorHelper.createParser();
     try {
       this.postCondition = parser.parseString(postConditionString);
     } catch (SyntaxException e) {

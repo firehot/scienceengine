@@ -25,15 +25,10 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter.Sam
 public class FieldMeterActor extends Science2DActor {
   private final FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
-  private TextureRegion[] textureRegions;
   
   public FieldMeterActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
     this.fieldMeter = (FieldMeter) body;
-    this.textureRegions = new TextureRegion[] {
-        ScienceEngine.getTextureRegion("field-down"),
-        textureRegion,
-        ScienceEngine.getTextureRegion("field-up")};
     
     this.removeListener(getListeners().get(0)); // help listener
     this.removeListener(getListeners().get(0)); // move, rotate listener
@@ -58,61 +53,67 @@ public class FieldMeterActor extends Science2DActor {
     return this;
   }
 
-  public void draw1(SpriteBatch batch, float parentAlpha) {
+  //@Override
+  public void draw(SpriteBatch batch, float parentAlpha) {
     ShapeRenderer shapeRenderer = new ShapeRenderer();
     batch.end();
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     List<FieldSample> fieldSamples = fieldMeter.getFieldSamples();
-    shapeRenderer.setColor(Color.GREEN);
 
     // Reverse traversal - want to show the latest point first
     for (int i = fieldSamples.size() - 1; i >= 0; i--) {
       FieldSample fieldSample = fieldSamples.get(i);
       // Magnitude is scaled logarmthmically as width and height of arrow
-      float magnitude = (float) Math.min(Math.log(1 + fieldSample.magnitude), 5);
+      float magnitude = (float) Math.min(Math.log(1 + fieldSample.magnitude), 3);
       // location of field meter center is the sample point
       pos.set(fieldSample.x, fieldSample.y);
       pos.mul(ScreenComponent.PIXELS_PER_M);
       shapeRenderer.identity();
       shapeRenderer.translate(pos.x, pos.y, 0);
       // find half width and half height
-      float w = magnitude * getWidth() / 2;
-      float h = magnitude * getHeight() / 2;
+      float w = magnitude * getWidth() / 3;
+      float h = magnitude * getHeight() / 5;
       // Bottom of arrow position
-      float rotation =  (fieldSample.theta * MathUtils.radiansToDegrees) % 360;
-      shapeRenderer.rotate(0, 1, 0, rotation);
-      shapeRenderer.begin(ShapeType.Box);
-      shapeRenderer.box(-w, -h, -h, w, h, h);
-      shapeRenderer.end();
-      shapeRenderer.translate(0, 0, 0);
-      shapeRenderer.begin(ShapeType.FilledCone);
-      shapeRenderer.rotate(0, 1, 0, 90);
-      shapeRenderer.filledCone(w, 0, 0, h, h/3f);
-      shapeRenderer.end();
+      float theta =  (fieldSample.theta * MathUtils.radiansToDegrees) % 360;
+      float phi = fieldSample.phi * MathUtils.radiansToDegrees;
+      // TODO: animated change to z-direction field
+      if (phi == 0) {
+        shapeRenderer.rotate(0, 0, 1, theta);
+//        shapeRenderer.rotate(0, 1, 0, phi);
+        shapeRenderer.setColor(ScienceEngine.getSkin().getColor("field"));
+        shapeRenderer.begin(ShapeType.FilledRectangle);
+        shapeRenderer.filledRect(-w - w / 2, -h, 2 * w, 2 * h);
+        shapeRenderer.end();
+        shapeRenderer.begin(ShapeType.FilledTriangle);
+        shapeRenderer.filledTriangle(w - w/2, -2 * h, w - w/2, 2 * h, w + w, 0);
+        shapeRenderer.end();
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.begin(ShapeType.FilledCircle);
+        shapeRenderer.filledCircle(0, 0, magnitude);
+        shapeRenderer.end();
+//        shapeRenderer.rotate(0, 1, 0, -phi);
+        shapeRenderer.rotate(0, 0, 1, -theta);
+      } else 
+      if (phi > 0) {
+        shapeRenderer.setColor(ScienceEngine.getSkin().getColor("field"));
+        shapeRenderer.begin(ShapeType.FilledCircle);
+        shapeRenderer.filledCircle(0, 0, h);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.filledCircle(0, 0, magnitude);
+        shapeRenderer.end();
+      } else if (phi < 0) {
+        shapeRenderer.setColor(ScienceEngine.getSkin().getColor("field"));
+        shapeRenderer.begin(ShapeType.FilledRectangle);
+        shapeRenderer.rotate(0, 0, 1, 45);
+        shapeRenderer.filledRect(-h*2, -magnitude/2, 4 * h, magnitude);
+        shapeRenderer.filledRect(-magnitude/2, -h*2, magnitude, 4 * h);
+        shapeRenderer.end();
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.begin(ShapeType.FilledCircle);
+        shapeRenderer.filledCircle(0, 0, magnitude);
+        shapeRenderer.end();
+      }
     }
     batch.begin();
-  }
-
-    @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-    List<FieldSample> fieldSamples = fieldMeter.getFieldSamples();
-    // Reverse traversal - want to show the latest point first
-    for (int i = fieldSamples.size() - 1; i >= 0; i--) {
-      FieldSample fieldSample = fieldSamples.get(i);
-      // Magnitude is scaled logarmthmically as width and height of arrow
-      float magnitude = (float) Math.min(Math.log(1 + fieldSample.magnitude), 5);
-      // location of field meter center is the sample point
-      pos.set(fieldSample.x, fieldSample.y);
-      pos.mul(ScreenComponent.PIXELS_PER_M);
-      // find location of origin
-      float originX = magnitude * getWidth() / 2;
-      float originY = magnitude * getHeight() / 2;
-      // Bottom of arrow position
-      pos.sub(originX, originY);
-      float rotation =  (fieldSample.theta * MathUtils.radiansToDegrees) % 360;
-      TextureRegion textureRegion = textureRegions[fieldSample.phi + 1];
-      batch.draw(textureRegion, pos.x, pos.y, 
-          originX, originY, getWidth() * magnitude, getHeight() * magnitude, 1, 1, rotation);
-    }
   }
 }

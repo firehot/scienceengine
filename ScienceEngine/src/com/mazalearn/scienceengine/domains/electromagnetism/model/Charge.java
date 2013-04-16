@@ -52,7 +52,7 @@ public class Charge extends Science2DBody implements IMagneticField.Consumer {
     configs.add(new AbstractModelConfig<Float>(this, 
         Parameter.Velocity, 0, 10) {
       public Float getValue() { return getBody().getLinearVelocity().len(); }
-      public void setValue(Float value) { getBody().setLinearVelocity(Vector2.tmp.set(value/1.4143f, value/1.4143f));}
+      public void setValue(Float value) { getBody().setLinearVelocity(force.set(value/1.4143f, value/1.4143f));}
       public boolean isPossible() { return isActive(); }
     });
   }

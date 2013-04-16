@@ -153,7 +153,7 @@ public class Profile implements Serializable {
 
   public String getUserName() {
     String s = properties.get(USER_NAME);
-    return s == null ? "Unregistered" : s;
+    return s == null ? "Guest" : s;
   }
 
   public String getUserEmail() {

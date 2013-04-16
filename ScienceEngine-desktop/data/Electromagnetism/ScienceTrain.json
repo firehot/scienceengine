@@ -69,7 +69,7 @@ tutors: [
        ]},
        {type: "RapidFire",
        id: "Multiple Choice Questions",
-       goal: "RapidFire Quiz",
+       goal: "RapidFire Review",
        childtutors: [
           {type: "MCQ1",
           id: "9.1",
@@ -87,7 +87,7 @@ tutors: [
            options:["Is parallel to the plane of the coil", 
                    "Is perpendicular to the plane of the coil"
                    ],
-         explanation: "When its axis is parallel to the plane of the coil, it does not cut the magnetic field lines. The rate of change of flux is negligible.",
+         explanation: ["When its axis is parallel to the plane of the coil, it does not cut the magnetic field lines. The rate of change of flux is negligible."],
          answermask: "01"
           }]
        }

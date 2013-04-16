@@ -40,7 +40,7 @@ public class AbstractScience2DProberTest {
   public AbstractScience2DProberTest() {
     prober = new FieldMagnitudeProber(science2DController,
       TutorType.FieldMagnitudeProber, null, "goal", "id", null, null,
-      0, 0, new String[] {}, null);
+      0, 0, new String[0], new String[0], new String[0]);
   }
   
   @BeforeClass
@@ -59,7 +59,7 @@ public class AbstractScience2DProberTest {
     app.postRunnable(new Runnable() {
       @Override
       public void run() {
-        ScienceEngine.loadAtlas("images/guru/pack.atlas");
+        ScienceEngine.loadAtlas("images/tutorHelper/pack.atlas");
         science2DController = new DummyController(scienceEngine.getSkin());
         science2DView = science2DController.getView();
       }    

@@ -205,7 +205,7 @@ public class DrawingActor extends Science2DActor {
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     shapeRenderer.identity();
     shapeRenderer.translate(getX(), getY(), 0);
-    shapeRenderer.begin(ShapeType.Rectangle);
+    shapeRenderer.begin(ShapeType.Line);
     shapeRenderer.setColor(Color.YELLOW);
     
     // Draw wheel areas

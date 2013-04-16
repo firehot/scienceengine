@@ -12,7 +12,7 @@ public class Scoreboard extends Table {
   private Label scoreLabel;
   private ITutor tutor;
 
-  Scoreboard(Skin skin) {
+  public Scoreboard(Skin skin) {
     super(skin);
     if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
       debug();

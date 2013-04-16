@@ -24,10 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
-import com.mazalearn.scienceengine.core.view.AnimateAction;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
@@ -44,8 +42,8 @@ public abstract class AbstractScreen implements Screen {
     this.scienceEngine = scienceEngine;
   }
   
-  public IMessage getMsg() {
-    return ScienceEngine.getMsg();
+  public String getMsg(String msg) {
+    return ScienceEngine.getMsg().getString(msg);
   }
   
   public AbstractScreen(ScienceEngine game) {
@@ -67,6 +65,9 @@ public abstract class AbstractScreen implements Screen {
         return super.keyDown(event, keycode);
       }      
     });
+    if (needsLayout()) {
+      setupCoreGroup(stage);
+    }
   }
 
   protected boolean needsLayout() {
@@ -98,15 +99,11 @@ public abstract class AbstractScreen implements Screen {
     }
   }
 
-  private void setupCoreGroup(Stage stage) {
-    Group coreGroup = (Group) stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
-    if (coreGroup == null) {
-      coreGroup = new Group();
-      coreGroup.setName(ScreenComponent.CORE_GROUP);
-      stage.addActor(coreGroup);
-    } else if (coreGroup.findActor(ScreenComponent.Title.name()) != null) {
-      return;
-    }
+  protected Group setupCoreGroup(Stage stage) {
+    Group coreGroup = new Group();
+    coreGroup.setName(ScreenComponent.CORE_GROUP);
+    stage.addActor(coreGroup);
+    
     // Create core group components
     for (ScreenComponent screenComponent: ScreenComponent.values()) {
       if (!screenComponent.isInAllScreens()) continue;
@@ -127,6 +124,7 @@ public abstract class AbstractScreen implements Screen {
             screenComponent.getY(component.getHeight()));
       }
     }
+    return coreGroup;
   }
 
   private Actor createScreenComponent(ScreenComponent screenComponent, final Stage stage, Skin skin) {
@@ -150,7 +148,7 @@ public abstract class AbstractScreen implements Screen {
         table.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-            new RegistrationDialog(getSkin(), image).show(stage);
+            new UserHomeDialog(getSkin(), image).show(stage);
           }      
          });
         return table;
@@ -226,9 +224,6 @@ public abstract class AbstractScreen implements Screen {
     Gdx.input.setCatchBackKey(true);
     // Catch menu key to prevent onscreen keyboard coming up
     Gdx.input.setCatchMenuKey(true);
-    if (needsLayout()) {
-      setupCoreGroup(stage);
-    }
   }
 
   @Override
@@ -281,7 +276,7 @@ public abstract class AbstractScreen implements Screen {
   }
 
   public Skin getSkin() {
-    return scienceEngine.getSkin();
+    return ScienceEngine.getSkin();
   }
 
   // Adds all assets required for this screen to reduce load timeLimit

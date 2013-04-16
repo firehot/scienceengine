@@ -25,9 +25,9 @@ public class McqTutor extends AbstractTutor {
   public McqTutor(IScience2DController science2DController, TutorType tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
       Skin skin, int successPoints, int failurePoints, String[] hints,
-      String explanation, boolean singleAnswer) {
+      String[] explanation, String[] refs, boolean singleAnswer) {
     super(science2DController, tutorType, parent, goal, id, 
-        components, configs, successPoints, failurePoints, hints, explanation);
+        components, configs, successPoints, failurePoints, hints, explanation, refs);
     this.singleAnswer = singleAnswer;
     this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }
@@ -45,10 +45,10 @@ public class McqTutor extends AbstractTutor {
       }
     }
     if (success) {
-      guru.showSuccess(getSuccessPoints());
+      tutorHelper.showSuccess(getSuccessPoints());
     } else {
       this.stats[ITutor.FAILURE_TRACKER] += failureTracker;
-      guru.showFailure(getFailurePoints());
+      tutorHelper.showFailure(getFailurePoints());
     }
     // Flash correct options.
     for (int i = 0; i < answerMask.length(); i++) {
@@ -93,8 +93,8 @@ public class McqTutor extends AbstractTutor {
   @Override
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);
-    McqActor mcqActor = guru.getMcqActor();
-    optionsGroup = mcqActor.setUp(this, optionList, getExplanation(), singleAnswer);
+    McqActor mcqActor = tutorHelper.getMcqActor();
+    optionsGroup = mcqActor.setUp(this, optionList, singleAnswer);
     addActor(mcqActor);
   }
 }

@@ -25,6 +25,7 @@ public class AboutDialog extends Dialog {
     description.setWidth(600);
     description.setWrap(true);
     
+    // TODO: clean up all copyrights statements
     final Label copyrights = 
         new Label(ScienceEngine.getMsg().getString("ScienceEngine.Copyrights"), skin);
     copyrights.setWidth(600);

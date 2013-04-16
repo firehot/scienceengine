@@ -41,9 +41,10 @@ class TutorLoader {
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
     String[] hints = loadStringArray("hints", tutorObj);
-    String explanation = (String) tutorObj.get("explanation");
+    String[] explanation = loadStringArray("explanation", tutorObj);
+    String[] refs = loadStringArray("refs", tutorObj);
     AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, id,
-        components, configs, (int) successPoints, (int) failurePoints, hints, explanation);
+        components, configs, (int) successPoints, (int) failurePoints, hints, explanation, refs);
     if (tutor == null) return null;
     
     if (tutor.getType() instanceof TutorType) {
@@ -141,7 +142,7 @@ class TutorLoader {
 
   private String[] loadStringArray(String attribute, OrderedMap<String, ?> tutorObj) {
     Array<?> hintObj = (Array<?>) tutorObj.get(attribute);
-    String[] hints = hintObj == null ? new String[]{} : new String[hintObj.toArray().length];
+    String[] hints = hintObj == null ? new String[0] : new String[hintObj.toArray().length];
     for (int i = 0; i < hints.length; i++) {
       hints[i] = (String) hintObj.get(i);
     }

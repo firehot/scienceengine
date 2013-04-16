@@ -78,7 +78,7 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
   
   private void updateStrength() {
     // Compute the electromagnet's emf amplitude.
-    float emf = (numberOfLoops / (float) ELECTROMAGNET_LOOPS_MAX) * current;
+    float emf = - (numberOfLoops / (float) ELECTROMAGNET_LOOPS_MAX) * current;
     emf = Clamp.clamp(-MAX_EMF, emf, MAX_EMF);
     
     /*
@@ -232,6 +232,10 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
   public Vector2 getT2Position() {
     return secondTerminal.set(getPosition())
         .add(ScreenComponent.getScaledX(1.5f), ScreenComponent.getScaledY(3.5f));
+  }
+
+  public float getCurrent() {
+    return current;
   }
   
 }

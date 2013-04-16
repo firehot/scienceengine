@@ -531,7 +531,7 @@ public class LevelEditor extends Stage {
 
   private void drawBoundingBox(Actor actor, boolean selected) {
     // Draw outline for actor
-    shapeRenderer.begin(ShapeType.Rectangle);
+    shapeRenderer.begin(ShapeType.Line);
     shapeRenderer.setColor(selected ? Color.YELLOW : Color.BLUE);
     shapeRenderer.rect(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
 
@@ -545,7 +545,7 @@ public class LevelEditor extends Stage {
     // Draw handle for rotation
     shapeRenderer.begin(ShapeType.FilledRectangle);
     shapeRenderer.setColor(Color.GREEN);
-    shapeRenderer.rect(actor.getX() + actor.getWidth() - handleSize.x, actor.getY(), 
+    shapeRenderer.filledRect(actor.getX() + actor.getWidth() - handleSize.x, actor.getY(), 
         handleSize.x, handleSize.y);
     shapeRenderer.end();
         

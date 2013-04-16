@@ -29,9 +29,9 @@ public class TutorGroup extends AbstractTutor {
     
   public TutorGroup(IScience2DController science2DController, TutorType tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs, 
-      int successPoints, int failurePoints, String[] hints, String explanation) {
+      int successPoints, int failurePoints, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, id, components, configs, 
-        successPoints, failurePoints, hints, explanation);
+        successPoints, failurePoints, hints, explanation, refs);
   }
   
   @Override
@@ -75,9 +75,9 @@ public class TutorGroup extends AbstractTutor {
     
     IComponentType tutorType = currentTutor.getType();
     if (tutorType == TutorType.Challenge) {
-      guru.doChallengeAnimation(currentTutor);
+      tutorHelper.doChallengeAnimation(currentTutor);
     } else if (tutorType == TutorType.RapidFire || tutorType == TutorType.Reviewer) {
-      guru.doRapidFireAnimation(currentTutor);
+      tutorHelper.doRapidFireAnimation(currentTutor);
     } else {
       currentTutor.teach();
     }
@@ -110,8 +110,10 @@ public class TutorGroup extends AbstractTutor {
   
   public void initialize(List<ITutor> childTutors, String successActionsString) {
     this.childTutors = childTutors;
+    this.clear(); // Clear all actors
     for (ITutor childTutor: childTutors) {
       this.addActor((AbstractTutor) childTutor);
+      childTutor.setParentTutor(this);
     }
     if (getType() == TutorType.RapidFire) {
       // Shuffle child tutors
@@ -120,7 +122,7 @@ public class TutorGroup extends AbstractTutor {
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.tutorBeginTime = new float[childTutors.size() + 1];
     if (successActionsString != null) {
-      Parser parser = guru.createParser();
+      Parser parser = tutorHelper.createParser();
       try {
         this.successActions = parser.parseString(successActionsString);
       } catch (SyntaxException e) {
@@ -165,7 +167,7 @@ public class TutorGroup extends AbstractTutor {
     stats[ITutor.POINTS] = points;
     
     // Save stats into profile
-    guru.getProfile().saveStats(stats, getId());
+    tutorHelper.getProfile().saveStats(stats, getId());
     parent.recordStats();
   }
 }

@@ -19,6 +19,7 @@ public class Hinter extends Group {
   private int scientistIndex = 0;
   private boolean jumpingMode = false;
   private String hint;
+  private ITutor activeTutor;
   
   static {
     SCIENTISTS.add(new Image());
@@ -63,6 +64,10 @@ public class Hinter extends Group {
   @Override
   public void act(float delta) {
     super.act(delta);
+    if (Math.round(ScienceEngine.getTime()) % 10 != 0) return;
+    if (activeTutor != null && !hasHint()) {
+      setHint(activeTutor.getHint());
+    }
     if (!jumpingMode) return;
     // Jump up and down
     if (count++ % 20 == 0) {
@@ -70,6 +75,11 @@ public class Hinter extends Group {
     }
     Image image = SCIENTISTS.get(scientistIndex);
     image.setY(image.getY() + increment);
+  }
+  
+  public void setActiveTutor(ITutor activeTutor) {
+    this.activeTutor = activeTutor;
+    clearHint();
   }
   
   public void setHint(String hint) {
@@ -95,7 +105,9 @@ public class Hinter extends Group {
   
   public void clearHint() {
     this.hint = null;
-    ScienceEngine.displayStatusMessage(getStage(), "");
+    if (getStage() != null) {
+      ScienceEngine.displayStatusMessage(getStage(), "");
+    }
   }
 
 }

@@ -31,6 +31,9 @@ public class ElectromagnetActor extends Science2DActor {
       batch.draw(coil, getX() - i * ScreenComponent.getScaledX(COIL_WIDTH), getY(), 0, 0, super.getWidth(), 
           getHeight(), 1, 1, getRotation());
     }
+    // Show current - direction is reversed
+    CurrentSourceActor.drawCurrent(batch, electromagnet.getCurrent(), getX(),
+        getY() + this.getHeight()/2.35f);
   }
   
   @Override

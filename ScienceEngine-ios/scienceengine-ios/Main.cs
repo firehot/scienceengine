@@ -48,6 +48,15 @@ namespace scienceengineios
 				return "";
 			}
 		}
+
+	    public override string httpGet(string path) {
+			try {
+				return base.httpGet(path);
+			} catch (System.Net.Sockets.SocketException ignore) {
+				return "";
+			}
+		}
+
 	}
 
 	public class Application
@@ -79,8 +88,8 @@ namespace scienceengineios
 				return result;
 			}
 			internal static ScienceEngine getScienceEngine () {
-				scienceEngine = new ScienceEngine ("");
 				ScienceEngine.DEV_MODE = ScienceEngine.DevMode.PRODUCTION;
+				scienceEngine = new ScienceEngine ("");
 				iosAdapter = new IosPlatformAdapter();
 				scienceEngine.setPlatformAdapter(iosAdapter);
 				return scienceEngine;

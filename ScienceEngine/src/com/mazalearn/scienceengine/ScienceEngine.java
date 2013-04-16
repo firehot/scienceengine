@@ -107,7 +107,7 @@ public class ScienceEngine extends Game {
     return soundManager;
   }
 
-  public Skin getSkin() {
+  public static Skin getSkin() {
     if (skin == null) {
       FileHandle skinFile = Gdx.files.internal(SKIN_BASE + ".json");
       skin = new Skin(skinFile, new TextureAtlas(Gdx.files.internal(SKIN_BASE + ".atlas")));
@@ -314,7 +314,7 @@ public class ScienceEngine extends Game {
     selectedBody = body;
     if (body == null) return;
     eventLog.logEvent(body.name(), Parameter.Select.name());
-    science2DView.checkGuruProgress();
+    science2DView.checkActiveTutorProgress();
     displayEntityStatus(body, body.getComponentTypeName(), science2DView);
   }
 
@@ -327,7 +327,7 @@ public class ScienceEngine extends Game {
     getSoundManager().play(ScienceEngineSound.CLICK);
     displayEntityStatus(body, parameter.name(), science2DView);
     if (body == null) return;
-    science2DView.checkGuruProgress();
+    science2DView.checkActiveTutorProgress();
     eventLog.logEvent(body.name(), parameter.name(), value);
   }
   
@@ -452,4 +452,5 @@ public class ScienceEngine extends Game {
     }
     return assetManager;
   }
+
 }

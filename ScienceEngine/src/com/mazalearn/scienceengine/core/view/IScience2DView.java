@@ -31,8 +31,8 @@ public interface IScience2DView extends IDoneCallback {
   public void removeLocationGroups();
   // Once all actors are created, prepare the stage
   void prepareView();
-  // Check progress of guru
-  void checkGuruProgress();
+  // Check progress of active tutor
+  void checkActiveTutorProgress();
   // return font for this view
   public BitmapFont getFont();
   // Commands available for this view
@@ -41,6 +41,4 @@ public interface IScience2DView extends IDoneCallback {
   public ModelControls getModelControls();
   // Get view controls for this view
   ViewControls getViewControls();
-  // show help
-  void showHelp();
 }

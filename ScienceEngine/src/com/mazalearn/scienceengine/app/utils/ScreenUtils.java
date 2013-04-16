@@ -147,14 +147,14 @@ public class ScreenUtils {
   public static TextButton createImageButton(TextureRegion textureRegion, Skin skin) {
     TextureRegionDrawable image = 
         new TextureRegionDrawable(textureRegion);
-    TextButton activityThumb = new TextButton("", skin) {
+    TextButton imageButton = new TextButton("", skin) {
       @Override
       public void drawBackground(SpriteBatch batch, float parentAlpha) {
         getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
       }
     };
-    activityThumb.setBackground(image);
-    return activityThumb;
+    imageButton.setBackground(image);
+    return imageButton;
   }
 
   public static TextButton createTextButton(String text, 
@@ -192,21 +192,6 @@ public class ScreenUtils {
     percentLabel.setAlignment(Align.center, Align.center);
     ScreenComponent.scalePositionAndSize(percentLabel, 5, 12, 40, 20);
     thumbnail.addActor(percentLabel);
-  }
-
-  public static TextButton createImageMessageBox(Skin skin, String textureName) {
-    TextureRegion textureRegion = ScienceEngine.getTextureRegion(textureName);
-    TextButton message = createImageButton(textureRegion, skin);
-    message.getLabel().setWrap(true);
-    message.getCell(message.getLabel()).pad(80, 40, 70, 40);
-    TextButtonStyle tbs = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
-    tbs.fontColor = Color.BLACK;
-    message.setStyle(tbs);
-    message.setWidth(250);
-    message.setHeight(250);
-    message.setPosition(ScreenComponent.ImageMessageBox.getX(message.getWidth()),
-        ScreenComponent.ImageMessageBox.getY(message.getHeight()));
-    return message;
   }
 
 }

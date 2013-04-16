@@ -19,9 +19,9 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   protected AbstractFieldProber(IScience2DController science2DController, 
       ITutorType tutorType, ITutor parent, String goal, String id,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, 
-      String[] hints, String explanation) {
+      String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, id, components, configs, 
-        deltaSuccessScore, deltaFailureScore, hints, explanation);
+        deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
     this.fieldMeterActor = (Science2DActor) science2DController.getView().findActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();
@@ -45,10 +45,10 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   public void systemReadyToFinish(boolean success) {
     netSuccesses += success ? 1 : -1;
     if (success) {
-      guru.showCorrect(getSuccessPoints());
+      tutorHelper.showCorrect(getSuccessPoints());
       stats[ITutor.POINTS] += getSuccessPoints();
     } else {
-      guru.showWrong(getFailurePoints());
+      tutorHelper.showWrong(getFailurePoints());
       stats[ITutor.POINTS] -= getFailurePoints();
       // TODO: equate success and failure scores
     }

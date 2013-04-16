@@ -18,9 +18,9 @@ public class LightProber extends AbstractScience2DProber {
   
   public LightProber(IScience2DController science2DController, ITutorType tutorType, ITutor parent,
       String goal, String name, Array<?> components, Array<?> configs, int deltaSuccessScore, 
-      int deltaFailureScore, String[] hints, String explanation) {
+      int deltaFailureScore, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, name, components, configs, 
-        deltaSuccessScore, deltaFailureScore, hints, explanation);
+        deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
 /*            "Light intensity increases when more current is induced in the coil.",
             "More current is induced in the coil if the magnetic field changes faster at the coil.",
             "Magnetic field change at the coil increases when the magnet moves faster relative to the coil.",
@@ -35,7 +35,7 @@ public class LightProber extends AbstractScience2DProber {
   public void act(float delta) {
     super.act(delta);
     if (lightbulbActor != null && lightbulbActor.withinLightRegion(image.getX(), image.getY())) {
-      guru.showCorrect(getSuccessPoints());
+      tutorHelper.showCorrect(getSuccessPoints());
       systemReadyToFinish(true);
     }
   }

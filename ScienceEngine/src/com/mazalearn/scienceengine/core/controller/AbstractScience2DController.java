@@ -105,7 +105,7 @@ public abstract class AbstractScience2DController implements
   @Override
   public void reset() {
     new LevelLoader(this).reload();
-    // TODO: guru should also be reset
+    // TODO: tutorHelper should also be reset
     // getGuru().teach();
   }
 
@@ -171,7 +171,7 @@ public abstract class AbstractScience2DController implements
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String id,
       Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints,
-      String explanation) {
+      String[] explanation, String[] refs) {
     TutorType tutorType;
     try {
       tutorType = TutorType.valueOf(type);
@@ -182,26 +182,26 @@ public abstract class AbstractScience2DController implements
     switch (tutorType) {
     case MCQ1:
       return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation, true);
+          deltaSuccessScore, deltaFailureScore, hints, explanation, refs, true);
     case MCQ:
       return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation, false);
+          deltaSuccessScore, deltaFailureScore, hints, explanation, refs, false);
     case ParameterProber:
       return new ParameterProber(this, tutorType, parent, goal, id, components, configs, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation);
+          deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
     case Challenge:
     case RapidFire:
     case Guide:
     case Reviewer:
       return new TutorGroup(this, tutorType, parent, goal, id, components, configs, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation);
+          deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
     case KnowledgeUnit:
       return new KnowledgeUnit(this, tutorType, parent, goal, id, components, configs, 
-          deltaSuccessScore, hints, explanation);
+          deltaSuccessScore, hints, explanation, refs);
     case Abstractor:
       return new Abstractor(this, tutorType, parent, goal, id, components, configs, skin, 
           science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore, 
-          hints, explanation);
+          hints, explanation, refs);
     }
     Gdx.app.error(ScienceEngine.LOG, "Could not create Tutor: " + type);
     return null;

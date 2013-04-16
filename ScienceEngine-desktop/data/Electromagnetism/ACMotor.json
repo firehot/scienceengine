@@ -37,7 +37,7 @@ tutors: [
    ]},
        {type: "RapidFire",
        id: "Multiple Choice Questions",
-       goal: "RapidFire Quiz",
+       goal: "RapidFire Review",
        childtutors: [
           {type: "MCQ",
           id: "8.1",

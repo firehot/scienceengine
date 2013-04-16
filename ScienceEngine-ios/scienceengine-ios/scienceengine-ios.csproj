@@ -60,11 +60,11 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchI18n>west</MtouchI18n>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir} -likvm-natives -lgdx -lfreetype -force_load ${ProjectDir}/libfreetype.a -force_load ${ProjectDir}/libgdx.a -force_load ${ProjectDir}/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <IpaPackageName />
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -DSRC=&quot;../..&quot; -DCLASSPATH=&quot;../../../libgdx/gdx/bin/;../../../libgdx/backends/gdx-backend-lwjgl/bin&quot; -DIN=&quot;-r:../../../libgdx/backends/gdx-backend-iosmonotouch/libs/gdx.dll -recurse:target/*.class&quot;  -DOUT=&quot;scienceengine.dll&quot; -DEXCLUDE=&quot;**/badlogic/**&quot; -v" workingdir="${ProjectDir}" externalConsole="True" />
+        <Command type="BeforeBuild" command="ant -f convert.xml compile convert -v" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
     <BuildIpa>True</BuildIpa>
@@ -108,6 +108,7 @@
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <CodesignProvision>8AEA0A63-0555-4AE7-983C-092A89ADA7EB</CodesignProvision>
+    <MtouchDebug>True</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -128,11 +129,8 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
-    <Reference Include="gdx">
-      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\gdx.dll</HintPath>
-    </Reference>
     <Reference Include="gdx-backend-ios">
-      <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\gdx-backend-ios.dll</HintPath>
+      <HintPath>libs\ios\gdx-backend-ios.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\libgdx\backends\gdx-backend-iosmonotouch\libs\ikvm\bin\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -169,6 +167,9 @@
     </Reference>
     <Reference Include="ScienceEngine">
       <HintPath>target\ScienceEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="gdx">
+      <HintPath>libs\ios\gdx.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -432,6 +433,9 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Waves\W.png">
       <Link>data\Waves\W.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\sound\chime.mp3">
+      <Link>sound\chime.mp3</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

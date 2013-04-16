@@ -7,7 +7,6 @@ import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.IMagneticField;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
-enum Phi { Up, Down };
 /**
  * Models a homogeneous uniform field with certain strength and rotation. 
  * <p/>
@@ -16,9 +15,12 @@ enum Phi { Up, Down };
  */
 public class BField extends Science2DBody implements IMagneticField.Producer {
 
+  public enum Phi { XYPlane, Up, Down };
+
   public static final float MAX_STRENGTH = 30f;
   private final Vector3 field3 = new Vector3(0.5f, 0.5f, 0);
   private final Vector2 field2 = new Vector2();
+  private Phi phi = Phi.XYPlane; 
   
   public BField(float x, float y, float angle) {
     super(ComponentType.BField, x, y, angle);
@@ -33,30 +35,18 @@ public class BField extends Science2DBody implements IMagneticField.Producer {
       public void setValue(Float value) { field3.nor().mul(value); getModel().notifyFieldChange(); }
       public boolean isPossible() { return isActive(); }
     });
+    configs.add(new AbstractModelConfig<String>(this, 
+        Parameter.FieldUpDown, Phi.values()) {
+      public String getValue() { return getPhi(); }
+      public void setValue(String value) { setPhi(value); }
+      public boolean isPossible() { return isActive(); }
+    });
     configs.add(new AbstractModelConfig<Float>(this, 
         Parameter.FieldAngle, 0, 2 * MathUtils.PI) {
       public Float getValue() { return getTheta(); }
-      public void setValue(Float angle) { 
-        float len = field3.len();
-        field3.y = len * MathUtils.sin(angle);
-        field3.x = len * MathUtils.cos(angle);
-        field3.z = 0;
-        getModel().notifyFieldChange();
-      }
-      public boolean isPossible() { return isActive() && field3.z == 0; }
-    });
-    
-    configs.add(new AbstractModelConfig<String>(this, 
-        Parameter.FieldUpDown, Phi.values()) {
-      public String getValue() { return field3.z >= 0 ? Phi.Up.name() : Phi.Down.name(); }
-      public void setValue(String value) { 
-        Phi phi = Phi.valueOf(value); 
-        field3.z = phi == Phi.Up ? field3.len() : -field3.len();
-        field3.x = field3.y = 0;
-        getModel().notifyFieldChange();
-      }
-      public boolean isPossible() { return isActive() && field3.y == 0 && field3.x == 0; }
-    });
+      public void setValue(Float angle) { setTheta(angle); }
+      public boolean isPossible() { return isActive() && phi == Phi.XYPlane; }
+    });    
   }
   
   public float getStrength() {
@@ -72,13 +62,44 @@ public class BField extends Science2DBody implements IMagneticField.Producer {
     return magneticField.set(field3);
   }
 
+  public void setTheta(Float angle) {
+    field2.set(field3.x, field3.y);
+    if (angle == field2.angle()) return;
+    float len = field3.len();
+    field3.y = len * MathUtils.sin(angle);
+    field3.x = len * MathUtils.cos(angle);
+    field3.z = 0;
+    getModel().notifyFieldChange();
+  }
+
   public float getTheta() {
     if (field3.z != 0) return 0;
     field2.set(field3.x, field3.y);
     return field2.angle() * MathUtils.degreesToRadians;
   }
 
+  public void setPhi(String value) {
+    Phi ph = Phi.valueOf(value);
+    if (ph != phi) {
+      phi = ph;
+      // Preserve magnitude and assign direction
+      float magnitude = field3.len();
+      switch (phi) {
+      case XYPlane: 
+        field3.set((float) Math.sqrt(magnitude), (float) Math.sqrt(magnitude), 0);
+        break;
+      case Up:
+        field3.set(0, 0, magnitude);
+        break;
+      case Down:
+        field3.set(0, 0, -magnitude);
+        break;
+      }
+      getModel().notifyFieldChange();
+    }
+  }
+
   public String getPhi() {
-    return field3.z > 0 ? Phi.Up.name() : Phi.Down.name();
+    return phi.name();
   }
 }

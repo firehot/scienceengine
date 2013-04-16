@@ -1,7 +1,10 @@
 package com.mazalearn.scienceengine.tutor;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,16 +37,17 @@ public class TutorNavigator extends Group {
       ScreenUtils.createTextureRegion(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, c);
   private TextButton activeTutorButton;
   private Label[] tutorTimeLabels;
-  private final Collection<ITutor> tutors;
+  private final LinkedHashMap<String, ITutor> tutors;
   private Image userImage;
   TextButton goal;
   private ITutor activeTutor;
   private Group tutorsPanel;
   private Button nextButton;
   
-  public TutorNavigator(Collection<ITutor> tutors, final Guru guru, Skin skin) {
+  public TutorNavigator(TutorGroup rootTutor, Guru guru, final TutorHelper tutorHelper, Skin skin) {
     super();
-    this.tutors = tutors;
+    this.tutors = new LinkedHashMap<String, ITutor>();
+    collectLeafTutors(rootTutor, tutors);
     setPosition(0, 0);
     tutorTimeLabels = new Label[tutors.size()];
     tutorsPanel = new Group() {
@@ -54,7 +58,7 @@ public class TutorNavigator extends Group {
       }      
     };
     tutorsPanel.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
-    tutorsPanel.addActor(createTutorsPane(tutors, guru, skin));
+    tutorsPanel.addActor(createTutorsPane(tutors.values(), guru, skin));
     tutorsPanel.setVisible(false);
     addActor(tutorsPanel);
     userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
@@ -67,15 +71,16 @@ public class TutorNavigator extends Group {
         // Bring tutor navigator to top and make tutorsPanel visible
         tutorsPanel.setVisible(true);
         show(activeTutor);
-        guru.addActor(TutorNavigator.this);
+        tutorHelper.addActor(TutorNavigator.this);
       }
     };
-  /*  TextureRegion goalTexture = ScreenUtils.createTextureRegion(
+/*    TextureRegion goalTexture = ScreenUtils.createTextureRegion(
         ScreenComponent.Goal.getWidth(), 
         ScreenComponent.Goal.getHeight(),
         Color.GREEN);
     goal = ScreenUtils.createImageButton(goalTexture, skin); */
     goal = new TextButton("", skin);
+
     goal.setWidth(ScreenComponent.Goal.getWidth());
     goal.setHeight(ScreenComponent.Goal.getHeight());
     goal.getLabel().setWrap(true);
@@ -85,6 +90,19 @@ public class TutorNavigator extends Group {
     createNextButton(skin);
   }
 
+  private static void collectLeafTutors(ITutor tutor, Map<String, ITutor> tutors) {
+    if (tutor.getChildTutors() == null) { 
+      if (tutors.containsKey(tutor.getId())) {
+        Gdx.app.error(ScienceEngine.LOG, "Duplicate Tutor ID: " + tutor.getId());
+      }
+      tutors.put(tutor.getId(), tutor);
+      return;
+    }
+    for (ITutor child: tutor.getChildTutors()) {
+      collectLeafTutors(child, tutors);
+    }
+  }
+  
   private void createNextButton(Skin skin) {
     TextButtonStyle style = new TextButtonStyle(skin.get("body", TextButtonStyle.class));
     style.font = skin.getFont(ScreenComponent.getFont(2));
@@ -108,7 +126,7 @@ public class TutorNavigator extends Group {
   public void show(ITutor activeTutor) {
     // Update times spent per tutor
     int count = 0;
-    for (final ITutor tutor: this.tutors) {
+    for (final ITutor tutor: this.tutors.values()) {
       Label timeLabel = tutorTimeLabels[count++];
       timeLabel.setText(Format.formatTime(tutor.getStats()[ITutor.TIME_SPENT]));
       if (tutor.getStats()[ITutor.PERCENT_PROGRESS] == 100) {
@@ -128,10 +146,8 @@ public class TutorNavigator extends Group {
   public void setActiveTutor(ITutor activeTutor) {
     this.activeTutor = activeTutor;
     goal.setText(activeTutor.getGoal());
-    /*
-     * TODO: setting color of goal causes the color to tint entire screen.
     goal.setColor(activeTutor.getType().getColor());
-    */
+    
     goal.addAction(Actions.sequence(
         Actions.alpha(0),
         Actions.alpha(1, 2)));
@@ -199,5 +215,9 @@ public class TutorNavigator extends Group {
 
   public void showNextButton(boolean show) {
     nextButton.setVisible(show);
+  }
+
+  public ITutor id2Tutor(String tutorId) {
+    return tutors.get(tutorId);
   }
 }
