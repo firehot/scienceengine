@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.core.view.AnimateAction;
 import com.mazalearn.scienceengine.tutor.ImageMessageBox;
 
 public class HelpTour extends Group {
@@ -33,6 +32,7 @@ public class HelpTour extends Group {
     public float getY();
     public float getWidth();
     public float getHeight();
+    public void showHelp(Stage stage, boolean animate);
   }
   
   public static class ClickHandler {
@@ -42,14 +42,17 @@ public class HelpTour extends Group {
     private Image arrow;
     private List<IHelpComponent> helpComponents;
     private IHelpComponent helpComponent;
+    private Stage stage;
 
-    public ClickHandler(List<IHelpComponent> iHelpComponents,
+    public ClickHandler(Stage stage, List<IHelpComponent> iHelpComponents,
         ImageMessageBox contentBox, String content, Image arrow) {
+      this.stage = stage;
       this.helpComponents = iHelpComponents;
       this.contentBox = contentBox;
       this.content = content;
       this.arrow = arrow;
-      this.currentComponent = 0;
+      this.currentComponent = helpComponents.size();
+      
       arrow.setPosition(CENTER_POS.x, CENTER_POS.y);
       setContent(content, CENTER_POS.x, CENTER_POS.y, 0);
       arrow.setVisible(false);
@@ -84,8 +87,8 @@ public class HelpTour extends Group {
           new Action() {
             @Override public boolean act(float delta) {
               String text;
-              currentComponent = (currentComponent + increment + helpComponents.size()) % helpComponents.size();
-              if (currentComponent == 0 ){
+              currentComponent = (currentComponent + increment + helpComponents.size() + 1) % (helpComponents.size() + 1);
+              if (currentComponent == helpComponents.size() ){
                 arrow.setPosition(CENTER_POS.x, CENTER_POS.y);
                 setContent(content, CENTER_POS.x, CENTER_POS.y, 0);
                 arrow.setVisible(false);
@@ -93,14 +96,14 @@ public class HelpTour extends Group {
                 contentBox.getPrevButton().setVisible(false);
                 helpComponent = null;
               } else {
-                if (helpComponent != null && helpComponent instanceof Actor) {
-                  ((Actor) helpComponent).clearActions();
+                if (helpComponent != null) {
+                  helpComponent.showHelp(stage, false);
                 }
                 helpComponent = helpComponents.get(currentComponent);
                 contentBox.getPrevButton().setVisible(true);
                 text = helpComponent.getLocalizedName() + "\n" +
                     getMsg("Help." + helpComponent.getComponentType()) + "\n\n\n";                
-                float angle = repositionArrow(helpComponent, arrow);
+                float angle = repositionArrow(stage, helpComponent, arrow);
                 arrow.setVisible(true);
                 setContent(text, arrow.getX(), arrow.getY(), angle);
               }
@@ -111,7 +114,7 @@ public class HelpTour extends Group {
     }
   }
 
-  private static float repositionArrow(IHelpComponent helpComponent, Actor arrow) {
+  private static float repositionArrow(Stage stage, IHelpComponent helpComponent, Actor arrow) {
     pos.set(helpComponent.getX() + helpComponent.getWidth() / 2, 
         helpComponent.getY() + helpComponent.getHeight() / 2).sub(CENTER_POS);
     float angle = pos.angle();
@@ -119,10 +122,7 @@ public class HelpTour extends Group {
     pos.y = helpComponent.getY() + helpComponent.getHeight() / 2 - arrow.getHeight() * MathUtils.sinDeg(angle) * 4;
     arrow.setRotation(angle);
     arrow.setPosition(pos.x, pos.y);
-    if (helpComponent instanceof Actor) {
-      Actor a = (Actor) helpComponent;
-      a.addAction(AnimateAction.animate(a.getWidth(), a.getHeight()));
-    }
+    helpComponent.showHelp(stage, true);
     return angle;
   }
 
@@ -146,7 +146,7 @@ public class HelpTour extends Group {
     final ImageMessageBox contentBox = new ImageMessageBox(skin, "helpcloud", this);
     addActor(contentBox);
 
-    final ClickHandler onClickHandler = new ClickHandler(iHelpComponents, contentBox, contents, arrow);
+    final ClickHandler onClickHandler = new ClickHandler(getStage(), iHelpComponents, contentBox, contents, arrow);
     contentBox.getNextButton().addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {

@@ -161,6 +161,7 @@ public class ActivityScreen extends AbstractScreen {
   private Button createGoButton() {
     Drawable go = new TextureRegionDrawable(ScienceEngine.getTextureRegion("go"));
     final Button goButton = new Button(go);
+    goButton.setName(ScreenComponent.GoButton.name());
     initializeGoButton(goButton);
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
@@ -180,7 +181,7 @@ public class ActivityScreen extends AbstractScreen {
   }
 
   private void initializeGoButton(final Button goButton) {
-    ScreenComponent goButtonUp = ScreenComponent.GoButtonUp;
+    ScreenComponent goButtonUp = ScreenComponent.GoButton;
     goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
     goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
   }
@@ -225,8 +226,9 @@ public class ActivityScreen extends AbstractScreen {
       return  new WaveController(level, width, height, getSkin());
     case Electromagnetism:
       return new ElectroMagnetismController(level, width, height, getSkin());
+    default:
+      throw new IllegalArgumentException("Unknown controller: " + topic);
     }
-    return null;
   }
   
   @Override

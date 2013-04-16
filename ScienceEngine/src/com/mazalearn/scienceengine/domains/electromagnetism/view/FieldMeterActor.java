@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -51,6 +52,17 @@ public class FieldMeterActor extends Science2DActor {
     if (touchable && this.getTouchable() != Touchable.enabled) return null;
     // If nothing else hits, and fieldmeter is present, it shows a hit.
     return this;
+  }
+  
+  @Override
+  public void showHelp(Stage stage, boolean animate) {
+    if (animate) {
+      pos.set(getX(), getY()).mul(1f / ScreenComponent.PIXELS_PER_M);
+      fieldMeter.setPositionAndAngle(pos, 0);
+    } else {
+      fieldMeter.reset();
+    }
+    super.showHelp(stage, animate);
   }
 
   //@Override

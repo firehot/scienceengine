@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
  */
 public class AnimateAction {
 
-  static public Action animate(final float w, final float h) {
+  static public Action animateSize(final float w, final float h) {
     float duration = 1f;
     return Actions.forever(
         Actions.sequence(
@@ -22,6 +22,28 @@ public class AnimateAction {
               public void setActor(Actor actor) {
                 if (actor == null) {
                   this.actor.setSize(w, h);
+                }
+                super.setActor(actor);
+              }
+              @Override
+              public boolean act(float delta) {
+                return true;
+              }
+            }
+        ));
+  }
+
+  static public Action animatePosition(final float x, final float y) {
+    float duration = 1f;
+    return Actions.forever(
+        Actions.sequence(
+            Actions.moveTo(x - 5, y - 5, duration),
+            Actions.moveTo(x + 5, y + 5, duration),
+            new Action() { // Resets position back when animations are cleared
+              @Override
+              public void setActor(Actor actor) {
+                if (actor == null) {
+                  this.actor.setPosition(x, y);
                 }
                 super.setActor(actor);
               }

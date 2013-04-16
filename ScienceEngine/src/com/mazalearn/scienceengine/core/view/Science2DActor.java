@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -179,6 +180,15 @@ public class Science2DActor extends Actor implements IHelpComponent {
   @Override
   public String getComponentType() {
     return body.getComponentTypeName();
+  }
+  
+  @Override
+  public void showHelp(Stage stage, boolean animate) {
+    if (animate) {
+      addAction(AnimateAction.animateSize(getWidth(), getHeight()));
+    } else {
+      clearActions();
+    }
   }
   
   protected void setTextureRegion(TextureRegion textureRegion) {

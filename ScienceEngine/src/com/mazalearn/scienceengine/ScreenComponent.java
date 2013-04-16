@@ -3,8 +3,10 @@ package com.mazalearn.scienceengine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.core.model.IComponentType;
+import com.mazalearn.scienceengine.core.view.AnimateAction;
 
 public enum ScreenComponent implements IComponentType, IHelpComponent {
   TopBar(XAlign.LEFT, 0, YAlign.TOP, 0, 800, 30, 0, Color.BLACK, true, false),
@@ -17,7 +19,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   ViewControls(XAlign.LEFT, 81, YAlign.TOP, 0, 0, 0, -1, Color.CLEAR, true, true),
   ModelControls(XAlign.RIGHT, -20, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, true),
   Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 32, 32, -1, Color.CLEAR, true, false),
-  GoButtonUp(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 60, 60, -1, Color.CLEAR, false, true),
+  GoButton(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 60, 60, -1, Color.CLEAR, false, true),
   GoButtonDown(XAlign.CENTER, 0, YAlign.TOP, -30, 0, 0, -1, Color.CLEAR, false, false),
   Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, -15, 0, 0, -1, Color.BLACK, false, false),
   Idea(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 60, -1, Color.BLACK, false, false),
@@ -230,5 +232,17 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
 
   public int getZIndex() {
     return zIndex;
+  }
+
+  @Override
+  public void showHelp(Stage stage, boolean animate) {
+    Actor actor = stage.getRoot().findActor(name());
+    if (actor == null) return;
+    if (animate) {
+      actor.addAction(
+          AnimateAction.animatePosition(actor.getX(), actor.getY()));
+    } else {
+      actor.clearActions();
+    }
   }
 }
