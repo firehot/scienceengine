@@ -1,0 +1,1 @@
+java -cp c:\Users\sridhar\gdx-tools.jar;c:\Users\sridhar\git\scienceengine\ScienceEngine\libs\gdx.jar com.badlogic.gdx.tools.imagepacker.TexturePacker2 <directory>

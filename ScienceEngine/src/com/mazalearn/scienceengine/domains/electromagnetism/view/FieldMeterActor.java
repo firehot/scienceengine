@@ -65,7 +65,7 @@ public class FieldMeterActor extends Science2DActor {
     super.showHelp(stage, animate);
   }
 
-  //@Override
+  @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     ShapeRenderer shapeRenderer = new ShapeRenderer();
     batch.end();

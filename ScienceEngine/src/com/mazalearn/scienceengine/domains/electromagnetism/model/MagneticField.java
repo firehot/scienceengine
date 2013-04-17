@@ -13,7 +13,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
  * 
  * @author sridhar
  */
-public class BField extends Science2DBody implements IMagneticField.Producer {
+public class MagneticField extends Science2DBody implements IMagneticField.Producer {
 
   public enum Phi { XYPlane, Up, Down };
 
@@ -22,8 +22,8 @@ public class BField extends Science2DBody implements IMagneticField.Producer {
   private final Vector2 field2 = new Vector2();
   private Phi phi = Phi.XYPlane; 
   
-  public BField(float x, float y, float angle) {
-    super(ComponentType.BField, x, y, angle);
+  public MagneticField(float x, float y, float angle) {
+    super(ComponentType.MagneticField, x, y, angle);
   }
   
   @Override

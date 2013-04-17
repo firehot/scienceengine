@@ -24,16 +24,17 @@ public class ElectromagnetActor extends Science2DActor {
   public void draw(SpriteBatch batch, float parentAlpha) {
     // x is location between coils and front.
     // coil..coil..x..front
+    float scale = electromagnet.getRadius() / ElectroMagnet.CANONICAL_RADIUS;
     batch.draw(getTextureRegion(), getX(), getY(), this.getOriginX(), 
-        this.getOriginY(), super.getWidth(), getHeight(), 1, 1, getRotation());
+        this.getOriginY(), super.getWidth() * scale, getHeight() * scale, 1, 1, getRotation());
     // Add the additional loops
     for (int i = 1; i <= electromagnet.getNumberOfLoops(); i++) {
-      batch.draw(coil, getX() - i * ScreenComponent.getScaledX(COIL_WIDTH), getY(), 0, 0, super.getWidth(), 
-          getHeight(), 1, 1, getRotation());
+      batch.draw(coil, getX() - i * ScreenComponent.getScaledX(COIL_WIDTH) * scale, getY(), 0, 0, super.getWidth() * scale, 
+          getHeight() * scale, 1, 1, getRotation());
     }
     // Show current - direction is reversed
     CurrentSourceActor.drawCurrent(batch, electromagnet.getCurrent(), getX(),
-        getY() + this.getHeight()/2.35f);
+        getY() + this.getHeight() * scale/2.35f);
   }
   
   @Override

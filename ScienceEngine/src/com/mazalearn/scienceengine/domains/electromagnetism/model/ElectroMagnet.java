@@ -2,6 +2,7 @@
 
 package com.mazalearn.scienceengine.domains.electromagnetism.model;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -20,11 +21,12 @@ import com.mazalearn.scienceengine.core.model.ICurrent;
  */
 public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
 
-  private static final float OUTPUT_SCALE = 200f;
+  private static final float OUTPUT_SCALE = 200f/800;
   private static final float TOLERANCE = 0.1f;
   private static final int ELECTROMAGNET_LOOPS_MAX = 4;
-  private static final float MAX_EMF = 25;
+  private static final float MAX_EMF = 25 * 800.0f;
   public static final float DISPLAY_WIDTH = 38f;
+  public static final float CANONICAL_RADIUS = 16f;
   private static final float COIL_WIDTH = DISPLAY_WIDTH / ScreenComponent.PIXELS_PER_M;
 
   private float maxStrengthOutside; // for debugging
@@ -35,6 +37,7 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
   private int numberOfLoops;
   // Terminals
   private Vector2 firstTerminal = new Vector2(), secondTerminal = new Vector2();
+  private float radius = 16;
 
 
   /**
@@ -66,6 +69,21 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
       public void setValue(Float value) { setNumberOfLoops(value); }
       public boolean isPossible() { return isActive(); }
     });
+    configs.add(new AbstractModelConfig<Float>(this, 
+        Parameter.Radius, 14f, 18f) {
+      public Float getValue() { return getRadius(); }
+      public void setValue(Float value) { setRadius(value); }
+      public boolean isPossible() { return isActive(); }
+    });
+  }
+
+  public void setRadius(Float radius) {
+    this.radius = radius;
+    updateStrength();
+  }
+
+  public Float getRadius() {
+    return radius;
   }
 
   public void setCurrent(float current) {
@@ -78,7 +96,7 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
   
   private void updateStrength() {
     // Compute the electromagnet's emf amplitude.
-    float emf = - (numberOfLoops / (float) ELECTROMAGNET_LOOPS_MAX) * current;
+    float emf = - (numberOfLoops / (float) ELECTROMAGNET_LOOPS_MAX) * current * MathUtils.PI * radius * radius;
     emf = Clamp.clamp(-MAX_EMF, emf, MAX_EMF);
     
     /*
@@ -224,14 +242,18 @@ public class ElectroMagnet extends AbstractMagnet implements ICurrent.Sink {
 
   @Override
   public Vector2 getT1Position() {
+    float scale = radius / CANONICAL_RADIUS;
     return firstTerminal.set(getPosition())
-        .add(ScreenComponent.getScaledX(1f), ScreenComponent.getScaledY(-2f));
+        .add(0, (scale - 1) * radius)
+        .add(ScreenComponent.getScaledX(1f) * scale, ScreenComponent.getScaledY(-2f) * scale);
   }
 
   @Override
   public Vector2 getT2Position() {
+    float scale = radius / CANONICAL_RADIUS;
     return secondTerminal.set(getPosition())
-        .add(ScreenComponent.getScaledX(1.5f), ScreenComponent.getScaledY(3.5f));
+        .add(0, (scale - 1) * radius)
+        .add(ScreenComponent.getScaledX(1.5f) * scale, ScreenComponent.getScaledY(3.5f) * scale);
   }
 
   public float getCurrent() {

@@ -94,7 +94,7 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new ChargeActor(body, textureRegion);
     case Wire:
       return new WireActor(body);
-    case BField:
+    case MagneticField:
     case Compass:
     default:
       return new Science2DActor(body, textureRegion);

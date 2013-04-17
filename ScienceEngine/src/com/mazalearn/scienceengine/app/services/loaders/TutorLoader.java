@@ -32,7 +32,7 @@ class TutorLoader {
   private AbstractTutor loadTutor(ITutor parentTutor, OrderedMap<String, ?> tutorObj) {
     String type = (String) tutorObj.get("type");
     String id = (String) tutorObj.get("id");
-    Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type);
+    Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type + " " + id);
     String goal = (String) tutorObj.get("goal");
     float successPoints = (Float) LevelLoader.nvl(tutorObj.get("success"),
         100.0f);
@@ -59,6 +59,8 @@ class TutorLoader {
       case Guide: return makeTutorGroup(tutorObj, (TutorGroup) tutor);
       case Abstractor: return makeAbstractor(tutorObj, (Abstractor) tutor);
       case KnowledgeUnit: return makeKnowledgeUnit(tutorObj, (KnowledgeUnit) tutor);
+      default:
+        throw new IllegalArgumentException("Unknown type of tutor: " + tutorType);
       }
     }
     return tutor;

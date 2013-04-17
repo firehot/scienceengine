@@ -28,7 +28,8 @@ public enum Parameter implements IParameter {
   FieldStrength, FieldAngle, FieldUpDown, 
   ChargeStrength, 
   SampleMode, 
-  Velocity;
+  Velocity, 
+  Radius;
   
   private Parameter() {
   }

@@ -51,7 +51,7 @@ public class FieldMeter extends Science2DBody implements IMagneticField.Consumer
     
     public static void rectangular2spherical(FieldSample fieldSample, Vector3 fieldVector) {
       if (fieldVector.x != 0 || fieldVector.y != 0) { // Avoid indeterminate theta
-        fieldSample.theta = (float) Math.atan(fieldVector.y / fieldVector.x);
+        fieldSample.theta = (float) Math.atan2(fieldVector.y, fieldVector.x);
       }
       fieldSample.magnitude = fieldVector.len();
       fieldSample.phi = (float) Math.acos(fieldVector.z / fieldSample.magnitude) - MathUtils.PI / 2;
