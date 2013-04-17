@@ -79,7 +79,7 @@ tutors:[
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          explanation: ["The magnetic field reverses direction when current direction is changed.",
                       "The direction of magnetic field is given by the right hand grip rule",
-                      "righthandgrip"],
+                      "righthandgripcurrent"],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentDirection) >=  1",
          components:[{type:"CurrentSource.1", pin: true}],
          success: 200

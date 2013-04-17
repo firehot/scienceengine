@@ -79,8 +79,9 @@ tutors: [
            id: "G1.6",
            components:[{type:"CurrentSource", pin: true}],
            goal: "Change the max current. See how the induced current changes",
-           explanation: ["When the current strength increases, the electromagnet strength increases and hence the maximum current induced in the coil increases"],
-           postcondition: "Count(CurrentSource.MaxCurrent) > 1 and Max(PickupCoil.Current) > 0.5",
+           explanation: ["When the current strength increases, the electromagnet strength increases and hence the maximum current induced in the coil increases",
+                         "Recall Faraday's law that the current induced increases with the rate of change of magnetic field through the coil"],
+                postcondition: "Count(CurrentSource.MaxCurrent) > 1 and Max(PickupCoil.Current) > 0.5",
            success: 250}
    ]},
   {type: "Challenge",

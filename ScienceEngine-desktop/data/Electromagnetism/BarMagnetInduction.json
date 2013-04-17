@@ -73,7 +73,8 @@ tutors: [
            {type: "KnowledgeUnit",
            id: "G1.6",
            goal: "Change the magnet strength and then move the magnet. See how the induced current changes.",
-           explanation: ["When the magnet strength increases, the maximum current induced in the coil increases when the magnet is moved"],
+           explanation: ["When the magnet strength increases, the maximum current induced in the coil increases when the magnet is moved",
+                         "Faraday's law states that the current induced increases with the rate of change of magnetic field through the coil"],
            postcondition: "Count(BarMagnet.MagnetStrength) > 3 and Max(PickupCoil.Current) > 1",
            components:[{type:"Environment", pin: false},{type:"BarMagnet", pin: true}],
            success: 250}

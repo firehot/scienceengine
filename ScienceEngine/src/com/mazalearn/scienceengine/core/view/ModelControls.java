@@ -68,7 +68,7 @@ public class ModelControls extends Table {
   @Override
   public void validate() {
     super.validate();
-    ScreenComponent sc = ScreenComponent.ModelControls;
+    ScreenComponent sc = ScreenComponent.ModelControls; // Gadzooks
     setPosition(sc.getX(getPrefWidth()) + getPrefWidth() / 2,
         sc.getY(getPrefHeight()) + getPrefHeight() / 2);
   }
