@@ -44,27 +44,27 @@ tutors:[
          explanation: ["The green field arrow at a point shows the direction of the field at that point.",
                        "The field arrow points towards the South Pole and away from the North Pole.",
                        "When the field is stronger, the arrow is bigger",
-                       "The magnetic field is stronger near the poles of the magnet."],
-                 },
+                       "The magnetic field is stronger near the poles of the magnet."]
+        },
         {type: "KnowledgeUnit",
          goal: "Move the magnet. See how the field changes.",
          id: "G1.3",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 1",
-         explanation: ["When the magnet moves, its magnetic field moves along with it."],
-                 },
+         explanation: ["When the magnet moves, its magnetic field moves along with it."]
+        },
         {type: "KnowledgeUnit",
          goal: "Change rotation angle of magnet. See how the field changes",
          id: "G1.4",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.RotationAngle) >= 1",
          explanation: ["When the magnet rotates, its magnetic field rotates along with it."],
-                  components:[{type:"BarMagnet", pin:true}]
+         components:[{type:"BarMagnet", pin:true}]
         },
         {type: "KnowledgeUnit",
          goal: "Change the magnet strength. See how the field changes.",
          id: "G1.5",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetStrength) >= 1",
          explanation: ["If the magnet strength is higher, the field at a point is stronger but there is no change in its direction."],
-                  components:[{type:"BarMagnet", pin:true}]
+         components:[{type:"BarMagnet", pin:true}]
          }
        ]},    
        {type: "Challenge",
@@ -91,7 +91,7 @@ tutors:[
           explanation: ["The direction of the field at a point is away from the North Pole and towards the South Pole of the magnet.",
                         "The nearer pole has a greater effect on the field direction."],
           configs:[{name: "BarMagnet.MovementMode", value:"None"}],
-                                        components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
+          components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
           }
         ]
         },

@@ -25,6 +25,12 @@ public class KnowledgeUnit extends AbstractTutor {
   }
 
   public void initialize(String when, String postConditionString) {
+    if (postConditionString == null) {
+      postCondition = null;
+      variables = null;
+      when = null;
+      return;
+    }
     Parser parser = tutorHelper.createParser();
     try {
       this.postCondition = parser.parseString(postConditionString);

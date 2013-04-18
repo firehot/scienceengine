@@ -37,5 +37,6 @@ public class PickupCoilActor extends Science2DActor {
   
   @Override
   public void showHelp(Stage stage, boolean animate) {
+    // TODO: help animation here on size or position breaks the back coil image.
   }
 }

@@ -53,6 +53,7 @@ public class ActivityScreen extends AbstractScreen {
   private Button goButton;
   private ClickListener helpListener;
   private IScience2DView science2DView;
+  private Actor helpActor;
  
   public ActivityScreen(ScienceEngine scienceEngine, Topic topic, Topic level) {
     super(scienceEngine, null);
@@ -104,7 +105,7 @@ public class ActivityScreen extends AbstractScreen {
     this.goButton = createGoButton();
     coreGroup.addActor(goButton);
     
-    Actor helpActor = createHelpActor();
+    helpActor = createHelpActor();
     coreGroup.addActor(helpActor);
     // Add TimeTracker
     Actor timeTracker = new TimeTracker("0", getSkin());
@@ -168,6 +169,7 @@ public class ActivityScreen extends AbstractScreen {
         // Ignore if HelpTour is in progress
         Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR.name());
         if (helpTour != null) return;
+        helpActor.setVisible(false);
         
         ScreenComponent goButtonDown = ScreenComponent.GoButtonDown;
         goButton.addAction(Actions.parallel(
