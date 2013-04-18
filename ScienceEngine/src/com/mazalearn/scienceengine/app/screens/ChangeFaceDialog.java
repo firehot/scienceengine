@@ -43,7 +43,7 @@ public class ChangeFaceDialog extends Dialog {
     TextButton cancelButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Cancel"), skin);
     this.getButtonTable().add(cancelButton).width(150).center();
     
-    Button closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Close"), skin);
+    Button closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Save"), skin);
     closeButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

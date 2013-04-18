@@ -15,7 +15,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Status(XAlign.CENTER, 0, YAlign.BOTTOM, 10, 0, 0, -1, Color.WHITE, true, false),
   User(XAlign.RIGHT, -20, YAlign.TOP, -2, 30, 30, -1, Color.WHITE, true, false),
   Back(XAlign.LEFT, 0, YAlign.TOP, 0, 70, 30, -1, Color.CLEAR, true, false),
-  Help(XAlign.RIGHT, -2, YAlign.TOP, -30, 30, 30, -1, Color.CLEAR, false, false),
+  Help(XAlign.LEFT, 20, YAlign.MIDDLE, 60, 60, 60, -1, Color.CLEAR, false, false),
   ViewControls(XAlign.LEFT, 81, YAlign.TOP, 0, 0, 0, -1, Color.CLEAR, true, true),
   ModelControls(XAlign.RIGHT, -20, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, true),
   Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 32, 32, -1, Color.CLEAR, true, false),

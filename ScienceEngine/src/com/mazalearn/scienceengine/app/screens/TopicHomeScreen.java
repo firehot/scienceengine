@@ -179,7 +179,7 @@ public class TopicHomeScreen extends AbstractScreen {
         pixmap = LevelUtil.getEmptyThumbnail();
       }
       TextButton activityThumb = 
-          ScreenUtils.createImageButton(new TextureRegion(new Texture(pixmap)), getSkin());
+          ScreenUtils.createImageButton(new TextureRegion(new Texture(pixmap)), getSkin(), "default");
       
       // Name Label
       activityThumb.addActor(ScreenUtils.createLabel(activityName, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground));

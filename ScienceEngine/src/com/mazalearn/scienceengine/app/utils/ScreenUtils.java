@@ -144,10 +144,10 @@ public class ScreenUtils {
     return nameLabel;
   }
 
-  public static TextButton createImageButton(TextureRegion textureRegion, Skin skin) {
+  public static TextButton createImageButton(TextureRegion textureRegion, Skin skin, String styleName) {
     TextureRegionDrawable image = 
         new TextureRegionDrawable(textureRegion);
-    TextButton imageButton = new TextButton("", skin) {
+    TextButton imageButton = new TextButton("", skin, styleName) {
       @Override
       public void drawBackground(SpriteBatch batch, float parentAlpha) {
         getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);

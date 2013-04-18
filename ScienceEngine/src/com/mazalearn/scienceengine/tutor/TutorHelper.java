@@ -116,6 +116,8 @@ public class TutorHelper extends Group {
     return skin;
   }
   
+  // TODO: why create a parser for each tutor? can share parser but 
+  // variables are being obtained as a global from the parser.
   public Parser createParser() {
     Parser parser = new Parser();
     Map<String, IFunction.A0> functions0 = new HashMap<String, IFunction.A0>();

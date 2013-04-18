@@ -146,7 +146,7 @@ tutors: [
           goal:"The magnitude of Induced Current depends on ",
           options:["Amount of magnetic flux on the coil", 
                    "Rate of change of magnetic flux on the coil", 
-                   "Magnetic permittivity of air",
+                   "Magnetic permeability of air",
                    "Electric conductivity of air"],
           explanation: ["Current induced depends on the rate of change of magnetic field passing through the coil, not on its magnitude"],
           answermask: "0100"

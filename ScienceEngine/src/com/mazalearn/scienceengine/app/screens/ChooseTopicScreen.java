@@ -75,7 +75,7 @@ public class ChooseTopicScreen extends AbstractScreen {
       final boolean lock = !topic.equals(Topic.Electromagnetism);
       Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic, topic.getCanonicalChild(), 1);
       TextButton topicThumb = 
-          ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin());
+          ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin(), "default");
       ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       if (lock) {
         Image lockImage = new Image(overlayLock);

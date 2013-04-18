@@ -138,7 +138,7 @@ tutors: [
           goal:"The magnitude of Induced Current depends on ",
            options:["Amount of magnetic flux on the coil", 
                    "Rate of change of magnetic flux on the coil", 
-                   "Magnetic permittivity of air",
+                   "Magnetic permeability of air",
                    "Electric conductivity of air"],
          answermask: "0100"
           },
