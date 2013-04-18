@@ -133,7 +133,7 @@ public class ActivityScreen extends AbstractScreen {
           description = "Revision for: " + tutorUnderRevision.getGoal();
         } else {
           description = getMsg(science2DController.getTopic() + "." + 
-            science2DController.getLevel() + ".Description");
+            science2DController.getLevel() + ".Begin");
         }
         List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
         Group activityGroup = (Group) stage.getRoot().findActor(ScreenComponent.ACTIVITY_GROUP);

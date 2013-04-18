@@ -25,7 +25,6 @@ public class ImageMessageBox extends TextButton {
     background = new TextureRegionDrawable(ScienceEngine.getTextureRegion(textureName));
     setBackground(background);
     getLabel().setWrap(true);
-    getCell(getLabel()).pad(80, 40, 70, 40);
     TextButtonStyle tbs = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
     tbs.fontColor = Color.BLACK;
     setStyle(tbs);
@@ -76,15 +75,20 @@ public class ImageMessageBox extends TextButton {
     float semiPerimeter = (float) Math.sqrt(text.length());
     float h = semiPerimeter * SCALE / 4 + 30; // To hold Buttons
     float w = semiPerimeter * SCALE * 3 / 4 + 40;
+    if (w > ScreenComponent.VIEWPORT_WIDTH * 0.9f) {
+      w = ScreenComponent.VIEWPORT_WIDTH * 0.9f;
+      h *= 1.1f;
+    }
     ScreenComponent.scaleSize(this, w, h);
     setSize(w, h);
     super.setText(text);
+    getCell(getLabel()).pad(0.15f * h, 0.12f * w, 0.1f *h, 0.1f * w);
     getLabel().setAlignment(Align.center, Align.left);
     positionButtons();
   }
 
   private void positionButtons() {
-    closeImage.setPosition(getWidth() - closeImage.getWidth(), getHeight() - closeImage.getHeight());
+    closeImage.setPosition(getWidth() - 2 * closeImage.getWidth(), getHeight() - closeImage.getHeight());
     nextButton.setPosition(getWidth() / 2 + nextButton.getWidth() / 2, 5);
     prevButton.setPosition(getWidth() / 2 - 2 * prevButton.getWidth() / 2, 5);
   }

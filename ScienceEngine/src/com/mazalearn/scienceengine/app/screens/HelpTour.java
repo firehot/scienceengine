@@ -88,6 +88,9 @@ public class HelpTour extends Group {
             @Override public boolean act(float delta) {
               String text;
               currentComponent = (currentComponent + increment + helpComponents.size() + 1) % (helpComponents.size() + 1);
+              if (helpComponent != null) {
+                helpComponent.showHelp(stage, false);
+              }
               if (currentComponent == helpComponents.size() ){
                 arrow.setPosition(CENTER_POS.x, CENTER_POS.y);
                 setContent(content, CENTER_POS.x, CENTER_POS.y, 0);
@@ -96,9 +99,6 @@ public class HelpTour extends Group {
                 contentBox.getPrevButton().setVisible(false);
                 helpComponent = null;
               } else {
-                if (helpComponent != null) {
-                  helpComponent.showHelp(stage, false);
-                }
                 helpComponent = helpComponents.get(currentComponent);
                 contentBox.getPrevButton().setVisible(true);
                 text = helpComponent.getLocalizedName() + "\n" +

@@ -74,9 +74,9 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
           "data/" + science2DController.getTopic() + "/" + science2DController.getLevel() + ".html");
       tutoring(false);
       // TODO: Each level should have own success/failure message. 
-      // Revision should have separate message and get treated as level?
       Dialog dialog = new TutoringEndDialog(this, skin, 
-          ScienceEngine.getMsg().getString("Level.Success"));
+          ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
+              science2DController.getLevel() + ".End"));
       dialog.show(this);      
     } else {
       // TODO: lack of symmetry here - cleanup required
