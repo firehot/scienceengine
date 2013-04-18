@@ -18,10 +18,9 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
  
   protected AbstractFieldProber(IScience2DController science2DController, 
       ITutorType tutorType, ITutor parent, String goal, String id,
-      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, 
-      String[] hints, String[] explanation, String[] refs) {
+      Array<?> components, Array<?> configs, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, id, components, configs, 
-        deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
+        hints, explanation, refs);
     this.fieldMeterActor = (Science2DActor) science2DController.getView().findActor("FieldMeter");
     if (fieldMeterActor != null) {
       this.fieldMeter = (FieldMeter) fieldMeterActor.getBody();

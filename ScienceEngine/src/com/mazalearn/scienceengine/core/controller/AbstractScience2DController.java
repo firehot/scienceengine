@@ -21,6 +21,7 @@ import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
+import com.mazalearn.scienceengine.core.view.AnimateAction;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -157,20 +158,31 @@ public abstract class AbstractScience2DController implements
       pixmap.fillRectangle(0, 0, 8, 8);
       TextureRegion textureRegion = new TextureRegion(new Texture(pixmap));
       pixmap.dispose();
-      Science2DActor science2DActor = new Science2DActor(body, textureRegion);
+      Science2DActor science2DActor = new Science2DActor(body, textureRegion) {
+        @Override
+        public void showHelp(Stage stage, boolean animate) {
+          Group activityGroup = (Group) science2DView.findActor(ScreenComponent.ACTIVITY_GROUP);
+          if (animate) {
+            activityGroup.addAction(AnimateAction.animatePosition(getX(), getY()));
+          } else {
+            activityGroup.clearActions();
+          }
+        }
+      };
       science2DActor.setPositionFromViewCoords(false);
       return science2DActor;      
     case Image:
       Actor actor = new Image(ScienceEngine.getTextureRegion(viewSpec));
       actor.setName(viewSpec);
       return actor;
+    default:
+      return null;
     }
-    return null;
   }
   
   @Override
   public AbstractTutor createTutor(ITutor parent, String type, String goal, String id,
-      Array<?> components, Array<?> configs, int deltaSuccessScore, int deltaFailureScore, String[] hints,
+      Array<?> components, Array<?> configs, String[] hints,
       String[] explanation, String[] refs) {
     TutorType tutorType;
     try {
@@ -182,29 +194,29 @@ public abstract class AbstractScience2DController implements
     switch (tutorType) {
     case MCQ1:
       return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation, refs, true);
+          hints, explanation, refs, true);
     case MCQ:
       return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation, refs, false);
+          hints, explanation, refs, false);
     case ParameterProber:
       return new ParameterProber(this, tutorType, parent, goal, id, components, configs, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
+          hints, explanation, refs);
     case Challenge:
     case RapidFire:
     case Guide:
     case Reviewer:
       return new TutorGroup(this, tutorType, parent, goal, id, components, configs, 
-          deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
+          hints, explanation, refs);
     case KnowledgeUnit:
       return new KnowledgeUnit(this, tutorType, parent, goal, id, components, configs, 
-          deltaSuccessScore, hints, explanation, refs);
+          hints, explanation, refs);
     case Abstractor:
       return new Abstractor(this, tutorType, parent, goal, id, components, configs, skin, 
-          science2DView.getModelControls(), deltaSuccessScore, deltaFailureScore, 
-          hints, explanation, refs);
+          science2DView.getModelControls(), hints, explanation, refs);
+    default:
+      Gdx.app.error(ScienceEngine.LOG, "Could not create Tutor: " + type);
+      return null;
     }
-    Gdx.app.error(ScienceEngine.LOG, "Could not create Tutor: " + type);
-    return null;
   }
 
 }

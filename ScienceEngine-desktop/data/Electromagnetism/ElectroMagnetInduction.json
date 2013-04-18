@@ -127,7 +127,7 @@ tutors: [
         {type: "Abstractor", 
          id: "C1.5",
          refs: ["G1.3", "G1.4", "G1.6"],
-         goal:"For each variable, select how induced current is affected when that variable is increased.\nYou have 3 tries.",
+         goal:"For each variable, select how induced current is affected when that variable is increased. You have 3 tries.",
          parameters: ["+CurrentSource.MaxCurrent", "+ElectroMagnet.CoilLoops", "+PickupCoil.CoilLoops"],
          success: 5000
         }

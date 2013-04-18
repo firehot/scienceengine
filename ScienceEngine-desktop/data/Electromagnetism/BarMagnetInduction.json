@@ -28,7 +28,7 @@ tutors: [
            goal: "Move the bar magnet back and forth. See how the light changes and current shown by ammeter changes.",
            explanation: ["When the magnet moves near the coil, current flows in the coil",
                          "The magnet does not touch the coil so this is an induced current",
-                         "The strength of induced current induced depends on speed of movement and location of magnet"],
+                         "The strength of current induced depends on speed of movement and location of magnet"],
            postcondition: "Count(BarMagnet.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1",
            success: 250},
           {type: "KnowledgeUnit",
@@ -110,7 +110,7 @@ tutors: [
            {type: "Abstractor", 
             id: "C1.4",
             refs: ["G1.1", "G1.2", "G1.4", "G1.6"],
-            goal:"For each variable, select how induced current is affected when that variable is increased.\nYou have 3 tries.",
+            goal:"For each variable, select how induced current is affected when that variable is increased. You have 3 tries.",
             configs: [{name: "BarMagnet.MovementMode", permitted: false, value:"Rotate"},
                           {name: "BarMagnet.RotationAngle", permitted: false, value:0},
                           {name: "BarMagnet.RotationVelocity", permitted: true}

@@ -34,17 +34,13 @@ class TutorLoader {
     String id = (String) tutorObj.get("id");
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type + " " + id);
     String goal = (String) tutorObj.get("goal");
-    float successPoints = (Float) LevelLoader.nvl(tutorObj.get("success"),
-        100.0f);
-    float failurePoints = (Float) LevelLoader.nvl(tutorObj.get("falure"),
-        50.0f);
     Array<?> components = (Array<?>) tutorObj.get("components");
     Array<?> configs = (Array<?>) tutorObj.get("configs");
     String[] hints = loadStringArray("hints", tutorObj);
     String[] explanation = loadStringArray("explanation", tutorObj);
     String[] refs = loadStringArray("refs", tutorObj);
     AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, id,
-        components, configs, (int) successPoints, (int) failurePoints, hints, explanation, refs);
+        components, configs, hints, explanation, refs);
     if (tutor == null) return null;
     
     if (tutor.getType() instanceof TutorType) {

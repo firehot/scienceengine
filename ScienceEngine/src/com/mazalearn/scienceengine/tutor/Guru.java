@@ -68,7 +68,7 @@ public class Guru extends Group implements ITutor {
   public ITutor getRootTutor() {
     if (rootTutor == null) {
       this.rootTutor = new TutorGroup(science2DController, TutorType.Guide, this, goal, ROOT_ID,
-          null, null, 0, 0, new String[0], new String[0], new String[0]);
+          null, null, new String[0], new String[0], new String[0]);
       this.addActor(rootTutor);      
     }
     return rootTutor;

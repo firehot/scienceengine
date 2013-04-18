@@ -46,15 +46,13 @@ public abstract class AbstractTutor extends Group implements ITutor {
    * @param id
    * @param components
    * @param configs
-   * @param successPoints
-   * @param failurePoints
    * @param hints
    * @param refs 
    * @param explanationImg 
    */
   public AbstractTutor(IScience2DController science2DController,
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
-      int successPoints, int failurePoints, String[] hints, String[] explanation, String[] refs) {
+      String[] hints, String[] explanation, String[] refs) {
     this.tutorType = tutorType;
     this.parent = parent;
     this.science2DController = science2DController;
@@ -62,8 +60,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.id = id;
     this.components = components;
     this.configs = configs;
-    this.successPoints = successPoints;
-    this.failurePoints = failurePoints;
+    this.successPoints = tutorType.getSuccessPoints();
+    this.failurePoints = tutorType.getFailurePoints();
     this.hints = hints;
     this.explanation = explanation;
     this.refs = refs;

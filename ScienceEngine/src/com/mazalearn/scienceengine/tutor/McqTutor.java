@@ -25,10 +25,10 @@ public class McqTutor extends AbstractTutor {
 
   public McqTutor(IScience2DController science2DController, TutorType tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
-      Skin skin, int successPoints, int failurePoints, String[] hints,
+      Skin skin, String[] hints,
       String[] explanation, String[] refs, boolean singleAnswer) {
     super(science2DController, tutorType, parent, goal, id, 
-        components, configs, successPoints, failurePoints, hints, explanation, refs);
+        components, configs, hints, explanation, refs);
     this.singleAnswer = singleAnswer;
     this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
   }
@@ -47,9 +47,11 @@ public class McqTutor extends AbstractTutor {
     }
     if (success) {
       tutorHelper.showSuccess(getSuccessPoints());
+      stats[ITutor.POINTS] += getSuccessPoints();
     } else {
       this.stats[ITutor.FAILURE_TRACKER] += failureTracker;
       tutorHelper.showFailure(getFailurePoints());
+      stats[ITutor.POINTS] -= getFailurePoints();
     }
     // Flash correct options.
     for (int i = 0; i < answerMask.length(); i++) {

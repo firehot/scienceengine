@@ -177,7 +177,7 @@ tutors: [
        },
        {type: "Abstractor", 
         id: "C1.4",
-        goal:"Select how increase in each variable affects rotation speed of the motor.\nYou have 3 tries.",
+        goal:"Select how increase in each variable affects rotation speed of the motor. You have 3 tries.",
         configs: [
             {name:"Environment.RoomTemperature", permitted: false},
             {name:"CurrentCoil.RotationDataType",permitted: false},

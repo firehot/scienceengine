@@ -171,7 +171,7 @@ tutors:[
          {type: "Abstractor", 
           id: "C1.4",
           refs: ["G3"],
-            goal:"Select how increase in each variable affects rotation speed of a charge.\nYou have 3 tries.",
+            goal:"Select how increase in each variable affects rotation speed of a charge. You have 3 tries.",
             configs: [
             {name:"Charge.ChargeStrength", permitted: true},
             {name:"MagneticField.FieldUpDown",permitted: true},
@@ -185,7 +185,7 @@ tutors:[
          {type: "Abstractor", 
           id: "C1.5",
           refs:["G2"],
-            goal:"Select how increase in each variable affects force on a magnetic monopole.\nYou have 3 tries.",
+            goal:"Select how increase in each variable affects force on a magnetic monopole. You have 3 tries.",
             configs: [
             {name:"Monopole.MagnetStrength", permitted: true},
             {name:"Monopole.MonopoleType", permitted: false},

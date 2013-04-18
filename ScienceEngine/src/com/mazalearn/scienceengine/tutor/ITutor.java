@@ -23,6 +23,10 @@ public interface ITutor {
   
   public interface ITutorType extends IComponentType {
     public Color getColor();
+
+    public int getSuccessPoints();
+
+    public int getFailurePoints();
   }
 
   public static final int NUM_ATTEMPTS = 0;

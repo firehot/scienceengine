@@ -53,9 +53,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
 
   public FieldMagnitudeProber(IScience2DController science2DController,
       ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
-      int deltaSuccessScore, int deltaFailureScore, String[] hints, String[] explanation, String[] refs) {
+      String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, id, components, configs, 
-        deltaSuccessScore, deltaFailureScore, hints, explanation, refs);
+        hints, explanation, refs);
     
     imageCorrect = new ProbeImage();
     imageCorrect.addListener(new ClickResult(true));

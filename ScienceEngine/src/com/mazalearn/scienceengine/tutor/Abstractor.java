@@ -35,13 +35,13 @@ public class Abstractor extends AbstractTutor {
   private Image[] life = new Image[3];
   private int numLivesLeft = 3;
   private TextureRegionDrawable increase, decrease, noeffect, question;
+  private List<IModelConfig<?>> configList;
   
   public Abstractor(final IScience2DController science2DController, TutorType tutorType, ITutor parent, String goal, 
       String name, Array<?> components, Array<?> configs, Skin skin, 
-      ModelControls modelControls, int successPoints,
-      int failurePoints, String[] hints, String[] explanation, String[] refs) {
+      ModelControls modelControls, String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, name, components, configs, 
-        successPoints, failurePoints, hints, explanation, refs);
+        hints, explanation, refs);
     this.skin = skin;
     this.modelControls = modelControls;
     /* Abstractor allows user to interact with bodies on screen as well as its
@@ -59,6 +59,11 @@ public class Abstractor extends AbstractTutor {
     
     if (configTable == null) {
       createConfigTable(science2DController.getModel(), skin);
+    } else {
+      for (final IModelConfig<?> config: configList) {
+        Image image = (Image) configTable.findActor(config.getName());
+        image.setDrawable(question);
+      }
     }
     configTable.setVisible(true);
     numLivesLeft = 3;
@@ -74,7 +79,7 @@ public class Abstractor extends AbstractTutor {
     this.addActor(configTable);
 
     TextureRegion ideaTexture = ScienceEngine.getTextureRegion("idea");
-    List<IModelConfig<?>> configList = new ArrayList<IModelConfig<?>>();
+    configList = new ArrayList<IModelConfig<?>>();
     for (final IModelConfig<?> config: science2DModel.getAllConfigs().values()) {
       if (config.isPossible() && config.isPermitted() && config.getBody() != null) {
         configList.add(config);
@@ -89,7 +94,8 @@ public class Abstractor extends AbstractTutor {
     this.addActor(changeOptions);
     for (final IModelConfig<?> config: configList) {
       configTable.add(config.getName()).left();
-      final Image image = new Image(question);
+      final Image image = new Image();
+      image.setDrawable(question);
       image.setName(config.getName());
       configTable.add(image).width(30).height(30);
       final Label label = new Label("", skin);

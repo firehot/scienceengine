@@ -18,9 +18,9 @@ public class KnowledgeUnit extends AbstractTutor {
   
   public KnowledgeUnit(IScience2DController science2DController,
       TutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
-      int successPoints, String[] hints, String[] explanation, String[] refs) {
+      String[] hints, String[] explanation, String[] refs) {
     super(science2DController, tutorType, parent, goal, id, components, configs, 
-        successPoints, 0, hints, explanation, refs);
+        hints, explanation, refs);
     
   }
 
