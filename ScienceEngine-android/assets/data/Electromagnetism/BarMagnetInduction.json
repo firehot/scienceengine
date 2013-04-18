@@ -231,7 +231,7 @@ tutors: [
                    "Coulomb's law"],
           answermask: "1000"
           },
-          {type: "MCQ",
+          {type: "MCQ1",
           id: "R5.11",
           refs: ["G1.6"],          
           goal:"Two bar magnets of strength 1T and 2T are thrust into a coil one at a time. The current induced in the coil is - ",

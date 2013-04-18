@@ -272,7 +272,7 @@ tutors:[
           id: "R3.7",
           refs:["G2.0", "G2.3"],
           goal:"The direction of magnetic field at a point near an infinite current carrying wire",
-          options:["Curl right hand into a fist placed along the wire with thumb in direction of current. The magnetic field is given by the curling fingers.", 
+          options:["Right hand grip rule.", 
                    "Is tangential to a circle drawn to touch the point with center at the wire", 
                    "Given by Fleming's left hand rule",
                    "Given by Flemings right hand rule"],

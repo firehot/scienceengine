@@ -16,6 +16,8 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 
 public class TutorGroup extends AbstractTutor {
   
+  private static final int RAPID_FIRE_MAX = 10;
+  private static final int REVIEWER_MAX = 50;
   private List<ITutor> childTutors = Collections.emptyList();
   private ITutor currentTutor;
   
@@ -24,6 +26,7 @@ public class TutorGroup extends AbstractTutor {
 
   private Expr successActions;
   private Set<Variable> variables;
+  private int numChildren;
 
 
     
@@ -42,15 +45,15 @@ public class TutorGroup extends AbstractTutor {
       return;
     }
     // Move on to next stage
-    if (++tutorIndex == childTutors.size()) {
+    if (++tutorIndex == numChildren) {
       // Goto first tutor which has not been successfully done, if any
-      for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
+      for (tutorIndex = 0; tutorIndex < numChildren; tutorIndex++) {
         if (childTutors.get(tutorIndex).getStats()[ITutor.PERCENT_PROGRESS] < 100) {
           break;
         }
       }
       // If all children done, we are ready to finish
-      if (tutorIndex == childTutors.size()) {
+      if (tutorIndex == numChildren) {
         this.success = true;
         // No user input required for group tutors
         this.state = State.UserFinished;
@@ -88,18 +91,32 @@ public class TutorGroup extends AbstractTutor {
    */
   @Override
   public void prepareToTeach(ITutor childTutor) {
+     
+    if (getType() == TutorType.RapidFire || getType() == TutorType.Reviewer) {
+      randomizeChildTutors();
+      tutorIndex = 0;
+      currentTutor = childTutors.get(tutorIndex);
+      super.prepareToTeach(currentTutor);
+      return;
+    } 
+    
     if (childTutor != null) {
       tutorIndex = childTutors.indexOf(childTutor);
     }
-    if (tutorIndex < 0 || tutorIndex >= childTutors.size()) {
+    if (tutorIndex < 0 || tutorIndex >= numChildren) {
       // Find out where we last left off.
-      for (tutorIndex = 0; tutorIndex < childTutors.size(); tutorIndex++) {
+      for (tutorIndex = 0; tutorIndex < numChildren; tutorIndex++) {
         if (childTutors.get(tutorIndex).getStats()[ITutor.PERCENT_PROGRESS] < 100) break;
       }
-      if (tutorIndex == childTutors.size()) tutorIndex = 0;
+      if (tutorIndex == numChildren) tutorIndex = 0;
     }
     currentTutor = childTutors.get(tutorIndex);
     super.prepareToTeach(currentTutor);
+  }
+
+  private void randomizeChildTutors() {
+    Utils.shuffle(childTutors);
+    numChildren = (getType() == TutorType.RapidFire) ? RAPID_FIRE_MAX : REVIEWER_MAX;
   }
   
   @Override
@@ -115,10 +132,7 @@ public class TutorGroup extends AbstractTutor {
       this.addActor((AbstractTutor) childTutor);
       childTutor.setParentTutor(this);
     }
-    if (getType() == TutorType.RapidFire) {
-      // Shuffle child tutors
-      Utils.shuffle(childTutors);
-    }
+    numChildren = childTutors.size();
     // End timeLimit of stage is begin timeLimit of stage i+1. So we need 1 extra
     this.tutorBeginTime = new float[childTutors.size() + 1];
     if (successActionsString != null) {

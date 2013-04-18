@@ -158,14 +158,14 @@ tutors: [
           explanation: ["Current induced depends on the rate of change of magnetic field passing through the coil, not on its magnitude"],
          answermask: "0100"
           },
-         {type: "MCQ",
+         {type: "MCQ1",
           id: "R6.3",
           goal:"Whenever a conductor cuts magnetic flux, an emf is induced in it. This is known as ",
            options:["Faraday's Law", 
                    "Joule's Law", 
                    "Coulomb's Law",
                    "Ohm's Law"],
-         answermask: "0100"
+         answermask: "1000"
           },
         {type: "*MCQ1",
           id: "R6.4",

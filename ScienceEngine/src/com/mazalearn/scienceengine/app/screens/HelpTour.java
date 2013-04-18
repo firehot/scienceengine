@@ -79,7 +79,13 @@ public class HelpTour extends Group {
       } else {
         contentBox.setPosition(arrowX - w, arrowY);
       }
-    }            
+    }
+    
+    private void endHelp() {
+      if (helpComponent != null) {
+        helpComponent.showHelp(stage, false);
+      }      
+    }
     
     private void showHelp(final int increment) {
       contentBox.addAction(Actions.sequence(
@@ -157,6 +163,13 @@ public class HelpTour extends Group {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
         onClickHandler.showHelp(-1);
+      }
+    });
+    
+    contentBox.getCloseButton().addListener(new ClickListener() {
+      @Override 
+      public void clicked (InputEvent event, float x, float y) {
+        onClickHandler.endHelp();
       }
     });
   }

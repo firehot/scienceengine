@@ -99,4 +99,8 @@ public class ImageMessageBox extends TextButton {
     setSize(drawable.getMinWidth(), getMinHeight());
     positionButtons();
   }
+
+  public Actor getCloseButton() {
+    return closeImage;
+  }
 }
