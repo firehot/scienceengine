@@ -179,6 +179,25 @@ public class ScreenUtils {
     return button;
   }
 
+  public static TextButton createImageCheckBox(String text, 
+      float x, float y, float width, float height, CheckBoxStyle checkBoxStyle) {
+    CheckBox button = new CheckBox("", checkBoxStyle) {
+      @Override
+      public void drawBackground(SpriteBatch batch, float parentAlpha) {
+        if (getBackground() != null) {
+          getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
+        }
+      }
+    };
+    button.getLabel().setWrap(true);
+    button.getLabel().setAlignment(Align.center, Align.center);
+    ScreenComponent.scaleSize(button, width, height);
+    button.setPosition(x, y);
+    button.getCell(button.getImage()).width(button.getImage().getWidth() * 2).height(button.getImage().getHeight() * 2);
+    button.getCell(button.getLabel()).width(button.getWidth() - button.getImage().getWidth() * 2);
+    return button;
+  }
+
   public static void createProgressPercentageBar(LabelStyle labelStyle,
       TextButton thumbnail, float percent, int width) {
     TextureRegion bar = createTextureRegion(10, 10, Color.GRAY);

@@ -21,6 +21,7 @@ public class McqTutor extends AbstractTutor {
   private int[] permutation;
 
   private List<String> optionList;
+  private String questionImageTexture;
 
   public McqTutor(IScience2DController science2DController, TutorType tutorType, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
@@ -69,8 +70,9 @@ public class McqTutor extends AbstractTutor {
    * @param options
    * @param answerMask - sequence of truth value of options - true = 1, false = 0
    */
-  public void initialize(String[] options, String answerMask) {
+  public void initialize(String questionImageTexture, String[] options, String answerMask) {
     this.answerMask = answerMask;
+    this.questionImageTexture = questionImageTexture;
     for (int i = 0; i < options.length; i++) {
       options[i] = options[i].substring(0,1).toUpperCase() + options[i].substring(1);
     }
@@ -94,7 +96,7 @@ public class McqTutor extends AbstractTutor {
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);
     McqActor mcqActor = tutorHelper.getMcqActor();
-    optionsGroup = mcqActor.setUp(this, optionList, singleAnswer);
+    optionsGroup = mcqActor.setUp(this, questionImageTexture, optionList, singleAnswer);
     addActor(mcqActor);
   }
 }

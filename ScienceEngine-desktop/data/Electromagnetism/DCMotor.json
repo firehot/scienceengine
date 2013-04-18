@@ -203,7 +203,7 @@ tutors: [
           },
          {type: "MCQ",
           id: "R7.2",
-          refs: [""],
+          refs: ["G1"],
           goal:"The speed of rotation of the DC motor increases when",
            options:["Magnetic field increases", 
                    "Magnetic field decreases", 
@@ -267,14 +267,15 @@ tutors: [
                    "spin at the same rate",
                    "not spin at all"
                    ],
-         answermask: "1000",
+         answermask: "0010",
          explanation: ["Gravity does not affect the spinning of a DC motor"]
           },
          {type: "MCQ",
           id: "R7.8",
           refs: ["G1.2", "G2.2"],
           goal:"How can we make a DC motor spin in the opposite direction to that in which it is spinning? ",
-          options:["reverse current direction in coil", 
+          options:[
+                   "reverse current direction in coil", 
                    "reverse magnetic field around coil", 
                    "stop and give it a starting push in opposite direction",
                    "spin direction cannot be changed"
@@ -292,6 +293,17 @@ tutors: [
                    ],
          answermask: "1000"
           },
+          {type: "*MCQ",
+          id: "R7.10",
+          refs: ["G1.2", "G2.2"],
+          goal:"In the picture of a motor below, in which direction does B experience a force?",
+           options:["reversing current direction", 
+                   "reversing magnetic field direction", 
+                   "connecting current to the coil",
+                   "generating current"
+                   ],
+         answermask: "1000"
+          }
           ]
        }
    ]

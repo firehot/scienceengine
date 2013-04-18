@@ -78,9 +78,10 @@ class TutorLoader {
 
   private AbstractTutor makeMcqTutor(OrderedMap<String, ?> tutorObj,
       McqTutor mcqTutor) {
+    String questionImageTexture = (String) tutorObj.get("image");
     String answerMask = (String) tutorObj.get("answermask");
     String[] options = loadStringArray("options", tutorObj);
-    mcqTutor.initialize(options, answerMask);
+    mcqTutor.initialize(questionImageTexture, options, answerMask);
     return mcqTutor;
   }
 
