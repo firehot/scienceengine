@@ -15,9 +15,7 @@ tutors: [
   {type: "Guide",
    id: "Science Train",
    goal: "Catch the Science Train - Light up your own coach",
-   success:200,
-   timelimit: 300,
-   successactions: "Upload()",
+         successactions: "Upload()",
    childtutors:[
          {type: "KnowledgeUnit",
           id: "Draw coach",

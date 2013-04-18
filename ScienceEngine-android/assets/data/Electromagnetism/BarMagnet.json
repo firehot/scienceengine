@@ -14,23 +14,20 @@ tutors:[
        id: "G1",
        goal: "Magnet and Compass",
        postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
-       success: 1000,
-       timelimit: 120,
        components:[{type:"FieldMeter", visible:false}],
        childtutors: [
          {type: "KnowledgeUnit",
           id: "G1.1",
           goal: "Make the compass go through one complete rotation",
-         hints: ["What happens to the compass when it moves around the magnet?",
+          hints: ["What happens to the compass when it moves around the magnet?",
                  "Move the compass around the magnet"],
-         postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
-         success: 1000,
-         explanation: ["A Bar Magnet has two poles - North and South.",
+          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
+          explanation: ["A Bar Magnet has two poles - North and South.",
                        "A compass is just a weak magnet with 2 poles which can freely rotate.",
                        "The North pole of the compass is attracted to the Bar Magnet's South pole and vice versa",
                        "The Earth has a magnetic field like a bar magnet and has two magnetic poles - North and South",
                        "The North pole of the compass points to the Earth's magnetic South Pole (Earth's geographic North Pole)"],
-         components:[{type:"Compass", visible: true}]
+          components:[{type:"Compass", visible: true}]
          }]
        },
        {type: "Guide",
@@ -38,9 +35,7 @@ tutors:[
        goal: "Understand the magnetic field of a magnet",
        components:[{type:"FieldMeter", visible:true},{type:"Compass", visible: false}],
        postcondition: "FieldMeter.Count >= 10",
-       success: 250,
-       timelimit: 180,
-       childtutors: [
+                     childtutors: [
         {type: "KnowledgeUnit",
          goal: "Touch the screen in multiple places around the magnet to see the field.",
          id: "G1.2", 
@@ -50,21 +45,18 @@ tutors:[
                        "The field arrow points towards the South Pole and away from the North Pole.",
                        "When the field is stronger, the arrow is bigger",
                        "The magnetic field is stronger near the poles of the magnet."],
-         success: 250
-        },
+                 },
         {type: "KnowledgeUnit",
          goal: "Move the magnet. See how the field changes.",
          id: "G1.3",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 1",
          explanation: ["When the magnet moves, its magnetic field moves along with it."],
-         success: 250
         },
         {type: "KnowledgeUnit",
          goal: "Change rotation angle of magnet. See how the field changes",
          id: "G1.4",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.RotationAngle) >= 1",
          explanation: ["When the magnet rotates, its magnetic field rotates along with it."],
-         success: 250,
          components:[{type:"BarMagnet", pin:true}]
         },
         {type: "KnowledgeUnit",
@@ -72,7 +64,6 @@ tutors:[
          id: "G1.5",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetStrength) >= 1",
          explanation: ["If the magnet strength is higher, the field at a point is stronger but there is no change in its direction."],
-         success: 250,
          components:[{type:"BarMagnet", pin:true}]
          }
        ]},    
@@ -87,9 +78,6 @@ tutors:[
           hints: ["The field is stronger closer to the poles of the magnet",
                   "The field moves and rotates along with the magnet"],
           configs:[{name: "BarMagnet.MovementMode", value:"None"}],
-          timelimit: 10,
-          success: 100,
-          failure: 50,
           explanation: ["The field is stronger closer to the poles of the magnet.", 
                         "The field moves and rotates as the magnet moves and rotates."],
           components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
@@ -103,10 +91,7 @@ tutors:[
           explanation: ["The direction of the field at a point is away from the North Pole and towards the South Pole of the magnet.",
                         "The nearer pole has a greater effect on the field direction."],
           configs:[{name: "BarMagnet.MovementMode", value:"None"}],
-          timelimit: 10,
-          success: 100,
-          failure: 50,
-          components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
+                                        components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
           }
         ]
         },

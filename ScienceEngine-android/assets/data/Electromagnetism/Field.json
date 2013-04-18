@@ -18,9 +18,7 @@ tutors:[
        {type: "Guide",
        id: "G1",
        goal: "Magnetic Field",
-       success: 1000,
-       timelimit: 120,
-       components:[{type:"Monopole", visible:false},
+                     components:[{type:"Monopole", visible:false},
                    {type:"Charge", visible: false}],
        childtutors: [
          {type: "KnowledgeUnit",
@@ -33,15 +31,12 @@ tutors:[
                        "When strength of the field increases, the size of the arrows increase but their direction does not change",
                        "When direction of the field changes, the direction of the arrows change, but their size does not change"],
          postcondition: "Count(MagneticField.FieldStrength) > 1 and Count(MagneticField.FieldAngle) > 1",
-         success: 1000
-         }]
+                  }]
        },
        {type: "Guide",
         id: "G2",
         goal: "Magnetic Field and Monopole",
-        success: 100,
-        timelimit: 120,
-       components:[{type:"Monopole", visible:true},
+                       components:[{type:"Monopole", visible:true},
                    {type:"Charge", visible: false}],
        configs:[ 
          {name: "Monopole.MonopoleType", permitted:true},
@@ -58,8 +53,7 @@ tutors:[
                          "When the field strength increases, the force on the monopole increases",
                          "NOTE: Magnetic monopoles are not found in nature. Magnetic North and South poles cannot be isolated unlike electric charges."],
            postcondition: "Count(MagneticField.FieldStrength) > 1 and Count(MagneticField.FieldAngle) > 1",
-           success: 1000
-          },
+                     },
           {type: "KnowledgeUnit",
            id: "G2.2",
            goal: "Change strength of monopole and see how it affects the movement",
@@ -67,8 +61,7 @@ tutors:[
            hints: ["The force exerted by the field on the monopole depends on monopole strength"],
            explanation: ["When the monopole strength increases, the force on the monopole increases"],
            postcondition: "Count(Monopole.MagnetStrength) > 1",
-           success: 1000
-          },
+                     },
           {type: "KnowledgeUnit",
            id: "G2.3",
            goal: "Change type of Monopole to South and see how monopole moves",
@@ -77,15 +70,12 @@ tutors:[
            explanation: ["A South monopole behaves as the opposite of a North monopole.",
                          "The force exerted by the field is same in magnitude but opposite in direction."],
            postcondition: "Count(Monopole.MonopoleType) >= 1",
-           success: 1000
-         }]
+                    }]
        },
        {type: "Guide",
         id: "G3",
         goal: "Magnetic Field and Charge",
-        success: 100,
-        timelimit: 120,
-        components:[{type:"Monopole", visible:false},
+                        components:[{type:"Monopole", visible:false},
                    {type:"Charge", visible: true, pin: true}],
         configs:[ 
           {name: "Monopole.MonopoleType", permitted:true},
@@ -101,8 +91,7 @@ tutors:[
            hints: ["A stationary charge is not affected by a magnetic field"],
            explanation: ["A stationary charge is not affected by the magnetic field."],
            postcondition: "Count(Charge.ChargeStrength) > 1",
-           success: 1000
-          },
+                     },
           {type: "KnowledgeUnit",
            id: "G3.2",
            goal: "Pull the charge in some direction and see how it moves",
@@ -112,8 +101,7 @@ tutors:[
                          "Since the force is perpendicular to the charge motion (current), the charge moves in a circle.",
                          "The force is higher if the velocity of the charge is higher"],
            postcondition: "Charge.Velocity > 0",
-           success: 1000
-          },
+                     },
           {type: "KnowledgeUnit",
            id: "G3.3",
            goal: "Change the magnetic field strength and charge strength and see how it affects the charge",
@@ -122,8 +110,7 @@ tutors:[
                          "A larger force on the charge makes it spin faster."],
            hints: ["A stronger magnetic field exerts a stronger force on a moving charge"],
            postcondition: "Count(MagneticField.FieldStrength) > 1 and Charge.Velocity > 0",
-           success: 1000
-          },
+                     },
           {type: "KnowledgeUnit",
            id: "G3.4",
            goal: "Change charge to negative and see how it moves",
@@ -131,8 +118,7 @@ tutors:[
                          "The force exerted on it by the field is equal in magnitude but opposite in direction"],
            hints: ["The force on the charge depends on its magnitude and sign"],
            postcondition: "Count(Charge.ChargeStrength) >= 1",
-           success: 1000
-         }]
+                    }]
        },
        {type: "Challenge",
         id: "C1",
@@ -146,10 +132,7 @@ tutors:[
                   "The South monopole moves opposite to the direction of the field"],
           explanation: ["A north monopole moves in the direction of the field",
                         "A south monopole moves opposite to the direction of the field."],
-          timelimit: 10,
-          success: 100,
-          failure: 50,
-          components:[{type:"Charge", visible: false}],
+                                        components:[{type:"Charge", visible: false}],
           configs:[{name:"FieldMeter.SampleMode", value:"User"} ]
           }, 
           {type:"ParameterProber",
@@ -158,9 +141,7 @@ tutors:[
            refs: ["G3.2", "G3.4"],
            hints:["Use Fleming's Left hand rule"],
            resultType:"Spin",
-           success: 100,
-           failure: 50,
-           explanation: ["Fleming's Left Hand Rule can be used to determine the direction of rotation of a positive charge in a magnetic field."],
+                                 explanation: ["Fleming's Left Hand Rule can be used to determine the direction of rotation of a positive charge in a magnetic field."],
            parameter:"Charge.ChargeStrength",
            result:"(Charge.CurrentStrength > 0) = (MagneticField.FieldUpDown = 'Up')",
            components:[{type:"Charge", visible: true, pin: true}, {type: "Monopole", visible: false} ],
@@ -181,8 +162,7 @@ tutors:[
             ],
             components:[{type:"Charge", visible: true, pin: true}, {type:"Monopole", visible:false} ],
             parameters: ["+Charge.ChargeStrength", "+Charge.Velocity", "+MagneticField.FieldStrength"],
-            success: 5000},
-         {type: "Abstractor", 
+                     {type: "Abstractor", 
           id: "C1.5",
           refs:["G2"],
             goal:"Select how increase in each variable affects force on a magnetic monopole.\nYou have 3 tries.",
@@ -195,8 +175,7 @@ tutors:[
             ],
             components:[{type:"Charge", visible: false}, {type:"Monopole", visible: true} ],
             parameters: ["+Monopole.MagnetStrength", "+MagneticField.FieldStrength"],
-            success: 5000
-        }]
+                    }]
        },
        {type: "RapidFire",
        id: "R1",
