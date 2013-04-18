@@ -68,17 +68,23 @@ public class HelpTour extends Group {
       float w = contentBox.getWidth();
       float h = contentBox.getHeight();
       if (arrowX == CENTER_POS.x && arrowY == CENTER_POS.y) {
-        contentBox.setPosition(CENTER_POS.x - w / 2, CENTER_POS.y - h / 2);
+        pos.set(CENTER_POS.x - w / 2, CENTER_POS.y - h / 2);
         contentBox.getNextButton().setText(getMsg("HelpTour.Help"));
       } else if (sx >= 0 && sy >= 0) {
-        contentBox.setPosition(arrowX - w, arrowY - h);
+        pos.set(arrowX - w, arrowY - h);
       } else if (sx <= 0 && sy >= 0) {
-        contentBox.setPosition(arrowX, arrowY - h);
+        pos.set(arrowX, arrowY - h);
       } else if (sx <= 0 && sy <= 0) {
-        contentBox.setPosition(arrowX + 10, arrowY + 10);
+        pos.set(arrowX + 10, arrowY + 10);
       } else {
-        contentBox.setPosition(arrowX - w, arrowY);
+        pos.set(arrowX - w, arrowY);
       }
+      // Ensure contentBox is entirely within screen
+      if (pos.x < 0) pos.x = 0;
+      if (pos.x + w > ScreenComponent.VIEWPORT_WIDTH) pos.x = ScreenComponent.VIEWPORT_WIDTH - w;
+      if (pos.y < 0) pos.y = 0;
+      if (pos.y + h > ScreenComponent.VIEWPORT_HEIGHT) pos.y = ScreenComponent.VIEWPORT_HEIGHT - h;
+      contentBox.setPosition(pos.x, pos.y);
     }
     
     private void endHelp() {

@@ -68,6 +68,8 @@ public class ModelControls extends Table {
   @Override
   public void validate() {
     super.validate();
+    // Periodically reposition
+    if (ScienceEngine.getLogicalTime() % 100 != 0) return;
     ScreenComponent sc = ScreenComponent.ModelControls; // Gadzooks
     setPosition(sc.getX(getPrefWidth()) + getPrefWidth() / 2,
         sc.getY(getPrefHeight()) + getPrefHeight() / 2);

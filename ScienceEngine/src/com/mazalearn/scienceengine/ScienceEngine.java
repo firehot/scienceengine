@@ -415,6 +415,7 @@ public class ScienceEngine extends Game {
     return "localhost:8888";
   }
 
+  // This is the number of times act has been called on app as opposed to time elapsed
   public static long getLogicalTime() {
     return logicalTime;
   }

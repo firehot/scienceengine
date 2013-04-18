@@ -3,10 +3,12 @@ package com.mazalearn.scienceengine.domains.electromagnetism.view;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
+import com.mazalearn.scienceengine.core.view.AnimateAction;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
 
@@ -49,4 +51,12 @@ public class ElectromagnetActor extends Science2DActor {
         && y >= 0 && y < getHeight() ? this : null;
   }
 
+  @Override
+  public void showHelp(Stage stage, boolean animate) {
+    if (animate) {
+      addAction(AnimateAction.animatePosition(getX(), getY()));
+    } else {
+      clearActions();
+    }
+  }
 }
