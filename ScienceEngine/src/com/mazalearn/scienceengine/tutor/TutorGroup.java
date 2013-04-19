@@ -116,7 +116,8 @@ public class TutorGroup extends AbstractTutor {
 
   private void randomizeChildTutors() {
     Utils.shuffle(childTutors);
-    numChildren = (getType() == TutorType.RapidFire) ? RAPID_FIRE_MAX : REVIEWER_MAX;
+    numChildren = Math.min(childTutors.size(), 
+        (getType() == TutorType.RapidFire) ? RAPID_FIRE_MAX : REVIEWER_MAX);
   }
   
   @Override

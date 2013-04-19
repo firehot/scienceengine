@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -147,6 +148,25 @@ public class SplashScreen extends AbstractScreen {
     });
     splashImage.addListener(startListener);
     touchToStart.addListener(startListener);
+    
+    // Installation Info
+    LabelStyle small = new LabelStyle(getSkin().get(LabelStyle.class));
+    small.font = getSkin().getFont("font12");
+    Label version = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), small);
+    Label installation = new Label(profile.getInstallationId(), small);
+    installation.setStyle(small);
+    version.setPosition(10, 40);
+    installation.setPosition(10, 25);
+    stage.addActor(version);
+    stage.addActor(installation);
+
+    // Registration Info if registered
+    if (profile.getUserEmail().length() > 0) {
+      Label registration = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Registered") + 
+          ": " + profile.getUserEmail(), small);
+      registration.setPosition(10, 10);
+      stage.addActor(registration);
+    }
     
     // Do a sync of all profiles here
     ScienceEngine.getPreferencesManager().syncProfiles();    

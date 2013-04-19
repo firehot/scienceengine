@@ -26,6 +26,7 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter.Sam
 public class FieldMeterActor extends Science2DActor {
   private final FieldMeter fieldMeter;
   private Vector2 pos = new Vector2();
+  private ShapeRenderer shapeRenderer;
   
   public FieldMeterActor(Science2DBody body, TextureRegion textureRegion) {
     super(body, textureRegion);
@@ -45,6 +46,7 @@ public class FieldMeterActor extends Science2DActor {
         fieldMeter.setPositionAndAngle(pos, 0);
       }
     });
+    shapeRenderer = new ShapeRenderer();
   }
   
   @Override
@@ -67,7 +69,6 @@ public class FieldMeterActor extends Science2DActor {
 
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
-    ShapeRenderer shapeRenderer = new ShapeRenderer();
     batch.end();
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     List<FieldSample> fieldSamples = fieldMeter.getFieldSamples();

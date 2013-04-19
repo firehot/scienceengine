@@ -13,7 +13,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   BottomBar(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 20, 0, Color.BLACK, true, false),
   Title(XAlign.CENTER, 0, YAlign.TOP, -10, 0, 0, -1, Color.WHITE, true, false),
   Status(XAlign.CENTER, 0, YAlign.BOTTOM, 10, 0, 0, -1, Color.WHITE, true, false),
-  User(XAlign.RIGHT, -20, YAlign.TOP, -2, 30, 30, -1, Color.WHITE, true, false),
+  User(XAlign.RIGHT, -20, YAlign.TOP, -2, 30, 30, -1, Color.WHITE, true, true),
   Back(XAlign.LEFT, 0, YAlign.TOP, 0, 70, 30, -1, Color.CLEAR, true, false),
   Help(XAlign.LEFT, 20, YAlign.MIDDLE, 60, 60, 60, -1, Color.CLEAR, false, false),
   ViewControls(XAlign.LEFT, 81, YAlign.TOP, 0, 0, 0, -1, Color.CLEAR, true, true),

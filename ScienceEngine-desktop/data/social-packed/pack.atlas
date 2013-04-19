@@ -5,22 +5,43 @@ filter: Nearest,Nearest
 repeat: none
 gift3
   rotate: false
-  xy: 1, 1
+  xy: 1, 334
   size: 395, 490
   orig: 395, 490
   offset: 0, 0
   index: -1
-gift2
+achievement
   rotate: false
-  xy: 398, 206
-  size: 365, 285
-  orig: 365, 285
+  xy: 398, 557
+  size: 400, 267
+  orig: 400, 267
+  offset: 0, 0
+  index: -1
+award
+  rotate: false
+  xy: 1, 65
+  size: 400, 267
+  orig: 400, 267
   offset: 0, 0
   index: -1
 gift1
   rotate: false
-  xy: 765, 243
+  xy: 800, 576
   size: 204, 248
   orig: 204, 248
+  offset: 0, 0
+  index: -1
+certificate
+  rotate: false
+  xy: 403, 288
+  size: 400, 267
+  orig: 400, 267
+  offset: 0, 0
+  index: -1
+gift2
+  rotate: false
+  xy: 403, 1
+  size: 365, 285
+  orig: 365, 285
   offset: 0, 0
   index: -1

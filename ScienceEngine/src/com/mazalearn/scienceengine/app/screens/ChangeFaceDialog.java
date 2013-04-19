@@ -40,11 +40,11 @@ public class ChangeFaceDialog extends Dialog {
     getContentTable().add(face).height(DrawingActor.SCALED_FACE_HEIGHT).width(DrawingActor.SCALED_FACE_WIDTH).fill();
     getContentTable().row();
 
-    TextButton cancelButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Cancel"), skin);
+    TextButton cancelButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Cancel"), skin, "body");
     this.getButtonTable().add(cancelButton).width(150).center();
     
-    Button closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Save"), skin);
-    closeButton.addListener(new ClickListener() {
+    Button saveButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Save"), skin, "body");
+    saveButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -52,6 +52,6 @@ public class ChangeFaceDialog extends Dialog {
         userImage.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion(ScienceEngine.USER)));
       }
     });
-    this.getButtonTable().add(closeButton).width(150).center();
+    this.getButtonTable().add(saveButton).width(150).center();
   }
 }

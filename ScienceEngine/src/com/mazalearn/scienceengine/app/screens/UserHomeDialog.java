@@ -3,11 +3,9 @@ package com.mazalearn.scienceengine.app.screens;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -25,6 +23,9 @@ public class UserHomeDialog extends Dialog {
   
   private static final int GIFT_WIDTH = 150;
   private static final int GIFT_HEIGHT = 100;
+  private static final int CERTIFICATE_WIDTH = 75;
+  private static final int CERTIFICATE_HEIGHT = 50;
+  private static final boolean ENABLE_SOCIAL = true;
 
   private Profile profile;
   private Skin skin;
@@ -33,19 +34,42 @@ public class UserHomeDialog extends Dialog {
     super("", skin);
     this.skin = skin;
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
+    ScienceEngine.loadAtlas("images/social/pack.atlas"); // Unload after since not used elsewhere?
 
+    Table contentTable = getContentTable();
+    
     // Title
     Label title = new Label("Home", skin);
     title.setAlignment(Align.center, Align.center);
-    getContentTable().add(title).fill().width(800).pad(10).height(40).colspan(2);
-    getContentTable().row();
+    contentTable.add(title).fill().width(800).pad(10).height(40).colspan(2);
+    contentTable.row();
     
     // Name and face
+    addUserInfo(userImage, contentTable);
+    
+    // Registration information
+    final boolean alreadyRegistered = profile.getUserEmail().length() > 0;
+    if (alreadyRegistered) {
+      addCertificatesPane(contentTable);
+      addSocialPane(contentTable);
+    } else {
+      addRegistrationRequest(contentTable);
+      // Sync profile so that registration will work.
+      ScienceEngine.getPreferencesManager().syncProfiles();
+    }
+
+    contentTable.debug();
+
+    TextButton closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Close"), skin, "body");
+    this.getButtonTable().add(closeButton).width(150).center();
+  }
+
+  private void addUserInfo(final Image userImage, Table contentTable) {
     Label name = new Label(profile.getUserName(), skin);
     name.setAlignment(Align.center, Align.center);
-    getContentTable().add(name).fill().width(400).pad(10);
+    contentTable.add(name).fill().width(400).pad(10);
     Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
-    getContentTable().add(image).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
+    contentTable.add(image).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
     image.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -53,91 +77,79 @@ public class UserHomeDialog extends Dialog {
         new ChangeFaceDialog(skin, userImage).show(getStage());
       }
     });
-    getContentTable().row();
+    contentTable.row();
+  }
 
-    // Installation Info
-    getContentTable().add(ScienceEngine.getMsg().getString("ScienceEngine.Name"));
-    Label installation = new Label("\nID:" + profile.getInstallationId(), skin);
-    installation.setWrap(true);
-    LabelStyle small = new LabelStyle(installation.getStyle());
-    small.font = skin.getFont("font12");
-    installation.setStyle(small);
-    getContentTable().add(installation).left().fill();
-    getContentTable().row();
-
-    // Registration information
-    final Label registration = new Label("", skin);
+  private void addRegistrationRequest(Table contentTable) {
+    Label registration = new Label("", skin);
     registration.setWidth(800);
     registration.setWrap(true);
-    final boolean alreadyRegistered = profile.getUserEmail().length() > 0;
-    Button registerButton = null;
-    if (alreadyRegistered) {
-      registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.Registered"));
-      getContentTable().add(registration).width(400).pad(10);
-      getContentTable().add(profile.getUserEmail());
-      getContentTable().row();
-      getContentTable().add("Gifts Waiting for You");
-      getContentTable().add("Create and Send Gifts");
-      getContentTable().row();
-      getContentTable().add(createGiftsWaitingPane()).width(400);
-      getContentTable().add(createGiftingPane()).width(400);
-      getContentTable().row();
-    } else {
-      registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.RegistrationInfo"));
-      getContentTable().add(registration).width(400).pad(10);
-      registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin, "body");
-      getContentTable().add(registerButton).width(150).center();      
-      getContentTable().row();
-      registerButton.addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          // Bring up registration form
-          ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + "/registration.jsp?" + 
-              Profile.INSTALL_ID + "=" + profile.getInstallationId().toLowerCase());
-        }
-      });
-      // Sync profile so that registration will work.
-      ScienceEngine.getPreferencesManager().syncProfiles();
-    }
+    registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.RegistrationInfo"));
+    contentTable.add(registration).width(400).pad(10);
+    TextButton registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin, "body");
+    contentTable.add(registerButton).width(150).center();      
+    contentTable.row();
+    registerButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        // Bring up registration form
+        ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + "/registration.jsp?" + 
+            Profile.INSTALL_ID + "=" + profile.getInstallationId().toLowerCase());
+      }
+    });
+  }
 
-    getContentTable().debug();
+  private void addCertificatesPane(Table contentTable) {
+    contentTable.add(createImagesPane("Certificates", 
+        new String[] {"certificate", "award", "award", "achievement", "certificate"},
+        CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT)).colspan(2);
+    contentTable.row();
+  }
 
-    TextButton closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Close"), skin, "body");
-    this.getButtonTable().add(closeButton).width(150).center();
+  private void addSocialPane(Table contentTable) {
+    if (!ENABLE_SOCIAL) return;
+    
+    contentTable.add("Gifts Waiting for You");
+    contentTable.add("Create and Send Gifts");
+    contentTable.row();
+    contentTable.add(createImagesPane("Gifts Waiting", 
+        new String[] {"gift1", "gift2", "gift3"}, 
+        GIFT_WIDTH, GIFT_HEIGHT)).width(400);
+    contentTable.add(createGiftingPane()).width(400);
+    contentTable.row();
   }
 
   private Actor createGiftingPane() {
     return null;
   }
 
-  private Actor createGiftsWaitingPane() {
-    ScienceEngine.loadAtlas("images/social/pack.atlas"); // Unload since not used elsewhere?
+  private Actor createImagesPane(String title, String[] items, int itemWidth, int itemHeight) {
     Table table = new Table(skin);
-    table.setName("Gifts Waiting");
+    table.setName(title);
     ScrollPane flickScrollPane = new ScrollPane(table, skin, "thumbs");
     flickScrollPane.setScrollingDisabled(false, true);
     table.setFillParent(false);
     table.defaults().fill();
-    for (String giftName: new String[] {"gift1", "gift2", "gift3"}) {
-      TextureRegion giftTexture = ScienceEngine.getTextureRegion(giftName);
-      TextButton gift = 
-          ScreenUtils.createImageButton(giftTexture, skin, "clear");
-      ScreenComponent.scaleSize(gift, GIFT_WIDTH, GIFT_HEIGHT);
-      gift.addListener(new ClickListener() {
+    for (String itemName: items) {
+      TextureRegion itemTexture = ScienceEngine.getTextureRegion(itemName);
+      TextButton item = 
+          ScreenUtils.createImageButton(itemTexture, skin, "clear");
+      ScreenComponent.scaleSize(item, itemWidth, itemHeight);
+      item.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
         }
 
       });
-      Table giftTable = new Table(skin);
-      giftTable.setName("Gift");
-      giftTable.add(giftName);
-      giftTable.row();
-      giftTable.add(gift)
-          .width(gift.getWidth())
-          .height(gift.getHeight());
-      table.add(giftTable).pad(5);
+      Table itemTable = new Table(skin);
+      itemTable.setName("Item");
+      //giftTable.add(itemName);
+      itemTable.row();
+      itemTable.add(item)
+          .width(item.getWidth())
+          .height(item.getHeight());
+      table.add(itemTable).pad(5);
     }
     return flickScrollPane;
   }
