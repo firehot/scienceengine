@@ -112,7 +112,7 @@ public class UserHomeDialog extends Dialog {
   }
 
   private Actor createGiftsWaitingPane() {
-    ScienceEngine.loadAtlas("images/social/pack.atlas");
+    ScienceEngine.loadAtlas("images/social/pack.atlas"); // Unload since not used elsewhere?
     Table table = new Table(skin);
     table.setName("Gifts Waiting");
     ScrollPane flickScrollPane = new ScrollPane(table, skin, "thumbs");
