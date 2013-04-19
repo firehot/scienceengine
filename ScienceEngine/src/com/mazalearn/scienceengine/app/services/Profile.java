@@ -1,6 +1,9 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -38,6 +41,7 @@ public class Profile implements Serializable {
   private static final String COLOR = "color";
   private static final String PLATFORM = "platform";
   public static final String USER_EMAIL = "useremail";
+  public static final String FRIENDS = "friends";
   
   private HashMap<Topic, HashMap<String, float[]>> topicStats;
   private HashMap<String, String> properties;
@@ -161,6 +165,10 @@ public class Profile implements Serializable {
     return s == null ? "" : s;
   }
 
+  void testSetUserEmail(String userEmail) {
+    properties.put(USER_ID, userEmail);
+  }
+  
   public void save() {
     properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
     ScienceEngine.getPreferencesManager().saveUserProfile();
@@ -173,6 +181,30 @@ public class Profile implements Serializable {
     } catch (IllegalArgumentException e) {
       return 0;
     }
+  }
+  
+  public void addFriend(String friendEmail) {
+    String[] currentFriends = getFriends();
+    // We dont want duplicates - convert to set to eliminate duplicates.
+    Set<String> friendSet = new HashSet<String>(Arrays.asList(currentFriends));
+    friendSet.add(friendEmail.toLowerCase());
+    String friendStr = friendSet.toString();
+    // Strip off beginning [ and ending ] and trim
+    friendStr = friendStr.substring(1, friendStr.length() - 1);
+    properties.put(FRIENDS, friendStr);
+    save();
+  }
+  
+  public String[] getFriends() {
+    String currentFriendStr = properties.get(FRIENDS);
+    if (currentFriendStr == null) {
+      if (getUserEmail().length() == 0) return new String[0];
+      currentFriendStr = getUserEmail().toLowerCase();
+      properties.put(FRIENDS, currentFriendStr);
+      save();
+    }
+    String[] currentFriends = currentFriendStr.split(", ");
+    return currentFriends;
   }
 
   public void setCoachPixmap(Pixmap coachPixmap, String current, String color) {
@@ -262,8 +294,13 @@ public class Profile implements Serializable {
   public synchronized void mergeProfile(String otherProfileBase64) {
     Profile otherProfile = fromBase64(otherProfileBase64);
     if (otherProfile != null) {
-      otherProfile.properties.putAll(properties);
-      properties = otherProfile.properties;
+      // Other profile is later - merge other on top of this
+      if (otherProfile.getLastUpdated() > getLastUpdated()) {
+        properties.putAll(otherProfile.properties);
+      } else {
+        otherProfile.properties.putAll(properties);
+        properties = otherProfile.properties;
+      }
     }
   }
 }

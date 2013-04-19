@@ -161,12 +161,11 @@ public class SplashScreen extends AbstractScreen {
     stage.addActor(installation);
 
     // Registration Info if registered
-    if (profile.getUserEmail().length() > 0) {
-      Label registration = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Registered") + 
-          ": " + profile.getUserEmail(), small);
-      registration.setPosition(10, 10);
-      stage.addActor(registration);
-    }
+    String owner = (profile.getUserEmail().length() > 0) ? profile.getUserEmail() : "Not registered";
+    Label registration = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Registered") + 
+          ": " + owner, small);
+    registration.setPosition(10, 10);
+    stage.addActor(registration);
     
     // Do a sync of all profiles here
     ScienceEngine.getPreferencesManager().syncProfiles();    

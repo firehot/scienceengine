@@ -121,7 +121,7 @@ public class ScienceEngine extends Game {
   
   // IPlatformAdapter interface
   
-  public void setPlatformAdapter(IPlatformAdapter platformAdapter) {
+  public static void setPlatformAdapter(IPlatformAdapter platformAdapter) {
     ScienceEngine.platformAdapter = platformAdapter;
   }
   

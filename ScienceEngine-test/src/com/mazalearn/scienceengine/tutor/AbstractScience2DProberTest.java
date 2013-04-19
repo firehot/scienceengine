@@ -40,7 +40,7 @@ public class AbstractScience2DProberTest {
   public AbstractScience2DProberTest() {
     prober = new FieldMagnitudeProber(science2DController,
       TutorType.FieldMagnitudeProber, null, "goal", "id", null, null,
-      0, 0, new String[0], new String[0], new String[0]);
+      new String[0], new String[0], new String[0]);
   }
   
   @BeforeClass
@@ -53,14 +53,14 @@ public class AbstractScience2DProberTest {
     
     scienceEngine = new ScienceEngine("");
     IPlatformAdapter platformAdapter = new PlatformAdapterImpl(Platform.Desktop);
-    scienceEngine.setPlatformAdapter(platformAdapter);
+    ScienceEngine.setPlatformAdapter(platformAdapter);
     ScienceEngine.DEV_MODE = DevMode.DEBUG;
     app = new LwjglApplication(scienceEngine, cfg);
     app.postRunnable(new Runnable() {
       @Override
       public void run() {
         ScienceEngine.loadAtlas("images/tutorHelper/pack.atlas");
-        science2DController = new DummyController(scienceEngine.getSkin());
+        science2DController = new DummyController(ScienceEngine.getSkin());
         science2DView = science2DController.getView();
       }    
     });
@@ -131,7 +131,7 @@ public class AbstractScience2DProberTest {
     image.setSize(100, 100);
     ((Stage) science2DView).addActor(image);
     
-    Table table = new Table(scienceEngine.getSkin());
+    Table table = new Table(ScienceEngine.getSkin());
     table.setPosition(100, 100);
     table.add(image).width(100).height(100).center();
     List<Actor> actors =  Arrays.asList(new Actor[] { table });
