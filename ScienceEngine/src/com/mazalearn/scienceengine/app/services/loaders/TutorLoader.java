@@ -29,9 +29,10 @@ class TutorLoader {
     this.science2DController = science2DController;
   }
 
-  private AbstractTutor loadTutor(ITutor parentTutor, OrderedMap<String, ?> tutorObj) {
+  private AbstractTutor loadTutor(Topic level, ITutor parentTutor, OrderedMap<String, ?> tutorObj) {
     String type = (String) tutorObj.get("type");
-    String id = (String) tutorObj.get("id");
+    // TutorId is the levelId concatenated with local id of tutor within the level.
+    String id = AbstractTutor.makeTutorKey(level, (String) tutorObj.get("id"));
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type + " " + id);
     String goal = (String) tutorObj.get("goal");
     Array<?> components = (Array<?>) tutorObj.get("components");
@@ -83,7 +84,8 @@ class TutorLoader {
 
   private AbstractTutor makeTutorGroup(OrderedMap<String, ?> tutorObj, TutorGroup tutorGroup) {
     Array<?> childTutorsObj = (Array<?>) tutorObj.get("childtutors");
-    List<ITutor> childTutors = loadChildTutors(tutorGroup, childTutorsObj);
+    List<ITutor> childTutors = 
+        loadChildTutors(science2DController.getLevel(), tutorGroup, childTutorsObj);
     String successActions = (String) tutorObj.get("successactions");
     tutorGroup.initialize(childTutors, successActions);
     return tutorGroup;
@@ -102,7 +104,7 @@ class TutorLoader {
         OrderedMap<String, ?> groupTutorsObj = (OrderedMap<String, ?>) tutorsObj.get(i);
         if (TutorType.RapidFire.name().equals(groupTutorsObj.get("type"))) {
           Array<?> childTutorsObj = (Array<?>) groupTutorsObj.get("childtutors");
-          List<ITutor> childTutors = loadChildTutors(reviewer, childTutorsObj);
+          List<ITutor> childTutors = loadChildTutors(level, reviewer, childTutorsObj);
           reviewTutors.addAll(childTutors);
         }
       }
@@ -149,7 +151,7 @@ class TutorLoader {
   }
 
   @SuppressWarnings("unchecked") 
-  public List<ITutor> loadChildTutors(ITutor parent, Array<?> childTutorsObj) {
+  public List<ITutor> loadChildTutors(Topic level, ITutor parent, Array<?> childTutorsObj) {
     Gdx.app.log(ScienceEngine.LOG, "Loading child Tutors: " + parent.getId());
     List<ITutor> childTutors = new ArrayList<ITutor>();
     if (childTutorsObj == null) {
@@ -157,7 +159,7 @@ class TutorLoader {
       return childTutors;
     }
     for (int i = 0; i < childTutorsObj.size; i++) {
-      AbstractTutor tutor = loadTutor(parent, (OrderedMap<String, ?>) childTutorsObj.get(i));
+      AbstractTutor tutor = loadTutor(level, parent, (OrderedMap<String, ?>) childTutorsObj.get(i));
       if (tutor != null) {
         childTutors.add(tutor);
       }

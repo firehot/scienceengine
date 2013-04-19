@@ -161,10 +161,6 @@ public class Profile implements Serializable {
     return s == null ? "" : s;
   }
 
-  private String makeTutorKey(Topic level, String tutorId) {
-    return level.getTopicId() + "$" + tutorId;
-  }
-
   public void save() {
     properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
     ScienceEngine.getPreferencesManager().saveUserProfile();
@@ -205,9 +201,9 @@ public class Profile implements Serializable {
     return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
-  public float[] getStats(Topic topic, Topic level, String tutorId) {
+  public float[] getStats(Topic topic, String tutorId) {
     HashMap<String, float[]> topicStat = topicStats.get(topic);
-    float[] s = topicStat.get(makeTutorKey(level, tutorId));
+    float[] s = topicStat.get(tutorId);
     
     if (s == null) return new float[ITutor.NUM_STATS];
     
@@ -221,7 +217,7 @@ public class Profile implements Serializable {
   }
 
   public float[] getStats(String tutorId) {
-    return getStats(getCurrentTopic(), getCurrentActivity(), tutorId);
+    return getStats(getCurrentTopic(), tutorId);
   }
   /**
    * Save stats for current topic, current activity.
@@ -229,9 +225,7 @@ public class Profile implements Serializable {
    * @param tutorId
    */
   public void saveStats(float[] stats, String tutorId) {
-    String tutorKey = makeTutorKey(getCurrentActivity(), tutorId);
-    currentTopicStats.put(tutorKey, stats);
-    // save here makes it very slow -- save();
+    currentTopicStats.put(tutorId, stats);
   }
 
   public void setPlatform(Platform platform) {
