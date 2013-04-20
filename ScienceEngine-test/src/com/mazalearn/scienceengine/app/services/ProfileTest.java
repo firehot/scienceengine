@@ -3,7 +3,8 @@ package com.mazalearn.scienceengine.app.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.annotation.Annotation;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,8 +12,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.mazalearn.scienceengine.PlatformAdapterImpl;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.Profile.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
 /**
@@ -42,7 +46,11 @@ public class ProfileTest {
   public ProfileTest() {
     profile = new Profile() {
       @Override
-      public void save() {}      
+      public void save() {
+        Writer writer = new StringWriter();
+        new Json(OutputType.javascript).toJson(this, writer);
+        System.out.println(writer.toString());
+      }      
     };
   }
   
@@ -80,6 +88,18 @@ public class ProfileTest {
     List<String> friendsList = Arrays.asList(currentFriends);
     assertTrue(friendsList.contains(TEST_EMAIL));
     assertTrue(friendsList.contains(TEST_EMAIL2));
-  }
-  
+  }  
+
+  @Test
+  public void testPostMessage() {
+    profile.postMessage("test@mazalearn.com", 1, "text", "image", 500);
+    assertEquals(1, profile.getOutbox().size());
+    profile.save();
+    Message msg = profile.getOutbox().get(0);
+    assertEquals(1, msg.giftType);
+    assertEquals("text", msg.text);
+    assertEquals("image", msg.image);
+    assertEquals(500, msg.points);
+    assertEquals("test@mazalearn.com", msg.email);
+  }  
 }

@@ -28,7 +28,6 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, -1, Color.YELLOW, false, false),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, -1, Color.YELLOW, false, false), 
   TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 
-  HELP_TOUR(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 
   ;
   
   enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800); 
@@ -69,6 +68,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   public static final String CORE_GROUP = "CoreGroup";
   public static final String TUTOR_GROUP = "TutorGroup";
   public static final String ACTIVITY_GROUP = "ActivityGroup";
+  public static final String HELP_TOUR = "HelpTour";
   public static final int PIXELS_PER_M = 8;
   
   static float X_SCALE = 1;

@@ -1,8 +1,10 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.services.Profile.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
@@ -41,12 +44,37 @@ public class Profile implements Serializable {
   private static final String COLOR = "color";
   private static final String PLATFORM = "platform";
   public static final String USER_EMAIL = "useremail";
-  public static final String FRIENDS = "friends";
   
   private HashMap<Topic, HashMap<String, float[]>> topicStats;
   private HashMap<String, String> properties;
   private HashMap<String, float[]> currentTopicStats;
 
+  public static class Social {
+    String[] friends;
+    public static class Message {
+      public Message(int messageId, String email, int giftType, String text, String image, int points) {
+        this.messageId = messageId;
+        this.email = email;
+        this.giftType = giftType;
+        this.text = text;
+        this.image = image;
+        this.points = points;
+      }
+      public final int messageId;
+      public final String email;
+      public final int giftType;
+      public final String text;
+      public final String image;
+      public final int points;
+    }
+    List<Message> inbox;
+    List<Message> outbox;
+    int lastInboxMessageId;
+    int lastOutboxMessageId;
+  }
+  
+  private Social social;
+  
   public Profile() {
     topicStats = new HashMap<Topic, HashMap<String, float[]>>();
     for (Topic topic: Topic.values()) {
@@ -55,6 +83,7 @@ public class Profile implements Serializable {
     }
     properties = new HashMap<String, String>();
     properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
+    social = new Social();
   }
 
   public void setCurrentActivity(Topic level) {
@@ -114,6 +143,8 @@ public class Profile implements Serializable {
       }
       topicStats.put(topic, stats);
     }
+    social = json.readValue("social", Social.class, jsonData);
+    
     // Set current topic
     Topic currentTopic = Topic.Electromagnetism;
     try {
@@ -133,6 +164,7 @@ public class Profile implements Serializable {
       }
     }
     json.writeObjectEnd();
+    json.writeValue("social", social);
   }
 
   public void setCurrentTopic(Topic topic) {
@@ -188,23 +220,45 @@ public class Profile implements Serializable {
     // We dont want duplicates - convert to set to eliminate duplicates.
     Set<String> friendSet = new HashSet<String>(Arrays.asList(currentFriends));
     friendSet.add(friendEmail.toLowerCase());
-    String friendStr = friendSet.toString();
-    // Strip off beginning [ and ending ] and trim
-    friendStr = friendStr.substring(1, friendStr.length() - 1);
-    properties.put(FRIENDS, friendStr);
+    social.friends = friendSet.toArray(new String[0]);
     save();
   }
   
   public String[] getFriends() {
-    String currentFriendStr = properties.get(FRIENDS);
-    if (currentFriendStr == null) {
+    if (social == null) {
+      social = new Social();
+    }
+    if (social.friends == null) {
       if (getUserEmail().length() == 0) return new String[0];
-      currentFriendStr = getUserEmail().toLowerCase();
-      properties.put(FRIENDS, currentFriendStr);
+      String currentFriendStr = getUserEmail().toLowerCase();
+      social.friends = new String[] { currentFriendStr };
       save();
     }
-    String[] currentFriends = currentFriendStr.split(", ");
-    return currentFriends;
+    return social.friends;
+  }
+  
+  public void postMessage(String emailTo, int giftType, String text, String image, int points) {
+    if (social.outbox == null) {
+      social.outbox = new ArrayList<Message>();
+    }
+    Message msg = new Message(social.lastOutboxMessageId++, emailTo, giftType, text, image, points);
+    social.outbox.add(msg);
+  }
+  
+  void testPostInMessage(String emailFrom, int giftType, String text, String image, int points) {
+    if (social.inbox == null) {
+      social.inbox = new ArrayList<Message>();
+    }
+    Message msg = new Message(social.lastInboxMessageId++, emailFrom, giftType, text, image, points);
+    social.inbox.add(msg);
+  }
+  
+  public List<Message> getOutbox() {
+    return social.outbox;
+  }
+
+  public List<Message> getInbox() {
+    return social.inbox;
   }
 
   public void setCoachPixmap(Pixmap coachPixmap, String current, String color) {

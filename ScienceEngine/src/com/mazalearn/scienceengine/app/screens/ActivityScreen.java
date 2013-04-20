@@ -127,7 +127,7 @@ public class ActivityScreen extends AbstractScreen {
     helpListener = new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x1, float y1) {
-        Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR.name());
+        Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR);
         if (helpTour != null) return;
         String description = null;
         if (tutorUnderRevision != null) {
@@ -167,7 +167,7 @@ public class ActivityScreen extends AbstractScreen {
     goButton.addListener(new ClickListener() {
       @Override public void clicked(InputEvent event, float x, float y) {
         // Ignore if HelpTour is in progress
-        Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR.name());
+        Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR);
         if (helpTour != null) return;
         helpActor.setVisible(false);
         

@@ -145,7 +145,7 @@ public class HelpTour extends Group {
   public HelpTour(final Stage stage, Skin skin, String contents, List<IHelpComponent> iHelpComponents) {
     setPosition(0, 0);
     setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
-    this.setName(ScreenComponent.HELP_TOUR.name());
+    this.setName(ScreenComponent.HELP_TOUR);
     // Add below Basic Screen
     Actor coreGroup = stage.getRoot().findActor(ScreenComponent.CORE_GROUP);
     stage.getRoot().addActorBefore(coreGroup, this);

@@ -1,5 +1,8 @@
 package com.mazalearn.scienceengine.app.screens;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
+import com.mazalearn.scienceengine.app.services.Profile.Social.Message;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.view.DrawingActor;
@@ -101,9 +105,13 @@ public class UserHomeDialog extends Dialog {
   }
 
   private void addCertificatesPane(Table contentTable) {
-    contentTable.add(createImagesPane("Certificates", 
-        new String[] {"certificate", "award", "award", "achievement", "certificate"},
-        CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT)).colspan(2);
+    // TODO: Once certificate granted, show image here.
+    List<TextButton> list = new ArrayList<TextButton>();
+    for (String itemName: new String[] {"certificate", "award", "award", "achievement", "certificate"}) {
+      TextButton item = createItem(CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
+      list.add(item);
+    }
+    contentTable.add(createImagesPane("Certificates", list)).colspan(2);
     contentTable.row();
   }
 
@@ -113,9 +121,20 @@ public class UserHomeDialog extends Dialog {
     contentTable.add("Gifts Waiting for You");
     contentTable.add("Send Gifts to Friends");
     contentTable.row();
-    contentTable.add(createImagesPane("Gifts Waiting", 
-        new String[] {"gift1", "gift2", "gift3"}, 
-        GIFT_WIDTH, GIFT_HEIGHT)).width(400);
+    
+    List<TextButton> list = new ArrayList<TextButton>();
+    for (final Message gift: profile.getInbox()) {
+      TextButton item = createItem(GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
+      list.add(item);
+      item.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          new ShowGiftDialog(skin, gift.points, gift.text, gift.image, UserHomeDialog.this).show(getStage());
+        }
+
+      });
+    }
+    contentTable.add(createImagesPane("Gifts Waiting", list)).width(400);
     contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f);
     contentTable.row();
   }
@@ -131,24 +150,14 @@ public class UserHomeDialog extends Dialog {
     return image;
   }
 
-  private Actor createImagesPane(String title, String[] items, int itemWidth, int itemHeight) {
+  private Actor createImagesPane(String title, List<TextButton> items) {
     Table table = new Table(skin);
     table.setName(title);
     ScrollPane flickScrollPane = new ScrollPane(table, skin, "thumbs");
     flickScrollPane.setScrollingDisabled(false, true);
     table.setFillParent(false);
     table.defaults().fill();
-    for (String itemName: items) {
-      TextureRegion itemTexture = ScienceEngine.getTextureRegion(itemName);
-      TextButton item = 
-          ScreenUtils.createImageButton(itemTexture, skin, "clear");
-      ScreenComponent.scaleSize(item, itemWidth, itemHeight);
-      item.addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-        }
-
-      });
+    for (TextButton item: items) {
       Table itemTable = new Table(skin);
       itemTable.setName("Item");
       //giftTable.add(itemName);
@@ -159,6 +168,14 @@ public class UserHomeDialog extends Dialog {
       table.add(itemTable).pad(5);
     }
     return flickScrollPane;
+  }
+
+  private TextButton createItem(int itemWidth, int itemHeight, String itemName) {
+    TextureRegion itemTexture = ScienceEngine.getTextureRegion(itemName);
+    TextButton item = 
+        ScreenUtils.createImageButton(itemTexture, skin, "clear");
+    ScreenComponent.scaleSize(item, itemWidth, itemHeight);
+    return item;
   }
   
 }

@@ -26,6 +26,7 @@ public class GiveGiftDialog extends Dialog {
   private String giftText;
   private String giftImage;
   private int giftPoints;
+  private int giftType;
 
   public GiveGiftDialog(final Skin skin, Dialog parentDialog) {
     super("", skin);
@@ -65,8 +66,8 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        int j = MathUtils.random(1, 3);
-        gift.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion("gift" + j)));
+        giftType = MathUtils.random(1, 3);
+        gift.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion("gift" + giftType)));
         int i = MathUtils.random(trivia.getNumTrivia() - 1);
         giftText = trivia.getTriviumPart(i, Trivia.Part.text);
         giftImage = trivia.getTriviumPart(i, Trivia.Part.image);
@@ -90,6 +91,7 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        profile.postMessage("test@mazalearn.com", giftType, giftText, giftImage, giftPoints);
       }
     });
     this.getButtonTable().add(sendButton).width(150).center();
