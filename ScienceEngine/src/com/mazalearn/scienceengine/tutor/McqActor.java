@@ -136,14 +136,14 @@ public class McqActor extends Group {
       optionButton.setColor(c.r, c.g, c.b, 1);
       if (i < optionList.size()) {
         String text = optionList.get(i);
-        TextureRegion textureRegion = ScienceEngine.getTextureRegion(text.toLowerCase());
-        if (textureRegion != null) {
+        // TODO: for image MCQ 
+        /*
+          TextureRegion textureRegion = ScienceEngine.getTextureRegion(text.toLowerCase());
           TextureRegionDrawable image = new TextureRegionDrawable(textureRegion);
           optionButton.setBackground(image);
           optionButton.setSize(image.getMinWidth(), image.getMinHeight());
-        } else {
-          optionButton.setText(text);
-        }
+          */
+        optionButton.setText(text);
         optionButton.setVisible(true);
       } else {
         optionButton.setVisible(false);

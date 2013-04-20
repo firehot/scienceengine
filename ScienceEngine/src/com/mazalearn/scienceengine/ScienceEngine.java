@@ -21,8 +21,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
@@ -444,7 +446,12 @@ public class ScienceEngine extends Game {
       AtlasRegion textureRegion = atlas.findRegion(name);
       if (textureRegion != null) return textureRegion;
     }
-    return null;
+    try {
+      return new TextureRegion(new Texture("images/" + name + ".png"));
+    } catch (GdxRuntimeException e) {
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace(); 
+      return null;
+    }
   }
 
   public static AssetManager getAssetManager() {
