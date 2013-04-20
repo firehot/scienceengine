@@ -111,17 +111,24 @@ public class UserHomeDialog extends Dialog {
     if (!ENABLE_SOCIAL) return;
     
     contentTable.add("Gifts Waiting for You");
-    contentTable.add("Create and Send Gifts");
+    contentTable.add("Send Gifts to Friends");
     contentTable.row();
     contentTable.add(createImagesPane("Gifts Waiting", 
         new String[] {"gift1", "gift2", "gift3"}, 
         GIFT_WIDTH, GIFT_HEIGHT)).width(400);
-    contentTable.add(createGiftingPane()).width(400);
+    contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f);
     contentTable.row();
   }
 
   private Actor createGiftingPane() {
-    return null;
+    Image image = new Image(ScienceEngine.getTextureRegion("opengift"));
+    image.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        new GiveGiftDialog(skin, UserHomeDialog.this).show(getStage());      }
+    });
+    return image;
   }
 
   private Actor createImagesPane(String title, String[] items, int itemWidth, int itemHeight) {

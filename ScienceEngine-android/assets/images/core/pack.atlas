@@ -5,105 +5,112 @@ filter: Nearest,Nearest
 repeat: none
 helpcloud
   rotate: false
-  xy: 1, 581
+  xy: 1, 599
   size: 613, 423
   orig: 613, 423
   offset: 0, 0
   index: -1
 rightscroll
   rotate: false
-  xy: 1, 67
+  xy: 1, 85
   size: 128, 512
   orig: 128, 512
   offset: 0, 0
   index: -1
 go
   rotate: false
-  xy: 616, 704
+  xy: 616, 722
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 engine
   rotate: false
-  xy: 131, 451
+  xy: 131, 469
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 help
   rotate: false
-  xy: 131, 321
+  xy: 131, 339
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 lock
   rotate: false
-  xy: 389, 451
+  xy: 389, 469
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 131, 191
+  xy: 131, 209
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 user
   rotate: false
-  xy: 261, 321
+  xy: 261, 339
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 videoplay
   rotate: false
-  xy: 261, 191
+  xy: 261, 209
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 back
   rotate: false
-  xy: 1, 1
+  xy: 1, 19
   size: 128, 64
   orig: 128, 64
   offset: 0, 0
   index: -1
 browser
   rotate: false
-  xy: 616, 638
+  xy: 616, 656
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel
   rotate: false
-  xy: 918, 940
+  xy: 918, 958
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+goldcoins
+  rotate: false
+  xy: 519, 548
+  size: 60, 49
+  orig: 60, 49
+  offset: 0, 0
+  index: -1
 helparrow
   rotate: false
-  xy: 519, 549
+  xy: 131, 177
   size: 64, 30
   orig: 64, 30
   offset: 0, 0
   index: -1
 close
   rotate: false
-  xy: 131, 157
+  xy: 391, 435
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fieldarrow-yellow
   rotate: false
-  xy: 391, 433
+  xy: 1, 1
   size: 32, 16
   orig: 32, 16
   offset: 0, 0

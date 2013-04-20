@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.core.view;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -20,7 +21,7 @@ public class Scoreboard extends Table {
     this.setName(ScreenComponent.Scoreboard.name());
 
     scoreLabel = new Label("0", skin);   
-    this.add("Score").top();
+    this.add(new Image(ScienceEngine.getTextureRegion("goldcoins"))).width(40).height(30).top();
     this.row();
     this.add(scoreLabel).width(40).fill().top();
     

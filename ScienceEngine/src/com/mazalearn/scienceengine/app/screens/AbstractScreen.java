@@ -196,8 +196,9 @@ public abstract class AbstractScreen implements Screen {
         }
         return actor;
       }
+    default:
+      return null;
     }
-    return null;
   }
 
   protected Table getTable() {

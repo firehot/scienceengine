@@ -204,11 +204,11 @@ public abstract class AbstractTutor extends Group implements ITutor {
 
 
   public int getSuccessPoints() {
-    return successPoints;
+    return tutorHelper.isRevisionMode() ? 0 : successPoints;
   }
   
   public int getFailurePoints() {
-    return failurePoints;
+    return tutorHelper.isRevisionMode() ? 0 : failurePoints;
   }
   
   @Override

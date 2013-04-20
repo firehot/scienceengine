@@ -69,9 +69,6 @@ public class ActivityViewControls extends ViewControls {
       }
     });
 
-    // Add Help tour
-//    Button helpButton = addHelpButton();
-
     viewControlPanel.add(resetControl.getActor());
     viewControlPanel.row();
     viewControlPanel.add(suspendControl.getActor());
@@ -80,7 +77,6 @@ public class ActivityViewControls extends ViewControls {
       viewControlPanel.add(snapshotButton);
       viewControlPanel.row();
     }
-//    viewControlPanel.add(helpButton);
     viewControlPanel.row();
     syncWithModel();
   }

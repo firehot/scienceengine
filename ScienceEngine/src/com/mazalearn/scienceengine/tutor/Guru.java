@@ -67,7 +67,7 @@ public class Guru extends Group implements ITutor {
 
   public ITutor getRootTutor() {
     if (rootTutor == null) {
-      this.rootTutor = new TutorGroup(science2DController, TutorType.Guide, this, goal, ROOT_ID,
+      this.rootTutor = new TutorGroup(science2DController, TutorType.Root, this, goal, ROOT_ID,
           null, null, new String[0], new String[0], new String[0]);
       this.addActor(rootTutor);      
     }
@@ -262,4 +262,16 @@ public class Guru extends Group implements ITutor {
   public String[] getRefs() {
     return rootTutor.getRefs();
   }
+
+  public String getLevelEndMessage(boolean success) {
+    int progress = Math.round(rootTutor.getStats()[ITutor.PERCENT_PROGRESS]);
+    String progressStr = "Progress = " + progress + "%\n\n\n\n";
+    if (success && progress == 100) { // Allow 80% for reviewer ???
+      return progressStr + ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
+          science2DController.getLevel() + ".Success");
+    }
+    // TODO: Each level should have own failure message. 
+    return progressStr + ScienceEngine.getMsg().getString("Level.Failure");
+  }
+  
 }

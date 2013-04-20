@@ -53,7 +53,10 @@ public class TutorGroup extends AbstractTutor {
         }
       }
       // If all children done, we are ready to finish
-      if (tutorIndex == numChildren) {
+      if (tutorIndex == numChildren || 
+             getType() == TutorType.RapidFire || 
+             getType() == TutorType.Reviewer || 
+             getType() == TutorType.Root) {
         this.success = true;
         // No user input required for group tutors
         this.state = State.UserFinished;
@@ -167,7 +170,8 @@ public class TutorGroup extends AbstractTutor {
     float percentProgress = 0;
     int numSuccesses = 0;
     float points = 0;
-    for (ITutor child: childTutors) {
+    for (int i = 0; i < numChildren; i++) {
+      ITutor child = childTutors.get(i);
       timeSpent += child.getStats()[ITutor.TIME_SPENT];
       if (child.getStats()[ITutor.NUM_ATTEMPTS] > 0) numAttempted++;
       percentProgress += child.getStats()[ITutor.PERCENT_PROGRESS];
@@ -176,7 +180,7 @@ public class TutorGroup extends AbstractTutor {
     }
     stats[ITutor.TIME_SPENT] = timeSpent;   
     stats[ITutor.NUM_ATTEMPTS] = numAttempted;
-    stats[ITutor.PERCENT_PROGRESS] = percentProgress / childTutors.size();
+    stats[ITutor.PERCENT_PROGRESS] = percentProgress / numChildren;
     stats[ITutor.NUM_SUCCESSES] = numSuccesses;
     stats[ITutor.POINTS] = points;
     

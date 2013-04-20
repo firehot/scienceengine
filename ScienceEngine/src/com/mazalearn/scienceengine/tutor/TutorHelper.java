@@ -9,6 +9,7 @@ import java.util.Stack;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -58,6 +59,8 @@ public class TutorHelper extends Group {
     }
   };
   private Stack<RevisionFrame> revisionStack = new Stack<RevisionFrame>();
+  private static final String[] ENCOURAGEMENTS = 
+      {"Well Done", "Bravo", "You Rock", "Fantastic", "Excellent", "Correct"};
   
   public TutorHelper(Guru guru, Skin skin, IScience2DView science2DView) {
     this.skin = skin;
@@ -138,11 +141,18 @@ public class TutorHelper extends Group {
     parser.allowFunctions(functions0, functions1, functions2);
     return parser;
   }
+  
+  private String scoreToString(int score) {
+    if (score != 0) {
+      return String.valueOf(score);
+    } 
+    return ENCOURAGEMENTS[MathUtils.random(ENCOURAGEMENTS.length - 1)];
+  }
 
   public void showWrong(int score) {
     addActor(wrongImage); // Bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
-    wrongImage.show(String.valueOf(-score));
+    wrongImage.show(scoreToString(-score));
   }
   
   public void showFailure(int score) {
@@ -154,14 +164,14 @@ public class TutorHelper extends Group {
   public void showCorrect(int score) {
     addActor(correctImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
-    correctImage.show(String.valueOf(score));
+    correctImage.show(scoreToString(score));
     hinter.clearHint();
   }
   
   public void showSuccess(int score) {
     addActor(successImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
-    successImage.show(String.valueOf(score));
+    successImage.show(scoreToString(score));
     hinter.clearHint();
    }
   
@@ -299,11 +309,18 @@ public class TutorHelper extends Group {
     activityScreen.enterRevisionMode(revisionFrame.tutorUnderRevision);
   }
 
+  /**
+   * pops revision frame and returns tutor under revision on stack.
+   */
   public ITutor popRevisionMode() {
     RevisionFrame revisionFrame = revisionStack.pop();
     guru.initialize(revisionFrame.childTutors);
     guru.goTo(revisionFrame.tutorUnderRevision);
-    return revisionStack.isEmpty() ? null : revisionStack.peek().tutorUnderRevision;
+    return isRevisionMode() ? revisionStack.peek().tutorUnderRevision : null;
+  }
+
+  public boolean isRevisionMode() {
+    return !revisionStack.isEmpty() || guru.getRootTutor().getChildTutors().get(0).getType() == TutorType.Reviewer;
   }
 
 }

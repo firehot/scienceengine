@@ -1,0 +1,66 @@
+[{
+  text: "LUIGI GALVANI (1737-1798) - discovered that by touching a dead frog�s legs with two different metal implements, the muscles in the frog�s legs would twitch. Galvani wrongly concluded it was the animal tissue that was storing the electricity, releasing it when touched by the metals. He felt he had discovered the very force of life � �animal electricity� � that animated flesh and bone. The Galvanometer, an instrument for detecting current, is named after him.",
+  image:"galvani.jpg"
+ },
+ {
+  text:"ALESSANDRO VOLTA (1745-1827) - Volta put together different combinations of metals to see if they produced any current. Volta�s produced electric current by using discs of silver and zinc dipped in a bowl of salt solution. By stacking several discs separated by cards soaked in salt water and by attaching copper wires to each end of the �pile� he successfully obtained a steady current. The �voltaic pile� was the first battery in history (1800). Volt, the SI unit of electric potential, honours Volta.",
+  image:"volta.jpg"
+ },
+ {
+  text:"HANS CHRISTIAN OERSTED (1777-1851) - Oersted discovered that an electric current could make the needle of a magnetic compass swivel. It was the first indication of a link between these two natural forces. Although Oersted discovered electromagnetism he did little about it. The oersted, the cgs unit of magnetic strength, is named after him.",
+  image:"oersted.jpg"
+ },
+ {
+  text:"ANDRE MARIE AMPERE (1775-1836) - Ampere observed that if the currents ran in the same direction in two parallel wires, the wires were attracted to each other and if they ran in opposite directions they were repelled. He theorized that the magnetic effect of current in an electric wire is due to the circular motion of that current. The effect is increased when the wire is coiled. His name is commemorated in the SI unit of electric current, the ampere.",
+  image:"ampere.jpg"
+ },
+ {
+  text:"JAMES CLERK MAXWELL (1831- 79) - The Scottish physicist took the experimental discoveries of Faraday in the field of electromagnetism and provided a unified mathematical explanation in the form of 4 equations. These describe the relationship between magnetic and electric fields and also light.",
+  image:"maxwell.jpg"
+ },
+ {
+  text:"HEINRICH RUDOLPH HERTZ (1857- 94) Hertz discovered radio waves. He devised an electric circuit with a gap that would cause a spark to leap across when the circuit was closed. These sparks caused radio waves which he could detect using a simple receiver. Hertz�s discovery proved that that light and heat were forms of electromagnetic radiation. The SI unit of frequency, the hertz (Hz), is named after him.",
+  image: "hertz.jpg"
+ },
+ {
+  text: "NIKOLA TESLA (1856-1943) - Tesla invented the AC induction motor and suggested that the transmission of AC power is more efficient. On 16th November 1896 the AC power plant at Niagara Falls became the first power plant to transmit electric power between two cities. Tesla�s development of AC power led to the invention of induction motors, dynamos, transformers, condensers, bladeless turbines, mechanical rev. counters, automobile speedometers, gas discharge lamps (forerunners of fluorescent lights), radio broadcasting and hundreds of other things. His patents number over 700. The tesla (T), the SI unit of magnetic flux density, for measuring magnetism, is named in his honour.",
+  image: "tesla.jpg"
+ },
+ { 
+   text:"MICHAEL FARADAY (1791-1869) - In 1831, by rotating a copper disc between the poles of a magnet, Faraday was able to produce a steady electric current. This was the world�s first dynamo. Faraday had rejected the concept of electricity as a �fluid� and instead visualised its �fields� with lines of force at their edges � the lines of force demonstrated by the pattern of iron fillings around a magnet. Farad, the SI derived unit of capacitance is named after him.",
+   image:"faraday.jpg"
+ },
+ {
+  text:"THOMAS ALVA EDISON (1847-1931) - Edison held 1093 patents either jointly or singularly. He was a prolific inventor and invented a usable light bulb, the 'talking' movie and the phonograph among others. Edison had a trial and error approach to scientific enquiry coined the phrase - Genius is one percent inspiration and ninety-nine percent perspiration.",
+  image:"edison.jpg"
+ },
+ {
+  text:"All known forces (or interactions) in the universe can be grouped into four basic types. In the order of decreasing strength, these are the strong nuclear force (inside atomic nuclei), electromagnetism, the weak nuclear force (inside atomic nuclei) and gravitation. Everyday experiences such as friction and air resistance are due to electromagnetism. This is also the resistant force that we feel, for example, when pressing our palm against a wall.",
+  image:"fourforces.jpg"
+ },
+ {
+  text:"Photons, or particles of light, are the 'carriers' electromagnetic forces. They have no mass, and no charge and can travel over infinite distances. This is the reason that light can travel to infinite distance and we can see stars that are far away.",
+  image:"photons.jpg"
+ },
+ {
+  text: "Microwave ovens were discovered by accident. During World War II in 1940, John Randall and H.A. Boot invented a magnetron that produced microwaves. In 1946 Percy Spencer, at a Raytheon laboratory, discovered that the chocolate in his pocket had melted due to the microwaves and that he could pop corn in front of a magnetron. Soon, Raytheon began producing commercial microwave ovens. The first microwave oven was 5 feet tall and weighed over 340 kgs.",
+  image:"microwaves.jpg"
+ },
+ {
+  text:"Far infrared waves are thermal. In other words, we experience this type of infrared radiation every day in the form of heat! The heat that we feel from sunlight, a fire, a radiator or a warm sidewalk is infrared. Shorter, near infrared waves are not hot at all - we cannot even feel them. These shorter wavelengths are used for the TV's remote control.",
+  image:"infrared.gif"
+ },
+ {
+  text: "Electricity travels at the speed of light more than 300,000 kilometres per second! If you traveled as fast as electricity, you could go around the world 8 times in the time it takes to turn on a light switch. The sun is so far away that it takes about 8 minutes for light from the sun to reach us.",
+  image:"electricity.jpg"
+ },
+ {
+  text:"Benjamin Franklin proved that lightning is a form of electrical energy. He proved this by flying a kite with a key attached to it in a storm. The wet kite string conducted the electricity from the cloud. This was a dangerous experiment and an actual lightning strike on the key could have killed him. Based on these experiments, he also invented the lightning rod to safely carry the charge away from clouds into the earth.",
+  image:"kiteexperiment.jpg"
+ },
+ {
+  text:"The first central power plant was Pearl Street Station in lower Manhattan, built by Thomas Edison began generating electricity on September 4, 1882. Pearl Street had one generator and it produced power for 800 electric light bulbs. Within 14 months, Pearl Street Station had 508 subscribers and 12,732 bulbs.",
+  image:"powerstation.jpg"
+  }
+]
+

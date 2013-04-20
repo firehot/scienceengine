@@ -70,23 +70,15 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
     if (!isTutoringInProgress) return;
     
     if (success) {
-      ScienceEngine.getPlatformAdapter().showInternalURL(
-          "data/" + science2DController.getTopic() + "/" + science2DController.getLevel() + ".html");
       tutoring(false);
-      // TODO: Each level should have own success/failure message. 
-      Dialog dialog = new TutoringEndDialog(this, skin, 
-          ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
-              science2DController.getLevel() + ".End"));
-      dialog.show(this);      
     } else {
       // TODO: lack of symmetry here - cleanup required
       isTutoringInProgress = false;      
-      Dialog dialog = new TutoringEndDialog(this, skin, 
-          ScienceEngine.getMsg().getString("Level.Failure"));
-      dialog.show(this);      
     }
+    Dialog dialog = new TutoringEndDialog(this, skin, science2DController.getGuru().getLevelEndMessage(success));
+    dialog.show(this);      
   }
-  
+
   public BitmapFont getFont() {
     //return skin.getFont("default-font");
     return skin.getFont("en");

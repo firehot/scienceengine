@@ -213,7 +213,7 @@ tutors:[
          {type: "MCQ1",
           id: "R4.10",
           refs: ["G2.5"],
-          goal:"A compass placed near an electromagnet carrying alternating current",
+          goal:"A compass placed at the center of an electromagnet carrying alternating current",
           options:["will point to North pole of earth", 
                    "will point steadily without changing",
                    "will not be affected",
