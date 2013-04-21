@@ -55,8 +55,8 @@ public class ProfileData {
       }
     }
     String[] friends;
-    ArrayList<Message> inbox; // owned by server
-    ArrayList<Message> outbox; // owned by client except for status in messages
+    ArrayList<Message> inbox; // only server can add, only client can remove 
+    ArrayList<Message> outbox; // only client can add, only server can remove
     int lastInboxMessageId;
     int lastOutboxMessageId;
     

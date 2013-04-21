@@ -23,6 +23,7 @@ public class InstallProfileServlet extends HttpServlet {
 
   private static final String INSTALL_PROFILE = "InstallProfile";
   public static final String INSTALL_ID = ProfileData.INSTALL_ID;
+  public static final String USER_IDS = "userids";
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -66,7 +67,7 @@ public class InstallProfileServlet extends HttpServlet {
   
   static class InstallProfile {
     Map<String, String> properties;
-    String[] topics;
+    String[] userids;
   }
 
   public static Entity createOrGetInstall(String installId, DatastoreService ds, boolean create) {
@@ -92,6 +93,7 @@ public class InstallProfileServlet extends HttpServlet {
     System.out.println(installEntity);
     StringBuilder properties = new StringBuilder("{");
     String propDelimiter = "";
+    String userids = "";
     for (Map.Entry<String, Object> property: installEntity.getProperties().entrySet()) {
       Object value = property.getValue();
       if (value instanceof Text) {
@@ -99,6 +101,14 @@ public class InstallProfileServlet extends HttpServlet {
         if (property.getKey().startsWith(ProfileData.PNG)) {
           properties.append(propDelimiter + property.getKey() + ":\"" + s + "\"");
           propDelimiter = ",";
+        } else if (property.getKey().equals(USER_IDS)) {
+          userids = ",userids:[";
+          String delim = "";
+          for (String email: s.split(",")) {
+            userids += delim + "\"" + email + "\"";
+            delim = ",";
+          }
+          userids += "]";
         }
       } else {
         properties.append(propDelimiter + property.getKey() + ":\"" + value + "\"");
@@ -106,7 +116,7 @@ public class InstallProfileServlet extends HttpServlet {
       }
     }
     properties.append("}");
-    String json = "{ properties:" + properties + "}";
+    String json = "{ properties:" + properties + userids + "}";
     System.out.println(json);
     return packageProfile(json, installId);
   }

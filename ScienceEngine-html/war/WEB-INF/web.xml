@@ -26,6 +26,7 @@
     <web-resource-collection>
         <url-pattern>/user</url-pattern>
         <url-pattern>/delprofile</url-pattern>
+        <url-pattern>/addusers</url-pattern>
     </web-resource-collection>
     <auth-constraint>
         <role-name>admin</role-name>
@@ -59,6 +60,11 @@
   <servlet>
     <servlet-name>InstallProfileServlet</servlet-name>
     <servlet-class>com.mazalearn.gwt.server.InstallProfileServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>AddUsersToInstallProfileServlet</servlet-name>
+    <servlet-class>com.mazalearn.gwt.server.AddUsersToInstallProfileServlet</servlet-class>
   </servlet>
 
   <servlet>
@@ -113,6 +119,10 @@
   <servlet-mapping>
     <servlet-name>InstallProfileServlet</servlet-name>
     <url-pattern>/installprofile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddUsersToInstallProfileServlet</servlet-name>
+    <url-pattern>/addusers</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>RegistrationEmailServlet</servlet-name>
