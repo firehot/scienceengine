@@ -189,7 +189,10 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.setVisible(false);
     tutorHelper.setActiveTutor(this);
     tutorHelper.showNextButton(false);
-    stats[ITutor.POINTS] = 0;
+    // Zero points if not in revision mode
+    if (!tutorHelper.isRevisionMode()) {
+      stats[ITutor.POINTS] = 0;
+    }
     recordStats();
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 

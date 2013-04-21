@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -109,10 +110,10 @@ public class UserHomeDialog extends Dialog {
     // TODO: Once certificate granted, show image here.
     List<TextButton> list = new ArrayList<TextButton>();
     for (String itemName: new String[] {"certificate", "award", "award", "achievement", "certificate"}) {
-      TextButton item = createItem(CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
+      TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
       list.add(item);
     }
-    contentTable.add(createImagesPane("Certificates", list)).colspan(2);
+    contentTable.add(createImagesPane(skin, list)).colspan(2);
     contentTable.row();
   }
 
@@ -123,21 +124,27 @@ public class UserHomeDialog extends Dialog {
     contentTable.add("Send Gifts to Friends");
     contentTable.row();
     
+    Actor waitingGiftsPane = createWaitingGiftsPane(this, getStage(), profile.getInbox(), skin);
+    contentTable.add(waitingGiftsPane).width(400);
+    contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f);
+    contentTable.row();
+  }
+
+  public static Actor createWaitingGiftsPane(final Dialog parentDialog, 
+      final Stage stage, List<Message> giftBox, final Skin skin) {
     List<TextButton> list = new ArrayList<TextButton>();
-    for (final Message gift: profile.getInbox()) {
-      TextButton item = createItem(GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
+    for (final Message gift: giftBox) {
+      TextButton item = createItem(skin, GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
       list.add(item);
       item.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          new ShowGiftDialog(skin, gift.points, gift.text, gift.image, UserHomeDialog.this).show(getStage());
+          new ShowGiftDialog(skin, gift, parentDialog).show(stage);
         }
 
       });
     }
-    contentTable.add(createImagesPane("Gifts Waiting", list)).width(400);
-    contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f);
-    contentTable.row();
+    return createImagesPane(skin, list);
   }
 
   private Actor createGiftingPane() {
@@ -151,9 +158,8 @@ public class UserHomeDialog extends Dialog {
     return image;
   }
 
-  private Actor createImagesPane(String title, List<TextButton> items) {
+  private static Actor createImagesPane(Skin skin, List<TextButton> items) {
     Table table = new Table(skin);
-    table.setName(title);
     ScrollPane flickScrollPane = new ScrollPane(table, skin, "thumbs");
     flickScrollPane.setScrollingDisabled(false, true);
     table.setFillParent(false);
@@ -171,7 +177,7 @@ public class UserHomeDialog extends Dialog {
     return flickScrollPane;
   }
 
-  private TextButton createItem(int itemWidth, int itemHeight, String itemName) {
+  private static TextButton createItem(Skin skin, int itemWidth, int itemHeight, String itemName) {
     TextureRegion itemTexture = ScienceEngine.getTextureRegion(itemName);
     TextButton item = 
         ScreenUtils.createImageButton(itemTexture, skin, "clear");

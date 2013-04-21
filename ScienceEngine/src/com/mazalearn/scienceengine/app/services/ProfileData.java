@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ProfileData {
@@ -37,26 +36,27 @@ public class ProfileData {
 
   public static class Social {
     public static class Message {
-      // Following params should all be set only once - cannot be made final because of json serialization
+      // Following params should all be set only once
       public int messageId;
       public String email;
       public int giftType;
       public String text;
       public String image;
       public int points;
+      public int status; // 0 = not processed, 1 = sent, 2 = problem
       public Message() {}
-      public Message(int messageId, String email, int giftType, String text, String image, int points) {
+      public Message(int messageId, Message other) {
         this.messageId = messageId;
-        this.email = email;
-        this.giftType = giftType;
-        this.text = text;
-        this.image = image;
-        this.points = points;
+        this.email = other.email;
+        this.giftType = other.giftType;
+        this.text = other.text;
+        this.image = other.image;
+        this.points = other.points;
       }
     }
     String[] friends;
-    ArrayList<Message> inbox;
-    ArrayList<Message> outbox;
+    ArrayList<Message> inbox; // owned by server
+    ArrayList<Message> outbox; // owned by client except for status in messages
     int lastInboxMessageId;
     int lastOutboxMessageId;
     

@@ -92,14 +92,20 @@ public class ProfileTest {
 
   @Test
   public void testPostMessage() {
-    profile.postMessage("test@mazalearn.com", 1, "text", "image", 500);
+    Message msg = new Message();
+    msg.email = "test@mazalearn.com";
+    msg.giftType = 1;
+    msg.text = "text";
+    msg.image = "image";
+    msg.points = 500;
+    profile.postMessage(msg);
     assertEquals(1, profile.getOutbox().size());
     profile.save();
-    Message msg = profile.getOutbox().get(0);
-    assertEquals(1, msg.giftType);
-    assertEquals("text", msg.text);
-    assertEquals("image", msg.image);
-    assertEquals(500, msg.points);
-    assertEquals("test@mazalearn.com", msg.email);
+    Message msg2 = profile.getOutbox().get(0);
+    assertEquals(1, msg2.giftType);
+    assertEquals("text", msg2.text);
+    assertEquals("image", msg2.image);
+    assertEquals(500, msg2.points);
+    assertEquals("test@mazalearn.com", msg2.email);
   }  
 }

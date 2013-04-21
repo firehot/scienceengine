@@ -9,27 +9,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 
 public class ShowGiftDialog extends Dialog {
   
   private Dialog parentDialog;
 
-  public ShowGiftDialog(final Skin skin, int giftPoints, String giftText, String giftImage, Dialog parentDialog) {
+  public ShowGiftDialog(final Skin skin, Message gift, Dialog parentDialog) {
     super("", skin);
     this.parentDialog = parentDialog;
     parentDialog.hide();
     
     Table contentTable = getContentTable();
     contentTable.debug();
-    Label points = new Label("Points: " + String.valueOf(giftPoints), skin);
-    contentTable.add(points).center().colspan(2);
+    contentTable.add(new Label(gift.email, skin));
+    Label points = new Label("Maza coins: " + String.valueOf(gift.points), skin);
+    contentTable.add(points).center();
     contentTable.row();
-    Label text = new Label(giftText, skin);
+    Label text = new Label(gift.text, skin);
     text.setWrap(true);
     text.setWidth(400);
     contentTable.add(text).width(400).fill();
     try {
-      Image image = new Image(new Texture("images/trivia/" + giftImage));
+      Image image = new Image(new Texture("images/trivia/" + gift.image));
       contentTable.add(image);
     } catch (GdxRuntimeException e) {
       // Ignore - image file not found is not a problem.

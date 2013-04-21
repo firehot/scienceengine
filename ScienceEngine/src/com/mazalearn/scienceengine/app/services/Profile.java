@@ -195,21 +195,21 @@ public class Profile implements Serializable {
     return data.social.friends;
   }
   
-  public void postMessage(String emailTo, int giftType, String text, String image, int points) {
+  public void postMessage(Message gift) {
     if (data.social.outbox == null) {
       data.social.outbox = new ArrayList<Message>();
     }
-    Message msg = new Message(data.social.lastOutboxMessageId++, emailTo, giftType, text, image, points);
+    Message msg = new Message(data.social.lastOutboxMessageId++, gift);
     data.social.outbox.add(msg);
     save();
   }
   
-  void testPostInMessage(String emailFrom, int giftType, String text, String image, int points) {
+  void testPostInMessage(Message msg) {
     if (data.social.inbox == null) {
       data.social.inbox = new ArrayList<Message>();
     }
-    Message msg = new Message(data.social.lastInboxMessageId++, emailFrom, giftType, text, image, points);
-    data.social.inbox.add(msg);
+    Message message = new Message(data.social.lastInboxMessageId++, msg);
+    data.social.inbox.add(message);
   }
   
   public List<Message> getOutbox() {

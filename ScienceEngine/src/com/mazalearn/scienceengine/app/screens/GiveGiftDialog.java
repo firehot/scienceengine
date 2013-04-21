@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.app.services.Profile;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.Trivia;
 
@@ -29,12 +30,8 @@ public class GiveGiftDialog extends Dialog {
   private Profile profile;
   private Trivia trivia = new Trivia();
   private Dialog parentDialog;
-  private String giftText;
-  private String giftImage;
-  private int giftPoints;
-  private int giftType;
-  private String giftEmail;
-
+  private Message gift;
+  
   public GiveGiftDialog(final Skin skin, Dialog parentDialog) {
     super("", skin);
     this.parentDialog = parentDialog;
@@ -51,7 +48,12 @@ public class GiveGiftDialog extends Dialog {
     contentTable.debug();
     contentTable.add(title).width(800).pad(10).center().colspan(2);
     contentTable.row();
-    contentTable.add(createFriendChooser(skin));
+    contentTable.add("Gifts Waiting to be Dispatched to Server").colspan(2);
+    contentTable.row();
+    Actor waitingGiftsPane = UserHomeDialog.createWaitingGiftsPane(this, parentDialog.getStage(), profile.getOutbox(), skin);
+    contentTable.add(waitingGiftsPane).colspan(2);
+    contentTable.row();
+    createFriendChooser(contentTable, skin);
     contentTable.row();
     contentTable.add("Maza coins you wish to gift");
     final List pointsList = new List(new Integer[] {100, 200, 500, 1000}, skin);
@@ -61,31 +63,31 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        giftPoints = Integer.parseInt(pointsList.getSelection());
+        gift.points = Integer.parseInt(pointsList.getSelection());
       }
     });
     contentTable.row();
-    final Image gift = new Image();
+    final Image giftImage = new Image();
     TextButton makeGift = new TextButton("Make Gift", skin, "body");
     contentTable.add(makeGift);
     makeGift.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        giftType = MathUtils.random(1, 3);
-        gift.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion("gift" + giftType)));
+        gift.giftType = MathUtils.random(1, 3);
+        giftImage.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion("gift" + gift.giftType)));
         int i = MathUtils.random(trivia.getNumTrivia() - 1);
-        giftText = trivia.getTriviumPart(i, Trivia.Part.text);
-        giftImage = trivia.getTriviumPart(i, Trivia.Part.image);
+        gift.text = trivia.getTriviumPart(i, Trivia.Part.text);
+        gift.image = trivia.getTriviumPart(i, Trivia.Part.image);
       }
     });
-    contentTable.add(gift).width(100).height(75);
+    contentTable.add(giftImage).width(100).height(75);
     contentTable.row();
-    gift.addListener(new ClickListener() {
+    giftImage.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        new ShowGiftDialog(skin, giftPoints, giftText, giftImage, GiveGiftDialog.this).show(getStage());
+        new ShowGiftDialog(skin, gift, GiveGiftDialog.this).show(getStage());
       }
     });
 
@@ -97,16 +99,17 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        profile.postMessage(giftEmail, giftType, giftText, giftImage, giftPoints);
+        profile.postMessage(gift);
       }
     });
     this.getButtonTable().add(sendButton).width(150).center();
     trivia.load();
   }
 
-  private Actor createFriendChooser(final Skin skin) {
+  private void createFriendChooser(Table contentTable, final Skin skin) {
     Table chooserTable = new Table(skin);
     chooserTable.add("Choose Friend");
+    chooserTable.row();
     TextButton addFriend = new TextButton("Add Friend", skin, "body");
     chooserTable.add(addFriend);
     final List friendsList = new List(profile.getFriends(), skin);
@@ -132,7 +135,7 @@ public class GiveGiftDialog extends Dialog {
             }
             profile.addFriend(email);
             ScienceEngine.displayStatusMessage(getStage(), StatusType.INFO, "Friend added");
-            giftEmail = email;
+            gift.email = email;
             friendsList.setItems(profile.getFriends());
           }
           
@@ -143,15 +146,16 @@ public class GiveGiftDialog extends Dialog {
         }, "Enter friend's email address", "");
       }
     });
-    chooserTable.add(friendsList);
     friendsList.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        giftEmail = friendsList.getSelection();
+        gift.email = friendsList.getSelection();
       }
     });
-    return chooserTable;
+    contentTable.add(chooserTable);
+    contentTable.add(friendsList);
+    contentTable.row();
   }
   
   @Override
