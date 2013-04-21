@@ -14,6 +14,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 
 @SuppressWarnings("serial")
 public class UserPermissionServlet extends HttpServlet {
@@ -37,7 +38,7 @@ public class UserPermissionServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String userId = request.getParameter(ProfileServlet.USER_ID);
+    String userId = request.getParameter(ProfileData.USER_ID);
     String permissions = request.getParameter(PERMISSIONS);
     if (userId == null || permissions == null) {
       response.getWriter().append("userId or permissions not found");

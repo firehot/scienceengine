@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -116,7 +117,7 @@ public class ActivityScreen extends AbstractScreen {
     
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {
-      ScienceEngine.displayStatusMessage(stage, 
+      ScienceEngine.displayStatusMessage(stage, StatusType.WARNING, 
           "Partial Demo only. Best experienced on Android/iPad Tablet.");
     }
     return coreGroup;

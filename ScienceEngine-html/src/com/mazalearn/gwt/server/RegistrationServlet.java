@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
@@ -32,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String userId = request.getParameter(ProfileServlet.INSTALL_ID).toLowerCase();
+    String userId = request.getParameter(ProfileData.INSTALL_ID).toLowerCase();
     System.out.println("Register User: " + userId);
 
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
@@ -44,29 +45,30 @@ public class RegistrationServlet extends HttpServlet {
 
     EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user, true);
     
-    String userEmail = request.getParameter(ProfileServlet.USER_EMAIL).toLowerCase();
+    String userEmail = request.getParameter(ProfileData.USER_EMAIL).toLowerCase();
     if (userEmail == null || !userEmail.contains("@")) {
       response.getWriter().append("Improper email. Cannot register");
       return;
     }
-    String userName = request.getParameter(ProfileServlet.USER_NAME);
+    String userName = request.getParameter(ProfileData.USER_NAME);
     if (userName == null || userName.length() < 2) {
       response.getWriter().append("Improper name. Cannot register");
       return;
     }
-    profile.setProperty(ProfileServlet.SEX, request.getParameter(ProfileServlet.SEX));
-    profile.setProperty(ProfileServlet.GRADE, request.getParameter(ProfileServlet.GRADE));
-    profile.setProperty(ProfileServlet.SCHOOL, request.getParameter(ProfileServlet.SCHOOL));
-    profile.setProperty(ProfileServlet.CITY, request.getParameter(ProfileServlet.CITY));
-    profile.setProperty(ProfileServlet.COMMENTS, request.getParameter(ProfileServlet.COMMENTS));
+    profile.setProperty(ProfileData.SEX, request.getParameter(ProfileData.SEX));
+    profile.setProperty(ProfileData.GRADE, request.getParameter(ProfileData.GRADE));
+    profile.setProperty(ProfileData.SCHOOL, request.getParameter(ProfileData.SCHOOL));
+    profile.setProperty(ProfileData.CITY, request.getParameter(ProfileData.CITY));
+    profile.setProperty(ProfileData.COMMENTS, request.getParameter(ProfileData.COMMENTS));
     Date date = new Date();
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    profile.setProperty(ProfileServlet.REGN_DATE, dateFormat.format(date));
+    profile.setProperty(ProfileData.REGN_DATE, dateFormat.format(date));
     ds.put(user);
 
+   sendUserEmail(userEmail, userName, userId);
+    response.getWriter().append("<html><body><br><br>");
     response.getWriter().append("Registration in progress: " + userEmail);
-    sendUserEmail(userEmail, userName, userId);
-    response.getWriter().append("<br><br>Email has been sent. <br>Please click on URL in email to complete registration.");
+    response.getWriter().append("<br><br>Email has been sent. <br>Please click on URL in email to complete registration.</body></html>");
   }
 
   private void sendUserEmail(String userEmail, String userName, String installId) {

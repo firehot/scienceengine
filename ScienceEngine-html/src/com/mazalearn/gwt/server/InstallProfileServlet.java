@@ -15,18 +15,19 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
 public class InstallProfileServlet extends HttpServlet {
 
   private static final String INSTALL_PROFILE = "InstallProfile";
-  public static final String INSTALL_ID = ProfileServlet.INSTALL_ID;
+  public static final String INSTALL_ID = ProfileData.INSTALL_ID;
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String installId = request.getParameter(INSTALL_ID);
-    String lastUpdatedStr = request.getParameter(ProfileServlet.LAST_UPDATED);
+    String lastUpdatedStr = request.getParameter(ProfileData.LAST_UPDATED);
     long lastUpdated = 0;
     try {
       lastUpdated = Long.parseLong(lastUpdatedStr);
@@ -41,7 +42,7 @@ public class InstallProfileServlet extends HttpServlet {
       long lastUpdatedClient, DatastoreService ds)
       throws IOException {
     Entity installEntity = createOrGetInstall(installId, ds, true);
-    String lastUpdatedServerStr = (String) installEntity.getProperty(ProfileServlet.LAST_UPDATED);
+    String lastUpdatedServerStr = (String) installEntity.getProperty(ProfileData.LAST_UPDATED);
     long lastUpdatedServer = 0;
     try {
       lastUpdatedServer = Long.parseLong(lastUpdatedServerStr);
@@ -78,7 +79,7 @@ public class InstallProfileServlet extends HttpServlet {
       if (create && install == null) {
         install = new Entity(INSTALL_PROFILE, installId.toLowerCase());
         install.setProperty(INSTALL_ID, installId);
-        install.setProperty(ProfileServlet.LAST_UPDATED, 
+        install.setProperty(ProfileData.LAST_UPDATED, 
             String.valueOf(System.currentTimeMillis()));
         ds.put(install);
       }
@@ -95,7 +96,7 @@ public class InstallProfileServlet extends HttpServlet {
       Object value = property.getValue();
       if (value instanceof Text) {
         String s = ((Text) value).getValue();
-        if (property.getKey().startsWith(ProfileServlet.PNG)) {
+        if (property.getKey().startsWith(ProfileData.PNG)) {
           properties.append(propDelimiter + property.getKey() + ":\"" + s + "\"");
           propDelimiter = ",";
         }

@@ -18,7 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.Profile.Social.Message;
+import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.view.DrawingActor;
@@ -99,7 +100,7 @@ public class UserHomeDialog extends Dialog {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         // Bring up registration form
         ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + "/registration.jsp?" + 
-            Profile.INSTALL_ID + "=" + profile.getInstallationId().toLowerCase());
+            ProfileData.INSTALL_ID + "=" + profile.getInstallationId().toLowerCase());
       }
     });
   }

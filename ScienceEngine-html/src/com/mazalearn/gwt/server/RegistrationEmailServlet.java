@@ -12,6 +12,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
@@ -48,7 +49,7 @@ public class RegistrationEmailServlet extends HttpServlet {
     EmbeddedEntity newUserProfile = ProfileServlet.retrieveUserProfile(userEmail, ds);
     if (newUserProfile != null) { 
       response.getWriter().append("Already registered. " + userEmail);
-      System.out.println("Already registered to: " + newUserProfile.getProperty(ProfileServlet.INSTALL_ID) + " " + userEmail);
+      System.out.println("Already registered to: " + newUserProfile.getProperty(ProfileData.INSTALL_ID) + " " + userEmail);
       return;
     }
     
@@ -59,8 +60,8 @@ public class RegistrationEmailServlet extends HttpServlet {
     }
     
     EmbeddedEntity oldUserProfile = ProfileServlet.createOrGetUserProfile(oldUser, true);
-    oldUserProfile.setProperty(ProfileServlet.USER_NAME, userName);
-    oldUserProfile.setProperty(ProfileServlet.USER_ID, userEmail);
+    oldUserProfile.setProperty(ProfileData.USER_NAME, userName);
+    oldUserProfile.setProperty(ProfileData.USER_ID, userEmail);
     oldUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);
     
     Entity newUser = ProfileServlet.createOrGetUser(userEmail, ds, true);

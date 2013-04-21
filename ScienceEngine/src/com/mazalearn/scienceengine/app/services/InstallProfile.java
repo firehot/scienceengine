@@ -111,7 +111,7 @@ public class InstallProfile implements Serializable {
       String installId = ScienceEngine.getPlatformAdapter().getInstallationId();
       String hashCalculated = Crypter.saltedSha1Hash(profileBase64, installId);
       if (!hashCalculated.equals(hashReceived)) {
-        Gdx.app.error(ScienceEngine.LOG, "Hash mismatch: " + hashCalculated + " " + hashReceived);
+        Gdx.app.error(ScienceEngine.LOG, "Install profile - Hash mismatch: " + hashCalculated + " " + hashReceived);
         return null;
       }
       String profileJson = Base64Coder.decodeString(profileBase64);
@@ -119,14 +119,14 @@ public class InstallProfile implements Serializable {
         installProfile = new Json().fromJson(InstallProfile.class, profileJson);
         // verify the installid
         if (!installId.equals(installProfile.getInstallationId())) {
-          Gdx.app.error(ScienceEngine.LOG, "Install id mismatch");
+          Gdx.app.error(ScienceEngine.LOG, "Install profile - Install id mismatch");
           return null;
         }
         
       } catch (SerializationException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + s.getMessage() + "\n" + profileJson);
+        Gdx.app.error(ScienceEngine.LOG, "Install Profile - Error deserializing: " + s.getMessage() + "\n" + profileJson);
       } catch (IllegalArgumentException s) {
-        Gdx.app.error(ScienceEngine.LOG, "Error deserializing: " + s.getMessage() + "\n" + profileJson);
+        Gdx.app.error(ScienceEngine.LOG, "Install Profile - Error deserializing: " + s.getMessage() + "\n" + profileJson);
       }
     }
     return installProfile;

@@ -1,6 +1,11 @@
 package com.mazalearn.scienceengine.app.screens;
 
+import java.util.Arrays;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -14,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.Trivia;
@@ -27,6 +33,7 @@ public class GiveGiftDialog extends Dialog {
   private String giftImage;
   private int giftPoints;
   private int giftType;
+  private String giftEmail;
 
   public GiveGiftDialog(final Skin skin, Dialog parentDialog) {
     super("", skin);
@@ -44,10 +51,9 @@ public class GiveGiftDialog extends Dialog {
     contentTable.debug();
     contentTable.add(title).width(800).pad(10).center().colspan(2);
     contentTable.row();
-    contentTable.add("Choose Friends");
-    contentTable.add(new List(profile.getFriends(), skin));
+    contentTable.add(createFriendChooser(skin));
     contentTable.row();
-    contentTable.add("Your Points contribution");
+    contentTable.add("Maza coins you wish to gift");
     final List pointsList = new List(new Integer[] {100, 200, 500, 1000}, skin);
     pointsList.setSelection("500");
     contentTable.add(pointsList);
@@ -91,11 +97,61 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        profile.postMessage("test@mazalearn.com", giftType, giftText, giftImage, giftPoints);
+        profile.postMessage(giftEmail, giftType, giftText, giftImage, giftPoints);
       }
     });
     this.getButtonTable().add(sendButton).width(150).center();
     trivia.load();
+  }
+
+  private Actor createFriendChooser(final Skin skin) {
+    Table chooserTable = new Table(skin);
+    chooserTable.add("Choose Friend");
+    TextButton addFriend = new TextButton("Add Friend", skin, "body");
+    chooserTable.add(addFriend);
+    final List friendsList = new List(profile.getFriends(), skin);
+    
+    addFriend.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        // Onscreen keyboard does not show in IOS - this is a workaround.
+        Gdx.input.getTextInput(new TextInputListener() {
+          @Override
+          public void input(String email) {
+            email = email.toLowerCase();
+            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+            if (!email.contains("@")) {
+              ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Invalid email address");
+              return;
+            } else if (email.equals(profile.getUserEmail())) {
+              ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Cannot add self as friend.");
+              return;
+            } else if (Arrays.asList(profile.getFriends()).contains(email)) {
+              ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Friend with this email already exists");
+              return;
+            }
+            profile.addFriend(email);
+            ScienceEngine.displayStatusMessage(getStage(), StatusType.INFO, "Friend added");
+            giftEmail = email;
+            friendsList.setItems(profile.getFriends());
+          }
+          
+          @Override
+          public void canceled() {
+            ScienceEngine.displayStatusMessage(getStage(), StatusType.WARNING, "Add Friend: Canceled");            
+          }
+        }, "Enter friend's email address", "");
+      }
+    });
+    chooserTable.add(friendsList);
+    friendsList.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        giftEmail = friendsList.getSelection();
+      }
+    });
+    return chooserTable;
   }
   
   @Override

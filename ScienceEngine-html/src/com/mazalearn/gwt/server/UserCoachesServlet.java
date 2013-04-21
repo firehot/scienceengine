@@ -16,6 +16,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 
 @SuppressWarnings("serial")
 public class UserCoachesServlet extends HttpServlet {
@@ -32,7 +33,7 @@ public class UserCoachesServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Filter colorPresentFilter =
-      new FilterPredicate(ProfileServlet.COLOR, FilterOperator.NOT_EQUAL, null);
+      new FilterPredicate(ProfileData.COLOR, FilterOperator.NOT_EQUAL, null);
 
     // Use class Query to assemble a query
     Query q = new Query("User"); // .setFilter(colorPresentFilter);
@@ -48,21 +49,21 @@ public class UserCoachesServlet extends HttpServlet {
       String userId = user.getKey().getName();
       System.out.println(userId);
       if (profileEntity == null) continue;
-      if (profileEntity.getProperty(ProfileServlet.COLOR) == null) continue;
-      if (profileEntity.getProperty(ProfileServlet.CURRENT) == null) continue;
-      String color = (String) profileEntity.getProperty(ProfileServlet.COLOR);
-      String userName = (String) profileEntity.getProperty(ProfileServlet.USER_NAME);
-      float currentValue = Float.parseFloat((String) profileEntity.getProperty(ProfileServlet.CURRENT));
+      if (profileEntity.getProperty(ProfileData.COLOR) == null) continue;
+      if (profileEntity.getProperty(ProfileData.CURRENT) == null) continue;
+      String color = (String) profileEntity.getProperty(ProfileData.COLOR);
+      String userName = (String) profileEntity.getProperty(ProfileData.USER_NAME);
+      float currentValue = Float.parseFloat((String) profileEntity.getProperty(ProfileData.CURRENT));
       String current = String.format("%2.2f", currentValue);
       if (!firstCoach) {
         jsonStr += ",";
       }
       firstCoach = false;
       jsonStr += "{";
-      jsonStr += "\"" + ProfileServlet.USER_ID + "\":\"" + userId + "\"";
-      jsonStr += ",\"" + ProfileServlet.COLOR + "\":\"" + color + "\"";
-      jsonStr += ",\"" + ProfileServlet.USER_NAME + "\":\"" + userName + "\"";
-      jsonStr += ",\"" + ProfileServlet.CURRENT + "\":" + current;
+      jsonStr += "\"" + ProfileData.USER_ID + "\":\"" + userId + "\"";
+      jsonStr += ",\"" + ProfileData.COLOR + "\":\"" + color + "\"";
+      jsonStr += ",\"" + ProfileData.USER_NAME + "\":\"" + userName + "\"";
+      jsonStr += ",\"" + ProfileData.CURRENT + "\":" + current;
       jsonStr += "}\n";
     }
     

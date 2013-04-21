@@ -65,7 +65,7 @@ public class PreferencesManager {
   
   // precondition: userprofile has an email
   public void setActiveUserProfile(Profile userProfile) {
-    prefs.putString(Profile.USER_ID, userProfile.getUserEmail());
+    prefs.putString(ProfileData.USER_ID, userProfile.getUserEmail());
     prefs.flush();
     this.userProfile = userProfile;
   }
@@ -75,7 +75,7 @@ public class PreferencesManager {
     userProfile = getUserProfile(userId);
     userProfile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
     if (userProfile.getUserEmail().length() > 0) {
-      prefs.putString(Profile.USER_ID, userProfile.getUserEmail());
+      prefs.putString(ProfileData.USER_ID, userProfile.getUserEmail());
       prefs.flush();
     }
     saveUserProfile();
@@ -93,7 +93,7 @@ public class PreferencesManager {
   }
 
   private String getProfileUserId() {
-    String userId = prefs.getString(Profile.USER_ID);
+    String userId = prefs.getString(ProfileData.USER_ID);
     if (userId == null || userId.length() == 0) {
       userId = ScienceEngine.getPlatformAdapter().getInstallationId();
     }
@@ -191,11 +191,11 @@ public class PreferencesManager {
         }
         String installProfileBase64 =
             ScienceEngine.getPlatformAdapter().httpGet("/installprofile?" + 
-                Profile.INSTALL_ID + "=" + installId + "&" + 
-                Profile.LAST_UPDATED + "=" + String.valueOf(lastUpdated));
+                ProfileData.INSTALL_ID + "=" + installId + "&" + 
+                ProfileData.LAST_UPDATED + "=" + String.valueOf(lastUpdated));
         InstallProfile newInstallProfile = InstallProfile.fromBase64((String) installProfileBase64);
         if (newInstallProfile == null) {
-           Gdx.app.error(ScienceEngine.LOG, "Invalid install profile - rejected");
+           Gdx.app.error(ScienceEngine.LOG, "Invalid or unchanged install profile");
         } else {
           prefs.putString(INSTALL_PROFILE, installProfileBase64);
           // will get loaded on next call to getInstallProfile in PreferencesManager
@@ -210,7 +210,7 @@ public class PreferencesManager {
 
     private void syncUserProfile(Map<String, String> postParams, String userId) {
       String localProfileBase64 = prefs.getString(userId);
-      postParams.put(Profile.USER_ID, userId);
+      postParams.put(ProfileData.USER_ID, userId);
       try {
         // Post userProfile to server and get back updated server userProfile
         String serverProfileBase64 =

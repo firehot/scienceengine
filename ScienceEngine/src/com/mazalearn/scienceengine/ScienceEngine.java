@@ -14,6 +14,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -352,13 +353,20 @@ public class ScienceEngine extends Game {
       entityName = entityName.substring(0, entityName.indexOf("."));
     }
     String message = component + getMsg().getString("Help." + entityName);
-    displayStatusMessage((Stage) stage, message);
+    displayStatusMessage((Stage) stage, StatusType.INFO, message);
   }
 
-  public static void displayStatusMessage(Stage stage, String message) {
+  public static void displayStatusMessage(Stage stage, StatusType type, String message) {
     Label status = (Label) stage.getRoot().findActor(ScreenComponent.Status.name());
-    if (status != null) // TODO: only for level editor - why?
-    status.setText(message);
+    if (status != null) {// TODO: only for level editor - why?
+      switch (type) {
+      case INFO: status.setColor(Color.WHITE); break;
+      case WARNING: status.setColor(Color.GREEN); break;
+      case ERROR: status.setColor(Color.YELLOW); break;
+      case FATAL: status.setColor(Color.RED); break;
+      }
+      status.setText(message);
+    }
   }
 
   public static void setProbeMode(boolean probeMode) {

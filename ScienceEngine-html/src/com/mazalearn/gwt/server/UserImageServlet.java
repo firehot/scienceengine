@@ -12,6 +12,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Text;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 
 @SuppressWarnings("serial")
 public class UserImageServlet extends HttpServlet {
@@ -19,8 +20,8 @@ public class UserImageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     System.out.println("UserImage servlet - Received get: " + request.getContentLength());
-    String userId = request.getParameter(ProfileServlet.USER_ID);
-    String img = request.getParameter(ProfileServlet.PNG);
+    String userId = request.getParameter(ProfileData.USER_ID);
+    String img = request.getParameter(ProfileData.PNG);
     System.out.println("UserId: " + userId);
     response.setHeader("ContentType", "image/png");
     BufferedOutputStream dis = new BufferedOutputStream(response.getOutputStream());

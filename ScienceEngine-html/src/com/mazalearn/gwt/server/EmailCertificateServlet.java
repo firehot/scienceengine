@@ -31,13 +31,14 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 
 @SuppressWarnings("serial")
 public class EmailCertificateServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String userId = request.getParameter(ProfileServlet.USER_ID).toLowerCase();
+    String userId = request.getParameter(ProfileData.USER_ID).toLowerCase();
     System.out.println("EmailCertificate - User: " + userId);
 
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
@@ -54,7 +55,7 @@ public class EmailCertificateServlet extends HttpServlet {
       response.getWriter().append("Improper email address. Cannot send certificate");
       return;
     }
-    String userName = (String) profile.getProperty(ProfileServlet.USER_NAME);
+    String userName = (String) profile.getProperty(ProfileData.USER_NAME);
     if (userName == null || userName.length() < 2) {
       response.getWriter().append("Cannot create certificate - Improper Name" + userName);
       return;

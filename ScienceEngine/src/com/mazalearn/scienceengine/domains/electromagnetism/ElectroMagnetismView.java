@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -106,7 +107,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     // Save drawing, current and color in profile
     profile.setCoachPixmap(drawingActor.getPixmap(), String.valueOf(current), rgba(color));
-    ScienceEngine.displayStatusMessage(this, "Uploading to MazaLearn - See www.mazalearn.com/train.html");    
+    ScienceEngine.displayStatusMessage(this, StatusType.INFO, "Uploading to MazaLearn - See www.mazalearn.com/train.html");    
   }
 
   private String rgba(Color color) {

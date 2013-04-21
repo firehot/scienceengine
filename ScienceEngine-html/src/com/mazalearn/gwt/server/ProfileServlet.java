@@ -19,28 +19,12 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
+import com.mazalearn.scienceengine.app.services.ProfileData;
 
 @SuppressWarnings("serial")
 public class ProfileServlet extends HttpServlet {
 
   public static final String PROFILE = "Profile";
-  public static final String USER_ID = "userid"; // owner
-  static final String PNG = "png";
-  public static final String COACH_PNG = PNG + "coach";
-  public static final String USER_PNG = PNG + "user";
-  public static final String USER_NAME = "username";
-  public static final String CURRENT = "current";
-  public static final String COLOR = "color";
-  public static final String USER_EMAIL = "useremail"; // param
-  public static final String SEX = "sex";  // owner
-  public static final String GRADE = "grade"; // owner
-  public static final String SCHOOL = "school"; // owner
-  public static final String CITY = "city";     // owner
-  public static final String COMMENTS = "comments"; // owner
-  public static final String REGN_DATE = "regndate"; // owner
-  public static final String INSTALL_ID = "installid";
-  public static final String PIN = "pin"; // readonly
-  public static final String LAST_UPDATED = "last_updated";
   // The profileId in a user entity forwards to the right profile.
   public static final String NEW_USER_ID = "newuserid"; // email verification is the owner
   public static final String OLD_USER_ID = "olduserid"; // email verification is the owner
@@ -48,7 +32,7 @@ public class ProfileServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     System.out.println("Received post: " + request.getContentLength());
-    String userId = request.getHeader(USER_ID);
+    String userId = request.getHeader(ProfileData.USER_ID);
     System.out.println("UserId: " + userId);
     BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
     byte[] profileBytes = new byte[request.getContentLength()];
@@ -70,7 +54,7 @@ public class ProfileServlet extends HttpServlet {
   
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String userId = request.getParameter(USER_ID);
+    String userId = request.getParameter(ProfileData.USER_ID);
     System.out.println("Received get: " + userId);
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     writeProfileResponse(response, userId, ds);
@@ -87,11 +71,6 @@ public class ProfileServlet extends HttpServlet {
     response.getWriter().close();
   }
   
-  static class Profile {
-    Map<String, String> properties;
-    Map<String, Map<String, float[]>> topics;
-  }
-
   private String saveUserProfile(String userId, byte[] profileBytes, DatastoreService ds) 
       throws IllegalStateException {
     Entity user = createOrGetUser(userId, ds, true);
@@ -103,11 +82,11 @@ public class ProfileServlet extends HttpServlet {
     while (profileStringJson.charAt(--count) == 0);
     Gson gson = new Gson();
     System.out.println(profileStringJson.substring(0, count + 1));
-    Profile profile = gson.fromJson(profileStringJson.substring(0, count+1), Profile.class);
+    ProfileData profile = gson.fromJson(profileStringJson.substring(0, count+1), ProfileData.class);
     
     EmbeddedEntity profileEntity = createOrGetUserProfile(user, true);
     for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
-      if (entry.getKey().startsWith(PNG)) { // Too large and base64encoded - store as TEXT
+      if (entry.getKey().startsWith(ProfileData.PNG)) { // Too large and base64encoded - store as TEXT
         if (entry.getValue() != null) {
           profileEntity.setProperty(entry.getKey(), new Text(entry.getValue()));
         }
@@ -115,10 +94,11 @@ public class ProfileServlet extends HttpServlet {
         profileEntity.setProperty(entry.getKey(), entry.getValue());
       }
     }
-    for (Map.Entry<String, Map<String, float[]>> topicStats: profile.topics.entrySet()) {
+    for (Map.Entry<String, Map<String, float[]>> topicStats: profile.topicStats.entrySet()) {
       String jsonStats = gson.toJson(topicStats.getValue());
       profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
+    profileEntity.setProperty(ProfileData.SOCIAL, new Text(gson.toJson(profile.social)));
     ds.put(user);
     // If retrieved user is for requested userid and not forwarded
     if (userId.equals(user.getKey().getName())) {
@@ -131,6 +111,7 @@ public class ProfileServlet extends HttpServlet {
     if (user == null) return null;
     EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(PROFILE);
     if (create && profileEntity == null) {
+      System.out.println("Creating profile for user:" + user.getKey().getName());
       profileEntity = new EmbeddedEntity();
       user.setProperty(PROFILE, profileEntity);
     }
@@ -151,6 +132,7 @@ public class ProfileServlet extends HttpServlet {
       }
     } catch (EntityNotFoundException e) {
       if (create && user == null) {
+        System.out.println("Creating user:" + userId.toLowerCase());
         user = new Entity(User.class.getSimpleName(), userId.toLowerCase());
         ds.put(user);
       }
@@ -167,18 +149,21 @@ public class ProfileServlet extends HttpServlet {
     }
     
     System.out.println(profileEntity);
+    String social = "{}";
     StringBuilder properties = new StringBuilder("{");
-    StringBuilder topics = new StringBuilder("{");
+    StringBuilder topicStats = new StringBuilder("{");
     String propDelimiter = "", topicDelimiter = "";
     for (Map.Entry<String, Object> property: profileEntity.getProperties().entrySet()) {
       Object value = property.getValue();
       if (value instanceof Text) {
         String s = ((Text) value).getValue();
-        if (property.getKey().startsWith(PNG)) {
+        if (property.getKey().startsWith(ProfileData.PNG)) {
           properties.append(propDelimiter + property.getKey() + ":\"" + s + "\"");
           propDelimiter = ",";
+        } else if (property.getKey().equals(ProfileData.SOCIAL)) {
+          social = s;
         } else if (!"null".equals(s)) {
-          topics.append(topicDelimiter + property.getKey() + ":" + s);
+          topicStats.append(topicDelimiter + property.getKey() + ":" + s);
           topicDelimiter = ",";
         }
       } else {
@@ -187,8 +172,8 @@ public class ProfileServlet extends HttpServlet {
       }
     }
     properties.append("}");
-    topics.append("}");
-    String json = "{ properties:" + properties + ",topics:" + topics + "}";
+    topicStats.append("}");
+    String json = "{ properties:" + properties + ",topicStats:" + topicStats + ",social:" + social + "}";
     System.out.println(json);
     String profileStringBase64 = Base64.encode(json);
     return profileStringBase64;

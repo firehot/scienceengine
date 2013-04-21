@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
@@ -17,7 +18,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
-import com.mazalearn.scienceengine.app.services.Profile.Social.Message;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
@@ -30,68 +31,25 @@ import com.mazalearn.scienceengine.tutor.ITutor;
  */
 public class Profile implements Serializable {
 
-  private static final String PNG = "png";
-  private static final String COACH_PNG = PNG + "coach";
-  private static final String USER_PNG = PNG + "user";
-  private static final String ACTIVITY = "activity";
-  private static final String LAST_ACTIVITY = "last_activity";
-  private static final String TOPIC = "topic";
-  public static final String USER_ID = "userid"; // readonly
-  private static final String USER_NAME = "username"; // readonly
-  public static final String INSTALL_ID = "installid";
-  public static final String LAST_UPDATED = "last_updated";
-  private static final String CURRENT = "current";
-  private static final String COLOR = "color";
-  private static final String PLATFORM = "platform";
-  public static final String USER_EMAIL = "useremail";
-  
-  private HashMap<Topic, HashMap<String, float[]>> topicStats;
-  private HashMap<String, String> properties;
-  private HashMap<String, float[]> currentTopicStats;
+  private ProfileData data = new ProfileData();
 
-  public static class Social {
-    String[] friends;
-    public static class Message {
-      public Message(int messageId, String email, int giftType, String text, String image, int points) {
-        this.messageId = messageId;
-        this.email = email;
-        this.giftType = giftType;
-        this.text = text;
-        this.image = image;
-        this.points = points;
-      }
-      public final int messageId;
-      public final String email;
-      public final int giftType;
-      public final String text;
-      public final String image;
-      public final int points;
-    }
-    List<Message> inbox;
-    List<Message> outbox;
-    int lastInboxMessageId;
-    int lastOutboxMessageId;
-  }
-  
-  private Social social;
-  
   public Profile() {
-    topicStats = new HashMap<Topic, HashMap<String, float[]>>();
+    data.topicStats = new HashMap<String, Map<String, float[]>>();
     for (Topic topic: Topic.values()) {
       if (topic.getChildren().length == 0) continue;
-      topicStats.put(topic, new HashMap<String, float[]>());
+      data.topicStats.put(topic.name(), new HashMap<String, float[]>());
     }
-    properties = new HashMap<String, String>();
-    properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
-    social = new Social();
+    data.properties = new HashMap<String, String>();
+    data.properties.put(ProfileData.INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
+    data.social = new ProfileData.Social();
   }
 
   public void setCurrentActivity(Topic level) {
     Topic activity = getCurrentActivity();
     if (level == activity) return;
     
-    properties.put(LAST_ACTIVITY, activity != null ? activity.name() : "");
-    properties.put(ACTIVITY, level != null ? level.name() : "");
+    data.properties.put(ProfileData.LAST_ACTIVITY, activity != null ? activity.name() : "");
+    data.properties.put(ProfileData.ACTIVITY, level != null ? level.name() : "");
     save();
   }
   
@@ -99,7 +57,7 @@ public class Profile implements Serializable {
    * Retrieves the ID of the current level.
    */
   public Topic getCurrentActivity() {
-    String levelStr = properties.get(ACTIVITY);
+    String levelStr = data.properties.get(ProfileData.ACTIVITY);
     if (levelStr == null) return null;
     try {
       return Topic.valueOf(levelStr);
@@ -112,7 +70,7 @@ public class Profile implements Serializable {
    * Retrieves the ID of the previous active level.
    */
   public Topic getLastActivity() {
-    String levelStr = properties.get(LAST_ACTIVITY);
+    String levelStr = data.properties.get(ProfileData.LAST_ACTIVITY);
     if (levelStr == null) return null;
     try {
       return Topic.valueOf(levelStr);
@@ -127,59 +85,59 @@ public class Profile implements Serializable {
   @Override
   public void read(Json json, OrderedMap<String, Object> jsonData) {
 
-    properties = json.readValue("properties", HashMap.class, String.class, jsonData);
-    if (properties == null) {
-      properties = new HashMap<String,String>();
-      properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
+    data.properties = json.readValue("properties", HashMap.class, String.class, jsonData);
+    if (data.properties == null) {
+      data.properties = new HashMap<String,String>();
+      data.properties.put(ProfileData.INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
     }
     
-    Object topicObj = json.readValue("topics", OrderedMap.class, OrderedMap.class, jsonData);
-    topicStats = new HashMap<Topic, HashMap<String, float[]>>();
+    Object topicObj = json.readValue("topicStats", OrderedMap.class, OrderedMap.class, jsonData);
+    data.topicStats = new HashMap<String, Map<String, float[]>>();
     for (Topic topic: Topic.values()) {
       if (topic.getChildren().length == 0) continue;
       HashMap<String, float[]> stats = json.readValue(topic.name(), HashMap.class, float[].class, topicObj);
       if (stats == null) {
         stats = new HashMap<String, float[]>();
       }
-      topicStats.put(topic, stats);
+      data.topicStats.put(topic.name(), stats);
     }
-    social = json.readValue("social", Social.class, jsonData);
+    data.social = json.readValue("social", ProfileData.Social.class, jsonData);
     
     // Set current topic
     Topic currentTopic = Topic.Electromagnetism;
     try {
-      currentTopic = Topic.valueOf(properties.get(TOPIC));
+      currentTopic = Topic.valueOf(data.properties.get(ProfileData.TOPIC));
     } catch (Exception ignored) {}
-    currentTopicStats = topicStats.get(currentTopic);
+    data.currentTopicStats = data.topicStats.get(currentTopic.name());
   }
 
   @Override
   public void write(Json json) {
-    json.writeValue("properties", properties);
-    json.writeObjectStart("topics");
+    json.writeValue("properties", data.properties);
+    json.writeObjectStart("topicStats");
     for (Topic topic: Topic.values()) {
-      HashMap<String,?> props = topicStats.get(topic);
+      Map<String,?> props = data.topicStats.get(topic.name());
       if (props != null) {
         json.writeValue(topic.name(), props);
       }
     }
     json.writeObjectEnd();
-    json.writeValue("social", social);
+    json.writeValue("social", data.social);
   }
 
   public void setCurrentTopic(Topic topic) {
-    if (topic != null && topic.name().equals(properties.get(TOPIC))) return;
-    properties.put(TOPIC, topic != null ? topic.name() : null);
-    currentTopicStats = topicStats.get(topic);
-    if (currentTopicStats == null) {
-      currentTopicStats = new HashMap<String, float[]>();
-      topicStats.put(topic, currentTopicStats);
+    if (topic != null && topic.name().equals(data.properties.get(ProfileData.TOPIC))) return;
+    data.properties.put(ProfileData.TOPIC, topic != null ? topic.name() : null);
+    data.currentTopicStats = data.topicStats.get(topic != null ? topic.name() : topic);
+    if (data.currentTopicStats == null && topic != null) {
+      data.currentTopicStats = new HashMap<String, float[]>();
+      data.topicStats.put(topic.name(), data.currentTopicStats);
     }
     save();
   }
   
   public Topic getCurrentTopic() {
-    String s = properties.get(TOPIC);
+    String s = data.properties.get(ProfileData.TOPIC);
     try {
       return s == null || s.length() == 0 ? null : Topic.valueOf(s);
     } catch (IllegalArgumentException e) {
@@ -188,27 +146,27 @@ public class Profile implements Serializable {
   }
 
   public String getUserName() {
-    String s = properties.get(USER_NAME);
+    String s = data.properties.get(ProfileData.USER_NAME);
     return s == null ? "Guest" : s;
   }
 
   public String getUserEmail() {
-    String s = properties.get(USER_ID);
+    String s = data.properties.get(ProfileData.USER_ID);
     return s == null ? "" : s;
   }
 
   void testSetUserEmail(String userEmail) {
-    properties.put(USER_ID, userEmail);
+    data.properties.put(ProfileData.USER_ID, userEmail);
   }
   
   public void save() {
-    properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
+    data.properties.put(ProfileData.LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
     ScienceEngine.getPreferencesManager().saveUserProfile();
   }
   
   public long getLastUpdated() {
     try {
-      String lastUpdated = properties.get(LAST_UPDATED);
+      String lastUpdated = data.properties.get(ProfileData.LAST_UPDATED);
       return Long.parseLong(lastUpdated);
     } catch (IllegalArgumentException e) {
       return 0;
@@ -220,75 +178,76 @@ public class Profile implements Serializable {
     // We dont want duplicates - convert to set to eliminate duplicates.
     Set<String> friendSet = new HashSet<String>(Arrays.asList(currentFriends));
     friendSet.add(friendEmail.toLowerCase());
-    social.friends = friendSet.toArray(new String[0]);
+    data.social.friends = friendSet.toArray(new String[0]);
     save();
   }
   
   public String[] getFriends() {
-    if (social == null) {
-      social = new Social();
+    if (data.social == null) {
+      data.social = new ProfileData.Social();
     }
-    if (social.friends == null) {
+    if (data.social.friends == null) {
       if (getUserEmail().length() == 0) return new String[0];
       String currentFriendStr = getUserEmail().toLowerCase();
-      social.friends = new String[] { currentFriendStr };
+      data.social.friends = new String[] { currentFriendStr };
       save();
     }
-    return social.friends;
+    return data.social.friends;
   }
   
   public void postMessage(String emailTo, int giftType, String text, String image, int points) {
-    if (social.outbox == null) {
-      social.outbox = new ArrayList<Message>();
+    if (data.social.outbox == null) {
+      data.social.outbox = new ArrayList<Message>();
     }
-    Message msg = new Message(social.lastOutboxMessageId++, emailTo, giftType, text, image, points);
-    social.outbox.add(msg);
+    Message msg = new Message(data.social.lastOutboxMessageId++, emailTo, giftType, text, image, points);
+    data.social.outbox.add(msg);
+    save();
   }
   
   void testPostInMessage(String emailFrom, int giftType, String text, String image, int points) {
-    if (social.inbox == null) {
-      social.inbox = new ArrayList<Message>();
+    if (data.social.inbox == null) {
+      data.social.inbox = new ArrayList<Message>();
     }
-    Message msg = new Message(social.lastInboxMessageId++, emailFrom, giftType, text, image, points);
-    social.inbox.add(msg);
+    Message msg = new Message(data.social.lastInboxMessageId++, emailFrom, giftType, text, image, points);
+    data.social.inbox.add(msg);
   }
   
   public List<Message> getOutbox() {
-    return social.outbox;
+    return data.social.outbox;
   }
 
   public List<Message> getInbox() {
-    return social.inbox;
+    return data.social.inbox;
   }
 
   public void setCoachPixmap(Pixmap coachPixmap, String current, String color) {
     byte[] coachPngBytes = ScienceEngine.getPlatformAdapter().pixmap2Bytes(coachPixmap);
     Gdx.app.error(ScienceEngine.LOG, " bytes = " + coachPngBytes.length);
-    properties.put(COACH_PNG, new String(Base64Coder.encode(coachPngBytes)));
-    properties.put(CURRENT, current);
-    properties.put(COLOR, color);
+    data.properties.put(ProfileData.COACH_PNG, new String(Base64Coder.encode(coachPngBytes)));
+    data.properties.put(ProfileData.CURRENT, current);
+    data.properties.put(ProfileData.COLOR, color);
     save();
   }
   
   public Pixmap getCoachPixmap() {
-    String png = properties.get(COACH_PNG);
+    String png = data.properties.get(ProfileData.COACH_PNG);
     return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
   public void setUserPixmap(Pixmap userPixmap) {
     byte[] userPngBytes = ScienceEngine.getPlatformAdapter().pixmap2Bytes(userPixmap);
     Gdx.app.error(ScienceEngine.LOG, " bytes = " + userPngBytes.length);
-    properties.put(USER_PNG, new String(Base64Coder.encode(userPngBytes)));
+    data.properties.put(ProfileData.USER_PNG, new String(Base64Coder.encode(userPngBytes)));
     save();
   }
   
   public Pixmap getUserPixmap() {
-    String png = properties.get(USER_PNG);
+    String png = data.properties.get(ProfileData.USER_PNG);
     return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
   public float[] getStats(Topic topic, String tutorId) {
-    HashMap<String, float[]> topicStat = topicStats.get(topic);
+    Map<String, float[]> topicStat = data.topicStats.get(topic.name());
     float[] s = topicStat.get(tutorId);
     
     if (s == null) return new float[ITutor.NUM_STATS];
@@ -299,7 +258,7 @@ public class Profile implements Serializable {
     for (int i = 0; i < s.length; i++) {
       stats[i] = s[i];
     }
-    return stats; 
+    return stats;
   }
 
   public float[] getStats(String tutorId) {
@@ -311,15 +270,15 @@ public class Profile implements Serializable {
    * @param tutorId
    */
   public void saveStats(float[] stats, String tutorId) {
-    currentTopicStats.put(tutorId, stats);
+    data.currentTopicStats.put(tutorId, stats);
   }
 
   public void setPlatform(Platform platform) {
-    properties.put(PLATFORM, platform.name());
+    data.properties.put(ProfileData.PLATFORM, platform.name());
   }
 
   public String getInstallationId() {
-    return properties.get(INSTALL_ID);
+    return data.properties.get(ProfileData.INSTALL_ID);
   }
 
   public static Profile fromBase64(String profileBase64) {
@@ -350,10 +309,10 @@ public class Profile implements Serializable {
     if (otherProfile != null) {
       // Other profile is later - merge other on top of this
       if (otherProfile.getLastUpdated() > getLastUpdated()) {
-        properties.putAll(otherProfile.properties);
+        data.properties.putAll(otherProfile.data.properties);
       } else {
-        otherProfile.properties.putAll(properties);
-        properties = otherProfile.properties;
+        otherProfile.data.properties.putAll(data.properties);
+        data.properties = otherProfile.data.properties;
       }
     }
   }

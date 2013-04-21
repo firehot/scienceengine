@@ -20,6 +20,7 @@
 <%@ page import="com.mazalearn.gwt.server.Activity" %>
 <%@ page import="com.mazalearn.gwt.server.Activity.Tutor" %>
 <%@ page import="com.mazalearn.gwt.server.ProfileServlet" %>
+<%@ page import="com.mazalearn.scienceengine.app.services.ProfileData" %>
 <%@ page import="com.mazalearn.scienceengine.Topic" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -67,7 +68,7 @@
     <div id="chart_div"></div>
 
 <%
-    String userId = request.getParameter(ProfileServlet.USER_ID);
+    String userId = request.getParameter(ProfileData.USER_ID);
     if (userId == null) {
       userId = "demouser@mazalearn.com";
     }
