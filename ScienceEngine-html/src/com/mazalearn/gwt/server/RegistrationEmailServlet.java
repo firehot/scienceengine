@@ -2,6 +2,9 @@ package com.mazalearn.gwt.server;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +15,9 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
+import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
@@ -60,8 +65,14 @@ public class RegistrationEmailServlet extends HttpServlet {
     }
     
     EmbeddedEntity oldUserProfile = ProfileServlet.createOrGetUserProfile(oldUser, true);
-    oldUserProfile.setProperty(ProfileData.USER_NAME, userName);
-    oldUserProfile.setProperty(ProfileData.USER_ID, userEmail);
+    Gson gson = new Gson();
+    ServerProps serverProps = (ServerProps) ProfileServlet.getFromJsonTextProperty(gson, oldUserProfile, ProfileData.SERVER_PROPS, ServerProps.class);
+    serverProps.userName = userName;
+    serverProps.userId = userEmail;
+    Date date = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    serverProps.registrationDate = dateFormat.format(date);
+    ProfileServlet.setAsJsonTextProperty(gson, oldUserProfile, ProfileData.SERVER_PROPS, serverProps);
     oldUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);
     
     Entity newUser = ProfileServlet.createOrGetUser(userEmail, ds, true);

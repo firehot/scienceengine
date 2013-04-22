@@ -23,7 +23,6 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Text;
 import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
@@ -59,8 +58,7 @@ public class RegistrationServlet extends HttpServlet {
       return;
     }
     Gson gson = new Gson();
-    Text serverPropsJson = (Text) profile.getProperty(ProfileData.SERVER_PROPS);
-    ServerProps serverProps = (serverPropsJson != null ? gson.fromJson(serverPropsJson.getValue(), ServerProps.class) : new ServerProps());
+    ServerProps serverProps = (ServerProps) ProfileServlet.getFromJsonTextProperty(gson, profile, ProfileData.SERVER_PROPS, ServerProps.class);
     serverProps.sex = request.getParameter(ProfileData.SEX);
     serverProps.grade = request.getParameter(ProfileData.GRADE);
     serverProps.school = request.getParameter(ProfileData.SCHOOL);
@@ -69,7 +67,7 @@ public class RegistrationServlet extends HttpServlet {
     Date date = new Date();
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     serverProps.registrationDate = dateFormat.format(date);
-    profile.setProperty(ProfileData.SERVER_PROPS, gson.toJson(serverProps));
+    ProfileServlet.setAsJsonTextProperty(gson, profile, ProfileData.SERVER_PROPS, serverProps);
     
     ds.put(user);
 

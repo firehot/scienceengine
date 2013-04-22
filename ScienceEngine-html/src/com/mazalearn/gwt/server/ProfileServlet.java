@@ -3,6 +3,7 @@ package com.mazalearn.gwt.server;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.Properties;
 
@@ -29,7 +30,6 @@ import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
-import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 
@@ -40,6 +40,7 @@ public class ProfileServlet extends HttpServlet {
   // The profileId in a user entity forwards to the right profile.
   public static final String NEW_USER_ID = "newuserid"; // email verification is the owner
   public static final String OLD_USER_ID = "olduserid"; // email verification is the owner
+  public Gson gson = new Gson();
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -92,7 +93,6 @@ public class ProfileServlet extends HttpServlet {
     // Trim at end where 0 chars are present.
     int count = clientProfileJson.length();
     while (clientProfileJson.charAt(--count) == 0);
-    Gson gson = new Gson();
     System.out.println("saveUserProfile:" + clientProfileJson.substring(0, count + 1));
     // Get profile data and sync with existing one
     ProfileData clientProfile = gson.fromJson(clientProfileJson.substring(0, count+1), ProfileData.class);
@@ -100,13 +100,12 @@ public class ProfileServlet extends HttpServlet {
     EmbeddedEntity serverProfileEntity = createOrGetUserProfile(user, true);
     
     // Client Properties
-    Text storedClientPropertiesJson = (Text) serverProfileEntity.getProperty(ProfileData.CLIENT_PROPS);
-    ClientProps storedClientProperties = storedClientPropertiesJson != null ? gson.fromJson(storedClientPropertiesJson.getValue(),  ProfileData.ClientProps.class) : new ClientProps();
+    ClientProps storedClientProperties = (ClientProps) getFromJsonTextProperty(gson, serverProfileEntity, ProfileData.CLIENT_PROPS, ClientProps.class);
     ClientProps clientProperties = clientProfile.client;
     if (clientProperties.lastUpdated > storedClientProperties.lastUpdated) {
-      serverProfileEntity.setProperty(ProfileData.CLIENT_PROPS, new Text(gson.toJson(clientProperties)));
+      setAsJsonTextProperty(gson, serverProfileEntity, ProfileData.CLIENT_PROPS, clientProperties);
     } else {
-      serverProfileEntity.setProperty(ProfileData.CLIENT_PROPS, new Text(gson.toJson(storedClientProperties)));
+      setAsJsonTextProperty(gson, serverProfileEntity, ProfileData.CLIENT_PROPS, storedClientProperties);
     }
     
     // TopicStats
@@ -115,15 +114,13 @@ public class ProfileServlet extends HttpServlet {
       topicStatsEntity = new EmbeddedEntity();
     }
     for (Map.Entry<String, Map<String, float[]>> topicStats: clientProfile.topicStats.entrySet()) {
-      String topicStatsJson = gson.toJson(topicStats.getValue());
-      topicStatsEntity.setProperty(topicStats.getKey(), new Text(topicStatsJson));
+      setAsJsonTextProperty(gson, topicStatsEntity, topicStats.getKey(), topicStats.getValue());
     }
     serverProfileEntity.setProperty(ProfileData.TOPIC_STATS, topicStatsEntity);
     
     // Social
     // extract server profile social
-    Text serverSocialJson = (Text) serverProfileEntity.getProperty(ProfileData.SOCIAL);
-    Social serverSocial = serverSocialJson != null ? gson.fromJson(serverSocialJson.getValue(), ProfileData.Social.class) : new Social();
+    Social serverSocial = (Social) getFromJsonTextProperty(gson, serverProfileEntity, ProfileData.SOCIAL, Social.class);
     Social clientSocial = clientProfile.social;
     // Clear out all outbox messages from client
     for (Message msg: clientSocial.outbox) {
@@ -138,28 +135,45 @@ public class ProfileServlet extends HttpServlet {
       } 
       // add gift to inbox of toUser's social
       // TODO: We should ideally lock toUser but we are being careless here
-      Text toSocialJson = (Text) toUserProfile.getProperty(ProfileData.SOCIAL);
-      Social toSocial = toSocialJson != null 
-          ? gson.fromJson(toSocialJson.getValue(), ProfileData.Social.class)
-          : new Social();
+      Social toSocial = (Social) getFromJsonTextProperty(gson, toUserProfile, ProfileData.SOCIAL, Social.class); 
       System.out.println("Transferring Gift " + msg.messageId + " to " + toEmail);
       msg.messageId = toSocial.lastInboxMessageId++;
       msg.email = userId;
       toSocial.inbox.add(msg);
-      toUserProfile.setProperty(ProfileData.SOCIAL, new Text(gson.toJson(toSocial)));
+      setAsJsonTextProperty(gson, toUserProfile, ProfileData.SOCIAL, toSocial);
       ds.put(toUser);
     }
     serverSocial.lastOutboxMessageId = clientSocial.lastOutboxMessageId;
     // Merge in friends list - for now copy over from client.
     serverSocial.friends = clientSocial.friends;
     
-    serverProfileEntity.setProperty(ProfileData.SOCIAL, new Text(gson.toJson(serverSocial)));
+    setAsJsonTextProperty(gson, serverProfileEntity, ProfileData.SOCIAL, serverSocial);
     ds.put(user);
     // If retrieved user is for requested userid and not forwarded
     if (userId.equals(user.getKey().getName())) {
       return (String) user.getProperty(OLD_USER_ID);
     }
     return null;
+  }
+  
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public static Object getFromJsonTextProperty(Gson gson, EmbeddedEntity entity, String name, Class clz) {
+    Text objectJson = (Text) entity.getProperty(name);
+    try {
+      if (objectJson != null) {
+        return gson.fromJson(objectJson.getValue(), clz);
+      }
+      Constructor c = clz.getConstructor(new Class[0]);
+      return c.newInstance(new Object[0]);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+  
+  public static void setAsJsonTextProperty(Gson gson,
+      EmbeddedEntity entity, String name, Object javaObj) {
+    entity.setProperty(name, new Text(gson.toJson(javaObj)));
   }
   
   private void sendUserInvite(String fromEmail, String toEmail) {
@@ -272,4 +286,5 @@ public class ProfileServlet extends HttpServlet {
   public static Entity retrieveUser(String userId, DatastoreService ds) {
     return createOrGetUser(userId, ds, false);
   }
+
 }
