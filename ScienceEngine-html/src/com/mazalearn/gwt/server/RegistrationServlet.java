@@ -23,7 +23,10 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Text;
+import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
@@ -55,14 +58,19 @@ public class RegistrationServlet extends HttpServlet {
       response.getWriter().append("Improper name. Cannot register");
       return;
     }
-    profile.setProperty(ProfileData.SEX, request.getParameter(ProfileData.SEX));
-    profile.setProperty(ProfileData.GRADE, request.getParameter(ProfileData.GRADE));
-    profile.setProperty(ProfileData.SCHOOL, request.getParameter(ProfileData.SCHOOL));
-    profile.setProperty(ProfileData.CITY, request.getParameter(ProfileData.CITY));
-    profile.setProperty(ProfileData.COMMENTS, request.getParameter(ProfileData.COMMENTS));
+    Gson gson = new Gson();
+    Text serverPropsJson = (Text) profile.getProperty(ProfileData.SERVER_PROPS);
+    ServerProps serverProps = (serverPropsJson != null ? gson.fromJson(serverPropsJson.getValue(), ServerProps.class) : new ServerProps());
+    serverProps.sex = request.getParameter(ProfileData.SEX);
+    serverProps.grade = request.getParameter(ProfileData.GRADE);
+    serverProps.school = request.getParameter(ProfileData.SCHOOL);
+    serverProps.city = request.getParameter(ProfileData.CITY);
+    serverProps.comments = request.getParameter(ProfileData.COMMENTS);
     Date date = new Date();
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    profile.setProperty(ProfileData.REGN_DATE, dateFormat.format(date));
+    serverProps.registrationDate = dateFormat.format(date);
+    profile.setProperty(ProfileData.SERVER_PROPS, gson.toJson(serverProps));
+    
     ds.put(user);
 
    sendUserEmail(userEmail, userName, userId);

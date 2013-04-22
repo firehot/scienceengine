@@ -4,36 +4,57 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ProfileData {
-  // Client owns below data items and can read and write. Server can only read.
   public static final String USER_EMAIL = "useremail";
-  public static final String PLATFORM = "platform";
-  public static final String COLOR = "color";
-  public static final String CURRENT = "current";
   public static final String INSTALL_ID = "installid";
-  public static final String TOPIC = "topic";
-  public static final String LAST_ACTIVITY = "last_activity";
-  public static final String ACTIVITY = "activity";
-  public static final String PNG = "png";
-  public static final String USER_PNG = PNG + "user";
-  public static final String COACH_PNG = PNG + "coach";
-  // Server owns below data items and can read and write. Client can only read.
   public static final String USER_NAME = "username";
   public static final String USER_ID = "userid";
+  public static final String LAST_UPDATED = "lastupdated";
   public static final String SEX = "sex";
   public static final String GRADE = "grade";
   public static final String SCHOOL = "school";
   public static final String CITY = "city";
   public static final String COMMENTS = "comments";
-  public static final String REGN_DATE = "regndate";
-  // Changed by both server and client
-  public static final String LAST_UPDATED = "last_updated";
+  public static final String COLOR = "color";
+  public static final String CURRENT = "current";
+  public static final String PNG = "png";
+  
   public static final String SOCIAL = "social";
+  public static final String CLIENT_PROPS = "client";
+  public static final String SERVER_PROPS = "server";
+  public static final String TOPIC_STATS = "topicstats";
 
-  public Map<String, Map<String, float[]>> topicStats;
-  public Map<String, String> properties;
   public transient Map<String, float[]> currentTopicStats;
-  public ProfileData.Social social;
 
+  public ClientProps client;
+  public ServerProps server;
+  public Map<String, Map<String, float[]>> topicStats;
+  public ProfileData.Social social;
+  
+  public static class ClientProps {
+    public String userEmail;
+    public String platform;
+    public String color;
+    public float current;
+    public String installId;
+    public String topic;
+    public String lastActivity;
+    public String activity;
+    public String pngUser;
+    public String pngCoach;
+    public long lastUpdated;
+  }
+  public static class ServerProps {
+    public String userName;
+    public String userId;
+    public String sex;
+    public String grade;
+    public String school;
+    public String city;
+    public String comments;
+    public String registrationDate;
+    public long lastUpdated;
+  }
+  
   public static class Social {
     public static class Message {
       // Following params should all be set only once

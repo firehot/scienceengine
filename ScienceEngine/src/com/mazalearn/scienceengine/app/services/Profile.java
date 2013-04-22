@@ -18,6 +18,8 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
+import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.tutor.ITutor;
@@ -40,8 +42,9 @@ public class Profile implements Serializable {
       if (topic.getChildren().length == 0) continue;
       data.topicStats.put(topic.name(), new HashMap<String, float[]>());
     }
-    data.properties = new HashMap<String, String>();
-    data.properties.put(ProfileData.INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
+    data.client = new ClientProps();
+    data.server = new ServerProps();
+    data.client.installId = ScienceEngine.getPlatformAdapter().getInstallationId();
     data.social = new ProfileData.Social();
   }
 
@@ -49,8 +52,8 @@ public class Profile implements Serializable {
     Topic activity = getCurrentActivity();
     if (level == activity) return;
     
-    data.properties.put(ProfileData.LAST_ACTIVITY, activity != null ? activity.name() : "");
-    data.properties.put(ProfileData.ACTIVITY, level != null ? level.name() : "");
+    data.client.lastActivity = activity != null ? activity.name() : "";
+    data.client.activity = level != null ? level.name() : "";
     save();
   }
   
@@ -58,7 +61,7 @@ public class Profile implements Serializable {
    * Retrieves the ID of the current level.
    */
   public Topic getCurrentActivity() {
-    String levelStr = data.properties.get(ProfileData.ACTIVITY);
+    String levelStr = data.client.activity;
     if (levelStr == null) return null;
     try {
       return Topic.valueOf(levelStr);
@@ -71,7 +74,7 @@ public class Profile implements Serializable {
    * Retrieves the ID of the previous active level.
    */
   public Topic getLastActivity() {
-    String levelStr = data.properties.get(ProfileData.LAST_ACTIVITY);
+    String levelStr = data.client.lastActivity;
     if (levelStr == null) return null;
     try {
       return Topic.valueOf(levelStr);
@@ -86,10 +89,15 @@ public class Profile implements Serializable {
   @Override
   public void read(Json json, OrderedMap<String, Object> jsonData) {
 
-    data.properties = json.readValue("properties", HashMap.class, String.class, jsonData);
-    if (data.properties == null) {
-      data.properties = new HashMap<String,String>();
-      data.properties.put(ProfileData.INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
+    data.client = json.readValue("client", ClientProps.class, jsonData);
+    if (data.client == null) {
+      data.client = new ClientProps();
+      data.client.installId = ScienceEngine.getPlatformAdapter().getInstallationId();
+    }
+    
+    data.server = json.readValue("server", ServerProps.class, jsonData);
+    if (data.server == null) {
+      data.server = new ServerProps();
     }
     
     Object topicObj = json.readValue("topicStats", OrderedMap.class, OrderedMap.class, jsonData);
@@ -107,14 +115,15 @@ public class Profile implements Serializable {
     // Set current topic
     Topic currentTopic = Topic.Electromagnetism;
     try {
-      currentTopic = Topic.valueOf(data.properties.get(ProfileData.TOPIC));
+      currentTopic = Topic.valueOf(data.client.topic);
     } catch (Exception ignored) {}
     data.currentTopicStats = data.topicStats.get(currentTopic.name());
   }
 
   @Override
   public void write(Json json) {
-    json.writeValue("properties", data.properties);
+    json.writeValue("client", data.client);
+    // No need to send server values
     json.writeObjectStart("topicStats");
     for (Topic topic: Topic.values()) {
       Map<String,?> props = data.topicStats.get(topic.name());
@@ -127,8 +136,8 @@ public class Profile implements Serializable {
   }
 
   public void setCurrentTopic(Topic topic) {
-    if (topic != null && topic.name().equals(data.properties.get(ProfileData.TOPIC))) return;
-    data.properties.put(ProfileData.TOPIC, topic != null ? topic.name() : null);
+    if (topic != null && topic.name().equals(data.client.topic)) return;
+    data.client.topic = topic != null ? topic.name() : null;
     data.currentTopicStats = data.topicStats.get(topic != null ? topic.name() : topic);
     if (data.currentTopicStats == null && topic != null) {
       data.currentTopicStats = new HashMap<String, float[]>();
@@ -138,7 +147,7 @@ public class Profile implements Serializable {
   }
   
   public Topic getCurrentTopic() {
-    String s = data.properties.get(ProfileData.TOPIC);
+    String s = data.client.topic;
     try {
       return s == null || s.length() == 0 ? null : Topic.valueOf(s);
     } catch (IllegalArgumentException e) {
@@ -147,31 +156,22 @@ public class Profile implements Serializable {
   }
 
   public String getUserName() {
-    String s = data.properties.get(ProfileData.USER_NAME);
+    String s = data.server.userName;
     return s == null ? GUEST : s;
   }
 
   public String getUserEmail() {
-    String s = data.properties.get(ProfileData.USER_ID);
+    String s = data.server.userId;
     return s == null ? "" : s;
   }
 
   void testSetUserEmail(String userEmail) {
-    data.properties.put(ProfileData.USER_ID, userEmail);
+    data.server.userId = userEmail;
   }
   
   public void save() {
-    data.properties.put(ProfileData.LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
+    data.client.lastUpdated = System.currentTimeMillis();
     ScienceEngine.getPreferencesManager().saveUserProfile();
-  }
-  
-  public long getLastUpdated() {
-    try {
-      String lastUpdated = data.properties.get(ProfileData.LAST_UPDATED);
-      return Long.parseLong(lastUpdated);
-    } catch (IllegalArgumentException e) {
-      return 0;
-    }
   }
   
   public void addFriend(String friendEmail) {
@@ -222,29 +222,29 @@ public class Profile implements Serializable {
     return data.social.inbox;
   }
 
-  public void setCoachPixmap(Pixmap coachPixmap, String current, String color) {
+  public void setCoachPixmap(Pixmap coachPixmap, float current, String color) {
     byte[] coachPngBytes = ScienceEngine.getPlatformAdapter().pixmap2Bytes(coachPixmap);
     Gdx.app.error(ScienceEngine.LOG, " bytes = " + coachPngBytes.length);
-    data.properties.put(ProfileData.COACH_PNG, new String(Base64Coder.encode(coachPngBytes)));
-    data.properties.put(ProfileData.CURRENT, current);
-    data.properties.put(ProfileData.COLOR, color);
+    data.client.pngCoach = new String(Base64Coder.encode(coachPngBytes));
+    data.client.current = current;
+    data.client.color = color;
     save();
   }
   
   public Pixmap getCoachPixmap() {
-    String png = data.properties.get(ProfileData.COACH_PNG);
+    String png = data.client.pngCoach;
     return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
   public void setUserPixmap(Pixmap userPixmap) {
     byte[] userPngBytes = ScienceEngine.getPlatformAdapter().pixmap2Bytes(userPixmap);
     Gdx.app.error(ScienceEngine.LOG, " bytes = " + userPngBytes.length);
-    data.properties.put(ProfileData.USER_PNG, new String(Base64Coder.encode(userPngBytes)));
+    data.client.pngUser = new String(Base64Coder.encode(userPngBytes));
     save();
   }
   
   public Pixmap getUserPixmap() {
-    String png = data.properties.get(ProfileData.USER_PNG);
+    String png = data.client.pngUser;
     return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
@@ -276,11 +276,11 @@ public class Profile implements Serializable {
   }
 
   public void setPlatform(Platform platform) {
-    data.properties.put(ProfileData.PLATFORM, platform.name());
+    data.client.platform = platform.name();
   }
 
   public String getInstallationId() {
-    return data.properties.get(ProfileData.INSTALL_ID);
+    return data.client.installId;
   }
 
   public static Profile fromBase64(String profileBase64) {
@@ -310,11 +310,11 @@ public class Profile implements Serializable {
     Profile serverProfile = fromBase64(serverProfileBase64);
     if (serverProfile != null) {
       // Other profile is later - merge other on top of this
-      if (serverProfile.getLastUpdated() > getLastUpdated()) {
-        data.properties.putAll(serverProfile.data.properties);
-      } else {
-        serverProfile.data.properties.putAll(data.properties);
-        data.properties = serverProfile.data.properties;
+      if (serverProfile.data.client.lastUpdated > data.client.lastUpdated) {
+        data.client = serverProfile.data.client;
+      }
+      if (serverProfile.data.server != null) {
+        data.server = serverProfile.data.server;
       }
       // Get inbox messages from server into local inbox
       for (Message msg: serverProfile.data.social.inbox) {

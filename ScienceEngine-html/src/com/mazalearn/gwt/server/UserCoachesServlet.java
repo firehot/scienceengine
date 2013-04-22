@@ -13,10 +13,11 @@ import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Text;
+import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
+import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 
 @SuppressWarnings("serial")
 public class UserCoachesServlet extends HttpServlet {
@@ -32,16 +33,13 @@ public class UserCoachesServlet extends HttpServlet {
     // Get the Datastore Service
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    Filter colorPresentFilter =
-      new FilterPredicate(ProfileData.COLOR, FilterOperator.NOT_EQUAL, null);
-
     // Use class Query to assemble a query
     Query q = new Query("User"); // .setFilter(colorPresentFilter);
 
     // Use PreparedQuery interface to retrieve results
     PreparedQuery pq = datastore.prepare(q);
 
-
+    Gson gson = new Gson();
     String jsonStr = "[";
     boolean firstCoach = true;
     for (Entity user : pq.asIterable()) {
@@ -49,20 +47,26 @@ public class UserCoachesServlet extends HttpServlet {
       String userId = user.getKey().getName();
       System.out.println(userId);
       if (profileEntity == null) continue;
-      if (profileEntity.getProperty(ProfileData.COLOR) == null) continue;
+      
+      Text clientPropsText = (Text) profileEntity.getProperty(ProfileData.CLIENT_PROPS);
+      if (clientPropsText == null) continue;
+      ClientProps clientProps = gson.fromJson(clientPropsText.getValue(), ClientProps.class);
+      if (clientProps.color == null) continue;
       if (profileEntity.getProperty(ProfileData.CURRENT) == null) continue;
-      String color = (String) profileEntity.getProperty(ProfileData.COLOR);
-      String userName = (String) profileEntity.getProperty(ProfileData.USER_NAME);
-      float currentValue = Float.parseFloat((String) profileEntity.getProperty(ProfileData.CURRENT));
-      String current = String.format("%2.2f", currentValue);
+      
+      Text serverPropsText = (Text) profileEntity.getProperty(ProfileData.SERVER_PROPS);
+      if (serverPropsText == null) continue;
+      ServerProps serverProps = gson.fromJson(serverPropsText.getValue(), ServerProps.class);
+      
+      String current = String.format("%2.2f", clientProps.current);
       if (!firstCoach) {
         jsonStr += ",";
       }
       firstCoach = false;
       jsonStr += "{";
-      jsonStr += "\"" + ProfileData.USER_ID + "\":\"" + userId + "\"";
-      jsonStr += ",\"" + ProfileData.COLOR + "\":\"" + color + "\"";
-      jsonStr += ",\"" + ProfileData.USER_NAME + "\":\"" + userName + "\"";
+      jsonStr += "\"" + ProfileData.USER_ID + "\":\"" + serverProps.userId + "\"";
+      jsonStr += ",\"" + ProfileData.COLOR + "\":\"" + clientProps.color + "\"";
+      jsonStr += ",\"" + ProfileData.USER_NAME + "\":\"" + serverProps.userName + "\"";
       jsonStr += ",\"" + ProfileData.CURRENT + "\":" + current;
       jsonStr += "}\n";
     }

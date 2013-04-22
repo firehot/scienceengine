@@ -106,7 +106,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     // Save drawing png in profile
     Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     // Save drawing, current and color in profile
-    profile.setCoachPixmap(drawingActor.getPixmap(), String.valueOf(current), rgba(color));
+    profile.setCoachPixmap(drawingActor.getPixmap(), current, rgba(color));
     ScienceEngine.displayStatusMessage(this, StatusType.INFO, "Uploading to MazaLearn - See www.mazalearn.com/train.html");    
   }
 

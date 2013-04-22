@@ -28,6 +28,8 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
+import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 
@@ -96,21 +98,28 @@ public class ProfileServlet extends HttpServlet {
     ProfileData clientProfile = gson.fromJson(clientProfileJson.substring(0, count+1), ProfileData.class);
     
     EmbeddedEntity serverProfileEntity = createOrGetUserProfile(user, true);
-    // Properties
-    for (Map.Entry<String, String> entry: clientProfile.properties.entrySet()) {
-      if (entry.getKey().startsWith(ProfileData.PNG)) { // Too large and base64encoded - store as TEXT
-        if (entry.getValue() != null) {
-          serverProfileEntity.setProperty(entry.getKey(), new Text(entry.getValue()));
-        }
-      } else {
-        serverProfileEntity.setProperty(entry.getKey(), entry.getValue());
-      }
+    
+    // Client Properties
+    Text storedClientPropertiesJson = (Text) serverProfileEntity.getProperty(ProfileData.CLIENT_PROPS);
+    ClientProps storedClientProperties = storedClientPropertiesJson != null ? gson.fromJson(storedClientPropertiesJson.getValue(),  ProfileData.ClientProps.class) : new ClientProps();
+    ClientProps clientProperties = clientProfile.client;
+    if (clientProperties.lastUpdated > storedClientProperties.lastUpdated) {
+      serverProfileEntity.setProperty(ProfileData.CLIENT_PROPS, new Text(gson.toJson(clientProperties)));
+    } else {
+      serverProfileEntity.setProperty(ProfileData.CLIENT_PROPS, new Text(gson.toJson(storedClientProperties)));
     }
+    
     // TopicStats
-    for (Map.Entry<String, Map<String, float[]>> topicStats: clientProfile.topicStats.entrySet()) {
-      String jsonStats = gson.toJson(topicStats.getValue());
-      serverProfileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
+    EmbeddedEntity topicStatsEntity = (EmbeddedEntity) serverProfileEntity.getProperty(ProfileData.TOPIC_STATS);
+    if (topicStatsEntity == null) {
+      topicStatsEntity = new EmbeddedEntity();
     }
+    for (Map.Entry<String, Map<String, float[]>> topicStats: clientProfile.topicStats.entrySet()) {
+      String topicStatsJson = gson.toJson(topicStats.getValue());
+      topicStatsEntity.setProperty(topicStats.getKey(), new Text(topicStatsJson));
+    }
+    serverProfileEntity.setProperty(ProfileData.TOPIC_STATS, topicStatsEntity);
+    
     // Social
     // extract server profile social
     Text serverSocialJson = (Text) serverProfileEntity.getProperty(ProfileData.SOCIAL);
@@ -223,33 +232,35 @@ public class ProfileServlet extends HttpServlet {
     }
     
     System.out.println("getUserProfileAsBase64: " + profileEntity);
-    String social = "{}";
-    StringBuilder properties = new StringBuilder("{");
-    StringBuilder topicStats = new StringBuilder("{");
-    String propDelimiter = "", topicDelimiter = "";
+    
+    StringBuilder json = new StringBuilder("{");
+    String topicDelimiter = "";
     for (Map.Entry<String, Object> property: profileEntity.getProperties().entrySet()) {
       Object value = property.getValue();
       if (value instanceof Text) {
-        String s = ((Text) value).getValue();
-        if (property.getKey().startsWith(ProfileData.PNG)) {
-          properties.append(propDelimiter + property.getKey() + ":\"" + s + "\"");
-          propDelimiter = ",";
-        } else if (property.getKey().equals(ProfileData.SOCIAL)) {
-          social = s;
-        } else if (!"null".equals(s)) {
-          topicStats.append(topicDelimiter + property.getKey() + ":" + s);
+        String v = (value == null) ? "{}" : ((Text) value).getValue();
+        if (!"null".equals(v)) {
+          json.append(topicDelimiter + property.getKey() + ":" + v);
           topicDelimiter = ",";
         }
-      } else {
-        properties.append(propDelimiter + property.getKey() + ":\"" + value + "\"");
-        propDelimiter = ",";
       }
     }
-    properties.append("}");
-    topicStats.append("}");
-    String json = "{ properties:" + properties + ",topicStats:" + topicStats + ",social:" + social + "}";
+    
+    EmbeddedEntity topicStatsEntity = (EmbeddedEntity) profileEntity.getProperty(ProfileData.TOPIC_STATS);
+    topicDelimiter = ", topicStats: { ";
+    for (Map.Entry<String, Object> property: topicStatsEntity.getProperties().entrySet()) {
+      Object value = property.getValue();
+      if (value instanceof Text) {
+        String v = (value == null) ? "{}" : ((Text) value).getValue();
+        if (!"null".equals(v)) {
+          json.append(topicDelimiter + property.getKey() + ":" + v);
+          topicDelimiter = ",";
+        }
+      }
+    }
+    json.append("}}");
     System.out.println("getUserProfileAsBase64: " + json);
-    String profileStringBase64 = Base64.encode(json);
+    String profileStringBase64 = Base64.encode(json.toString());
     return profileStringBase64;
   }
 
