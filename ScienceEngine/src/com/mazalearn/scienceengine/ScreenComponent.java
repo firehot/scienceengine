@@ -21,7 +21,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 32, 32, -1, Color.CLEAR, true, false),
   GoButton(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 60, 60, -1, Color.CLEAR, false, true),
   GoButtonDown(XAlign.CENTER, 0, YAlign.TOP, -30, 0, 0, -1, Color.CLEAR, false, false),
-  Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, -15, 0, 0, -1, Color.BLACK, false, true),
+  Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, 0, 0, 0, -1, Color.BLACK, true, true),
   Idea(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 60, -1, Color.BLACK, false, false),
   NextButton(XAlign.CENTER, 108, YAlign.TOP, -70, 0, 0, -1, Color.CLEAR, false, false), 
   ImageMessageBox(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, false), 

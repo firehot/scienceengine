@@ -7,11 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
 public class Scoreboard extends Table {
   private Label scoreLabel;
   private ITutor tutor;
+  private Profile profile;
 
   public Scoreboard(Skin skin) {
     super(skin);
@@ -24,15 +26,15 @@ public class Scoreboard extends Table {
     this.add(new Image(ScienceEngine.getTextureRegion("goldcoins"))).width(40).height(30).top();
     this.row();
     this.add(scoreLabel).width(40).fill().top();
-    
-    this.setPosition(ScreenComponent.Scoreboard.getX(getWidth()) + getWidth() / 2,
-        ScreenComponent.Scoreboard.getY(getHeight()) + getHeight() / 2);
+    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
   }
 
   @Override
   public void act(float delta) {
     if (tutor != null) {
-      scoreLabel.setText(String.valueOf(Math.round(tutor.getStats()[ITutor.POINTS])));
+      int tutorPoints = Math.round(tutor.getStats()[ITutor.POINTS]);
+      int giftPoints = profile.getGiftPoints();
+      scoreLabel.setText(String.valueOf(tutorPoints + giftPoints));
     }
   }
   

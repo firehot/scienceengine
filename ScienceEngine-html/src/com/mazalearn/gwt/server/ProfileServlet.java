@@ -2,8 +2,16 @@ package com.mazalearn.gwt.server;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +28,8 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 
 @SuppressWarnings("serial")
 public class ProfileServlet extends HttpServlet {
@@ -74,31 +84,67 @@ public class ProfileServlet extends HttpServlet {
   private String saveUserProfile(String userId, byte[] profileBytes, DatastoreService ds) 
       throws IllegalStateException {
     Entity user = createOrGetUser(userId, ds, true);
-    String profileStringBase64 = new String(profileBytes);
-    String profileStringJson = new String(Base64.decode(profileStringBase64));
+    String clientProfileBase64 = new String(profileBytes);
+    String clientProfileJson = new String(Base64.decode(clientProfileBase64));
     
     // Trim at end where 0 chars are present.
-    int count = profileStringJson.length();
-    while (profileStringJson.charAt(--count) == 0);
+    int count = clientProfileJson.length();
+    while (clientProfileJson.charAt(--count) == 0);
     Gson gson = new Gson();
-    System.out.println(profileStringJson.substring(0, count + 1));
-    ProfileData profile = gson.fromJson(profileStringJson.substring(0, count+1), ProfileData.class);
+    System.out.println("saveUserProfile:" + clientProfileJson.substring(0, count + 1));
+    // Get profile data and sync with existing one
+    ProfileData clientProfile = gson.fromJson(clientProfileJson.substring(0, count+1), ProfileData.class);
     
-    EmbeddedEntity profileEntity = createOrGetUserProfile(user, true);
-    for (Map.Entry<String, String> entry: profile.properties.entrySet()) {
+    EmbeddedEntity serverProfileEntity = createOrGetUserProfile(user, true);
+    // Properties
+    for (Map.Entry<String, String> entry: clientProfile.properties.entrySet()) {
       if (entry.getKey().startsWith(ProfileData.PNG)) { // Too large and base64encoded - store as TEXT
         if (entry.getValue() != null) {
-          profileEntity.setProperty(entry.getKey(), new Text(entry.getValue()));
+          serverProfileEntity.setProperty(entry.getKey(), new Text(entry.getValue()));
         }
       } else {
-        profileEntity.setProperty(entry.getKey(), entry.getValue());
+        serverProfileEntity.setProperty(entry.getKey(), entry.getValue());
       }
     }
-    for (Map.Entry<String, Map<String, float[]>> topicStats: profile.topicStats.entrySet()) {
+    // TopicStats
+    for (Map.Entry<String, Map<String, float[]>> topicStats: clientProfile.topicStats.entrySet()) {
       String jsonStats = gson.toJson(topicStats.getValue());
-      profileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
+      serverProfileEntity.setProperty(topicStats.getKey(), new Text(jsonStats));
     }
-    profileEntity.setProperty(ProfileData.SOCIAL, new Text(gson.toJson(profile.social)));
+    // Social
+    // extract server profile social
+    Text serverSocialJson = (Text) serverProfileEntity.getProperty(ProfileData.SOCIAL);
+    Social serverSocial = serverSocialJson != null ? gson.fromJson(serverSocialJson.getValue(), ProfileData.Social.class) : new Social();
+    Social clientSocial = clientProfile.social;
+    // Clear out all outbox messages from client
+    for (Message msg: clientSocial.outbox) {
+      // If message has already been processed, ignore it.
+      if (msg.messageId < serverSocial.lastOutboxMessageId) continue;
+      String toEmail = msg.email;
+      Entity toUser = createOrGetUser(toEmail, ds, true);
+      EmbeddedEntity toUserProfile = createOrGetUserProfile(toUser, true);
+      // If toUser has no installation, send an email invite
+      if (toUserProfile.getProperty(ProfileData.INSTALL_ID) == null) {
+        sendUserInvite(userId, toEmail);
+      } 
+      // add gift to inbox of toUser's social
+      // TODO: We should ideally lock toUser but we are being careless here
+      Text toSocialJson = (Text) toUserProfile.getProperty(ProfileData.SOCIAL);
+      Social toSocial = toSocialJson != null 
+          ? gson.fromJson(toSocialJson.getValue(), ProfileData.Social.class)
+          : new Social();
+      System.out.println("Transferring Gift " + msg.messageId + " to " + toEmail);
+      msg.messageId = toSocial.lastInboxMessageId++;
+      msg.email = userId;
+      toSocial.inbox.add(msg);
+      toUserProfile.setProperty(ProfileData.SOCIAL, new Text(gson.toJson(toSocial)));
+      ds.put(toUser);
+    }
+    serverSocial.lastOutboxMessageId = clientSocial.lastOutboxMessageId;
+    // Merge in friends list - for now copy over from client.
+    serverSocial.friends = clientSocial.friends;
+    
+    serverProfileEntity.setProperty(ProfileData.SOCIAL, new Text(gson.toJson(serverSocial)));
     ds.put(user);
     // If retrieved user is for requested userid and not forwarded
     if (userId.equals(user.getKey().getName())) {
@@ -106,6 +152,34 @@ public class ProfileServlet extends HttpServlet {
     }
     return null;
   }
+  
+  private void sendUserInvite(String fromEmail, String toEmail) {
+    Properties properties = new Properties();
+    Session session = Session.getDefaultInstance(properties, null);
+
+    String msgBody = 
+    		"Your friend " + toEmail + " has sent you a Science gift." +
+        "\nTo use the gift, you have to install Science Engine." +
+        "\n\n-MazaLearn";
+
+    try {
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress("admin@mazalearn.com", "Mazalearn Admin"));
+        msg.addRecipient(MimeMessage.RecipientType.TO,
+                         new InternetAddress(toEmail, "User"));
+        msg.setSubject("Collect Science Engine Gift sent by " + toEmail);
+        msg.setText(msgBody);
+        Transport.send(msg);
+
+    } catch (AddressException e) {
+        // ...
+    } catch (MessagingException e) {
+        // ...
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }    
+  }
+
 
   public static EmbeddedEntity createOrGetUserProfile(Entity user, boolean create) {
     if (user == null) return null;
@@ -148,7 +222,7 @@ public class ProfileServlet extends HttpServlet {
       return "";
     }
     
-    System.out.println(profileEntity);
+    System.out.println("getUserProfileAsBase64: " + profileEntity);
     String social = "{}";
     StringBuilder properties = new StringBuilder("{");
     StringBuilder topicStats = new StringBuilder("{");
@@ -174,7 +248,7 @@ public class ProfileServlet extends HttpServlet {
     properties.append("}");
     topicStats.append("}");
     String json = "{ properties:" + properties + ",topicStats:" + topicStats + ",social:" + social + "}";
-    System.out.println(json);
+    System.out.println("getUserProfileAsBase64: " + json);
     String profileStringBase64 = Base64.encode(json);
     return profileStringBase64;
   }

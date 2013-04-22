@@ -98,7 +98,7 @@ public class ProfileTest {
     msg.text = "text";
     msg.image = "image";
     msg.points = 500;
-    profile.postMessage(msg);
+    profile.sendGift(msg);
     assertEquals(1, profile.getOutbox().size());
     profile.save();
     Message msg2 = profile.getOutbox().get(0);

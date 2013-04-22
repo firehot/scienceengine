@@ -6,7 +6,6 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -28,7 +27,7 @@ import com.mazalearn.scienceengine.core.view.DrawingActor;
 public class UserHomeDialog extends Dialog {
   
   private static final int GIFT_WIDTH = 150;
-  private static final int GIFT_HEIGHT = 100;
+  static final int GIFT_HEIGHT = 100;
   private static final int CERTIFICATE_WIDTH = 75;
   private static final int CERTIFICATE_HEIGHT = 50;
   private static final boolean ENABLE_SOCIAL = true;
@@ -124,22 +123,22 @@ public class UserHomeDialog extends Dialog {
     contentTable.add("Send Gifts to Friends");
     contentTable.row();
     
-    Actor waitingGiftsPane = createWaitingGiftsPane(this, getStage(), profile.getInbox(), skin);
-    contentTable.add(waitingGiftsPane).width(400);
+    Actor waitingGiftsPane = createWaitingGiftsPane(this, profile.getInbox(), skin);
+    contentTable.add(waitingGiftsPane).width(400).height(GIFT_HEIGHT);
     contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f);
     contentTable.row();
   }
 
   public static Actor createWaitingGiftsPane(final Dialog parentDialog, 
-      final Stage stage, List<Message> giftBox, final Skin skin) {
+      List<Message> giftBox, final Skin skin) {
     List<TextButton> list = new ArrayList<TextButton>();
     for (final Message gift: giftBox) {
-      TextButton item = createItem(skin, GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
+      final TextButton item = createItem(skin, GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
       list.add(item);
       item.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          new ShowGiftDialog(skin, gift, parentDialog).show(stage);
+          new ShowGiftDialog(skin, gift, item, parentDialog).show(parentDialog.getStage());
         }
 
       });

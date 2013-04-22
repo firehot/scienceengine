@@ -33,7 +33,6 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.core.view.Science2DGestureDetector;
-import com.mazalearn.scienceengine.core.view.Scoreboard;
 import com.mazalearn.scienceengine.domains.electromagnetism.ElectroMagnetismController;
 import com.mazalearn.scienceengine.domains.statesofmatter.StatesOfMatterController;
 import com.mazalearn.scienceengine.domains.waves.WaveController;
@@ -111,9 +110,6 @@ public class ActivityScreen extends AbstractScreen {
     // Add TimeTracker
     Actor timeTracker = new TimeTracker("0", getSkin());
     coreGroup.addActor(timeTracker);
-    // Add scoreboard
-    Actor scoreboard = new Scoreboard(getSkin());
-    coreGroup.addActor(scoreboard);
     
     // If GWT, display a disclaimer about experiencing on a Tablet
     if (ScienceEngine.getPlatformAdapter().getPlatform() == Platform.GWT) {

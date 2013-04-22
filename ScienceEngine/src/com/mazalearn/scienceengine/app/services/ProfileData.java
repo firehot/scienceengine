@@ -54,11 +54,12 @@ public class ProfileData {
         this.points = other.points;
       }
     }
-    String[] friends;
-    ArrayList<Message> inbox; // only server can add, only client can remove 
-    ArrayList<Message> outbox; // only client can add, only server can remove
-    int lastInboxMessageId;
-    int lastOutboxMessageId;
+    public String[] friends;
+    public ArrayList<Message> inbox; // server can only add, client can only remove 
+    public ArrayList<Message> outbox; // client can only add, server can only remove
+    public int lastInboxMessageId;
+    public int lastOutboxMessageId;
+    public int points;
     
     public Social() {
       inbox = new ArrayList<Message>();

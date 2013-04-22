@@ -26,6 +26,7 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.Scoreboard;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 
 /**
@@ -196,6 +197,8 @@ public abstract class AbstractScreen implements Screen {
         }
         return actor;
       }
+      case Scoreboard:
+        return new Scoreboard(getSkin());
     default:
       return null;
     }

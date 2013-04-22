@@ -134,13 +134,13 @@ public class PreferencesManager {
 
   private void saveProfile(Profile profile) {
     // convert the given userProfile to text
-    String localProfileBase64 = profile.toBase64();
     String userId = getProfileUserId();
     String serverProfileBase64 = prefs.getString(SERVER_PROFILE_PREFIX + userId);
     if (serverProfileBase64 != null) {
       profile.mergeProfile(serverProfileBase64);
       prefs.remove(SERVER_PROFILE_PREFIX + userId);
     }
+    String localProfileBase64 = profile.toBase64();
 
     String savedProfile = prefs.getString(userId);
     // No need to save if already up to date

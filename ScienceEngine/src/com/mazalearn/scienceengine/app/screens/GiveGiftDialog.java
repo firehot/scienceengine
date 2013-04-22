@@ -30,9 +30,9 @@ public class GiveGiftDialog extends Dialog {
   private Profile profile;
   private Trivia trivia = new Trivia();
   private Dialog parentDialog;
-  private Message gift;
+  private Message gift = new Message();
   
-  public GiveGiftDialog(final Skin skin, Dialog parentDialog) {
+  public GiveGiftDialog(final Skin skin, final Dialog parentDialog) {
     super("", skin);
     this.parentDialog = parentDialog;
     
@@ -50,8 +50,8 @@ public class GiveGiftDialog extends Dialog {
     contentTable.row();
     contentTable.add("Gifts Waiting to be Dispatched to Server").colspan(2);
     contentTable.row();
-    Actor waitingGiftsPane = UserHomeDialog.createWaitingGiftsPane(this, parentDialog.getStage(), profile.getOutbox(), skin);
-    contentTable.add(waitingGiftsPane).colspan(2);
+    Actor waitingGiftsPane = UserHomeDialog.createWaitingGiftsPane(this, profile.getOutbox(), skin);
+    contentTable.add(waitingGiftsPane).width(400).height(UserHomeDialog.GIFT_HEIGHT).colspan(2);
     contentTable.row();
     createFriendChooser(contentTable, skin);
     contentTable.row();
@@ -74,6 +74,10 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        if (gift.points > profile.getPoints()) {
+          ScienceEngine.displayStatusMessage(parentDialog.getStage(), StatusType.ERROR, "Not enough points");
+          return;
+        }
         gift.giftType = MathUtils.random(1, 3);
         giftImage.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion("gift" + gift.giftType)));
         int i = MathUtils.random(trivia.getNumTrivia() - 1);
@@ -87,7 +91,7 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        new ShowGiftDialog(skin, gift, GiveGiftDialog.this).show(getStage());
+        new ShowGiftDialog(skin, gift, null, GiveGiftDialog.this).show(getStage());
       }
     });
 
@@ -99,7 +103,7 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        profile.postMessage(gift);
+        profile.sendGift(gift);
       }
     });
     this.getButtonTable().add(sendButton).width(150).center();

@@ -31,6 +31,7 @@ import com.mazalearn.scienceengine.tutor.ITutor;
  */
 public class Profile implements Serializable {
 
+  public static final String GUEST = "Guest";
   private ProfileData data = new ProfileData();
 
   public Profile() {
@@ -147,7 +148,7 @@ public class Profile implements Serializable {
 
   public String getUserName() {
     String s = data.properties.get(ProfileData.USER_NAME);
-    return s == null ? "Guest" : s;
+    return s == null ? GUEST : s;
   }
 
   public String getUserEmail() {
@@ -195,12 +196,13 @@ public class Profile implements Serializable {
     return data.social.friends;
   }
   
-  public void postMessage(Message gift) {
+  public void sendGift(Message gift) {
     if (data.social.outbox == null) {
       data.social.outbox = new ArrayList<Message>();
     }
     Message msg = new Message(data.social.lastOutboxMessageId++, gift);
     data.social.outbox.add(msg);
+    data.social.points -= gift.points;
     save();
   }
   
@@ -304,16 +306,36 @@ public class Profile implements Serializable {
     return profileAsBase64;
   }
 
-  public synchronized void mergeProfile(String otherProfileBase64) {
-    Profile otherProfile = fromBase64(otherProfileBase64);
-    if (otherProfile != null) {
+  public synchronized void mergeProfile(String serverProfileBase64) {
+    Profile serverProfile = fromBase64(serverProfileBase64);
+    if (serverProfile != null) {
       // Other profile is later - merge other on top of this
-      if (otherProfile.getLastUpdated() > getLastUpdated()) {
-        data.properties.putAll(otherProfile.data.properties);
+      if (serverProfile.getLastUpdated() > getLastUpdated()) {
+        data.properties.putAll(serverProfile.data.properties);
       } else {
-        otherProfile.data.properties.putAll(data.properties);
-        data.properties = otherProfile.data.properties;
+        serverProfile.data.properties.putAll(data.properties);
+        data.properties = serverProfile.data.properties;
+      }
+      // Get inbox messages from server into local inbox
+      for (Message msg: serverProfile.data.social.inbox) {
+        if (msg.messageId < data.social.lastInboxMessageId) continue;
+        data.social.inbox.add(msg);
+        data.social.lastInboxMessageId = Math.max(data.social.lastInboxMessageId, msg.messageId);
       }
     }
+  }
+
+  public void acceptGift(Message gift) {
+    data.social.inbox.remove(gift);
+    data.social.points += gift.points;
+  }
+
+  public int getPoints() {
+    // TODO Auto-generated method stub
+    return 10000;
+  }
+
+  public int getGiftPoints() {
+    return data.social.points;
   }
 }

@@ -111,8 +111,12 @@ public class SplashScreen extends AbstractScreen {
           userTable.defaults().fill();
           for (final String userId: installProfile.getUserIds()) {
             final Profile userProfile = preferencesManager.getUserProfile(userId);
+            String name =  userProfile.getUserName();
+            if (userProfile.getUserName().equals(Profile.GUEST)) {
+              name = userId.substring(0, userId.indexOf("@"));
+            }
             // precondition: this user has a name and pixmap
-            Label userLabel = new Label(userProfile.getUserName(), getSkin());
+            Label userLabel = new Label(name, getSkin());
             ClickListener listener = new ClickListener() {
               public void clicked (InputEvent event, float x, float y) {
                 // change to selected user as active
