@@ -65,7 +65,7 @@ public class DummyController implements IScience2DController {
   }
   
   @Override
-  public AbstractTutor createTutor(ITutor parent, String type, String goal,
+  public AbstractTutor createTutor(ITutor parent, String type, Topic topic, String goal,
       String name, Array<?> components, Array<?> configs,
       String[] hints, String[] explanation,
       String[] refs) {

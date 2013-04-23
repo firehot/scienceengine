@@ -210,6 +210,9 @@ public class PreferencesManager {
 
     private void syncUserProfile(Map<String, String> postParams, String userId) {
       String localProfileBase64 = prefs.getString(userId);
+      // Resurrect profile and find data to send
+      //Profile profile = Profile.fromBase64(localProfileBase64);
+      //String profileSyncStr = profile.getSyncStr();
       postParams.put(ProfileData.USER_ID, userId);
       try {
         // Post userProfile to server and get back updated server userProfile

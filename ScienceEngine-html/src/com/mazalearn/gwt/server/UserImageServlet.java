@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Text;
 import com.mazalearn.scienceengine.app.services.ProfileData;
@@ -33,8 +31,8 @@ public class UserImageServlet extends HttpServlet {
   }
 
   public byte[] getUserImage(String userEmail, String img) throws IllegalStateException {
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    EmbeddedEntity profileEntity = ProfileServlet.retrieveUserProfile(userEmail, ds);
+    ProfileUtil profileUtil = new ProfileUtil();
+    EmbeddedEntity profileEntity = profileUtil.retrieveUserProfile(userEmail);
     if (profileEntity != null) {
       Text coachPngBase64 = (Text) profileEntity.getProperty(img);
       if (coachPngBase64 != null) {

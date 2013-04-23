@@ -116,7 +116,7 @@ public class InstallProfile implements Serializable {
       }
       String profileJson = Base64Coder.decodeString(profileBase64);
       try {
-        installProfile = new Json().fromJson(InstallProfile.class, profileJson);
+        installProfile = new Json(OutputType.javascript).fromJson(InstallProfile.class, profileJson);
         // verify the installid
         if (!installId.equals(installProfile.getInstallationId())) {
           Gdx.app.error(ScienceEngine.LOG, "Install profile - Install id mismatch");

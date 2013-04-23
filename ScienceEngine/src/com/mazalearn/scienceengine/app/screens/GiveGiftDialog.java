@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.app.screens;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.math.MathUtils;
@@ -116,7 +114,7 @@ public class GiveGiftDialog extends Dialog {
     chooserTable.row();
     TextButton addFriend = new TextButton("Add Friend", skin, "body");
     chooserTable.add(addFriend);
-    final List friendsList = new List(profile.getFriends(), skin);
+    final List friendsList = new List(profile.getFriends().toArray(new String[0]), skin);
     
     addFriend.addListener(new ClickListener() {
       @Override
@@ -133,14 +131,14 @@ public class GiveGiftDialog extends Dialog {
             } else if (email.equals(profile.getUserEmail())) {
               ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Cannot add self as friend.");
               return;
-            } else if (Arrays.asList(profile.getFriends()).contains(email)) {
+            } else if (profile.getFriends().contains(email)) {
               ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Friend with this email already exists");
               return;
             }
             profile.addFriend(email);
             ScienceEngine.displayStatusMessage(getStage(), StatusType.INFO, "Friend added");
             gift.email = email;
-            friendsList.setItems(profile.getFriends());
+            friendsList.setItems(profile.getFriends().toArray(new String[0]));
           }
           
           @Override

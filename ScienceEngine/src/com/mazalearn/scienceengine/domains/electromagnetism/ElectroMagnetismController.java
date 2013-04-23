@@ -102,24 +102,24 @@ public class ElectroMagnetismController extends AbstractScience2DController {
   }
 
   @Override
-  public AbstractTutor createTutor(ITutor parent, String type, String goal, String name,
+  public AbstractTutor createTutor(ITutor parent, String type, Topic topic, String goal, String name,
       Array<?> components, Array<?> configs, String[] hints, String[] explanation, String[] refs) {
     TutorType tutorType;
     try {
       tutorType = TutorType.valueOf(type);
     } catch(IllegalArgumentException e) {
-      return super.createTutor(parent, type, goal, name, components, configs, 
+      return super.createTutor(parent, type, topic, goal, name, components, configs, 
           hints, explanation, refs);
     }
     switch (tutorType) {
     case FieldMagnitudeProber:
-      return new FieldMagnitudeProber(this, tutorType, parent, goal, name, components, 
+      return new FieldMagnitudeProber(this, tutorType, topic, parent, goal, name, components, 
           configs, hints, explanation, refs);
     case FieldDirectionProber:
-      return new FieldDirectionProber(this, tutorType, parent, goal, name, components, 
+      return new FieldDirectionProber(this, tutorType, topic, parent, goal, name, components, 
           configs, hints, explanation, refs);
     case LightProber:
-      return new LightProber(this, tutorType, parent, goal, name, components, configs, 
+      return new LightProber(this, tutorType, parent, topic, goal, name, components, configs, 
           hints, explanation, refs);
     }
     return null;

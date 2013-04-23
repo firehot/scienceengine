@@ -3,9 +3,9 @@ package com.mazalearn.scienceengine.app.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.mazalearn.scienceengine.PlatformAdapterImpl;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
@@ -24,6 +25,15 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
  * 
  */
 public class ProfileTest {
+
+  public static class TestProfile extends Profile {
+    @Override
+    public void save() {
+      Writer writer = new StringWriter();
+      new Json(OutputType.javascript).toJson(this, writer);
+      System.out.println(writer.toString());
+    }
+  }
 
   private Profile profile;
   private static final String TEST_EMAIL = "test@mazalearn.com";
@@ -44,50 +54,33 @@ public class ProfileTest {
   }
 
   public ProfileTest() {
-    profile = new Profile() {
-      @Override
-      public void save() {
-        Writer writer = new StringWriter();
-        new Json(OutputType.javascript).toJson(this, writer);
-        System.out.println(writer.toString());
-      }      
-    };
+    profile = new TestProfile();
   }
   
   @Test
   public void testGetFriends_Unregistered() {
-    String[] currentFriends = profile.getFriends();
-    assertEquals(0, currentFriends.length);
-  }
-
-  @Test
-  public void testGetFriends_Empty() {
-    profile.testSetUserEmail(TEST_EMAIL);
-    String[] currentFriends = profile.getFriends();
-    assertEquals(1, currentFriends.length);
-    assertEquals(TEST_EMAIL, currentFriends[0]);
+    List<String> currentFriends = profile.getFriends();
+    assertEquals(0, currentFriends.size());
   }
 
   @Test
   public void testAddFriend_DuplicatesIgnored() {
-    profile.testSetUserEmail(TEST_EMAIL);
     profile.addFriend(TEST_EMAIL);
-    String[] currentFriendsOld = profile.getFriends();
+    List<String> currentFriendsOld = profile.getFriends();
     
     profile.addFriend(TEST_EMAIL);
-    String[] currentFriendsNew = profile.getFriends();
-    assertEquals(currentFriendsOld.length, currentFriendsNew.length);
+    List<String> currentFriendsNew = profile.getFriends();
+    assertEquals(currentFriendsOld.size(), currentFriendsNew.size());
   }
   
   @Test
   public void testAddFriend() {
-    profile.testSetUserEmail(TEST_EMAIL);
+    profile.addFriend(TEST_EMAIL);
     profile.addFriend(TEST_EMAIL2);
-    String[] currentFriends = profile.getFriends();
-    assertEquals(2, currentFriends.length);
-    List<String> friendsList = Arrays.asList(currentFriends);
-    assertTrue(friendsList.contains(TEST_EMAIL));
-    assertTrue(friendsList.contains(TEST_EMAIL2));
+    List<String> currentFriends = profile.getFriends();
+    assertEquals(2, currentFriends.size());
+    assertTrue(currentFriends.contains(TEST_EMAIL));
+    assertTrue(currentFriends.contains(TEST_EMAIL2));
   }  
 
   @Test
@@ -100,6 +93,7 @@ public class ProfileTest {
     msg.points = 500;
     profile.sendGift(msg);
     assertEquals(1, profile.getOutbox().size());
+    profile.markForSync(ProfileData.SOCIAL);
     profile.save();
     Message msg2 = profile.getOutbox().get(0);
     assertEquals(1, msg2.giftType);
@@ -108,4 +102,39 @@ public class ProfileTest {
     assertEquals(500, msg2.points);
     assertEquals("test@mazalearn.com", msg2.email);
   }  
+
+  @Test
+  public void testGetSyncStr() throws IOException {
+    profile.setCurrentTopic(Topic.Electromagnetism);
+    profile.setCurrentActivity(Topic.BarMagnet);
+    profile.saveStats(new float[]{1, 2, 3, 4, 5, 6}, "101$G1.1");
+    profile.addFriend("test@mazalearn.com");
+    System.out.println("Sync Str: " + profile.getSyncStr());
+  }
+  
+  @Test
+  public void testRead() {
+    Profile profile = new Json(OutputType.javascript).fromJson(TestProfile.class, 
+        "{ lastupdated: {client:28,test:10,social:38,BarMagnet:48}," +
+        "client:{lastActivity:\"\",activity:\"BarMagnet\",topic:\"Electromagnetism\"," +
+        "installId:\"TestInstallationId\"}," +
+        "social:{friends:[\"test@mazalearn.com\"]}, " +
+        "topicStats:{BarMagnet:{\"101$G1.1\":[1.0,2.0,3.0,4.0,5.0,6.0]}}}"
+        );
+    profile.save();
+  }
+
+//  @Test
+  public void testWriteAfterRead() {
+    Profile profile = new Json(OutputType.javascript).fromJson(TestProfile.class, 
+        "{ lastupdated: {client:28,test:10,social:38,BarMagnet:48}," +
+        "client:{lastActivity:\"\",activity:\"BarMagnet\",topic:\"Electromagnetism\"," +
+        "installId:\"TestInstallationId\"}," +
+        "social:{friends:[\"test@mazalearn.com\"]}, " +
+        "topicStats:{BarMagnet:{\"101$G1.1\":[1.0,2.0,3.0,4.0,5.0,6.0]}}}"
+        );
+    profile.save();
+    profile.write(new Json(OutputType.javascript));
+  }
+
 }

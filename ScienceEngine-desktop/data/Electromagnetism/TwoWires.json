@@ -71,7 +71,7 @@ tutors:[
          configs: [{name:"CurrentSource.1.CurrentType", value:"DC", permitted: false}],
          explanation: ["The magnetic field reverses direction when current direction is changed.",
                       "The direction of magnetic field is given by the right hand grip rule",
-                      "righthandgripcurrent"],
+                      "image:righthandgripcurrent"],
          postcondition: "FieldMeter.Count >= 10 and Count(CurrentSource.1.CurrentDirection) >=  1",
          components:[{type:"CurrentSource.1", pin: true}]
          },
@@ -193,7 +193,7 @@ tutors:[
                    "Not affect each other",
                    "Repel if AC current and attract if DC current"],
           explanation: ["Think of magnetic field of first wire and Fleming's left hand rule operating on second wire",
-                        "fleminglefthand",
+                        "image:fleminglefthand",
                         "The force on second wire pulls it towards the first wire"],
           answermask: "0100"
           },
@@ -219,7 +219,7 @@ tutors:[
                    "not affect each other",
                    "attract, then repel each other"],
            explanation: ["Think of magnetic field of first wire and Fleming's left hand rule operating on second wire",
-                        "fleminglefthand",
+                        "image:fleminglefthand",
                         "The force on second wire repels it away from the first wire"],
           answermask: "0100"
           },

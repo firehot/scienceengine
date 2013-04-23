@@ -49,7 +49,11 @@ public class ExplanationBox extends ImageMessageBox {
     String currentText = explanation[current];
     getNextButton().setVisible(current < explanation.length - 1);
     getPrevButton().setVisible(current > 0);
-    TextureRegion textureRegion = ScienceEngine.getTextureRegion(currentText);
+    boolean isImage = currentText.startsWith("image:");
+    TextureRegion textureRegion = null;
+    if (isImage) {
+      textureRegion = ScienceEngine.getTextureRegion(currentText.substring("image:".length()));
+    }
     if (textureRegion != null) {
       TextureRegionDrawable drawable = new TextureRegionDrawable(textureRegion);
       setImageAndResize(drawable);

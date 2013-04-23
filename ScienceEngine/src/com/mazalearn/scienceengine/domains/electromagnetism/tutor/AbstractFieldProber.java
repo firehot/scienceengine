@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
@@ -17,9 +18,9 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
   private int netSuccesses;
  
   protected AbstractFieldProber(IScience2DController science2DController, 
-      ITutorType tutorType, ITutor parent, String goal, String id,
+      ITutorType tutorType, Topic topic, ITutor parent, String goal, String id,
       Array<?> components, Array<?> configs, String[] hints, String[] explanation, String[] refs) {
-    super(science2DController, tutorType, parent, goal, id, components, configs, 
+    super(science2DController, tutorType, topic, parent, goal, id, components, configs, 
         hints, explanation, refs);
     this.fieldMeterActor = (Science2DActor) science2DController.getView().findActor("FieldMeter");
     if (fieldMeterActor != null) {

@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
@@ -72,9 +73,9 @@ public class ParameterProber extends AbstractScience2DProber {
   }
     
   public ParameterProber(IScience2DController science2DController,
-      TutorType tutorType, ITutor parent, String goal, String name, Array<?> components, Array<?> configs, 
+      TutorType tutorType, Topic topic, ITutor parent, String goal, String name, Array<?> components, Array<?> configs, 
       String[] hints, String[] explanation, String[] refs) {
-    super(science2DController, tutorType, parent, goal, name, components, configs, 
+    super(science2DController, tutorType, topic, parent, goal, name, components, configs, 
         hints, explanation, refs);
     this.image = new ProbeImage();
   }

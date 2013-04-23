@@ -27,7 +27,7 @@ public interface IScience2DController {
       float y, float rotation);
   public Guru getGuru();
   // Factory method to create tutor
-  AbstractTutor createTutor(ITutor parent, String type, String goal, String name, Array<?> components,
+  AbstractTutor createTutor(ITutor parent, String type, Topic topic, String goal, String name, Array<?> components,
       Array<?> configs, String[] hints, String[] explanation, String[] refs);
   // Skin used in this invocation
   Skin getSkin();

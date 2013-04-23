@@ -48,8 +48,8 @@ public interface ITutor {
    * This does not accumulate at non-leaf levels.
    */
   public static final int FAILURE_TRACKER = 4;
-  public static final int NUM_STATS = 6;
   public static final int POINTS = 5;
+  public static final int NUM_STATS = 6;
   
   /**
    * @return goal of this tutor

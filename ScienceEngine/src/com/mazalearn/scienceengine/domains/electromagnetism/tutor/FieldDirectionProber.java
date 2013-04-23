@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.ProbeImage;
@@ -24,9 +25,9 @@ public class FieldDirectionProber extends AbstractFieldProber {
   private Vector3[] bFields;
 
   public FieldDirectionProber(final IScience2DController science2DController,
-      ITutorType tutorType, final ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
+      ITutorType tutorType, Topic topic, final ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
       String[] hints, String[] explanation, String[] refs) {
-    super(science2DController, tutorType, parent, goal, id, components, configs, 
+    super(science2DController, tutorType, topic, parent, goal, id, components, configs, 
         hints, explanation, refs);
     
     this.points = new Vector2[] { new Vector2()};

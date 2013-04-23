@@ -34,7 +34,7 @@ tutors: [
            goal: "Move the bar magnet towards or away from coil. See current direction in ammeter.",
            explanation: ["When the magnet moves towards the coil, current flows in one direction. When it moves away, current direction reverses.",
                          "The induced current direction is given by Fleming's Right Hand Rule.",
-                         "flemingrighthand"],
+                         "image:flemingrighthand"],
            postcondition: "Count(BarMagnet.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1"
           },
           {type: "KnowledgeUnit",

@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.Topic;
 
 public class Activity {
   public static class Tutor {
-    private static final int NUM_STATS = 5;
+    private static final int NUM_STATS = 6;
     public String type;
     public String id;
     public String goal;
@@ -25,6 +25,7 @@ public class Activity {
     public static final int PERCENT_PROGRESS = 2;
     public static final int TIME_SPENT = 3;
     public static final int FAILURE_TRACKER = 4;
+    public static final int POINTS = 5;
     
     public void loadStats(Map<String, float[]> stats, Topic topic, int activityLevel) {
       String statKey = activityLevel + "$" + id;

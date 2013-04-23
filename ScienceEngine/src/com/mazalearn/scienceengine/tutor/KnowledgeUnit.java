@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
 import com.mazalearn.scienceengine.core.lang.Parser;
@@ -17,9 +18,9 @@ public class KnowledgeUnit extends AbstractTutor {
   private String when;
   
   public KnowledgeUnit(IScience2DController science2DController,
-      TutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
+      TutorType tutorType, Topic topic, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
       String[] hints, String[] explanation, String[] refs) {
-    super(science2DController, tutorType, parent, goal, id, components, configs, 
+    super(science2DController, tutorType, topic, parent, goal, id, components, configs, 
         hints, explanation, refs);
     
   }

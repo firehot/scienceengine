@@ -19,7 +19,7 @@
 
 <%@ page import="com.mazalearn.gwt.server.Activity" %>
 <%@ page import="com.mazalearn.gwt.server.Activity.Tutor" %>
-<%@ page import="com.mazalearn.gwt.server.ProfileServlet" %>
+<%@ page import="com.mazalearn.gwt.server.ProfileUtil" %>
 <%@ page import="com.mazalearn.scienceengine.app.services.ProfileData" %>
 <%@ page import="com.mazalearn.scienceengine.Topic" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -78,7 +78,7 @@
       topic = Topic.valueOf(request.getParameter("topic"));
     } catch(Exception ignored) {};
     
-    Topic activityLevel = Topic.Field;
+    Topic activityLevel = Topic.BarMagnet;
     try {
       activityLevel = Topic.valueOf(request.getParameter("activity"));
     } catch (Exception ignored) {};
@@ -90,21 +90,22 @@
 %>
 
 <%
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    EmbeddedEntity profile = ProfileServlet.retrieveUserProfile(userId, ds);
+    ProfileUtil profileUtil = new ProfileUtil();
+    EmbeddedEntity profile = profileUtil.retrieveUserProfile(userId);
 %>
 
       <table>
         <tr><td>User</td><td>${fn:escapeXml(userEmail)}</td></tr>
       </table>
     <p>
-    <%= topic.name() %>
+    <%= topic.name() %> <br/>
+    <%= activityLevel.name() %>
     <img src='/assets/data/<%= topic.name() + "/" + activityLevel + ".png" %>' width=400>
    
 <%
-   String domainStatsStr = ((Text) profile.getProperty(topic.name())).getValue();
+   String activityStatsStr = ((Text) profile.getProperty(activityLevel.name())).getValue();
    Type statsType = new TypeToken<Map<String, float[]>>() {}.getType();
-   Map<String, float[]> stats = new Gson().fromJson(domainStatsStr, statsType);
+   Map<String, float[]> stats = new Gson().fromJson(activityStatsStr, statsType);
    Activity activity = Activity.load(getServletContext(), topic, activityLevel);
    activity.populateStats(stats);
    %>
@@ -116,6 +117,7 @@
         <td>Num Successes</td>
         <td>Failure Tracker</td>
         <td>% Attempted</td>
+        <td>Points</td>
      </tr>
 <%
      String json = "[";
@@ -133,6 +135,7 @@
          <td><%= Math.round(tutor.stats[Activity.Tutor.NUM_SUCCESSES]) %></td>
          <td><%= Math.round(tutor.stats[Activity.Tutor.FAILURE_TRACKER]) %></td>
          <td><%= Math.round(tutor.stats[Activity.Tutor.PERCENT_PROGRESS]) %></td>
+         <td><%= Math.round(tutor.stats[Activity.Tutor.POINTS]) %></td>
        </tr>
 <%       
      }

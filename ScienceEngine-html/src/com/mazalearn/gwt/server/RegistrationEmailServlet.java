@@ -2,22 +2,15 @@ package com.mazalearn.gwt.server;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
-import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
-import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
@@ -49,39 +42,23 @@ public class RegistrationEmailServlet extends HttpServlet {
       return;
     }
     
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    ProfileUtil profileUtil = new ProfileUtil();
     // User may exist but should not have profile
-    EmbeddedEntity newUserProfile = ProfileServlet.retrieveUserProfile(userEmail, ds);
+    EmbeddedEntity newUserProfile = profileUtil.retrieveUserProfile(userEmail);
     if (newUserProfile != null) { 
       response.getWriter().append("Already registered. " + userEmail);
       System.out.println("Already registered to: " + newUserProfile.getProperty(ProfileData.INSTALL_ID) + " " + userEmail);
       return;
     }
     
-    Entity oldUser = ProfileServlet.retrieveUser(installId, ds);
+    Entity oldUser = profileUtil.retrieveUser(installId);
     if (oldUser == null) {
       response.getWriter().append("No such user: " + installId);
       return;       
     }
     
-    EmbeddedEntity oldUserProfile = ProfileServlet.createOrGetUserProfile(oldUser, true);
-    Gson gson = new Gson();
-    ServerProps serverProps = (ServerProps) ProfileServlet.getFromJsonTextProperty(gson, oldUserProfile, ProfileData.SERVER_PROPS, ServerProps.class);
-    serverProps.userName = userName;
-    serverProps.userId = userEmail;
-    Date date = new Date();
-    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    serverProps.registrationDate = dateFormat.format(date);
-    ProfileServlet.setAsJsonTextProperty(gson, oldUserProfile, ProfileData.SERVER_PROPS, serverProps);
-    oldUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);
-    
-    Entity newUser = ProfileServlet.createOrGetUser(userEmail, ds, true);
-    newUser.setPropertiesFrom(oldUser);
-
-    newUser.setProperty(ProfileServlet.OLD_USER_ID, installId);
-    ds.put(newUser);
-    oldUser.setProperty(ProfileServlet.NEW_USER_ID, userEmail);
-    ds.put(oldUser);
+    profileUtil.confirmRegistrationInfo(userEmail, installId, userName, 
+        newUserProfile, oldUser);
     
     response.getWriter().append("<div style='background-color: black; width:64'>" + 
         "<img src='/userimage?userid=" + userEmail +"&png=pnguser'>" +

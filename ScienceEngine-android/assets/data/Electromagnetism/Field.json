@@ -97,7 +97,7 @@ tutors:[
            goal: "Pull the charge in some direction and see how it moves",
            hints: ["A magnetic field exerts force on a moving charge"],
            explanation: ["A magnetic field exerts force only on a moving charge, not on a stationary charge.\nThe direction of force is given by Fleming's left hand rule.",
-                         "fleminglefthand",
+                         "image:fleminglefthand",
                          "Since the force is perpendicular to the charge motion (current), the charge moves in a circle.",
                          "The force is higher if the velocity of the charge is higher"],
            postcondition: "Charge.Velocity > 0"

@@ -181,7 +181,7 @@ public abstract class AbstractScience2DController implements
   }
   
   @Override
-  public AbstractTutor createTutor(ITutor parent, String type, String goal, String id,
+  public AbstractTutor createTutor(ITutor parent, String type, Topic topic, String goal, String id,
       Array<?> components, Array<?> configs, String[] hints,
       String[] explanation, String[] refs) {
     TutorType tutorType;
@@ -193,25 +193,25 @@ public abstract class AbstractScience2DController implements
     }
     switch (tutorType) {
     case MCQ1:
-      return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, 
+      return new McqTutor(this, tutorType, topic, parent, goal, id, components, configs, skin, 
           hints, explanation, refs, true);
     case MCQ:
-      return new McqTutor(this, tutorType, parent, goal, id, components, configs, skin, 
+      return new McqTutor(this, tutorType, topic, parent, goal, id, components, configs, skin, 
           hints, explanation, refs, false);
     case ParameterProber:
-      return new ParameterProber(this, tutorType, parent, goal, id, components, configs, 
+      return new ParameterProber(this, tutorType, topic, parent, goal, id, components, configs, 
           hints, explanation, refs);
     case Challenge:
     case RapidFire:
     case Guide:
     case Reviewer:
-      return new TutorGroup(this, tutorType, parent, goal, id, components, configs, 
+      return new TutorGroup(this, tutorType, topic, parent, goal, id, components, configs, 
           hints, explanation, refs);
     case KnowledgeUnit:
-      return new KnowledgeUnit(this, tutorType, parent, goal, id, components, configs, 
+      return new KnowledgeUnit(this, tutorType, topic, parent, goal, id, components, configs, 
           hints, explanation, refs);
     case Abstractor:
-      return new Abstractor(this, tutorType, parent, goal, id, components, configs, skin, 
+      return new Abstractor(this, tutorType, topic, parent, goal, id, components, configs, skin, 
           science2DView.getModelControls(), hints, explanation, refs);
     default:
       Gdx.app.error(ScienceEngine.LOG, "Could not create Tutor: " + type);

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public class McqTutor extends AbstractTutor {
@@ -23,11 +24,11 @@ public class McqTutor extends AbstractTutor {
   private List<String> optionList;
   private String questionImageTexture;
 
-  public McqTutor(IScience2DController science2DController, TutorType tutorType, ITutor parent,
+  public McqTutor(IScience2DController science2DController, TutorType tutorType, Topic topic, ITutor parent,
       String goal, String id, Array<?> components, Array<?> configs,
       Skin skin, String[] hints,
       String[] explanation, String[] refs, boolean singleAnswer) {
-    super(science2DController, tutorType, parent, goal, id, 
+    super(science2DController, tutorType, topic, parent, goal, id, 
         components, configs, hints, explanation, refs);
     this.singleAnswer = singleAnswer;
     this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);

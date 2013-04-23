@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.domains.electromagnetism.tutor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
@@ -17,9 +18,9 @@ public class LightProber extends AbstractScience2DProber {
   private LightbulbActor lightbulbActor;
   
   public LightProber(IScience2DController science2DController, ITutorType tutorType, ITutor parent,
-      String goal, String name, Array<?> components, Array<?> configs,
+      Topic topic, String goal, String name, Array<?> components, Array<?> configs,
       String[] hints, String[] explanation, String[] refs) {
-    super(science2DController, tutorType, parent, goal, name, components, configs, 
+    super(science2DController, tutorType, topic, parent, goal, name, components, configs, 
         hints, explanation, refs);
 /*            "Light intensity increases when more current is induced in the coil.",
             "More current is induced in the coil if the magnetic field changes faster at the coil.",

@@ -32,7 +32,7 @@ tutors: [
              goal: "Flip the horseshoe magnet and see how it affects the coil. Give the coil a starting push.", 
              explanation: ["For a given magnetic field direction, a current carrying coil rotates when kept in certain positions",
                            "From Fleming's Left Hand rule, we can determine the direction of rotation of each arm of the coil",
-                           "fleminglefthand",
+                           "image:fleminglefthand",
                            "The two arms of the coil form a 'couple' causing the coil to rotate"],
              postcondition: "CurrentCoil.AngularVelocity <> 0 and CurrentCoil.RotationData <> 0 and Count(HorseshoeMagnet.Flip) >= 2"
              },
@@ -66,7 +66,7 @@ tutors: [
              goal: "Change current direction and see how it affects the rotation of the coil. Give the coil a starting push.", 
              explanation: ["For a given magnetic field direction and current direction, a current carrying coil rotates when kept in certain positions",
                            "From Fleming's Left Hand rule, we can determine the direction of rotation of each arm of the coil",
-                           "fleminglefthand",
+                           "image:fleminglefthand",
                            "The two arms of the coil form a 'couple' causing the coil to rotate"],
               components:[{type:"CurrentSource", pin: true}],
               postcondition: "CurrentCoil.AngularVelocity <> 0 and CurrentCoil.RotationData <> 0 and Count(CurrentSource.CurrentDirection) >= 2"

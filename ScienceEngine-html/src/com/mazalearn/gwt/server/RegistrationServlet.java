@@ -1,32 +1,15 @@
 package com.mazalearn.gwt.server;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
-import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData;
-import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
-import com.mazalearn.scienceengine.app.utils.Crypter;
 
 @SuppressWarnings("serial")
 public class RegistrationServlet extends HttpServlet {
@@ -38,14 +21,14 @@ public class RegistrationServlet extends HttpServlet {
     String userId = request.getParameter(ProfileData.INSTALL_ID).toLowerCase();
     System.out.println("Register User: " + userId);
 
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Entity user = ProfileServlet.retrieveUser(userId, ds);
+    ProfileUtil profileUtil = new ProfileUtil();
+    Entity user = profileUtil.retrieveUser(userId);
     if (user == null) { 
       response.getWriter().append("Already registered? Could not find installation");
       return;
     }
 
-    EmbeddedEntity profile = ProfileServlet.createOrGetUserProfile(user, true);
+    EmbeddedEntity profile = ProfileUtil.createOrGetUserProfile(user, true);
     
     String userEmail = request.getParameter(ProfileData.USER_EMAIL).toLowerCase();
     if (userEmail == null || !userEmail.contains("@")) {
@@ -57,56 +40,19 @@ public class RegistrationServlet extends HttpServlet {
       response.getWriter().append("Improper name. Cannot register");
       return;
     }
-    Gson gson = new Gson();
-    ServerProps serverProps = (ServerProps) ProfileServlet.getFromJsonTextProperty(gson, profile, ProfileData.SERVER_PROPS, ServerProps.class);
-    serverProps.sex = request.getParameter(ProfileData.SEX);
-    serverProps.grade = request.getParameter(ProfileData.GRADE);
-    serverProps.school = request.getParameter(ProfileData.SCHOOL);
-    serverProps.city = request.getParameter(ProfileData.CITY);
-    serverProps.comments = request.getParameter(ProfileData.COMMENTS);
-    Date date = new Date();
-    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    serverProps.registrationDate = dateFormat.format(date);
-    ProfileServlet.setAsJsonTextProperty(gson, profile, ProfileData.SERVER_PROPS, serverProps);
-    
-    ds.put(user);
 
-   sendUserEmail(userEmail, userName, userId);
+    String sex = request.getParameter(ProfileData.SEX);
+    String grade = request.getParameter(ProfileData.GRADE);
+    String school = request.getParameter(ProfileData.SCHOOL);
+    String city = request.getParameter(ProfileData.CITY);
+    String comments = request.getParameter(ProfileData.COMMENTS);
+    profileUtil.saveRegistrationInfo(user, profile, sex, grade, school,
+        city, comments);
+
+    EmailUtil.sendConfirmationEmail(userEmail, userName, userId);
     response.getWriter().append("<html><body><br><br>");
     response.getWriter().append("Registration in progress: " + userEmail);
     response.getWriter().append("<br><br>Email has been sent. <br>Please click on URL in email to complete registration.</body></html>");
-  }
-
-  private void sendUserEmail(String userEmail, String userName, String installId) {
-    Properties properties = new Properties();
-    Session session = Session.getDefaultInstance(properties, null);
-
-    long timeEmailSent = System.currentTimeMillis();
-    String msgBody = "Welcome to Science Engine\nTo complete registration please click on link below: \n" +
-        "http://www.mazalearn.com/re" + 
-        "?i=" + installId + 
-        "&e=" + userEmail +
-        "&n=" + userName +
-        "&t=" + timeEmailSent + 
-        "&h=" + Crypter.saltedSha1Hash(installId + userEmail + userName + timeEmailSent, installId) + 
-        "\n\n-MazaLearn";
-
-    try {
-        Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("admin@mazalearn.com", "Mazalearn Admin"));
-        msg.addRecipient(Message.RecipientType.TO,
-                         new InternetAddress(userEmail, "User"));
-        msg.setSubject("Science Engine - Mazalearn.com account registration");
-        msg.setText(msgBody);
-        Transport.send(msg);
-
-    } catch (AddressException e) {
-        // ...
-    } catch (MessagingException e) {
-        // ...
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    }    
   }
 }
 

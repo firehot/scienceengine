@@ -32,7 +32,7 @@ class TutorLoader {
   private AbstractTutor loadTutor(Topic level, ITutor parentTutor, OrderedMap<String, ?> tutorObj) {
     String type = (String) tutorObj.get("type");
     // TutorId is the levelId concatenated with local id of tutor within the level.
-    String id = AbstractTutor.makeTutorKey(level, (String) tutorObj.get("id"));
+    String id = (String) tutorObj.get("id");
     Gdx.app.log(ScienceEngine.LOG, "Loading tutor: " + type + " " + id);
     String goal = (String) tutorObj.get("goal");
     Array<?> components = (Array<?>) tutorObj.get("components");
@@ -40,7 +40,7 @@ class TutorLoader {
     String[] hints = loadStringArray("hints", tutorObj);
     String[] explanation = loadStringArray("explanation", tutorObj);
     String[] refs = loadStringArray("refs", tutorObj);
-    AbstractTutor tutor = science2DController.createTutor(parentTutor, type, goal, id,
+    AbstractTutor tutor = science2DController.createTutor(parentTutor, type, level, goal, id,
         components, configs, hints, explanation, refs);
     if (tutor == null) return null;
     

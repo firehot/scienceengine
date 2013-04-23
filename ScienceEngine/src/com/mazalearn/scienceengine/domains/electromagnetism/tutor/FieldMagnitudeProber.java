@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.ProbeImage;
@@ -52,9 +53,9 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
   private Vector3[] bFields;
 
   public FieldMagnitudeProber(IScience2DController science2DController,
-      ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
+      ITutorType tutorType, Topic topic, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
       String[] hints, String[] explanation, String[] refs) {
-    super(science2DController, tutorType, parent, goal, id, components, configs, 
+    super(science2DController, tutorType, topic, parent, goal, id, components, configs, 
         hints, explanation, refs);
     
     imageCorrect = new ProbeImage();

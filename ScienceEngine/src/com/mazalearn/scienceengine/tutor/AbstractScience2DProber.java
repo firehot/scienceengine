@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public abstract class AbstractScience2DProber extends AbstractTutor {
@@ -20,9 +21,9 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
   private Vector2 localPoint = new Vector2();
 
   public AbstractScience2DProber(IScience2DController science2DController,
-      ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
+      ITutorType tutorType, Topic topic, ITutor parent, String goal, String id, Array<?> components, Array<?> configs,
       String[] hints, String[] explanation, String[] refs) {
-    super(science2DController, tutorType, parent, goal, id, components, configs, 
+    super(science2DController, tutorType, topic, parent, goal, id, components, configs, 
         hints, explanation, refs);
     // A prober covers the entire screen
     this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);

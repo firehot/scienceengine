@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileData {
@@ -18,17 +19,25 @@ public class ProfileData {
   public static final String CURRENT = "current";
   public static final String PNG = "png";
   
+  // These are the units of synchronization since each is large.
+  // TopicStats is a collection of changed activity stats - not atomic.
   public static final String SOCIAL = "social";
   public static final String CLIENT_PROPS = "client";
   public static final String SERVER_PROPS = "server";
-  public static final String TOPIC_STATS = "topicstats";
+  public static final String TOPIC_STATS = "topicStats";
+  public static final String LAST_SYNC_TIME = "lastsynctime";
+  public static final String COACH_PNG = "pngcoach";
+  public static final String USER_PNG = "pnguser";
 
-  public transient Map<String, float[]> currentTopicStats;
+  public transient HashMap<String, float[]> currentActivityStats;
 
   public ClientProps client;
   public ServerProps server;
-  public Map<String, Map<String, float[]>> topicStats;
+  public HashMap<String, HashMap<String, float[]>> topicStats;
   public ProfileData.Social social;
+  public HashMap<String, Long> lastUpdated = new HashMap<String, Long>();
+  public String userPng;
+  public String coachPng;
   
   public static class ClientProps {
     public String userEmail;
@@ -39,9 +48,6 @@ public class ProfileData {
     public String topic;
     public String lastActivity;
     public String activity;
-    public String pngUser;
-    public String pngCoach;
-    public long lastUpdated;
   }
   public static class ServerProps {
     public String userName;
@@ -52,7 +58,6 @@ public class ProfileData {
     public String city;
     public String comments;
     public String registrationDate;
-    public long lastUpdated;
   }
   
   public static class Social {
@@ -75,7 +80,7 @@ public class ProfileData {
         this.points = other.points;
       }
     }
-    public String[] friends;
+    public ArrayList<String> friends;
     public ArrayList<Message> inbox; // server can only add, client can only remove 
     public ArrayList<Message> outbox; // client can only add, server can only remove
     public int lastInboxMessageId;

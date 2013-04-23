@@ -41,7 +41,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
    *                                      |                                                      |
    *                                      |----<-----------------------<----------------------<--|
    * @param science2DController 
-   * @param tutorType2 
+   * @param tutorType
+   * @param topic - this is the topic of the tutor. But it may be loaded for review in other topics
    * @param parent
    * @param goal
    * @param id
@@ -52,13 +53,14 @@ public abstract class AbstractTutor extends Group implements ITutor {
    * @param explanationImg 
    */
   public AbstractTutor(IScience2DController science2DController,
-      ITutorType tutorType, ITutor parent, String goal, String id, Array<?> components, Array<?> configs, 
+      ITutorType tutorType, Topic topic, ITutor parent, String goal, 
+      String localId, Array<?> components, Array<?> configs, 
       String[] hints, String[] explanation, String[] refs) {
     this.tutorType = tutorType;
     this.parent = parent;
     this.science2DController = science2DController;
     this.goal = goal;
-    this.id = id;
+    this.id = makeGlobalId(topic, localId);
     this.components = components;
     this.configs = configs;
     this.successPoints = tutorType.getSuccessPoints();
@@ -67,10 +69,14 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.explanation = explanation;
     this.refs = refs;
     this.tutorHelper = science2DController.getGuru().getTutorHelper();
-    this.stats = tutorHelper.getProfile().getStats(id);
+    this.stats = tutorHelper.getProfile().getStats(topic, this.id);
     this.setVisible(false);
   }
 
+  private static String makeGlobalId(Topic topic, String localTutorId) {
+    return String.valueOf(topic.getTopicId()) + "$" + localTutorId;
+  }
+  
   @Override
   public void systemReadyToFinish(boolean success) {
     if (state == State.SystemFinished && this.success == success) return;
@@ -246,9 +252,5 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public String[] getRefs() {
     return refs;
-  }
-
-  public static String makeTutorKey(Topic level, String localTutorId) {
-    return String.valueOf(level.getTopicId()) + "$" + localTutorId;
   }
 }
