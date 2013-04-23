@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ProfileData {
   public static final String USER_EMAIL = "useremail";

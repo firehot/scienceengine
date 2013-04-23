@@ -61,36 +61,53 @@ public class ProfileUtil {
     return user;
   }
 
-  public String getUserSyncProfileAsBase64(String userId) 
+  // clientprofile may be null for a GET request
+  public String getUserSyncProfileAsBase64(String userId, ProfileData clientProfile) 
       throws IllegalStateException {
-    EmbeddedEntity profileEntity = retrieveUserProfile(userId);
-    if (profileEntity == null) {
+    EmbeddedEntity serverProfile = retrieveUserProfile(userId);
+    if (serverProfile == null) {
       System.out.println("No user profile: " + userId);
       return "";
     }
     
-    System.out.println("getUserProfileAsBase64: " + profileEntity);
+    String json = getUserSyncProfile(serverProfile, clientProfile);
     
+    String profileStringBase64 = Base64.encode(json);
+    return profileStringBase64;
+  }
+
+  // Package protected for testing
+  String getUserSyncProfile(EmbeddedEntity serverProfile, ProfileData clientProfile) 
+      throws IllegalStateException {
+    System.out.println("getUserProfileAsBase64: " + serverProfile);
+    EmbeddedEntity serverUpdates = (EmbeddedEntity) serverProfile.getProperty(ProfileData.LAST_UPDATED);
+    Map<String, Long> clientUpdates = 
+        clientProfile != null ? clientProfile.lastUpdated : new HashMap<String, Long>();   
     StringBuilder json = new StringBuilder("{");
     String topicDelimiter = "";
-    for (Map.Entry<String, Object> property: profileEntity.getProperties().entrySet()) {
+    for (Map.Entry<String, Object> property: serverProfile.getProperties().entrySet()) {
+      String key = property.getKey();
       Object value = property.getValue();
+      // If server version is older than client version, no need to send
+      if (nvl((Long)serverUpdates.getProperty(key), 1) <= nvl(clientUpdates.get(key), 0)) continue;
       if (value instanceof Text) {
-        String v = (value == null) ? "{}" : ((Text) value).getValue();
-        if (!"null".equals(v)) {
-          json.append(topicDelimiter + property.getKey() + ":" + v);
+        String s = (value == null) ? "{}" : ((Text) value).getValue();
+        if (!"null".equals(s)) {
+          json.append(topicDelimiter + key + ":" + s);
           topicDelimiter = ",";
         }
       } else if (value instanceof EmbeddedEntity) {
         EmbeddedEntity embeddedEntity = (EmbeddedEntity) value;
-        json.append(topicDelimiter + property.getKey() + ":{");
+        json.append(topicDelimiter + key + ":{");
         topicDelimiter = ",";
         String delimiter = "";
         for (Map.Entry<String, Object> p: embeddedEntity.getProperties().entrySet()) {
           Object v = p.getValue();
-          if (value instanceof Text) {
+          // If server version is older than client version, no need to send
+          if (nvl((Long)serverUpdates.getProperty(p.getKey()), 1) <= nvl(clientUpdates.get(p.getKey()), 0)) continue;
+          if (v instanceof Text) {
             String s = (v == null) ? "{}" : ((Text) v).getValue();
-            if (!"null".equals(v)) {
+            if (!"null".equals(s)) {
               json.append(delimiter + p.getKey() + ":" + s);
               delimiter = ",";
             }
@@ -105,8 +122,7 @@ public class ProfileUtil {
     
     json.append("}");
     System.out.println("getUserProfileAsBase64: " + json);
-    String profileStringBase64 = Base64.encode(json.toString());
-    return profileStringBase64;
+    return json.toString();
   }
 
   public EmbeddedEntity retrieveUserProfile(String userId) {
@@ -118,18 +134,9 @@ public class ProfileUtil {
     return createOrGetUser(userId, false);
   }
 
-  String saveUserProfile(String userId, byte[] profileBytes) 
+  String saveUserProfile(String userId, ProfileData clientProfile) 
       throws IllegalStateException {
     Entity user = createOrGetUser(userId, true);
-    String clientProfileBase64 = new String(profileBytes);
-    String clientProfileJson = new String(Base64.decode(clientProfileBase64));
-    
-    // Trim at end where 0 chars are present.
-    int count = clientProfileJson.length();
-    while (clientProfileJson.charAt(--count) == 0);
-    System.out.println("saveUserProfile:" + clientProfileJson.substring(0, count + 1));
-    // Get profile data and sync with existing one
-    ProfileData clientProfile = jsonEntityUtil.profileFromJson(clientProfileJson.substring(0, count+1));
     
     EmbeddedEntity serverProfile = createOrGetUserProfile(user, true);
     
@@ -148,6 +155,22 @@ public class ProfileUtil {
     merge(topicStatsEntity, clientProfile.topicStats, serverProfileLastUpdated, clientProfile.lastUpdated);    
     
     // Social
+    syncSocial(userId, clientProfile, serverProfile);
+    ds.put(user);
+    // If retrieved user is for requested userid and not forwarded
+    if (userId.equals(user.getKey().getName())) {
+      return (String) user.getProperty(ProfileServlet.OLD_USER_ID);
+    }
+    return null;
+  }
+
+  public ProfileData profileFromBase64(byte[] profileBytes) {
+    return jsonEntityUtil.profileFromBase64(profileBytes);
+  }
+
+  private void syncSocial(String userId, ProfileData clientProfile,
+      EmbeddedEntity serverProfile) {
+    if (clientProfile.social == null) return;
     // extract server profile social
     Social serverSocial = jsonEntityUtil.getFromJsonTextProperty(serverProfile, ProfileData.SOCIAL, Social.class);
     Social clientSocial = clientProfile.social;
@@ -177,12 +200,6 @@ public class ProfileUtil {
     serverSocial.friends = clientSocial.friends;
     
     jsonEntityUtil.setAsJsonTextProperty(serverProfile, ProfileData.SOCIAL, serverSocial);
-    ds.put(user);
-    // If retrieved user is for requested userid and not forwarded
-    if (userId.equals(user.getKey().getName())) {
-      return (String) user.getProperty(ProfileServlet.OLD_USER_ID);
-    }
-    return null;
   }
 
   private void merge(PropertyContainer serverEntity, Map<String, ?> props, EmbeddedEntity serverUpdates,
@@ -247,6 +264,15 @@ public class ProfileUtil {
       user.setProperty(ProfileServlet.PROFILE, null);
       ds.put(user);      
     }
+  }
+
+  public void deleteOldUser(String userId, String oldUserId) {
+    Key key = KeyFactory.createKey(User.class.getSimpleName(), oldUserId.toLowerCase());
+    ds.delete(key);
+    System.out.println("Deleted: " + oldUserId);
+    Entity newUser = retrieveUser(userId);
+    newUser.removeProperty(ProfileServlet.OLD_USER_ID);
+    ds.put(newUser);
   }
 
 

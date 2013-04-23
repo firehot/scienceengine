@@ -8,12 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.users.User;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 
 @SuppressWarnings("serial")
@@ -34,33 +28,28 @@ public class ProfileServlet extends HttpServlet {
     BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
     byte[] profileBytes = new byte[request.getContentLength()];
     bis.read(profileBytes);
+    bis.close();
     
     profileUtil = new ProfileUtil();
-    String oldUserId = profileUtil.saveUserProfile(userId, profileBytes);
-    bis.close();
-    writeProfileResponse(response, userId);
+    ProfileData clientProfile = profileUtil.profileFromBase64(profileBytes);
+    String oldUserId = profileUtil.saveUserProfile(userId, clientProfile);
+    writeProfileResponse(response, userId, clientProfile);
     // Delete old user, if any
     if (oldUserId != null) {
-      DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-      Key key = KeyFactory.createKey(User.class.getSimpleName(), oldUserId.toLowerCase());
-      ds.delete(key);
-      System.out.println("Deleted: " + oldUserId);
-      Entity newUser = profileUtil.retrieveUser(userId);
-      newUser.removeProperty(OLD_USER_ID);
-      ds.put(newUser);
+      profileUtil.deleteOldUser(userId, oldUserId);
     }
   }
-  
+
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String userId = request.getParameter(ProfileData.USER_ID);
     System.out.println("Received get: " + userId);
-    writeProfileResponse(response, userId);
+    writeProfileResponse(response, userId, null);
   }
 
-  private void writeProfileResponse(HttpServletResponse response, String userId)
+  private void writeProfileResponse(HttpServletResponse response, String userId, ProfileData clientProfile)
       throws IOException {
-    String responseStr = profileUtil.getUserSyncProfileAsBase64(userId);
+    String responseStr = profileUtil.getUserSyncProfileAsBase64(userId, clientProfile);
     if (responseStr.isEmpty()) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     } else {

@@ -35,4 +35,16 @@ public class JsonEntityUtil {
     return gson.fromJson(clientProfileJson, ProfileData.class);
   }
 
+  public ProfileData profileFromBase64(byte[] profileBytes) {
+    String profileBase64 = new String(profileBytes);
+    String profileJson = new String(Base64.decode(profileBase64));
+    
+    // Trim at end where 0 chars are present.
+    int count = profileJson.length();
+    while (profileJson.charAt(--count) == 0);
+    System.out.println("saveUserProfile:" + profileJson.substring(0, count + 1));
+    // Get profile data
+    return profileFromJson(profileJson.substring(0, count+1));
+  }
+
 }

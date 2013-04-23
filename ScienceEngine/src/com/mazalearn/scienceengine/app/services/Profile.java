@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
@@ -385,8 +386,7 @@ public class Profile implements Serializable {
   }
 
   // Returns the profile string to be used for syncing to server
-  public String getSyncStr() throws IOException {
-    Writer writer = new StringWriter();
+  public String getSyncStr()  {
     Map<String, Object> props = new HashMap<String, Object>();
     props.put(ProfileData.SERVER_PROPS, data.server);
     props.put(ProfileData.CLIENT_PROPS, data.client);
@@ -396,24 +396,32 @@ public class Profile implements Serializable {
 
     Json json = new Json(OutputType.javascript);
     
-    writer.append("{ lastupdated: ");
-    json.toJson(data.lastUpdated, writer);
-    for (Map.Entry<String, Long> entry: data.lastUpdated.entrySet()) {
-      if (props.get(entry.getKey()) != null) {
-        writer.append("," + entry.getKey() + ":");
-        json.toJson(props.get(entry.getKey()), writer);
+    try {
+      Writer writer = new StringWriter();
+      writer.append("{ lastupdated: ");
+      json.toJson(data.lastUpdated, writer);
+      for (Map.Entry<String, Long> entry: data.lastUpdated.entrySet()) {
+        if (props.get(entry.getKey()) != null) {
+          writer.append("," + entry.getKey() + ":");
+          json.toJson(props.get(entry.getKey()), writer);
+        }
       }
-    }
-    writer.append(", topicStats:{");
-    String delimiter = "";
-    for (Map.Entry<String, Long> entry: data.lastUpdated.entrySet()) {
-      if (data.topicStats.get(entry.getKey()) != null) {
-        writer.append(delimiter + entry.getKey() + ":");
-        json.toJson(data.topicStats.get(entry.getKey()), writer);
-        delimiter = ",";
+      writer.append(", topicStats:{");
+      String delimiter = "";
+      for (Map.Entry<String, Long> entry: data.lastUpdated.entrySet()) {
+        if (data.topicStats.get(entry.getKey()) != null) {
+          writer.append(delimiter + entry.getKey() + ":");
+          json.toJson(data.topicStats.get(entry.getKey()), writer);
+          delimiter = ",";
+        }
       }
+      writer.append("}}");
+      String syncProfileStr = writer.toString();
+      Gdx.app.log(ScienceEngine.LOG, syncProfileStr);
+      return Base64Coder.encodeString(syncProfileStr);
+    } catch(IOException e) {
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();       
     }
-    writer.append("}}");
-    return writer.toString();
+    return null;
   }
 }
