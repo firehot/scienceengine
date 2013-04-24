@@ -27,6 +27,7 @@ public class ProfileData {
   public static final String LAST_SYNC_TIME = "lastsynctime";
   public static final String COACH_PNG = "pngcoach";
   public static final String USER_PNG = "pnguser";
+  public static final String THIS_SYNC_TIME = "thissynctime";
 
   public transient HashMap<String, float[]> currentActivityStats;
 

@@ -77,19 +77,21 @@ public class ProfileUtil {
   }
 
   // Package protected for testing
+  // clientprofile may be null for a GET request
   String getUserSyncProfile(EmbeddedEntity serverProfile, ProfileData clientProfile) 
       throws IllegalStateException {
-    System.out.println("getUserProfileAsBase64: " + serverProfile);
+    System.out.println("getUserSyncProfile serverprofile: " + serverProfile);
     EmbeddedEntity serverUpdates = (EmbeddedEntity) serverProfile.getProperty(ProfileData.LAST_UPDATED);
     Map<String, Long> clientUpdates = 
-        clientProfile != null ? clientProfile.lastUpdated : new HashMap<String, Long>();   
+        clientProfile != null ? clientProfile.lastUpdated : new HashMap<String, Long>();
+    long clientDefault = nvl(clientUpdates.get(ProfileData.LAST_SYNC_TIME), 0L);
     StringBuilder json = new StringBuilder("{");
     String topicDelimiter = "";
     for (Map.Entry<String, Object> property: serverProfile.getProperties().entrySet()) {
       String key = property.getKey();
       Object value = property.getValue();
       // If server version is older than client version, no need to send
-      if (nvl((Long)serverUpdates.getProperty(key), 1) <= nvl(clientUpdates.get(key), 0)) continue;
+      if (nvl((Long)serverUpdates.getProperty(key), 1) <= nvl(clientUpdates.get(key), clientDefault)) continue;
       if (value instanceof Text) {
         String s = (value == null) ? "{}" : ((Text) value).getValue();
         if (!"null".equals(s)) {
@@ -104,8 +106,8 @@ public class ProfileUtil {
         for (Map.Entry<String, Object> p: embeddedEntity.getProperties().entrySet()) {
           Object v = p.getValue();
           // If server version is older than client version, no need to send
-          if (nvl((Long)serverUpdates.getProperty(p.getKey()), 1) <= nvl(clientUpdates.get(p.getKey()), 0)) continue;
           if (v instanceof Text) {
+            if (nvl((Long)serverUpdates.getProperty(p.getKey()), 1) <= nvl(clientUpdates.get(p.getKey()), clientDefault)) continue;
             String s = (v == null) ? "{}" : ((Text) v).getValue();
             if (!"null".equals(s)) {
               json.append(delimiter + p.getKey() + ":" + s);
@@ -121,7 +123,7 @@ public class ProfileUtil {
     }
     
     json.append("}");
-    System.out.println("getUserProfileAsBase64: " + json);
+    System.out.println("getUserSyncProfile: " + json);
     return json.toString();
   }
 

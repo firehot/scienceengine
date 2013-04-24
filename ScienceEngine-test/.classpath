@@ -7,5 +7,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ScienceEngine-desktop"/>
 	<classpathentry kind="lib" path="/ScienceEngine-desktop/libs/gdx-backend-lwjgl.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ScienceEngine-designer"/>
+	<classpathentry kind="lib" path="/ScienceEngine-html/war/WEB-INF/lib/appengine-api-1.0-sdk-1.7.7.jar"/>
+	<classpathentry kind="lib" path="/ScienceEngine-html/war/WEB-INF/lib/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="/ScienceEngine-html/war/WEB-INF/lib/gwt-servlet.jar"/>
+	<classpathentry kind="lib" path="/ScienceEngine-html/war/WEB-INF/lib/pdfbox-1.8.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ScienceEngine-html"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
