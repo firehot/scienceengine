@@ -1,9 +1,9 @@
-package com.mazalearn.gwt.server;
+package com.mazalearn.scienceengine.app.services;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.google.gson.Gson;
 
 public class ProfileSyncer {
   
@@ -22,7 +22,7 @@ public class ProfileSyncer {
    */
   
   @SuppressWarnings("unchecked")
-  void syncMerge(Map<String, Long> myTimestamps, Map<String, Long> yourTimestamps,
+  public void syncMerge(Map<String, Long> myTimestamps, Map<String, Long> yourTimestamps,
       Map<String, Object> myData, Map<String, Object> yourData) {
     
     for (Map.Entry<String, Long> entry: yourTimestamps.entrySet()) {
@@ -58,7 +58,7 @@ public class ProfileSyncer {
         return dataToSend
    */
   @SuppressWarnings("unchecked")
-  Map<String, Object> getSyncData(Map<String, Long> myTimestamps,
+  public Map<String, Object> getSyncData(Map<String, Long> myTimestamps,
       Map<String, Long> yourTimestamps, Map<String, Object> myData,
       Map<String, Long> syncTimestamps) {
     Map<String, Object> syncData = new HashMap<String, Object>();
@@ -81,6 +81,22 @@ public class ProfileSyncer {
     return syncData;
   }
   
+  public String doSync(Gson gson, Map<String, Object> myData,
+      Map<String, Object> yourData, Map<String, Long> myTimestamps,
+      Map<String, Long> yourTimestamps) {
+    syncMerge(myTimestamps, yourTimestamps, myData, yourData);
+    // All first time stamps >= second time stamps at this point
+    
+    // TODO: why below line??? should only be on client with unreliable time
+    // myTimestamps.put(ProfileData.LAST_SYNC_TIME, yourTimestamps.get(ProfileData.THIS_SYNC_TIME));
+    
+    Map<String, Long> syncTimestamps = new HashMap<String, Long>();
+    Map<String, Object> syncData = getSyncData(myTimestamps, yourTimestamps, myData, syncTimestamps);
+    syncData.put(ProfileData.LAST_UPDATED, syncTimestamps);
+    String syncJson = gson.toJson(syncData);
+    return syncJson;
+  }
+
   private static long nvl(Long value, long defaultValue) {
     return value == null ? defaultValue : value;
   }

@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -22,7 +21,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileSyncer;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
@@ -92,40 +93,32 @@ public class ProfileUtil {
     }
     
     ProfileMapConverter profileMapConverter = new ProfileMapConverter();
+    EntityMapConverter entityMapConverter = new EntityMapConverter();
     // Sync other parts of profile
-    Map<String, Object> myData = EntityMapConverter.entityToMap(serverProfile);
+    Map<String, Object> myData = entityMapConverter.entityToMap(serverProfile);
     Map<String, Object> yourData = profileMapConverter.profileToMap(clientProfile);
     Map<String, Long> myTimestamps = (Map<String, Long>) myData.get(ProfileData.LAST_UPDATED);
     Map<String, Long> yourTimestamps = (Map<String, Long>) yourData.get(ProfileData.LAST_UPDATED);
     if (yourTimestamps.size() == 0) { // No data on client - do a forced sync
       yourTimestamps.put(ProfileData.TOPIC_STATS, 0L);
     }
-    Map<String, Long> syncTimestamps = new HashMap<String, Long>();
-    ProfileSyncer profileSyncer = new ProfileSyncer();
-    
-    profileSyncer.syncMerge(myTimestamps, yourTimestamps, myData, yourData);
-    // All first time stamps >= second time stamps at this point
-    
-    // TODO: why below line??? should only be on client with unreliable time
-    // myTimestamps.put(ProfileData.LAST_SYNC_TIME, yourTimestamps.get(ProfileData.THIS_SYNC_TIME));
-    
-    Map<String, Object> syncData = profileSyncer.getSyncData(myTimestamps, yourTimestamps, myData, syncTimestamps);
+    ProfileSyncer profileSyncer = new ProfileSyncer();  
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapter(Text.class, new TextSerializer())
+      .create();
+    String syncJson = profileSyncer.doSync(gson, myData, yourData, myTimestamps, yourTimestamps);
     
     myTimestamps.put(ProfileData.THIS_SYNC_TIME, getCurrentTime());
     
     // save data back from map into entity profile
-    EntityMapConverter.mapToEntity(serverProfile, myData);
+    entityMapConverter.mapToEntity(serverProfile, myData);
     
-    syncData.put(ProfileData.LAST_UPDATED, syncTimestamps);
     // TODO: only inbox of client needs to be pushed if it has changed
     // syncData.put(ProfileData.SOCIAL, serverSocial);
     
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(Text.class, new TextSerializer())
-        .create();
-    return gson.toJson(syncData);
+    return syncJson;
   }
-  
+
   public EmbeddedEntity retrieveUserProfile(String userId) {
     Entity user = createOrGetUser(userId, false);
     return createOrGetUserProfile(user, false);

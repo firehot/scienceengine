@@ -22,6 +22,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
@@ -133,5 +134,4 @@ public class ProfileSyncerTest {
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
   }
-
 }

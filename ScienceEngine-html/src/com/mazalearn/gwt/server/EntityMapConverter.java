@@ -5,11 +5,16 @@ import java.util.Map;
 
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Text;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 
 public class EntityMapConverter {
+  private Gson gson = new Gson();
   /* convert entity to map */
-  public static Map<String, Object> entityToMap(EmbeddedEntity entity) {
+  public Map<String, Object> entityToMap(EmbeddedEntity entity) {
     Map<String, Object> entityMap = new HashMap<String, Object>();
 
     for (Map.Entry<String, Object> property : entity.getProperties().entrySet()) {
@@ -34,7 +39,7 @@ public class EntityMapConverter {
 
   /* convert map to entity in the same entity sent in */
   @SuppressWarnings("unchecked")
-  public static void mapToEntity(EmbeddedEntity entity,
+  public void mapToEntity(EmbeddedEntity entity,
       Map<String, Object> entityMap) {
 
     for (Map.Entry<String, Object> property : entityMap.entrySet()) {
@@ -44,8 +49,10 @@ public class EntityMapConverter {
         mapToEntity((EmbeddedEntity) entity.getProperty(key), (Map<String, Object>) value);
       } else if (value instanceof String) {
         entity.setProperty(key, new Text((String) value));
-      } else {
+      } else if (value instanceof Text || value instanceof Long) {
         entity.setProperty(key, value);
+      } else {
+        entity.setProperty(key, new Text(gson.toJson(value)));
       }
     }
 
