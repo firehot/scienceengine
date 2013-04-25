@@ -333,6 +333,8 @@ public class Profile implements Serializable {
   
   public synchronized void mergeProfile(String serverProfileBase64) {
     Profile serverProfile = fromBase64(serverProfileBase64);
+    // TODO: add locking - getProfileData() should lock on profiledata
+    // Not locking ProfileData here - so chances of overwrites.
     if (serverProfile != null) {
       // Other profile is later - merge other on top of this
       long serverLastUpdated = nvl(serverProfile.data.lastUpdated.get(ProfileData.CLIENT_PROPS), 0);
@@ -357,12 +359,13 @@ public class Profile implements Serializable {
         data.server = serverProfile.data.server;
       }
       // Get inbox messages from server into local inbox
-      for (Message msg: serverProfile.data.social.inbox) {
-        if (msg.messageId < data.social.lastInboxMessageId) continue;
-        data.social.inbox.add(msg);
-        data.social.lastInboxMessageId = Math.max(data.social.lastInboxMessageId, msg.messageId);
+      if (serverProfile.data.social != null) {
+        for (Message msg: serverProfile.data.social.inbox) {
+          if (msg.messageId < data.social.lastInboxMessageId) continue;
+          data.social.inbox.add(msg);
+          data.social.lastInboxMessageId = Math.max(data.social.lastInboxMessageId, msg.messageId);
+        }
       }
-      data.lastUpdated.clear();
       data.lastUpdated.put(ProfileData.LAST_SYNC_TIME, System.currentTimeMillis());
     }
   }
@@ -423,5 +426,13 @@ public class Profile implements Serializable {
       if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();       
     }
     return null;
+  }
+
+  public boolean isRegistered() {
+    return data.server.isRegistered;
+  }
+
+  public List<String> getCertificates() {
+    return data.client.certificates;
   }
 }

@@ -32,28 +32,24 @@ public class ProfileServlet extends HttpServlet {
     
     profileUtil = new ProfileUtil();
     ProfileData clientProfile = profileUtil.profileFromBase64(profileBytes);
-    String oldUserId = profileUtil.saveUserProfile(userId, clientProfile);
-    writeProfileResponse(response, userId, clientProfile);
+    String syncProfileBase64 = profileUtil.saveUserProfile(userId, clientProfile);
+    writeProfileResponse(response, syncProfileBase64);
     // Delete old user, if any
-    if (oldUserId != null) {
-      profileUtil.deleteOldUser(userId, oldUserId);
-    }
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String userId = request.getParameter(ProfileData.USER_ID);
     System.out.println("Received get: " + userId);
-    writeProfileResponse(response, userId, null);
+//    writeProfileResponse(response, userId, null);
   }
 
-  private void writeProfileResponse(HttpServletResponse response, String userId, ProfileData clientProfile)
+  private void writeProfileResponse(HttpServletResponse response, String syncProfileBase64)
       throws IOException {
-    String responseStr = profileUtil.getUserSyncProfileAsBase64(userId, clientProfile);
-    if (responseStr.isEmpty()) {
+    if (syncProfileBase64.isEmpty()) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     } else {
-      response.getWriter().append(responseStr);
+      response.getWriter().append(syncProfileBase64);
     }
     response.getWriter().close();
   }

@@ -53,8 +53,7 @@ public class UserHomeDialog extends Dialog {
     addUserInfo(userImage, contentTable);
     
     // Registration information
-    final boolean alreadyRegistered = profile.getUserEmail().length() > 0;
-    if (alreadyRegistered) {
+    if (profile.isRegistered()) {
       addCertificatesPane(contentTable);
       addSocialPane(contentTable);
     } else {
@@ -108,6 +107,10 @@ public class UserHomeDialog extends Dialog {
   private void addCertificatesPane(Table contentTable) {
     // TODO: Once certificate granted, show image here.
     List<TextButton> list = new ArrayList<TextButton>();
+    for (String itemName: profile.getCertificates()) {
+      TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
+      list.add(item);
+    }    
     for (String itemName: new String[] {"certificate", "award", "award", "achievement", "certificate"}) {
       TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
       list.add(item);

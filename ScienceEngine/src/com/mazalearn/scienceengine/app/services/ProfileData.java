@@ -35,19 +35,32 @@ public class ProfileData {
   public ServerProps server;
   public HashMap<String, HashMap<String, float[]>> topicStats;
   public ProfileData.Social social;
+  // update timestamps for all synchronizable chunks of profile
   public HashMap<String, Long> lastUpdated = new HashMap<String, Long>();
+  // base 64 encoded string of image of user face
   public String userPng;
+  // base64 encoded string of png image of coach in science train
   public String coachPng;
   
   public static class ClientProps {
+    // email id of user - not available until registration
     public String userEmail;
+    // platform of current device of user
     public String platform;
+    // value of color for Science Train
     public String color;
+    // value of current for Science Train
     public float current;
+    // Installation id of current device of user
     public String installId;
+    // Current topic of user
     public String topic;
+    // Previous to current activity of user
     public String lastActivity;
+    // Current activity of user
     public String activity;
+    // These are the certificates held by user
+    public ArrayList<String> certificates = new ArrayList<String>();
   }
   public static class ServerProps {
     public String userName;
@@ -58,6 +71,7 @@ public class ProfileData {
     public String city;
     public String comments;
     public String registrationDate;
+    public boolean isRegistered;
   }
   
   public static class Social {
