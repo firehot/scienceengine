@@ -159,4 +159,6 @@ public interface ITutor {
   public String[] getRefs();
 
   public void setParentTutor(ITutor tutor);
+
+  public String getProgressText();
 }

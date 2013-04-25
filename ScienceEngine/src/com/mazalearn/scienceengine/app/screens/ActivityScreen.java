@@ -196,7 +196,8 @@ public class ActivityScreen extends AbstractScreen {
     InputProcessor gestureListener = new Science2DGestureDetector((Stage) science2DView);
     Gdx.input.setInputProcessor(new InputMultiplexer(gestureListener, (Stage) science2DView));
     Gdx.app.log(ScienceEngine.LOG, "Set gesture detector");
-    if (science2DController.getGuru().getActiveTutor() != science2DController.getGuru()) {
+    // If progress on this level is 0, then show help
+    if (science2DController.getGuru().getStats()[ITutor.PERCENT_PROGRESS] == 0) {
       showHelp();
     }
   }

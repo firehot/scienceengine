@@ -118,7 +118,14 @@ public class TutorGroup extends AbstractTutor {
     super.prepareToTeach(currentTutor);
   }
 
+  @Override
+  public String getProgressText() {
+    return String.valueOf(tutorIndex + 1) + " of " + numChildren + "\n" 
+       + Math.round(stats[ITutor.NUM_SUCCESSES]) + " Correct";
+  }
+  
   private void randomizeChildTutors() {
+    stats[ITutor.NUM_SUCCESSES] = 0;
     Utils.shuffle(childTutors);
     numChildren = Math.min(childTutors.size(), 
         (getType() == TutorType.RapidFire) ? RAPID_FIRE_MAX : REVIEWER_MAX);

@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -266,12 +268,22 @@ public class Guru extends Group implements ITutor {
   public String getLevelEndMessage(boolean success) {
     int progress = Math.round(rootTutor.getStats()[ITutor.PERCENT_PROGRESS]);
     String progressStr = "Progress = " + progress + "%\n\n\n\n";
-    if (success && progress == 100) { // Allow 80% for reviewer ???
+    if (success && progress >= 80) {
+      // TODO: Hardcoded for now. 
+      if (science2DController.getLevel() == Topic.EMReview) {
+        Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
+        profile.addCertificate(Topic.EMReview.name());
+      }
       return progressStr + ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
           science2DController.getLevel() + ".Success");
     }
     // TODO: Each level should have own failure message. 
     return progressStr + ScienceEngine.getMsg().getString("Level.Failure");
+  }
+
+  @Override
+  public String getProgressText() {
+    return "1 of many";
   }
   
 }

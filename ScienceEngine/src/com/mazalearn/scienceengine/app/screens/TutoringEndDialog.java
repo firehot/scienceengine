@@ -21,6 +21,7 @@ public class TutoringEndDialog extends Dialog {
     setBackground(createBackground());
     
     Label description = new Label("\n\n" + contents, skin);
+    description.setColor(Color.BLUE);
     description.setWidth(400);
     description.setWrap(true);
     

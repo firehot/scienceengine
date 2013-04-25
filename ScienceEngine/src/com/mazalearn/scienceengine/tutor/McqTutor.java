@@ -99,7 +99,7 @@ public class McqTutor extends AbstractTutor {
   public void prepareToTeach(ITutor childTutor) {
     super.prepareToTeach(childTutor);
     McqActor mcqActor = tutorHelper.getMcqActor();
-    optionsGroup = mcqActor.setUp(this, questionImageTexture, optionList, singleAnswer);
+    optionsGroup = mcqActor.setUp(this, parent.getProgressText(), questionImageTexture, optionList, singleAnswer);
     addActor(mcqActor);
   }
 }

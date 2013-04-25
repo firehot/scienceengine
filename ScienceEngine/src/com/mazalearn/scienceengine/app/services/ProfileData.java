@@ -59,7 +59,7 @@ public class ProfileData {
     public String lastActivity;
     // Current activity of user
     public String activity;
-    // These are the certificates held by user
+    // These are the set of certificates held by user
     public ArrayList<String> certificates = new ArrayList<String>();
   }
   public static class ServerProps {

@@ -111,8 +111,9 @@ public class UserHomeDialog extends Dialog {
       TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
       list.add(item);
     }    
-    for (String itemName: new String[] {"certificate", "award", "award", "achievement", "certificate"}) {
-      TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
+    String[] dummyCertificates = {"certificate", "award", "award", "achievement", "certificate"};
+    for (int i = profile.getCertificates().size(); i < dummyCertificates.length; i++) {
+      TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, dummyCertificates[i]);
       list.add(item);
     }
     contentTable.add(createImagesPane(skin, list)).colspan(2);

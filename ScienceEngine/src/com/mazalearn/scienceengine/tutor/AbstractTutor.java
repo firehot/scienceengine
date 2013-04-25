@@ -253,4 +253,9 @@ public abstract class AbstractTutor extends Group implements ITutor {
   public String[] getRefs() {
     return refs;
   }
+  
+  @Override
+  public String getProgressText() {
+    return "1 of 1";
+  }
 }

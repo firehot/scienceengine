@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -31,6 +32,7 @@ public class McqActor extends Group {
   private ButtonGroup optionButtons;
   private final CheckBoxStyle radioButtonStyle, checkBoxStyle;
   private Image questionImage;
+  private Label progressInfo;
   
   private static class OptionListener extends ClickListener {
     
@@ -59,6 +61,13 @@ public class McqActor extends Group {
     this.optionListener = createListener(skin, submitButton);
     this.radioButtonStyle = skin.get("mcq-radio", CheckBoxStyle.class);
     this.checkBoxStyle = skin.get("mcq-check", CheckBoxStyle.class);
+    this.progressInfo = new Label("", skin);
+    this.addActor(progressInfo);
+    
+    progressInfo.setPosition(ScreenComponent.McqProgressInfo.getX(ScreenComponent.getScaledX(40)),
+       ScreenComponent.McqProgressInfo.getY(ScreenComponent.getScaledY(30)));
+    
+
     final TextureRegion blackTexture = ScreenUtils.createTextureRegion(10, 10, Color.BLACK);
     this.questionImage = new Image() {
       @Override
@@ -93,9 +102,10 @@ public class McqActor extends Group {
     return listener;
   }
   
-  public ButtonGroup setUp(ITutor tutor, String questionImageTexture, List<String> optionList, boolean singleAnswer) {
+  public ButtonGroup setUp(ITutor tutor, String progress, String questionImageTexture, List<String> optionList, boolean singleAnswer) {
     this.tutor = tutor;
     optionListener.setTutor(tutor);
+    progressInfo.setText(progress);
     if (questionImageTexture != null) {
       TextureRegion textureRegion = ScienceEngine.getTextureRegion(questionImageTexture);
       if (textureRegion != null) {
