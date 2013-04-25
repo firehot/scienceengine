@@ -21,12 +21,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.google.gson.reflect.TypeToken;
 import com.mazalearn.scienceengine.app.services.ProfileData;
-import com.mazalearn.scienceengine.app.services.ProfileSyncer;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
+import com.mazalearn.scienceengine.app.services.ProfileSyncer;
 import com.mazalearn.scienceengine.app.utils.ProfileMapConverter;
 
 public class ProfileUtil {
@@ -88,19 +87,18 @@ public class ProfileUtil {
     // Social sync is special - do this first
     if (clientProfile.social != null) {
       Social serverSocial = jsonEntityUtil.getFromJsonTextProperty(serverProfile, ProfileData.SOCIAL, Social.class);
-      syncSocial(userEmail, clientProfile.social, serverSocial);
+      syncSocialServer(userEmail, clientProfile.social, serverSocial);
       jsonEntityUtil.setAsJsonTextProperty(serverProfile, ProfileData.SOCIAL, serverSocial);
     }
     
-    ProfileMapConverter profileMapConverter = new ProfileMapConverter();
     EntityMapConverter entityMapConverter = new EntityMapConverter();
     // Sync other parts of profile
     Map<String, Object> myData = entityMapConverter.entityToMap(serverProfile);
-    Map<String, Object> yourData = profileMapConverter.profileToMap(clientProfile);
+    Map<String, Object> yourData = ProfileMapConverter.profileToMap(clientProfile);
     Map<String, Long> myTimestamps = (Map<String, Long>) myData.get(ProfileData.LAST_UPDATED);
     Map<String, Long> yourTimestamps = (Map<String, Long>) yourData.get(ProfileData.LAST_UPDATED);
     if (yourTimestamps.size() == 0) { // No data on client - do a forced sync
-      yourTimestamps.put(ProfileData.TOPIC_STATS, 0L);
+      yourTimestamps.put(ProfileData.TOPIC_STATS, -1L);
     }
     ProfileSyncer profileSyncer = new ProfileSyncer();  
     Gson gson = new GsonBuilder()
@@ -159,7 +157,7 @@ public class ProfileUtil {
     return jsonEntityUtil.profileFromBase64(profileBytes);
   }
 
-  private void syncSocial(String fromEmail, Social clientSocial, Social serverSocial) {
+  private void syncSocialServer(String fromEmail, Social clientSocial, Social serverSocial) {
     // Clear out all outbox messages from client
     for (Message msg: clientSocial.outbox) {
       // If message has already been processed, ignore it.

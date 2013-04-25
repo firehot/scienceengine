@@ -336,42 +336,8 @@ public class Profile implements Serializable {
     // TODO: add locking - getProfileData() should lock on profiledata
     // Not locking ProfileData here - so chances of overwrites.
     if (serverProfile != null) {
-      // Other profile is later - merge other on top of this
-      long serverLastUpdated = nvl(serverProfile.data.lastUpdated.get(ProfileData.CLIENT_PROPS), 0);
-      long clientLastUpdated = nvl(data.lastUpdated.get(ProfileData.CLIENT_PROPS), 0);
-      if ( serverLastUpdated > clientLastUpdated) {
-        data.client = serverProfile.data.client;
-      }
-
-      serverLastUpdated = nvl(serverProfile.data.lastUpdated.get(ProfileData.COACH_PNG), 0);
-      clientLastUpdated = nvl(data.lastUpdated.get(ProfileData.COACH_PNG), 0);
-      if ( serverLastUpdated > clientLastUpdated) {
-        data.coachPng = serverProfile.data.coachPng;
-      }
-
-      serverLastUpdated = nvl(serverProfile.data.lastUpdated.get(ProfileData.USER_PNG), 0);
-      clientLastUpdated = nvl(data.lastUpdated.get(ProfileData.USER_PNG), 0);
-      if ( serverLastUpdated > clientLastUpdated) {
-        data.userPng = serverProfile.data.userPng;
-      }
-
-      if (serverProfile.data.server != null) {
-        data.server = serverProfile.data.server;
-      }
-      // Get inbox messages from server into local inbox
-      if (serverProfile.data.social != null) {
-        for (Message msg: serverProfile.data.social.inbox) {
-          if (msg.messageId < data.social.lastInboxMessageId) continue;
-          data.social.inbox.add(msg);
-          data.social.lastInboxMessageId = Math.max(data.social.lastInboxMessageId, msg.messageId);
-        }
-      }
-      data.lastUpdated.put(ProfileData.LAST_SYNC_TIME, System.currentTimeMillis());
+      new ProfileSyncer().mergeProfile(serverProfile.data, data);
     }
-  }
-
-  private static long nvl(Long value, long defaultValue) {
-    return value == null ? defaultValue : value;
   }
 
   public void acceptGift(Message gift) {
@@ -389,7 +355,14 @@ public class Profile implements Serializable {
   }
 
   // Returns the profile string to be used for syncing to server
-  public String getSyncStr()  {
+  public String getSyncStr() {
+    String syncProfileStr = new ProfileSyncer().getSyncJson(data);
+    Gdx.app.log(ScienceEngine.LOG, syncProfileStr);
+    return Base64Coder.encodeString(syncProfileStr);
+    
+  }
+
+  public String getSyncStr1()  {
     Map<String, Object> props = new HashMap<String, Object>();
     props.put(ProfileData.SERVER_PROPS, data.server);
     props.put(ProfileData.CLIENT_PROPS, data.client);

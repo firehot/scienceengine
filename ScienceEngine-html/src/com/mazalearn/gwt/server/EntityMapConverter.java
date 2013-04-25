@@ -6,9 +6,6 @@ import java.util.Map;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Text;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 
 public class EntityMapConverter {
@@ -45,7 +42,7 @@ public class EntityMapConverter {
     for (Map.Entry<String, Object> property : entityMap.entrySet()) {
       String key = property.getKey();
       Object value = property.getValue();
-      if (value instanceof Map) {
+      if (entity.getProperty(key) instanceof EmbeddedEntity) {
         mapToEntity((EmbeddedEntity) entity.getProperty(key), (Map<String, Object>) value);
       } else if (value instanceof String) {
         entity.setProperty(key, new Text((String) value));

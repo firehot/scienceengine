@@ -2,9 +2,7 @@ package com.mazalearn.gwt.server;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,20 +11,11 @@ import org.junit.Test;
 
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Text;
-import com.google.appengine.repackaged.com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.reflect.TypeToken;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
+import com.mazalearn.scienceengine.app.services.ProfileSyncer;
 
 /**
  * Test for profileutil.java
@@ -37,11 +26,11 @@ public class ProfileSyncerTest {
 
   public static final long TIME_NOW = 123456L;
 
-
   private EmbeddedEntity serverUpdates = new EmbeddedEntity();
   private EmbeddedEntity serverProfile = new EmbeddedEntity();
   private HashMap<String, Long> clientUpdates = new HashMap<String, Long>();
   private ProfileData clientProfile = new ProfileData();
+  private ProfileSyncer profileSyncer = new ProfileSyncer();
   private ProfileUtil profileUtil = new ProfileUtil() {
     @Override
     long getCurrentTime() {
@@ -62,7 +51,7 @@ public class ProfileSyncerTest {
     serverUpdates.setProperty(ProfileData.CLIENT_PROPS, 10L);
     serverUpdates.setProperty(ProfileData.SERVER_PROPS, 20L);
     serverUpdates.setProperty(ProfileData.SOCIAL, 30L);
-    serverUpdates.setProperty(ProfileData.TOPIC_STATS, 40L);
+    serverUpdates.setProperty(ProfileData.TOPIC_STATS, 0L);
     serverUpdates.setProperty("Field", 40L);
     serverUpdates.setProperty("BarMagnet", 30L);
 
@@ -78,16 +67,21 @@ public class ProfileSyncerTest {
     clientUpdates.put(ProfileData.CLIENT_PROPS, 10L);
     clientUpdates.put(ProfileData.SERVER_PROPS, 20L);
     clientUpdates.put(ProfileData.SOCIAL, 30L);
+    clientUpdates.put("BarMagnet", 40L);
     
     clientUpdates.put(ProfileData.LAST_SYNC_TIME, 40L);
     clientUpdates.put(ProfileData.THIS_SYNC_TIME, 50L);
+    
     clientProfile.lastUpdated = clientUpdates;
     clientProfile.client = new ClientProps();
     clientProfile.server = new ServerProps();
     clientProfile.social = null;
+    clientProfile.topicStats = new HashMap<String, HashMap<String, float[]>>();
+    HashMap<String, float[]> entry = new HashMap<String, float[]>();
+    entry.put("Guru", new float[] {10});
+    clientProfile.topicStats.put("BarMagnet", entry);
   }
   
-  private static final String TIMESTAMPS_JSON =  "{\"lastupdated\":{}}";
   @Test
   public void testGetUserSyncProfile_NoUpdates() {
     String expected = "{\"lastupdated\":{}}";
@@ -129,9 +123,30 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetUserSyncProfile_TopicStatsForced() {
-    String expected= "{\"lastupdated\":{\"Field\":40,\"BarMagnet\":30},\"topicStats\":{\"Field\":{\"FIeld\":20},\"BarMagnet\":{\"Guru\":10}}}";
-    clientUpdates.put(ProfileData.TOPIC_STATS, 0L);
+    String expected= "{\"lastupdated\":{\"Field\":40},\"topicStats\":{\"Field\":{\"FIeld\":20}}}";
+    clientUpdates.put(ProfileData.TOPIC_STATS, ProfileSyncer.FORCED_SYNC);
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
+  }
+  
+  @Test
+  public void testGetSyncJson() {
+    String expected = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastupdated\":{\"client\":10,\"BarMagnet\":40},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
+    String s = profileSyncer.getSyncJson(clientProfile);
+    assertEquals(expected, s);
+  }
+
+  @Test
+  public void testMergeProfile() {
+    ProfileData serverProfileData = new ProfileData();
+    serverProfileData.social = new Social();
+    serverProfileData.server = new ServerProps();
+    serverProfileData.client = new ClientProps();
+    serverProfileData.lastUpdated = new HashMap<String, Long>();
+    serverProfileData.lastUpdated.put(ProfileData.SERVER_PROPS, 100L);
+    serverProfileData.lastUpdated.put(ProfileData.CLIENT_PROPS, 100L);
+    profileSyncer.mergeProfile(serverProfileData, clientProfile);
+    assertEquals(serverProfileData.server, clientProfile.server);
+    assertEquals(serverProfileData.client, clientProfile.client);
   }
 }
