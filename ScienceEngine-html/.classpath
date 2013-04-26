@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ScienceEngine"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry including="com/mazalearn/scienceengine/Topic.java|com/mazalearn/scienceengine/app/services/ProfileData.java|com/mazalearn/scienceengine/app/utils/Crypter.java" kind="src" path="src2"/>
+	<classpathentry including="com/mazalearn/scienceengine/Topic.java|com/mazalearn/scienceengine/app/services/ProfileData.java|com/mazalearn/scienceengine/app/services/ProfileSyncer.java|com/mazalearn/scienceengine/app/utils/Crypter.java|com/mazalearn/scienceengine/app/utils/ProfileMapConverter.java" kind="src" path="src2"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

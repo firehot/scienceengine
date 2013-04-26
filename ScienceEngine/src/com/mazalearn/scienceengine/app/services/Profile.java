@@ -17,6 +17,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social.MQ;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.tutor.ITutor;
@@ -205,29 +206,34 @@ public class Profile implements Serializable {
   
   public void sendGift(Message gift) {
     if (data.social.outbox == null) {
-      data.social.outbox = new ArrayList<Message>();
+      data.social.outbox = new MQ();
     }
-    Message msg = new Message(data.social.lastOutboxMessageId++, gift);
-    data.social.outbox.add(msg);
+    data.social.outbox.addMessage(gift);
     data.social.points -= gift.points;
     markForSync(ProfileData.SOCIAL);
     save();
   }
-  
+
   void testPostInMessage(Message msg) {
     if (data.social.inbox == null) {
-      data.social.inbox = new ArrayList<Message>();
+      data.social.inbox = new MQ();
     }
-    Message message = new Message(data.social.lastInboxMessageId++, msg);
-    data.social.inbox.add(message);
+    data.social.inbox.addMessage(msg);
   }
   
   public List<Message> getOutbox() {
-    return data.social.outbox;
+    return data.social.outbox.mq;
   }
 
   public List<Message> getInbox() {
-    return data.social.inbox;
+    return data.social.inbox.mq;
+  }
+
+  public void acceptGift(Message gift) {
+    data.social.inbox.mq.remove(gift);
+    data.social.points += gift.points;
+    markForSync(ProfileData.SOCIAL);
+    save();
   }
 
   public void setCoachPixmap(Pixmap coachPixmap, float current, String color) {
@@ -334,11 +340,6 @@ public class Profile implements Serializable {
     if (serverProfile != null) {
       new ProfileSyncer().mergeProfile(serverProfile.data, data);
     }
-  }
-
-  public void acceptGift(Message gift) {
-    data.social.inbox.remove(gift);
-    data.social.points += gift.points;
   }
 
   public int getPoints() {

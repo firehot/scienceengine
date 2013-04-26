@@ -2,7 +2,15 @@ package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
+import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
+
+/**
+ * The data component of Profile and methods shared between client and server
+ * @author sridhar
+ *
+ */
 public class ProfileData {
   public static final String USER_EMAIL = "useremail";
   public static final String INSTALL_ID = "installid";
@@ -41,6 +49,8 @@ public class ProfileData {
   public String userPng;
   // base64 encoded string of png image of coach in science train
   public String coachPng;
+  // Server timestamps received at client - not used at server
+  public transient Map<String, Long> serverTimestamps;
   
   public static class ClientProps {
     // email id of user - not available until registration
@@ -83,7 +93,6 @@ public class ProfileData {
       public String text;
       public String image;
       public int points;
-      public int status; // 0 = not processed, 1 = sent, 2 = problem
       public Message() {}
       public Message(int messageId, Message other) {
         this.messageId = messageId;
@@ -94,16 +103,30 @@ public class ProfileData {
         this.points = other.points;
       }
     }
+    
+    // Message Queue shared between producer and consumer
+    // Producer writes to tail of mq and consumer reads from head of mq
+    // tailId belongs to producer and headId belongs to consumer
+    // only producer is allowed to remove messages
+    public static class MQ {
+      public ArrayList<Message> mq = new ArrayList<Message>();
+      public int tailId;
+      public int headId;
+      
+      public void addMessage(Message gift) {
+        Message msg = new Message(++tailId, gift);
+        mq.add(msg);
+      }
+      
+    }
     public ArrayList<String> friends;
-    public ArrayList<Message> inbox; // server can only add, client can only remove 
-    public ArrayList<Message> outbox; // client can only add, server can only remove
-    public int lastInboxMessageId;
-    public int lastOutboxMessageId;
+    public MQ inbox;  // producer = server, consumer = client 
+    public MQ outbox; // producer = client, consumer = server
     public int points;
     
     public Social() {
-      inbox = new ArrayList<Message>();
-      outbox = new ArrayList<Message>();
+      inbox = new MQ();
+      outbox = new MQ();
     }
   }
 

@@ -14,6 +14,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
+import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,10 +33,6 @@ public class ProfileUtil {
 
   private DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
   private JsonEntityUtil jsonEntityUtil = new JsonEntityUtil();
-  
-  long getCurrentTime() { // Refactored out for testing
-    return System.currentTimeMillis();
-  }
   
   public static EmbeddedEntity createOrGetUserProfile(Entity user, boolean create) {
     if (user == null) return null;
@@ -84,11 +81,18 @@ public class ProfileUtil {
   @SuppressWarnings("unchecked")
   public String getUserSyncProfile(String userEmail, EmbeddedEntity serverProfile, ProfileData clientProfile) 
       throws IllegalStateException {
-    // Social sync is special - do this first
+    ProfileSyncer profileSyncer = new ProfileSyncer();  
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(Text.class, new TextSerializer())
+        .create();
+
+    // Always do a Social sync - if client sends social data
+    boolean socialSyncDone = false;
     if (clientProfile.social != null) {
       Social serverSocial = jsonEntityUtil.getFromJsonTextProperty(serverProfile, ProfileData.SOCIAL, Social.class);
       syncSocialServer(userEmail, clientProfile.social, serverSocial);
       jsonEntityUtil.setAsJsonTextProperty(serverProfile, ProfileData.SOCIAL, serverSocial);
+      socialSyncDone = true;
     }
     
     EntityMapConverter entityMapConverter = new EntityMapConverter();
@@ -97,17 +101,18 @@ public class ProfileUtil {
     Map<String, Object> yourData = ProfileMapConverter.profileToMap(clientProfile);
     Map<String, Long> myTimestamps = (Map<String, Long>) myData.get(ProfileData.LAST_UPDATED);
     Map<String, Long> yourTimestamps = (Map<String, Long>) yourData.get(ProfileData.LAST_UPDATED);
-    if (yourTimestamps.size() == 0) { // No data on client - do a forced sync
+    
+    // set SOCIAL timestamp to now if social sync was done -otherwise, it can be what it was already set to
+    if (socialSyncDone) {
+      myTimestamps.put(ProfileData.SOCIAL, profileSyncer.getCurrentTime());
+    }
+    
+    // If there is no data on client - do a forced sync
+    if (yourTimestamps.size() == 0) {
       yourTimestamps.put(ProfileData.TOPIC_STATS, -1L);
     }
-    ProfileSyncer profileSyncer = new ProfileSyncer();  
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Text.class, new TextSerializer())
-      .create();
     String syncJson = profileSyncer.doSync(gson, myData, yourData, myTimestamps, yourTimestamps);
-    
-    myTimestamps.put(ProfileData.THIS_SYNC_TIME, getCurrentTime());
-    
+        
     // save data back from map into entity profile
     entityMapConverter.mapToEntity(serverProfile, myData);
     
@@ -157,30 +162,65 @@ public class ProfileUtil {
     return jsonEntityUtil.profileFromBase64(profileBytes);
   }
 
+  /**
+   * 
+   * @param fromEmail - email of current user to be used to send invites
+   * @param clientSocial
+   * @param serverSocial
+   */
   private void syncSocialServer(String fromEmail, Social clientSocial, Social serverSocial) {
-    // Clear out all outbox messages from client
-    for (Message msg: clientSocial.outbox) {
+    // Consume all outbox messages from client
+    for (Message msg: clientSocial.outbox.mq) {
       // If message has already been processed, ignore it.
       // TODO: serverSocial should maintain outboxmessageid per installation per user
-      if (msg.messageId < serverSocial.lastOutboxMessageId) continue;
+      if (msg.messageId < serverSocial.outbox.headId) continue;
       String toEmail = msg.email;
-      Entity toUser = createOrGetUser(toEmail, true);
-      EmbeddedEntity toUserProfile = createOrGetUserProfile(toUser, true);
+      String installId = null;
+
+      Transaction txn = ds.beginTransaction();
+      try {
+        Entity toUser = createOrGetUser(toEmail, true);
+        EmbeddedEntity toUserProfile = createOrGetUserProfile(toUser, true);
+        installId = (String) toUserProfile.getProperty(ProfileData.INSTALL_ID);
+        // If toUserProfile already exists and is bound to an installation, add gift to inbox.
+        if (installId != null) {
+          // Update inbox with gift
+          Social toSocial = jsonEntityUtil.getFromJsonTextProperty(toUserProfile, ProfileData.SOCIAL, Social.class); 
+          System.out.println("Transferring Gift " + msg.messageId + " to " + toEmail);
+          msg.email = fromEmail;
+          toSocial.inbox.addMessage(msg);
+          jsonEntityUtil.setAsJsonTextProperty(toUserProfile, ProfileData.SOCIAL, toSocial);
+          
+          // update timestamp of social properties which have now been updated
+          EmbeddedEntity lastUpdated = (EmbeddedEntity) toUserProfile.getProperty(ProfileData.LAST_UPDATED);
+          lastUpdated.setProperty(ProfileData.SOCIAL, System.currentTimeMillis());
+          
+          // save user and commit transaction
+          ds.put(toUser);
+          txn.commit();
+        }
+      } finally {
+          if (txn.isActive()) {
+              txn.rollback();
+          }
+      }
+      
       // If toUser has no installation, send an email invite
-      if (toUserProfile.getProperty(ProfileData.INSTALL_ID) == null) {
+      if (installId == null) {
         EmailUtil.sendUserInvite(fromEmail, toEmail);
       }
-      // add gift to inbox of toUser's social
-      // TODO: We should ideally lock toUser but we are being careless here
-      Social toSocial = jsonEntityUtil.getFromJsonTextProperty(toUserProfile, ProfileData.SOCIAL, Social.class); 
-      System.out.println("Transferring Gift " + msg.messageId + " to " + toEmail);
-      msg.messageId = toSocial.lastInboxMessageId++;
-      msg.email = fromEmail;
-      toSocial.inbox.add(msg);
-      jsonEntityUtil.setAsJsonTextProperty(toUserProfile, ProfileData.SOCIAL, toSocial);
-      ds.put(toUser);
     }
-    serverSocial.lastOutboxMessageId = clientSocial.lastOutboxMessageId;
+    serverSocial.outbox.headId = clientSocial.outbox.tailId;
+    serverSocial.outbox.tailId = clientSocial.outbox.tailId;
+    serverSocial.outbox.mq.clear();
+    
+    // Remove inbox messages consumed at client and send the rest
+    for (int i = serverSocial.inbox.mq.size() - 1; i >= 0; i--) {
+      Message msg = serverSocial.inbox.mq.get(i);
+      if (msg.messageId < clientSocial.inbox.headId) {
+        serverSocial.inbox.mq.remove(msg);
+      }
+    }
     // Merge in friends list - for now copy over from client.
     serverSocial.friends = clientSocial.friends;
   }

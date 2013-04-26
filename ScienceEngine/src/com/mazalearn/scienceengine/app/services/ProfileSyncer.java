@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.services;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -11,7 +12,16 @@ import com.mazalearn.scienceengine.app.utils.ProfileMapConverter;
 public class ProfileSyncer {
   
   public static final long FORCED_SYNC = -1L;
-
+  private static long testCurrentTime = 0L;
+  
+  public static void setTestCurrentTime(long ttestCurrentTime) {
+    testCurrentTime = ttestCurrentTime;
+  }
+  
+  public long getCurrentTime() { // Refactored out for testing
+    return testCurrentTime == 0 ? System.currentTimeMillis() : testCurrentTime;
+  }
+  
  /*
    * Merge your data in to mine overwriting any item for which you have a later timestamp
    * 
@@ -101,6 +111,9 @@ public class ProfileSyncer {
     }
     Map<String, Long> syncTimestamps = new HashMap<String, Long>();
     Map<String, Object> syncData = getSyncData(myTimestamps, yourTimestamps, myData, syncTimestamps);
+    syncTimestamps.put(ProfileData.THIS_SYNC_TIME, 
+        nvl(yourTimestamps.get(ProfileData.THIS_SYNC_TIME), getCurrentTime()));
+    
     syncData.put(ProfileData.LAST_UPDATED, syncTimestamps);
     String syncJson = gson.toJson(syncData);
     return syncJson;
@@ -116,28 +129,55 @@ public class ProfileSyncer {
     Map<String, Object> myData = ProfileMapConverter.profileToMap(clientData);
     Map<String, Long> myTimestamps = (Map<String, Long>) myData.get(ProfileData.LAST_UPDATED);
     Map<String, Long> yourTimestamps = (Map<String, Long>) yourData.get(ProfileData.LAST_UPDATED);
-    
-   // Other profile is later - merge other on top of this
-    syncMerge(myTimestamps, yourTimestamps, myData, yourData);
-    // All first time stamps >= second time stamps at this point
-    
-    // TODO: why below line??? should only be on client with unreliable time
-    // myTimestamps.put(ProfileData.LAST_SYNC_TIME, yourTimestamps.get(ProfileData.THIS_SYNC_TIME));
-    syncSocialClient(serverData.social, clientData.social);
-    
-    ProfileMapConverter.mapToProfile(clientData, myData);
-    clientData.lastUpdated.put(ProfileData.LAST_SYNC_TIME, System.currentTimeMillis());
-  }
 
-  private static void syncSocialClient(Social serverSocial, Social clientSocial) {
-    // Get inbox messages from server into local inbox
-    if (serverSocial != null) {
-      for (Message msg: serverSocial.inbox) {
-        if (msg.messageId < serverSocial.lastInboxMessageId) continue;
-        clientSocial.inbox.add(msg);
-        clientSocial.lastInboxMessageId = Math.max(clientSocial.lastInboxMessageId, msg.messageId);
+    // First sync social data
+    if (syncSocialClient(serverData.social, clientData.social)) {
+      myTimestamps.put(ProfileData.SOCIAL, getCurrentTime());
+    }
+    
+   // merge server profile on top of this
+    syncMerge(myTimestamps, yourTimestamps, myData, yourData);
+    // All my time stamps >= your time stamps at this point
+    clientData.serverTimestamps = yourTimestamps;
+    
+    Long lastSyncTime = yourTimestamps.get(ProfileData.THIS_SYNC_TIME);
+    myTimestamps.put(ProfileData.LAST_SYNC_TIME, lastSyncTime);
+    // Remove timestamps older than last sync time
+    for(Iterator<Map.Entry<String, Long>> it = myTimestamps.entrySet().iterator(); it.hasNext(); ) {
+      Map.Entry<String, Long> entry = it.next();
+      if(entry.getValue() < lastSyncTime && !entry.getKey().equals(ProfileData.SERVER_PROPS)) {
+        it.remove();
       }
     }
+    
+    ProfileMapConverter.mapToProfile(clientData, myData);
+  }
+
+  /**
+   * 
+   * @param serverSocial
+   * @param clientSocial
+   * @return true iff serversocial had something which caused a change in client social
+   */
+  public static boolean syncSocialClient(Social serverSocial, Social clientSocial) {
+    // Get inbox mq of server into local inbox
+    boolean changed = false;
+    if (serverSocial != null) {
+      for (Message msg: serverSocial.inbox.mq) {        if (msg.messageId <= clientSocial.inbox.headId) continue;
+        clientSocial.inbox.addMessage(msg);
+        clientSocial.inbox.headId = Math.max(clientSocial.inbox.headId, msg.messageId);
+        changed = true;
+      }
+      // Remove outbox messages consumed at server and send the rest
+      for (int i = clientSocial.outbox.mq.size() - 1; i >= 0; i--) {
+        Message msg = clientSocial.outbox.mq.get(i);
+        if (msg.messageId < serverSocial.outbox.headId) {
+          clientSocial.outbox.mq.remove(msg);
+          changed = true;
+        }
+      }
+    }
+    return changed;
   }
 
   @SuppressWarnings("unchecked")
@@ -145,9 +185,8 @@ public class ProfileSyncer {
     Map<String, Object> myData = ProfileMapConverter.profileToMap(clientData);
     Map<String, Long> myTimestamps = (Map<String, Long>) myData.get(ProfileData.LAST_UPDATED);
     
-    Map<String, Long> yourTimestamps = new HashMap<String, Long>();
-    // no need to sync server props
-    yourTimestamps.put(ProfileData.SERVER_PROPS, System.currentTimeMillis());
+    Map<String, Long> yourTimestamps = 
+        clientData.serverTimestamps != null ? clientData.serverTimestamps : new HashMap<String, Long>();
     // always sync below topic stats
     myTimestamps.put(ProfileData.TOPIC_STATS, 0L);
     yourTimestamps.put(ProfileData.TOPIC_STATS, FORCED_SYNC);
@@ -155,6 +194,7 @@ public class ProfileSyncer {
     Map<String, Long> syncTimestamps = new HashMap<String, Long>();
     Map<String, Object> syncData = getSyncData(myTimestamps, yourTimestamps, myData, syncTimestamps);
     syncData.put(ProfileData.LAST_UPDATED, syncTimestamps);
+    syncTimestamps.put(ProfileData.THIS_SYNC_TIME, getCurrentTime());
     String syncProfileStr = new Gson().toJson(syncData);
     return syncProfileStr;
   }

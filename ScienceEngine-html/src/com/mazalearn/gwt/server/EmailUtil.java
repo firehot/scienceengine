@@ -30,7 +30,7 @@ public class EmailUtil {
     Session session = Session.getDefaultInstance(properties, null);
   
     String msgBody = 
-    		"Your friend " + toEmail + " has sent you a Science gift." +
+    		"Your friend " + fromEmail + " has sent you a Science gift." +
         "\nTo use the gift, you have to install Science Engine." +
         "\n\n-MazaLearn";
   
@@ -39,7 +39,7 @@ public class EmailUtil {
         msg.setFrom(new InternetAddress("admin@mazalearn.com", "Mazalearn Admin"));
         msg.addRecipient(MimeMessage.RecipientType.TO,
                          new InternetAddress(toEmail, "User"));
-        msg.setSubject("Collect Science Engine Gift sent by " + toEmail);
+        msg.setSubject("Collect Science Engine Gift sent by " + fromEmail);
         msg.setText(msgBody);
         Transport.send(msg);
   
