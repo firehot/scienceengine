@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
-
 /**
  * The data component of Profile and methods shared between client and server
  * @author sridhar
@@ -16,7 +14,7 @@ public class ProfileData {
   public static final String INSTALL_ID = "installid";
   public static final String USER_NAME = "username";
   public static final String USER_ID = "userid";
-  public static final String LAST_UPDATED = "lastupdated";
+  public static final String LAST_UPDATED = "lastUpdated";
   public static final String SEX = "sex";
   public static final String GRADE = "grade";
   public static final String SCHOOL = "school";
@@ -36,6 +34,7 @@ public class ProfileData {
   public static final String COACH_PNG = "pngcoach";
   public static final String USER_PNG = "pnguser";
   public static final String THIS_SYNC_TIME = "thissynctime";
+  public static final String SERVER_TIME_STAMPS = "servertimestamps";
 
   public transient HashMap<String, float[]> currentActivityStats;
 

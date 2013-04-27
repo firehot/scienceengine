@@ -90,6 +90,7 @@ public class Profile implements Serializable {
   public void read(Json json, OrderedMap<String, Object> jsonData) {
 
     data.lastUpdated = json.readValue(ProfileData.LAST_UPDATED, HashMap.class, Long.class, jsonData);
+    data.serverTimestamps = json.readValue(ProfileData.SERVER_TIME_STAMPS, HashMap.class, Long.class, jsonData);
     data.client = json.readValue(ProfileData.CLIENT_PROPS, ClientProps.class, jsonData);
     if (data.client == null) {
       data.client = new ClientProps();
@@ -131,6 +132,7 @@ public class Profile implements Serializable {
   @Override
   public void write(Json json) {
     json.writeValue(ProfileData.LAST_UPDATED, data.lastUpdated, HashMap.class, Long.class);
+    json.writeValue(ProfileData.SERVER_TIME_STAMPS, data.serverTimestamps, HashMap.class, Long.class);
     json.writeValue(ProfileData.CLIENT_PROPS, data.client);
     json.writeValue(ProfileData.SERVER_PROPS, data.server);
     if (data.coachPng != null) {

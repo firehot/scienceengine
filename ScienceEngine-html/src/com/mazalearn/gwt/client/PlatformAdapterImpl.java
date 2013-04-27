@@ -160,4 +160,9 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
     });  */
   }
 
+  @Override
+  public boolean supportsSync() {
+    return false;
+  }
+
 }

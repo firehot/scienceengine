@@ -26,6 +26,7 @@ public class PreferencesManager {
   private static final String PREF_SOUND_ENABLED = "sound.enabled";
   // Active user
   private static final String PREFS_NAME = "scienceengine";
+  private static final String PREFS_SYNC_MODE = "syncmode";
   private Profile userProfile;
   private Preferences prefs;
   private InstallProfile installProfile;
@@ -229,8 +230,13 @@ public class PreferencesManager {
     
   }
 
-  public void syncProfiles() {
+  public void syncProfiles(boolean forceSync) {
+    if (!forceSync && "Manual".equals(prefs.getString(PREFS_SYNC_MODE))) return;
+    
     Gdx.app.log(ScienceEngine.LOG, "Syncing Profiles");
+    if (forceSync) {
+      markProfileDirty(getProfileUserId());
+    }
     String syncProfilesString = prefs.getString(SYNC_PROFILES);
     Gdx.app.log(ScienceEngine.LOG, "Sync Profile: " + syncProfilesString);
     if (syncProfilesString.length() == 0) return;
@@ -243,5 +249,9 @@ public class PreferencesManager {
   public void saveInstallProfile() {
     prefs.putString(INSTALL_PROFILE, installProfile.toBase64());
     prefs.flush();
+  }
+
+  public void setSync(String syncMode) {
+    prefs.putString(PREFS_SYNC_MODE, syncMode);
   }
 }

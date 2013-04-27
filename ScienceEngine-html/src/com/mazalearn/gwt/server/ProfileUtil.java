@@ -170,12 +170,15 @@ public class ProfileUtil {
    */
   private void syncSocialServer(String fromEmail, Social clientSocial, Social serverSocial) {
     // Consume all outbox messages from client
+    int newHeadId = serverSocial.outbox.headId;
     for (Message msg: clientSocial.outbox.mq) {
       // If message has already been processed, ignore it.
       // TODO: serverSocial should maintain outboxmessageid per installation per user
       if (msg.messageId < serverSocial.outbox.headId) continue;
       String toEmail = msg.email;
       String installId = null;
+      // Messages could be out of order in outbox
+      newHeadId = Math.max(newHeadId, msg.messageId);
 
       Transaction txn = ds.beginTransaction();
       try {
@@ -210,7 +213,7 @@ public class ProfileUtil {
         EmailUtil.sendUserInvite(fromEmail, toEmail);
       }
     }
-    serverSocial.outbox.headId = clientSocial.outbox.tailId;
+    serverSocial.outbox.headId = newHeadId;
     serverSocial.outbox.tailId = clientSocial.outbox.tailId;
     serverSocial.outbox.mq.clear();
     
@@ -221,6 +224,7 @@ public class ProfileUtil {
         serverSocial.inbox.mq.remove(msg);
       }
     }
+    serverSocial.inbox.headId = clientSocial.inbox.headId;
     // Merge in friends list - for now copy over from client.
     serverSocial.friends = clientSocial.friends;
   }

@@ -65,5 +65,8 @@ public interface IPlatformAdapter {
   public String httpGet(String path);
 
   public void executeAsync(Runnable runnable);
+
+  // Does platform support sync to server of install and user profiles?
+  public boolean supportsSync();
 }
 

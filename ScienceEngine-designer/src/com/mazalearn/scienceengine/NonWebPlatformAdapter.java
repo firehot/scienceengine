@@ -186,4 +186,9 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     Thread syncThread = new Thread(runnable, "syncthread");
     syncThread.start();
   }
+
+  @Override
+  public boolean supportsSync() {
+    return true;
+  }
 }

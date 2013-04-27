@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
@@ -25,12 +26,13 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 public class OptionsDialog extends Dialog {
   private Label volumeValue;
   
-  private static IMessage getMsg() {
-    return ScienceEngine.getMsg();
+  private static String getMsg(String msgId) {
+    return ScienceEngine.getMsg().getString(msgId);
   }
 
   public OptionsDialog(final Stage stage, final Skin skin) {
-    super(getMsg().getString("ScienceEngine.Options"), skin);
+    super(getMsg("ScienceEngine.Options"), skin);
+    final PreferencesManager preferencesManager = ScienceEngine.getPreferencesManager();
 
     // retrieve the default table actor
     Table table = getContentTable();
@@ -42,19 +44,43 @@ public class OptionsDialog extends Dialog {
     if (platform.supportsLanguage()) {
       final SelectBox languageSelect = 
           new SelectBox(new String[] { "en", "ka", "hi"}, skin);
-      languageSelect.setSelection(getMsg().getLanguage());
+      languageSelect.setSelection(ScienceEngine.getMsg().getLanguage());
       languageSelect.addListener(new ChangeListener() {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-          getMsg().setLanguage(skin, languageSelect.getSelection());
+          ScienceEngine.getMsg().setLanguage(skin, languageSelect.getSelection());
         }
       });
       table.row();
-      table.add(getMsg().getString("ScienceEngine.Language")); // $NON-NLS-1$
+      table.add(getMsg("ScienceEngine.Language")); // $NON-NLS-1$
       table.add(languageSelect).colspan(2).left();
     }
     
+    if (platform.supportsSync()) {
+      final SelectBox syncSelect = 
+          new SelectBox(new String[] { "Manual", "Automatic"}, skin);
+      syncSelect.setSelection("Automatic");
+      syncSelect.addListener(new ChangeListener() {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+          preferencesManager.setSync(syncSelect.getSelection());
+        }
+      });
+      table.row();
+      table.add(getMsg("ScienceEngine.SyncMode")); // $NON-NLS-1$
+      table.add(syncSelect).left();
+      TextButton syncButton = new TextButton(getMsg("ScienceEngine.ForceSync"), skin, "body");
+      syncButton.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+          preferencesManager.syncProfiles(true);
+        }
+      });
+      table.add(syncButton).left();
+    }
     // create the labels widgets
     final CheckBox soundEffectsCheckbox = new CheckBox("", skin); //$NON-NLS-1$
     soundEffectsCheckbox.setChecked(ScienceEngine.getPreferencesManager()
@@ -63,13 +89,13 @@ public class OptionsDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         boolean enabled = soundEffectsCheckbox.isChecked();
-        ScienceEngine.getPreferencesManager().setSoundEnabled(enabled);
+        preferencesManager.setSoundEnabled(enabled);
         ScienceEngine.getSoundManager().setEnabled(enabled);
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       }
     });
     table.row();
-    table.add(getMsg().getString("ScienceEngine.SoundEffects")); //$NON-NLS-1$
+    table.add(getMsg("ScienceEngine.SoundEffects")); //$NON-NLS-1$
     table.add(soundEffectsCheckbox).colspan(2).left();
 
     if (false) { // Music being disabled for now.
@@ -79,7 +105,7 @@ public class OptionsDialog extends Dialog {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           boolean enabled = musicCheckbox.isChecked();
-          ScienceEngine.getPreferencesManager().setMusicEnabled(enabled);
+          preferencesManager.setMusicEnabled(enabled);
           ScienceEngine.getMusicManager().setEnabled(enabled);
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
   
@@ -89,7 +115,7 @@ public class OptionsDialog extends Dialog {
         }
       });
       table.row();
-      table.add(getMsg().getString("ScienceEngine.Music")); //$NON-NLS-1$
+      table.add(getMsg("ScienceEngine.Music")); //$NON-NLS-1$
       table.add(musicCheckbox).colspan(2).left();
     }
 
@@ -100,7 +126,7 @@ public class OptionsDialog extends Dialog {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
         float value = volumeSlider.getValue();
-        ScienceEngine.getPreferencesManager().setVolume(value);
+        preferencesManager.setVolume(value);
         ScienceEngine.getMusicManager().setVolume(value);
         ScienceEngine.getSoundManager().setVolume(value);
         updateVolumeLabel();
@@ -113,14 +139,14 @@ public class OptionsDialog extends Dialog {
 
     // add the volume row
     table.row();
-    table.add(getMsg().getString("ScienceEngine.Volume")); //$NON-NLS-1$
+    table.add(getMsg("ScienceEngine.Volume")); //$NON-NLS-1$
     table.add(volumeSlider);
     table.add(volumeValue).width(40);
     
     // Add About
     table.row();
     TextButton aboutButton = 
-        new TextButton(getMsg().getString("ScienceEngine.About"), skin, "body");
+        new TextButton(getMsg("ScienceEngine.About"), skin, "body");
     aboutButton.addListener(new ClickListener() {
       @Override
       public void clicked (InputEvent event, float x, float y) {

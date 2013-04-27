@@ -54,7 +54,7 @@ public class SplashScreen extends AbstractScreen {
 
   private void enterApplication() {
     // TODO: sync when login user changes otherwise not useful here.
-    ScienceEngine.getPreferencesManager().syncProfiles();
+    ScienceEngine.getPreferencesManager().syncProfiles(false);
     scienceEngine.setScreen(new ChooseTopicScreen(scienceEngine));
   }
 
@@ -172,7 +172,7 @@ public class SplashScreen extends AbstractScreen {
     stage.addActor(registration);
     
     // Do a sync of all profiles here
-    ScienceEngine.getPreferencesManager().syncProfiles();    
+    ScienceEngine.getPreferencesManager().syncProfiles(false);    
   }
 
   @Override

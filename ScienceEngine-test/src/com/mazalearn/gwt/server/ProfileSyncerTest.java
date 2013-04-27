@@ -2,7 +2,9 @@ package com.mazalearn.gwt.server;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,6 +20,7 @@ import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.services.ProfileSyncer;
+import com.mazalearn.scienceengine.app.utils.ProfileMapConverter;
 
 /**
  * Test for profileutil.java
@@ -83,7 +86,7 @@ public class ProfileSyncerTest {
   
   @Test
   public void testGetUserSyncProfile_NoUpdates() {
-    String expected = "{\"lastupdated\":{\"thissynctime\":50}}";
+    String expected = "{\"lastUpdated\":{\"thissynctime\":50}}";
     // Client is up to date as per setup
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -91,7 +94,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetUserSyncProfile_YouBehindOnClient() {
-    String expected= "{\"client\":{\"clientjson\":\"test\"}," + "\"lastupdated\":{\"client\":10,\"thissynctime\":50}}";
+    String expected= "{\"client\":{\"clientjson\":\"test\"}," + "\"lastUpdated\":{\"client\":10,\"thissynctime\":50}}";
     // clientTime < serverTime
     clientUpdates.put(ProfileData.CLIENT_PROPS, 5L);
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
@@ -105,7 +108,7 @@ public class ProfileSyncerTest {
   
   @Test
   public void testGetUserSyncProfile_MeBehindOnClient() {
-    String expected= "{\"lastupdated\":{\"thissynctime\":50}}";
+    String expected= "{\"lastUpdated\":{\"thissynctime\":50}}";
     // serverTime defaults to 0
     serverUpdates.removeProperty(ProfileData.CLIENT_PROPS);
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
@@ -114,7 +117,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetUserSyncProfile_ReInitialize() {
-    String expected= "{\"client\":{\"clientjson\":\"test\"},\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastupdated\":{\"Field\":40,\"client\":10,\"BarMagnet\":30,\"social\":30,\"thissynctime\":123456,\"server\":20},\"server\":{\"serverjson\":\"test\"},\"topicStats\":{\"Field\":{\"FIeld\":20},\"BarMagnet\":{\"Guru\":10}}}";
+    String expected= "{\"client\":{\"clientjson\":\"test\"},\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"Field\":40,\"client\":10,\"BarMagnet\":30,\"social\":30,\"thissynctime\":123456,\"server\":20},\"server\":{\"serverjson\":\"test\"},\"topicStats\":{\"Field\":{\"FIeld\":20},\"BarMagnet\":{\"Guru\":10}}}";
     clientUpdates.clear();
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -122,7 +125,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetUserSyncProfile_TopicStatsForced() {
-    String expected= "{\"lastupdated\":{\"Field\":40,\"thissynctime\":50},\"topicStats\":{\"Field\":{\"FIeld\":20}}}";
+    String expected= "{\"lastUpdated\":{\"Field\":40,\"thissynctime\":50},\"topicStats\":{\"Field\":{\"FIeld\":20}}}";
     clientUpdates.put(ProfileData.TOPIC_STATS, ProfileSyncer.FORCED_SYNC);
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -130,7 +133,7 @@ public class ProfileSyncerTest {
   
   @Test
   public void testGetUserSyncProfile_SocialClientPull() {
-    String expected= "{\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastupdated\":{\"social\":123456,\"thissynctime\":50}}";
+    String expected= "{\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"social\":123456,\"thissynctime\":50}}";
     clientProfile.social = new Social();
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -138,7 +141,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetUserSyncProfile_SocialServerPush() {
-    String expected= "{\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastupdated\":{\"social\":40,\"thissynctime\":50}}";
+    String expected= "{\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"social\":40,\"thissynctime\":50}}";
     serverUpdates.setProperty(ProfileData.SOCIAL, 40L);
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -146,7 +149,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetSyncJson() {
-    String expected = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastupdated\":{\"client\":10,\"BarMagnet\":40,\"thissynctime\":123456,\"server\":20},\"server\":{\"isRegistered\":false},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
+    String expected = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"thissynctime\":123456,\"server\":20},\"server\":{\"isRegistered\":false},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
     // No server props in timestamps
     String s = profileSyncer.getSyncJson(clientProfile);
     assertEquals(expected, s);
@@ -155,7 +158,7 @@ public class ProfileSyncerTest {
     clientProfile.serverTimestamps = new HashMap<String, Long>();
     clientProfile.serverTimestamps.put(ProfileData.SERVER_PROPS, 20L);
     s = profileSyncer.getSyncJson(clientProfile);
-    String expectedNoServer = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastupdated\":{\"client\":10,\"BarMagnet\":40,\"thissynctime\":123456},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
+    String expectedNoServer = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"server\":20,\"thissynctime\":123456},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
     assertEquals(expectedNoServer, s);
     // Server props timestamp - client > server
     clientProfile.serverTimestamps.put(ProfileData.SERVER_PROPS, 10L);
@@ -168,6 +171,7 @@ public class ProfileSyncerTest {
     ProfileData serverProfileData = new ProfileData();
     serverProfileData.social = new Social();
     serverProfileData.social.inbox.addMessage(new Message());
+    serverProfileData.social.friends = new ArrayList<String>();
     serverProfileData.server = new ServerProps();
     serverProfileData.client = new ClientProps();
     serverProfileData.lastUpdated = new HashMap<String, Long>();
@@ -183,8 +187,46 @@ public class ProfileSyncerTest {
   }
   
   @Test
+  public void testMergeProfile_scenario1() {
+    String clientSyncStr1 = "{" + 
+        "\"client\":{\"platform\":\"Desktop\",\"current\":0.0,\"installId\":\"Desktop-0e8ff0b1-efb7-40ba-a70f-b88a7677a4f2\",\"topic\":\"Electromagnetism\",\"lastActivity\":\"\",\"activity\":\"BarMagnet\",\"certificates\":[]}," +
+        "\"social\":{\"friends\":[],\"inbox\":{\"mq\":[],\"tailId\":2,\"headId\":2},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0}," +
+        "\"lastUpdated\":{\"client\":7,\"social\":4,\"server\":1,\"thissynctime\":6}," +
+        "\"topicStats\":{}}";
+    String serverSyncStr1 = "{" +
+    		"\"social\":{\"friends\":[\"shaileshsridhar@gmail.com\"],\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":1,\"headId\":1},\"points\":0}," +
+        "\"lastUpdated\":{\"social\":3,\"thissynctime\":5,\"server\":2}," +
+  		  "\"server\":{\"userName\":\"sridhar\",\"userId\":\"sridharsundaram@gmail.com\",\"sex\":\"M\",\"grade\":\"7\",\"school\":\"\",\"city\":\"\",\"comments\":\"\",\"registrationDate\":\"2013/04/26 15:42:49\",\"isRegistered\":true}}";
+    ProfileData clientProfile1 = new Gson().fromJson(clientSyncStr1, ProfileData.class);
+    ProfileData serverProfile1 = new Gson().fromJson(serverSyncStr1, ProfileData.class);
+    // Client gets sync string from server and syncs up
+    profileSyncer.mergeProfile(serverProfile1, clientProfile1);
+    
+    String expected = 
+        "{\"client\":{\"platform\":\"Desktop\",\"current\":0.0,\"installId\":\"Desktop-0e8ff0b1-efb7-40ba-a70f-b88a7677a4f2\",\"topic\":\"Electromagnetism\",\"lastActivity\":\"\",\"activity\":\"BarMagnet\",\"certificates\":[]}," +
+        "\"social\":{\"friends\":[\"shaileshsridhar@gmail.com\"],\"inbox\":{\"mq\":[],\"tailId\":2,\"headId\":2},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":1},\"points\":0}," +
+        "\"lastUpdated\":{\"client\":7,\"social\":123456,\"server\":2,\"thissynctime\":123456}," +
+        "\"topicStats\":{}}";
+    // Client sends this sync string to server
+    String clientSyncStr2 = profileSyncer.getSyncJson(clientProfile1);
+    assertEquals(expected, clientSyncStr2);
+    Gson gson = new Gson();
+    ProfileData clientProfile2 = gson.fromJson(clientSyncStr2, ProfileData.class);
+    clientProfile2.social = new Social();
+    Map<String, Object> clientMap = ProfileMapConverter.profileToMap(clientProfile2);
+    Map<String, Object> serverMap = ProfileMapConverter.profileToMap(serverProfile1);
+    String serverSyncStr2 = profileSyncer.doSync(new Gson(), serverMap, clientMap, serverProfile1.lastUpdated, clientProfile2.lastUpdated);
+    // Server sends back this sync string
+    String expected2 = 
+        "{\"lastUpdated\":{\"thissynctime\":123456}}";
+    assertEquals(expected2, serverSyncStr2);
+    // assertEquals(gson.toJson(clientProfile2), gson.toJson(serverProfile1));
+  }
+  
+  @Test
   public void testSyncSocialClient() {
     Social serverSocial = new Social();
+    serverSocial.friends = new ArrayList<String>();
     Social clientSocial = new Social();
     Message msg = new Message();
     serverSocial.inbox.addMessage(msg);

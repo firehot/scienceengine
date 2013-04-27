@@ -59,7 +59,7 @@ public class UserHomeDialog extends Dialog {
     } else {
       addRegistrationRequest(contentTable);
       // Sync profile so that registration will work.
-      ScienceEngine.getPreferencesManager().syncProfiles();
+      ScienceEngine.getPreferencesManager().syncProfiles(true);
     }
 
     contentTable.debug();

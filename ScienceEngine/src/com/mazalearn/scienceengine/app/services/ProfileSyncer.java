@@ -1,7 +1,9 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -13,6 +15,8 @@ public class ProfileSyncer {
   
   public static final long FORCED_SYNC = -1L;
   private static long testCurrentTime = 0L;
+  private static List<String> serverProfileItems = 
+      Arrays.asList(new String[] {ProfileData.SERVER_PROPS, ProfileData.SOCIAL});
   
   public static void setTestCurrentTime(long ttestCurrentTime) {
     testCurrentTime = ttestCurrentTime;
@@ -100,7 +104,7 @@ public class ProfileSyncer {
       Map<String, Object> yourData, Map<String, Long> myTimestamps,
       Map<String, Long> yourTimestamps) {
     syncMerge(myTimestamps, yourTimestamps, myData, yourData);
-    // All first time stamps >= second time stamps at this point
+    // All sync time stamps for non-null values >= your time stamps at this point
     
     // TODO: why below line??? should only be on client with unreliable time
     // myTimestamps.put(ProfileData.LAST_SYNC_TIME, yourTimestamps.get(ProfileData.THIS_SYNC_TIME));
@@ -142,10 +146,10 @@ public class ProfileSyncer {
     
     Long lastSyncTime = yourTimestamps.get(ProfileData.THIS_SYNC_TIME);
     myTimestamps.put(ProfileData.LAST_SYNC_TIME, lastSyncTime);
-    // Remove timestamps older than last sync time
+    // Remove timestamps older than last sync time for client side items
     for(Iterator<Map.Entry<String, Long>> it = myTimestamps.entrySet().iterator(); it.hasNext(); ) {
       Map.Entry<String, Long> entry = it.next();
-      if(entry.getValue() < lastSyncTime && !entry.getKey().equals(ProfileData.SERVER_PROPS)) {
+      if(entry.getValue() < lastSyncTime && !serverProfileItems.contains(entry.getKey())) {
         it.remove();
       }
     }
@@ -168,11 +172,20 @@ public class ProfileSyncer {
         clientSocial.inbox.headId = Math.max(clientSocial.inbox.headId, msg.messageId);
         changed = true;
       }
+      clientSocial.inbox.tailId = clientSocial.inbox.tailId;
+      clientSocial.outbox.headId = serverSocial.outbox.headId;
       // Remove outbox messages consumed at server and send the rest
       for (int i = clientSocial.outbox.mq.size() - 1; i >= 0; i--) {
         Message msg = clientSocial.outbox.mq.get(i);
         if (msg.messageId < serverSocial.outbox.headId) {
           clientSocial.outbox.mq.remove(msg);
+          changed = true;
+        }
+      }
+      // sync friends list
+      for (String email: serverSocial.friends) {
+        if (!clientSocial.friends.contains(email)) {
+          clientSocial.friends.add(email);
           changed = true;
         }
       }
@@ -195,6 +208,10 @@ public class ProfileSyncer {
     Map<String, Object> syncData = getSyncData(myTimestamps, yourTimestamps, myData, syncTimestamps);
     syncData.put(ProfileData.LAST_UPDATED, syncTimestamps);
     syncTimestamps.put(ProfileData.THIS_SYNC_TIME, getCurrentTime());
+    // Add server item sync times, in case they are not there to prevent server sending them
+    for (String key: serverProfileItems) {
+      syncTimestamps.put(key, myTimestamps.get(key));
+    }
     String syncProfileStr = new Gson().toJson(syncData);
     return syncProfileStr;
   }
