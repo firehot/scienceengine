@@ -68,7 +68,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     ScrollPane flickScrollPane = new ScrollPane(table, getSkin());
     table.setFillParent(false);
     table.defaults().fill();
-    TextureRegion overlayLock = ScienceEngine.getTextureRegion("lock");
+    TextureRegion overlayLock = ScienceEngine.getTextureRegion("comingsoon");
     for (final Topic topic: Topic.values()) {
       // Ignore leaf level topics
       if (topic.getChildren().length == 0) continue;
@@ -79,8 +79,8 @@ public class ChooseTopicScreen extends AbstractScreen {
       ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       if (lock) {
         Image lockImage = new Image(overlayLock);
-        lockImage.setPosition(topicThumb.getWidth() / 2 - lockImage.getWidth() / 2,
-            topicThumb.getHeight() / 2 - lockImage.getHeight() / 2);
+        lockImage.setSize(THUMBNAIL_WIDTH / 2, THUMBNAIL_HEIGHT / 2);
+        lockImage.setPosition(0, topicThumb.getHeight() - lockImage.getHeight());
         topicThumb.addActor(lockImage);
       } else {
         int progressPercentage = findTopicProgressPercentage(topic);
