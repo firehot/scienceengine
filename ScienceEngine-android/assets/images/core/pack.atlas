@@ -24,44 +24,51 @@ go
   orig: 300, 300
   offset: 0, 0
   index: -1
+comingsoon
+  rotate: false
+  xy: 131, 341
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 engine
   rotate: false
-  xy: 131, 469
+  xy: 131, 211
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 help
   rotate: false
-  xy: 131, 339
+  xy: 389, 469
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 lock
   rotate: false
-  xy: 389, 469
+  xy: 389, 339
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 131, 209
+  xy: 389, 209
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 user
   rotate: false
-  xy: 261, 339
+  xy: 131, 81
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 videoplay
   rotate: false
-  xy: 261, 209
+  xy: 616, 592
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -75,35 +82,35 @@ back
   index: -1
 browser
   rotate: false
-  xy: 616, 656
+  xy: 918, 958
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel
   rotate: false
-  xy: 918, 958
+  xy: 261, 145
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 goldcoins
   rotate: false
-  xy: 519, 548
+  xy: 327, 160
   size: 60, 49
   orig: 60, 49
   offset: 0, 0
   index: -1
 helparrow
   rotate: false
-  xy: 131, 177
+  xy: 746, 690
   size: 64, 30
   orig: 64, 30
   offset: 0, 0
   index: -1
 close
   rotate: false
-  xy: 391, 435
+  xy: 519, 565
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

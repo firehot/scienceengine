@@ -168,8 +168,10 @@ public class TopicHomeScreen extends AbstractScreen {
         new TextureRegionDrawable(ScreenUtils.createTextureRegion(20, 20, Color.BLUE));
 
     int numTopics = 0;
+    TextureRegion lockTexture = ScienceEngine.getTextureRegion("lock");
     for (Topic level: topic.getChildren()) {
       numTopics++;
+      boolean isLocked = numTopics == topic.getChildren().length && !profile.getCertificates().contains("EMReview");
       String activityName = getMsg(topic + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(topic, level, ".png");
       Pixmap pixmap;
@@ -180,28 +182,42 @@ public class TopicHomeScreen extends AbstractScreen {
       }
       TextButton activityThumb = 
           ScreenUtils.createImageButton(new TextureRegion(new Texture(pixmap)), getSkin(), "default");
+      ScreenComponent.scaleSize(activityThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       
       // Name Label
       activityThumb.addActor(ScreenUtils.createLabel(activityName, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground));
       // Level Label
       activityThumb.addActor(ScreenUtils.createLabel(String.valueOf(numTopics), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
-      // Progress bar
-      float[] stats = profile.getStats(level, Guru.ID);
-      float percent = stats[ITutor.PERCENT_PROGRESS];
-      ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
-      // Timespent label
-      String timeSpent = Format.formatTime(stats[ITutor.TIME_SPENT]);
-      activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 60, 30, blueBackground));
-
-      final Topic iLevel = level;
-      activityThumb.addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-          gotoActivityLevel(iLevel);
-        }
-      });
+      if (isLocked) {
+        Image lockImage = new Image(lockTexture);
+        lockImage.setSize(activityThumb.getWidth() / 2, activityThumb.getHeight() / 2);
+        lockImage.setPosition(activityThumb.getWidth() / 2 - lockImage.getWidth() / 2, 
+            activityThumb.getHeight() / 2 - lockImage.getHeight() / 2);
+        activityThumb.addActor(lockImage);
+        activityThumb.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent event, float x, float y) {
+            new MessageDialog(getSkin(), "To unlock this level, you need the " + topic.name() + " Certificate").show(stage);
+          }
+        });
+      } else {
+        // Progress bar
+        float[] stats = profile.getStats(level, Guru.ID);
+        float percent = stats[ITutor.PERCENT_PROGRESS];
+        ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
+        // Timespent label
+        String timeSpent = Format.formatTime(stats[ITutor.TIME_SPENT]);
+        activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 60, 30, blueBackground));
+  
+        final Topic iLevel = level;
+        activityThumb.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent event, float x, float y) {
+            gotoActivityLevel(iLevel);
+          }
+        });
+      }
       activityThumbs[numTopics - 1] = activityThumb;
-      ScreenComponent.scaleSize(activityThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       activities
           .add(activityThumb)
           .width(activityThumb.getWidth())

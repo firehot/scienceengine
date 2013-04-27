@@ -68,7 +68,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     ScrollPane flickScrollPane = new ScrollPane(table, getSkin());
     table.setFillParent(false);
     table.defaults().fill();
-    TextureRegion overlayLock = ScienceEngine.getTextureRegion("comingsoon");
+    TextureRegion comingsoon = ScienceEngine.getTextureRegion("comingsoon");
     for (final Topic topic: Topic.values()) {
       // Ignore leaf level topics
       if (topic.getChildren().length == 0) continue;
@@ -78,7 +78,7 @@ public class ChooseTopicScreen extends AbstractScreen {
           ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin(), "default");
       ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       if (lock) {
-        Image lockImage = new Image(overlayLock);
+        Image lockImage = new Image(comingsoon);
         lockImage.setSize(THUMBNAIL_WIDTH / 2, THUMBNAIL_HEIGHT / 2);
         lockImage.setPosition(0, topicThumb.getHeight() - lockImage.getHeight());
         topicThumb.addActor(lockImage);

@@ -199,7 +199,7 @@ public class ScreenUtils {
   }
 
   public static void createProgressPercentageBar(LabelStyle labelStyle,
-      TextButton thumbnail, float percent, int width) {
+      TextButton thumbnail, float percent, float width) {
     TextureRegion bar = createTextureRegion(10, 10, Color.GRAY);
     Image fullBar = new Image(bar);
     ScreenComponent.scalePositionAndSize(fullBar, 10, 20, width - 20, 10);

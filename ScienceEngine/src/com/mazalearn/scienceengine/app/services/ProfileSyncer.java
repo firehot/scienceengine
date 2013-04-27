@@ -133,6 +133,10 @@ public class ProfileSyncer {
     Map<String, Object> myData = ProfileMapConverter.profileToMap(clientData);
     Map<String, Long> myTimestamps = (Map<String, Long>) myData.get(ProfileData.LAST_UPDATED);
     Map<String, Long> yourTimestamps = (Map<String, Long>) yourData.get(ProfileData.LAST_UPDATED);
+    if (yourTimestamps == null) {
+      yourData.put(ProfileData.LAST_UPDATED, new HashMap<String, Long>());
+      yourTimestamps = (Map<String, Long>) yourData.get(ProfileData.LAST_UPDATED);
+    }
 
     // First sync social data
     if (syncSocialClient(serverData.social, clientData.social)) {
@@ -144,12 +148,12 @@ public class ProfileSyncer {
     // All my time stamps >= your time stamps at this point
     clientData.serverTimestamps = yourTimestamps;
     
-    Long lastSyncTime = yourTimestamps.get(ProfileData.THIS_SYNC_TIME);
+    Long lastSyncTime = nvl(yourTimestamps.get(ProfileData.THIS_SYNC_TIME), 0);
     myTimestamps.put(ProfileData.LAST_SYNC_TIME, lastSyncTime);
     // Remove timestamps older than last sync time for client side items
     for(Iterator<Map.Entry<String, Long>> it = myTimestamps.entrySet().iterator(); it.hasNext(); ) {
       Map.Entry<String, Long> entry = it.next();
-      if(entry.getValue() < lastSyncTime && !serverProfileItems.contains(entry.getKey())) {
+      if(nvl(entry.getValue(), 0) < lastSyncTime && !serverProfileItems.contains(entry.getKey())) {
         it.remove();
       }
     }

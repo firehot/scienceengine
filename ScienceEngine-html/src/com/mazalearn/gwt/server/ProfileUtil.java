@@ -63,6 +63,7 @@ public class ProfileUtil {
       if (create && user == null) {
         System.out.println("Creating user:" + userId.toLowerCase());
         user = new Entity(User.class.getSimpleName(), userId.toLowerCase());
+        createOrGetUserProfile(user, true);
         ds.put(user);
       }
     }

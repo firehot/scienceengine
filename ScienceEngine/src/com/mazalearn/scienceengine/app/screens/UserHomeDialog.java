@@ -127,14 +127,14 @@ public class UserHomeDialog extends Dialog {
     contentTable.add("Send Gifts to Friends");
     contentTable.row();
     
-    Actor waitingGiftsPane = createWaitingGiftsPane(this, profile.getInbox(), skin);
+    Actor waitingGiftsPane = createWaitingGiftsPane(this, profile.getInbox(), true, skin);
     contentTable.add(waitingGiftsPane).width(400).height(GIFT_HEIGHT);
     contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f);
     contentTable.row();
   }
 
   public static Actor createWaitingGiftsPane(final Dialog parentDialog, 
-      List<Message> giftBox, final Skin skin) {
+      List<Message> giftBox, final boolean allowAccept, final Skin skin) {
     List<TextButton> list = new ArrayList<TextButton>();
     for (final Message gift: giftBox) {
       final TextButton item = createItem(skin, GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
@@ -142,7 +142,7 @@ public class UserHomeDialog extends Dialog {
       item.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          new ShowGiftDialog(skin, gift, item, parentDialog).show(parentDialog.getStage());
+          new ShowGiftDialog(skin, gift, item, allowAccept, parentDialog).show(parentDialog.getStage());
         }
 
       });

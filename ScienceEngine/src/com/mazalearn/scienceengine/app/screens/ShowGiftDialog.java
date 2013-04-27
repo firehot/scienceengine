@@ -20,7 +20,7 @@ public class ShowGiftDialog extends Dialog {
   
   private Dialog parentDialog;
 
-  public ShowGiftDialog(final Skin skin, final Message gift, final Actor giftItem, Dialog parentDialog) {
+  public ShowGiftDialog(final Skin skin, final Message gift, final Actor giftItem, boolean allowAccept, Dialog parentDialog) {
     super("", skin);
     this.parentDialog = parentDialog;
     parentDialog.hide();
@@ -45,7 +45,7 @@ public class ShowGiftDialog extends Dialog {
 
     TextButton closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Close"), skin, "body");
     this.button(closeButton);
-    if (giftItem != null) { // Accept this gift to get points and add sender to friends
+    if (allowAccept) { // Accept this gift to get points and add sender to friends
       closeButton.setText(ScienceEngine.getMsg().getString("ScienceEngine.AcceptGift"));
       closeButton.addListener(new ClickListener() {
         @Override

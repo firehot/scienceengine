@@ -48,7 +48,7 @@ public class GiveGiftDialog extends Dialog {
     contentTable.row();
     contentTable.add("Gifts Waiting to be Dispatched to Server").colspan(2);
     contentTable.row();
-    Actor waitingGiftsPane = UserHomeDialog.createWaitingGiftsPane(this, profile.getOutbox(), skin);
+    Actor waitingGiftsPane = UserHomeDialog.createWaitingGiftsPane(this, profile.getOutbox(), false, skin);
     contentTable.add(waitingGiftsPane).width(400).height(UserHomeDialog.GIFT_HEIGHT).colspan(2);
     contentTable.row();
     createFriendChooser(contentTable, skin);
@@ -89,7 +89,7 @@ public class GiveGiftDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        new ShowGiftDialog(skin, gift, null, GiveGiftDialog.this).show(getStage());
+        new ShowGiftDialog(skin, gift, giftImage, false, GiveGiftDialog.this).show(getStage());
       }
     });
 
