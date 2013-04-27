@@ -151,18 +151,21 @@ public class ProfileSyncerTest {
   public void testGetSyncJson() {
     String expected = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"thissynctime\":123456,\"server\":20},\"server\":{\"isRegistered\":false},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
     // No server props in timestamps
-    String s = profileSyncer.getSyncJson(clientProfile);
+    Map<String, Object> syncData = profileSyncer.getSyncJson(clientProfile);
+    String s = new Gson().toJson(syncData);
     assertEquals(expected, s);
     // Server props timestamp - client <= server
     clientProfile.lastUpdated.put(ProfileData.SERVER_PROPS, 20L);
     clientProfile.serverTimestamps = new HashMap<String, Long>();
     clientProfile.serverTimestamps.put(ProfileData.SERVER_PROPS, 20L);
-    s = profileSyncer.getSyncJson(clientProfile);
+    syncData = profileSyncer.getSyncJson(clientProfile);
+    s = new Gson().toJson(syncData);
     String expectedNoServer = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"server\":20,\"thissynctime\":123456},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
     assertEquals(expectedNoServer, s);
     // Server props timestamp - client > server
     clientProfile.serverTimestamps.put(ProfileData.SERVER_PROPS, 10L);
-    s = profileSyncer.getSyncJson(clientProfile);
+    syncData = profileSyncer.getSyncJson(clientProfile);
+    s = new Gson().toJson(syncData);
     assertEquals(expected, s);
   }
 
@@ -208,14 +211,16 @@ public class ProfileSyncerTest {
         "\"lastUpdated\":{\"client\":7,\"social\":123456,\"server\":2,\"thissynctime\":123456}," +
         "\"topicStats\":{}}";
     // Client sends this sync string to server
-    String clientSyncStr2 = profileSyncer.getSyncJson(clientProfile1);
+    Map<String, Object> syncData = profileSyncer.getSyncJson(clientProfile1);
+    String clientSyncStr2 = new Gson().toJson(syncData);
     assertEquals(expected, clientSyncStr2);
     Gson gson = new Gson();
     ProfileData clientProfile2 = gson.fromJson(clientSyncStr2, ProfileData.class);
     clientProfile2.social = new Social();
     Map<String, Object> clientMap = ProfileMapConverter.profileToMap(clientProfile2);
     Map<String, Object> serverMap = ProfileMapConverter.profileToMap(serverProfile1);
-    String serverSyncStr2 = profileSyncer.doSync(new Gson(), serverMap, clientMap, serverProfile1.lastUpdated, clientProfile2.lastUpdated);
+    syncData = profileSyncer.doSync(serverMap, clientMap, serverProfile1.lastUpdated, clientProfile2.lastUpdated);
+    String serverSyncStr2 = new Gson().toJson(syncData);
     // Server sends back this sync string
     String expected2 = 
         "{\"lastUpdated\":{\"thissynctime\":123456}}";
@@ -244,5 +249,13 @@ public class ProfileSyncerTest {
     ProfileSyncer.syncSocialClient(serverSocial, clientSocial);
     assertEquals(2, clientSocial.inbox.mq.size());
     assertEquals(2, clientSocial.inbox.headId);    
+  }
+  
+  @Test
+  public void testGson() {
+    String clientJson =  "{client:{class:\"com.mazalearn.scienceengine.app.services.ProfileData$ClientProps\", lastActivity:\"BarMagnet\",activity:\"\",topic:\"Electromagnetism\", platform:\"Desktop\",installId:\"Desktop-0e8ff0b1-efb7-40ba-a70f-b88a7677a4f2\"}, lastUpdated:{class:\"java.util.HashMap\",client:1367076503552,social:1367076110336, thissynctime:1367084605055,server:1367075586048}, server:{class:\"com.mazalearn.scienceengine.app.services.ProfileData$ServerProps\", userId:\"sridharsundaram@gmail.com\",registrationDate:\"2013/04/27 20:42:51\",sex:\"M\",city:\"\", comments:\"\",school:\"\",userName:\"sridhar\",grade:\"7\",isRegistered:true}, topicStats:{class:\"java.util.HashMap\"}}";
+    clientJson = clientJson.replace("class:\"java.util.HashMap\",",  "");
+    clientJson = clientJson.replace("class:\"java.util.HashMap\"",  "");
+    ProfileData profile = new Gson().fromJson(clientJson, ProfileData.class);
   }
 }

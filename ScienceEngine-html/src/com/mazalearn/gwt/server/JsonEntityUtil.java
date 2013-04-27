@@ -32,6 +32,9 @@ public class JsonEntityUtil {
   }
 
   public ProfileData profileFromJson(String clientProfileJson) {
+    // causes NumberFormatException if present
+    clientProfileJson = clientProfileJson.replace("class:\"java.util.HashMap\",",  "");
+    clientProfileJson = clientProfileJson.replace("class:\"java.util.HashMap\"",  "");
     return gson.fromJson(clientProfileJson, ProfileData.class);
   }
 

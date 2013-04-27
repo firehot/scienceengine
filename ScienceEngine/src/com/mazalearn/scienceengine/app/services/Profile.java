@@ -355,7 +355,8 @@ public class Profile implements Serializable {
 
   // Returns the profile string to be used for syncing to server
   public String getSyncStr() {
-    String syncProfileStr = new ProfileSyncer().getSyncJson(data);
+    Map<String, Object> syncData = new ProfileSyncer().getSyncJson(data);
+    String syncProfileStr = new Json(OutputType.javascript).toJson(syncData);
     Gdx.app.log(ScienceEngine.LOG, syncProfileStr);
     return Base64Coder.encodeString(syncProfileStr);
     

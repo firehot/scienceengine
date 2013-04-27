@@ -112,8 +112,9 @@ public class ProfileUtil {
     if (yourTimestamps.size() == 0) {
       yourTimestamps.put(ProfileData.TOPIC_STATS, -1L);
     }
-    String syncJson = profileSyncer.doSync(gson, myData, yourData, myTimestamps, yourTimestamps);
-        
+    Map<String, Object> syncData = profileSyncer.doSync(myData, yourData, myTimestamps, yourTimestamps);
+    String syncJson = gson.toJson(syncData);
+    
     // save data back from map into entity profile
     entityMapConverter.mapToEntity(serverProfile, myData);
     

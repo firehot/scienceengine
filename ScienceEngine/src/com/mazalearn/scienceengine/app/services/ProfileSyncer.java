@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.ProfileMapConverter;
@@ -100,7 +99,7 @@ public class ProfileSyncer {
     return syncData;
   }
   
-  public String doSync(Gson gson, Map<String, Object> myData,
+  public Map<String, Object> doSync(Map<String, Object> myData,
       Map<String, Object> yourData, Map<String, Long> myTimestamps,
       Map<String, Long> yourTimestamps) {
     syncMerge(myTimestamps, yourTimestamps, myData, yourData);
@@ -119,8 +118,7 @@ public class ProfileSyncer {
         nvl(yourTimestamps.get(ProfileData.THIS_SYNC_TIME), getCurrentTime()));
     
     syncData.put(ProfileData.LAST_UPDATED, syncTimestamps);
-    String syncJson = gson.toJson(syncData);
-    return syncJson;
+    return syncData;
   }
 
   private static long nvl(Long value, long defaultValue) {
@@ -198,7 +196,7 @@ public class ProfileSyncer {
   }
 
   @SuppressWarnings("unchecked")
-  public String getSyncJson(ProfileData clientData) {
+  public Map<String, Object> getSyncJson(ProfileData clientData) {
     Map<String, Object> myData = ProfileMapConverter.profileToMap(clientData);
     Map<String, Long> myTimestamps = (Map<String, Long>) myData.get(ProfileData.LAST_UPDATED);
     
@@ -216,8 +214,7 @@ public class ProfileSyncer {
     for (String key: serverProfileItems) {
       syncTimestamps.put(key, myTimestamps.get(key));
     }
-    String syncProfileStr = new Gson().toJson(syncData);
-    return syncProfileStr;
+    return syncData;
   }
   
 }
