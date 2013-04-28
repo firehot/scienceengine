@@ -11,37 +11,53 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 public class Crypter {
   private static final String SALT = "imazalearne";
   private static final String XLATE = "0123456789abcdef";
+  
+  public interface Sha1 {
+    public byte[] sha1Hash(byte[] toHash);
+  }
+  
+  // default sha1 implementor
+  private static Sha1 sha1 = new Sha1() {
+      public byte[] sha1Hash(byte[] toHash) {
+        try {
+          MessageDigest digest = MessageDigest.getInstance("SHA-1");
+          digest.update(toHash, 0, toHash.length);
+          return digest.digest();
+        } catch (NoSuchAlgorithmException e) {
+          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+            e.printStackTrace();
+          }
+          Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());
+        } catch (UnsupportedOperationException e) {
+          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+            e.printStackTrace();
+          }
+          Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());      
+        }
+        return null;
+      }
+    };
+  
+  public static void setSha1Implementor(Sha1 sha1Implementor) {
+    sha1 = sha1Implementor;
+  }
+  
   // Produces a 160 bit message digest = 20 bytes.
   // Each byte is converted to 2 hexchars => 40 char string.
-  private static String sha1Hash(String toHash) {
-    String hash = "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef";
+  // package protected for testing
+  public static String saltedSha1Hash(String target, String id) {
+    String toHash = id + SALT + target + id + SALT;
+    byte[] bytes;
     try {
-      MessageDigest digest = MessageDigest.getInstance("SHA-1");
-      byte[] bytes = toHash.getBytes("UTF-8");
-      digest.update(bytes, 0, bytes.length);
-      bytes = digest.digest();
-      hash = hexlate(bytes);
-    } catch (NoSuchAlgorithmException e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
-        e.printStackTrace();
-      }
-      Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());
+      bytes = toHash.getBytes("UTF-8");
     } catch (UnsupportedEncodingException e) {
       if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
         e.printStackTrace();
       }
       Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());
-    } catch (UnsupportedOperationException e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
-        e.printStackTrace();
-      }
-      Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());      
+      return null;
     }
-    return hash;
-  }
-  
-  public static String saltedSha1Hash(String toHash, String id) {
-    return sha1Hash(id + SALT + toHash + id + SALT);
+    return hexlate(sha1.sha1Hash(bytes));
   }
 
   private static String hexlate (byte[] bytes) {
