@@ -14,7 +14,7 @@ public class Crypter {
   // Produces a 160 bit message digest = 20 bytes.
   // Each byte is converted to 2 hexchars => 40 char string.
   private static String sha1Hash(String toHash) {
-    String hash = null;
+    String hash = "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef";
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-1");
       byte[] bytes = toHash.getBytes("UTF-8");
@@ -31,6 +31,11 @@ public class Crypter {
         e.printStackTrace();
       }
       Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());
+    } catch (UnsupportedOperationException e) {
+      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+        e.printStackTrace();
+      }
+      Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());      
     }
     return hash;
   }

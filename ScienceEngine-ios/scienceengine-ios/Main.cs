@@ -91,7 +91,7 @@ namespace scienceengineios
 				ScienceEngine.DEV_MODE = ScienceEngine.DevMode.PRODUCTION;
 				scienceEngine = new ScienceEngine ("");
 				iosAdapter = new IosPlatformAdapter();
-				scienceEngine.setPlatformAdapter(iosAdapter);
+				ScienceEngine.setPlatformAdapter(iosAdapter);
 				return scienceEngine;
 			}
 			internal static IOSApplicationConfiguration getConfig() {

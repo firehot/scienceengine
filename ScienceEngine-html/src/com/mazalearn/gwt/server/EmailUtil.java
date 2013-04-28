@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -98,7 +99,8 @@ public class EmailUtil {
     }    
   }
 
-  static void sendConfirmationEmail(String userEmail, String userName, String installId) {
+  static void sendConfirmationEmail(String userEmail, String userName, String installId) 
+      throws UnsupportedEncodingException {
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);
   
@@ -107,7 +109,7 @@ public class EmailUtil {
         "http://www.mazalearn.com/re" + 
         "?i=" + installId + 
         "&e=" + userEmail +
-        "&n=" + userName +
+        "&n=" + URLEncoder.encode(userName, "UTF-8") +
         "&t=" + timeEmailSent + 
         "&h=" + Crypter.saltedSha1Hash(installId + userEmail + userName + timeEmailSent, installId) + 
         "\n\n-MazaLearn";

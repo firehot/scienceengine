@@ -10,6 +10,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 
 public class Trivia {
     
+  private static final String TRIVIA_FILE_NAME = "data/Electromagnetism/trivia.json";
   private Array<?> trivia;
   public enum Part {
     text, image;
@@ -19,10 +20,10 @@ public class Trivia {
   }
    
   public void load() {
-    Gdx.app.log(ScienceEngine.LOG, "Opening trivia file");
-    FileHandle file = Gdx.files.internal("data/Electromagnetism/trivia.json");
-    if (file == null) {
-      Gdx.app.error(ScienceEngine.LOG, "Could not open trivia file");
+    Gdx.app.log(ScienceEngine.LOG, "Opening trivia file: " + TRIVIA_FILE_NAME);
+    FileHandle file = Gdx.files.internal(TRIVIA_FILE_NAME);
+    if (file == null || !file.exists()) {
+      Gdx.app.error(ScienceEngine.LOG, "Could not open trivia file: " + TRIVIA_FILE_NAME);
       trivia = null;
     }
     String str = file.readString();

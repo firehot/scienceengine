@@ -26,10 +26,8 @@ tutors:[
           goal: "Change Magnetic field strength and direction and observe direction of field arrows",
           hints: ["What happens to the arrows when only Magnetic Field strength is changed?",
                  "What happens to the arrows when only Magnetic Field direction is changed?"],
-          explanation: ["The region around a magnet where magnetic forces act is called a magnetic field",
-                       "The magnetic field has a strength and a direction at each point.",
-                       "When strength of the field increases, the size of the arrows increase but their direction does not change",
-                       "When direction of the field changes, the direction of the arrows change, but their size does not change"],
+          explanation: ["The region around a magnet where magnetic forces act is called a magnetic field.\nThe magnetic field has a strength and a direction at each point.",
+                       "When field strength increases, the size of the arrows increase but their direction does not change.\nWhen direction of the field changes, the direction of the arrows change, but their size does not change"],
           postcondition: "Count(MagneticField.FieldStrength) > 1 and Count(MagneticField.FieldAngle) > 1"
          }]
        },
@@ -49,8 +47,7 @@ tutors:[
            id: "G2.1",
            goal: "Change Field strength and direction and see how monopole moves",
            hints: ["A free north pole moves in the direction of the field"],
-           explanation: ["The monopole moves in the direction of the field",
-                         "When the field strength increases, the force on the monopole increases",
+           explanation: ["The monopole moves in the direction of the field.\nWhen the field strength increases, the force on the monopole increases",
                          "NOTE: Magnetic monopoles are not found in nature. Magnetic North and South poles cannot be isolated unlike electric charges."],
            postcondition: "Count(MagneticField.FieldStrength) > 1 and Count(MagneticField.FieldAngle) > 1"
           },
@@ -67,8 +64,7 @@ tutors:[
            goal: "Change type of Monopole to South and see how monopole moves",
            components:[{type:"Monopole", pin:true}],
            hints: ["A free south pole moves opposite to the direction of the field"],
-           explanation: ["A South monopole behaves as the opposite of a North monopole.",
-                         "The force exerted by the field is same in magnitude but opposite in direction."],
+           explanation: ["A South monopole behaves as the opposite of a North monopole.\nThe force exerted by the field is same in magnitude but opposite in direction."],
            postcondition: "Count(Monopole.MonopoleType) >= 1"
           }]
        },
@@ -98,24 +94,20 @@ tutors:[
            hints: ["A magnetic field exerts force on a moving charge"],
            explanation: ["A magnetic field exerts force only on a moving charge, not on a stationary charge.\nThe direction of force is given by Fleming's left hand rule.",
                          "image:fleminglefthand",
-                         "Since the force is perpendicular to the charge motion (current), the charge moves in a circle.",
-                         "The force is higher if the velocity of the charge is higher"],
+                         "Since the force is perpendicular to the charge motion (current), the charge moves in a circle.\nThe force is higher if the velocity of the charge is higher"],
            postcondition: "Charge.Velocity > 0"
           },
           {type: "KnowledgeUnit",
            id: "G3.3",
            goal: "Change the magnetic field strength and charge strength and see how it affects the charge",
-           explanation: ["A stronger magnetic field exerts a stronger force on a moving charge",
-                         "The force on a higher strength charge is also higher.",
-                         "A larger force on the charge makes it spin faster."],
+           explanation: ["A stronger magnetic field exerts a stronger force on a moving charge\nThe force on a higher strength charge is also higher.\nA larger force on the charge makes it spin faster."],
            hints: ["A stronger magnetic field exerts a stronger force on a moving charge"],
            postcondition: "Count(MagneticField.FieldStrength) > 1 and Charge.Velocity > 0"
           },
           {type: "KnowledgeUnit",
            id: "G3.4",
            goal: "Change charge to negative and see how it moves",
-           explanation: ["A moving negative charge in a magnetic field spins in the opposite direction to a positive charge.",
-                         "The force exerted on it by the field is equal in magnitude but opposite in direction"],
+           explanation: ["A moving negative charge in a magnetic field spins in the opposite direction to a positive charge.\nThe force exerted on it by the field is equal in magnitude but opposite in direction"],
            hints: ["The force on the charge depends on its magnitude and sign"],
            postcondition: "Count(Charge.ChargeStrength) >= 1"
           }]
@@ -130,8 +122,7 @@ tutors:[
           refs:["2.1", "2.3"],
           hints: ["The North monopole moves in the direction of the field",
                   "The South monopole moves opposite to the direction of the field"],
-          explanation: ["A north monopole moves in the direction of the field",
-                        "A south monopole moves opposite to the direction of the field."],
+          explanation: ["A north monopole moves in the direction of the field.\nA south monopole moves opposite to the direction of the field."],
           components:[{type:"Charge", visible: false}],
           configs:[{name:"FieldMeter.SampleMode", value:"User"} ]
           }, 
