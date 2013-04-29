@@ -117,7 +117,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetUserSyncProfile_ReInitialize() {
-    String expected= "{\"client\":{\"clientjson\":\"test\"},\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"Field\":40,\"client\":10,\"BarMagnet\":30,\"social\":30,\"thissynctime\":123456,\"server\":20},\"server\":{\"serverjson\":\"test\"},\"topicStats\":{\"Field\":{\"FIeld\":20},\"BarMagnet\":{\"Guru\":10}}}";
+    String expected= "{\"client\":{\"clientjson\":\"test\"},\"social\":{\"friends\":[],\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"Field\":40,\"client\":10,\"BarMagnet\":30,\"social\":30,\"thissynctime\":123456,\"server\":20},\"server\":{\"serverjson\":\"test\"},\"topicStats\":{\"Field\":{\"FIeld\":20},\"BarMagnet\":{\"Guru\":10}}}";
     clientUpdates.clear();
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -133,7 +133,7 @@ public class ProfileSyncerTest {
   
   @Test
   public void testGetUserSyncProfile_SocialClientPull() {
-    String expected= "{\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"social\":123456,\"thissynctime\":50}}";
+    String expected= "{\"social\":{\"friends\":[],\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"social\":123456,\"thissynctime\":50}}";
     clientProfile.social = new Social();
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -141,7 +141,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetUserSyncProfile_SocialServerPush() {
-    String expected= "{\"social\":{\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"social\":40,\"thissynctime\":50}}";
+    String expected= "{\"social\":{\"friends\":[],\"inbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":0},\"points\":0},\"lastUpdated\":{\"social\":40,\"thissynctime\":50}}";
     serverUpdates.setProperty(ProfileData.SOCIAL, 40L);
     String s = profileUtil.getUserSyncProfile(null, serverProfile, clientProfile);
     assertEquals(expected, s);
@@ -231,8 +231,10 @@ public class ProfileSyncerTest {
   @Test
   public void testSyncSocialClient() {
     Social serverSocial = new Social();
-    serverSocial.friends = new ArrayList<String>();
     Social clientSocial = new Social();
+    // should not crash
+    ProfileSyncer.syncSocialClient(serverSocial, clientSocial);
+    serverSocial.friends = new ArrayList<String>();
     Message msg = new Message();
     serverSocial.inbox.addMessage(msg);
     ProfileSyncer.syncSocialClient(serverSocial, clientSocial);

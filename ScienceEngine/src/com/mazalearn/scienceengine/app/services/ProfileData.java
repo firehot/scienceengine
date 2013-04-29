@@ -118,7 +118,7 @@ public class ProfileData {
       }
       
     }
-    public ArrayList<String> friends;
+    public ArrayList<String> friends = new ArrayList<String>();
     public MQ inbox;  // producer = server, consumer = client 
     public MQ outbox; // producer = client, consumer = server
     public int points;
