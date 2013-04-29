@@ -437,6 +437,9 @@
     <Content Include="..\..\ScienceEngine-android\assets\sound\chime.mp3">
       <Link>sound\chime.mp3</Link>
     </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\EMReview.png">
+      <Link>images\EMReview.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

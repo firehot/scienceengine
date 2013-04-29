@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using java.nio;
 using java.util;
 
@@ -59,6 +60,13 @@ namespace scienceengineios
 
 	}
 
+	public class Sha1Implementor : Crypter.Sha1 {
+		public byte[] sha1Hash (byte[] toHash) {
+			HashAlgorithm sha1 = HashAlgorithm.Create("SHA1");
+			return sha1.ComputeHash(toHash);
+		}	
+	}
+
 	public class Application
 	{
 		[Register ("AppDelegate")]
@@ -92,6 +100,7 @@ namespace scienceengineios
 				scienceEngine = new ScienceEngine ("");
 				iosAdapter = new IosPlatformAdapter();
 				ScienceEngine.setPlatformAdapter(iosAdapter);
+				Crypter.setSha1Implementor(new Sha1Implementor());
 				return scienceEngine;
 			}
 			internal static IOSApplicationConfiguration getConfig() {
