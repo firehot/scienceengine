@@ -99,11 +99,11 @@ public class SplashScreen extends AbstractScreen {
     stage.addActor(splashImage);
     stage.addActor(touchToStart);
     stage.addActor(userInfo);
+    final PreferencesManager preferencesManager = ScienceEngine.getPreferencesManager();
+    final InstallProfile installProfile = preferencesManager.getInstallProfile();
     userInfo.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        final PreferencesManager preferencesManager = ScienceEngine.getPreferencesManager();
-        InstallProfile installProfile = preferencesManager.getInstallProfile();
         boolean multipleUsers = installProfile.getUserIds() != null;
         if (multipleUsers) {
           Table userTable = new Table(getSkin());
@@ -111,9 +111,13 @@ public class SplashScreen extends AbstractScreen {
           userTable.defaults().fill();
           for (final String userId: installProfile.getUserIds()) {
             final Profile userProfile = preferencesManager.getUserProfile(userId);
-            String name =  userProfile.getUserName();
-            if (userProfile.getUserName().equals(Profile.GUEST)) {
+            String name;
+            if (userProfile.isRegistered()) {
+              name = userProfile.getUserName();
+            } else {
               name = userId.substring(0, userId.indexOf("@"));
+              // set user id locally - this has effect only on this client
+              userProfile.setUserEmailLocally(userId);
             }
             // precondition: this user has a name and pixmap
             Label userLabel = new Label(name, getSkin());
@@ -157,7 +161,7 @@ public class SplashScreen extends AbstractScreen {
     LabelStyle small = new LabelStyle(getSkin().get(LabelStyle.class));
     small.font = getSkin().getFont("font12");
     Label version = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), small);
-    Label installation = new Label(profile.getInstallationId(), small);
+    Label installation = new Label(installProfile.getInstallationId(), small);
     installation.setStyle(small);
     version.setPosition(10, 40);
     installation.setPosition(10, 25);
@@ -165,7 +169,7 @@ public class SplashScreen extends AbstractScreen {
     stage.addActor(installation);
 
     // Registration Info if registered
-    String owner = (profile.getUserEmail().length() > 0) ? profile.getUserEmail() : "Not registered";
+    String owner = (installProfile.getRegisteredUserId() != null) ? installProfile.getRegisteredUserId() : "Not registered";
     Label registration = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Registered") + 
           ": " + owner, small);
     registration.setPosition(10, 10);

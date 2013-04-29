@@ -22,6 +22,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.mazalearn.scienceengine.app.services.InstallData;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social;
@@ -232,33 +233,37 @@ public class ProfileUtil {
   }
 
   public void confirmRegistrationInfo(String userEmail, String installId,
-      String userName, EmbeddedEntity newUserProfile,
-      Entity oldUser) {
+      String userName, EmbeddedEntity newUserProfile, Entity newUser) {
+    
+    Entity oldUser = retrieveUser(installId);
     EmbeddedEntity oldUserProfile = createOrGetUserProfile(oldUser, true);
-    ServerProps serverProps = jsonEntityUtil.getFromJsonTextProperty(oldUserProfile, ProfileData.SERVER_PROPS, ServerProps.class);
+    EmbeddedEntity userProfile = newUserProfile;
+    if (oldUserProfile != null && oldUser.getProperty(ProfileServlet.NEW_USER_ID) == null) {
+      userProfile = oldUserProfile;
+    }
+    ServerProps serverProps = jsonEntityUtil.getFromJsonTextProperty(userProfile, ProfileData.SERVER_PROPS, ServerProps.class);
     serverProps.userName = userName;
     serverProps.userId = userEmail;
     serverProps.isRegistered = true;
     Date date = new Date();
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     serverProps.registrationDate = dateFormat.format(date);
-    jsonEntityUtil.setAsJsonTextProperty(oldUserProfile, ProfileData.SERVER_PROPS, serverProps);
+    jsonEntityUtil.setAsJsonTextProperty(userProfile, ProfileData.SERVER_PROPS, serverProps);
     // update timestamp of server properties which have now been updated
-    EmbeddedEntity lastUpdated = (EmbeddedEntity) oldUserProfile.getProperty(ProfileData.LAST_UPDATED);
+    EmbeddedEntity lastUpdated = (EmbeddedEntity) userProfile.getProperty(ProfileData.LAST_UPDATED);
     lastUpdated.setProperty(ProfileData.SERVER_PROPS, System.currentTimeMillis());
     
-    oldUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);
-    
-    Entity newUser = createOrGetUser(userEmail, true);
-    newUser.setPropertiesFrom(oldUser);
-  
-    newUser.setProperty(ProfileServlet.OLD_USER_ID, installId);
+    if (userProfile == oldUserProfile) {
+      oldUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);      
+      newUser.setPropertiesFrom(oldUser);
+      newUser.setProperty(ProfileServlet.OLD_USER_ID, installId);
+      oldUser.setProperty(ProfileServlet.NEW_USER_ID, userEmail);
+      ds.put(oldUser);
+    }
     ds.put(newUser);
-    oldUser.setProperty(ProfileServlet.NEW_USER_ID, userEmail);
-    ds.put(oldUser);
   }
 
-  public void saveRegistrationInfo(Entity user, EmbeddedEntity profile,
+  public void saveOptionalRegistrationInfo(Entity user, EmbeddedEntity profile,
       String sex, String grade, String school,
       String city, String comments) {
     ServerProps serverProps = jsonEntityUtil.getFromJsonTextProperty(profile, ProfileData.SERVER_PROPS, ServerProps.class);
@@ -284,5 +289,28 @@ public class ProfileUtil {
       user.setProperty(ProfileServlet.PROFILE, null);
       ds.put(user);      
     }
+  }
+
+  public Entity createOrGetInstall(String installId, boolean create) {
+    if (installId == null || installId.length() == 0) return null;
+    Key key = KeyFactory.createKey(InstallProfileServlet.INSTALL_PROFILE, installId.toLowerCase());
+    Entity install = null;
+    try {
+      install = ds.get(key);
+    } catch (EntityNotFoundException e) {
+      if (create && install == null) {
+        install = new Entity(InstallProfileServlet.INSTALL_PROFILE, installId.toLowerCase());
+        InstallData data = new InstallData();
+        data.lastUpdated = System.currentTimeMillis();
+        data.installId = installId.toLowerCase();
+        install.setProperty(InstallData.INSTALL_DATA, new Text(new Gson().toJson(data)));
+        ds.put(install);
+      }
+    }
+    return install;
+  }
+
+  public void saveInstallProfile(Entity installProfile) {
+    ds.put(installProfile);
   }
 }

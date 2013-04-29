@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.app.services;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Base64Coder;
@@ -22,83 +20,65 @@ import com.mazalearn.scienceengine.app.utils.Crypter;
  */
 public class InstallProfile implements Serializable {
 
-  private static final String PNG = "png";
-  private static final String ENTERPRISE_NAME = "enterprisename";
-  private static final String ENTERPRISE_LOGO = PNG + "enterprise";
-  private static final String ENTERPRISE_ID = "enterpriseid";
-  public static final String INSTALL_ID = "installid";
-  public static final String INSTALL_NAME = "installname";
-  private static final String LAST_UPDATED = "last_updated";
-  private static final String EXPIRY_DATE = "expirydate";
-  private static final String CONFIGURATION = "configuration";
-  
-  private HashMap<String, String> properties;
-  private String[] userids;
-  
+  private InstallData data = new InstallData();
+
   public InstallProfile() {
-    properties = new HashMap<String, String>();
-    properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
+    data.installId = ScienceEngine.getPlatformAdapter().getInstallationId();
   }
 
     // Serializable implementation
 
-  @SuppressWarnings("unchecked")
   @Override
   public void read(Json json, OrderedMap<String, Object> jsonData) {
 
-    properties = json.readValue("properties", HashMap.class, String.class, jsonData);
-    if (properties == null) {
-      properties = new HashMap<String,String>();
-      properties.put(INSTALL_ID, ScienceEngine.getPlatformAdapter().getInstallationId());
+    data = json.readValue("data", InstallData.class, jsonData);
+    if (data == null) {
+      data = new InstallData();
+      data.installId = ScienceEngine.getPlatformAdapter().getInstallationId();
     }
-    userids = json.readValue("userids", String[].class, (String[]) null, jsonData);
   }
 
   @Override
   public void write(Json json) {
-    json.writeValue("properties", properties);
-    json.writeValue("userids", userids);
+    json.writeValue("data", data);
   }
 
   public String getEnterpriseName() {
-    String s = properties.get(ENTERPRISE_NAME);
-    return s == null ? "" : s;
+    return data.enterpriseName == null ? "" : data.enterpriseName;
   }
 
   public String getEnterpriseId() {
-    String s = properties.get(ENTERPRISE_ID);
-    return s == null ? "" : s;
+    return data.enterpriseId == null ? "" : data.enterpriseId;
+  }
+  
+  public String getRegisteredUserId() {
+    return data.registeredUserId == null ? "" : data.registeredUserId;
   }
 
   public void save() {
-    properties.put(LAST_UPDATED, String.valueOf(System.currentTimeMillis()));
+    data.lastUpdated = System.currentTimeMillis();
     ScienceEngine.getPreferencesManager().saveInstallProfile();
   }
   
   public long getLastUpdated() {
-    try {
-      String lastUpdated = properties.get(LAST_UPDATED);
-      return Long.parseLong(lastUpdated);
-    } catch (IllegalArgumentException e) {
-      return 0;
-    }
+    return data.lastUpdated;
   }
 
   public Pixmap getEnterpriseLogo() {
-    String png = properties.get(ENTERPRISE_LOGO);
+    String png = data.pngEnterpriseLogo;
     return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
   public String[] getUserIds() {    
-    return userids;
+    return data.userIds;
   }
 
   public String getInstallationId() {
-    return properties.get(INSTALL_ID);
+    return data.installId;
   }
 
   public String getInstallationName() {
-    return properties.get(INSTALL_NAME);
+    return data.installName;
   }
 
   public static InstallProfile fromBase64(String profileBase64AndHash) {
@@ -116,9 +96,10 @@ public class InstallProfile implements Serializable {
       }
       String profileJson = Base64Coder.decodeString(profileBase64);
       try {
-        installProfile = new Json(OutputType.javascript).fromJson(InstallProfile.class, profileJson);
+        installProfile = new InstallProfile();
+        installProfile.data = new Json(OutputType.javascript).fromJson(InstallData.class, profileJson);
         // verify the installid
-        if (!installId.equals(installProfile.getInstallationId())) {
+        if (!installId.toLowerCase().equals(installProfile.getInstallationId())) {
           Gdx.app.error(ScienceEngine.LOG, "Install profile - Install id mismatch");
           return null;
         }

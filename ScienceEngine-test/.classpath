@@ -11,6 +11,7 @@
 	<classpathentry kind="lib" path="/ScienceEngine-html/war/WEB-INF/lib/gwt-servlet.jar"/>
 	<classpathentry kind="lib" path="/ScienceEngine-html/war/WEB-INF/lib/pdfbox-1.8.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ScienceEngine-html"/>
+	<classpathentry kind="lib" path="libs/servlet-api.jar"/>
 	<classpathentry kind="lib" path="/ScienceEngine-html/war/WEB-INF/lib/appengine-api-1.0-sdk-1.7.7.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

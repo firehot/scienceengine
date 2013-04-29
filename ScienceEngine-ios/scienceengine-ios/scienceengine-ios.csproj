@@ -440,6 +440,66 @@
     <Content Include="..\..\ScienceEngine-android\assets\images\EMReview.png">
       <Link>images\EMReview.png</Link>
     </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\social\pack.png">
+      <Link>images\social\pack.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\social\pack2.png">
+      <Link>images\social\pack2.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\ampere.jpg">
+      <Link>images\trivia\ampere.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\edison.jpg">
+      <Link>images\trivia\edison.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\electricity.jpg">
+      <Link>images\trivia\electricity.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\faraday.jpg">
+      <Link>images\trivia\faraday.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\fourforces.jpg">
+      <Link>images\trivia\fourforces.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\galvani.jpg">
+      <Link>images\trivia\galvani.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\hertz.jpg">
+      <Link>images\trivia\hertz.jpg</Link>
+    </Content>
+    <None Include="..\..\ScienceEngine-android\assets\images\trivia\infrared.gif">
+      <Link>images\trivia\infrared.gif</Link>
+    </None>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\kiteexperiment.jpg">
+      <Link>images\trivia\kiteexperiment.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\maxwell.jpg">
+      <Link>images\trivia\maxwell.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\microwaves.jpg">
+      <Link>images\trivia\microwaves.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\oersted.jpg">
+      <Link>images\trivia\oersted.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\photons.jpg">
+      <Link>images\trivia\photons.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\powerstation.jpg">
+      <Link>images\trivia\powerstation.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\tesla.jpg">
+      <Link>images\trivia\tesla.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\volta.jpg">
+      <Link>images\trivia\volta.jpg</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\images\social\pack.atlas">
+      <Link>images\social\pack.atlas</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\trivia.json">
+      <Link>data\Electromagnetism\trivia.json</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

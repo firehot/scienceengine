@@ -22,10 +22,12 @@
   <body>
 
 <%
-    String userId = request.getParameter(ProfileData.INSTALL_ID);
-    if (userId == null) {
-        userId = "Unknown User";
+    String installId = request.getParameter(ProfileData.INSTALL_ID);
+    if (installId == null) {
+        installId = "Unknown Installation";
     }
+    String userEmail = request.getParameter(ProfileData.USER_EMAIL);
+    String userId = (userEmail.length() > 0) ? userEmail : installId;
 
 %>
 
@@ -35,7 +37,7 @@
         <img src='/userimage?userid=<%= userId %>&png=pnguser'>
       </div>
       <table>
-        <tr><td>Email*</td><td><input name="<%= ProfileData.USER_EMAIL %>"></td></tr>
+        <tr><td>Email*</td><td><input name="<%= ProfileData.USER_EMAIL %>" value="<%= userEmail %>"></td></tr>
         <tr><td>Name*</td><td><input name="<%= ProfileData.USER_NAME %>"></td></tr>
         <tr><td>Sex</td><td><input type="radio" name="<%= ProfileData.SEX %>" value="F">Female
                             <input type="radio" name="<%= ProfileData.SEX %>" value="M">Male

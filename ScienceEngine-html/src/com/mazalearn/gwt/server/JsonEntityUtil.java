@@ -13,6 +13,8 @@ public class JsonEntityUtil {
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public <T> T getFromJsonTextProperty(PropertyContainer entity, String name, Class<T> clz) {
+    if (entity == null) return null;
+    
     Text objectJson = (Text) entity.getProperty(name);
     try {
       if (objectJson != null) {

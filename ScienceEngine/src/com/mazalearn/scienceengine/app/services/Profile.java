@@ -17,6 +17,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
+import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.MQ;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
@@ -90,6 +91,9 @@ public class Profile implements Serializable {
   public void read(Json json, OrderedMap<String, Object> jsonData) {
 
     data.lastUpdated = json.readValue(ProfileData.LAST_UPDATED, HashMap.class, Long.class, jsonData);
+    if (data.lastUpdated == null) {
+      data.lastUpdated = new HashMap<String, Long>();
+    }
     data.serverTimestamps = json.readValue(ProfileData.SERVER_TIME_STAMPS, HashMap.class, Long.class, jsonData);
     data.client = json.readValue(ProfileData.CLIENT_PROPS, ClientProps.class, jsonData);
     if (data.client == null) {
@@ -115,6 +119,9 @@ public class Profile implements Serializable {
       }
     }
     data.social = json.readValue(ProfileData.SOCIAL, ProfileData.Social.class, jsonData);
+    if (data.social == null) {
+      data.social = new Social();
+    }
     
     // Set current activity
     Topic currentActivity = Topic.BarMagnet;
@@ -178,7 +185,7 @@ public class Profile implements Serializable {
     return s == null ? "" : s;
   }
 
-  void testSetUserEmail(String userEmail) {
+  public void setUserEmailLocally(String userEmail) {
     data.server.userId = userEmail;
   }
   
