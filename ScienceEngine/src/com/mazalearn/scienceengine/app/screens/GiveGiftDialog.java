@@ -29,12 +29,14 @@ public class GiveGiftDialog extends Dialog {
   private Trivia trivia = new Trivia();
   private Dialog parentDialog;
   private Message gift = new Message();
+  private Button sendButton;
+  private TextButton makeGift;
   
   public GiveGiftDialog(final Skin skin, final Dialog parentDialog) {
     super("", skin);
     this.parentDialog = parentDialog;
     
-    parentDialog.hide();
+    parentDialog.setVisible(false);
     final Table contentTable = getContentTable();
     
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
@@ -62,25 +64,29 @@ public class GiveGiftDialog extends Dialog {
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         gift.points = Integer.parseInt(pointsList.getSelection());
-      }
-    });
-    contentTable.row();
-    final Image giftImage = new Image();
-    TextButton makeGift = new TextButton("Make Gift", skin, "body");
-    contentTable.add(makeGift);
-    makeGift.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         if (gift.points > profile.getPoints()) {
           ScienceEngine.displayStatusMessage(parentDialog.getStage(), StatusType.ERROR, "Not enough points");
           return;
         }
+        enableGifting(gift);
+      }
+    });
+    contentTable.row();
+    final Image giftImage = new Image();
+    makeGift = new TextButton("Make Gift", skin, "body");
+    contentTable.add(makeGift);
+    makeGift.setDisabled(true);
+    makeGift.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        if (makeGift.isDisabled()) return; 
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         gift.giftType = MathUtils.random(1, 3);
         giftImage.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion("gift" + gift.giftType)));
         int i = MathUtils.random(trivia.getNumTrivia() - 1);
         gift.text = trivia.getTriviumPart(i, Trivia.Part.text);
         gift.image = trivia.getTriviumPart(i, Trivia.Part.image);
+        enableGifting(gift);
       }
     });
     contentTable.add(giftImage).width(100).height(75);
@@ -96,16 +102,25 @@ public class GiveGiftDialog extends Dialog {
     TextButton cancelButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Cancel"), skin, "body");
     this.getButtonTable().add(cancelButton).width(150).center();
     
-    Button sendButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.SendGift"), skin, "body");
+    sendButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.SendGift"), skin, "body");
     sendButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
+        if (sendButton.isDisabled()) return; 
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         profile.sendGift(gift);
       }
     });
+    sendButton.setDisabled(true);
     this.getButtonTable().add(sendButton).width(150).center();
     trivia.load();
+  }
+  
+  private void enableGifting(Message gift) {
+    boolean isDisabled = gift.email == null || gift.giftType == 0 || gift.image == null || 
+        gift.points == 0 || gift.points > profile.getPoints();
+    sendButton.setDisabled(isDisabled);
+    makeGift.setDisabled(gift.points == 0 || gift.points > profile.getPoints() || gift.email == null);
   }
 
   private void createFriendChooser(Table contentTable, final Skin skin) {
@@ -162,6 +177,6 @@ public class GiveGiftDialog extends Dialog {
   
   @Override
   protected void result(Object object) {
-    parentDialog.show(getStage());
+    parentDialog.setVisible(true);
   }
 }

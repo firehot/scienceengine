@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.app.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -139,6 +140,7 @@ public class UserHomeDialog extends Dialog {
     List<TextButton> list = new ArrayList<TextButton>();
     for (final Message gift: giftBox) {
       final TextButton item = createItem(skin, GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
+      if (item == null) continue;
       list.add(item);
       item.addListener(new ClickListener() {
         @Override
@@ -183,6 +185,11 @@ public class UserHomeDialog extends Dialog {
 
   private static TextButton createItem(Skin skin, int itemWidth, int itemHeight, String itemName) {
     TextureRegion itemTexture = ScienceEngine.getTextureRegion(itemName);
+    if (itemTexture == null) {
+      Gdx.app.error(ScienceEngine.LOG, "Unknown item texture: " + itemName);
+      return null;
+    }
+    
     TextButton item = 
         ScreenUtils.createImageButton(itemTexture, skin, "clear");
     ScreenComponent.scaleSize(item, itemWidth, itemHeight);

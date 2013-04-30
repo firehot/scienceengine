@@ -23,7 +23,7 @@ public class ShowGiftDialog extends Dialog {
   public ShowGiftDialog(final Skin skin, final Message gift, final Actor giftItem, boolean allowAccept, Dialog parentDialog) {
     super("", skin);
     this.parentDialog = parentDialog;
-    parentDialog.hide();
+    parentDialog.setVisible(false);
     
     Table contentTable = getContentTable();
     contentTable.debug();
@@ -64,6 +64,6 @@ public class ShowGiftDialog extends Dialog {
   
   @Override
   protected void result(Object object) {
-    parentDialog.show(getStage());
+    parentDialog.setVisible(true);
   }
 }

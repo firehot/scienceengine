@@ -353,7 +353,7 @@ public class Profile implements Serializable {
 
   public int getPoints() {
     // TODO Auto-generated method stub
-    return 10000;
+    return 0;
   }
 
   public int getGiftPoints() {
