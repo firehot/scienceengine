@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,6 +17,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.TutoringEndDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
@@ -75,7 +77,9 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       // TODO: lack of symmetry here - cleanup required
       isTutoringInProgress = false;      
     }
-    Dialog dialog = new TutoringEndDialog(this, skin, science2DController.getGuru().getLevelEndMessage(success));
+    Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
+    profile.save();
+    Dialog dialog = new TutoringEndDialog(this, skin, science2DController.getGuru().getLevelEndMessage(success), Color.WHITE);
     dialog.show(this);      
   }
 

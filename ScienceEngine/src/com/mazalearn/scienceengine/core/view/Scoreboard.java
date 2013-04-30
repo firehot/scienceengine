@@ -31,11 +31,9 @@ public class Scoreboard extends Table {
 
   @Override
   public void act(float delta) {
-    if (tutor != null) {
-      int tutorPoints = Math.round(tutor.getStats()[ITutor.POINTS]);
-      int giftPoints = profile.getGiftPoints();
-      scoreLabel.setText(String.valueOf(tutorPoints + giftPoints));
-    }
+    int tutorPoints = Math.round(profile.getPoints());
+    int giftPoints = profile.getGiftPoints();
+    scoreLabel.setText(String.valueOf(tutorPoints + giftPoints));
   }
   
   public void setTutor(ITutor tutor) {

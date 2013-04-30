@@ -51,6 +51,7 @@ public abstract class AbstractFieldProber extends AbstractScience2DProber {
       tutorHelper.showWrong(getFailurePoints());
       stats[ITutor.POINTS] -= getFailurePoints();
       // TODO: equate success and failure scores
+      tutorHelper.showNextAndExplanation(false, true);
     }
     recordStats();
 

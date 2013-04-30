@@ -67,7 +67,11 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.failurePoints = tutorType.getFailurePoints();
     this.hints = hints;
     this.explanation = explanation;
-    this.refs = refs;
+    // Refs are also using localid
+    this.refs = new String[refs.length];
+    for (int i = 0; i < refs.length; i++) {
+      this.refs[i] = makeGlobalId(topic, refs[i]);
+    }
     this.tutorHelper = science2DController.getGuru().getTutorHelper();
     this.stats = tutorHelper.getProfile().getStats(topic, this.id);
     this.setVisible(false);
@@ -87,7 +91,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
       finish();
     } else {
       state = State.SystemFinished;
-      tutorHelper.showNextButton(true);
+      tutorHelper.showNextAndExplanation(true, true);
     }
   }
   
@@ -116,7 +120,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void userReadyToFinish() { // Assumed to be always success
     Gdx.app.log(ScienceEngine.LOG, "User has finished");
-    tutorHelper.showNextButton(false);
+    tutorHelper.showNextAndExplanation(false, false);
     if (state == State.SystemFinished) {
       state = State.Finished;
       finish();
@@ -131,7 +135,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     this.setVisible(false);
     if (success) stats[ITutor.NUM_SUCCESSES]++;
     recordStats();
-    tutorHelper.showNextButton(false);
+    tutorHelper.showNextAndExplanation(false, false);
     tutorHelper.setActiveTutor(parent);
     if (state == State.Finished) { 
       parent.systemReadyToFinish(true);
@@ -194,11 +198,9 @@ public abstract class AbstractTutor extends Group implements ITutor {
     
     this.setVisible(false);
     tutorHelper.setActiveTutor(this);
-    tutorHelper.showNextButton(false);
-    // Zero points if not in revision mode
-    if (!tutorHelper.isRevisionMode()) {
-      stats[ITutor.POINTS] = 0;
-    }
+    tutorHelper.showNextAndExplanation(false, false);
+    // Zero out points
+    stats[ITutor.POINTS] = 0;
     recordStats();
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 

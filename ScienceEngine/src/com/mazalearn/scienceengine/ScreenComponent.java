@@ -241,7 +241,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
     if (actor == null) return;
     if (animate) {
       actor.addAction(
-          AnimateAction.animatePosition(actor.getX(), actor.getY()));
+          AnimateAction.animatePosition(actor.getX(), actor.getY(), actor.isVisible()));
     } else {
       actor.clearActions();
     }

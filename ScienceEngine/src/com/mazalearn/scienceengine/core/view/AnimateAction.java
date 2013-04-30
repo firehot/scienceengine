@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
  */
 public class AnimateAction {
 
-  static public Action animateSize(final float w, final float h) {
+  static public Action animateSize(final float w, final float h, final boolean visible) {
     float duration = 1f;
     return Actions.forever(
         Actions.sequence(
@@ -22,6 +22,9 @@ public class AnimateAction {
               public void setActor(Actor actor) {
                 if (actor == null) {
                   this.actor.setSize(w, h);
+                  this.actor.setVisible(visible);
+                } else {
+                  actor.setVisible(true);
                 }
                 super.setActor(actor);
               }
@@ -33,7 +36,7 @@ public class AnimateAction {
         ));
   }
 
-  static public Action animatePosition(final float x, final float y) {
+  static public Action animatePosition(final float x, final float y, final boolean visible) {
     float duration = 1f;
     return Actions.forever(
         Actions.sequence(
@@ -44,6 +47,9 @@ public class AnimateAction {
               public void setActor(Actor actor) {
                 if (actor == null) {
                   this.actor.setPosition(x, y);
+                  this.actor.setVisible(visible);
+                } else {
+                  actor.setVisible(true);
                 }
                 super.setActor(actor);
               }

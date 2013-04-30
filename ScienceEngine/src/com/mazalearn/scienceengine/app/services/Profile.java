@@ -351,9 +351,12 @@ public class Profile implements Serializable {
     }
   }
 
+  public void addPoints(int points) {
+    data.client.points += points;
+  }
+
   public int getPoints() {
-    // TODO Auto-generated method stub
-    return 0;
+    return data.client.points;
   }
 
   public int getGiftPoints() {

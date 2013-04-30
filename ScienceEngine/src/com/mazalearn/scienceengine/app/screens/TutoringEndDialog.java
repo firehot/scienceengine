@@ -15,13 +15,13 @@ import com.mazalearn.scienceengine.ScreenComponent;
 
 public class TutoringEndDialog extends Dialog {
   
-  public TutoringEndDialog(final Stage stage, Skin skin, String contents) {
+  public TutoringEndDialog(final Stage stage, Skin skin, String contents, Color color) {
     super("\n\n", skin);
     
     setBackground(createBackground());
     
     Label description = new Label("\n\n" + contents, skin);
-    description.setColor(Color.BLUE);
+    description.setColor(color);
     description.setWidth(400);
     description.setWrap(true);
     
@@ -34,7 +34,7 @@ public class TutoringEndDialog extends Dialog {
   private static TextureRegionDrawable createBackground() {
     Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
     Color c = Color.LIGHT_GRAY;
-    pixmap.setColor(c.r, c.g, c.b, 0.6f);
+    pixmap.setColor(c.r, c.g, c.b, 0.8f);
     pixmap.fillRectangle(0, 0, 1, 1);
     TextureRegion textureRegion = new TextureRegion(new Texture(pixmap), 
         ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);

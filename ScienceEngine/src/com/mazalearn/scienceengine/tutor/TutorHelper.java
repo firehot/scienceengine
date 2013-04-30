@@ -153,18 +153,21 @@ public class TutorHelper extends Group {
     addActor(wrongImage); // Bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
     wrongImage.show(scoreToString(-score));
+    profile.addPoints(-score);
   }
   
   public void showFailure(int score) {
     addActor(failureImage); // bring to top
     soundManager.play(ScienceEngineSound.FAILURE);
     failureImage.show("Oops!");
+    profile.addPoints(-score);
   }
 
   public void showCorrect(int score) {
     addActor(correctImage); // bring to top
     soundManager.play(ScienceEngineSound.SUCCESS);
     correctImage.show(scoreToString(score));
+    profile.addPoints(score);
     hinter.clearHint();
   }
   
@@ -173,6 +176,7 @@ public class TutorHelper extends Group {
     soundManager.play(ScienceEngineSound.SUCCESS);
     successImage.show(scoreToString(score));
     hinter.clearHint();
+    profile.addPoints(score);
    }
   
   public McqActor getMcqActor() {
@@ -254,9 +258,9 @@ public class TutorHelper extends Group {
               }));
   }
 
-  public void showNextButton(boolean show) {
-    tutorNavigator.showNextButton(show);
-    if (show) {
+  public void showNextAndExplanation(boolean showNext, boolean showExplanation) {
+    tutorNavigator.showNextButton(showNext);
+    if (showExplanation) {
       if (activeTutor.getExplanation() != null && activeTutor.getExplanation().length > 0) {
         explanation.setExplanation(activeTutor.getExplanation(), activeTutor.getRefs().length > 0);
         explanation.setVisible(true);
@@ -273,6 +277,9 @@ public class TutorHelper extends Group {
   }
 
   public void populateTutors(TutorGroup rootTutor) {
+    if (tutorNavigator != null) {
+      tutorNavigator.remove();
+    }
     tutorNavigator = new TutorNavigator(rootTutor, guru, this, skin);
     this.addActor(tutorNavigator);
     // Reinitialize excluded actors
@@ -281,7 +288,7 @@ public class TutorHelper extends Group {
     excludedActors.add(tutorNavigator);
     for (Actor actor: science2DView.getActors()) {
       // actor is visible
-      if (actor.isVisible()) {
+      if (actor.isVisible() && actor != guru) {
         excludedActors.add(actor);
       }
     }            

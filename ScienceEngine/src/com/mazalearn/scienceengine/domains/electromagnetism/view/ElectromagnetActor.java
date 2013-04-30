@@ -54,7 +54,7 @@ public class ElectromagnetActor extends Science2DActor {
   @Override
   public void showHelp(Stage stage, boolean animate) {
     if (animate) {
-      addAction(AnimateAction.animatePosition(getX(), getY()));
+      addAction(AnimateAction.animatePosition(getX(), getY(), isVisible()));
     } else {
       clearActions();
     }

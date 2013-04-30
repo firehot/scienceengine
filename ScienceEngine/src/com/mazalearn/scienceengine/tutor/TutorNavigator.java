@@ -79,7 +79,7 @@ public class TutorNavigator extends Group {
         ScreenComponent.Goal.getHeight(),
         Color.GREEN);
     goal = ScreenUtils.createImageButton(goalTexture, skin); */
-    goal = new TextButton("", skin);
+    goal = new TextButton("Goal", skin);
 
     goal.setWidth(ScreenComponent.Goal.getWidth());
     goal.setHeight(ScreenComponent.Goal.getHeight());

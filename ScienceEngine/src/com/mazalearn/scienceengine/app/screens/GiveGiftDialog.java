@@ -48,33 +48,20 @@ public class GiveGiftDialog extends Dialog {
     contentTable.debug();
     contentTable.add(title).width(800).pad(10).center().colspan(2);
     contentTable.row();
-    contentTable.add("Gifts Waiting to be Dispatched to Server").colspan(2);
+/*    contentTable.add("Gifts Waiting to be Dispatched to Server").colspan(2);
     contentTable.row();
     Actor waitingGiftsPane = UserHomeDialog.createWaitingGiftsPane(this, profile.getOutbox(), false, skin);
     contentTable.add(waitingGiftsPane).width(400).height(UserHomeDialog.GIFT_HEIGHT).colspan(2);
+    contentTable.row(); */
+    contentTable.add("Choose Friend");
+    contentTable.add("Choose Maza coins");
     contentTable.row();
-    createFriendChooser(contentTable, skin);
+    contentTable.add(createFriendChooser(skin));
+    contentTable.add(createCoinsChooser(skin, parentDialog));
     contentTable.row();
-    contentTable.add("Maza coins you wish to gift");
-    final List pointsList = new List(new Integer[] {100, 200, 500, 1000}, skin);
-    pointsList.setSelection("500");
-    contentTable.add(pointsList);
-    pointsList.addListener(new ClickListener() {
-      @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        gift.points = Integer.parseInt(pointsList.getSelection());
-        if (gift.points > profile.getPoints()) {
-          ScienceEngine.displayStatusMessage(parentDialog.getStage(), StatusType.ERROR, "Not enough points");
-          return;
-        }
-        enableGifting(gift);
-      }
-    });
-    contentTable.row();
-    final Image giftImage = new Image();
-    makeGift = new TextButton("Make Gift", skin, "body");
-    contentTable.add(makeGift);
+    final Image giftImage = new Image(ScienceEngine.getTextureRegion("opengift"));
+    makeGift = new TextButton("Pack the Gift", skin);
+    contentTable.add(makeGift).right().spaceRight(10);
     makeGift.setDisabled(true);
     makeGift.addListener(new ClickListener() {
       @Override
@@ -89,7 +76,7 @@ public class GiveGiftDialog extends Dialog {
         enableGifting(gift);
       }
     });
-    contentTable.add(giftImage).width(100).height(75);
+    contentTable.add(giftImage).width(100).height(75).left();
     contentTable.row();
     giftImage.addListener(new ClickListener() {
       @Override
@@ -115,6 +102,28 @@ public class GiveGiftDialog extends Dialog {
     this.getButtonTable().add(sendButton).width(150).center();
     trivia.load();
   }
+
+  private Actor createCoinsChooser(final Skin skin, final Dialog parentDialog) {
+    Table coinsTable = new Table(skin);
+    final List pointsList = new List(new Integer[] {100, 200, 500, 1000}, skin);
+    pointsList.setSelection("500");
+    coinsTable.add(pointsList);
+    pointsList.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        gift.points = Integer.parseInt(pointsList.getSelection());
+        if (gift.points > profile.getPoints()) {
+          ScienceEngine.displayStatusMessage(parentDialog.getStage(), 
+              StatusType.ERROR, "Not enough points");
+          return;
+        }
+        enableGifting(gift);
+      }
+    });
+    coinsTable.row();
+    return coinsTable;
+  }
   
   private void enableGifting(Message gift) {
     boolean isDisabled = gift.email == null || gift.giftType == 0 || gift.image == null || 
@@ -123,14 +132,9 @@ public class GiveGiftDialog extends Dialog {
     makeGift.setDisabled(gift.points == 0 || gift.points > profile.getPoints() || gift.email == null);
   }
 
-  private void createFriendChooser(Table contentTable, final Skin skin) {
-    Table chooserTable = new Table(skin);
-    chooserTable.add("Choose Friend");
-    chooserTable.row();
-    TextButton addFriend = new TextButton("Add Friend", skin, "body");
-    chooserTable.add(addFriend);
+  private Actor createFriendChooser(final Skin skin) {    
     final List friendsList = new List(profile.getFriends().toArray(new String[0]), skin);
-    
+    TextButton addFriend = new TextButton("Add a Friend", skin);
     addFriend.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -170,9 +174,11 @@ public class GiveGiftDialog extends Dialog {
         gift.email = friendsList.getSelection();
       }
     });
-    contentTable.add(chooserTable);
-    contentTable.add(friendsList);
-    contentTable.row();
+    
+    Table chooserTable = new Table(skin);
+    chooserTable.add(friendsList);
+    chooserTable.add(addFriend).spaceLeft(30);
+    return chooserTable;
   }
   
   @Override

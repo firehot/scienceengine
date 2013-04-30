@@ -185,7 +185,7 @@ public class Science2DActor extends Actor implements IHelpComponent {
   @Override
   public void showHelp(Stage stage, boolean animate) {
     if (animate) {
-      addAction(AnimateAction.animateSize(getWidth(), getHeight()));
+      addAction(AnimateAction.animateSize(getWidth(), getHeight(), isVisible()));
     } else {
       clearActions();
     }

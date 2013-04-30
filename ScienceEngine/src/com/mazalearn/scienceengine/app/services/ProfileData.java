@@ -70,6 +70,8 @@ public class ProfileData {
     public String activity;
     // These are the set of certificates held by user
     public ArrayList<String> certificates = new ArrayList<String>();
+    // Points earned through challenges and rapidfire
+    public int points;
   }
   public static class ServerProps {
     public String userName;
@@ -121,7 +123,7 @@ public class ProfileData {
     public ArrayList<String> friends = new ArrayList<String>();
     public MQ inbox;  // producer = server, consumer = client 
     public MQ outbox; // producer = client, consumer = server
-    public int points;
+    public int points; // gift points received
     
     public Social() {
       inbox = new MQ();

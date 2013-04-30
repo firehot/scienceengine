@@ -163,7 +163,7 @@ public abstract class AbstractScience2DController implements
         public void showHelp(Stage stage, boolean animate) {
           Group activityGroup = (Group) science2DView.findActor(ScreenComponent.ACTIVITY_GROUP);
           if (animate) {
-            activityGroup.addAction(AnimateAction.animatePosition(getX(), getY()));
+            activityGroup.addAction(AnimateAction.animatePosition(getX(), getY(), isVisible()));
           } else {
             activityGroup.clearActions();
           }
