@@ -27,7 +27,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   ImageMessageBox(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, -1, Color.YELLOW, false, false),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, -1, Color.YELLOW, false, false), 
-  TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 5, 0, 0, -1, Color.CLEAR, false, false), 
+  TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 2, 0, 0, -1, Color.CLEAR, false, false), 
   McqProgressInfo(XAlign.RIGHT, -45, YAlign.TOP, -15, 0, 0, -1, Color.CLEAR, false, false), 
   ;
   
@@ -210,13 +210,18 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
     }
   }
 
-  private static int selectFontSize(int fontSize) {
+  /**
+   * @return closest available font size to <code>fontSize</code>
+   * package protected for testing 
+   */
+  static int selectFontSize(int fontSize) {
+    int index = AVAILABLE_FONT_SIZES.length - 1;
     for (int i = 1; i < AVAILABLE_FONT_SIZES.length; i++) {
-      if (AVAILABLE_FONT_SIZES[i-1] < fontSize && fontSize <= AVAILABLE_FONT_SIZES[i]) {
-        return AVAILABLE_FONT_SIZES[i];
+      if (Math.abs(AVAILABLE_FONT_SIZES[i] - fontSize) < Math.abs(AVAILABLE_FONT_SIZES[index] - fontSize)) {
+        index = i;
       }
     }
-    return AVAILABLE_FONT_SIZES[AVAILABLE_FONT_SIZES.length - 1];
+    return AVAILABLE_FONT_SIZES[index];
   }
   
   // should be called only after setSize has been called

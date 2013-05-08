@@ -27,6 +27,7 @@ public class ImageMessageBox extends TextButton {
     getLabel().setWrap(true);
     TextButtonStyle tbs = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
     tbs.fontColor = Color.BLACK;
+    tbs.font = skin.getFont(ScreenComponent.getFont(0.85f));
     setStyle(tbs);
     setWidth(250);
     setHeight(250);

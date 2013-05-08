@@ -46,7 +46,7 @@ public class ProfileSyncer {
     for (Map.Entry<String, Long> entry: yourTimestamps.entrySet()) {
       String key = entry.getKey();
       if (key.equals(ProfileData.LAST_UPDATED) || yourData.get(key) == null) continue;
-      Long yourTimestampForKey = entry.getValue();
+      Long yourTimestampForKey = nvl(entry.getValue(), 0);
       if (myData.get(key) instanceof Map) {
         syncMerge(myTimestamps, yourTimestamps, 
             (Map<String, Object>) myData.get(key), (Map<String, Object>) yourData.get(key));
