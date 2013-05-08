@@ -42,7 +42,7 @@ public class RegistrationServlet extends HttpServlet {
     Entity user = profileUtil.retrieveUser(userEmail);
     if (user == null) { // Case 1 - check
       user = profileUtil.retrieveUser(installId);
-      if (user == null || !user.getKey().getName().equals(userEmail)) {
+      if (user == null || (!user.getKey().getName().equals(userEmail) && !user.getKey().getName().equals(installId))) {
         response.getWriter().append("Not properly synced to server? Could not find user");
         return;
       }

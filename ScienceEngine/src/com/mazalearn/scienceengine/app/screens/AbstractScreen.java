@@ -37,8 +37,7 @@ public abstract class AbstractScreen implements Screen {
   protected Stage stage;
 
   private Table table;
-  private Color backgroundColor = Color.BLACK;
-
+  private Color backgroundColor = ScienceEngine.getSkin().getColor("background");
   public AbstractScreen(ScienceEngine scienceEngine, Stage stage) {
     this.scienceEngine = scienceEngine;
   }

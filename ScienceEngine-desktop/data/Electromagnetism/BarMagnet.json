@@ -42,7 +42,7 @@ tutors:[
                        "When the field is stronger, the arrow is bigger.\nThe magnetic field is stronger near the poles of the magnet."]
         },
         {type: "KnowledgeUnit",
-         goal: "Move the magnet. See how the all the field arrows change.",
+         goal: "Move the magnet. See how all the field arrows change.",
          id: "G1.3",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 1",
          explanation: ["When the magnet moves, its magnetic field moves along with it."]
