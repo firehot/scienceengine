@@ -47,7 +47,7 @@ public class UserHomeDialog extends Dialog {
     // Title
     Label title = new Label("Home", skin);
     title.setAlignment(Align.center, Align.center);
-    contentTable.add(title).fill().width(800).pad(10).height(40).colspan(2);
+    contentTable.add(title).fill().pad(10).colspan(2);
     contentTable.row();
     
     // Name and face
@@ -72,7 +72,7 @@ public class UserHomeDialog extends Dialog {
   private void addUserInfo(final Image userImage, Table contentTable) {
     Label name = new Label(profile.getUserName(), skin);
     name.setAlignment(Align.center, Align.center);
-    contentTable.add(name).fill().width(400).pad(10);
+    contentTable.add(name).fill().pad(10);
     Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     contentTable.add(image).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
     image.addListener(new ClickListener() {
@@ -87,7 +87,7 @@ public class UserHomeDialog extends Dialog {
 
   private void addRegistrationRequest(Table contentTable) {
     Label registration = new Label("", skin);
-    registration.setWidth(800);
+    //registration.setWidth(800);
     registration.setWrap(true);
     registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.RegistrationInfo"));
     contentTable.add(registration).width(400).pad(10);
@@ -98,6 +98,8 @@ public class UserHomeDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        // Hide this dialog
+        UserHomeDialog.this.hide();
         // Bring up registration form
         ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + "/registration.jsp?" + 
             ProfileData.INSTALL_ID + "=" + profile.getInstallationId().toLowerCase() + "&" +
@@ -130,8 +132,8 @@ public class UserHomeDialog extends Dialog {
     contentTable.row();
     
     Actor waitingGiftsPane = createWaitingGiftsPane(this, profile.getInbox(), true, skin);
-    contentTable.add(waitingGiftsPane).width(400).height(GIFT_HEIGHT);
-    contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f);
+    contentTable.add(waitingGiftsPane).width(GIFT_WIDTH * 2.5f).height(GIFT_HEIGHT).padLeft(30);
+    contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f).padRight(30);
     contentTable.row();
   }
 

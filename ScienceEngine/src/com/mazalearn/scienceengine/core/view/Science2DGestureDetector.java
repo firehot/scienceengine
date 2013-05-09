@@ -1,11 +1,13 @@
 package com.mazalearn.scienceengine.core.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
@@ -19,8 +21,9 @@ public class Science2DGestureDetector extends GestureDetector {
 
   public static class Science2DGestureAdapter extends GestureAdapter {
     
+    private static final float TOLERANCE = 0.1f;
     private final Stage science2DView;
-    private Vector2 p = new Vector2();
+    private Vector2 p = new Vector2(), center = new Vector2();
 
     public Science2DGestureAdapter(Stage science2DView) {
       super();
@@ -45,16 +48,31 @@ public class Science2DGestureDetector extends GestureDetector {
         }
       }
       if (rotateConfig == null || !rotateConfig.isAvailable()) return false;
-      // Treat initialPointer2 and pointer2 as position vectors from pointer1 - the delta is the degree of rotation
-      p.set(pointer2).sub(pointer1);
-      float degrees = p.angle();
-      p.set(initialPointer2).sub(pointer1);
-      initialPointer2.set(pointer2);
-      initialPointer1.set(pointer1);
-      degrees -= p.angle();
-      float radians = body.getAngle() - degrees * MathUtils.degreesToRadians;
-      rotateConfig.setValue(radians);
-      ScienceEngine.selectParameter(body, Parameter.RotationAngle, radians, (IScience2DView) science2DView);
+      // Treat initialPointer1, initialPointer2 as one line and pointer1, pointer2 as second line.
+      // then delta is the degree of rotation to rotate the first to the second around their intersection point
+      center.set(initialPointer1).sub(initialPointer2);
+      p.set(pointer1).sub(pointer2);
+      float degrees = center.angle() - p.angle();
+      if (degrees > 90 || degrees < -90) {
+        degrees = ((degrees - 180) + 360) % 360;
+      }
+      
+      float deltaRadians = degrees * MathUtils.degreesToRadians;
+      float radians = body.getAngle() + deltaRadians;
+      if (deltaRadians > TOLERANCE || deltaRadians < -TOLERANCE) {
+        Gdx.app.error(ScienceEngine.LOG, "Degrees = " + degrees + 
+            " rotation = " + body.getAngle() * MathUtils.radiansToDegrees);
+        // Let us move the body to the average point of all 4 end points
+        float avgX = (initialPointer1.x + initialPointer2.x + pointer1.x + pointer2.x) / 4;
+        float avgY = (initialPointer1.y + initialPointer2.y + pointer1.y + pointer2.y) / 4;
+        
+        science2DView.screenToStageCoordinates(center.set(avgX, avgY)).mul(1f / ScreenComponent.PIXELS_PER_M);
+        body.setPositionAndAngle(center, body.getAngle());
+        initialPointer2.set(pointer2);
+        initialPointer1.set(pointer1);
+        rotateConfig.setValue(radians);
+        ScienceEngine.selectParameter(body, Parameter.RotationAngle, radians, (IScience2DView) science2DView);
+      }
       return true;
     }
   }
