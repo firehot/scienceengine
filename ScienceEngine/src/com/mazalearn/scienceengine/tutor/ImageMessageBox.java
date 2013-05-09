@@ -35,7 +35,7 @@ public class ImageMessageBox extends TextButton {
         ScreenComponent.ImageMessageBox.getY(getHeight()));
     
     closeImage = new Image(ScienceEngine.getTextureRegion("close"));
-    ScreenComponent.scaleSize(closeImage, closeImage.getWidth() * 0.5f, closeImage.getHeight() * 0.5f);
+    ScreenComponent.scaleSize(closeImage, closeImage.getWidth() * 0.75f, closeImage.getHeight() * 0.75f);
     closeImage.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
