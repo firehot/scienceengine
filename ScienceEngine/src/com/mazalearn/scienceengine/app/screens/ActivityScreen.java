@@ -198,6 +198,7 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
+    super.addAssets();
     String fileName = LevelUtil.getLevelFilename(topic, 
         science2DController.getLevel(), ".json");
     if (ScienceEngine.getAssetManager().isLoaded(fileName)) {

@@ -345,6 +345,7 @@ public class TopicHomeScreen extends AbstractScreen {
   
   @Override
   public void addAssets() {
+    super.addAssets();
     for (Topic childTopic: topic.getChildren()) {
       String filename = LevelUtil.getLevelFilename(topic, childTopic, ".png");
       ScienceEngine.getAssetManager().load(filename, Pixmap.class);

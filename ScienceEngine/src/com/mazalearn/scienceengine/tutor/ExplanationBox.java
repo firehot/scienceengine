@@ -48,6 +48,9 @@ public class ExplanationBox extends ImageMessageBox {
     
     String currentText = explanation[current];
     getNextButton().setVisible(current < explanation.length - 1);
+    if (!getNextButton().isVisible()) {
+      currentText += "\n\nTouch Next to continue";
+    }
     getPrevButton().setVisible(current > 0);
     boolean isImage = currentText.startsWith("image:");
     TextureRegion textureRegion = null;

@@ -73,7 +73,7 @@ public class SoundManager implements
     if (soundToPlay == null) {
       FileHandle soundFile = Gdx.files.internal(sound.getFileName());
       soundToPlay = Gdx.audio.newSound(soundFile);
-      soundCache.add(sound, soundToPlay);
+      soundCache.add(sound, ScienceEngine.getAssetManager().get(sound.getFileName(), Sound.class));
     }
 
     // play the sound

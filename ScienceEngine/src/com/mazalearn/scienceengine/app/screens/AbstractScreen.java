@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.app.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -137,7 +138,7 @@ public abstract class AbstractScreen implements Screen {
         return bar;
       case User: { 
         String text = ScienceEngine.getUserName();
-        Table table = new Table(skin);
+        TextButton table = new TextButton("", skin, "body");
         table.setName(screenComponent.name());
         final Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
         image.setSize(screenComponent.getWidth(), screenComponent.getHeight());
@@ -145,6 +146,7 @@ public abstract class AbstractScreen implements Screen {
             .width(screenComponent.getWidth())
             .height(screenComponent.getHeight());
         table.add(text);
+        table.setSize(screenComponent.getWidth() * 3, screenComponent.getHeight());
         table.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -287,6 +289,11 @@ public abstract class AbstractScreen implements Screen {
 
   // Adds all assets required for this screen to reduce load timeLimit
   public void addAssets() {
+    // MP3 sound files
+    for (ScienceEngineSound sound: ScienceEngineSound.values()) {
+      ScienceEngine.getAssetManager().load(sound.getFileName(), Sound.class);
+    }
+    ScienceEngine.getAssetManager().finishLoading();
   }
 
 }
