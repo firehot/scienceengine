@@ -17,14 +17,14 @@ rightscroll
   orig: 128, 512
   offset: 0, 0
   index: -1
-go
+comingsoon
   rotate: false
-  xy: 616, 722
-  size: 300, 300
-  orig: 300, 300
+  xy: 616, 766
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
-comingsoon
+videoplay
   rotate: false
   xy: 131, 341
   size: 256, 256
@@ -33,42 +33,35 @@ comingsoon
   index: -1
 engine
   rotate: false
-  xy: 131, 211
+  xy: 616, 636
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 help
   rotate: false
-  xy: 389, 469
+  xy: 874, 894
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 lock
   rotate: false
-  xy: 389, 339
+  xy: 131, 211
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 389, 209
+  xy: 389, 469
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 user
   rotate: false
-  xy: 131, 81
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-videoplay
-  rotate: false
-  xy: 616, 592
+  xy: 874, 764
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -82,28 +75,28 @@ back
   index: -1
 browser
   rotate: false
-  xy: 918, 958
+  xy: 131, 145
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel
   rotate: false
-  xy: 261, 145
+  xy: 261, 275
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 goldcoins
   rotate: false
-  xy: 327, 160
+  xy: 389, 418
   size: 60, 49
   orig: 60, 49
   offset: 0, 0
   index: -1
 helparrow
   rotate: false
-  xy: 746, 690
+  xy: 616, 604
   size: 64, 30
   orig: 64, 30
   offset: 0, 0
@@ -111,6 +104,20 @@ helparrow
 close
   rotate: false
   xy: 519, 565
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+nextarrow
+  rotate: false
+  xy: 874, 730
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+prevarrow
+  rotate: false
+  xy: 131, 111
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

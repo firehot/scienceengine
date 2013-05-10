@@ -64,12 +64,12 @@ public class HelpTour extends Group {
       // Put contentbutton on screen touching arrow based on quadrant
       int sx = (int) Math.signum(MathUtils.cosDeg(angle));
       int sy = (int) Math.signum(MathUtils.sinDeg(angle));
-      contentBox.getNextButton().setText(getMsg("ScienceEngine.Next"));
       float w = contentBox.getWidth();
       float h = contentBox.getHeight();
       if (arrowX == CENTER_POS.x && arrowY == CENTER_POS.y) {
         pos.set(CENTER_POS.x - w / 2, CENTER_POS.y - h / 2);
-        contentBox.getNextButton().setText(getMsg("HelpTour.Help"));
+        //TODO: Help button
+        //contentBox.getNextButton().setText(getMsg("HelpTour.Help"));
       } else if (sx >= 0 && sy >= 0) {
         pos.set(arrowX - w, arrowY - h);
       } else if (sx <= 0 && sy >= 0) {

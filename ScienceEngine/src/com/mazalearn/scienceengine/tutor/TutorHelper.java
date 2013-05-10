@@ -29,7 +29,6 @@ import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.lang.IFunction;
 import com.mazalearn.scienceengine.core.lang.Parser;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
-import com.mazalearn.scienceengine.core.view.Scoreboard;
 import com.mazalearn.scienceengine.core.view.SizeAction;
 
 public class TutorHelper extends Group {
@@ -88,11 +87,6 @@ public class TutorHelper extends Group {
     this.addActor(hinter);
     this.addActor(explanation = new ExplanationBox(this, skin, "explanation"));
     
-    Scoreboard scoreboard = (Scoreboard) science2DView.findActor(ScreenComponent.Scoreboard.name());;
-    if (scoreboard != null) {
-      scoreboard.setTutor(guru);
-    }
-
     timeTracker = (TimeTracker) science2DView.findActor(ScreenComponent.TimeTracker.name());
     if (timeTracker != null) {
       timeTracker.setActiveTutor(guru);

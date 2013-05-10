@@ -196,8 +196,11 @@ public abstract class AbstractScreen implements Screen {
         }
         return actor;
       }
-      case Scoreboard:
-        return new Scoreboard(getSkin());
+      case Scoreboard: {
+        Actor actor = new Scoreboard(getSkin());
+        actor.setName(screenComponent.name());
+        return actor;
+      }
     default:
       return null;
     }

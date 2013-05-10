@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 public class ImageMessageBox extends TextButton {
   
@@ -48,12 +50,14 @@ public class ImageMessageBox extends TextButton {
     });
     addActor(closeImage);
     
-    nextButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Next"), skin);
+    nextButton = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion("nextarrow"), skin, "default");
     nextButton.setPosition(5, 5);
+    nextButton.setSize(48, 48);
     addActor(nextButton);
     
-    prevButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Prev"), skin);
+    prevButton = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion("prevarrow"), skin, "default");
     prevButton.setPosition(5, 5);
+    prevButton.setSize(48, 48);
     addActor(prevButton);    
   }
 
@@ -62,11 +66,11 @@ public class ImageMessageBox extends TextButton {
     getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
   }
 
-  public TextButton getNextButton() {
+  public Button getNextButton() {
     return nextButton;
   }
 
-  public TextButton getPrevButton() {
+  public Button getPrevButton() {
     return prevButton;
   }
 
