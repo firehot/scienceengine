@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.mazalearn.scienceengine.tutor.ITutor.ITutorType;
 
 public enum TutorType implements ITutorType {
-  Root(Color.CLEAR, 0, 0), 
+  Root(Color.YELLOW, 0, 0), 
   Guide(Color.YELLOW, 0, 0), 
   Challenge(Color.RED, 0, 0), 
   RapidFire(Color.MAGENTA, 0, 0),

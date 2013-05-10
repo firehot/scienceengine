@@ -74,17 +74,13 @@ public class TutorNavigator extends Group {
         tutorHelper.addActor(TutorNavigator.this);
       }
     };
-/*    TextureRegion goalTexture = ScreenUtils.createTextureRegion(
-        ScreenComponent.Goal.getWidth(), 
-        ScreenComponent.Goal.getHeight(),
-        Color.GREEN);
-    goal = ScreenUtils.createImageButton(goalTexture, skin); */
     goal = new TextButton("Goal", skin);
 
     goal.setWidth(ScreenComponent.Goal.getWidth());
     goal.setHeight(ScreenComponent.Goal.getHeight());
     goal.getLabel().setWrap(true);
     goal.addListener(clickListener);
+    goal.setName(ScreenComponent.Goal.name());
     addActor(goal);
     // Create a button NEXT for learner to click when ready to move on.
     createNextButton(skin);

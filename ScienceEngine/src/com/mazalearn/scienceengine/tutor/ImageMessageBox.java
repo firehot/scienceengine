@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -19,7 +18,7 @@ public class ImageMessageBox extends TextButton {
   
   private TextButton nextButton, prevButton;
   protected static final int SCALE = 60;
-  private Image closeImage;
+  private Button closeButton;
   private TextureRegionDrawable background;
 
   public ImageMessageBox(Skin skin, String textureName, final Actor parentActor) {
@@ -36,9 +35,9 @@ public class ImageMessageBox extends TextButton {
     setPosition(ScreenComponent.ImageMessageBox.getX(getWidth()),
         ScreenComponent.ImageMessageBox.getY(getHeight()));
     
-    closeImage = new Image(ScienceEngine.getTextureRegion("close"));
-    ScreenComponent.scaleSize(closeImage, closeImage.getWidth() * 0.75f, closeImage.getHeight() * 0.75f);
-    closeImage.addListener(new ClickListener() {
+    closeButton = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion("close"), skin, "default");
+    ScreenComponent.scaleSize(closeButton, 32 * 0.75f, 32 * 0.75f);
+    closeButton.addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
         if (parentActor == null) {
@@ -48,16 +47,16 @@ public class ImageMessageBox extends TextButton {
         }
       }      
     });
-    addActor(closeImage);
+    addActor(closeButton);
     
     nextButton = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion("nextarrow"), skin, "default");
     nextButton.setPosition(5, 5);
-    nextButton.setSize(48, 48);
+    ScreenComponent.scaleSize(nextButton, 32, 32);
     addActor(nextButton);
     
     prevButton = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion("prevarrow"), skin, "default");
     prevButton.setPosition(5, 5);
-    prevButton.setSize(48, 48);
+    ScreenComponent.scaleSize(prevButton, 32, 32);
     addActor(prevButton);    
   }
 
@@ -93,7 +92,7 @@ public class ImageMessageBox extends TextButton {
   }
 
   private void positionButtons() {
-    closeImage.setPosition(getWidth() - 2 * closeImage.getWidth(), getHeight() - closeImage.getHeight());
+    closeButton.setPosition(getWidth() - 2 * closeButton.getWidth(), getHeight() - closeButton.getHeight());
     nextButton.setPosition(getWidth() / 2 + nextButton.getWidth() / 2, 5);
     prevButton.setPosition(getWidth() / 2 - 2 * prevButton.getWidth() / 2, 5);
   }
@@ -106,6 +105,6 @@ public class ImageMessageBox extends TextButton {
   }
 
   public Actor getCloseButton() {
-    return closeImage;
+    return closeButton;
   }
 }

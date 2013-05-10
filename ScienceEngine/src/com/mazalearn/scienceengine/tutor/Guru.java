@@ -36,7 +36,7 @@ public class Guru extends Group implements ITutor {
   private final ConfigGenerator configGenerator;
   private IScience2DController science2DController;
   private ViewControls viewControls;
-  private final String goal;
+  private String goal;
   private Skin skin;
   private TutorGroup rootTutor;
   private ITutor activeTutor;
@@ -59,7 +59,6 @@ public class Guru extends Group implements ITutor {
     this.modelControls = science2DController.getModelControls();
     this.viewControls = science2DController.getViewControls();
     
-    this.setVisible(false);
     activeTutor = this;
   }
   
@@ -191,17 +190,22 @@ public class Guru extends Group implements ITutor {
     return rootTutor.getStats();
   }
   
-  // Prerequisite: childTutors.size() >= 1
   @Override
   public void teach() {
     this.setVisible(true);
-    rootTutor.teach();
+    // If progress on this level is 0, then show initial goal
+    if (getStats()[ITutor.PERCENT_PROGRESS] == 0) {
+      goal = rootTutor.getGoal() + "\nTouch Next to get started";
+      tutorHelper.setActiveTutor(this);
+      tutorHelper.showNextAndExplanation(true, false);
+    } else {
+      rootTutor.prepareToTeach(null);
+      rootTutor.teach();
+    }
   }
   
   @Override
   public void prepareToTeach(ITutor childTutor) {
-    this.setVisible(true);
-    rootTutor.prepareToTeach(null);
   }
 
   @Override
@@ -244,6 +248,8 @@ public class Guru extends Group implements ITutor {
   
   @Override
   public void userReadyToFinish() {
+    rootTutor.prepareToTeach(null);
+    rootTutor.teach();
   }
 
   @Override

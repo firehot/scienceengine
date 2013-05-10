@@ -12,12 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -50,7 +46,6 @@ public class ActivityScreen extends AbstractScreen {
   @SuppressWarnings("unused")
   private Topic activityLevel;
   private ITutor tutorUnderRevision;
-  private Button goButton;
   private ClickListener helpListener;
   private IScience2DView science2DView;
   private Actor helpActor;
@@ -94,7 +89,6 @@ public class ActivityScreen extends AbstractScreen {
   public void enterRevisionMode(ITutor tutorUnderRevision) {
     setTitle("Revision: " + science2DController.getTitle());
     this.tutorUnderRevision = tutorUnderRevision;
-    initializeGoButton(goButton);
     showHelp();
   }
   
@@ -102,8 +96,6 @@ public class ActivityScreen extends AbstractScreen {
   protected Group setupCoreGroup(Stage stage) {
     Group coreGroup = super.setupCoreGroup(stage);
     coreGroup.addActor(science2DController.getViewControls());
-    this.goButton = createGoButton();
-    coreGroup.addActor(goButton);
     
     helpActor = createHelpActor();
     coreGroup.addActor(helpActor);
@@ -157,35 +149,6 @@ public class ActivityScreen extends AbstractScreen {
     return helpImage;
   }
   
-  private Button createGoButton() {
-    Drawable go = new TextureRegionDrawable(ScienceEngine.getTextureRegion("go"));
-    final Button goButton = new Button(go);
-    goButton.setName(ScreenComponent.GoButton.name());
-    initializeGoButton(goButton);
-    goButton.addListener(new ClickListener() {
-      @Override public void clicked(InputEvent event, float x, float y) {
-        // Ignore if HelpTour is in progress
-        Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR);
-        if (helpTour != null) return;
-        helpActor.setVisible(false);
-        
-        ScreenComponent goButtonDown = ScreenComponent.GoButtonDown;
-        goButton.addAction(Actions.parallel(
-            Actions.moveTo(goButtonDown.getX(), goButtonDown.getY(), 1),
-            Actions.sizeTo(goButtonDown.getWidth(), goButtonDown.getHeight(), 1)));
-        science2DView.tutoring(true);
-      }
-    });
-    
-    return goButton;
-  }
-
-  private void initializeGoButton(final Button goButton) {
-    ScreenComponent goButtonUp = ScreenComponent.GoButton;
-    goButton.setSize(goButtonUp.getWidth(), goButtonUp.getHeight());
-    goButton.setPosition(goButtonUp.getX(), goButtonUp.getY());
-  }
-
   private void showHelp() {
     helpListener.clicked(new InputEvent(), 0, 0);
   }
@@ -197,6 +160,7 @@ public class ActivityScreen extends AbstractScreen {
     InputProcessor gestureListener = new Science2DGestureDetector((Stage) science2DView);
     Gdx.input.setInputProcessor(new InputMultiplexer(gestureListener, (Stage) science2DView));
     Gdx.app.log(ScienceEngine.LOG, "Set gesture detector");
+    science2DView.tutoring(true);
     // If progress on this level is 0, then show help
     if (science2DController.getGuru().getStats()[ITutor.PERCENT_PROGRESS] == 0) {
       showHelp();
