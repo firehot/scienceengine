@@ -26,7 +26,7 @@ public class Controller {
   @SuppressWarnings({ "rawtypes" })
   public static Controller createController(IModelConfig property, 
       Table controlTable, Skin skin) {
-    return createController(property, controlTable, skin, "default");
+    return createController(property, controlTable, skin, "default-small");
   }
   
   @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -44,7 +44,7 @@ public class Controller {
         //for checkbox - we need - table.add(property.getName()).pad(0, 5, 0, 5);
         break;
       case RANGE:
-        Label name = new Label(property.getParameter().name(), skin);
+        Label name = new Label(property.getParameter().name(), skin, styleName);
         table.add(name);
         table.row();
         control = new SliderControl(property, skin, styleName);

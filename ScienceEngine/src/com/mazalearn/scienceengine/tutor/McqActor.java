@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -61,8 +60,8 @@ public class McqActor extends Group {
     this.optionListener = createListener(skin, submitButton);
     this.radioButtonStyle = skin.get("mcq-radio", CheckBoxStyle.class);
     this.checkBoxStyle = skin.get("mcq-check", CheckBoxStyle.class);
-    TextButtonStyle style = skin.get(TextButtonStyle.class);
-    style.font = skin.getFont(ScreenComponent.getFont(0.75f));
+    TextButtonStyle style = new TextButtonStyle(skin.get(TextButtonStyle.class));
+    style.font = skin.getFont("default-small");
     this.progressInfo = new TextButton("", style);
     this.addActor(progressInfo);
     

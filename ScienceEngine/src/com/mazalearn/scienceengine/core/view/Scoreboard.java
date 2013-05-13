@@ -22,8 +22,8 @@ public class Scoreboard extends Table {
     }
     this.setName(ScreenComponent.Scoreboard.name());
 
-    LabelStyle style = skin.get(LabelStyle.class);
-    style.font = skin.getFont(ScreenComponent.getFont(0.85f));
+    LabelStyle style = new LabelStyle(skin.get(LabelStyle.class));
+    style.font = skin.getFont("default-small");
     scoreLabel = new Label("0", style);   
     scoreLabel.setAlignment(Align.center, Align.center);
     this.add(new Image(ScienceEngine.getTextureRegion("goldcoins"))).width(40).height(30).top();

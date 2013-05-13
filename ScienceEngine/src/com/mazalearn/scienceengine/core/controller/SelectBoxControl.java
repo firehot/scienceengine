@@ -14,7 +14,7 @@ public class SelectBoxControl implements IControl {
   private final SelectBox selectBox;
 
   public SelectBoxControl(final IModelConfig<String> property, Skin skin, String styleName) {
-    this.selectBox = new SelectBox (getItems(property), skin);
+    this.selectBox = new SelectBox (getItems(property), skin, styleName);
     this.property = property;
     syncWithModel();
     selectBox.setName(property.getName());
@@ -25,7 +25,7 @@ public class SelectBoxControl implements IControl {
         property.setValue(selectBox.getSelection());
       }      
     });
-    selectBox.addListener(new ClickListener() {   
+    selectBox.addListener(new ClickListener() {
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(property.getBody(), property.getParameter(),

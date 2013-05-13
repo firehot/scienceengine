@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
@@ -26,7 +25,7 @@ public class SliderControl implements IControl {
       // Add a 0 bar to the slider
       this.slider = new Slider(property.getLow(), property.getHigh(), 
           (property.getHigh() - property.getLow())/10, false, skin) {
-        BitmapFont font = skin.getFont(ScreenComponent.getFont(1));
+        BitmapFont font = skin.getFont("default-font");
         public void draw(SpriteBatch batch, float parentAlpha) {
           super.draw(batch, parentAlpha);
           // Show 0 in slider at right place

@@ -1,6 +1,7 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: { 
 default-font: { file: arial-16.fnt },
+default-small: { file: arial-12.fnt },
 font80: { file: arial-80.fnt },
 font26: { file: arial-26.fnt },
 font20: { file: arial-20.fnt },
@@ -29,13 +30,15 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
   default: { down: default-round-down, up: default-round, font: default-font, fontColor: activeText, disabledFontColor: disabledText },
+  default-small: { down: default-round-down, up: default-round, font: default-small, fontColor: activeText, disabledFontColor: disabledText },
   clear: { down: clear-round, up: clear-round, font: default-font, fontColor: activeText },
   body: { down: body-round-down, up: body-round, checked: body-round-down, font: default-font, fontColor: activeText, downFontColor: selectedButtonText, checkedFontColor: selectedButtonText, disabledFontColor: disabledText },
-  toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: activeText, downFontColor: toggledText },
+  toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-small, fontColor: activeText, downFontColor: toggledText },
   mcq: { down: mcq-round-down, up: mcq-round, checked: mcq-round-down, font: default-font, fontColor: activeText, downFontColor: selectedText, checkedFontColor: selectedText }
 },
 com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
-  default: { listBackground: default-rect, listSelection: default-select-selection, font: default-font, fontColor: activeText, background: default-select }
+  default: { listBackground: default-rect, listSelection: default-select-selection, font: default-font, fontColor: activeText, background: default-select },
+  default-small: { listBackground: default-rect, listSelection: default-select-selection, font: default-small, fontColor: activeText, background: default-select }
 },
 com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
   default-vertical: { handle: default-splitpane-vertical },
@@ -54,6 +57,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
   default: { font: default-font, fontColor: activeText },
+  default-small: { font: default-small, fontColor: activeText },
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
   default: { selection: selection, background: textfield, font: default-font, fontColor: activeText, cursor: cursor }
