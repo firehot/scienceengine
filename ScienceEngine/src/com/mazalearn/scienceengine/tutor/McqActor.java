@@ -32,7 +32,7 @@ public class McqActor extends Group {
   private ButtonGroup optionButtons;
   private final CheckBoxStyle radioButtonStyle, checkBoxStyle;
   private Image questionImage;
-  private Label progressInfo;
+  private TextButton progressInfo;
   
   private static class OptionListener extends ClickListener {
     
@@ -61,11 +61,16 @@ public class McqActor extends Group {
     this.optionListener = createListener(skin, submitButton);
     this.radioButtonStyle = skin.get("mcq-radio", CheckBoxStyle.class);
     this.checkBoxStyle = skin.get("mcq-check", CheckBoxStyle.class);
-    this.progressInfo = new Label("", skin);
+    TextButtonStyle style = skin.get(TextButtonStyle.class);
+    style.font = skin.getFont(ScreenComponent.getFont(0.75f));
+    this.progressInfo = new TextButton("", style);
     this.addActor(progressInfo);
     
     progressInfo.setPosition(ScreenComponent.McqProgressInfo.getX(ScreenComponent.getScaledX(40)),
        ScreenComponent.McqProgressInfo.getY(ScreenComponent.getScaledY(30)));
+    progressInfo.setColor(ScreenComponent.McqProgressInfo.getColor());
+    ScreenComponent.scaleSize(progressInfo, ScreenComponent.McqProgressInfo.getWidth(), 
+        ScreenComponent.McqProgressInfo.getHeight());
     
 
     final TextureRegion blackTexture = ScreenUtils.createTextureRegion(10, 10, Color.BLACK);

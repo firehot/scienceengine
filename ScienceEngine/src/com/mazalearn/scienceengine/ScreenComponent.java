@@ -13,7 +13,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   BottomBar(XAlign.LEFT, 0, YAlign.BOTTOM, 0, 800, 20, 0, Color.BLACK, true, false),
   Title(XAlign.CENTER, 0, YAlign.TOP, -10, 0, 0, -1, Color.WHITE, true, false),
   Status(XAlign.CENTER, 0, YAlign.BOTTOM, 10, 0, 0, -1, Color.WHITE, true, false),
-  User(XAlign.RIGHT, 0, YAlign.TOP, 0, 30, 30, -1, Color.WHITE, true, true),
+  User(XAlign.RIGHT, 0, YAlign.TOP, 0, 30, 29, -1, Color.WHITE, true, true),
   Back(XAlign.LEFT, 0, YAlign.TOP, 0, 70, 30, -1, Color.CLEAR, true, false),
   Help(XAlign.LEFT, 20, YAlign.TOP, -30, 40, 40, -1, Color.CLEAR, false, true),
   ViewControls(XAlign.LEFT, 81, YAlign.TOP, 0, 0, 0, -1, Color.CLEAR, true, false),
@@ -21,12 +21,12 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 32, 32, -1, Color.CLEAR, true, false),
   Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, 0, 0, 0, -1, Color.BLACK, true, true),
   Idea(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 60, -1, Color.BLACK, false, false),
-  NextButton(XAlign.CENTER, 108, YAlign.TOP, -70, 0, 0, -1, Color.CLEAR, false, false), 
+  NextButton(XAlign.RIGHT, -125, YAlign.TOP, -60, 0, 0, -1, Color.CLEAR, false, false), 
   ImageMessageBox(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, -1, Color.YELLOW, false, true),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, -1, Color.YELLOW, false, false), 
   TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 2, 0, 0, -1, Color.CLEAR, false, false), 
-  McqProgressInfo(XAlign.RIGHT, -45, YAlign.TOP, -15, 0, 0, -1, Color.CLEAR, false, false), 
+  McqProgressInfo(XAlign.RIGHT, -40, YAlign.TOP, -32, 60, 20, -1, Color.YELLOW, false, false), 
   ;
   
   enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800);

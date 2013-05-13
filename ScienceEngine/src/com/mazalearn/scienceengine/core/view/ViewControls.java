@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IControl;
 
 public class ViewControls extends Table implements IControl {
-  private static final int VIEW_BUTTON_HEIGHT = 30;
+  private static final int VIEW_BUTTON_HEIGHT = 29;
   private static final int VIEW_BUTTON_WIDTH = 110;
   protected IMessage messages;
   private boolean isActivated = false;

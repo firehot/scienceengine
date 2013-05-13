@@ -138,22 +138,22 @@ public abstract class AbstractScreen implements Screen {
         return bar;
       case User: { 
         String text = ScienceEngine.getUserName();
-        TextButton table = new TextButton("", skin, "body");
-        table.setName(screenComponent.name());
+        TextButton user = new TextButton("", skin, "body");
+        user.setName(screenComponent.name());
         final Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
         image.setSize(screenComponent.getWidth(), screenComponent.getHeight());
-        table.add(image)
+        user.add(image)
             .width(screenComponent.getWidth())
             .height(screenComponent.getHeight());
-        table.add(text);
-        table.setSize(screenComponent.getWidth() * 3, screenComponent.getHeight());
-        table.addListener(new ClickListener() {
+        user.add(text);
+        user.setSize(screenComponent.getWidth() * 3, screenComponent.getHeight());
+        user.addListener(new ClickListener() {
           public void clicked(InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
             new UserHomeDialog(getSkin(), image).show(stage);
           }      
          });
-        return table;
+        return user;
       }
       case Logo:
         Image logo = new Image(new Texture("images/logo.png"));

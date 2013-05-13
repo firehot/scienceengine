@@ -1,5 +1,6 @@
 package com.mazalearn.scienceengine.tutor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -57,7 +59,27 @@ public class ImageMessageBox extends TextButton {
     prevButton = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion("prevarrow"), skin, "default");
     prevButton.setPosition(5, 5);
     ScreenComponent.scaleSize(prevButton, 32, 32);
-    addActor(prevButton);    
+    addActor(prevButton);
+    
+    this.addListener(new DragListener() {
+      boolean ignore = true;
+      public void drag (InputEvent event, float x, float y, int pointer) {
+        // Ensure new position will keep box entirely within screen.
+        ignore = !ignore;
+        if (ignore) return;
+        
+        float w = getWidth();
+        float h = getHeight();
+        float newX = getX() - getDeltaX();
+        float newY = getY() - getDeltaY();
+        if (newX < 0) newX = 0;
+        if (newX + w > ScreenComponent.VIEWPORT_WIDTH) newX = ScreenComponent.VIEWPORT_WIDTH - w;
+        if (newY < 0) newY = 0;
+        if (newY + h > ScreenComponent.VIEWPORT_HEIGHT) newY = ScreenComponent.VIEWPORT_HEIGHT - h;
+        Gdx.app.error(ScienceEngine.LOG, "x y " + getDeltaX() + " " + getDeltaY() + " " + newX + " " + newY);
+        setPosition(newX, newY);
+      }
+    });
   }
 
   @Override
