@@ -24,12 +24,11 @@ public class ChangeFaceDialog extends Dialog {
     
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     Label title = new Label(profile.getUserName(), skin);
-    title.setWidth(600);
     title.setAlignment(Align.center, Align.center);
 
 
     getContentTable().debug();
-    getContentTable().add(title).width(800).pad(10).center().colspan(2);
+    getContentTable().add(title).pad(10).center().colspan(2);
     getContentTable().row();
     getContentTable().add("Your current face");
     getContentTable().add("Your new face");

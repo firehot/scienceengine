@@ -62,6 +62,7 @@ public class TutorNavigator extends Group {
     tutorsPanel.setVisible(false);
     addActor(tutorsPanel);
     userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+    ScreenComponent.scaleSize(userImage, ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
     ClickListener clickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         if (tutorsPanel.isVisible()) {
@@ -101,7 +102,7 @@ public class TutorNavigator extends Group {
   
   private void createNextButton(Skin skin) {
     TextButtonStyle style = new TextButtonStyle(skin.get("body", TextButtonStyle.class));
-    style.font = skin.getFont(ScreenComponent.getFont(2));
+    style.font = skin.getFont("default-big");
     nextButton = new TextButton("Next", style);
     nextButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {

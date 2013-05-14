@@ -65,11 +65,11 @@ public class McqActor extends Group {
     this.progressInfo = new TextButton("", style);
     this.addActor(progressInfo);
     
-    progressInfo.setPosition(ScreenComponent.McqProgressInfo.getX(ScreenComponent.getScaledX(40)),
-       ScreenComponent.McqProgressInfo.getY(ScreenComponent.getScaledY(30)));
-    progressInfo.setColor(ScreenComponent.McqProgressInfo.getColor());
-    ScreenComponent.scaleSize(progressInfo, ScreenComponent.McqProgressInfo.getWidth(), 
-        ScreenComponent.McqProgressInfo.getHeight());
+    ScreenComponent mcqProgressInfo = ScreenComponent.McqProgressInfo;
+    progressInfo.setPosition(mcqProgressInfo.getX(mcqProgressInfo.getWidth()),
+       mcqProgressInfo.getY(mcqProgressInfo.getHeight()));
+    progressInfo.setColor(mcqProgressInfo.getColor());
+    progressInfo.setSize(mcqProgressInfo.getWidth(), mcqProgressInfo.getHeight());
     
 
     final TextureRegion blackTexture = ScreenUtils.createTextureRegion(10, 10, Color.BLACK);
@@ -167,7 +167,7 @@ public class McqActor extends Group {
   
   private void createSubmitButton(Skin skin) {
     TextButtonStyle style = new TextButtonStyle(skin.get("body", TextButtonStyle.class));
-    style.font = skin.getFont(ScreenComponent.getFont(2));
+    style.font = skin.getFont("default-big");
     submitButton = new TextButton("Submit", style);
     submitButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {

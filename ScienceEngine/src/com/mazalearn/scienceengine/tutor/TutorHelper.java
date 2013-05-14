@@ -207,7 +207,7 @@ public class TutorHelper extends Group {
 
   public void doRapidFireAnimation(final ITutor tutor) {
     final LabelStyle large = new LabelStyle(skin.get(LabelStyle.class));
-    BitmapFont font = skin.getFont(ScreenComponent.getFont(2.5f));
+    BitmapFont font = skin.getFont("default-big");
     large.font = font;
     final TextButton start = new TextButton("RapidFire", skin);
     start.setSize(250, 70);

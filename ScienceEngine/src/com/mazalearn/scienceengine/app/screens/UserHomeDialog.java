@@ -132,8 +132,10 @@ public class UserHomeDialog extends Dialog {
     contentTable.row();
     
     Actor waitingGiftsPane = createWaitingGiftsPane(this, profile.getInbox(), true, skin);
-    contentTable.add(waitingGiftsPane).width(GIFT_WIDTH * 2.5f).height(GIFT_HEIGHT).padLeft(30);
-    contentTable.add(createGiftingPane()).width(GIFT_WIDTH * 1.5f).height(GIFT_HEIGHT * 1.5f).padRight(30);
+    float giftWidth = ScreenComponent.getScaledX(GIFT_WIDTH);
+    float giftHeight = ScreenComponent.getScaledX(GIFT_HEIGHT);
+    contentTable.add(waitingGiftsPane).width(giftWidth * 2.5f).height(giftHeight).padLeft(30);
+    contentTable.add(createGiftingPane()).width(giftWidth * 1.5f).height(giftHeight * 1.5f).padRight(30);
     contentTable.row();
   }
 
@@ -157,6 +159,7 @@ public class UserHomeDialog extends Dialog {
 
   private Actor createGiftingPane() {
     Image image = new Image(ScienceEngine.getTextureRegion("opengift"));
+    ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
     image.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

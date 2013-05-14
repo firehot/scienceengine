@@ -2,12 +2,15 @@
 com.badlogic.gdx.graphics.g2d.BitmapFont: { 
 default-font: { file: arial-16.fnt },
 default-small: { file: arial-12.fnt },
+default-big: { file: arial-20.fnt },
 font80: { file: arial-80.fnt },
 font26: { file: arial-26.fnt },
 font20: { file: arial-20.fnt },
 font16: { file: arial-16.fnt },
 font15: { file: arial-15.fnt },
 font12: { file: arial-12.fnt },
+font10: { file: arial-10.fnt },
+font9: { file: arial-9.fnt },
 },
 com.badlogic.gdx.graphics.Color: {
   activeText: { a: 1, b: 1, g: 1, r: 1 },
@@ -31,6 +34,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
   default: { down: default-round-down, up: default-round, font: default-font, fontColor: activeText, disabledFontColor: disabledText },
   default-small: { down: default-round-down, up: default-round, font: default-small, fontColor: activeText, disabledFontColor: disabledText },
+  default-big: { down: default-round-down, up: default-round, font: default-big, fontColor: activeText, disabledFontColor: disabledText },
   clear: { down: clear-round, up: clear-round, font: default-font, fontColor: activeText },
   body: { down: body-round-down, up: body-round, checked: body-round-down, font: default-font, fontColor: activeText, downFontColor: selectedButtonText, checkedFontColor: selectedButtonText, disabledFontColor: disabledText },
   toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-small, fontColor: activeText, downFontColor: toggledText },
@@ -58,6 +62,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
   default: { font: default-font, fontColor: activeText },
   default-small: { font: default-small, fontColor: activeText },
+  default-big: { font: default-big, fontColor: activeText },
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
   default: { selection: selection, background: textfield, font: default-font, fontColor: activeText, cursor: cursor }
@@ -69,7 +74,8 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
   mcq-radio: { checkboxOn: mcq-radio-on, checkboxOff: mcq-radio-off, down:mcq-round-down, up: mcq-round, checked: mcq-round-down, font: default-font, fontColor: activeText, downFontColor: selectedText, checkedFontColor: selectedText  }
 },
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
-  default: { fontColorUnselected: activeText, selection: default-rect-pad, fontColorSelected: activeText, font: default-font }
+  default: { fontColorUnselected: activeText, selection: default-rect-pad, fontColorSelected: activeText, font: default-font },
+  default-small: { fontColorUnselected: activeText, selection: default-rect-pad, fontColorSelected: activeText, font: default-small }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {
   default: { background: default-pane, knob: default-round-large }

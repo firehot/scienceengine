@@ -41,6 +41,7 @@ public class Guru extends Group implements ITutor {
   private TutorGroup rootTutor;
   private ITutor activeTutor;
   private TutorHelper tutorHelper;
+  private ITutor gotoTutor;
   
   public Guru(final Skin skin, IScience2DController science2DController, String goal) {
     super();
@@ -134,6 +135,7 @@ public class Guru extends Group implements ITutor {
     setupProbeConfigs(Collections.<IModelConfig<?>> emptyList(), true);
     // ??? why above series ??? 
     prepareTutors(tutor);
+    gotoTutor = tutor;
     tutor.prepareToTeach(null);
     teach();
   }
@@ -193,8 +195,8 @@ public class Guru extends Group implements ITutor {
   @Override
   public void teach() {
     this.setVisible(true);
-    // If progress on this level is 0, then show initial goal
-    if (getStats()[ITutor.PERCENT_PROGRESS] == 0) {
+    // If progress on this level is 0 and not a GOTO tutor, then show initial goal
+    if (getStats()[ITutor.PERCENT_PROGRESS] == 0 && gotoTutor == null) {
       goal = rootTutor.getGoal() + "\nTouch Next to get started";
       tutorHelper.setActiveTutor(this);
       tutorHelper.showNextAndExplanation(true, false);
@@ -204,6 +206,7 @@ public class Guru extends Group implements ITutor {
     }
   }
   
+  // TODO: prepareToTeach should be same as goto at this level
   @Override
   public void prepareToTeach(ITutor childTutor) {
   }

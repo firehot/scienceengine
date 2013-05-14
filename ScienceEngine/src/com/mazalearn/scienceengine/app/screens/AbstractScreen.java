@@ -157,6 +157,7 @@ public abstract class AbstractScreen implements Screen {
       }
       case Logo:
         Image logo = new Image(new Texture("images/logo.png"));
+        logo.setSize(screenComponent.getWidth(), screenComponent.getHeight());
         logo.addListener(new ClickListener() {
           public void clicked (InputEvent event, float x, float y) {
             ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);

@@ -46,7 +46,7 @@ public class GiveGiftDialog extends Dialog {
 
 
     contentTable.debug();
-    contentTable.add(title).width(800).pad(10).center().colspan(2);
+    contentTable.add(title).pad(10).center().colspan(2);
     contentTable.row();
     contentTable.add("Choose Friend");
     contentTable.add("Choose Maza coins");

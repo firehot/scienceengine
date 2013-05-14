@@ -24,10 +24,12 @@ public class Scoreboard extends Table {
 
     LabelStyle style = new LabelStyle(skin.get(LabelStyle.class));
     style.font = skin.getFont("default-small");
-    scoreLabel = new Label("0", style);   
+    scoreLabel = new Label("0", style);
     scoreLabel.setAlignment(Align.center, Align.center);
-    this.add(new Image(ScienceEngine.getTextureRegion("goldcoins"))).width(40).height(30).top();
-    this.row();
+    Image coins = new Image(ScienceEngine.getTextureRegion("goldcoins"));
+    ScreenComponent.scaleSize(coins, ScreenComponent.Scoreboard.getWidth(), ScreenComponent.Scoreboard.getHeight());
+    
+    this.add(coins).width(coins.getWidth()).height(coins.getHeight()).top();
     this.add(scoreLabel).width(40).fill().top();
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
   }

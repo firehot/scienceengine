@@ -73,7 +73,8 @@ currentcoil
     TextureRegion frame = rotationFrames[frameIndex];
     // 6, 8.5 for desktop 1280x1024 (1.6, 1.6)
     // 3.5, 5.5 for ipad 1024x768   (1.28, 1.2)
-    // 1, 2.5 for 800x640           (1, 1)
+    //          for nexus 7 1280x800
+    // 1, 2.5 for 800x480           (1, 1)
     batch.draw(frame,
         (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 3.5f) * ScreenComponent.PIXELS_PER_M, 
         (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 6.5f) * ScreenComponent.PIXELS_PER_M,

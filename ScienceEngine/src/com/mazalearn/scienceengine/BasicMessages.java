@@ -8,6 +8,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -59,32 +60,45 @@ class BasicMessages implements IMessage {
   public void setFont(Skin skin) {
     BitmapFont font = null;
     BitmapFont smallFont = null;
+    BitmapFont bigFont = null;
     String language = getLanguage();
     try {
       font = skin.getFont(language);
       smallFont = skin.getFont(language + "-small");
+      bigFont = skin.getFont(language + "-big");
     } catch (GdxRuntimeException e) { // font not found
       font = skin.getFont("en"); // Supports only english
       smallFont = skin.getFont("en-small");
+      bigFont = skin.getFont("en-big");
     }
     skin.add(language, font);
       
     for (Entry<String, TextButtonStyle> nameStyle: skin.getAll(TextButtonStyle.class).entries()) {
-      nameStyle.value.font = nameStyle.key.equals("default-small") ? smallFont : font;
+      String key = nameStyle.key;
+      nameStyle.value.font = key.equals("default-small") ? smallFont : key.equals("default-big") ? bigFont : font;
     }
     for (Entry<String, LabelStyle> nameStyle: skin.getAll(LabelStyle.class).entries()) {
-      nameStyle.value.font = nameStyle.key.equals("default-small") ? smallFont : font;
+      String key = nameStyle.key;
+      nameStyle.value.font = key.equals("default-small") ? smallFont : key.equals("default-big") ? bigFont : font;
     }
     for (Entry<String, CheckBoxStyle> nameStyle: skin.getAll(CheckBoxStyle.class).entries()) {
-      nameStyle.value.font = nameStyle.key.equals("default-small") ? smallFont : font;
+      String key = nameStyle.key;
+      nameStyle.value.font = key.equals("default-small") ? smallFont : key.equals("default-big") ? bigFont : font;
     }
     for (Entry<String, SelectBoxStyle> nameStyle: skin.getAll(SelectBoxStyle.class).entries()) {
-      nameStyle.value.font = nameStyle.key.equals("default-small") ? smallFont : font;
+      String key = nameStyle.key;
+      nameStyle.value.font = key.equals("default-small") ? smallFont : key.equals("default-big") ? bigFont : font;
     }
     for (Entry<String, TextField.TextFieldStyle> nameStyle: skin.getAll(TextField.TextFieldStyle.class).entries()) {
-      nameStyle.value.font = nameStyle.key.equals("default-small") ? smallFont : font;
+      String key = nameStyle.key;
+      nameStyle.value.font = key.equals("default-small") ? smallFont : key.equals("default-big") ? bigFont : font;
+    }
+    for (Entry<String, ListStyle> nameStyle: skin.getAll(ListStyle.class).entries()) {
+      String key = nameStyle.key;
+      nameStyle.value.font = key.equals("default-small") ? smallFont : key.equals("default-big") ? bigFont : font;
     }
     skin.add("default-font", font);
     skin.add("default-small", smallFont);
+    skin.add("default-big", bigFont);
   }
 }

@@ -75,8 +75,9 @@ public class SplashScreen extends AbstractScreen {
     Table userInfo = new Table(getSkin());
     Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     final Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+    ScreenComponent.scaleSize(userImage, ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
     userInfo.add(profile.getUserName()).left();
-    userInfo.add(userImage).width(60).height(60);
+    userInfo.add(userImage).width(userImage.getWidth()).height(userImage.getHeight());
     userInfo.setPosition(100, 100);
 
     Label touchToStart = new Label("Touch to Start", getSkin());

@@ -116,6 +116,7 @@ public class ScienceEngine extends Game {
       skin = new Skin(skinFile, new TextureAtlas(Gdx.files.internal(SKIN_BASE + ".atlas")));
       skin.add("en", skin.getFont(ScreenComponent.getFont(1)));
       skin.add("en-small", skin.getFont(ScreenComponent.getFont(0.85f)));
+      skin.add("en-big", skin.getFont(ScreenComponent.getFont(2f)));
       getMsg().setFont(skin);
       skin.add("en", skin.getFont("default-font"));
       getMsg().setLanguage(skin, "en");
@@ -165,7 +166,10 @@ public class ScienceEngine extends Game {
     //}
     
     if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
-      ScreenComponent.setSize(1024, 768);
+      ScreenComponent.setSize(480, 320); // iPhone
+      //ScreenComponent.setSize(800, 480); // Canonical
+      //ScreenComponent.setSize(1024, 768); // iPad
+      //ScreenComponent.setSize(1280, 800); // Nexus 7
     } else {
       DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
       ScreenComponent.setSize(displayMode.width, displayMode.height);

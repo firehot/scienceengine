@@ -11,8 +11,14 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "ScienceEngine";
 		cfg.useGL20 = true;
-		cfg.width = 1024; // 800;
-		cfg.height = 768; // 480;
+		// canonical: 800x480
+		// nexus 7: 1280x800
+		// ipad: 1024x768
+		// iphone: 320x480
+		// iphone 4: 640x960
+		// iphone 5: 640x1136
+		cfg.width = 480; // 800;
+		cfg.height = 320; // 480;
 		
     ScienceEngine.DEV_MODE = DevMode.DEBUG;
 		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "");

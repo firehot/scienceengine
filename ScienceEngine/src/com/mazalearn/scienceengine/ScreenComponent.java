@@ -19,14 +19,14 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   ViewControls(XAlign.LEFT, 81, YAlign.TOP, 0, 0, 0, -1, Color.CLEAR, true, false),
   ModelControls(XAlign.RIGHT, -20, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, true),
   Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 32, 32, -1, Color.CLEAR, true, false),
-  Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, 0, 0, 0, -1, Color.BLACK, true, true),
+  Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, 0, 40, 30, -1, Color.BLACK, true, true),
   Idea(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 60, -1, Color.BLACK, false, false),
   NextButton(XAlign.RIGHT, -125, YAlign.TOP, -60, 0, 0, -1, Color.CLEAR, false, false), 
   ImageMessageBox(XAlign.LEFT, 10, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, false), 
   Goal(XAlign.CENTER, 0, YAlign.TOP, -30, 550, 30, -1, Color.YELLOW, false, true),
   McqOption(XAlign.CENTER, 0, YAlign.MIDDLE, 100, 0, 0, -1, Color.YELLOW, false, false), 
   TimeTracker(XAlign.LEFT, 5, YAlign.BOTTOM, 2, 0, 0, -1, Color.CLEAR, false, false), 
-  McqProgressInfo(XAlign.RIGHT, -40, YAlign.TOP, -32, 60, 20, -1, Color.YELLOW, false, false), 
+  McqProgressInfo(XAlign.RIGHT, -40, YAlign.TOP, -32, 60, 40, -1, Color.YELLOW, false, false), 
   ;
   
   enum XAlign { LEFT(0), CENTER(800 / 2), RIGHT(800);
@@ -79,7 +79,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   private final static int CANONICAL_FONT_SIZE = 16;
   private static int FontSize = CANONICAL_FONT_SIZE;
   // Initial entry is a flag
-  private static int[] AVAILABLE_FONT_SIZES = {0, 12, 15, 16, 20, 26};
+  private static int[] AVAILABLE_FONT_SIZES = {0, 9, 10, 12, 15, 16, 20, 26};
 
   /**
    * Constructor 
@@ -225,7 +225,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   // should be called only after setSize has been called
   public static String getFont(float relativeScaling) {
     int fontsize = selectFontSize(Math.round(FontSize * relativeScaling));
-    Gdx.app.log(ScienceEngine.LOG, "Font chosen size: " + FontSize);
+    Gdx.app.log(ScienceEngine.LOG, "Font chosen size: " + fontsize);
     return "font" + String.valueOf(fontsize);
   }
 
