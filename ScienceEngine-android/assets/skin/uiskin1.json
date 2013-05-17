@@ -11,6 +11,7 @@ font15: { file: arial-15.fnt },
 font12: { file: arial-12.fnt },
 font10: { file: arial-10.fnt },
 font9: { file: arial-9.fnt },
+font8: { file: arial-8.fnt },
 },
 com.badlogic.gdx.graphics.Color: {
   activeText: { a: 1, b: 1, g: 1, r: 1 },

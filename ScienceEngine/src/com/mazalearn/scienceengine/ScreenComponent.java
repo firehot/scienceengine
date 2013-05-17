@@ -79,7 +79,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   private final static int CANONICAL_FONT_SIZE = 16;
   private static int FontSize = CANONICAL_FONT_SIZE;
   // Initial entry is a flag
-  private static int[] AVAILABLE_FONT_SIZES = {0, 9, 10, 12, 15, 16, 20, 26};
+  private static int[] AVAILABLE_FONT_SIZES = {0, 8, 9, 10, 12, 15, 16, 20, 26};
 
   /**
    * Constructor 
@@ -198,7 +198,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
     YAlign.TOP.base = VIEWPORT_HEIGHT;
     X_SCALE = VIEWPORT_WIDTH / (float) CANONICAL_VIEWPORT_WIDTH;
     Y_SCALE = VIEWPORT_HEIGHT / (float) CANONICAL_VIEWPORT_HEIGHT;
-    int fontSize = Math.round(Math.min(X_SCALE, Y_SCALE) * CANONICAL_FONT_SIZE);
+    int fontSize = (int) Math.floor(Math.min(X_SCALE, Y_SCALE) * CANONICAL_FONT_SIZE);
     FontSize = selectFontSize(fontSize);
     for (ScreenComponent sc: values()) {
       sc.width = sc.canonicalWidth * X_SCALE;

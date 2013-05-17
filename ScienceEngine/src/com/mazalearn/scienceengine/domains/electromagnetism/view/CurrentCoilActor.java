@@ -76,7 +76,7 @@ public class CurrentCoilActor extends Science2DActor {
     TextureRegion frame = rotationFrames[frameIndex];
     float w = 1.3f * getWidth();
     float deltaX = ScreenComponent.getScaledX(1) * 1.3f;
-    float deltaY = ScreenComponent.getScaledY(-14) * 1.3f;
+    float deltaY = ScreenComponent.getScaledY(-10) * 1.3f;
     // current coil
     batch.draw(
         frame,
