@@ -74,18 +74,22 @@ public class CurrentCoilActor extends Science2DActor {
     }
     int frameIndex = (int) Math.floor(((rotation + 360) % 360) / 10);
     TextureRegion frame = rotationFrames[frameIndex];
-    float deltax = ScreenComponent.getScaledX(6); // nexus7 = 12; // ipad, android, iphone4, iphone = 8; // iphone5 = 12; 
-    float deltay = ScreenComponent.getScaledY(12) - 6; // nexus7 = 18; // ipad = 16; // iphone4, android = 12; // iphone = 6; // iphone5=18;
+    float w = 1.3f * getWidth();
+    float deltaX = ScreenComponent.getScaledX(1) * 1.3f;
+    float deltaY = ScreenComponent.getScaledY(-14) * 1.3f;
     // current coil
     batch.draw(
         frame,
-        getX() - deltax, getY() - 1.2f * getWidth() / 2 + getHeight() / 2 - deltay, 0, 0,
-        getWidth() * 1.2f, getWidth() * 1.2f, 1, 1, 0);
+        getX() + getOriginX() + deltaX - w / 2, getY() + getOriginY() + deltaY - w / 2, 0, 0,
+        w, w, 1, 1, 0);
 
     int rotation2 = rotationAngles[frameIndex];
     // Central commutator rod
     batch.draw(textureRegion, getX(), getY(), this.getOriginX(),
         this.getOriginY(), getWidth(), getHeight(), 1, 1, rotation2);
+    // Below used for debugging
+    //  TextureRegion close = ScienceEngine.getTextureRegion("close");
+    //  batch.draw(close, getX() + getOriginX() - close.getRegionWidth() / 2, getY() + getOriginY() - close.getRegionHeight() / 2);
     drawRotationData(batch, parentAlpha);
   }
 
