@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.mazalearn.scienceengine.Device;
 import com.mazalearn.scienceengine.PlatformAdapterImpl;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
@@ -51,7 +52,7 @@ public class AbstractScience2DProberTest {
     cfg.width = 1024; // 800;
     cfg.height = 768; // 480;
     
-    scienceEngine = new ScienceEngine("");
+    scienceEngine = new ScienceEngine("", Device.Desktop);
     IPlatformAdapter platformAdapter = new PlatformAdapterImpl(Platform.Desktop);
     ScienceEngine.setPlatformAdapter(platformAdapter);
     ScienceEngine.DEV_MODE = DevMode.DEBUG;

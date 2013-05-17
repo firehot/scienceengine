@@ -74,8 +74,8 @@ public class CurrentCoilActor extends Science2DActor {
     }
     int frameIndex = (int) Math.floor(((rotation + 360) % 360) / 10);
     TextureRegion frame = rotationFrames[frameIndex];
-    float deltax = 12; // nexus7 = 12; // ipad, android, iphone4, iphone = 8; // iphone5 = 12; 
-    float deltay = 18; // nexus7 = 18; // ipad = 16; // iphone4, android = 12; // iphone = 6; // iphone5=18;
+    float deltax = ScreenComponent.getScaledX(6); // nexus7 = 12; // ipad, android, iphone4, iphone = 8; // iphone5 = 12; 
+    float deltay = ScreenComponent.getScaledY(12) - 6; // nexus7 = 18; // ipad = 16; // iphone4, android = 12; // iphone = 6; // iphone5=18;
     // current coil
     batch.draw(
         frame,

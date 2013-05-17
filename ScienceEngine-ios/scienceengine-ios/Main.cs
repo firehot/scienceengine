@@ -97,7 +97,7 @@ namespace scienceengineios
 			}
 			internal static ScienceEngine getScienceEngine () {
 				ScienceEngine.DEV_MODE = ScienceEngine.DevMode.PRODUCTION;
-				scienceEngine = new ScienceEngine ("");
+				scienceEngine = new ScienceEngine ("", Device.IPad);
 				iosAdapter = new IosPlatformAdapter();
 				ScienceEngine.setPlatformAdapter(iosAdapter);
 				Crypter.setSha1Implementor(new Sha1Implementor());

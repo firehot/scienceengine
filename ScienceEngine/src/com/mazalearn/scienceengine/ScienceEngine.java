@@ -90,8 +90,11 @@ public class ScienceEngine extends Game {
 
   private static long logicalTime;
 
-  public ScienceEngine(String url) {
+  private Device device;
+
+  public ScienceEngine(String url, Device device) {
     this.uri = url;
+    this.device = device;
   }
 
   public static PreferencesManager getPreferencesManager() {
@@ -166,7 +169,6 @@ public class ScienceEngine extends Game {
     //}
     
     if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
-      Device device = Device.IPhone;
       ScreenComponent.setSize(device.width, device.height);
     } else {
       DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();

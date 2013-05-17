@@ -55,7 +55,7 @@ public class MainActivity extends AndroidApplication {
     Uri data = getIntent().getData();
 
     ScienceEngine scienceEngine = 
-        new ScienceEngine(data != null ? data.toString() : "");
+        new ScienceEngine(data != null ? data.toString() : "", Device.Android);
     
     Platform platform = android.os.Build.FINGERPRINT.contains("generic") 
         ? Platform.AndroidEmulator : Platform.Android;

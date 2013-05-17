@@ -11,12 +11,12 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "ScienceEngine";
 		cfg.useGL20 = true;
-		Device device = Device.IPhone;
+		Device device = Device.IPad;
 		cfg.width = device.width;
 		cfg.height = device.height;
 		
     ScienceEngine.DEV_MODE = DevMode.DEBUG;
-		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "");
+		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "", device);
 		ScienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.Desktop));
     new LwjglApplication(scienceEngine, cfg) {
       @Override
