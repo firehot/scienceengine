@@ -27,10 +27,10 @@ public class Scoreboard extends Table {
     scoreLabel = new Label("0", style);
     scoreLabel.setAlignment(Align.center, Align.center);
     Image coins = new Image(ScienceEngine.getTextureRegion("goldcoins"));
-    ScreenComponent.scaleSize(coins, ScreenComponent.Scoreboard.getWidth(), ScreenComponent.Scoreboard.getHeight());
+    coins.setSize(ScreenComponent.Scoreboard.getWidth(), ScreenComponent.Scoreboard.getHeight());
     
     this.add(coins).width(coins.getWidth()).height(coins.getHeight()).top();
-    this.add(scoreLabel).width(40).fill().top();
+    this.add(scoreLabel).width(coins.getWidth()).fill().top();
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
   }
 

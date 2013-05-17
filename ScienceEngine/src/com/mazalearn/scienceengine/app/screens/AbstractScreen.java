@@ -136,7 +136,7 @@ public abstract class AbstractScreen implements Screen {
             screenComponent.getWidth(), screenComponent.getHeight(), skin.getColor("bar")));
         bar.setName(screenComponent.name());
         return bar;
-      case User: { 
+      case User: {
         String text = ScienceEngine.getUserName();
         TextButton user = new TextButton("", skin, "body");
         user.setName(screenComponent.name());

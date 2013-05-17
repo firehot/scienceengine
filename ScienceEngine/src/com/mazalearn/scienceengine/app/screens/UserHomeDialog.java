@@ -79,7 +79,7 @@ public class UserHomeDialog extends Dialog {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-        new ChangeFaceDialog(skin, userImage).show(getStage());
+        new ChangeFaceDialog(skin, userImage, UserHomeDialog.this).show(getStage());
       }
     });
     contentTable.row();

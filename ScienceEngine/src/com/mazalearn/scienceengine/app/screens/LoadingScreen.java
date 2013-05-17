@@ -16,6 +16,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
  */
 public class LoadingScreen extends AbstractScreen {
 
+  private static final int WIDTH = 450;
   private Image logo;
   private Image loadingFrame;
   private Image loadingBarHidden;
@@ -109,10 +110,10 @@ public class LoadingScreen extends AbstractScreen {
     loadingBarHidden.setY(loadingBar.getY() - 3);
     // The start position and how far to move the hidden loading bar
     startX = loadingBarHidden.getX();
-    endX = 440;
+    endX = WIDTH - 10;
 
     // The rest of the hidden bar
-    loadingBg.setSize(450, 50);
+    loadingBg.setSize(WIDTH, 50);
     loadingBg.setX(loadingBarHidden.getX() + 30);
     loadingBg.setY(loadingBarHidden.getY() + 3);
   }
@@ -134,7 +135,7 @@ public class LoadingScreen extends AbstractScreen {
     // Update positions (and size) to match the percentage
     loadingBarHidden.setX(startX + endX * percent);
     loadingBg.setX(loadingBarHidden.getX() + 30);
-    loadingBg.setWidth(450 - 450 * percent);
+    loadingBg.setWidth(WIDTH * ( 1 - percent));
     loadingBg.invalidate();
 
     // Show the loading screen

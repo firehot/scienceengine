@@ -19,7 +19,7 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 public class ImageMessageBox extends TextButton {
   
   private TextButton nextButton, prevButton;
-  protected static final int SCALE = 40;
+  protected static final int SCALE = Math.round(3f * ScreenComponent.getFontSize());
   private Button closeButton;
   private TextureRegionDrawable background;
 

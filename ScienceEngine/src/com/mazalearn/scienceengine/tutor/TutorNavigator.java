@@ -62,7 +62,7 @@ public class TutorNavigator extends Group {
     tutorsPanel.setVisible(false);
     addActor(tutorsPanel);
     userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
-    ScreenComponent.scaleSize(userImage, ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
+    userImage.setSize(ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
     ClickListener clickListener = new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         if (tutorsPanel.isVisible()) {

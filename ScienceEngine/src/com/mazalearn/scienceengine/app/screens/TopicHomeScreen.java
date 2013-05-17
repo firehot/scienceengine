@@ -236,7 +236,7 @@ public class TopicHomeScreen extends AbstractScreen {
     if (lastActiveLevel != null) {
       Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
       ScreenComponent.scalePosition(userImage, 2, THUMBNAIL_HEIGHT / 2);
-      ScreenComponent.scaleSize(userImage, ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
+      userImage.setSize(ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
       
       int idx = Arrays.asList(topic.getChildren()).indexOf(lastActiveLevel);
       if (idx != -1) {

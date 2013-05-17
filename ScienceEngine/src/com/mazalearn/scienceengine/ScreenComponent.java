@@ -18,7 +18,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   Help(XAlign.LEFT, 20, YAlign.TOP, -30, 40, 40, -1, Color.CLEAR, false, true),
   ViewControls(XAlign.LEFT, 81, YAlign.TOP, 0, 0, 0, -1, Color.CLEAR, true, false),
   ModelControls(XAlign.RIGHT, -20, YAlign.MIDDLE, 0, 0, 0, -1, Color.CLEAR, false, true),
-  Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 32, 32, -1, Color.CLEAR, true, false),
+  Logo(XAlign.RIGHT, 0, YAlign.BOTTOM, 0, 20, 20, -1, Color.CLEAR, true, false),
   Scoreboard(XAlign.RIGHT, -140, YAlign.TOP, 0, 40, 30, -1, Color.BLACK, true, true),
   Idea(XAlign.LEFT, 40, YAlign.TOP, -50, 50, 60, -1, Color.BLACK, false, false),
   NextButton(XAlign.RIGHT, -125, YAlign.TOP, -60, 0, 0, -1, Color.CLEAR, false, false), 
@@ -222,9 +222,13 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
     return AVAILABLE_FONT_SIZES[index];
   }
   
+  public static int getFontSize() {
+    return FontSize;
+  }
+
   // should be called only after setSize has been called
   public static String getFont(float relativeScaling) {
-    int fontsize = selectFontSize(Math.round(FontSize * relativeScaling));
+    int fontsize = selectFontSize(Math.round(getFontSize() * relativeScaling));
     Gdx.app.log(ScienceEngine.LOG, "Font chosen size: " + fontsize);
     return "font" + String.valueOf(fontsize);
   }

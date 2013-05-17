@@ -14,15 +14,15 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
 
 public class CurrentCoilActor extends Science2DActor {
   private final CurrentCoil currentCoil;
-  private static TextureRegion commutatorNone = 
-      ScienceEngine.getTextureRegion("currentcoil_nocommutator");
-  private static TextureRegion commutatorAc = 
-      ScienceEngine.getTextureRegion("currentcoil_accommutator");
-  private static TextureRegion commutatorDc = 
-      ScienceEngine.getTextureRegion("currentcoil_dccommutator");
+  private static TextureRegion commutatorNone = ScienceEngine
+      .getTextureRegion("currentcoil_nocommutator");
+  private static TextureRegion commutatorAc = ScienceEngine
+      .getTextureRegion("currentcoil_accommutator");
+  private static TextureRegion commutatorDc = ScienceEngine
+      .getTextureRegion("currentcoil_dccommutator");
   private BitmapFont font;
   private Vector2 newPos = new Vector2();
-   
+
   private static final int NUM_FRAMES = 36;
   // To synchronize the coil commutator with blender animation.
   private int[] rotationAngles = new int[] { 0, 1, 7, 15, 28, 40, 55, 65, 80,
@@ -35,16 +35,19 @@ public class CurrentCoilActor extends Science2DActor {
     super(body, commutatorNone);
     this.currentCoil = (CurrentCoil) body;
     this.font = font;
-/**
- * in directory electromangetism
- * java -cp c:\Users\sridhar\gdx-tools.jar;c:\Users\sridhar\git\scienceengine\ScienceEngine\libs\gdx.jar com.badlogic.gdx.tools.imagepacker.TexturePacker2
-currentcoil
- */
+    /**
+     * in directory electromangetism java -cp
+     * c:\Users\sridhar\gdx-tools.jar;c:\Users
+     * \sridhar\git\scienceengine\ScienceEngine\libs\gdx.jar
+     * com.badlogic.gdx.tools.imagepacker.TexturePacker2 currentcoil
+     */
     rotationFrames = new TextureRegion[NUM_FRAMES];
-    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/Electromagnetism/currentcoil/pack.atlas"));
+    TextureAtlas atlas = new TextureAtlas(
+        Gdx.files.internal("images/Electromagnetism/currentcoil/pack.atlas"));
     for (int i = 0; i < NUM_FRAMES; i++) {
       String num = String.valueOf(i);
-      rotationFrames[i] = atlas.findRegion("000".substring(0, 3 - num.length()) + num + '0');
+      rotationFrames[i] = atlas.findRegion("000".substring(0, 3 - num.length())
+          + num + '0');
     }
   }
 
@@ -52,15 +55,15 @@ currentcoil
   protected int getRotationForceScaler() {
     return -100;
   }
-  
+
   @Override
   public void draw(SpriteBatch batch, float parentAlpha) {
     // Flip if negative current so that +, - on coil are correctly shown
     TextureRegion textureRegion = null;
     float rotation = getRotation();
     rotation += currentCoil.getCurrent() < 0 ? 180 : 0;
-    switch(currentCoil.getCommutatorType()) {
-    case Commutator: 
+    switch (currentCoil.getCommutatorType()) {
+    case Commutator:
       textureRegion = commutatorDc;
       break;
     case Connector:
@@ -69,25 +72,23 @@ currentcoil
     case Disconnected:
       textureRegion = commutatorNone;
     }
-    int frameIndex = (int) Math.floor(((rotation + 360) % 360 ) / 10);
+    int frameIndex = (int) Math.floor(((rotation + 360) % 360) / 10);
     TextureRegion frame = rotationFrames[frameIndex];
-    // 6, 8.5 for desktop 1280x1024 (1.6, 1.6)
-    // 3.5, 5.5 for ipad 1024x768   (1.28, 1.2)
-    //          for nexus 7 1280x800
-    // 1, 2.5 for 800x480           (1, 1)
-    batch.draw(frame,
-        (currentCoil.getPosition().x - currentCoil.getWidth() / 2 - 3.5f) * ScreenComponent.PIXELS_PER_M, 
-        (currentCoil.getPosition().y - currentCoil.getWidth() / 2 - 6.5f) * ScreenComponent.PIXELS_PER_M,
-        ScreenComponent.getScaledX(frame.getRegionWidth()/2), 
-        ScreenComponent.getScaledY(frame.getRegionHeight()/2),
-        getWidth()*1.2f, getWidth()*1.2f, 1, 1, 0); 
+    float deltax = 12; // nexus7 = 12; // ipad, android, iphone4, iphone = 8; // iphone5 = 12; 
+    float deltay = 18; // nexus7 = 18; // ipad = 16; // iphone4, android = 12; // iphone = 6; // iphone5=18;
+    // current coil
+    batch.draw(
+        frame,
+        getX() - deltax, getY() - 1.2f * getWidth() / 2 + getHeight() / 2 - deltay, 0, 0,
+        getWidth() * 1.2f, getWidth() * 1.2f, 1, 1, 0);
 
     int rotation2 = rotationAngles[frameIndex];
-    batch.draw(textureRegion, getX(), getY(), this.getOriginX(), 
+    // Central commutator rod
+    batch.draw(textureRegion, getX(), getY(), this.getOriginX(),
         this.getOriginY(), getWidth(), getHeight(), 1, 1, rotation2);
     drawRotationData(batch, parentAlpha);
   }
-  
+
   private void drawRotationData(SpriteBatch batch, float parentAlpha) {
     font.setColor(0f, 0f, 0f, parentAlpha);
     int data = Math.round(currentCoil.getRotationData());

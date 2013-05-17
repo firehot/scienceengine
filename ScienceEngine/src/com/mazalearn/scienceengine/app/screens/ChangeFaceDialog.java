@@ -18,9 +18,13 @@ import com.mazalearn.scienceengine.core.view.DrawingActor;
 public class ChangeFaceDialog extends Dialog {
   
   private Profile profile;
+  private Dialog parentDialog;
 
-  public ChangeFaceDialog(final Skin skin, final Image userImage) {
+  public ChangeFaceDialog(final Skin skin, final Image userImage, final Dialog parentDialog) {
     super("", skin);
+    
+    this.parentDialog = parentDialog;
+    parentDialog.setVisible(false);
     
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     Label title = new Label(profile.getUserName(), skin);
@@ -52,5 +56,10 @@ public class ChangeFaceDialog extends Dialog {
       }
     });
     this.getButtonTable().add(saveButton).width(150).center();
+  }
+  
+  @Override
+  protected void result(Object object) {
+    parentDialog.setVisible(true);
   }
 }
