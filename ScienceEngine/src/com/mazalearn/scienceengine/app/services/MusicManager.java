@@ -16,7 +16,7 @@ public class MusicManager implements Disposable {
    * The available music files.
    */
   public enum ScienceEngineMusic {
-    MENU("music/menu.mp3"), LEVEL("music/level.mp3");
+    MENU("music/vivaldi-spring-1.mp3"), LEVEL("music/vivaldi-spring-2.mp3");
 
     private String fileName;
     private Music musicResource;

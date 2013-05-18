@@ -96,21 +96,17 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
   @Override
   public void tutoring(boolean tutoringOn) {
     // Turn on or turn off music
-    if (tutoringOn) {
-      ScienceEngine.getMusicManager().setEnabled(false);
-    } else {
-      ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
-    }
+    ScienceEngine.getMusicManager().play(ScienceEngineMusic.LEVEL);
 
     if (tutoringOn) {
       isTutoringInProgress = true;
-      // Reinitialize level
+      // Reinitialize level BEFORE beginning
       science2DController.reset();
       science2DController.getGuru().beginTutoring();
     } else if (isTutoringInProgress) {
       isTutoringInProgress = false;
       science2DController.getGuru().endTutoring();
-      // Reinitialize level
+      // Reinitialize level AFTER ending
       science2DController.reset();
     }
   }
