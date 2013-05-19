@@ -108,7 +108,6 @@
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
     <CodesignProvision>8AEA0A63-0555-4AE7-983C-092A89ADA7EB</CodesignProvision>
-    <MtouchDebug>True</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -193,12 +192,6 @@
     <Content Include="icon_57x57.png" />
     <Content Include="icon_72x72.png" />
     <None Include="scienceengineios-1.0.plist" />
-    <Content Include="..\..\ScienceEngine-android\assets\music\level.mp3">
-      <Link>music\level.mp3</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\music\menu.mp3">
-      <Link>music\menu.mp3</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\skin\arial-12.fnt">
       <Link>skin\arial-12.fnt</Link>
     </Content>
@@ -499,6 +492,30 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\trivia.json">
       <Link>data\Electromagnetism\trivia.json</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-8.png">
+      <Link>skin\arial-8.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-9.png">
+      <Link>skin\arial-9.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-9.fnt">
+      <Link>skin\arial-9.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-8.fnt">
+      <Link>skin\arial-8.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-10.png">
+      <Link>skin\arial-10.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\skin\arial-10.fnt">
+      <Link>skin\arial-10.fnt</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\music\vivaldi-spring-1.mp3">
+      <Link>music\vivaldi-spring-1.mp3</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\music\vivaldi-spring-2.mp3">
+      <Link>music\vivaldi-spring-2.mp3</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

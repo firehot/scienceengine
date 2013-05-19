@@ -28,7 +28,7 @@ public class TutoringEndDialog extends Dialog {
     getContentTable().add(description).width(400).pad(10);
 
     Button b = new TextButton("OK", skin);
-    this.getButtonTable().add(b).width(200);
+    this.getButtonTable().add(b).width(ScreenComponent.getScaledX(200));
   }
 
   private static TextureRegionDrawable createBackground() {
