@@ -153,7 +153,10 @@ public class TopicHomeScreen extends AbstractScreen {
         }
       }
     });
-    table.add(contentTypeButton).width(400).height(50).padTop(50);
+    table.add(contentTypeButton)
+        .width(ScreenComponent.getScaledX(400))
+        .height(ScreenComponent.getScaledY(50))
+        .padTop(ScreenComponent.getScaledY(50));
   }
 
   private Actor createActivitiesPane() {
@@ -287,10 +290,14 @@ public class TopicHomeScreen extends AbstractScreen {
       resource.addListener(clickListener);
       
       String rated = "*****".substring(0, (int) Math.floor(rating));
-      Label ratingLabel = new Label(rated, getSkin(), "en", Color.YELLOW);
-      resource.add(ratingLabel).right().width(50);
-      resource.add(play).width(60).height(60).top().center();
-      resource.add(new Label(duration, getSkin())).padLeft(10).width(40);
+      Label ratingLabel = new Label(rated, getSkin(), "en-big", Color.YELLOW);
+      resource.add(ratingLabel).right().width(ScreenComponent.getScaledX(50));
+      resource.add(play)
+          .width(ScreenComponent.getScaledX(60))
+          .height(ScreenComponent.getScaledY(60))
+          .top()
+          .center();
+      resource.add(new Label(duration, getSkin())).padLeft(10).width(ScreenComponent.getScaledX(40));
       resource.row();
       Label attributionLabel = 
           new Label(getMsg("ScienceEngine.From") + ": " + 

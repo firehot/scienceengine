@@ -25,16 +25,19 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 public class DrawingActor extends Actor {
-  private static final int LINE_WIDTH = 5;
+  private static int LINE_WIDTH = 5;
   public static final int FACE_HEIGHT = 64;
   public static final int FACE_WIDTH = 64;
   private static int SCALE = 4;
   public static int SCALED_FACE_WIDTH = SCALE * FACE_WIDTH;
   public static int SCALED_FACE_HEIGHT = SCALE * FACE_HEIGHT;
   static {
-    SCALE = (ScreenComponent.VIEWPORT_WIDTH < 800) ? 2 : 4;      
-    SCALED_FACE_WIDTH = SCALE * FACE_WIDTH;
-    SCALED_FACE_HEIGHT = SCALE * FACE_HEIGHT;
+    if (ScreenComponent.VIEWPORT_WIDTH < 800) {
+      SCALE =  2;      
+      SCALED_FACE_WIDTH = SCALE * FACE_WIDTH;
+      SCALED_FACE_HEIGHT = SCALE * FACE_HEIGHT;
+      LINE_WIDTH = 3;
+    }
   }
   private Vector2 pos = new Vector2(), prevPos = new Vector2();
   private ShapeRenderer shapeRenderer;

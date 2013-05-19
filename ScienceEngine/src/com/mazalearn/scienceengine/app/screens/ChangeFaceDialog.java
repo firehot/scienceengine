@@ -18,9 +18,9 @@ import com.mazalearn.scienceengine.core.view.DrawingActor;
 public class ChangeFaceDialog extends Dialog {
   
   private Profile profile;
-  private Dialog parentDialog;
+  private UserHomeDialog parentDialog;
 
-  public ChangeFaceDialog(final Skin skin, final Image userImage, final Dialog parentDialog) {
+  public ChangeFaceDialog(final Skin skin, final Image userImage, final UserHomeDialog parentDialog) {
     super("", skin);
     
     this.parentDialog = parentDialog;
@@ -52,7 +52,9 @@ public class ChangeFaceDialog extends Dialog {
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         profile.setUserPixmap(face.getPixmap());
-        userImage.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion(ScienceEngine.USER)));
+        TextureRegionDrawable drawable = new TextureRegionDrawable(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+        userImage.setDrawable(drawable);
+        parentDialog.setUserImage(drawable);
       }
     });
     this.getButtonTable().add(saveButton).width(150).center();

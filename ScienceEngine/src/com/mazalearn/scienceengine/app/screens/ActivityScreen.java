@@ -89,6 +89,7 @@ public class ActivityScreen extends AbstractScreen {
   public void enterRevisionMode(ITutor tutorUnderRevision) {
     setTitle("Revision: " + science2DController.getTitle());
     this.tutorUnderRevision = tutorUnderRevision;
+    science2DController.getGuru().getTutorHelper().showNextAndExplanation(true, false);
     showHelp();
   }
   

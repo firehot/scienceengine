@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -78,12 +77,14 @@ public class SplashScreen extends AbstractScreen {
     userImage.setSize(ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
     userInfo.add(profile.getUserName()).left();
     userInfo.add(userImage).width(userImage.getWidth()).height(userImage.getHeight());
-    userInfo.setPosition(100, 100);
+    userInfo.setPosition(ScreenComponent.getScaledX(100), ScreenComponent.getScaledY(100));
 
-    Label touchToStart = new Label("Touch to Start", getSkin());
+    Label touchToStart = new Label("Touch to Start", getSkin(), "default-big");
     touchToStart.setColor(Color.WHITE);
-    touchToStart.setFontScale(2f);
-    touchToStart.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - 120, ScreenComponent.VIEWPORT_HEIGHT / 2 - 80);
+    
+    touchToStart.setPosition(
+        ScreenComponent.VIEWPORT_WIDTH / 2 - ScreenComponent.getScaledX(touchToStart.getWidth()),
+        ScreenComponent.VIEWPORT_HEIGHT / 2 - ScreenComponent.getScaledY(touchToStart.getHeight()) * 3);
     touchToStart.addAction(
         Actions.forever(
             Actions.sequence(
@@ -159,21 +160,18 @@ public class SplashScreen extends AbstractScreen {
     touchToStart.addListener(startListener);
     
     // Installation Info
-    LabelStyle small = new LabelStyle(getSkin().get(LabelStyle.class));
-    small.font = getSkin().getFont("font12");
-    Label version = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), small);
-    Label installation = new Label(installProfile.getInstallationId(), small);
-    installation.setStyle(small);
-    version.setPosition(10, 40);
-    installation.setPosition(10, 25);
+    Label version = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), getSkin(), "default-small");
+    Label installation = new Label(installProfile.getInstallationId(), getSkin(), "default-small");
+    version.setPosition(ScreenComponent.getScaledX(10), ScreenComponent.getScaledY(40));
+    installation.setPosition(ScreenComponent.getScaledX(10), ScreenComponent.getScaledY(25));
     stage.addActor(version);
     stage.addActor(installation);
 
     // Registration Info if registered
     String owner = (installProfile.getRegisteredUserId() != null) ? installProfile.getRegisteredUserId() : "Not registered";
     Label registration = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Registered") + 
-          ": " + owner, small);
-    registration.setPosition(10, 10);
+          ": " + owner, getSkin(), "default-small");
+    registration.setPosition(ScreenComponent.getScaledX(10), ScreenComponent.getScaledY(10));
     stage.addActor(registration);
     
     // Do a sync of all profiles here

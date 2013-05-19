@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -35,6 +36,7 @@ public class UserHomeDialog extends Dialog {
 
   private Profile profile;
   private Skin skin;
+  private Image myUserImage;
 
   public UserHomeDialog(final Skin skin, final Image userImage) {
     super("", skin);
@@ -73,9 +75,9 @@ public class UserHomeDialog extends Dialog {
     Label name = new Label(profile.getUserName(), skin);
     name.setAlignment(Align.center, Align.center);
     contentTable.add(name).fill().pad(10);
-    Image image = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
-    contentTable.add(image).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
-    image.addListener(new ClickListener() {
+    myUserImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+    contentTable.add(myUserImage).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
+    myUserImage.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -85,6 +87,10 @@ public class UserHomeDialog extends Dialog {
     contentTable.row();
   }
 
+  public void setUserImage(Drawable drawable) {
+    myUserImage.setDrawable(drawable);
+  }
+  
   private void addRegistrationRequest(Table contentTable) {
     Label registration = new Label("", skin);
     //registration.setWidth(800);
