@@ -74,17 +74,19 @@ public class SplashScreen extends AbstractScreen {
     Table userInfo = new Table(getSkin());
     Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     final Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
-    userImage.setSize(ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
-    userInfo.add(profile.getUserName()).left();
+    userImage.setSize(ScreenComponent.User.getWidth() * 2, ScreenComponent.User.getHeight() * 2);
     userInfo.add(userImage).width(userImage.getWidth()).height(userImage.getHeight());
+    Label userName = new Label(profile.getUserName(), getSkin(), "default-big");
+    userInfo.add(userName).right();
     userInfo.setPosition(ScreenComponent.getScaledX(100), ScreenComponent.getScaledY(100));
 
     Label touchToStart = new Label("Touch to Start", getSkin(), "default-big");
+    touchToStart.setFontScale(1.5f);
     touchToStart.setColor(Color.WHITE);
     
     touchToStart.setPosition(
-        ScreenComponent.VIEWPORT_WIDTH / 2 - ScreenComponent.getScaledX(touchToStart.getWidth()),
-        ScreenComponent.VIEWPORT_HEIGHT / 2 - ScreenComponent.getScaledY(touchToStart.getHeight()) * 3);
+        ScreenComponent.VIEWPORT_WIDTH / 2 - ScreenComponent.getScaledX(touchToStart.getWidth() / 2),
+        ScreenComponent.VIEWPORT_HEIGHT / 2 - ScreenComponent.getScaledY(touchToStart.getHeight()) * 2);
     touchToStart.addAction(
         Actions.forever(
             Actions.sequence(
@@ -142,11 +144,11 @@ public class SplashScreen extends AbstractScreen {
             userLabel.addListener(listener);
             userImage.addListener(listener);
             userTable.add(userLabel).center();
-            userTable.add(userImage).width(60).height(60);
+            userTable.add(userImage).width(ScreenComponent.getScaledX(60)).height(ScreenComponent.getScaledY(60));
             userTable.row();
             ScrollPane usersPane = new ScrollPane(userTable, getSkin());
-            usersPane.setPosition(50, 50);
-            usersPane.setSize(200, 150);
+            usersPane.setPosition(ScreenComponent.getScaledX(50), ScreenComponent.getScaledY(50));
+            usersPane.setSize(ScreenComponent.getScaledX(200), ScreenComponent.getScaledY(150));
             usersPane.setScrollingDisabled(true, false);
 
             stage.addActor(usersPane);
