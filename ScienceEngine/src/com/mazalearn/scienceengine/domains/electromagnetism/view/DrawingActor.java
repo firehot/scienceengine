@@ -38,8 +38,9 @@ public class DrawingActor extends Science2DActor {
   private static final int COACH_HEIGHT = 64;
   private static final int COACH_WIDTH = 105;
   private static final int WHEEL_OFFSET = 20;
-  private static float DRAWING_WHEEL_DIA = SCALE * (WHEEL_DIA + 2);
-  private static float DRAWING_WHEEL_OFFSET = SCALE * (WHEEL_OFFSET - 1);
+  private static float DRAWING_WHEEL_DIA_X = SCALE * WHEEL_DIA + 2;
+  private static float DRAWING_WHEEL_DIA_Y = SCALE * WHEEL_DIA + 2;
+  private static float DRAWING_WHEEL_OFFSET = SCALE * WHEEL_OFFSET - 1;
   private static float DRAWING_COACH_WIDTH = SCALE * COACH_WIDTH;
   private static float DRAWING_COACH_HEIGHT = SCALE * COACH_HEIGHT;
   private final Drawing drawing;
@@ -54,8 +55,9 @@ public class DrawingActor extends Science2DActor {
   
   static {
     // Scale screen sizes based on screen dimensions
-    DRAWING_WHEEL_DIA = ScreenComponent.getScaledX(SCALE * (WHEEL_DIA + 2));
-    DRAWING_WHEEL_OFFSET = ScreenComponent.getScaledX(SCALE * (WHEEL_OFFSET - 1));
+    DRAWING_WHEEL_DIA_X = ScreenComponent.getScaledX(SCALE * WHEEL_DIA) + 2;
+    DRAWING_WHEEL_DIA_Y = ScreenComponent.getScaledY(SCALE * WHEEL_DIA) + 2;
+    DRAWING_WHEEL_OFFSET = ScreenComponent.getScaledX(SCALE * WHEEL_OFFSET) - 1;
     DRAWING_COACH_WIDTH = ScreenComponent.getScaledX(SCALE * COACH_WIDTH);
     DRAWING_COACH_HEIGHT = ScreenComponent.getScaledY(SCALE * COACH_HEIGHT);
   }
@@ -158,17 +160,17 @@ public class DrawingActor extends Science2DActor {
     
     // Blank out the wheels in the coachBody
     snapshot.setColor(0);
-    snapshot.fillRectangle(WHEEL_OFFSET - 1, COACH_HEIGHT - WHEEL_DIA - 3, 
+    snapshot.fillRectangle(WHEEL_OFFSET - 1, COACH_HEIGHT - WHEEL_DIA - 3,
         WHEEL_DIA + 3, WHEEL_DIA + 3);
-    snapshot.fillRectangle(COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA - 1, 
+    snapshot.fillRectangle(COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA - 1,
         COACH_HEIGHT - WHEEL_DIA - 3, WHEEL_DIA + 3, WHEEL_DIA + 3);
     // Draw wheels on side
-    snapshot.drawPixmap(screenShot, 
-        WHEEL_OFFSET, COACH_HEIGHT - WHEEL_DIA - 1, WHEEL_DIA, WHEEL_DIA, 
+    snapshot.drawPixmap(screenShot,
+        WHEEL_OFFSET, COACH_HEIGHT - WHEEL_DIA, WHEEL_DIA, WHEEL_DIA,
         COACH_WIDTH, 0, WHEEL_DIA, WHEEL_DIA);
     snapshot.drawPixmap(screenShot,
-        COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA, COACH_HEIGHT - WHEEL_DIA - 1, 
-        WHEEL_DIA, WHEEL_DIA, 
+        COACH_WIDTH - WHEEL_OFFSET - WHEEL_DIA, COACH_HEIGHT - WHEEL_DIA,
+        WHEEL_DIA, WHEEL_DIA,
         COACH_WIDTH, WHEEL_DIA, WHEEL_DIA, WHEEL_DIA);
 
     // Workaround for GWT WebGL - TexSubImage2D gives an error, using TexImage2D instead.
@@ -205,13 +207,13 @@ public class DrawingActor extends Science2DActor {
     shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
     shapeRenderer.identity();
     shapeRenderer.translate(getX(), getY(), 0);
-    shapeRenderer.begin(ShapeType.Line);
+    shapeRenderer.begin(ShapeType.Rectangle);
     shapeRenderer.setColor(Color.YELLOW);
     
     // Draw wheel areas
-    shapeRenderer.rect(DRAWING_WHEEL_OFFSET, 0, DRAWING_WHEEL_DIA, DRAWING_WHEEL_DIA);
-    shapeRenderer.rect(DRAWING_COACH_WIDTH - DRAWING_WHEEL_OFFSET - DRAWING_WHEEL_DIA, 0, 
-        DRAWING_WHEEL_DIA, DRAWING_WHEEL_DIA);
+    shapeRenderer.rect(DRAWING_WHEEL_OFFSET, 0, DRAWING_WHEEL_DIA_X, DRAWING_WHEEL_DIA_Y);
+    shapeRenderer.rect(DRAWING_COACH_WIDTH - DRAWING_WHEEL_OFFSET - DRAWING_WHEEL_DIA_X, 0, 
+        DRAWING_WHEEL_DIA_X, DRAWING_WHEEL_DIA_Y);
     
     // Draw coach area
     shapeRenderer.rect(0, 0, DRAWING_COACH_WIDTH, DRAWING_COACH_HEIGHT);

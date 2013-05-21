@@ -354,7 +354,6 @@ public class IabHelper {
     public void launchPurchaseFlow(Activity act, String sku, String itemType, int requestCode,
                         OnIabPurchaseFinishedListener listener, String extraData) {
         checkSetupDone("launchPurchaseFlow");
-        flagStartAsync("launchPurchaseFlow");
         IabResult result;
         
         if (itemType.equals(ITEM_TYPE_SUBS) && !mSubscriptionsSupported) {
@@ -381,6 +380,7 @@ public class IabHelper {
             mRequestCode = requestCode;
             mPurchaseListener = listener;
             mPurchasingItemType = itemType;
+            flagStartAsync("launchPurchaseFlow");
             act.startIntentSenderForResult(pendingIntent.getIntentSender(),
                                            requestCode, new Intent(),
                                            Integer.valueOf(0), Integer.valueOf(0),

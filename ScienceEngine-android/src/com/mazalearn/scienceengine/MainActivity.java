@@ -1,9 +1,9 @@
 package com.mazalearn.scienceengine;
 
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -59,9 +59,9 @@ public class MainActivity extends AndroidApplication {
     
     Platform platform = android.os.Build.FINGERPRINT.contains("generic") 
         ? Platform.AndroidEmulator : Platform.Android;
-    PlatformAdapterImpl platformAdapter = new PlatformAdapterImpl(this, platform);
+    PlatformAdapterImpl platformAdapter = new PlatformAdapterImpl(this, platform, iabHelper);
     
-    scienceEngine.setPlatformAdapter(platformAdapter);
+    ScienceEngine.setPlatformAdapter(platformAdapter);
     initialize(scienceEngine, cfg);
   }
    
@@ -144,6 +144,15 @@ public class MainActivity extends AndroidApplication {
        */
       
       return true;
+  }
+  
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    log(ScienceEngine.LOG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+
+     if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
+       super.onActivityResult(requestCode, resultCode, data);  
+     }
   }
   
   @Override

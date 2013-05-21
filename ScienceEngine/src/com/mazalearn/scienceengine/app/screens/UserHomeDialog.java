@@ -45,13 +45,7 @@ public class UserHomeDialog extends Dialog {
     ScienceEngine.loadAtlas("images/social/pack.atlas"); // Unload after since not used elsewhere?
 
     Table contentTable = getContentTable();
-    
-    // Title
-    Label title = new Label("Home", skin);
-    title.setAlignment(Align.center, Align.center);
-    contentTable.add(title).fill().pad(10).colspan(2);
-    contentTable.row();
-    
+    setTitle("Home");
     // Name and face
     addUserInfo(userImage, contentTable);
     
@@ -68,13 +62,13 @@ public class UserHomeDialog extends Dialog {
     contentTable.debug();
 
     TextButton closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Close"), skin, "body");
-    this.getButtonTable().add(closeButton).width(150).center();
+    this.getButtonTable().add(closeButton).width(ScreenComponent.getScaledX(150)).center();
   }
 
   private void addUserInfo(final Image userImage, Table contentTable) {
     Label name = new Label(profile.getUserName(), skin);
     name.setAlignment(Align.center, Align.center);
-    contentTable.add(name).fill().pad(10);
+    contentTable.add(name).fill().pad(ScreenComponent.getScaledY(10));
     myUserImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     contentTable.add(myUserImage).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
     myUserImage.addListener(new ClickListener() {
@@ -96,7 +90,9 @@ public class UserHomeDialog extends Dialog {
     //registration.setWidth(800);
     registration.setWrap(true);
     registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.RegistrationInfo"));
-    contentTable.add(registration).width(400).pad(10);
+    contentTable.add(registration)
+        .width(ScreenComponent.getScaledX(400))
+        .pad(ScreenComponent.getScaledY(10));
     TextButton registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin, "body");
     contentTable.add(registerButton).width(150).center();      
     contentTable.row();
@@ -189,7 +185,7 @@ public class UserHomeDialog extends Dialog {
       itemTable.add(item)
           .width(item.getWidth())
           .height(item.getHeight());
-      table.add(itemTable).pad(5);
+      table.add(itemTable).pad(ScreenComponent.getScaledY(5));
     }
     return flickScrollPane;
   }

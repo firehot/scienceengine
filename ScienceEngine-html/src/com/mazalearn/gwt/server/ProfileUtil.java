@@ -283,10 +283,12 @@ public class ProfileUtil {
     ds.put(user);
   }
 
-  public void deleteUserProfile(String userEmail) throws IllegalStateException {
+  public void resetUserProfile(String userEmail) throws IllegalStateException {
     Entity user = retrieveUser(userEmail);
-    if (user != null) {
-      user.setProperty(ProfileServlet.PROFILE, null);
+    EmbeddedEntity userProfile = retrieveUserProfile(userEmail);
+    if (userProfile != null) {
+      userProfile.setProperty(ProfileData.TOPIC_STATS, new EmbeddedEntity());
+      EmbeddedEntity lastUpdated = (EmbeddedEntity) userProfile.getProperty(ProfileData.LAST_UPDATED);
       ds.put(user);      
     }
   }

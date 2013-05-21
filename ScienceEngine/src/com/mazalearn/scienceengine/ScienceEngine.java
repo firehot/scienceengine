@@ -22,14 +22,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
-import com.mazalearn.scienceengine.app.screens.LoadingScreen;
-import com.mazalearn.scienceengine.app.screens.LoadingScreen2;
+import com.mazalearn.scienceengine.app.screens.LoadingScienceTrain;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.services.EventLog;
@@ -188,7 +186,7 @@ public class ScienceEngine extends Game {
     // show the starting screen when the scienceEngine is resized for the first timeLimit;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(new LoadingScreen2(this, createScreen(uri)));
+      setScreen(new LoadingScienceTrain(this, createScreen(uri)));
     }
   }
 

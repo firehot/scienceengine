@@ -65,7 +65,7 @@ tutors: [
               ],
          },
        ]},
-       {type: "RapidFire",
+       {type: "RapidFire*",
        id: "Multiple Choice Questions",
        goal: "RapidFire Review",
        childtutors: [

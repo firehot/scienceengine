@@ -18,6 +18,7 @@ import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 import com.mazalearn.scienceengine.designer.PngWriter;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   
@@ -190,5 +191,11 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   @Override
   public boolean supportsSync() {
     return true;
+  }
+
+  @Override
+  public void launchPurchaseFlow(String sku, String itemType,
+      IDoneCallback doneCallback, String extraData) {
+    throw new UnsupportedOperationException("Purchase flow not implemented");
   }
 }

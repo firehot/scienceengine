@@ -16,13 +16,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.FreeTypeComplexFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.services.IMessage;
+import com.mazalearn.scienceengine.billing.util.IabHelper;
+import com.mazalearn.scienceengine.billing.util.IabHelper.OnIabPurchaseFinishedListener;
+import com.mazalearn.scienceengine.billing.util.IabResult;
+import com.mazalearn.scienceengine.billing.util.Purchase;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   private AndroidApplication application;
+  private IabHelper iabHelper;
   
-  public PlatformAdapterImpl(AndroidApplication application, Platform platform) {
+  public PlatformAdapterImpl(AndroidApplication application, Platform platform, IabHelper iabHelper) {
     super(platform);
     this.application = application;
+    this.iabHelper = iabHelper;
   }
 
   public IMessage getMsg() {
@@ -56,6 +63,18 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
     showFileUri(url, "android_asset");
   }
 
+  @Override
+  public void launchPurchaseFlow(String sku, String itemType, final IDoneCallback doneCallback, String extraData) {
+    iabHelper.launchPurchaseFlow(application, sku, itemType, 1234,
+        new OnIabPurchaseFinishedListener() {
+          @Override
+          public void onIabPurchaseFinished(IabResult result, Purchase info) {
+            doneCallback.done(result.isSuccess() || 
+                result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED);
+          } 
+        }, extraData);
+  }
+  
   @Override
   public boolean playVideo(File file) {
     Intent videoPlayback = new Intent(application, VideoPlayer.class);

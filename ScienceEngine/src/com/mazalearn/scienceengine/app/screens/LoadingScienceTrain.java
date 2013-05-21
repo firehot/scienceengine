@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 /**
  * @author Mats Svensson
  */
-public class LoadingScreen2 extends AbstractScreen {
+public class LoadingScienceTrain extends AbstractScreen {
 
   private static final int NUM_ENGINE_WHEELS = 4;
   private static final int WIDTH = 450;
@@ -30,7 +30,7 @@ public class LoadingScreen2 extends AbstractScreen {
   private float startY;
   private float endY;
 
-  public LoadingScreen2(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
+  public LoadingScienceTrain(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
     super(scienceEngine);
     this.nextScreen = nextScreen;
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {

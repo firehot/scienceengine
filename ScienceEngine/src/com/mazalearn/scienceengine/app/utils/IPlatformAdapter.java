@@ -11,6 +11,7 @@ import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public interface IPlatformAdapter {
 
@@ -68,5 +69,8 @@ public interface IPlatformAdapter {
 
   // Does platform support sync to server of install and user profiles?
   public boolean supportsSync();
+
+  void launchPurchaseFlow(String sku, String itemType,
+      IDoneCallback doneCallback, String extraData);
 }
 

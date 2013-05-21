@@ -278,10 +278,12 @@ public class Guru extends Group implements ITutor {
     int progress = Math.round(rootTutor.getStats()[ITutor.PERCENT_PROGRESS]);
     String progressStr = "Progress = " + progress + "%\n\n\n\n";
     if (success && progress >= 80) {
-      // TODO: Hardcoded for now. 
-      if (science2DController.getLevel() == Topic.EMReview) {
+      // Assumption - second last level in any topic is the certification level
+      // last level is the Science Train level.
+      Topic[] topicLevels = science2DController.getTopic().getChildren();
+      if (science2DController.getLevel() == topicLevels[topicLevels.length - 2]) {
         Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
-        profile.addCertificate(Topic.EMReview.name());
+        profile.addCertificate(science2DController.getTopic().name());
       }
       return progressStr + ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
           science2DController.getLevel() + ".Success");

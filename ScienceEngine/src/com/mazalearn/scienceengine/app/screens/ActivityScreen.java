@@ -95,8 +95,9 @@ public class ActivityScreen extends AbstractScreen {
   
   @Override
   protected Group setupCoreGroup(Stage stage) {
+    // We create activityviewcontrols first so that viewcontrols will get overridden
+    ((Stage) science2DView).addActor(science2DController.getViewControls());
     Group coreGroup = super.setupCoreGroup(stage);
-    coreGroup.addActor(science2DController.getViewControls());
     
     helpActor = createHelpActor();
     coreGroup.addActor(helpActor);
@@ -180,7 +181,7 @@ public class ActivityScreen extends AbstractScreen {
     TopicHomeScreen topicHomeScreen = 
         new TopicHomeScreen(scienceEngine, topic);
     profile.setCurrentActivity(null);
-    scienceEngine.setScreen(new LoadingScreen2(scienceEngine, topicHomeScreen));
+    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
   }
   
   public IScience2DController createTopicController(

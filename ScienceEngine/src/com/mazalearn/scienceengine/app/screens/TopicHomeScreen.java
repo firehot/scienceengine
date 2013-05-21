@@ -174,7 +174,9 @@ public class TopicHomeScreen extends AbstractScreen {
     TextureRegion lockTexture = ScienceEngine.getTextureRegion("lock");
     for (Topic level: topic.getChildren()) {
       numTopics++;
-      boolean isLocked = numTopics == topic.getChildren().length && !profile.getCertificates().contains("EMReview");
+      // Assumption: Last level is the Science train level - unlocked only on certification
+      boolean isLocked = numTopics == topic.getChildren().length &&
+          !profile.getCertificates().contains(topic.name());
       String activityName = getMsg(topic + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(topic, level, ".png");
       Pixmap pixmap;
@@ -333,7 +335,7 @@ public class TopicHomeScreen extends AbstractScreen {
     AbstractScreen activityLevelScreen = 
         new ActivityScreen(scienceEngine, topic, level);
     // Set loading screen
-    scienceEngine.setScreen(new LoadingScreen2(scienceEngine, activityLevelScreen));
+    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, activityLevelScreen));
   }
   
   @SuppressWarnings("unchecked")

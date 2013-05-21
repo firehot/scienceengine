@@ -22,6 +22,7 @@ import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.tutor.Guru;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
 public class ChooseTopicScreen extends AbstractScreen {
@@ -91,17 +92,7 @@ public class ChooseTopicScreen extends AbstractScreen {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           if (lock) {
-            Gdx.input.getTextInput(new TextInputListener() {
-              @Override
-              public void input(String passcode) {
-                if ("9n8e7s6s".equals(passcode)) {
-                  gotoTopicHome(topic);
-                }
-              }
-              
-              @Override
-              public void canceled() {}
-            }, "Enter key", "");         
+            purchaseTopic(topic);         
           } else {
             gotoTopicHome(topic);
           }
@@ -141,6 +132,34 @@ public class ChooseTopicScreen extends AbstractScreen {
     Gdx.app.log(ScienceEngine.LOG, "Starting " + topic); //$NON-NLS-1$
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     AbstractScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
-    scienceEngine.setScreen(new LoadingScreen2(scienceEngine, topicHomeScreen));
+    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
+  }
+
+  private void purchaseTopic1(final Topic topic) {
+    Gdx.input.getTextInput(new TextInputListener() {
+      @Override
+      public void input(String passcode) {
+        if ("9n8e7s6s".equals(passcode)) {
+          gotoTopicHome(topic);
+        }
+      }
+      
+      @Override
+      public void canceled() {}
+    }, "Enter key", "");
+  }
+
+  private void purchaseTopic(final Topic topic) {
+    // android.test.purchased - item already owned not handled
+    // android.test.canceled - BUG: either purchasedata or datasignature is null
+    // android.test.item_unavailable - shows item unavailable
+    ScienceEngine.getPlatformAdapter().launchPurchaseFlow("android.test.purchased", "inapp", new IDoneCallback() {
+      @Override
+      public void done(boolean success) {
+        if (success) {
+          gotoTopicHome(topic);
+        }
+      }
+    }, topic.name());
   }
 }

@@ -48,9 +48,9 @@ public class DynamoActor extends Science2DActor {
       for (int i = 1; i <= dynamo.getNumberOfLoops(); i++) {
         int frameIndex = (int) Math.floor(((rotation + 360 + i * perLoopRotation) % 360 ) / 10);
         TextureRegion frame = rotationFrames[frameIndex];
-        batch.draw(frame, (dynamo.getPosition().x - dynamo.getWidth() * 1.2f / 2) * ScreenComponent.PIXELS_PER_M, 
-            (dynamo.getPosition().y - dynamo.getHeight() * 1.4f / 2) * ScreenComponent.PIXELS_PER_M,
-            0, 0, getWidth() * 1.2f, getWidth() * 1.2f, 1, 1, 0);
+        batch.draw(frame, (dynamo.getPosition().x - dynamo.getWidth() * 1.5f / 2) * ScreenComponent.PIXELS_PER_M, 
+            (dynamo.getPosition().y - dynamo.getHeight() * 1.6f / 2) * ScreenComponent.PIXELS_PER_M,
+            0, 0, getWidth() * 1.5f, getWidth() * 1.5f, 1, 1, 0);
       }
     } else { // Parallel to rotation
       // Draw the loops in reverse order

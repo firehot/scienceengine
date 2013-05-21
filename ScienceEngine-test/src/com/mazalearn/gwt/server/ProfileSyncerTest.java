@@ -149,7 +149,7 @@ public class ProfileSyncerTest {
 
   @Test
   public void testGetSyncJson() {
-    String expected = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"thissynctime\":123456,\"server\":20},\"server\":{\"isRegistered\":false},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
+    String expected = "{\"client\":{\"current\":0.0,\"certificates\":[],\"points\":0},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"thissynctime\":123456,\"server\":20},\"server\":{\"isRegistered\":false},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
     // No server props in timestamps
     Map<String, Object> syncData = profileSyncer.getSyncJson(clientProfile);
     String s = new Gson().toJson(syncData);
@@ -160,7 +160,7 @@ public class ProfileSyncerTest {
     clientProfile.serverTimestamps.put(ProfileData.SERVER_PROPS, 20L);
     syncData = profileSyncer.getSyncJson(clientProfile);
     s = new Gson().toJson(syncData);
-    String expectedNoServer = "{\"client\":{\"current\":0.0,\"certificates\":[]},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"server\":20,\"thissynctime\":123456},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
+    String expectedNoServer = "{\"client\":{\"current\":0.0,\"certificates\":[],\"points\":0},\"lastUpdated\":{\"client\":10,\"social\":30,\"BarMagnet\":40,\"server\":20,\"thissynctime\":123456},\"topicStats\":{\"BarMagnet\":{\"Guru\":[10.0]}}}";
     assertEquals(expectedNoServer, s);
     // Server props timestamp - client > server
     clientProfile.serverTimestamps.put(ProfileData.SERVER_PROPS, 10L);
@@ -206,7 +206,7 @@ public class ProfileSyncerTest {
     profileSyncer.mergeProfile(serverProfile1, clientProfile1);
     
     String expected = 
-        "{\"client\":{\"platform\":\"Desktop\",\"current\":0.0,\"installId\":\"Desktop-0e8ff0b1-efb7-40ba-a70f-b88a7677a4f2\",\"topic\":\"Electromagnetism\",\"lastActivity\":\"\",\"activity\":\"BarMagnet\",\"certificates\":[]}," +
+        "{\"client\":{\"platform\":\"Desktop\",\"current\":0.0,\"installId\":\"Desktop-0e8ff0b1-efb7-40ba-a70f-b88a7677a4f2\",\"topic\":\"Electromagnetism\",\"lastActivity\":\"\",\"activity\":\"BarMagnet\",\"certificates\":[],\"points\":0}," +
         "\"social\":{\"friends\":[\"shaileshsridhar@gmail.com\"],\"inbox\":{\"mq\":[],\"tailId\":2,\"headId\":2},\"outbox\":{\"mq\":[],\"tailId\":0,\"headId\":1},\"points\":0}," +
         "\"lastUpdated\":{\"client\":7,\"social\":123456,\"server\":2,\"thissynctime\":123456}," +
         "\"topicStats\":{}}";

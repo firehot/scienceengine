@@ -15,6 +15,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 class PlatformAdapterImpl extends AbstractPlatformAdapter {
   
@@ -163,6 +164,12 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   @Override
   public boolean supportsSync() {
     return false;
+  }
+
+  @Override
+  public void launchPurchaseFlow(String sku, String itemType,
+      IDoneCallback doneCallback, String extraData) {
+    throw new UnsupportedOperationException("Purchase flow not implemented");
   }
 
 }
