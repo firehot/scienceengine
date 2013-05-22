@@ -13,4 +13,14 @@
 {"name":"WaveMaker.Amplitude","permitted":true,"value":3.0},
 {"name":"WaveBox.Damping","permitted":true,"value":0.05}
 ],
+tutors:[
+       {type: "Guide",
+       id: "G1",
+       goal: "Waves",
+       childtutors: [
+         {type: "KnowledgeUnit",
+          id: "G1.1",
+          goal: "Learn about waves"
+         }]
+       }]
 }

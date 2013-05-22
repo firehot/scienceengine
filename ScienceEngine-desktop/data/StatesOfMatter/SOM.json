@@ -9,5 +9,15 @@
 "configs":[
 {"name":"MoleculeBox.StateOfMatter","permitted":true,"value":"Gas"},
 {"name":"MoleculeBox.HeatingLevel","permitted":true,"value":"Neutral"}
-]
+],
+tutors:[
+       {type: "Guide",
+       id: "G1",
+       goal: "States Of Matter",
+       childtutors: [
+         {type: "KnowledgeUnit",
+          id: "G1.1",
+          goal: "Learn about States Of Matter"
+         }]
+       }]
 }

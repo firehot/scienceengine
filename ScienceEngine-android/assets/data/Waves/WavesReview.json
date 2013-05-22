@@ -1,0 +1,12 @@
+{name:"Waves",description:"Science Genius Certificate in Waves",
+components:[
+ {type:"Image",viewspec:"Waves", x:250,y:150,originX:0,originY:0.0,width:300,height:180,visible:true,rotation:0.0},
+],
+tutors: [
+       {type: "Reviewer",
+       id: "Review Quiz",
+       goal: "RapidFire Review Quiz",
+       childtutors: []
+       }
+]
+}

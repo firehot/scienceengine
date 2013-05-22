@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
+import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   
@@ -114,5 +116,15 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   @Override
   public boolean supportsLanguage() {
     return true;
+  }
+
+  @Override
+  public void launchPurchaseFlow(String sku, String itemType,
+      IDoneCallback doneCallback, String extraData) {
+    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+      doneCallback.done(true);
+      return;
+    }
+    throw new UnsupportedOperationException("Purchase flow not implemented");
   }
 }
