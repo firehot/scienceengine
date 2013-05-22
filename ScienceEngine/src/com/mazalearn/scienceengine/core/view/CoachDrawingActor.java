@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.electromagnetism.view;
+package com.mazalearn.scienceengine.core.view;
 
 import java.util.List;
 
@@ -27,11 +27,11 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.model.Drawing;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.Science2DActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
+import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 
-public class DrawingActor extends Science2DActor {
+public class CoachDrawingActor extends Science2DActor {
   private static final int LINE_WIDTH = 4;
   private static final float SCALE = 4f;
   private static final int WHEEL_DIA = 23;
@@ -108,9 +108,8 @@ public class DrawingActor extends Science2DActor {
     }
   }
   
-  public DrawingActor(Science2DBody body, TextureRegion textureRegion, 
-      String name, BitmapFont font, Skin skin) {
-    super(body, textureRegion);
+  public CoachDrawingActor(Science2DBody body, String name, BitmapFont font, Skin skin) {
+    super(body, null);
     this.drawing = (Drawing) body;
     this.font = font;
     this.viewSpec = name;
@@ -142,7 +141,7 @@ public class DrawingActor extends Science2DActor {
 
       @Override
       public void touchDragged(InputEvent event, float localX, float localY, int pointer) {
-        if (DrawingActor.this.hit(localX, localY, true) == null) return;
+        if (CoachDrawingActor.this.hit(localX, localY, true) == null) return;
         // Use coordinates at origin
         pos.set(localX, localY).mul(1f / ScreenComponent.PIXELS_PER_M);
         drawing.addPoint(pos.x, pos.y);

@@ -22,9 +22,11 @@ import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.AnimateAction;
+import com.mazalearn.scienceengine.core.view.CoachDrawingActor;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
+import com.mazalearn.scienceengine.core.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
 import com.mazalearn.scienceengine.tutor.Abstractor;
@@ -175,6 +177,10 @@ public abstract class AbstractScience2DController implements
       Actor actor = new Image(ScienceEngine.getTextureRegion(viewSpec));
       actor.setName(viewSpec);
       return actor;
+    case Drawing:
+      return new CoachDrawingActor(body, viewSpec, science2DView.getFont(), skin);
+    case ScienceTrain:
+      return new ScienceTrainActor(body, science2DView, skin);
     default:
       return null;
     }

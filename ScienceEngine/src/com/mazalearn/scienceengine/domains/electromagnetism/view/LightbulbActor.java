@@ -32,9 +32,9 @@ public class LightbulbActor extends Science2DActor {
     super.draw(batch, parentAlpha);
   }
 
-  // Package protected, also used by DrawingActor.Coach
+  // Also used by CoachDrawingActor.Coach
   // Draw a circle of light with radius and alpha proportional to intensity
-  static void drawLight(SpriteBatch batch, float intensity, float diameter, 
+  public static void drawLight(SpriteBatch batch, float intensity, float diameter, 
       Color color, float x, float y) {
     int radius = Math.round(diameter / 2);
     Color c = batch.getColor();

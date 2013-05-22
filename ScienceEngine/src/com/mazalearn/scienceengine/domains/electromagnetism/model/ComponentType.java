@@ -15,8 +15,6 @@ public enum ComponentType implements IComponentType {
   Ammeter("ammeter"), 
   HorseshoeMagnet("horseshoemagnet"),
   CurrentCoil("currentcoil_nocommutator"), 
-  Drawing("draw"), 
-  ScienceTrain("engine"), 
   Dynamo("copperwire"),
   Magnet("neodymium"), 
   Monopole("northpole"), 

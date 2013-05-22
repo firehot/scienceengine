@@ -1,6 +1,4 @@
-package com.mazalearn.scienceengine.domains.electromagnetism.model;
-
-import com.mazalearn.scienceengine.core.model.Science2DBody;
+package com.mazalearn.scienceengine.core.model;
 
 /**
  * ScienceTrain represents the science train

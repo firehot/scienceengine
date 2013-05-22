@@ -24,7 +24,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.BarMagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ChargeActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentCoilActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CurrentSourceActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.DynamoActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.ElectromagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.FieldMeterActor;
@@ -32,7 +31,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.view.LightbulbActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MagnetActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.MonopoleActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.PickupCoilActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.WireActor;
 import com.mazalearn.scienceengine.tutor.AbstractTutor;
 import com.mazalearn.scienceengine.tutor.ITutor;
@@ -72,8 +70,6 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new CurrentCoilActor(body, science2DView.getFont());
     case CurrentSource:
       return new CurrentSourceActor(body, textureRegion);
-    case Drawing:
-      return new DrawingActor(body, textureRegion, viewSpec, science2DView.getFont(), skin);
     case Dynamo:
       return new DynamoActor(body, textureRegion);
     case ElectroMagnet:
@@ -86,8 +82,6 @@ public class ElectroMagnetismController extends AbstractScience2DController {
       return new MagnetActor(body, textureRegion);
     case PickupCoil:
       return new PickupCoilActor((PickupCoil) body, textureRegion);
-    case ScienceTrain:
-      return new ScienceTrainActor(body, science2DView, skin);
     case Monopole:
       return new MonopoleActor(body, textureRegion);
     case Charge:

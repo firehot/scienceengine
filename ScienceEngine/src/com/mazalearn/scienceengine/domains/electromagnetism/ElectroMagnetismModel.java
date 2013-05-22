@@ -13,7 +13,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.Compass;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentCoil;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.CurrentSource;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.Drawing;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Dynamo;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ElectroMagnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.FieldMeter;
@@ -23,7 +22,6 @@ import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.MagneticField;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Monopole;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.PickupCoil;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.ScienceTrain;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Wire;
 
 public class ElectroMagnetismModel extends AbstractScience2DModel {
@@ -49,7 +47,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case Compass: return new Compass(x, y, rotation);
     case CurrentCoil: return new CurrentCoil(x, y, rotation);
     case CurrentSource: return new CurrentSource(x, y, rotation);
-    case Drawing: return new Drawing(x, y, rotation);
     case Dynamo: return new Dynamo(x, y, rotation);
     case ElectroMagnet: return new ElectroMagnet(x, y, rotation);
     case FieldMeter: return new FieldMeter(x, y, rotation);
@@ -60,7 +57,6 @@ public class ElectroMagnetismModel extends AbstractScience2DModel {
     case PickupCoil: return new PickupCoil(x, y, rotation, 2E7f);
     case Monopole: return new Monopole(x, y, rotation);
     case Charge: return new Charge(x, y, rotation);
-    case ScienceTrain: return new ScienceTrain(x, y, rotation);
     case Wire: return new Wire(x, y, rotation);
     }
     return null;

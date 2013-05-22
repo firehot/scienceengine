@@ -17,13 +17,13 @@ import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
+import com.mazalearn.scienceengine.core.view.CoachDrawingActor;
+import com.mazalearn.scienceengine.core.view.ScienceTrainActor;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Dynamo;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Lightbulb;
 import com.mazalearn.scienceengine.domains.electromagnetism.model.Magnet;
 import com.mazalearn.scienceengine.domains.electromagnetism.view.CircuitActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.DrawingActor;
-import com.mazalearn.scienceengine.domains.electromagnetism.view.ScienceTrainActor;
 
 public class ElectroMagnetismView extends AbstractScience2DView {
 
@@ -57,7 +57,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     magnet = (Magnet) science2DModel.findBody(ComponentType.Magnet);
     lightbulb = (Lightbulb) science2DModel.findBody(ComponentType.Lightbulb);
     ScienceTrainActor scienceTrainActor = 
-        (ScienceTrainActor) findActor(ComponentType.ScienceTrain.name());
+        (ScienceTrainActor) findActor(com.mazalearn.scienceengine.core.model.ComponentType.ScienceTrain.name());
     if (scienceTrainActor != null) {
       scienceTrainActor.reset();
     }
@@ -85,20 +85,21 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     Color color = lightbulb.getColor();
 
     // Set light to display on coach drawing
-    DrawingActor drawingActor = (DrawingActor) findActor(ComponentType.Drawing.name());
-    drawingActor.getCoach().setLight(current, lightbulb.getColor());
+    CoachDrawingActor coachDrawingActor = 
+        (CoachDrawingActor) findActor(com.mazalearn.scienceengine.core.model.ComponentType.Drawing.name());
+    coachDrawingActor.getCoach().setLight(current, lightbulb.getColor());
     
     // Show only the main actors - ScienceTrain and control related
     List<String> actorsToBeHidden = 
         Arrays.asList(new String[]{ComponentType.Dynamo.name(),  ComponentType.Magnet.name(), 
-            CircuitActor.COMPONENT_TYPE, ComponentType.Drawing.name(), 
+            CircuitActor.COMPONENT_TYPE, com.mazalearn.scienceengine.core.model.ComponentType.Drawing.name(), 
             ComponentType.Lightbulb.name()});
     for (Actor actor: getActors()) {
       String name = actor.getName();
       if (actorsToBeHidden.contains(name)) {
         actor.setVisible(false);
       }
-      if (ComponentType.ScienceTrain.name().equals(name)) {
+      if (com.mazalearn.scienceengine.core.model.ComponentType.ScienceTrain.name().equals(name)) {
         ((ScienceTrainActor) actor).animate();
       }
     }
@@ -106,7 +107,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     // Save drawing png in profile
     Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     // Save drawing, current and color in profile
-    profile.setCoachPixmap(drawingActor.getPixmap(), current, rgba(color));
+    profile.setCoachPixmap(coachDrawingActor.getPixmap(), current, rgba(color));
     ScienceEngine.displayStatusMessage(this, StatusType.INFO, "Uploading to MazaLearn - See www.mazalearn.com/train.html");    
   }
 

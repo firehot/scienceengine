@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.domains.electromagnetism.view;
+package com.mazalearn.scienceengine.core.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,9 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.core.model.ComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
-import com.mazalearn.scienceengine.core.view.IScience2DView;
-import com.mazalearn.scienceengine.domains.electromagnetism.model.ComponentType;
 
 public class ScienceTrainActor extends Group {
   private final IScience2DView science2DView;
@@ -37,7 +36,7 @@ public class ScienceTrainActor extends Group {
   }
   
   public void draw(SpriteBatch batch, float parentAlpha) {
-    DrawingActor coachDrawing = (DrawingActor) science2DView.findActor("Drawing");
+    CoachDrawingActor coachDrawing = (CoachDrawingActor) science2DView.findActor("Drawing");
     if (coachDrawing == null) return;
     if (coachDrawing.hasChangedSinceSnapshot()) {
       coachDrawing.takeSnapshot();

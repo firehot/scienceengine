@@ -1,11 +1,10 @@
-package com.mazalearn.scienceengine.domains.electromagnetism.model;
+package com.mazalearn.scienceengine.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 /**
  * Models a drawing pen which can store multiple samples at 
