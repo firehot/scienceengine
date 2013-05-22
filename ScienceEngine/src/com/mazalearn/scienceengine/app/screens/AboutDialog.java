@@ -15,16 +15,18 @@ import com.mazalearn.scienceengine.ScreenComponent;
 public class AboutDialog extends Dialog {
   
   public AboutDialog(Skin skin) {
-    super("About", skin);
-    
-    Image image = new Image(new Texture("images/splash.jpg"));
-    getContentTable().add(image)
-        .width(ScreenComponent.getScaledX(100))
-        .height(ScreenComponent.getScaledY(80)).center();
-    getContentTable().row();
+    super(ScienceEngine.getMsg().getString("ScienceEngine.About"), skin);
     
     Label name = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), skin);
-    name.setWidth(ScreenComponent.getScaledX(600));
+    name.setWidth(ScreenComponent.getScaledX(100));
+    getContentTable().add(name).uniformX();
+
+    Image image = new Image(new Texture("images/splash.jpg"));
+    getContentTable().add(image)
+        .width(ScreenComponent.getScaledX(100)).uniformX()
+        .height(ScreenComponent.getScaledY(80)).left();
+    getContentTable().row();
+    
 
     Label description = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Maza"), skin);
     description.setWidth(ScreenComponent.getScaledX(600));
@@ -39,11 +41,11 @@ public class AboutDialog extends Dialog {
     copyrights.setWrap(true);
     ScrollPane copyrightsPane = new ScrollPane(copyrights, skin);
 
-    getContentTable().add(name).pad(10);
+    getContentTable().add(description).fill().width(ScreenComponent.getScaledX(600)).colspan(2);
     getContentTable().row();
-    getContentTable().add(description).fill().width(ScreenComponent.getScaledX(600));
-    getContentTable().row();
-    getContentTable().add(copyrightsPane).pad(10).fill()
+    getContentTable().add(copyrightsPane)
+        .colspan(2)
+        .pad(ScreenComponent.getScaledX(10)).fill()
         .width(ScreenComponent.getScaledX(600))
         .height(ScreenComponent.getScaledY(150));
 

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
@@ -35,8 +36,8 @@ public class OptionsDialog extends Dialog {
 
     // retrieve the default table actor
     Table table = getContentTable();
-    table.defaults().spaceBottom(30);
-    table.columnDefaults(0).padRight(20);
+    table.defaults().spaceBottom(ScreenComponent.getScaledY(30));
+    table.columnDefaults(0).padRight(ScreenComponent.getScaledX(20));
 
     // Create locale selection box if platform supports languages
     IPlatformAdapter platform = ScienceEngine.getPlatformAdapter();
@@ -159,7 +160,7 @@ public class OptionsDialog extends Dialog {
    * Updates the volume label next to the slider.
    */
   private void updateVolumeLabel() {
-    float volume = (ScienceEngine.getPreferencesManager().getVolume() * 100);
+    int volume = Math.round(ScienceEngine.getPreferencesManager().getVolume() * 100);
     volumeValue.setText(String.valueOf(volume));
   }
 }

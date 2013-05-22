@@ -80,7 +80,7 @@ public class ChooseTopicScreen extends AbstractScreen {
       ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       if (lock) {
         Image lockImage = new Image(comingsoon);
-        lockImage.setSize(THUMBNAIL_WIDTH / 2, THUMBNAIL_HEIGHT / 2);
+        ScreenComponent.scaleSize(lockImage, THUMBNAIL_WIDTH / 2, THUMBNAIL_HEIGHT / 2);
         lockImage.setPosition(0, topicThumb.getHeight() - lockImage.getHeight());
         topicThumb.addActor(lockImage);
       } else {
