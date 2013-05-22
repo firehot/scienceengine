@@ -7,11 +7,11 @@ import java.util.Map;
 public enum Topic {
   BarMagnet(102), Field(101), TwoWires(103), ElectroMagnet(104),
   BarMagnetInduction(105), ElectroMagnetInduction(106),
-  DCMotor(107), ScienceTrain(109), EMReview(108),
+  DCMotor(107), ElectromagnetismScienceTrain(109), ElectromagnetismReview(108),
   Electromagnetism(1, BarMagnet, BarMagnet, Field, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
-      EMReview, ScienceTrain),
-  SOM(201), StatesOfMatter(2, SOM, SOM), 
-  W(301), Waves(3, W, W);
+      ElectromagnetismReview, ElectromagnetismScienceTrain),
+  SOM(201), StatesOfMatterReview(210), StatesOfMatter(2, SOM, SOM, StatesOfMatterReview), 
+  W(301), WavesReview(310), Waves(3, W, W, WavesReview);
 
   private final Topic[] childTopics;
   private final Topic canonicalChild;
