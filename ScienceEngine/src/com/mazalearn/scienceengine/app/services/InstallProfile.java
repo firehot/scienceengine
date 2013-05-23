@@ -1,7 +1,5 @@
 package com.mazalearn.scienceengine.app.services;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Base64Coder;
@@ -88,8 +86,13 @@ public class InstallProfile implements Serializable {
     return data.availableTopicNames.contains(topic.name());
   }
 
+  /**
+   * Only method which modifies installation profile data on client side.
+   * @param topic
+   */
   public void addAsAvailableTopic(Topic topic) {
     data.availableTopicNames.add(topic.name());
+    data.isChanged = true;
   }
   
   public static InstallProfile fromBase64(String profileBase64AndHash) {
@@ -131,6 +134,15 @@ public class InstallProfile implements Serializable {
     String profileBase64 = Base64Coder.encodeString(profileAsText);
     String hash = Crypter.saltedSha1Hash(profileBase64, ScienceEngine.getPlatformAdapter().getInstallationId());
     return profileBase64 + hash;
+  }
+
+  public boolean isChanged() {
+    return data.isChanged;
+  }
+
+  void markChanged(boolean changed) {
+    data.isChanged = changed;
+    
   }
 
 }

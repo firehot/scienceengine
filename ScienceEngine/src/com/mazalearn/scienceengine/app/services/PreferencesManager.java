@@ -190,10 +190,20 @@ public class PreferencesManager {
         if (installProfile != null) {
           lastUpdated = installProfile.getLastUpdated();
         }
-        String installProfileBase64 =
-            ScienceEngine.getPlatformAdapter().httpGet("/installprofile?" + 
-                ProfileData.INSTALL_ID + "=" + installId + "&" + 
-                ProfileData.LAST_UPDATED + "=" + String.valueOf(lastUpdated));
+        String installProfileBase64;
+        if (installProfile.isChanged()) {
+          Map<String, String> postParams = new HashMap<String, String>();
+          postParams.put(ProfileData.INSTALL_ID, installId);
+          installProfileBase64 = installProfile.toBase64();
+          installProfileBase64 = ScienceEngine.getPlatformAdapter().httpPost("/installprofile",
+              "application/octet-stream", postParams, installProfileBase64.getBytes());
+          Gdx.app.log(ScienceEngine.LOG, "Sync Install Profile to MazaLearn - " + installId);
+          installProfile.markChanged(false);
+       } else {
+          installProfileBase64 = ScienceEngine.getPlatformAdapter().httpGet("/installprofile?" + 
+              ProfileData.INSTALL_ID + "=" + installId + "&" + 
+              ProfileData.LAST_UPDATED + "=" + String.valueOf(lastUpdated));
+        }
         InstallProfile newInstallProfile = InstallProfile.fromBase64((String) installProfileBase64);
         if (newInstallProfile == null) {
            Gdx.app.error(ScienceEngine.LOG, "Invalid or unchanged install profile");

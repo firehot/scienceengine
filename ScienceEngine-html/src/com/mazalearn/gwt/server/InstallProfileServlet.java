@@ -1,5 +1,6 @@
 package com.mazalearn.gwt.server;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,34 @@ public class InstallProfileServlet extends HttpServlet {
 
   static final String INSTALL_PROFILE = "InstallProfile";
 
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+    System.out.println("Received post: " + request.getContentLength());
+    String installId = request.getHeader(ProfileData.INSTALL_ID);
+    System.out.println("InstallId: " + installId);
+    
+    BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
+    byte[] profileBytesBase64 = new byte[request.getContentLength()];
+    bis.read(profileBytesBase64);
+    bis.close();
+    
+    JsonEntityUtil jsonEntityUtil = new JsonEntityUtil();
+    InstallData newInstallData = jsonEntityUtil.installProfileFromBase64(profileBytesBase64, installId);
+    if (newInstallData == null) {
+      throw new IllegalArgumentException("Invalid hash: could not decode");
+    }
+    ProfileUtil profileUtil = new ProfileUtil();
+    Entity installEntity = profileUtil.createOrGetInstall(installId, true);
+    Text installDataText = (Text) installEntity.getProperty(InstallData.INSTALL_DATA);
+    InstallData installData = new Gson().fromJson(installDataText.getValue(), InstallData.class);
+    installData.availableTopicNames = newInstallData.availableTopicNames;
+    installData.lastUpdated = Math.max(installData.lastUpdated, newInstallData.lastUpdated);
+    jsonEntityUtil.setAsJsonTextProperty(installEntity, InstallData.INSTALL_DATA, installData);
+    profileUtil.saveInstallProfile(installEntity);
+
+    writeProfileResponse(response, installId, newInstallData.lastUpdated);
+  }
+  
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String installId = request.getParameter(ProfileData.INSTALL_ID);

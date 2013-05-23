@@ -18,6 +18,7 @@ public class InstallData {
   public long lastUpdated;
   public String[] userIds;
   public ArrayList<String> availableTopicNames = new ArrayList<String>();
+  public boolean isChanged;
 
   public InstallData() {
   }
