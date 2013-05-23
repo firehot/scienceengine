@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.util.ArrayList;
+
 
 public class InstallData {
   public static final String PNG = "png";
@@ -15,6 +17,7 @@ public class InstallData {
   public String expiryDate;
   public long lastUpdated;
   public String[] userIds;
+  public ArrayList<String> availableTopicNames = new ArrayList<String>();
 
   public InstallData() {
   }

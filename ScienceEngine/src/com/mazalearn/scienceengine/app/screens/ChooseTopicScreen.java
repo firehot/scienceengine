@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,12 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.dialogs.PurchaseDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.billing.IBilling;
 import com.mazalearn.scienceengine.tutor.Guru;
 import com.mazalearn.scienceengine.tutor.IDoneCallback;
 import com.mazalearn.scienceengine.tutor.ITutor;
@@ -92,7 +93,7 @@ public class ChooseTopicScreen extends AbstractScreen {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           if (lock) {
-            purchaseTopic(topic);         
+            purchaseTopic(topic, null);         
           } else {
             gotoTopicHome(topic);
           }
@@ -135,31 +136,15 @@ public class ChooseTopicScreen extends AbstractScreen {
     scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
   }
 
-  private void purchaseTopic1(final Topic topic) {
-    Gdx.input.getTextInput(new TextInputListener() {
+  private void purchaseTopic(final Topic topic, final Topic level) {
+    PurchaseDialog buy = new PurchaseDialog(topic, level, new IBilling() {
       @Override
-      public void input(String passcode) {
-        if ("9n8e7s6s".equals(passcode)) {
+      public void purchaseCallback(Topic purchasedTopic) {
+        if (topic == purchasedTopic || level == purchasedTopic) {
           gotoTopicHome(topic);
         }
       }
-      
-      @Override
-      public void canceled() {}
-    }, "Enter key", "");
-  }
-
-  private void purchaseTopic(final Topic topic) {
-    // android.test.purchased - item already owned not handled
-    // android.test.canceled - BUG: either purchasedata or datasignature is null
-    // android.test.item_unavailable - shows item unavailable
-    ScienceEngine.getPlatformAdapter().launchPurchaseFlow("android.test.purchased", "inapp", new IDoneCallback() {
-      @Override
-      public void done(boolean success) {
-        if (success) {
-          gotoTopicHome(topic);
-        }
-      }
-    }, topic.name());
+    }, stage, getSkin());
+    buy.show(stage);
   }
 }

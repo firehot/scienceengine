@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.screens;
+package com.mazalearn.scienceengine.app.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;

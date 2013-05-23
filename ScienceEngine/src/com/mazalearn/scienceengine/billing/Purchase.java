@@ -13,10 +13,9 @@
  * limitations under the License.
  */
 
-package com.mazalearn.scienceengine.billing.util;
+package com.mazalearn.scienceengine.billing;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.badlogic.gdx.utils.Json;
 
 /**
  * Represents an in-app billing purchase.
@@ -33,18 +32,12 @@ public class Purchase {
     String mOriginalJson;
     String mSignature;
 
-    public Purchase(String itemType, String jsonPurchaseInfo, String signature) throws JSONException {
-        mItemType = itemType;
-        mOriginalJson = jsonPurchaseInfo;
-        JSONObject o = new JSONObject(mOriginalJson);
-        mOrderId = o.optString("orderId");
-        mPackageName = o.optString("packageName");
-        mSku = o.optString("productId");
-        mPurchaseTime = o.optLong("purchaseTime");
-        mPurchaseState = o.optInt("purchaseState");
-        mDeveloperPayload = o.optString("developerPayload");
-        mToken = o.optString("token", o.optString("purchaseToken"));
-        mSignature = signature;
+    public static Purchase toPurchase(String itemType, String jsonPurchaseInfo, String signature) {
+      Purchase purchase = new Json().fromJson(Purchase.class, jsonPurchaseInfo);
+      purchase.mItemType = itemType;
+      purchase.mOriginalJson = jsonPurchaseInfo;
+      purchase.mSignature = signature;
+      return purchase;
     }
 
     public String getItemType() { return mItemType; }

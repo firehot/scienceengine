@@ -1,6 +1,9 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -16,15 +19,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.FreeTypeComplexFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.billing.util.IabHelper;
-import com.mazalearn.scienceengine.billing.util.IabHelper.OnIabPurchaseFinishedListener;
-import com.mazalearn.scienceengine.billing.util.IabResult;
-import com.mazalearn.scienceengine.billing.util.Purchase;
-import com.mazalearn.scienceengine.tutor.IDoneCallback;
+import com.mazalearn.scienceengine.billing.IBilling;
+import com.mazalearn.scienceengine.billing.IabException;
+import com.mazalearn.scienceengine.billing.IabHelper;
+import com.mazalearn.scienceengine.billing.IabHelper.OnIabPurchaseFinishedListener;
+import com.mazalearn.scienceengine.billing.IabResult;
+import com.mazalearn.scienceengine.billing.Inventory;
+import com.mazalearn.scienceengine.billing.Purchase;
 
 public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   private AndroidApplication application;
   private IabHelper iabHelper;
+  protected static final String SKU_ELECTROMAGNETISM = "electromagnetism";
   
   public PlatformAdapterImpl(AndroidApplication application, Platform platform, IabHelper iabHelper) {
     super(platform);
@@ -64,15 +70,110 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   }
 
   @Override
-  public void launchPurchaseFlow(String sku, String itemType, final IDoneCallback doneCallback, String extraData) {
-    iabHelper.launchPurchaseFlow(application, sku, itemType, 1234,
+  public void launchPurchaseFlow(final Topic sku, String itemType, final IBilling billing, String extraData) {
+    iabHelper.launchPurchaseFlow(application, sku.name(), itemType, 1234,
         new OnIabPurchaseFinishedListener() {
           @Override
           public void onIabPurchaseFinished(IabResult result, Purchase info) {
-            doneCallback.done(result.isSuccess() || 
-                result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED);
+            if (result.isSuccess() || 
+                result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
+              billing.purchaseCallback(sku);
+            }
           } 
         }, extraData);
+  }
+  
+  @Override
+  public Inventory queryInventory(List<Topic> topicList) {
+    Gdx.app.log(ScienceEngine.LOG, "Querying inventory.");
+    List<String> itemList = new ArrayList<String>();
+    for (Topic topic: topicList) {
+      itemList.add(topic.name());
+    }
+    try {
+      return iabHelper.queryInventory(true, itemList, Collections.<String> emptyList());
+    } catch (IabException e) {
+      e.printStackTrace();
+      return null;
+    }    
+  }
+  
+  // Listener that's called when we finish querying the items and subscriptions we own
+  IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+      public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+        Gdx.app.log(ScienceEngine.LOG, "Query inventory finished.");
+          if (result.isFailure()) {
+            Gdx.app.log(ScienceEngine.LOG, "Failed to query inventory: " + result);
+            return;
+          }
+
+          Gdx.app.log(ScienceEngine.LOG, "Query inventory was successful.");
+          
+          /*
+           * Check for items we own. Notice that for each purchase, we check
+           * the developer payload to see if it's correct! See
+           * verifyDeveloperPayload().
+           */
+          
+    /*      // Do we have the electromagnetism upgrade?
+          Purchase electromagnetismPurchase = inventory.getPurchase(SKU_ELECTROMAGNETISM);
+          boolean mHasElectromagnetism = (electromagnetismPurchase != null && verifyDeveloperPayload(electromagnetismPurchase));
+          Gdx.app.log(ScienceEngine.LOG, "User " + (mHasElectromagnetism ? "has electromagnetism" : "does not have electromagnetism"));
+   */       
+          Gdx.app.log(ScienceEngine.LOG, "Initial inventory query finished");
+      }
+  };
+
+  /** Verifies the developer payload of a purchase. */
+  boolean verifyDeveloperPayload(Purchase p) {
+      String payload = p.getDeveloperPayload();
+      
+      /*
+       * TODO: verify that the developer payload of the purchase is correct. It will be
+       * the same one that you sent when initiating the purchase.
+       * 
+       * WARNING: Locally generating a random string when starting a purchase and 
+       * verifying it here might seem like a good approach, but this will fail in the 
+       * case where the user purchases an item on one device and then uses your app on 
+       * a different device, because on the other device you will not have access to the
+       * random string you originally generated.
+       *
+       * So a good developer payload has these characteristics:
+       * 
+       * 1. If two different users purchase an item, the payload is different between them,
+       *    so that one user's purchase can't be replayed to another user.
+       * 
+       * 2. The payload must be such that you can verify it even when the app wasn't the
+       *    one who initiated the purchase flow (so that items purchased by the user on 
+       *    one device work on other devices owned by the user).
+       * 
+       * Using your own server to store and verify developer payloads across app
+       * installations is recommended.
+       */
+      
+      return true;
+  }
+  
+  IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+    public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+       if (result.isFailure()) {
+         Gdx.app.log(ScienceEngine.LOG, "Error purchasing: " + result);
+          return;
+       }      
+       if (!verifyDeveloperPayload(purchase)) {
+         Gdx.app.log(ScienceEngine.LOG, "Error purchasing. Authenticity verification failed.");
+         return;
+       }
+       Gdx.app.log(ScienceEngine.LOG, "Purchase successful.");
+       if (purchase.getSku().equals(SKU_ELECTROMAGNETISM)) {
+          // Give user access to electromagnetism
+       }
+    }
+  };
+
+  void purchaseElectromagnetism(String userId) {
+    iabHelper.launchPurchaseFlow(application, SKU_ELECTROMAGNETISM, 10001,   
+        mPurchaseFinishedListener, userId);    
   }
   
   @Override

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.mazalearn.scienceengine.billing.util;
+package com.mazalearn.scienceengine.billing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class Inventory {
     Map<String,SkuDetails> mSkuMap = new HashMap<String,SkuDetails>();
     Map<String,Purchase> mPurchaseMap = new HashMap<String,Purchase>();
 
-    Inventory() { }
+    public Inventory() { }
 
     /** Returns the listing details for an in-app product. */
     public SkuDetails getSkuDetails(String sku) {
@@ -81,7 +81,7 @@ public class Inventory {
         return new ArrayList<Purchase>(mPurchaseMap.values());
     }
 
-    void addSkuDetails(SkuDetails d) {
+    public void addSkuDetails(SkuDetails d) {
         mSkuMap.put(d.getSku(), d);
     }
 

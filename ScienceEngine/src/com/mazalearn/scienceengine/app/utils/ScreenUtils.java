@@ -170,6 +170,11 @@ public class ScreenUtils {
   public static TextButton createCheckBox(String text, 
       float x, float y, float width, float height, CheckBoxStyle checkBoxStyle) {
     CheckBox button = new CheckBox(text, checkBoxStyle);
+    return setupTextBox(x, y, width, height, button);
+  }
+
+  private static TextButton setupTextBox(float x, float y, float width,
+      float height, CheckBox button) {
     button.getLabel().setWrap(true);
     button.getLabel().setAlignment(Align.center, Align.center);
     ScreenComponent.scaleSize(button, width, height);
@@ -189,13 +194,7 @@ public class ScreenUtils {
         }
       }
     };
-    button.getLabel().setWrap(true);
-    button.getLabel().setAlignment(Align.center, Align.center);
-    ScreenComponent.scaleSize(button, width, height);
-    button.setPosition(x, y);
-    button.getCell(button.getImage()).width(button.getImage().getWidth() * 2).height(button.getImage().getHeight() * 2);
-    button.getCell(button.getLabel()).width(button.getWidth() - button.getImage().getWidth() * 2);
-    return button;
+    return setupTextBox(x, y, width, height, button);
   }
 
   public static void createProgressPercentageBar(LabelStyle labelStyle,

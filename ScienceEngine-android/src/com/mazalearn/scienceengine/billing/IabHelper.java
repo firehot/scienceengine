@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.mazalearn.scienceengine.billing.util;
+package com.mazalearn.scienceengine.billing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 
 /**
@@ -452,7 +453,7 @@ public class IabHelper {
 
             Purchase purchase = null;
             try {
-                purchase = new Purchase(mPurchasingItemType, purchaseData, dataSignature);
+                purchase = Purchase.toPurchase(mPurchasingItemType, purchaseData, dataSignature);
                 String sku = purchase.getSku();
 
                 // Verify signature
@@ -464,7 +465,7 @@ public class IabHelper {
                 }
                 logDebug("Purchase signature successfully verified.");
             }
-            catch (JSONException e) {
+            catch (GdxRuntimeException e) {
                 logError("Failed to parse purchase data.");
                 e.printStackTrace();
                 result = new IabResult(IABHELPER_BAD_RESPONSE, "Failed to parse purchase data.");
@@ -841,7 +842,7 @@ public class IabHelper {
                 String sku = ownedSkus.get(i);
                 if (Security.verifyPurchase(mSignatureBase64, purchaseData, signature)) {
                     logDebug("Sku is owned: " + sku);
-                    Purchase purchase = new Purchase(itemType, purchaseData, signature);
+                    Purchase purchase = Purchase.toPurchase(itemType, purchaseData, signature);
 
                     if (TextUtils.isEmpty(purchase.getToken())) {
                         logWarn("BUG: empty/null token!");
@@ -899,7 +900,7 @@ public class IabHelper {
                 RESPONSE_GET_SKU_DETAILS_LIST);
 
         for (String thisResponse : responseList) {
-            SkuDetails d = new SkuDetails(itemType, thisResponse);
+            SkuDetails d = SkuDetails.toSkuDetails(itemType, thisResponse);
             logDebug("Got sku details: " + d);
             inv.addSkuDetails(d);
         }

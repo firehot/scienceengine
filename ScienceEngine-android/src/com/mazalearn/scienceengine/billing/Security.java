@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.mazalearn.scienceengine.billing.util;
+package com.mazalearn.scienceengine.billing;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;

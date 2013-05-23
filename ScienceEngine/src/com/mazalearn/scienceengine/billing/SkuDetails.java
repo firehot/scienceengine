@@ -13,10 +13,9 @@
  * limitations under the License.
  */
 
-package com.mazalearn.scienceengine.billing.util;
+package com.mazalearn.scienceengine.billing;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.badlogic.gdx.utils.Json;
 
 /**
  * Represents an in-app product's listing details.
@@ -30,19 +29,19 @@ public class SkuDetails {
     String mDescription;
     String mJson;
 
-    public SkuDetails(String jsonSkuDetails) throws JSONException {
-        this(IabHelper.ITEM_TYPE_INAPP, jsonSkuDetails);
+    public SkuDetails() {}
+    
+    public SkuDetails(String title, String description, String price) {
+      mSku = mTitle = title;
+      mDescription = description;
+      mPrice = price;
     }
     
-    public SkuDetails(String itemType, String jsonSkuDetails) throws JSONException {
-        mItemType = itemType;
-        mJson = jsonSkuDetails;
-        JSONObject o = new JSONObject(mJson);
-        mSku = o.optString("productId");
-        mType = o.optString("type");
-        mPrice = o.optString("price");
-        mTitle = o.optString("title");
-        mDescription = o.optString("description");
+    public static SkuDetails toSkuDetails(String itemType, String jsonSkuDetails) {
+      SkuDetails skuDetails = new Json().fromJson(SkuDetails.class, jsonSkuDetails);
+      skuDetails.mItemType = itemType;
+      skuDetails.mJson = jsonSkuDetails;
+      return skuDetails;
     }
 
     public String getSku() { return mSku; }

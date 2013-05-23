@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -15,10 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
+import com.mazalearn.scienceengine.billing.IBilling;
+import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 import com.mazalearn.scienceengine.designer.PngWriter;
-import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   
@@ -194,8 +196,13 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
 
   @Override
-  public void launchPurchaseFlow(String sku, String itemType,
-      IDoneCallback doneCallback, String extraData) {
+  public void launchPurchaseFlow(Topic sku, String itemType,
+      IBilling billing, String extraData) {
     throw new UnsupportedOperationException("Purchase flow not implemented");
+  }
+
+  @Override
+  public Inventory queryInventory(List<Topic> topicList) {
+    throw new UnsupportedOperationException("Query Inventory not implemented");
   }
 }

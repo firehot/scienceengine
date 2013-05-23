@@ -1,4 +1,4 @@
-package com.mazalearn.scienceengine.app.screens;
+package com.mazalearn.scienceengine.app.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;

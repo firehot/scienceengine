@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.mazalearn.scienceengine.billing.util;
+package com.mazalearn.scienceengine.billing;
 
 /**
  * Represents the result of an in-app billing operation.

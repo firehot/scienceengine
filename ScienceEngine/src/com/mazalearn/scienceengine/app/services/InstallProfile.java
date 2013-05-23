@@ -1,5 +1,7 @@
 package com.mazalearn.scienceengine.app.services;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Base64Coder;
@@ -9,6 +11,7 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 /**
@@ -80,7 +83,15 @@ public class InstallProfile implements Serializable {
   public String getInstallationName() {
     return data.installName;
   }
+  
+  public boolean isAvailableTopic(Topic topic) {
+    return data.availableTopicNames.contains(topic.name());
+  }
 
+  public void addAsAvailableTopic(Topic topic) {
+    data.availableTopicNames.add(topic.name());
+  }
+  
   public static InstallProfile fromBase64(String profileBase64AndHash) {
     InstallProfile installProfile = null;
     if (profileBase64AndHash != null && profileBase64AndHash.length() > 0) {
@@ -99,7 +110,7 @@ public class InstallProfile implements Serializable {
         installProfile = new InstallProfile();
         installProfile.data = new Json(OutputType.javascript).fromJson(InstallData.class, profileJson);
         // verify the installid
-        if (!installId.toLowerCase().equals(installProfile.getInstallationId())) {
+        if (!installId.toLowerCase().equals(installProfile.getInstallationId().toLowerCase())) {
           Gdx.app.error(ScienceEngine.LOG, "Install profile - Install id mismatch");
           return null;
         }
@@ -114,9 +125,12 @@ public class InstallProfile implements Serializable {
   }
 
   public String toBase64() {
-    String profileAsText = new Json(OutputType.json).toJson(this);
+    String profileAsText = new Json(OutputType.javascript).toJson(data);
     Gdx.app.log(ScienceEngine.LOG, "Saving InstallProfile - " + profileAsText);
-    String profileAsBase64 = Base64Coder.encodeString(profileAsText);
-    return profileAsBase64;
+
+    String profileBase64 = Base64Coder.encodeString(profileAsText);
+    String hash = Crypter.saltedSha1Hash(profileBase64, ScienceEngine.getPlatformAdapter().getInstallationId());
+    return profileBase64 + hash;
   }
+
 }

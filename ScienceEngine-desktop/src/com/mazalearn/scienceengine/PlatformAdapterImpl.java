@@ -2,6 +2,7 @@ package com.mazalearn.scienceengine;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -11,7 +12,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
-import com.mazalearn.scienceengine.tutor.IDoneCallback;
+import com.mazalearn.scienceengine.billing.IBilling;
+import com.mazalearn.scienceengine.billing.Inventory;
+import com.mazalearn.scienceengine.billing.SkuDetails;
 
 public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   
@@ -119,12 +122,25 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   }
 
   @Override
-  public void launchPurchaseFlow(String sku, String itemType,
-      IDoneCallback doneCallback, String extraData) {
+  public void launchPurchaseFlow(Topic sku, String itemType,
+      IBilling billing, String extraData) {
     if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
-      doneCallback.done(true);
+      billing.purchaseCallback(sku);
       return;
     }
     throw new UnsupportedOperationException("Purchase flow not implemented");
+  }
+
+  @Override
+  public Inventory queryInventory(List<Topic> topicList) {
+    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+      Inventory inventory = new Inventory();
+      for (Topic topic: topicList) {
+        SkuDetails skuDetails = new SkuDetails(topic.name(), topic.name(), topic.getChildren().length > 0 ? "$4.99" : "0.99");
+        inventory.addSkuDetails(skuDetails);
+      }
+      return inventory;
+    }
+    throw new UnsupportedOperationException("Query Inventory not implemented");
   }
 }

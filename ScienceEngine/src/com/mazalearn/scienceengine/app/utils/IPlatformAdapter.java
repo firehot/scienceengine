@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.utils;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.Pixmap;
@@ -10,8 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
+import com.mazalearn.scienceengine.billing.IBilling;
+import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 public interface IPlatformAdapter {
 
@@ -70,7 +72,9 @@ public interface IPlatformAdapter {
   // Does platform support sync to server of install and user profiles?
   public boolean supportsSync();
 
-  void launchPurchaseFlow(String sku, String itemType,
-      IDoneCallback doneCallback, String extraData);
+  void launchPurchaseFlow(Topic sku, String itemType,
+      IBilling billing, String extraData);
+
+  Inventory queryInventory(List<Topic> itemList);
 }
 
