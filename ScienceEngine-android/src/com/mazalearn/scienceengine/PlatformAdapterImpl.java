@@ -137,7 +137,7 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
     
     /*
      * Verify that the developer payload of the purchase is correct. It will be
-     * the same one that sent when initiating the purchase.
+     * the same one that is sent when initiating the purchase.
      * 
      * WARNING: Locally generating a random string when starting a purchase and 
      * verifying it here might seem like a good approach, but this will fail in the 

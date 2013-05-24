@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
 /**
@@ -28,6 +29,7 @@ public class LoadingScienceTrain extends AbstractScreen {
   private Group train;
   private float startY;
   private float endY;
+  private Image railTracks;
 
   public LoadingScienceTrain(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
     super(scienceEngine);
@@ -56,6 +58,9 @@ public class LoadingScienceTrain extends AbstractScreen {
     Image engine = new Image(ScienceEngine.getTextureRegion("engine"));
     train.addActor(engine);
     engine.setSize(180, 35);
+    railTracks = new Image(ScienceEngine.getTextureRegion("railtracks"));
+    railTracks.setSize(railTracks.getWidth() * 3, railTracks.getHeight() * 0.35f);
+    stage.addActor(railTracks);
     // Add wheels to the engine
     for (int i = 0; i < NUM_ENGINE_WHEELS; i++) {
       Image wheel = new Image(ScienceEngine.getTextureRegion("wheel"));
@@ -79,7 +84,11 @@ public class LoadingScienceTrain extends AbstractScreen {
     startY = ScreenComponent.VIEWPORT_HEIGHT * MathUtils.random(0.2f, 0.8f);
     endY = ScreenComponent.VIEWPORT_HEIGHT * MathUtils.random(0.2f, 0.8f);
     train.setPosition(startX, startY);
-    train.setRotation(MathUtils.atan2(endY - startY, endX - startX) * MathUtils.radiansToDegrees);
+    float angle = MathUtils.atan2(endY - startY, endX - startX) * MathUtils.radiansToDegrees;
+    train.setRotation(angle);
+    railTracks.setPosition(startX - 100 * MathUtils.cosDeg(angle), 
+        startY - 25 - 100 * MathUtils.sinDeg(angle));
+    railTracks.setRotation(angle);
 
   }
 
@@ -101,9 +110,20 @@ public class LoadingScienceTrain extends AbstractScreen {
     train.setX(startX + endX * percent);
     train.setY(startY + (endY - startY) * percent);
 
+    delayIfDebug();
     // Show the loading screen
     stage.act();
     stage.draw();
+  }
+
+  private void delayIfDebug() {
+    if (ScienceEngine.DEV_MODE != DevMode.DEBUG) return;
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   @Override
