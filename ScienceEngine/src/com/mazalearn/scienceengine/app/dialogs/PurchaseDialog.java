@@ -37,7 +37,7 @@ public class PurchaseDialog extends Dialog {
 
   public PurchaseDialog(final Topic topic, Topic level, final IBilling billing, 
       final Stage stage, final Skin skin) {
-    super(getMsg("ScienceEngine.Buy"), skin);
+    super("", skin);
 
     // retrieve the default table actor
     Table table = getContentTable();
@@ -60,15 +60,15 @@ public class PurchaseDialog extends Dialog {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         }
       });
-      table.add(topicCheckbox).left();
-      table.add(skuDetails.getPrice());
+      table.add(topicCheckbox).left().height(ScreenComponent.getScaledY(60)).pad(ScreenComponent.getScaledX(10));
+      table.add(skuDetails.getPrice()).pad(ScreenComponent.getScaledX(10));
       topicCheckbox.setName(item.name());
       buttonGroup.add(topicCheckbox);
       table.row();
     }
     
-    TextButton okButton = new TextButton("Purchase Selected Topics", skin);
-    getButtonTable().add(okButton).width(ScreenComponent.getScaledX(300));
+    TextButton okButton = new TextButton("Purchase Selected Topics", skin, "body");
+    getButtonTable().add(okButton).width(ScreenComponent.getScaledX(300)).height(ScreenComponent.getScaledY(60));
     okButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {

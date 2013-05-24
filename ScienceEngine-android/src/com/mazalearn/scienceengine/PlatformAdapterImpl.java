@@ -130,34 +130,35 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
 
   /** Verifies the developer payload of a purchase. */
   boolean verifyDeveloperPayload(Purchase purchase, Topic sku) {
-      String payload = purchase.getDeveloperPayload();
-      
-      if (sku != Topic.fromProductId(purchase.getSku())) return false;
-      
-      /*
-       * Verify that the developer payload of the purchase is correct. It will be
-       * the same one that sent when initiating the purchase.
-       * 
-       * WARNING: Locally generating a random string when starting a purchase and 
-       * verifying it here might seem like a good approach, but this will fail in the 
-       * case where the user purchases an item on one device and then uses your app on 
-       * a different device, because on the other device you will not have access to the
-       * random string you originally generated.
-       *
-       * So a good developer payload has these characteristics:
-       * 
-       * 1. If two different users purchase an item, the payload is different between them,
-       *    so that one user's purchase can't be replayed to another user.
-       * 
-       * 2. The payload must be such that you can verify it even when the app wasn't the
-       *    one who initiated the purchase flow (so that items purchased by the user on 
-       *    one device work on other devices owned by the user).
-       * 
-       * Using your own server to store and verify developer payloads across app
-       * installations is recommended.
-       */
-      
-      return payload.equals(getInstallationId());
+    if (purchase == null) return false;
+    String payload = purchase.getDeveloperPayload();
+    
+    if (sku != Topic.fromProductId(purchase.getSku())) return false;
+    
+    /*
+     * Verify that the developer payload of the purchase is correct. It will be
+     * the same one that sent when initiating the purchase.
+     * 
+     * WARNING: Locally generating a random string when starting a purchase and 
+     * verifying it here might seem like a good approach, but this will fail in the 
+     * case where the user purchases an item on one device and then uses your app on 
+     * a different device, because on the other device you will not have access to the
+     * random string you originally generated.
+     *
+     * So a good developer payload has these characteristics:
+     * 
+     * 1. If two different users purchase an item, the payload is different between them,
+     *    so that one user's purchase can't be replayed to another user.
+     * 
+     * 2. The payload must be such that you can verify it even when the app wasn't the
+     *    one who initiated the purchase flow (so that items purchased by the user on 
+     *    one device work on other devices owned by the user).
+     * 
+     * Using your own server to store and verify developer payloads across app
+     * installations is recommended.
+     */
+    
+    return payload.equals(getInstallationId());
   }
   
   @Override

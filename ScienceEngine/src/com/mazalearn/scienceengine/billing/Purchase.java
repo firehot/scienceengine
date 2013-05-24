@@ -21,36 +21,36 @@ import com.badlogic.gdx.utils.Json;
  * Represents an in-app billing purchase.
  */
 public class Purchase {
-    String mItemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
-    String mOrderId;
-    String mPackageName;
-    String mSku;
-    long mPurchaseTime;
-    int mPurchaseState;
-    String mDeveloperPayload;
-    String mToken;
-    String mOriginalJson;
-    String mSignature;
+    String itemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
+    String orderId;
+    String packageName;
+    String sku;
+    long purchaseTime;
+    int purchaseState;
+    String developerPayload;
+    String token;
+    String originalJson;
+    String signature;
 
     public static Purchase toPurchase(String itemType, String jsonPurchaseInfo, String signature) {
       Purchase purchase = new Json().fromJson(Purchase.class, jsonPurchaseInfo);
-      purchase.mItemType = itemType;
-      purchase.mOriginalJson = jsonPurchaseInfo;
-      purchase.mSignature = signature;
+      purchase.itemType = itemType;
+      purchase.originalJson = jsonPurchaseInfo;
+      purchase.signature = signature;
       return purchase;
     }
 
-    public String getItemType() { return mItemType; }
-    public String getOrderId() { return mOrderId; }
-    public String getPackageName() { return mPackageName; }
-    public String getSku() { return mSku; }
-    public long getPurchaseTime() { return mPurchaseTime; }
-    public int getPurchaseState() { return mPurchaseState; }
-    public String getDeveloperPayload() { return mDeveloperPayload; }
-    public String getToken() { return mToken; }
-    public String getOriginalJson() { return mOriginalJson; }
-    public String getSignature() { return mSignature; }
+    public String getItemType() { return itemType; }
+    public String getOrderId() { return orderId; }
+    public String getPackageName() { return packageName; }
+    public String getSku() { return sku; }
+    public long getPurchaseTime() { return purchaseTime; }
+    public int getPurchaseState() { return purchaseState; }
+    public String getDeveloperPayload() { return developerPayload; }
+    public String getToken() { return token; }
+    public String getOriginalJson() { return originalJson; }
+    public String getSignature() { return signature; }
 
     @Override
-    public String toString() { return "PurchaseInfo(type:" + mItemType + "):" + mOriginalJson; }
+    public String toString() { return "PurchaseInfo(type:" + itemType + "):" + originalJson; }
 }

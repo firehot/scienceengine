@@ -301,8 +301,8 @@ public class IabHelper {
     public interface OnIabPurchaseFinishedListener {
         /**
          * Called to notify that an in-app purchase finished. If the purchase was successful,
-         * then the sku parameter specifies which item was purchased. If the purchase failed,
-         * the sku and extraData parameters may or may not be null, depending on how far the purchase
+         * then the productId parameter specifies which item was purchased. If the purchase failed,
+         * the productId and extraData parameters may or may not be null, depending on how far the purchase
          * process went.
          *
          * @param result The result of the purchase.
@@ -343,7 +343,7 @@ public class IabHelper {
      * MUST be called from the UI thread of the Activity.
      *
      * @param act The calling activity.
-     * @param sku The sku of the item to purchase.
+     * @param productId The productId of the item to purchase.
      * @param itemType indicates if it's a product or a subscription (ITEM_TYPE_INAPP or ITEM_TYPE_SUBS)
      * @param requestCode A request code (to differentiate from other responses --
      *     as in {@link android.app.Activity#startActivityForResult}).
@@ -388,14 +388,14 @@ public class IabHelper {
                                            Integer.valueOf(0));
         }
         catch (SendIntentException e) {
-            logError("SendIntentException while launching purchase flow for sku " + sku);
+            logError("SendIntentException while launching purchase flow for productId " + sku);
             e.printStackTrace();
 
             result = new IabResult(IABHELPER_SEND_INTENT_FAILED, "Failed to send intent.");
             if (listener != null) listener.onIabPurchaseFinished(result, null);
         }
         catch (RemoteException e) {
-            logError("RemoteException while launching purchase flow for sku " + sku);
+            logError("RemoteException while launching purchase flow for productId " + sku);
             e.printStackTrace();
 
             result = new IabResult(IABHELPER_REMOTE_EXCEPTION, "Remote exception while starting purchase flow");
@@ -458,8 +458,8 @@ public class IabHelper {
 
                 // Verify signature
                 if (!Security.verifyPurchase(mSignatureBase64, purchaseData, dataSignature)) {
-                    logError("Purchase signature verification FAILED for sku " + sku);
-                    result = new IabResult(IABHELPER_VERIFICATION_FAILED, "Signature verification failed for sku " + sku);
+                    logError("Purchase signature verification FAILED for productId " + sku);
+                    result = new IabResult(IABHELPER_VERIFICATION_FAILED, "Signature verification failed for productId " + sku);
                     if (mPurchaseListener != null) mPurchaseListener.onIabPurchaseFinished(result, purchase);
                     return true;
                 }
@@ -633,9 +633,9 @@ public class IabHelper {
     void consume(Purchase itemInfo) throws IabException {
         checkSetupDone("consume");
         
-        if (!itemInfo.mItemType.equals(ITEM_TYPE_INAPP)) {
+        if (!itemInfo.itemType.equals(ITEM_TYPE_INAPP)) {
             throw new IabException(IABHELPER_INVALID_CONSUMPTION, 
-                    "Items of type '" + itemInfo.mItemType + "' can't be consumed.");
+                    "Items of type '" + itemInfo.itemType + "' can't be consumed.");
         }
         
         try {
@@ -643,18 +643,18 @@ public class IabHelper {
             String sku = itemInfo.getSku();
             if (token == null || token.equals("")) {
                logError("Can't consume "+ sku + ". No token.");
-               throw new IabException(IABHELPER_MISSING_TOKEN, "PurchaseInfo is missing token for sku: "
+               throw new IabException(IABHELPER_MISSING_TOKEN, "PurchaseInfo is missing token for productId: "
                    + sku + " " + itemInfo);
             }
 
-            logDebug("Consuming sku: " + sku + ", token: " + token);
+            logDebug("Consuming productId: " + sku + ", token: " + token);
             int response = mService.consumePurchase(3, mContext.getPackageName(), token);
             if (response == BILLING_RESPONSE_RESULT_OK) {
-               logDebug("Successfully consumed sku: " + sku);
+               logDebug("Successfully consumed productId: " + sku);
             }
             else {
-               logDebug("Error consuming consuming sku " + sku + ". " + getResponseDesc(response));
-               throw new IabException(response, "Error consuming sku " + sku);
+               logDebug("Error consuming consuming productId " + sku + ". " + getResponseDesc(response));
+               throw new IabException(response, "Error consuming productId " + sku);
             }
         }
         catch (RemoteException e) {
@@ -684,7 +684,7 @@ public class IabHelper {
          *
          * @param purchases The purchases that were (or were to be) consumed.
          * @param results The results of each consumption operation, corresponding to each
-         *     sku.
+         *     productId.
          */
         public void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results);
     }
@@ -901,7 +901,7 @@ public class IabHelper {
 
         for (String thisResponse : responseList) {
             SkuDetails d = SkuDetails.toSkuDetails(itemType, thisResponse);
-            logDebug("Got sku details: " + d);
+            logDebug("Got productId details: " + d);
             inv.addSkuDetails(d);
         }
         return BILLING_RESPONSE_RESULT_OK;
@@ -919,7 +919,7 @@ public class IabHelper {
                 for (Purchase purchase : purchases) {
                     try {
                         consume(purchase);
-                        results.add(new IabResult(BILLING_RESPONSE_RESULT_OK, "Successful consume of sku " + purchase.getSku()));
+                        results.add(new IabResult(BILLING_RESPONSE_RESULT_OK, "Successful consume of productId " + purchase.getSku()));
                     }
                     catch (IabException ex) {
                         results.add(ex.getResult());
