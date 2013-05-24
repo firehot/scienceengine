@@ -51,7 +51,7 @@ public class PurchaseDialog extends Dialog {
     buttonGroup.setMinCheckCount(0);
     buttonGroup.setMaxCheckCount(1);
     for (Topic item: topicList) {
-      SkuDetails skuDetails = inventory.getSkuDetails(item.name());
+      SkuDetails skuDetails = inventory.getSkuDetails(item.toProductId());
       final TextButton topicCheckbox = ScreenUtils.createCheckBox(skuDetails.getDescription(), 0f, 0f, 300f, 30f, 
           skin.get("mcq-check", CheckBoxStyle.class)); //$NON-NLS-1$
       topicCheckbox.addListener(new ClickListener() {
@@ -62,7 +62,7 @@ public class PurchaseDialog extends Dialog {
       });
       table.add(topicCheckbox).left();
       table.add(skuDetails.getPrice());
-      topicCheckbox.setName(skuDetails.getSku());
+      topicCheckbox.setName(item.name());
       buttonGroup.add(topicCheckbox);
       table.row();
     }
@@ -79,7 +79,7 @@ public class PurchaseDialog extends Dialog {
           // android.test.canceled - BUG: either purchasedata or datasignature is null
           // android.test.item_unavailable - shows item unavailable
           Topic purchaseTopic = Topic.valueOf(topicButton.getName());
-          ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, "inapp", billing, topicButton.getName());
+          ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, "inapp", billing);
         }
       }
     });

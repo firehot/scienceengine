@@ -123,7 +123,7 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
 
   @Override
   public void launchPurchaseFlow(Topic sku, String itemType,
-      IBilling billing, String extraData) {
+      IBilling billing) {
     if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
       billing.purchaseCallback(sku);
       return;
@@ -136,7 +136,8 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
     if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
       Inventory inventory = new Inventory();
       for (Topic topic: topicList) {
-        SkuDetails skuDetails = new SkuDetails(topic.name(), topic.name(), topic.getChildren().length > 0 ? "$4.99" : "0.99");
+        SkuDetails skuDetails = new SkuDetails(topic.toProductId(), topic.name(), topic.name(),
+            topic.getChildren().length > 0 ? "$4.99" : "0.99");
         inventory.addSkuDetails(skuDetails);
       }
       return inventory;

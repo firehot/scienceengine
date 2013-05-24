@@ -171,7 +171,7 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
 
   @Override
   public void launchPurchaseFlow(Topic sku, String itemType,
-      IBilling billing, String extraData) {
+      IBilling billing) {
     throw new UnsupportedOperationException("Purchase flow not implemented");
   }
 

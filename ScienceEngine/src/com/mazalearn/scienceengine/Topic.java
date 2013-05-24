@@ -13,6 +13,7 @@ public enum Topic {
   SOM(201), StatesOfMatterReview(210), StatesOfMatter(2, SOM, SOM, StatesOfMatterReview), 
   W(301), WavesReview(310), Waves(3, W, W, WavesReview);
 
+  private static final String PRODUCT_PREFIX = "com.mazalearn.scienceengine.";
   private final Topic[] childTopics;
   private final Topic canonicalChild;
   private final int topicId;
@@ -23,6 +24,7 @@ public enum Topic {
       idToTopicMap.put(topic.getTopicId(), topic);
     }
   }
+  
   /**
    * Constructor
    * @param topicId - numerical id for topic used for stats
@@ -56,5 +58,24 @@ public enum Topic {
   
   public Topic idToTopic(int topicId) {
     return idToTopicMap.get(topicId);
+  }
+  
+  public static Topic fromProductId(String productId) {
+    if (!productId.startsWith(PRODUCT_PREFIX)) {
+      return null;
+    }
+    
+    String prodId = productId.substring(PRODUCT_PREFIX.length());
+    for (Topic topic: values()) {
+      if (prodId.equals(topic.name())) {
+        return topic;
+      }
+    }
+    
+    return null;
+  }
+
+  public String toProductId() {
+    return PRODUCT_PREFIX + name().toLowerCase();
   }
 }

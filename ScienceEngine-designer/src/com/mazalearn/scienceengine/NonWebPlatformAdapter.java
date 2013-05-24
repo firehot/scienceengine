@@ -196,8 +196,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   }
 
   @Override
-  public void launchPurchaseFlow(Topic sku, String itemType,
-      IBilling billing, String extraData) {
+  public void launchPurchaseFlow(Topic sku, String itemType, IBilling billing) {
     throw new UnsupportedOperationException("Purchase flow not implemented");
   }
 

@@ -73,7 +73,7 @@ public interface IPlatformAdapter {
   public boolean supportsSync();
 
   void launchPurchaseFlow(Topic sku, String itemType,
-      IBilling billing, String extraData);
+      IBilling billing);
 
   Inventory queryInventory(List<Topic> itemList);
 }

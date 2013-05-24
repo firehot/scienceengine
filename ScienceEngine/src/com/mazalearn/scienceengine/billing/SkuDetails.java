@@ -31,8 +31,9 @@ public class SkuDetails {
 
     public SkuDetails() {}
     
-    public SkuDetails(String title, String description, String price) {
-      mSku = mTitle = title;
+    public SkuDetails(String id, String title, String description, String price) {
+      mSku = id;
+      mTitle = title;
       mDescription = description;
       mPrice = price;
     }

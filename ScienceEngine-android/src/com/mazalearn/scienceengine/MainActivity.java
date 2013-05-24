@@ -65,7 +65,7 @@ public class MainActivity extends AndroidApplication {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     log(ScienceEngine.LOG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
-
+  
      if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
        super.onActivityResult(requestCode, resultCode, data);  
      }

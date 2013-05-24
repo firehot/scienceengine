@@ -70,28 +70,32 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   }
 
   @Override
-  public void launchPurchaseFlow(final Topic sku, String itemType, final IBilling billing, String extraData) {
-    iabHelper.launchPurchaseFlow(application, sku.name(), itemType, 1234,
+  public void launchPurchaseFlow(final Topic sku, String itemType, final IBilling billing) {
+    iabHelper.launchPurchaseFlow(application, sku.toProductId(), itemType, IBilling.REQUEST_CODE,
         new OnIabPurchaseFinishedListener() {
           @Override
-          public void onIabPurchaseFinished(IabResult result, Purchase info) {
+          public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            if (!verifyDeveloperPayload(purchase, sku)) {
+              Gdx.app.log(ScienceEngine.LOG, "Error purchasing. Authenticity verification failed.");
+              return;
+            }
             if (result.isSuccess() || 
                 result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
               billing.purchaseCallback(sku);
             }
           } 
-        }, extraData);
+        }, getInstallationId());
   }
   
   @Override
   public Inventory queryInventory(List<Topic> topicList) {
     Gdx.app.log(ScienceEngine.LOG, "Querying inventory.");
-    List<String> itemList = new ArrayList<String>();
+    List<String> productList = new ArrayList<String>();
     for (Topic topic: topicList) {
-      itemList.add(topic.name());
+      productList.add(topic.toProductId());
     }
     try {
-      return iabHelper.queryInventory(true, itemList, Collections.<String> emptyList());
+      return iabHelper.queryInventory(true, productList, Collections.<String> emptyList());
     } catch (IabException e) {
       e.printStackTrace();
       return null;
@@ -125,12 +129,14 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   };
 
   /** Verifies the developer payload of a purchase. */
-  boolean verifyDeveloperPayload(Purchase p) {
-      String payload = p.getDeveloperPayload();
+  boolean verifyDeveloperPayload(Purchase purchase, Topic sku) {
+      String payload = purchase.getDeveloperPayload();
+      
+      if (sku != Topic.fromProductId(purchase.getSku())) return false;
       
       /*
-       * TODO: verify that the developer payload of the purchase is correct. It will be
-       * the same one that you sent when initiating the purchase.
+       * Verify that the developer payload of the purchase is correct. It will be
+       * the same one that sent when initiating the purchase.
        * 
        * WARNING: Locally generating a random string when starting a purchase and 
        * verifying it here might seem like a good approach, but this will fail in the 
@@ -151,29 +157,7 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
        * installations is recommended.
        */
       
-      return true;
-  }
-  
-  IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-    public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-       if (result.isFailure()) {
-         Gdx.app.log(ScienceEngine.LOG, "Error purchasing: " + result);
-          return;
-       }      
-       if (!verifyDeveloperPayload(purchase)) {
-         Gdx.app.log(ScienceEngine.LOG, "Error purchasing. Authenticity verification failed.");
-         return;
-       }
-       Gdx.app.log(ScienceEngine.LOG, "Purchase successful.");
-       if (purchase.getSku().equals(SKU_ELECTROMAGNETISM)) {
-          // Give user access to electromagnetism
-       }
-    }
-  };
-
-  void purchaseElectromagnetism(String userId) {
-    iabHelper.launchPurchaseFlow(application, SKU_ELECTROMAGNETISM, 10001,   
-        mPurchaseFinishedListener, userId);    
+      return payload.equals(getInstallationId());
   }
   
   @Override
