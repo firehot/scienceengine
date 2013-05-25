@@ -91,9 +91,7 @@ public class ChooseTopicScreen extends AbstractScreen {
       topicThumb.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-          if (lock) {
-            purchaseTopic(topic, null);         
-          } else {
+          if (!lock) {
             gotoTopicHome(topic);
           }
         }
@@ -133,17 +131,5 @@ public class ChooseTopicScreen extends AbstractScreen {
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     AbstractScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
     scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
-  }
-
-  private void purchaseTopic(final Topic topic, final Topic level) {
-    PurchaseDialog buy = new PurchaseDialog(topic, level, new IBilling() {
-      @Override
-      public void purchaseCallback(Topic purchasedTopic) {
-        if (topic == purchasedTopic || level == purchasedTopic) {
-          gotoTopicHome(topic);
-        }
-      }
-    }, stage, getSkin());
-    buy.show(stage);
   }
 }

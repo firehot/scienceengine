@@ -70,18 +70,23 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   }
 
   @Override
-  public void launchPurchaseFlow(final Topic sku, String itemType, final IBilling billing) {
-    iabHelper.launchPurchaseFlow(application, sku.toProductId(), itemType, IBilling.REQUEST_CODE,
+  public void launchPurchaseFlow(final Topic topic, final IBilling billing) {
+    iabHelper.launchPurchaseFlow(application, topic.toProductId(), IabHelper.ITEM_TYPE_INAPP, 
+        IBilling.REQUEST_CODE,
         new OnIabPurchaseFinishedListener() {
           @Override
           public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if (!verifyDeveloperPayload(purchase, sku)) {
-              Gdx.app.log(ScienceEngine.LOG, "Error purchasing. Authenticity verification failed.");
+            if (result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
+              // In this case, the purchase info is missing - we allow this
+              billing.purchaseCallback(topic);
+            }
+
+            if (!verifyDeveloperPayload(purchase, topic)) {
+              Gdx.app.error(ScienceEngine.LOG, "Error purchasing. Authenticity verification failed.");
               return;
             }
-            if (result.isSuccess() || 
-                result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
-              billing.purchaseCallback(sku);
+            if (result.isSuccess()) {
+              billing.purchaseCallback(topic);
             }
           } 
         }, getInstallationId());
@@ -112,28 +117,22 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
           }
 
           Gdx.app.log(ScienceEngine.LOG, "Query inventory was successful.");
-          
-          /*
-           * Check for items we own. Notice that for each purchase, we check
-           * the developer payload to see if it's correct! See
-           * verifyDeveloperPayload().
-           */
-          
-    /*      // Do we have the electromagnetism upgrade?
-          Purchase electromagnetismPurchase = inventory.getPurchase(SKU_ELECTROMAGNETISM);
-          boolean mHasElectromagnetism = (electromagnetismPurchase != null && verifyDeveloperPayload(electromagnetismPurchase));
-          Gdx.app.log(ScienceEngine.LOG, "User " + (mHasElectromagnetism ? "has electromagnetism" : "does not have electromagnetism"));
-   */       
-          Gdx.app.log(ScienceEngine.LOG, "Initial inventory query finished");
       }
   };
 
   /** Verifies the developer payload of a purchase. */
-  boolean verifyDeveloperPayload(Purchase purchase, Topic sku) {
-    if (purchase == null) return false;
+  boolean verifyDeveloperPayload(Purchase purchase, Topic topic) {
+    if (purchase == null) {
+      Gdx.app.error(ScienceEngine.LOG, "Error developer payload - purchase missing");
+      return false;
+    }
     String payload = purchase.getDeveloperPayload();
     
-    if (sku != Topic.fromProductId(purchase.getSku())) return false;
+    if (topic != Topic.fromProductId(purchase.getProductId())) {
+      Gdx.app.error(ScienceEngine.LOG, "Error developer payload - topic product mismatch: " + 
+          topic + " <> " + purchase.getProductId());
+      return false;
+    }
     
     /*
      * Verify that the developer payload of the purchase is correct. It will be
@@ -158,7 +157,13 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
      * installations is recommended.
      */
     
-    return payload.equals(getInstallationId());
+    if (!payload.equals(getInstallationId())) {
+      Gdx.app.error(ScienceEngine.LOG, "Error developer payload - payload installid mismatch: " + 
+          payload + " <> " + getInstallationId());
+      return false;      
+    }
+    
+    return true;
   }
   
   @Override

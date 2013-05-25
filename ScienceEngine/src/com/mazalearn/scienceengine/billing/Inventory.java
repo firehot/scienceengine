@@ -71,7 +71,7 @@ public class Inventory {
     List<String> getAllOwnedSkus(String itemType) {
         List<String> result = new ArrayList<String>();
         for (Purchase p : mPurchaseMap.values()) {
-            if (p.getItemType().equals(itemType)) result.add(p.getSku());
+            if (p.getItemType().equals(itemType)) result.add(p.getProductId());
         }
         return result;
     }
@@ -82,10 +82,10 @@ public class Inventory {
     }
 
     public void addSkuDetails(SkuDetails d) {
-        mSkuMap.put(d.getSku(), d);
+        mSkuMap.put(d.getProductId(), d);
     }
 
     void addPurchase(Purchase p) {
-        mPurchaseMap.put(p.getSku(), p);
+        mPurchaseMap.put(p.getProductId(), p);
     }
 }

@@ -219,10 +219,9 @@ public class TopicHomeScreen extends AbstractScreen {
                     installProfile.addAsAvailableTopic(child);
                   }
                   installProfile.save();
-                  TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
-                  scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));                  
+                  LoadingScienceTrain.setWaitForBackend(false);                  
                 }
-              }, getStage(), getSkin()).show(getStage());
+              }, getStage(), getSkin(), scienceEngine).show(getStage());
               return;
             }
             new MessageDialog(getSkin(), "To unlock this level, you need the " + topic.name() + " Certificate").show(stage);

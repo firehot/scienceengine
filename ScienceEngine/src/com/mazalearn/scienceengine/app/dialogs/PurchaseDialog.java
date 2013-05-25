@@ -3,40 +3,34 @@ package com.mazalearn.scienceengine.app.dialogs;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.screens.LoadingScienceTrain;
+import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.billing.IBilling;
 import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.billing.SkuDetails;
-import com.mazalearn.scienceengine.tutor.IDoneCallback;
 
 /**
  * A screen to buy topics
  */
 public class PurchaseDialog extends Dialog {
   
-  private static String getMsg(String msgId) {
-    return ScienceEngine.getMsg().getString(msgId);
-  }
-
   public PurchaseDialog(final Topic topic, Topic level, final IBilling billing, 
-      final Stage stage, final Skin skin) {
+      final Stage stage, final Skin skin, final ScienceEngine scienceEngine) {
     super("", skin);
 
     // retrieve the default table actor
@@ -67,9 +61,11 @@ public class PurchaseDialog extends Dialog {
       table.row();
     }
     
-    TextButton okButton = new TextButton("Purchase Selected Topics", skin, "body");
-    getButtonTable().add(okButton).width(ScreenComponent.getScaledX(300)).height(ScreenComponent.getScaledY(60));
-    okButton.addListener(new ClickListener() {
+    TextButton purchaseButton = new TextButton("Purchase Selected Topics", skin, "body");
+    getButtonTable().add(purchaseButton)
+        .width(ScreenComponent.getScaledX(300))
+        .height(ScreenComponent.getScaledY(60));
+    purchaseButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
@@ -79,7 +75,10 @@ public class PurchaseDialog extends Dialog {
           // android.test.canceled - BUG: either purchasedata or datasignature is null
           // android.test.item_unavailable - shows item unavailable
           Topic purchaseTopic = Topic.valueOf(topicButton.getName());
-          ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, "inapp", billing);
+          LoadingScienceTrain.setWaitForBackend(true);
+          TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
+          scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));                  
+          ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, billing);
         }
       }
     });

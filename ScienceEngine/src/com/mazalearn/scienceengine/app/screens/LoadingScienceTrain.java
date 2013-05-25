@@ -21,6 +21,7 @@ public class LoadingScienceTrain extends AbstractScreen {
 
   private static final int NUM_ENGINE_WHEELS = 4;
   private static final int WIDTH = 450;
+  private static boolean waitingForBackend;
 
   private float startX, endX;
   private float percent;
@@ -98,7 +99,7 @@ public class LoadingScienceTrain extends AbstractScreen {
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     // Load some, will return true if done loading
-    if (ScienceEngine.getAssetManager().update()) {
+    if (ScienceEngine.getAssetManager().update() && !waitingForBackend) {
       scienceEngine.setScreen(nextScreen);
     }
 
@@ -121,7 +122,6 @@ public class LoadingScienceTrain extends AbstractScreen {
     try {
       Thread.sleep(500);
     } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
@@ -134,5 +134,9 @@ public class LoadingScienceTrain extends AbstractScreen {
   @Override
   protected void goBack() {
     // Ignore.
+  }
+
+  public static void setWaitForBackend(boolean waitForBackend) {
+    waitingForBackend = waitForBackend;
   }
 }

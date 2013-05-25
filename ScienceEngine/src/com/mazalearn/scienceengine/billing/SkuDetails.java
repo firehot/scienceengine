@@ -31,11 +31,12 @@ public class SkuDetails {
 
     public SkuDetails() {}
     
-    public SkuDetails(String productId, String title, String description, String price) {
+    private SkuDetails(String productId, String type, String title, String description, String price) {
       this.productId = productId;
       this.title = title;
       this.description = description;
       this.price = price;
+      this.type = type;
     }
     
     public static SkuDetails toSkuDetails(String itemType, String jsonSkuDetails) {
@@ -45,7 +46,7 @@ public class SkuDetails {
       return skuDetails;
     }
 
-    public String getSku() { return productId; }
+    public String getProductId() { return productId; }
     public String getType() { return type; }
     public String getPrice() { return price; }
     public String getTitle() { return title; }

@@ -24,11 +24,11 @@ public class Purchase {
     String itemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
     String orderId;
     String packageName;
-    String sku;
+    String productId;
     long purchaseTime;
     int purchaseState;
     String developerPayload;
-    String token;
+    String purchaseToken;
     String originalJson;
     String signature;
 
@@ -43,11 +43,11 @@ public class Purchase {
     public String getItemType() { return itemType; }
     public String getOrderId() { return orderId; }
     public String getPackageName() { return packageName; }
-    public String getSku() { return sku; }
+    public String getProductId() { return productId; }
     public long getPurchaseTime() { return purchaseTime; }
     public int getPurchaseState() { return purchaseState; }
     public String getDeveloperPayload() { return developerPayload; }
-    public String getToken() { return token; }
+    public String getPurchaseToken() { return purchaseToken; }
     public String getOriginalJson() { return originalJson; }
     public String getSignature() { return signature; }
 

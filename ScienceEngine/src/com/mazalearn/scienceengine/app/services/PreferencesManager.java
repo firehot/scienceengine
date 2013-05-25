@@ -257,7 +257,7 @@ public class PreferencesManager {
   }
 
   public void saveInstallProfile() {
-    prefs.putString(INSTALL_PROFILE, installProfile.toBase64());
+    prefs.putString(INSTALL_PROFILE, getInstallProfile().toBase64());
     prefs.flush();
   }
 

@@ -67,7 +67,7 @@ public enum Topic {
     
     String prodId = productId.substring(PRODUCT_PREFIX.length());
     for (Topic topic: values()) {
-      if (prodId.equals(topic.name())) {
+      if (prodId.equals(topic.name().toLowerCase())) {
         return topic;
       }
     }

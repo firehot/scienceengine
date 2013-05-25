@@ -38,6 +38,13 @@ engine
   orig: 256, 128
   offset: 0, 0
   index: -1
+railtracks
+  rotate: false
+  xy: 131, 323
+  size: 512, 16
+  orig: 512, 16
+  offset: 0, 0
+  index: -1
 help
   rotate: false
   xy: 874, 894
@@ -47,7 +54,7 @@ help
   index: -1
 lock
   rotate: false
-  xy: 131, 211
+  xy: 131, 193
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -75,14 +82,14 @@ back
   index: -1
 browser
   rotate: false
-  xy: 131, 145
+  xy: 131, 127
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 wheel
   rotate: false
-  xy: 261, 275
+  xy: 261, 257
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -117,7 +124,7 @@ nextarrow
   index: -1
 prevarrow
   rotate: false
-  xy: 131, 111
+  xy: 131, 93
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
