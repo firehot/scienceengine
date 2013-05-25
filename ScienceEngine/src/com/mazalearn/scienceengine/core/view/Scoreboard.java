@@ -17,7 +17,7 @@ public class Scoreboard extends Table {
 
   public Scoreboard(Skin skin) {
     super(skin);
-    if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
       debug();
     }
     this.setName(ScreenComponent.Scoreboard.name());

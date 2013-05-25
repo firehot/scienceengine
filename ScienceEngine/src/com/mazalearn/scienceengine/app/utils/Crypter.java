@@ -24,12 +24,12 @@ public class Crypter {
           digest.update(toHash, 0, toHash.length);
           return digest.digest();
         } catch (NoSuchAlgorithmException e) {
-          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+          if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
             e.printStackTrace();
           }
           Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());
         } catch (UnsupportedOperationException e) {
-          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+          if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
             e.printStackTrace();
           }
           Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());      
@@ -51,7 +51,7 @@ public class Crypter {
     try {
       bytes = toHash.getBytes("UTF-8");
     } catch (UnsupportedEncodingException e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
         e.printStackTrace();
       }
       Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());

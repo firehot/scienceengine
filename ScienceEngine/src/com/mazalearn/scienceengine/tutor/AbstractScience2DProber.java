@@ -61,7 +61,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
           return true;
         }
       }
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG)
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0)
         System.out.println(actor.getClass().getName() + " " + actor.getName() + 
             " Stagepoint: " + stagePoint + " localpoint: " + localPoint);
     }

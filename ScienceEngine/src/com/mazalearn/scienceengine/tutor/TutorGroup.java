@@ -152,7 +152,7 @@ public class TutorGroup extends AbstractTutor {
       try {
         this.successActions = parser.parseString(successActionsString);
       } catch (SyntaxException e) {
-        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+        if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
         throw new RuntimeException(e);
       }
       this.variables = parser.getVariables();

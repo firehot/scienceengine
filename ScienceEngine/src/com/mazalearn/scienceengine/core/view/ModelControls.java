@@ -33,7 +33,7 @@ public class ModelControls extends Table {
     this.defaults().fill();
     this.modelControlPanel = createModelControlPanel(skin);
     this.add(modelControlPanel);
-    if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
       debug();
     }
   }

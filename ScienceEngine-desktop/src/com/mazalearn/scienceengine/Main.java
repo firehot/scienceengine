@@ -15,7 +15,7 @@ public class Main {
 		cfg.width = device.width;
 		cfg.height = device.height;
 		
-    ScienceEngine.DEV_MODE = DevMode.DEBUG;
+    ScienceEngine.DEV_MODE = DevMode.DEBUG | DevMode.BILLING_DUMMY;
 		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "", device);
 		ScienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.Desktop));
     new LwjglApplication(scienceEngine, cfg) {

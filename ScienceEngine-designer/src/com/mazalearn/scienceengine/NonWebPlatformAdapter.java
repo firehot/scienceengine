@@ -4,7 +4,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -16,8 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
-import com.mazalearn.scienceengine.billing.IBilling;
-import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.designer.LevelEditor;
 import com.mazalearn.scienceengine.designer.PngWriter;
@@ -65,7 +62,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
     try {
       return new Pixmap(new Gdx2DPixmap(bytes, 0, bytes.length, 0));
     } catch (IOException e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
       return null;
     }
   }
@@ -94,7 +91,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       return responseStr;
     } catch (Exception e) {
       Gdx.app.log(ScienceEngine.LOG, "Could not upload to " + hostPort + path);
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
       throw new GdxRuntimeException(e);
     } finally {
       if (socket != null) {
@@ -118,7 +115,7 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
       DataOutputStream wr = 
           new DataOutputStream(socket.getOutputStream());
       // TODO: why this anomaly between local and production servers? apphosting?
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) { 
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) { 
         wr.writeBytes("GET " + path + " HTTP/1.0\r\n\r\n");
       } else {
         wr.writeBytes("GET " + hostPort + path + " HTTP/1.0\r\n\r\n");
@@ -193,15 +190,5 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
   @Override
   public boolean supportsSync() {
     return true;
-  }
-
-  @Override
-  public void launchPurchaseFlow(Topic sku, IBilling billing) {
-    throw new UnsupportedOperationException("Purchase flow not implemented");
-  }
-
-  @Override
-  public Inventory queryInventory(List<Topic> topicList) {
-    throw new UnsupportedOperationException("Query Inventory not implemented");
   }
 }

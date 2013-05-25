@@ -1,7 +1,6 @@
 package com.mazalearn.gwt.client;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -16,9 +15,6 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.Topic;
-import com.mazalearn.scienceengine.billing.IBilling;
-import com.mazalearn.scienceengine.billing.Inventory;
 
 class PlatformAdapterImpl extends AbstractPlatformAdapter {
   
@@ -168,15 +164,4 @@ class PlatformAdapterImpl extends AbstractPlatformAdapter {
   public boolean supportsSync() {
     return false;
   }
-
-  @Override
-  public void launchPurchaseFlow(Topic sku, IBilling billing) {
-    throw new UnsupportedOperationException("Purchase flow not implemented");
-  }
-
-  @Override
-  public Inventory queryInventory(List<Topic> itemList) {
-    throw new UnsupportedOperationException("Query inventory not implemented");
-  }
-
 }

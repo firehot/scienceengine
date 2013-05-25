@@ -117,7 +117,7 @@ public class LoadingScienceTrain extends AbstractScreen {
   }
 
   private void delayIfDebug() {
-    if (ScienceEngine.DEV_MODE != DevMode.DEBUG) return;
+    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) return;
     try {
       Thread.sleep(500);
     } catch (InterruptedException e) {

@@ -24,7 +24,7 @@ public class Messages extends BasicMessages {
       String val = resourceBundle.getString(key);
       return platform == Platform.Android ? val : new String(val.getBytes("ISO-8859-1"), "UTF-8");
     } catch (Exception e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
       return '!' + key + '!';
     }
   }

@@ -1,15 +1,20 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.billing.IBilling;
+import com.mazalearn.scienceengine.billing.Inventory;
+import com.mazalearn.scienceengine.billing.SkuDetails;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
@@ -79,5 +84,34 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
 
   @Override
   public void takeSnapshot(Stage stage, Topic topicArea, Topic level, int x, int y, int width, int height) {
+  }
+  
+  @Override
+  public void launchPurchaseFlow(Topic sku, IBilling billing) {
+    if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) != 0) {
+      billing.purchaseCallback(sku);
+      return;
+    }
+    throw new UnsupportedOperationException("Purchase flow not implemented");
+  }
+
+  @Override
+  public Inventory queryInventory(List<Topic> topicList) {
+    if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) != 0) {
+      Inventory inventory = new Inventory();
+      for (Topic topic: topicList) {
+        StringBuffer json = new StringBuffer();
+        json.append("{");
+        json.append("productId:\"" + topic.toProductId() + "\"");
+        json.append(",title:\"" + topic.name() + "\"");
+        json.append(",description:\"" + topic.name() + "\"");
+        json.append(",price:" + (topic.getChildren().length > 0 ? "\"$4.99\"" : "\"0.99\""));
+        json.append("}");
+        SkuDetails skuDetails = SkuDetails.toSkuDetails("inapp", json.toString());
+        inventory.addSkuDetails(skuDetails);
+      }
+      return inventory;
+    }
+    throw new UnsupportedOperationException("Query Inventory not implemented");
   }
 }

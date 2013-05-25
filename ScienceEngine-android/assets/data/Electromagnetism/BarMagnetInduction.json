@@ -24,12 +24,18 @@ tutors: [
           {type: "KnowledgeUnit",
            id:"G1.1",
            goal: "Move the bar magnet back and forth. See how the light changes and current shown by ammeter changes.",
+           hints: ["Does the bar magnet need to touch the coil for current to be induced in it?",
+                   "When the magnet is moved slowly, is current induced?",
+                   "When the magnet moves faster, is the light brighter?"],
            explanation: ["When the magnet moves near the coil, current flows in the coil\nThe magnet does not touch the coil so this is an induced current.\nThe strength of current induced depends on speed of movement and location of magnet"],
            postcondition: "Count(BarMagnet.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1"
           },
           {type: "KnowledgeUnit",
            id:"G1.1.5",
            goal: "Move the bar magnet towards or away from coil. See current direction in ammeter.",
+            hints: ["When magnet moves towards the coil, what is the induced current direction?",
+                   "When magnet moves out of the coil, what is the induced current direction?",
+                   "Can we predict direction of induced current in the coil?"],
            explanation: ["When the magnet moves towards the coil, current flows in one direction. When it moves away, current direction reverses.\nThe induced current direction is given by Fleming's Right Hand Rule.",
                          "image:flemingrighthand"],
            postcondition: "Count(BarMagnet.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1"
@@ -37,6 +43,8 @@ tutors: [
           {type: "KnowledgeUnit",
            id: "G1.2",
            goal: "Change magnet mode from 'Move' to 'Rotate' and rotate the magnet by pulling it.\nSee how the induced current changes.",
+           hints: ["If we rotate the magnet instead of moving, will current be induced?",
+                   "When magnet is rotated faster, is the light brighter?"],
            explanation: ["As the magnet rotates, current induced in the coil changes in direction and magnitude.\nThe induced current is alternating current"],
            postcondition: "Count(BarMagnet.Rotate) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1",
            components:[{type:"BarMagnet", pin: true}]
@@ -45,6 +53,9 @@ tutors: [
            id: "G1.3",
            goal: "Move the coil back and forth around the magnet. See how the induced current changes.",
            when: "PickupCoil.Move",
+           hints: ["If we move only the coil and not the magnet, will current be induced?",
+                   "When coil is moved slowly, is current induced?",
+                   "When coil moves faster, is the light brighter?"],
            explanation: ["When the coil moves near the magnet, current is induced in the coil",
            "Current induction happens due to relative motion of coil and magnet"],
            postcondition: "Count(PickupCoil.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1"
@@ -52,6 +63,8 @@ tutors: [
           {type: "KnowledgeUnit",
            id: "G1.4",
            goal: "Change the number of coil loops and move the magnet. See how induced current changes",
+           hints: ["When the number of coil loops increases and it moves, is the light brigther?",
+                   "If we move the magnet at the same speed but coil has more loops, is more current induced?"],
            explanation: ["When the number of coil loops increases, the maximum current induced in the coil increases"],
            postcondition: "Count(PickupCoil.CoilLoops) > 3 and Max(PickupCoil.Current) >= 1.5",
            components:[{type:"PickupCoil", pin: true},{type:"BarMagnet", pin: false}]
@@ -61,6 +74,8 @@ tutors: [
            goal: "Change Earth's magnetic field in Environment. See whether induced current changes.",
            postcondition: "Count(Environment.EarthMagneticField) >= 3 and Max(PickupCoil.Current) > 1",
            components:[{type:"Environment", pin: true},{type:"PickupCoil", pin: false}],
+           hints: ["How does the Earth's magnetic field affect induced current?",
+                   "When Earth's magnetic field is larger, is induced current more?"],
            explanation: ["The Earth's magnetic field change has no effect on the current induced in the coil.\nThe magnetic field on the coil has to CHANGE for current to be induced."]
           },
           {type: "KnowledgeUnit",

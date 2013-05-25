@@ -380,13 +380,13 @@ public class BarMagnet extends AbstractMagnet {
         }
       } catch (IOException e) {
         errorString = "could not read " + resourceName;
-        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+        if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
       } catch (NumberFormatException nfe) {
         errorString = "could not parse number in " + resourceName;
-        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) nfe.printStackTrace();
+        if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) nfe.printStackTrace();
       } catch (ArrayIndexOutOfBoundsException be) {
         errorString = "more values than expected in " + resourceName;
-        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) be.printStackTrace();
+        if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) be.printStackTrace();
       }
 
       if (errorString == null) {

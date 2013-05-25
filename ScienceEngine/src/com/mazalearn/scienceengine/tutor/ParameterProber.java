@@ -216,7 +216,7 @@ public class ParameterProber extends AbstractScience2DProber {
     try {
       this.resultExpr = parser.parseString(resultExprString);
     } catch (SyntaxException e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
       throw new RuntimeException(e);
     }
     this.resultExprVariables = parser.getVariables();   

@@ -214,7 +214,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
       setCurrent(current);
     }
     
-    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
       calibrateEmf();
     }
   }

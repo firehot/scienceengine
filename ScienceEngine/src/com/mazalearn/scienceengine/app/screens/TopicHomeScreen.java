@@ -332,7 +332,7 @@ public class TopicHomeScreen extends AbstractScreen {
       ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
       scrollPane.setScrollingDisabled(true,  false);
       scrollPane.setFlickScroll(false);
-      if (ScienceEngine.DEV_MODE != DevMode.PRODUCTION) {
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
         resource.debug();
       }
       ScreenComponent.scaleSize(scrollPane, RESOURCE_WIDTH, RESOURCE_INFO_HEIGHT);

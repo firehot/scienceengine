@@ -36,7 +36,7 @@ public class KnowledgeUnit extends AbstractTutor {
     try {
       this.postCondition = parser.parseString(postConditionString);
     } catch (SyntaxException e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
       throw new RuntimeException(e);
     }
     this.variables = parser.getVariables();

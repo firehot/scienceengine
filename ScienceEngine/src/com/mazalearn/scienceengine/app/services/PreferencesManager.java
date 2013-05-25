@@ -214,7 +214,7 @@ public class PreferencesManager {
         }
         Gdx.app.log(ScienceEngine.LOG, "Got Install Profile from MazaLearn: " + installId);
       } catch(GdxRuntimeException e) {
-        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+        if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
         Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to get - " + installId);
       }
     }
@@ -233,7 +233,7 @@ public class PreferencesManager {
         prefs.putString(SERVER_PROFILE_PREFIX + userId, serverProfileBase64);
         Gdx.app.log(ScienceEngine.LOG, "Sync Profile to MazaLearn - " + userId);
       } catch(GdxRuntimeException e) {
-        if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace();
+        if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
         Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to sync - " + userId);
       }
     }

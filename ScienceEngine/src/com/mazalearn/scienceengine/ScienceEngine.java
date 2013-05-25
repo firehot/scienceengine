@@ -52,8 +52,8 @@ public class ScienceEngine extends Game {
   public static final String LOG = ScienceEngine.class.getName();
 
   // mode of development
-  public enum DevMode {PRODUCTION, DEBUG, DESIGN};
-  public static DevMode DEV_MODE = DevMode.PRODUCTION;
+  public static class DevMode {public static int PRODUCTION = 0, DEBUG = 1, DESIGN = 2, BILLING_DUMMY = 4;};
+  public static int DEV_MODE = DevMode.PRODUCTION;
   
   // Provide access to this singleton scienceEngine from any class
   public static ScienceEngine SCIENCE_ENGINE;
@@ -167,7 +167,7 @@ public class ScienceEngine extends Game {
       fpsLogger = new FPSLogger();
     //}
     
-    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
       ScreenComponent.setSize(device.width, device.height);
     } else {
       DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
@@ -423,7 +423,7 @@ public class ScienceEngine extends Game {
   }
 
   public static String getHostPort() {
-    if (ScienceEngine.DEV_MODE == DevMode.PRODUCTION) {
+    if ((ScienceEngine.DEV_MODE & DevMode.PRODUCTION) != 0) {
       return "www.mazalearn.com:80";
     }
     return "localhost:8888";
@@ -461,7 +461,7 @@ public class ScienceEngine extends Game {
     try {
       return new TextureRegion(new Texture("images/" + name + ".png"));
     } catch (GdxRuntimeException e) {
-      if (ScienceEngine.DEV_MODE == DevMode.DEBUG) e.printStackTrace(); 
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace(); 
       return null;
     }
   }

@@ -56,10 +56,8 @@ public abstract class AbstractScreen implements Screen {
       @Override
       public boolean keyDown(InputEvent event, int keycode) {
         if (keycode == Keys.ALT_LEFT) {
-          if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
-            ScienceEngine.DEV_MODE = DevMode.DESIGN;
-          } else if (ScienceEngine.DEV_MODE == DevMode.DESIGN) {
-            ScienceEngine.DEV_MODE = DevMode.DEBUG;
+          if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+            ScienceEngine.DEV_MODE ^= DevMode.DESIGN;
           } 
         } else if (keycode == Keys.BACK) {
           goBack();
@@ -215,7 +213,7 @@ public abstract class AbstractScreen implements Screen {
     if (table == null) {
       table = new Table(getSkin());
       table.setFillParent(true);
-      if (ScienceEngine.DEV_MODE != ScienceEngine.DevMode.PRODUCTION) {
+      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
         table.debug();
       }
       stage.addActor(table);
@@ -249,7 +247,7 @@ public abstract class AbstractScreen implements Screen {
     Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     stage.draw();
-    if (ScienceEngine.DEV_MODE == DevMode.DEBUG) {
+    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
       Table.drawDebug(stage);
     }
   }
