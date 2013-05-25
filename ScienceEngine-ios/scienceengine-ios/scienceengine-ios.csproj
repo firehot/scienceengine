@@ -373,11 +373,11 @@
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\DCMotor.png">
       <Link>data\Electromagnetism\DCMotor.png</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\EMReview.json">
-      <Link>data\Electromagnetism\EMReview.json</Link>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\EelectromagnetismReview.json">
+      <Link>data\Electromagnetism\ElectromagnetismReview.json</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\EMReview.png">
-      <Link>data\Electromagnetism\EMReview.png</Link>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismReview.png">
+      <Link>data\Electromagnetism\ElectromagnetismReview.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnet.json">
       <Link>data\Electromagnetism\ElectroMagnet.json</Link>
@@ -430,8 +430,8 @@
     <Content Include="..\..\ScienceEngine-android\assets\sound\chime.mp3">
       <Link>sound\chime.mp3</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\EMReview.png">
-      <Link>images\EMReview.png</Link>
+    <Content Include="..\..\ScienceEngine-android\assets\images\Electromagnetism.png">
+      <Link>images\Electromagnetism.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\images\social\pack.png">
       <Link>images\social\pack.png</Link>

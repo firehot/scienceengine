@@ -46,7 +46,8 @@ tutors:[
           {type: "KnowledgeUnit",
            id: "G2.1",
            goal: "Change Field strength and direction and see how monopole moves",
-           hints: ["A free north pole moves in the direction of the field"],
+           hints: ["When field direction changes, which way does the monopole move?",
+                   "When field strength changes, how is the monopole affected?"],
            explanation: ["The monopole moves in the direction of the field.\nWhen the field strength increases, the force on the monopole increases",
                          "NOTE: Magnetic monopoles are not found in nature. Magnetic North and South poles cannot be isolated unlike electric charges."],
            postcondition: "Count(MagneticField.FieldStrength) > 1 and Count(MagneticField.FieldAngle) > 1"
@@ -55,7 +56,7 @@ tutors:[
            id: "G2.2",
            goal: "Change strength of monopole and see how it affects the movement",
            components:[{type:"Monopole", pin:true}],
-           hints: ["The force exerted by the field on the monopole depends on monopole strength"],
+           hints: ["Does the force on the monopole change when monopole strength changes?"],
            explanation: ["When the monopole strength increases, the force on the monopole increases"],
            postcondition: "Count(Monopole.MagnetStrength) > 1"
           },
@@ -63,7 +64,8 @@ tutors:[
            id: "G2.3",
            goal: "Change type of Monopole to South and see how monopole moves",
            components:[{type:"Monopole", pin:true}],
-           hints: ["A free south pole moves opposite to the direction of the field"],
+           hints: ["Does a south monopole move in the same direction as a north monopole in the field?",
+                   "Does the field apply the same force on a south monopole as a north monopole?"],
            explanation: ["A South monopole behaves as the opposite of a North monopole.\nThe force exerted by the field is same in magnitude but opposite in direction."],
            postcondition: "Count(Monopole.MonopoleType) >= 1"
           }]
@@ -84,14 +86,16 @@ tutors:[
           {type: "KnowledgeUnit",
            id: "G3.1",
            goal: "Increase the charge strength and see how the charge moves",
-           hints: ["A stationary charge is not affected by a magnetic field"],
+           hints: ["Is a non-moving charge affected by a magnetic field?"],
            explanation: ["A stationary charge is not affected by the magnetic field."],
            postcondition: "Count(Charge.ChargeStrength) > 1"
           },
           {type: "KnowledgeUnit",
            id: "G3.2",
            goal: "Pull the charge in some direction and see how it moves",
-           hints: ["A magnetic field exerts force on a moving charge"],
+           hints: ["Is a moving charge affected by the magnetic field?",
+                   "What is the direction of force on a moving charge in a magnetic field?",
+                   "Will the charge move faster if it is subjected to a magnetic field for longer time?"],
            explanation: ["A magnetic field exerts force only on a moving charge, not on a stationary charge.\nThe direction of force is given by Fleming's left hand rule.",
                          "image:fleminglefthand",
                          "Since the force is perpendicular to the charge motion (current), the charge moves in a circle.\nThe force is higher if the velocity of the charge is higher"],
@@ -101,7 +105,8 @@ tutors:[
            id: "G3.3",
            goal: "Change the magnetic field strength and charge strength and see how it affects the charge",
            explanation: ["A stronger magnetic field exerts a stronger force on a moving charge\nThe force on a higher strength charge is also higher.\nA larger force on the charge makes it spin faster."],
-           hints: ["A stronger magnetic field exerts a stronger force on a moving charge"],
+           hints: ["When the magnetic field become stronger, how is the motion of the charge affected?",
+                   "When the charge strength increases, how is the motion of the charge affected?"],
            postcondition: "Count(MagneticField.FieldStrength) > 1 and Charge.Velocity > 0"
           },
           {type: "KnowledgeUnit",

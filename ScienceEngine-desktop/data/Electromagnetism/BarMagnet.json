@@ -20,7 +20,7 @@ tutors:[
           id: "G1.1",
           goal: "Make the compass go through one complete rotation",
          hints: ["What happens to the compass when it moves around the magnet?",
-                 "It is easier to move the compass around the magnet"],
+                 "Can we move the compass instead of the magnet?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
                   explanation: ["A Bar Magnet has two poles - North and South.\nA compass is just a weak magnet with 2 poles which can freely rotate.\nThe North pole of the compass is attracted to the Bar Magnet's South pole and vice versa",
                        "The Earth has a magnetic field like a bar magnet and has two magnetic poles - North and South.\nThe North pole of the compass points to the Earth's magnetic South Pole (Earth's geographic North Pole)"],
@@ -36,7 +36,11 @@ tutors:[
         {type: "KnowledgeUnit",
          goal: "Touch the screen in multiple places around the magnet to see the field.",
          id: "G1.2", 
-         hints: ["When you touch a point, the magnetic field at that point is shown"],
+         hints: ["When you touch a point, the magnetic field at that point is shown",
+                 "What does the direction of the field arrow mean?",
+                 "What does a larger field arrow indicate?",
+                 "Are the field arrows bigger near the center of the magnet or near the poles?",
+                 "Do any field arrows point towards the North Pole of the magnet?"],
          postcondition: "FieldMeter.Count >= 10",
          explanation: ["The green field arrow at a point shows the direction of the field at that point.\nThe field arrow points towards the South Pole and away from the North Pole.",
                        "When the field is stronger, the arrow is bigger.\nThe magnetic field is stronger near the poles of the magnet."]
@@ -45,12 +49,16 @@ tutors:[
          goal: "Move the magnet. See how all the field arrows change.",
          id: "G1.3",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.Move) >= 1",
+         hints: ["What happens to the size of the field arrow when the magnet moves farther away?",
+                 "What happens to the direction of a field arrow when the magnet moves?"],
          explanation: ["When the magnet moves, its magnetic field moves along with it."]
         },
         {type: "KnowledgeUnit",
          goal: "Change rotation angle of magnet. See how the field changes",
          id: "G1.4",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.RotationAngle) >= 1",
+         hints: ["What happens to a field arrow when the pole of the magnet rotates towards it?",
+                 "What happens to the direction of the field arrow when the magnet rotates?"],
          explanation: ["When the magnet rotates, its magnetic field rotates along with it."],
          components:[{type:"BarMagnet", pin:true}]
         },
@@ -58,6 +66,8 @@ tutors:[
          goal: "Change the magnet strength. See how the field changes.",
          id: "G1.5",
          postcondition: "FieldMeter.Count >= 10 and Count(BarMagnet.MagnetStrength) >= 1",
+         hints: ["What happens to a field arrow when the strength of the magnet increases? Decreases?",
+                 "What happens to the direction of the field arrow when the magnet strength changes?"],
          explanation: ["If the magnet strength is higher, the field at a point is stronger but there is no change in its direction."],
          components:[{type:"BarMagnet", pin:true}]
          }

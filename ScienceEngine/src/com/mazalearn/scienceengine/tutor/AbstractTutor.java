@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.tutor;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -33,6 +32,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
   private int failurePoints;
   private String[] explanation;
   private String[] refs;
+  private int hintCounter = -1;
 
   /**
    * State Machine
@@ -210,7 +210,8 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public String getHint() {
     if (hints == null || hints.length == 0) return null;
-    return hints[MathUtils.random(0, hints.length - 1)];
+    hintCounter = (hintCounter + 1) % hints.length;
+    return hints[hintCounter];
   }
 
 

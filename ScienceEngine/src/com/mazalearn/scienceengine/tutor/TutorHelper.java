@@ -280,6 +280,7 @@ public class TutorHelper extends Group {
     // Collect visible actors to be excluded from probe points.
     excludedActors.clear();
     excludedActors.add(tutorNavigator);
+    excludedActors.add(hinter);
     for (Actor actor: science2DView.getActors()) {
       // actor is visible
       if (actor.isVisible() && actor != guru) {

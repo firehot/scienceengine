@@ -111,7 +111,6 @@ public class LoadingScienceTrain extends AbstractScreen {
     train.setX(startX + endX * percent);
     train.setY(startY + (endY - startY) * percent);
 
-    delayIfDebug();
     // Show the loading screen
     stage.act();
     stage.draw();

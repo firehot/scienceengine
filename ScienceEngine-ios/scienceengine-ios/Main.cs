@@ -50,7 +50,7 @@ namespace scienceengineios
 			}
 		}
 
-	    public override string httpGet(string path) {
+	  public override string httpGet(string path) {
 			try {
 				return base.httpGet(path);
 			} catch (System.Net.Sockets.SocketException ignore) {
