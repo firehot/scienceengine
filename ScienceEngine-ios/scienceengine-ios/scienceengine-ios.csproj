@@ -235,12 +235,6 @@
     <Content Include="..\..\ScienceEngine-android\assets\skin\arial-80.png">
       <Link>skin\arial-80.png</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\loading.pack">
-      <Link>images\loading.pack</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\images\loading.png">
-      <Link>images\loading.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\images\logo.png">
       <Link>images\logo.png</Link>
     </Content>
@@ -349,12 +343,6 @@
     <Content Include="..\..\ScienceEngine-android\assets\sound\success.mp3">
       <Link>sound\success.mp3</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ACMotor.json">
-      <Link>data\Electromagnetism\ACMotor.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ACMotor.png">
-      <Link>data\Electromagnetism\ACMotor.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnet.json">
       <Link>data\Electromagnetism\BarMagnet.json</Link>
     </Content>
@@ -373,7 +361,7 @@
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\DCMotor.png">
       <Link>data\Electromagnetism\DCMotor.png</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\EelectromagnetismReview.json">
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismReview.json">
       <Link>data\Electromagnetism\ElectromagnetismReview.json</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismReview.png">
@@ -397,23 +385,11 @@
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Field.png">
       <Link>data\Electromagnetism\Field.png</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ScienceTrain.json">
-      <Link>data\Electromagnetism\ScienceTrain.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ScienceTrain.png">
-      <Link>data\Electromagnetism\ScienceTrain.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\TwoWires.json">
       <Link>data\Electromagnetism\TwoWires.json</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\TwoWires.png">
       <Link>data\Electromagnetism\TwoWires.png</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Wire.json">
-      <Link>data\Electromagnetism\Wire.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Wire.png">
-      <Link>data\Electromagnetism\Wire.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\SOM.json">
       <Link>data\StatesOfMatter\SOM.json</Link>
@@ -517,11 +493,18 @@
     <Content Include="..\..\ScienceEngine-android\assets\music\vivaldi-spring-2.mp3">
       <Link>music\vivaldi-spring-2.mp3</Link>
     </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismScienceTrain.png">
+      <Link>data\Electromagnetism\ElectromagnetismScienceTrain.png</Link>
+    </Content>
+    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismScienceTrain.json">
+      <Link>data\Electromagnetism\ElectromagnetismScienceTrain.json</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="WebViewController.cs" />
     <Compile Include="Reachability.cs" />
+    <Compile Include="IosPlatformAdapter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -31,7 +31,7 @@ public class SkuDetails {
 
     public SkuDetails() {}
     
-    private SkuDetails(String productId, String type, String title, String description, String price) {
+    public SkuDetails(String productId, String type, String title, String description, String price) {
       this.productId = productId;
       this.title = title;
       this.description = description;

@@ -16,49 +16,7 @@ using com.mazalearn.scienceengine.designer;
 using com.mazalearn.scienceengine.app.services;
 using com.mazalearn.scienceengine.app.utils;
 
-namespace scienceengineios
-{		
-	public class IosPlatformAdapter : NonWebPlatformAdapter {
-		UIWindow window;
-		WebViewController webViewController;
-
-		public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
-		}
-		
-		public void setWindowAndWebViewController(UIWindow window, WebViewController webViewController) {
-      this.window = window;
-      this.webViewController = webViewController;
-		}
-
-		public override void browseURL (string url)
-		{
-			webViewController.load (new NSUrlRequest(new NSUrl(url)));
-			window.MakeKeyAndVisible ();
-		}
-
-		public override void showInternalURL(string url) {
-			string localHtmlUrl = Path.Combine (NSBundle.MainBundle.BundlePath, url);
-			webViewController.load (new NSUrlRequest(new NSUrl(localHtmlUrl, false)));
-			window.MakeKeyAndVisible();
-		}
-
-		public override string httpPost(string path, string contentType, java.util.Map paramset, byte[] data) {
-			try {
-			  return base.httpPost(path, contentType, paramset, data);
-			} catch (System.Net.Sockets.SocketException ignore) {
-				return "";
-			}
-		}
-
-	  public override string httpGet(string path) {
-			try {
-				return base.httpGet(path);
-			} catch (System.Net.Sockets.SocketException ignore) {
-				return "";
-			}
-		}
-
-	}
+namespace scienceengineios {
 
 	public class Sha1Implementor : Crypter.Sha1 {
 		public byte[] sha1Hash (byte[] toHash) {

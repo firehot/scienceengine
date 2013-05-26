@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.FreeTypeComplexFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.billing.IBilling;
 import com.mazalearn.scienceengine.billing.IabException;
@@ -95,6 +96,10 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   @Override
   public void queryInventory(List<Topic> topicList, final IBilling billing) {
     Gdx.app.log(ScienceEngine.LOG, "Querying inventory.");
+    if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) == 1) {
+      super.queryInventory(topicList, billing);
+      return;
+    }
     List<String> productList = new ArrayList<String>();
     for (Topic topic: topicList) {
       productList.add(topic.toProductId());

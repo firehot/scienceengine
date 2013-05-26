@@ -9,7 +9,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 
 public class Hinter extends Group {
-  private static final int TIME_GAP_BETWEEN_HINTS = 5;
+  private static final int TIME_GAP_BETWEEN_HINTS = 10;
   private String hint;
   private TextButton hintBox;
   private ITutor activeTutor;
