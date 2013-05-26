@@ -81,7 +81,7 @@ public class LoadingScienceTrain extends AbstractScreen {
     height = ScreenComponent.VIEWPORT_HEIGHT;
     stage.setViewport(width, height, false);
     startX = 50;
-    endX = WIDTH - 10;
+    endX = ScreenComponent.VIEWPORT_WIDTH - 10;
     startY = ScreenComponent.VIEWPORT_HEIGHT * MathUtils.random(0.2f, 0.8f);
     endY = ScreenComponent.VIEWPORT_HEIGHT * MathUtils.random(0.2f, 0.8f);
     train.setPosition(startX, startY);
@@ -90,7 +90,6 @@ public class LoadingScienceTrain extends AbstractScreen {
     railTracks.setPosition(startX - 100 * MathUtils.cosDeg(angle), 
         startY - 25 - 100 * MathUtils.sinDeg(angle));
     railTracks.setRotation(angle);
-
   }
 
   @Override

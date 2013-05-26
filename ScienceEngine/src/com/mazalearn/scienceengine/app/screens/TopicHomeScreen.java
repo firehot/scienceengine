@@ -37,7 +37,6 @@ import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
-import com.mazalearn.scienceengine.billing.IBilling;
 import com.mazalearn.scienceengine.tutor.Guru;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
@@ -209,19 +208,7 @@ public class TopicHomeScreen extends AbstractScreen {
           @Override
           public void clicked(InputEvent event, float x, float y) {
             if (!installProfile.isAvailableTopic(level)) {
-              new PurchaseDialog(topic, level, new IBilling() {
-                @Override
-                public void purchaseCallback(Topic purchasedTopic) {
-                  if (purchasedTopic == null) return;
-                  // Allow access after marking in install profile
-                  installProfile.addAsAvailableTopic(purchasedTopic);
-                  for (Topic child: purchasedTopic.getChildren()) {
-                    installProfile.addAsAvailableTopic(child);
-                  }
-                  installProfile.save();
-                  LoadingScienceTrain.setWaitForBackend(false);                  
-                }
-              }, getStage(), getSkin(), scienceEngine).show(getStage());
+              new PurchaseDialog(topic, level, getStage(), getSkin(), scienceEngine).show(getStage());
               return;
             }
             new MessageDialog(getSkin(), "To unlock this level, you need the " + topic.name() + " Certificate").show(stage);

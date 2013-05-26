@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine.tutor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -76,7 +75,7 @@ public class ImageMessageBox extends TextButton {
         if (newX + w > ScreenComponent.VIEWPORT_WIDTH) newX = ScreenComponent.VIEWPORT_WIDTH - w;
         if (newY < 0) newY = 0;
         if (newY + h > ScreenComponent.VIEWPORT_HEIGHT) newY = ScreenComponent.VIEWPORT_HEIGHT - h;
-        Gdx.app.error(ScienceEngine.LOG, "x y " + getDeltaX() + " " + getDeltaY() + " " + newX + " " + newY);
+        // Gdx.app.error(ScienceEngine.LOG, "ImageMessageBox x y " + getDeltaX() + " " + getDeltaY() + " " + newX + " " + newY);
         setPosition(newX, newY);
       }
     });

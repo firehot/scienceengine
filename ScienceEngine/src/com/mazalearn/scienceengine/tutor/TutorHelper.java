@@ -81,11 +81,11 @@ public class TutorHelper extends Group {
     this.addActor(successImage);
     this.addActor(failureImage);
     this.addActor(correctImage);
-    this.addActor(wrongImage);   
+    this.addActor(wrongImage);
     
     hinter = new Hinter(skin);
     this.addActor(hinter);
-    this.addActor(explanation = new ExplanationBox(this, skin, "explanation"));
+    this.addActor(explanation = new ExplanationBox(this, skin, "explanation2"));
     
     timeTracker = (TimeTracker) science2DView.findActor(ScreenComponent.TimeTracker.name());
     if (timeTracker != null) {

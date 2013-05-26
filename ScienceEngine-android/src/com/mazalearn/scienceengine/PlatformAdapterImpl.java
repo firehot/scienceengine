@@ -93,18 +93,25 @@ public class PlatformAdapterImpl extends NonWebPlatformAdapter {
   }
   
   @Override
-  public Inventory queryInventory(List<Topic> topicList) {
+  public void queryInventory(List<Topic> topicList, final IBilling billing) {
     Gdx.app.log(ScienceEngine.LOG, "Querying inventory.");
     List<String> productList = new ArrayList<String>();
     for (Topic topic: topicList) {
       productList.add(topic.toProductId());
     }
-    try {
-      return iabHelper.queryInventory(true, productList, Collections.<String> emptyList());
-    } catch (IabException e) {
-      e.printStackTrace();
-      return null;
-    }    
+    
+    iabHelper.queryInventoryAsync(true, productList,
+        new IabHelper.QueryInventoryFinishedListener() {
+          @Override
+          public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+            if (result.isFailure()) {
+              Gdx.app.error(ScienceEngine.LOG, "Failed to query inventory: " + result);
+              billing.inventoryCallback(null);
+            }
+            Gdx.app.log(ScienceEngine.LOG, "Query inventory was successful.");
+            billing.inventoryCallback(inventory);
+          }
+        });    
   }
   
   // Listener that's called when we finish querying the items and subscriptions we own

@@ -12,7 +12,6 @@ import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.billing.IBilling;
-import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 
 public interface IPlatformAdapter {
@@ -74,6 +73,6 @@ public interface IPlatformAdapter {
 
   void launchPurchaseFlow(Topic sku, IBilling billing);
 
-  Inventory queryInventory(List<Topic> itemList);
+  void queryInventory(List<Topic> itemList, IBilling billing);
 }
 

@@ -96,22 +96,33 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   }
 
   @Override
-  public Inventory queryInventory(List<Topic> topicList) {
-    if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) != 0) {
-      Inventory inventory = new Inventory();
-      for (Topic topic: topicList) {
-        StringBuffer json = new StringBuffer();
-        json.append("{");
-        json.append("productId:\"" + topic.toProductId() + "\"");
-        json.append(",title:\"" + topic.name() + "\"");
-        json.append(",description:\"" + topic.name() + "\"");
-        json.append(",price:" + (topic.getChildren().length > 0 ? "\"$4.99\"" : "\"0.99\""));
-        json.append("}");
-        SkuDetails skuDetails = SkuDetails.toSkuDetails("inapp", json.toString());
-        inventory.addSkuDetails(skuDetails);
-      }
-      return inventory;
+  public void queryInventory(List<Topic> topicList, final IBilling billing) {
+    if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) == 0) {
+      throw new UnsupportedOperationException("Query Inventory not implemented");
     }
-    throw new UnsupportedOperationException("Query Inventory not implemented");
+    final Inventory inventory = new Inventory();
+    for (Topic topic: topicList) {
+      StringBuffer json = new StringBuffer();
+      json.append("{");
+      json.append("productId:\"" + topic.toProductId() + "\"");
+      json.append(",title:\"" + topic.name() + "\"");
+      json.append(",description:\"" + topic.name() + "\"");
+      json.append(",price:" + (topic.getChildren().length > 0 ? "\"$4.99\"" : "\"0.99\""));
+      json.append("}");
+      SkuDetails skuDetails = SkuDetails.toSkuDetails("inapp", json.toString());
+      inventory.addSkuDetails(skuDetails);
+    }
+    // Simulate an asynchronous inventory query
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        billing.inventoryCallback(inventory);
+      }
+    }).start();
   }
 }

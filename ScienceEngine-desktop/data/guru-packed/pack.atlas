@@ -24,51 +24,58 @@ explanation
   orig: 256, 128
   offset: 0, 0
   index: -1
-anticlockwise
+explanation2
   rotate: false
   xy: 563, 381
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+anticlockwise
+  rotate: false
+  xy: 821, 381
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 clockwise
   rotate: false
-  xy: 693, 381
+  xy: 563, 251
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 greenballoon
   rotate: false
-  xy: 823, 381
+  xy: 693, 251
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 redballoon
   rotate: false
-  xy: 563, 251
+  xy: 823, 251
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 check
   rotate: false
-  xy: 953, 445
+  xy: 305, 187
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 cross
   rotate: false
-  xy: 305, 187
+  xy: 951, 445
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 questionmark
   rotate: false
-  xy: 693, 315
+  xy: 371, 187
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -89,7 +96,7 @@ fieldarrow-yellow
   index: -1
 fieldarrow
   rotate: false
-  xy: 953, 427
+  xy: 305, 169
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
