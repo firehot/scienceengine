@@ -9,6 +9,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.speech.tts.TextToSpeech;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -29,6 +30,7 @@ import com.mazalearn.scienceengine.billing.Purchase;
 public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   private AndroidApplication application;
   private IabHelper iabHelper;
+  private TextToSpeech mTts;
   
   public AndroidPlatformAdapter(AndroidApplication application, Platform platform, IabHelper iabHelper) {
     super(platform);
@@ -216,6 +218,13 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
     return true;
   }
   
+  @Override
+  public void speak(String text, boolean append) {
+    if (mTts != null) {
+      mTts.speak(text, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
+    }
+  }
+  
   public String getUserEmail() {
     for (Account a: AccountManager.get(application).getAccountsByType("com.google")) {
       if (a.name.contains("@gmail.com")) {
@@ -223,5 +232,9 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
       }
     }    
     return "";
+  }
+
+  public void setTts(TextToSpeech mTts) {
+    this.mTts = mTts;
   }
 }

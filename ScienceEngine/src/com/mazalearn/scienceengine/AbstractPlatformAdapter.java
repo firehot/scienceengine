@@ -136,4 +136,9 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
       }
     }).start();
   }
+  
+  @Override
+  public void speak(String text, boolean append) {
+    // Ignore - throwing exception is not useful.
+  }
 }

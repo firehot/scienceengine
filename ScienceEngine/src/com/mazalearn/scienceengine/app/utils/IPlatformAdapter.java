@@ -74,5 +74,7 @@ public interface IPlatformAdapter {
   void launchPurchaseFlow(Topic sku, IBilling billing);
 
   void queryInventory(List<Topic> itemList, IBilling billing);
+
+  void speak(String text, boolean append);
 }
 

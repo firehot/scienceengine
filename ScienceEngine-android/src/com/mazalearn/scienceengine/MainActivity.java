@@ -1,11 +1,15 @@
 package com.mazalearn.scienceengine;
 
 
+import java.util.Locale;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -18,13 +22,22 @@ import com.mazalearn.scienceengine.billing.Security;
 
 public class MainActivity extends AndroidApplication {
 
+  private static final int TTS_CHECK = 2000;
   private IabHelper iabHelper;
+  private AndroidPlatformAdapter platformAdapter;
+  private TextToSpeech mTts;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);      
     // Android always in production mode
     ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
+    // TTS
+    Intent checkIntent = new Intent();
+    checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+    startActivityForResult(checkIntent, TTS_CHECK);
+    // TTS
+    
     // InApp Billing helper
     iabHelper = new IabHelper(this, Security.getPublicKey());
     // enable debug logging (for a production application, set this to false).
@@ -52,7 +65,7 @@ public class MainActivity extends AndroidApplication {
     
     Platform platform = android.os.Build.FINGERPRINT.contains("generic") 
         ? Platform.AndroidEmulator : Platform.Android;
-    AndroidPlatformAdapter platformAdapter = new AndroidPlatformAdapter(this, platform, iabHelper);
+    platformAdapter = new AndroidPlatformAdapter(this, platform, iabHelper);
     
     ScienceEngine.setPlatformAdapter(platformAdapter);
     initialize(scienceEngine, cfg);
@@ -69,6 +82,25 @@ public class MainActivity extends AndroidApplication {
      if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
        super.onActivityResult(requestCode, resultCode, data);  
      }
+     mTts = null;
+     if (requestCode == TTS_CHECK) {
+       if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+         // success, create the TTS instance
+         mTts = new TextToSpeech(this, new OnInitListener() {
+          @Override
+          public void onInit(int arg0) {
+            mTts.setLanguage(Locale.US);
+            platformAdapter.setTts(mTts);
+          }});
+       } else {
+         // missing data, install it
+         Intent installIntent = new Intent();
+         installIntent.setAction(
+             TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+         startActivity(installIntent);
+       }
+     }
+     // TTS
   }
   
   @Override
@@ -81,6 +113,7 @@ public class MainActivity extends AndroidApplication {
   @Override
   public void onDestroy() {
     if (iabHelper != null) iabHelper.dispose();
+    if (mTts != null) mTts.shutdown();
     iabHelper = null;
     super.onDestroy();
   }

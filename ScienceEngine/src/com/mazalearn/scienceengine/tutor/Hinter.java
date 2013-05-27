@@ -47,6 +47,7 @@ public class Hinter extends Group {
     this.hint = hint;
     this.setVisible(true);
     lastTimeHintShown = ScienceEngine.getTime();
+    ScienceEngine.getPlatformAdapter().speak(hint, false);
     hintBox.addAction(Actions.sequence(
         Actions.fadeOut(0.5f),
         new Action() {
@@ -56,8 +57,7 @@ public class Hinter extends Group {
             return true;
           }
         },
-        Actions.fadeIn(0.5f)));
-        
+        Actions.fadeIn(0.5f)));      
   }
 
   public boolean hasHint() {
