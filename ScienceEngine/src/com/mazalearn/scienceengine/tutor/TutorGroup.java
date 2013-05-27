@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.core.model.IComponentType;
 public class TutorGroup extends AbstractTutor {
   
   private static final int RAPID_FIRE_MAX = 10;
-  private static final int REVIEWER_MAX = 1;
+  private static final int REVIEWER_MAX = 50;
   private List<ITutor> childTutors = Collections.emptyList();
   private ITutor currentTutor;
   

@@ -208,8 +208,6 @@ public class ActivityScreen extends AbstractScreen {
     }
     // Guru resources
     ScienceEngine.loadAtlas("images/guru/pack.atlas");
-    // Topic resources
-    ScienceEngine.loadAtlas("images/" + topic.name() + "/pack.atlas");
     AsyncLevelLoader.LevelLoaderParameter parameter = new AsyncLevelLoader.LevelLoaderParameter();
     parameter.science2DController = science2DController;
     ScienceEngine.getAssetManager().load(fileName, IScience2DController.class, parameter);

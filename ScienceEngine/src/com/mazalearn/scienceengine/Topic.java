@@ -31,6 +31,7 @@ public enum Topic {
   private final Topic canonicalChild;
   private final int topicId;
   private final String description;
+  private boolean isFree = false;
   private static Map<Integer, Topic> idToTopicMap = new HashMap<Integer, Topic>();
   
   static {
@@ -53,6 +54,7 @@ public enum Topic {
       return;
     }
     this.canonicalChild = childTopics[0];
+    this.canonicalChild.isFree = true;
     this.childTopics = new Topic[childTopics.length - 1];
     for (int i = 1; i < childTopics.length; i++) {
       this.childTopics[i - 1] = childTopics[i];
@@ -73,6 +75,10 @@ public enum Topic {
   
   public String getDescription() {
     return description;
+  }
+  
+  public boolean isFree() {
+    return isFree;
   }
   
   public Topic idToTopic(int topicId) {

@@ -8,15 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 public class MessageDialog extends Dialog {
   
   public MessageDialog(final Skin skin, final String messageText) {
-    super("", skin);
+    super("", skin, "buydialog");
     
-    Label message = new Label(messageText, skin);
-    message.setWidth(600);
+    Label message = new Label(messageText, skin, "buy");
     message.setAlignment(Align.center, Align.center);
 
 
-    getContentTable().add(message).width(800).pad(10).center().colspan(2);
-    getContentTable().row();
+    getContentTable().add(message).pad(10).center();
     button("OK");
   }
 }

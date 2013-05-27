@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -118,6 +117,7 @@ public class TopicHomeScreen extends AbstractScreen {
 
   protected void goBack() {
     profile.setCurrentTopic(null);
+    ScienceEngine.unloadAtlas("images/" + topic.name() + "/pack.atlas");
     scienceEngine.setScreen(new ChooseTopicScreen(scienceEngine));
   }
   
@@ -179,26 +179,28 @@ public class TopicHomeScreen extends AbstractScreen {
     for (final Topic level: topic.getChildren()) {
       numTopics++;
       // Assumption: Last level is the Science train level - unlocked only on certification
-      boolean isLocked = !installProfile.isAvailableTopic(level) || 
-          (numTopics == topic.getChildren().length &&
-          !profile.getCertificates().contains(topic.name()));
+      final boolean isScienceEngineLevel = numTopics == topic.getChildren().length;
+      boolean isUnlocked = level.isFree() ||
+          installProfile.isAvailableTopic(level) || 
+          (isScienceEngineLevel && profile.getCertificates().contains(topic.name()));
       String activityName = getMsg(topic + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(topic, level, ".png");
-      Pixmap pixmap;
-      if (ScienceEngine.getAssetManager().isLoaded(filename)) {
-        pixmap = ScienceEngine.getAssetManager().get(filename, Pixmap.class);
+      FileHandle file = Gdx.files.internal(filename);
+      Texture texture;
+      if (file.exists()) {
+        texture = new Texture(file);
       } else {
-        pixmap = LevelUtil.getEmptyThumbnail();
+        texture = new Texture(LevelUtil.getEmptyThumbnail());
       }
       TextButton activityThumb = 
-          ScreenUtils.createImageButton(new TextureRegion(new Texture(pixmap)), getSkin(), "default");
+          ScreenUtils.createImageButton(new TextureRegion(texture), getSkin(), "default");
       ScreenComponent.scaleSize(activityThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
       
       // Name Label
       activityThumb.addActor(ScreenUtils.createLabel(activityName, 2, 40, THUMBNAIL_WIDTH - 4, 50, blueBackground));
       // Level Label
       activityThumb.addActor(ScreenUtils.createLabel(String.valueOf(numTopics), THUMBNAIL_WIDTH - 34, THUMBNAIL_HEIGHT - 34, 30, 30, blueBackground));
-      if (isLocked) {
+      if (!isUnlocked) {
         Image lockImage = new Image(lockTexture);
         lockImage.setSize(activityThumb.getWidth() / 2, activityThumb.getHeight() / 2);
         lockImage.setPosition(activityThumb.getWidth() / 2 - lockImage.getWidth() / 2, 
@@ -207,11 +209,11 @@ public class TopicHomeScreen extends AbstractScreen {
         activityThumb.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent event, float x, float y) {
-            if (!installProfile.isAvailableTopic(level)) {
+            if (isScienceEngineLevel) {
+              new MessageDialog(getSkin(), "To unlock this level, you need the " + topic.name() + " Certificate").show(stage);
+            } else if (!installProfile.isAvailableTopic(level)) {
               new PurchaseDialog(topic, level, getStage(), getSkin(), scienceEngine).show(getStage());
-              return;
             }
-            new MessageDialog(getSkin(), "To unlock this level, you need the " + topic.name() + " Certificate").show(stage);
           }
         });
       } else {
@@ -365,10 +367,8 @@ public class TopicHomeScreen extends AbstractScreen {
   @Override
   public void addAssets() {
     super.addAssets();
-    for (Topic childTopic: topic.getChildren()) {
-      String filename = LevelUtil.getLevelFilename(topic, childTopic, ".png");
-      ScienceEngine.getAssetManager().load(filename, Pixmap.class);
-    }
+    // Topic resources
+    ScienceEngine.loadAtlas("images/" + topic.name() + "/pack.atlas");
   }
 
 }
