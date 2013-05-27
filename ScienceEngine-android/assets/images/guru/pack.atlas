@@ -17,44 +17,30 @@ challenge
   orig: 256, 256
   offset: 0, 0
   index: -1
-explanation
-  rotate: false
-  xy: 1, 19
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-explanation2
-  rotate: false
-  xy: 563, 381
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
 anticlockwise
   rotate: false
-  xy: 821, 381
+  xy: 1, 19
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 clockwise
   rotate: false
-  xy: 563, 251
+  xy: 563, 381
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 greenballoon
   rotate: false
-  xy: 693, 251
+  xy: 131, 19
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 redballoon
   rotate: false
-  xy: 823, 251
+  xy: 693, 381
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -68,14 +54,14 @@ check
   index: -1
 cross
   rotate: false
-  xy: 951, 445
+  xy: 563, 315
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 questionmark
   rotate: false
-  xy: 371, 187
+  xy: 823, 445
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -89,7 +75,7 @@ fieldarrow-left
   index: -1
 fieldarrow-yellow
   rotate: false
-  xy: 259, 131
+  xy: 261, 131
   size: 32, 16
   orig: 32, 16
   offset: 0, 0

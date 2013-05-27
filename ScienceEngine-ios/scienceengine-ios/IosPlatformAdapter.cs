@@ -68,12 +68,14 @@ namespace scienceengineios
       priceObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerTransactionSucceededNotification, 
       (notification) => {
         billing.purchaseCallback(sku);
+        NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
       });
 
       requestObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerRequestFailedNotification, 
                                                                        (notification) => {
         Console.WriteLine ("Request Failed");
         billing.purchaseCallback(null);
+        NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
       });
       
       iap.PurchaseProduct (sku.toProductId());
@@ -109,6 +111,7 @@ namespace scienceengineios
 					    product.LocalizedDescription, product.LocalizedTitle, product.Price.ToString ());
 					inventory.addSkuDetails(skuDetails);
 				}
+        NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
 				billing.inventoryCallback(inventory);
 			});
 			// only if we can make payments, request the prices

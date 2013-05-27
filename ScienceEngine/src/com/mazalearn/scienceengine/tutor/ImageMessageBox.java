@@ -18,19 +18,25 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 public class ImageMessageBox extends TextButton {
   
   private TextButton nextButton, prevButton;
-  protected static final int SCALE = Math.round(3f * ScreenComponent.getFontSize());
+  private int scale = Math.round(3f * ScreenComponent.getFontSize());
   private Button closeButton;
   private TextureRegionDrawable background;
+  private TextButtonStyle textButtonStyle;
+  private float padding[] = new float[] {0.15f, 0.12f, 0.1f, 0.1f};
 
   public ImageMessageBox(Skin skin, String textureName, final Actor parentActor) {
     super("", skin);
-    background = new TextureRegionDrawable(ScienceEngine.getTextureRegion(textureName));
-    setBackground(background);
+    if (textureName != null) {
+      background = new TextureRegionDrawable(ScienceEngine.getTextureRegion(textureName));
+      setBackground(background);
+      textButtonStyle = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
+    } else {
+      textButtonStyle = new TextButtonStyle(skin.get(TextButtonStyle.class));      
+    }
     getLabel().setWrap(true);
-    TextButtonStyle tbs = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
-    tbs.fontColor = Color.BLACK;
-    tbs.font = skin.getFont("default-small");
-    setStyle(tbs);
+    setFontColor(Color.BLACK);
+    textButtonStyle.font = skin.getFont("default-small");
+    setStyle(textButtonStyle);
     setWidth(250);
     setHeight(250);
     setPosition(ScreenComponent.ImageMessageBox.getX(getWidth()),
@@ -81,8 +87,21 @@ public class ImageMessageBox extends TextButton {
     });
   }
 
+  public void setFontColor(Color color) {
+    textButtonStyle.fontColor = color;
+  }
+
+  public void setPaddingAndScale(float top, float left, float bottom, float right, float scale) {
+    padding[0] = top;
+    padding[1] = left;
+    padding[2] = bottom;
+    padding[3] = right;
+    this.scale = Math.round(scale * ScreenComponent.getFontSize());
+  }
+
   @Override
   public void drawBackground(SpriteBatch batch, float parentAlpha) {
+    if (background == null) return;
     getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
   }
 
@@ -95,11 +114,13 @@ public class ImageMessageBox extends TextButton {
   }
 
   public void setTextAndResize(String text) {
-    setBackground(background);
+    if (background != null) {
+      setBackground(background);
+    }
     // Set size in a 3:1 aspect ratio
     float semiPerimeter = (float) Math.sqrt(text.length());
-    float h = semiPerimeter * SCALE / 4 + 30; // To hold Buttons
-    float w = semiPerimeter * SCALE * 3 / 4 + 40;
+    float h = semiPerimeter * scale / 4 + 30; // To hold Buttons
+    float w = semiPerimeter * scale * 3 / 4 + 40;
     if (w > ScreenComponent.VIEWPORT_WIDTH * 0.9f) {
       w = ScreenComponent.VIEWPORT_WIDTH * 0.9f;
       h *= 1.1f;
@@ -107,15 +128,15 @@ public class ImageMessageBox extends TextButton {
     ScreenComponent.scaleSize(this, w, h);
     setSize(w, h);
     super.setText(text);
-    getCell(getLabel()).pad(0.15f * h, 0.12f * w, 0.1f *h, 0.1f * w);
+    getCell(getLabel()).pad(padding[0] * h, padding[1] * w, padding[2] * h, padding[3] * w);
     getLabel().setAlignment(Align.center, Align.left);
     positionButtons();
   }
 
   private void positionButtons() {
-    closeButton.setPosition(getWidth() - 2 * closeButton.getWidth(), getHeight() - closeButton.getHeight());
-    nextButton.setPosition(getWidth() / 2 + nextButton.getWidth() / 2, 5);
-    prevButton.setPosition(getWidth() / 2 - 2 * prevButton.getWidth() / 2, 5);
+    closeButton.setPosition(getWidth() - closeButton.getWidth(), getHeight() - closeButton.getHeight());
+    nextButton.setPosition(getWidth() / 2 + nextButton.getWidth() / 2, -5);
+    prevButton.setPosition(getWidth() / 2 - 2 * prevButton.getWidth() / 2, -5);
   }
 
   public void setImageAndResize(TextureRegionDrawable drawable) {

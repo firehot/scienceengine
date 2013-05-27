@@ -2,11 +2,13 @@ package com.mazalearn.scienceengine.tutor;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.ScreenComponent;
 
 public class ExplanationBox extends ImageMessageBox {
 
@@ -16,7 +18,7 @@ public class ExplanationBox extends ImageMessageBox {
   private boolean hasRevisionRefs;
   
   public ExplanationBox(final TutorHelper tutorHelper, Skin skin, String textureName) {
-    super(skin, textureName, null);
+    super(skin, null, null);
     getNextButton().addListener(new ClickListener() {
       @Override 
       public void clicked (InputEvent event, float x, float y) {
@@ -31,6 +33,10 @@ public class ExplanationBox extends ImageMessageBox {
         showExplanation();
       }            
     });
+    Image themeImage = new Image(ScienceEngine.getTextureRegion(textureName));
+    addActor(themeImage);
+    themeImage.setPosition(0, 0);
+    themeImage.setSize(ScreenComponent.getScaledX(30), ScreenComponent.getScaledX(30));
     reviseButton = new TextButton("Revise This", skin);
     addActor(reviseButton);
     reviseButton.setVisible(false);

@@ -85,7 +85,9 @@ public class TutorHelper extends Group {
     
     hinter = new Hinter(skin);
     this.addActor(hinter);
-    this.addActor(explanation = new ExplanationBox(this, skin, "explanation2"));
+    this.addActor(explanation = new ExplanationBox(this, skin, "idea"));
+    explanation.setFontColor(Color.WHITE);
+    explanation.setPaddingAndScale(0.10f, 0.05f, 0.15f, 0.05f, 2f);
     
     timeTracker = (TimeTracker) science2DView.findActor(ScreenComponent.TimeTracker.name());
     if (timeTracker != null) {
