@@ -17,7 +17,7 @@ public class Main {
 		
     ScienceEngine.DEV_MODE = DevMode.DEBUG | DevMode.BILLING_DUMMY;
 		ScienceEngine scienceEngine = new ScienceEngine(args.length > 0 ? args[0] : "", device);
-		ScienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.Desktop));
+		ScienceEngine.setPlatformAdapter(new DesktopPlatformAdapter(Platform.Desktop));
     new LwjglApplication(scienceEngine, cfg) {
       @Override
       public void exit() {

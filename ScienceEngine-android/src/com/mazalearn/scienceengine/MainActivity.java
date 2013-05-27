@@ -52,7 +52,7 @@ public class MainActivity extends AndroidApplication {
     
     Platform platform = android.os.Build.FINGERPRINT.contains("generic") 
         ? Platform.AndroidEmulator : Platform.Android;
-    PlatformAdapterImpl platformAdapter = new PlatformAdapterImpl(this, platform, iabHelper);
+    AndroidPlatformAdapter platformAdapter = new AndroidPlatformAdapter(this, platform, iabHelper);
     
     ScienceEngine.setPlatformAdapter(platformAdapter);
     initialize(scienceEngine, cfg);

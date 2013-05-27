@@ -20,7 +20,7 @@ public class GwtLauncher extends GwtApplication {
 	@Override
 	public ApplicationListener getApplicationListener () {
 	  String href = Window.Location.getHref().replace("/scienceengine#", "");
-    ScienceEngine.setPlatformAdapter(new PlatformAdapterImpl(Platform.GWT));
+    ScienceEngine.setPlatformAdapter(new GwtPlatformAdapter(Platform.GWT));
     ScienceEngine scienceEngine = new ScienceEngine(href, Device.Desktop);
 		ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
     return scienceEngine;

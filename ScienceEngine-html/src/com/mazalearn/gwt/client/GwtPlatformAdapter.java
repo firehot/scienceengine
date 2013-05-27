@@ -16,9 +16,9 @@ import com.google.gwt.user.client.Window;
 import com.mazalearn.scienceengine.AbstractPlatformAdapter;
 import com.mazalearn.scienceengine.ScienceEngine;
 
-class PlatformAdapterImpl extends AbstractPlatformAdapter {
+class GwtPlatformAdapter extends AbstractPlatformAdapter {
   
-  public PlatformAdapterImpl(Platform platform) {
+  public GwtPlatformAdapter(Platform platform) {
     super(platform);
   }
 

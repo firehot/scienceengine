@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
-import com.mazalearn.scienceengine.PlatformAdapterImpl;
+import com.mazalearn.scienceengine.DesktopPlatformAdapter;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
@@ -41,7 +41,7 @@ public class ProfileTest {
   
   @BeforeClass
   public static void setUp() {
-    ScienceEngine.setPlatformAdapter(new PlatformAdapterImpl(IPlatformAdapter.Platform.Desktop) {
+    ScienceEngine.setPlatformAdapter(new DesktopPlatformAdapter(IPlatformAdapter.Platform.Desktop) {
       @Override
       public String getInstallationId() {
         return "TestInstallationId";

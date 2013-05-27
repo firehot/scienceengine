@@ -2,7 +2,6 @@ package com.mazalearn.scienceengine;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import android.accounts.Account;
@@ -21,19 +20,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.billing.IBilling;
-import com.mazalearn.scienceengine.billing.IabException;
 import com.mazalearn.scienceengine.billing.IabHelper;
 import com.mazalearn.scienceengine.billing.IabHelper.OnIabPurchaseFinishedListener;
 import com.mazalearn.scienceengine.billing.IabResult;
 import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.billing.Purchase;
 
-public class PlatformAdapterImpl extends NonWebPlatformAdapter {
+public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   private AndroidApplication application;
   private IabHelper iabHelper;
-  protected static final String SKU_ELECTROMAGNETISM = "electromagnetism";
   
-  public PlatformAdapterImpl(AndroidApplication application, Platform platform, IabHelper iabHelper) {
+  public AndroidPlatformAdapter(AndroidApplication application, Platform platform, IabHelper iabHelper) {
     super(platform);
     this.application = application;
     this.iabHelper = iabHelper;
