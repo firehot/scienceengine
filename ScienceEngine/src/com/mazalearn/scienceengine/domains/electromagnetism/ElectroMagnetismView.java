@@ -94,13 +94,12 @@ public class ElectroMagnetismView extends AbstractScience2DView {
         Arrays.asList(new String[]{ComponentType.Dynamo.name(),  ComponentType.Magnet.name(), 
             CircuitActor.COMPONENT_TYPE, com.mazalearn.scienceengine.core.model.ComponentType.Drawing.name(), 
             ComponentType.Lightbulb.name()});
-    for (Actor actor: getActors()) {
-      String name = actor.getName();
-      if (actorsToBeHidden.contains(name)) {
+    ScienceTrainActor scienceTrain = (ScienceTrainActor) findActor(com.mazalearn.scienceengine.core.model.ComponentType.ScienceTrain.name());
+    scienceTrain.animate();
+    for (String actorName: actorsToBeHidden) {
+      Actor actor = findActor(actorName);
+      if (actor != null) {
         actor.setVisible(false);
-      }
-      if (com.mazalearn.scienceengine.core.model.ComponentType.ScienceTrain.name().equals(name)) {
-        ((ScienceTrainActor) actor).animate();
       }
     }
     
