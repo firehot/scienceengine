@@ -48,11 +48,12 @@ public class LoadingScienceTrain extends AbstractScreen {
 
     Label loading = new Label("Loading...Please Wait...", getSkin(), "default-big");
     loading.setColor(Color.ORANGE);
-    loading.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - loading.getWidth() / 2, ScreenComponent.VIEWPORT_HEIGHT - 30);
+    loading.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - loading.getWidth() / 2,
+        ScreenComponent.VIEWPORT_HEIGHT - 30);
     stage.addActor(loading);
 
     railTracks = new Image(ScienceEngine.getTextureRegion("railtracks"));
-    railTracks.setSize(railTracks.getWidth() * 3, railTracks.getHeight() * 0.35f);
+    ScreenComponent.scaleSize(railTracks, railTracks.getWidth() * 3, railTracks.getHeight() * 0.35f);
     stage.addActor(railTracks);
 
     train = ScreenUtils.createScienceTrain(25);
@@ -72,8 +73,8 @@ public class LoadingScienceTrain extends AbstractScreen {
     train.setPosition(startX, startY);
     float angle = MathUtils.atan2(endY - startY, endX - startX) * MathUtils.radiansToDegrees;
     train.setRotation(angle);
-    railTracks.setPosition(startX - 100 * MathUtils.cosDeg(angle), 
-        startY - 25 - 100 * MathUtils.sinDeg(angle));
+    railTracks.setPosition(startX - ScreenComponent.getScaledX(100 * MathUtils.cosDeg(angle)), 
+        startY - ScreenComponent.getScaledY(25 + 100 * MathUtils.sinDeg(angle)));
     railTracks.setRotation(angle);
   }
 
@@ -95,13 +96,14 @@ public class LoadingScienceTrain extends AbstractScreen {
     train.setX(startX + endX * percent);
     train.setY(startY + (endY - startY) * percent);
 
+    delayIfDebug();
     // Show the loading screen
     stage.act();
     stage.draw();
   }
 
   private void delayIfDebug() {
-    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) return;
+    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) == 0) return;
     try {
       Thread.sleep(500);
     } catch (InterruptedException e) {

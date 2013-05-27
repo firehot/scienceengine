@@ -153,7 +153,9 @@ public class ScreenUtils {
     TextButton imageButton = new TextButton("", skin, styleName) {
       @Override
       public void drawBackground(SpriteBatch batch, float parentAlpha) {
-        getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
+        float xOffset = ScreenComponent.getScaledX(5);
+        float yOffset = ScreenComponent.getScaledY(5);
+        getBackground().draw(batch, getX()+xOffset, getY()+yOffset, getWidth()-2*xOffset, getHeight()-2*yOffset);
       }
     };
     imageButton.setBackground(image);
@@ -220,12 +222,14 @@ public class ScreenUtils {
     Group train = new Group();
     Image engine = new Image(ScienceEngine.getTextureRegion("engine"));
     train.addActor(engine);
-    engine.setSize(7.2f * wheelDia, 1.4f * wheelDia);
+    engine.setSize(ScreenComponent.getScaledX(7.2f * wheelDia),
+        ScreenComponent.getScaledY(1.4f * wheelDia));
     // Add wheels to the engine
     for (int i = 0; i < NUM_ENGINE_WHEELS; i++) {
       Image wheel = new Image(ScienceEngine.getTextureRegion("wheel"));
-      wheel.setPosition(i * wheelDia * 1.6f, -0.8f * wheelDia);
-      wheel.setSize(wheelDia, wheelDia);
+      wheel.setPosition(ScreenComponent.getScaledX(i * wheelDia * 1.6f),
+          ScreenComponent.getScaledY(-0.8f * wheelDia));
+      wheel.setSize(ScreenComponent.getScaledY(wheelDia), ScreenComponent.getScaledY(wheelDia));
       wheel.setOrigin(wheel.getWidth()/2, wheel.getWidth()/2);
       wheel.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
       train.addActor(wheel);
