@@ -363,12 +363,7 @@ public class ScienceEngine extends Game {
   public static void displayStatusMessage(Stage stage, StatusType type, String message) {
     Label status = (Label) stage.getRoot().findActor(ScreenComponent.Status.name());
     if (status != null) {// TODO: only for level editor - why?
-      switch (type) {
-      case INFO: status.setColor(Color.WHITE); break;
-      case WARNING: status.setColor(Color.GREEN); break;
-      case ERROR: status.setColor(Color.YELLOW); break;
-      case FATAL: status.setColor(Color.RED); break;
-      }
+      status.setColor(type.color); 
       status.setText(message);
     }
   }

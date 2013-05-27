@@ -89,7 +89,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   @Override
   public void launchPurchaseFlow(final Topic sku, final IBilling billing) {
     if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) != 0) {
-      // Simulate an asynchronous inventory query
+      // Simulate an asynchronous purchase flow
       new Thread(new Runnable() {
         @Override
         public void run() {

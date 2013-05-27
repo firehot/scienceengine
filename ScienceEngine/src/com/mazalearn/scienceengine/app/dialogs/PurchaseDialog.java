@@ -3,22 +3,22 @@ package com.mazalearn.scienceengine.app.dialogs;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.LoadingScienceTrain;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
@@ -42,7 +42,8 @@ public class PurchaseDialog extends Dialog {
   private IBilling billing;
   private Table waitActor;
   // flag for communication across purchase thread and UI thread
-  private boolean purchaseDone = false;
+  // null => status unknown, false => failure, true => success
+  private Boolean purchaseDone = null;
   
   public PurchaseDialog(final Topic topic, Topic level,
       final Stage stage, final Skin skin, final ScienceEngine scienceEngine) {
@@ -57,7 +58,7 @@ public class PurchaseDialog extends Dialog {
     table.defaults().spaceBottom(ScreenComponent.getScaledY(10));
     table.columnDefaults(0).padRight(ScreenComponent.getScaledX(20));
     waitActor = createWaitActor(skin);
-    table.add(waitActor);
+    table.add(waitActor).width(waitActor.getPrefWidth()).height(waitActor.getPrefHeight());
 
     purchasableItems = new ButtonGroup();
     purchasableItems.setMinCheckCount(1);
@@ -76,8 +77,14 @@ public class PurchaseDialog extends Dialog {
             installProfile.addAsAvailableTopic(child);
           }
           installProfile.save();
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.SUCCESS);
+          ScienceEngine.displayStatusMessage(getStage(), StatusType.INFO, "Purchase completed successfully");
+          purchaseDone = true;
+        } else {
+          ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Purchase could not be completed");
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.FAILURE);
+          purchaseDone = false;
         }
-        purchaseDone = true;
       }
 
       @Override
@@ -104,9 +111,11 @@ public class PurchaseDialog extends Dialog {
   @Override
   public void act(float delta) {
     super.act(delta);
-    if (!purchaseDone) return;
-    TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
-    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
+    if (purchaseDone == null) return;
+    if (purchaseDone) {
+      TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
+      scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
+    }
     hide();    
   }
 
