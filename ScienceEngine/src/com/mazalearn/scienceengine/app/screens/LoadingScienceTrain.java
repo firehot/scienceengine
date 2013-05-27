@@ -5,29 +5,25 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
+import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 /**
  * @author Mats Svensson
  */
 public class LoadingScienceTrain extends AbstractScreen {
 
-  private static final int NUM_ENGINE_WHEELS = 4;
-  private static final int WIDTH = 450;
-  private static boolean waitingForBackend;
-
   private float startX, endX;
   private float percent;
 
   private AbstractScreen nextScreen;
-  private Group train;
+  private Actor train;
   private float startY;
   private float endY;
   private Image railTracks;
@@ -50,27 +46,16 @@ public class LoadingScienceTrain extends AbstractScreen {
   public void show() {
     super.show();
 
-    Label loading = new Label("Loading...", getSkin(), "default-big");
+    Label loading = new Label("Loading...Please Wait...", getSkin(), "default-big");
     loading.setColor(Color.ORANGE);
     loading.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - loading.getWidth() / 2, ScreenComponent.VIEWPORT_HEIGHT - 30);
     stage.addActor(loading);
 
-    train = new Group();
-    Image engine = new Image(ScienceEngine.getTextureRegion("engine"));
-    train.addActor(engine);
-    engine.setSize(180, 35);
     railTracks = new Image(ScienceEngine.getTextureRegion("railtracks"));
     railTracks.setSize(railTracks.getWidth() * 3, railTracks.getHeight() * 0.35f);
     stage.addActor(railTracks);
-    // Add wheels to the engine
-    for (int i = 0; i < NUM_ENGINE_WHEELS; i++) {
-      Image wheel = new Image(ScienceEngine.getTextureRegion("wheel"));
-      wheel.setPosition(i * 40, -20);
-      wheel.setSize(25, 25);
-      wheel.setOrigin(wheel.getWidth()/2, wheel.getWidth()/2);
-      wheel.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
-      train.addActor(wheel);
-    }
+
+    train = ScreenUtils.createScienceTrain(25);
     stage.addActor(train);
   }
 
@@ -98,7 +83,7 @@ public class LoadingScienceTrain extends AbstractScreen {
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     // Load some, will return true if done loading
-    if (ScienceEngine.getAssetManager().update() && !waitingForBackend) {
+    if (ScienceEngine.getAssetManager().update()) {
       scienceEngine.setScreen(nextScreen);
     }
 
@@ -132,9 +117,5 @@ public class LoadingScienceTrain extends AbstractScreen {
   @Override
   protected void goBack() {
     // Ignore.
-  }
-
-  public static void setWaitForBackend(boolean waitForBackend) {
-    waitingForBackend = waitForBackend;
   }
 }

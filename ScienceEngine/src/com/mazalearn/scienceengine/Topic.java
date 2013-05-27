@@ -5,18 +5,32 @@ import java.util.Map;
 
 
 public enum Topic {
-  BarMagnet(102), Field(101), TwoWires(103), ElectroMagnet(104),
-  BarMagnetInduction(105), ElectroMagnetInduction(106),
-  DCMotor(107), ElectromagnetismScienceTrain(109), ElectromagnetismReview(108),
-  Electromagnetism(1, BarMagnet, BarMagnet, Field, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
+  BarMagnet(102, "Magnetic field due to a bar magnet - compass, field lines of force, rotation"),
+  Field(101, "Electromagnetic field and its effect on magnetic materials and electric charges"),
+  TwoWires(103, "Magnetic field due to wires carrying current - how field changes with current"),
+  ElectroMagnet(104, "Electromagnet and its field change with coil loops, loop area and current"),
+  BarMagnetInduction(105, "Nature of current induced in a coil due to a moving bar magnet - Faradays laws"),
+  ElectroMagnetInduction(106, "Current induced when an electromagnet moves near a coil and parameters affecting"),
+  DCMotor(107, "Working of DC and AC motors - current carrying coil, magnet, commutator"),
+  ElectromagnetismScienceTrain(109, "Create your own coach with dynamo and share with friends"),
+  ElectromagnetismReview(108, "Concepts in electromagnetism reviewed through multiple choice questions"),
+  Electromagnetism(1, "All Levels - Concepts in magnetic fields, electromagnets, dynamos and motors",
+      BarMagnet, BarMagnet, Field, TwoWires, ElectroMagnet, BarMagnetInduction, ElectroMagnetInduction, DCMotor,
       ElectromagnetismReview, ElectromagnetismScienceTrain),
-  SOM(201), StatesOfMatterReview(210), StatesOfMatter(2, SOM, SOM, StatesOfMatterReview), 
-  W(301), WavesReview(310), Waves(3, W, W, WavesReview);
+  SOM(201, "States of Matter basic"),
+  StatesOfMatterReview(210, "Concepts in States Of Matter reviewed through multiple choice questions"),
+  StatesOfMatter(2, "All Levels - Concepts in States of Matter",
+      SOM, SOM, StatesOfMatterReview), 
+  W(301, "Waves - basic"),
+  WavesReview(310, "Concepts in Waves reviewed through multiple choice questions"),
+  Waves(3, "All Levels - Concepts in Waves",
+      W, W, WavesReview);
 
   private static final String PRODUCT_PREFIX = "com.mazalearn.scienceengine.";
   private final Topic[] childTopics;
   private final Topic canonicalChild;
   private final int topicId;
+  private final String description;
   private static Map<Integer, Topic> idToTopicMap = new HashMap<Integer, Topic>();
   
   static {
@@ -30,8 +44,9 @@ public enum Topic {
    * @param topicId - numerical id for topic used for stats
    * @param childTopics - canonicalchild as first followed by all child topics in order
    */
-  Topic(int topicId, Topic... childTopics) {
+  Topic(int topicId, String description, Topic... childTopics) {
     this.topicId = topicId;
+    this.description = description;
     if (childTopics.length == 0) {
       this.canonicalChild = null;
       this.childTopics = childTopics;
@@ -54,6 +69,10 @@ public enum Topic {
 
   public int getTopicId() {
     return topicId;
+  }
+  
+  public String getDescription() {
+    return description;
   }
   
   public Topic idToTopic(int topicId) {

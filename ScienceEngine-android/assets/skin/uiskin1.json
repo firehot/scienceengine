@@ -55,7 +55,8 @@ com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
   default: { titleFont: default-font, background: default-window, titleFontColor: activeText },
-  dialog: { titleFont: default-font, background: default-window, titleFontColor: activeText, stageBackground: dialogDim }
+  dialog: { titleFont: default-font, background: default-window, titleFontColor: activeText, stageBackground: dialogDim },
+  buydialog: { titleFont: default-font, background: buy-window, titleFontColor: activeText, stageBackground: dialogDim }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
   default-horizontal: { background: default-slider, knob: default-slider-knob }
@@ -64,6 +65,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
   default: { font: default-font, fontColor: activeText },
   default-small: { font: default-small, fontColor: activeText },
   default-big: { font: default-big, fontColor: activeText },
+  buy: { font: default-small, fontColor: selectedText },
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
   default: { selection: selection, background: textfield, font: default-font, fontColor: activeText, cursor: cursor }
@@ -72,7 +74,8 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
   default: { checkboxOn: check-on, checkboxOff: check-off, font: default-font, fontColor: activeText },
   mcq: { checkboxOn: check-on, checkboxOff: check-off, down:mcq-round-down, up: mcq-round, checked: mcq-round-down, font: default-font, fontColor: activeText, downFontColor: selectedText, checkedFontColor: selectedText },
   mcq-check: { checkboxOn: mcq-check-on, checkboxOff: mcq-check-off, down:mcq-round-down, up: mcq-round, checked: mcq-round-down, font: default-font, fontColor: activeText, downFontColor: selectedText, checkedFontColor: selectedText  },
-  mcq-radio: { checkboxOn: mcq-radio-on, checkboxOff: mcq-radio-off, down:mcq-round-down, up: mcq-round, checked: mcq-round-down, font: default-font, fontColor: activeText, downFontColor: selectedText, checkedFontColor: selectedText  }
+  mcq-radio: { checkboxOn: mcq-radio-on, checkboxOff: mcq-radio-off, down:mcq-round-down, up: mcq-round, checked: mcq-round-down, font: default-font, fontColor: activeText, downFontColor: selectedText, checkedFontColor: selectedText  },
+  mcq-buy: { checkboxOn: mcq-check-on, checkboxOff: mcq-check-off, down:mcq-round-down, up: clear-round, checked: mcq-round-down, font: default-small, fontColor: selectedText, downFontColor: selectedText, checkedFontColor: selectedText  }
 },
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
   default: { fontColorUnselected: activeText, selection: default-rect-pad, fontColorSelected: activeText, font: default-font },

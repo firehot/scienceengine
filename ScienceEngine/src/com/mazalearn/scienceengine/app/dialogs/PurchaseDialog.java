@@ -3,15 +3,19 @@ package com.mazalearn.scienceengine.app.dialogs;
 import java.util.Arrays;
 import java.util.List;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -36,10 +40,13 @@ public class PurchaseDialog extends Dialog {
   private ScienceEngine scienceEngine;
   private Topic topic;
   private IBilling billing;
-
+  private Table waitActor;
+  // flag for communication across purchase thread and UI thread
+  private boolean purchaseDone = false;
+  
   public PurchaseDialog(final Topic topic, Topic level,
       final Stage stage, final Skin skin, final ScienceEngine scienceEngine) {
-    super("", skin, "dialog");
+    super("", skin, "buydialog");
     
     this.skin = skin;
     this.scienceEngine = scienceEngine;
@@ -47,12 +54,13 @@ public class PurchaseDialog extends Dialog {
 
     // retrieve the default table actor
     Table table = getContentTable();
-    table.defaults().spaceBottom(ScreenComponent.getScaledY(30));
+    table.defaults().spaceBottom(ScreenComponent.getScaledY(10));
     table.columnDefaults(0).padRight(ScreenComponent.getScaledX(20));
-    table.add("Loading...Please wait...");
+    waitActor = createWaitActor(skin);
+    table.add(waitActor);
 
     purchasableItems = new ButtonGroup();
-    purchasableItems.setMinCheckCount(0);
+    purchasableItems.setMinCheckCount(1);
     purchasableItems.setMaxCheckCount(1);
 
     // Do an inventory query to get prices and description
@@ -61,14 +69,15 @@ public class PurchaseDialog extends Dialog {
     billing = new IBilling() {
       @Override
       public void purchaseCallback(Topic purchasedTopic) {
-        if (purchasedTopic == null) return;
-        // Allow access after marking in install profile
-        installProfile.addAsAvailableTopic(purchasedTopic);
-        for (Topic child: purchasedTopic.getChildren()) {
-          installProfile.addAsAvailableTopic(child);
+        if (purchasedTopic != null) {
+          // Allow access after marking in install profile
+          installProfile.addAsAvailableTopic(purchasedTopic);
+          for (Topic child: purchasedTopic.getChildren()) {
+            installProfile.addAsAvailableTopic(child);
+          }
+          installProfile.save();
         }
-        installProfile.save();
-        LoadingScienceTrain.setWaitForBackend(false);                  
+        purchaseDone = true;
       }
 
       @Override
@@ -80,30 +89,86 @@ public class PurchaseDialog extends Dialog {
     
   }
 
+  private Table createWaitActor(final Skin skin) {
+    Table waitActor = new Table(skin);
+    Label wait1 = new Label("Processing...Please wait...", skin, "buy");
+    waitActor.add(wait1).padBottom(ScreenComponent.getScaledY(30));
+    waitActor.row();
+    waitActor.add(ScreenUtils.createScienceTrain(10)).width(75).height(25);
+    waitActor.row();
+    Label wait2 = new Label("Processing...Please wait...", skin, "buy");
+    waitActor.add(wait2).padTop(ScreenComponent.getScaledY(30));
+    return waitActor;
+  }
+  
+  @Override
+  public void act(float delta) {
+    super.act(delta);
+    if (!purchaseDone) return;
+    TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
+    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
+    hide();    
+  }
+
   private void showItemsForPurchase(Inventory inventory) {
     Table table = getContentTable();
     table.clear();
+    addPurchasableItems(inventory, table);
+    table.row();
+    Table buttonTable = createButtons();
+    table.add(buttonTable).colspan(2);
+
+    this.show(getStage());
+  }
+
+  public void addPurchasableItems(Inventory inventory, Table table) {
     for (Topic item: topicList) {
       SkuDetails skuDetails = inventory.getSkuDetails(item.toProductId());
       final TextButton topicCheckbox = ScreenUtils.createCheckBox(skuDetails.getDescription(), 0f, 0f, 300f, 30f, 
-          skin.get("mcq-check", CheckBoxStyle.class)); //$NON-NLS-1$
+          skin.get("mcq-buy", CheckBoxStyle.class)); //$NON-NLS-1$
+      topicCheckbox.getLabel().setAlignment(Align.center, Align.center);
       topicCheckbox.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
           ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         }
       });
-      table.add(topicCheckbox).left().height(ScreenComponent.getScaledY(60)).pad(ScreenComponent.getScaledX(10));
-      table.add(skuDetails.getPrice()).pad(ScreenComponent.getScaledX(10));
+      table.add(topicCheckbox).left().height(ScreenComponent.getScaledY(60));
+      Label price = new Label(skuDetails.getPrice(), skin, "buy");
+      table.add(price)
+          .padRight(ScreenComponent.getScaledX(10));
       topicCheckbox.setName(item.name());
       purchasableItems.add(topicCheckbox);
       table.row();
     }
-    // Add a purchase button
-    TextButton purchaseButton = new TextButton("Purchase Selected Topics", skin, "body");
-    getButtonTable().add(purchaseButton)
-        .width(ScreenComponent.getScaledX(300))
-        .height(ScreenComponent.getScaledY(60));
+  }
+
+  public Table createButtons() {
+    final Table buttonTable = new Table(skin);
+    // Add a cancel and purchase button
+    TextButton cancelButton = new TextButton("Cancel", skin, "toggle");
+    cancelButton.setChecked(true);
+    buttonTable.add(cancelButton)
+        .width(ScreenComponent.getScaledX(60))
+        .height(ScreenComponent.getScaledY(30))
+        .left()
+        .padRight(ScreenComponent.getScaledX(60));
+    cancelButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        hide();
+      }
+    });
+    
+    TextButtonStyle buyStyle = skin.get("body", TextButtonStyle.class);
+    buyStyle.font = skin.getFont(ScreenComponent.getFont(2));
+    TextButton purchaseButton = new TextButton("Buy", skin, "body");
+    buttonTable.add(purchaseButton)
+        .width(ScreenComponent.getScaledX(100))
+        .height(ScreenComponent.getScaledY(60))
+        .padLeft(ScreenComponent.getScaledX(60))
+        .right();
     purchaseButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
@@ -114,14 +179,15 @@ public class PurchaseDialog extends Dialog {
           // android.test.canceled - BUG: either purchasedata or datasignature is null
           // android.test.item_unavailable - shows item unavailable
           Topic purchaseTopic = Topic.valueOf(topicButton.getName());
-          LoadingScienceTrain.setWaitForBackend(true);
-          TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
-          scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));                  
+          buttonTable.clear();
+          buttonTable.add(waitActor);
+          show(getStage());
           ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, billing);
+        } else {
+          hide();
         }
       } 
     });
-
-    this.show(getStage());
+    return buttonTable;
   }
 }

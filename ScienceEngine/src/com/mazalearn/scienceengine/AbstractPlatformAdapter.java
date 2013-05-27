@@ -87,9 +87,20 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   }
   
   @Override
-  public void launchPurchaseFlow(Topic sku, IBilling billing) {
+  public void launchPurchaseFlow(final Topic sku, final IBilling billing) {
     if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) != 0) {
-      billing.purchaseCallback(sku);
+      // Simulate an asynchronous inventory query
+      new Thread(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          billing.purchaseCallback(sku);
+        }
+      }).start();
       return;
     }
     throw new UnsupportedOperationException("Purchase flow not implemented");
@@ -106,8 +117,8 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
       json.append("{");
       json.append("productId:\"" + topic.toProductId() + "\"");
       json.append(",title:\"" + topic.name() + "\"");
-      json.append(",description:\"" + topic.name() + "\"");
-      json.append(",price:" + (topic.getChildren().length > 0 ? "\"$4.99\"" : "\"0.99\""));
+      json.append(",description:\"" + topic.getDescription() + "\"");
+      json.append(",price:" + (topic.getChildren().length > 0 ? "\"$4.99\"" : "\"$0.99\""));
       json.append("}");
       SkuDetails skuDetails = SkuDetails.toSkuDetails("inapp", json.toString());
       inventory.addSkuDetails(skuDetails);

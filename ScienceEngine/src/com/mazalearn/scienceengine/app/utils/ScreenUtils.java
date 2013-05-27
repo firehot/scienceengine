@@ -14,7 +14,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -210,6 +213,24 @@ public class ScreenUtils {
     percentLabel.setAlignment(Align.center, Align.center);
     ScreenComponent.scalePositionAndSize(percentLabel, 5, 12, 40, 20);
     thumbnail.addActor(percentLabel);
+  }
+
+  private static final int NUM_ENGINE_WHEELS = 4;
+  public static Actor createScienceTrain(int wheelDia) {
+    Group train = new Group();
+    Image engine = new Image(ScienceEngine.getTextureRegion("engine"));
+    train.addActor(engine);
+    engine.setSize(7.2f * wheelDia, 1.4f * wheelDia);
+    // Add wheels to the engine
+    for (int i = 0; i < NUM_ENGINE_WHEELS; i++) {
+      Image wheel = new Image(ScienceEngine.getTextureRegion("wheel"));
+      wheel.setPosition(i * wheelDia * 1.6f, -0.8f * wheelDia);
+      wheel.setSize(wheelDia, wheelDia);
+      wheel.setOrigin(wheel.getWidth()/2, wheel.getWidth()/2);
+      wheel.addAction(Actions.repeat(-1, Actions.rotateBy(-360, 1)));
+      train.addActor(wheel);
+    }
+    return train;
   }
 
 }
