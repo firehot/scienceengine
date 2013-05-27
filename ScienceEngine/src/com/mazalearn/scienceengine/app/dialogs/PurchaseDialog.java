@@ -122,9 +122,17 @@ public class PurchaseDialog extends Dialog {
   private void showItemsForPurchase(Inventory inventory) {
     Table table = getContentTable();
     table.clear();
-    addPurchasableItems(inventory, table);
+    boolean buyDisabled = inventory == null;
+    if (buyDisabled) {
+      // Not able to query items 
+      Label notAvailable = new Label("Sorry, Store is unavailable now.\nIs billing setup properly? Is the network working?", skin, "buy");
+      notAvailable.setAlignment(Align.center, Align.center);
+      table.add(notAvailable);
+    } else {
+      addPurchasableItems(inventory, table);
+    }
     table.row();
-    Table buttonTable = createButtons();
+    Table buttonTable = createButtons(buyDisabled);
     table.add(buttonTable).colspan(2);
 
     this.show(getStage());
@@ -152,7 +160,7 @@ public class PurchaseDialog extends Dialog {
     }
   }
 
-  public Table createButtons() {
+  public Table createButtons(boolean buyDisabled) {
     final Table buttonTable = new Table(skin);
     // Add a cancel and purchase button
     TextButton cancelButton = new TextButton("Cancel", skin, "toggle");
@@ -172,7 +180,8 @@ public class PurchaseDialog extends Dialog {
     
     TextButtonStyle buyStyle = skin.get("body", TextButtonStyle.class);
     buyStyle.font = skin.getFont(ScreenComponent.getFont(2));
-    TextButton purchaseButton = new TextButton("Buy", skin, "body");
+    final TextButton purchaseButton = new TextButton("Buy", skin, "body");
+    purchaseButton.setDisabled(buyDisabled);
     buttonTable.add(purchaseButton)
         .width(ScreenComponent.getScaledX(100))
         .height(ScreenComponent.getScaledY(60))
@@ -181,6 +190,7 @@ public class PurchaseDialog extends Dialog {
     purchaseButton.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x, float y) {
+        if (purchaseButton.isDisabled()) return;
         ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         Button topicButton = purchasableItems.getChecked();
         if (topicButton != null) {

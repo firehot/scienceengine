@@ -97,6 +97,10 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
       super.queryInventory(topicList, billing);
       return;
     }
+    if (!iabHelper.inappItemsSupported()) {
+      billing.inventoryCallback(null);
+      return;
+    }
     List<String> productList = new ArrayList<String>();
     for (Topic topic: topicList) {
       productList.add(topic.toProductId());

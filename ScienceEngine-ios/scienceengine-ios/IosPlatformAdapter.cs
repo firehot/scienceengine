@@ -121,7 +121,7 @@ namespace scienceengineios
 					iap.RequestProductData (products); // async request via StoreKit -> App Store
 			  } else {
 				  // can't make payments (purchases turned off in Settings?)
-				  // Disable purchase button
+				  billing.inventoryCallback(null);
 			  }
 		  }
     }

@@ -294,6 +294,11 @@ public class IabHelper {
         return mSubscriptionsSupported;
     }
 
+    /** Returns whether inapp items are supported. */
+    public boolean inappItemsSupported() {
+        return mSetupDone;
+    }
+
 
     /**
      * Callback that notifies when a purchase is finished.

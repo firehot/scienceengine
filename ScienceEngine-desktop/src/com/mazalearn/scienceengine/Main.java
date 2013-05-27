@@ -11,7 +11,7 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "ScienceEngine";
 		cfg.useGL20 = true;
-		Device device = Device.Android;
+		Device device = Device.IPad;
 		cfg.width = device.width;
 		cfg.height = device.height;
 		
