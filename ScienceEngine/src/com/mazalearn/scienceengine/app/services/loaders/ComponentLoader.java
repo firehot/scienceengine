@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.CoreComponentType;
 import com.mazalearn.scienceengine.core.model.EnvironmentBody;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
@@ -96,7 +96,7 @@ public class ComponentLoader {
       if ((Boolean) LevelLoader.nvl(component.get("bodytype"), false)) {
         science2DActor.getBody().setType(BodyType.DynamicBody);
       } 
-      if (ComponentType.Environment.name().equals(type)) {
+      if (CoreComponentType.Environment.name().equals(type)) {
         loadEnvironment((EnvironmentBody) science2DActor.getBody(),
             (Array<String>) component.get("params"));
       }

@@ -9,7 +9,7 @@ package com.mazalearn.scienceengine.core.model;
 public class ScienceTrain extends Science2DBody {
 
   public ScienceTrain(float x, float y, float angle) {
-    super(ComponentType.ScienceTrain, x, y, angle);
+    super(CoreComponentType.ScienceTrain, x, y, angle);
   }
   
   @Override

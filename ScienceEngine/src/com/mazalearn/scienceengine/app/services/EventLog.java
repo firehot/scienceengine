@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.mazalearn.scienceengine.app.services.AggregatorFunction.Aggregator;
 import com.mazalearn.scienceengine.core.lang.Event;
-import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.CoreComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 
 public class EventLog {
@@ -25,7 +25,7 @@ public class EventLog {
     // Go in reverse order and stop on end of current tutor
     for (int i = events.size() - 1; i >= 0; i--) {
       Event e = events.get(i);
-      if (e.getObject().equals(ComponentType.Global.name()) &&
+      if (e.getObject().equals(CoreComponentType.Global.name()) &&
           e.getAction().equals(Parameter.Tutor.name())) {
         break;
       }

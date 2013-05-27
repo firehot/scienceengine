@@ -18,7 +18,7 @@ public class Drawing extends Science2DBody {
   private List<List<Vector2>> points = new ArrayList<List<Vector2>>();
 
   public Drawing(float x, float y, float angle) {
-    super(ComponentType.Drawing, x, y, angle);
+    super(CoreComponentType.Drawing, x, y, angle);
     getBody().setType(BodyType.DynamicBody);
   }
   

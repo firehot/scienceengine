@@ -2,7 +2,7 @@ package com.mazalearn.scienceengine.core.model;
 
 import com.mazalearn.scienceengine.ScienceEngine;
 
-public enum ComponentType implements IComponentType {
+public enum CoreComponentType implements IComponentType {
   Dummy,
   Drawing, 
   Environment,

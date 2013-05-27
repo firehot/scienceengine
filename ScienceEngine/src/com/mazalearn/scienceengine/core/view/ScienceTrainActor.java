@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
-import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.CoreComponentType;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class ScienceTrainActor extends Group {
@@ -16,7 +16,7 @@ public class ScienceTrainActor extends Group {
 
   public ScienceTrainActor(Science2DBody body, IScience2DView science2DView, Skin skin) {
     super();
-    setName(ComponentType.ScienceTrain.name());
+    setName(CoreComponentType.ScienceTrain.name());
     body.setActive(true);
     this.science2DView = science2DView;
     addActor(ScreenUtils.createScienceTrain(25));

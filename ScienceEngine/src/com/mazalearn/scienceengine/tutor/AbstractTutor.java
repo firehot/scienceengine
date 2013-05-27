@@ -11,7 +11,7 @@ import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.ComponentLoader;
 import com.mazalearn.scienceengine.app.services.loaders.ConfigLoader;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.CoreComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 
 public abstract class AbstractTutor extends Group implements ITutor {
@@ -203,7 +203,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     stats[ITutor.POINTS] = 0;
     recordStats();
     // Mark start of tutor in event log
-    ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
+    ScienceEngine.getEventLog().logEvent(CoreComponentType.Global.name(), 
         Parameter.Tutor.name());
   }
 

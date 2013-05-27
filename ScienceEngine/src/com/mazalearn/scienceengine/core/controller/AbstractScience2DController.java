@@ -17,7 +17,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.loaders.LevelLoader;
-import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.CoreComponentType;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
@@ -145,14 +145,14 @@ public abstract class AbstractScience2DController implements
   
   // Factory method for creating science2D actors
   protected Actor createActor(String type, String viewSpec, Science2DBody body) {
-    ComponentType componentType;
+    CoreComponentType coreComponentType;
     try {
-      componentType = ComponentType.valueOf(type);
+      coreComponentType = CoreComponentType.valueOf(type);
     } catch(IllegalArgumentException e) {
       return null;
     }
     
-    switch (componentType) {
+    switch (coreComponentType) {
     case Dummy:
     case Environment:
       Pixmap pixmap = new Pixmap(8, 8, Format.RGBA8888);

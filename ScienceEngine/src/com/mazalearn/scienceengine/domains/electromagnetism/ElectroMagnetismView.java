@@ -15,6 +15,7 @@ import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.AbstractScience2DModel;
+import com.mazalearn.scienceengine.core.model.CoreComponentType;
 import com.mazalearn.scienceengine.core.model.ICurrent.CircuitElement;
 import com.mazalearn.scienceengine.core.view.AbstractScience2DView;
 import com.mazalearn.scienceengine.core.view.CoachDrawingActor;
@@ -57,7 +58,7 @@ public class ElectroMagnetismView extends AbstractScience2DView {
     magnet = (Magnet) science2DModel.findBody(ComponentType.Magnet);
     lightbulb = (Lightbulb) science2DModel.findBody(ComponentType.Lightbulb);
     ScienceTrainActor scienceTrainActor = 
-        (ScienceTrainActor) findActor(com.mazalearn.scienceengine.core.model.ComponentType.ScienceTrain.name());
+        (ScienceTrainActor) findActor(CoreComponentType.ScienceTrain.name());
     if (scienceTrainActor != null) {
       scienceTrainActor.reset();
     }
@@ -86,15 +87,15 @@ public class ElectroMagnetismView extends AbstractScience2DView {
 
     // Set light to display on coach drawing
     CoachDrawingActor coachDrawingActor = 
-        (CoachDrawingActor) findActor(com.mazalearn.scienceengine.core.model.ComponentType.Drawing.name());
+        (CoachDrawingActor) findActor(CoreComponentType.Drawing.name());
     coachDrawingActor.getCoach().setLight(current, lightbulb.getColor());
     
     // Show only the main actors - ScienceTrain and control related
     List<String> actorsToBeHidden = 
         Arrays.asList(new String[]{ComponentType.Dynamo.name(),  ComponentType.Magnet.name(), 
-            CircuitActor.COMPONENT_TYPE, com.mazalearn.scienceengine.core.model.ComponentType.Drawing.name(), 
+            CircuitActor.COMPONENT_TYPE, CoreComponentType.Drawing.name(), 
             ComponentType.Lightbulb.name()});
-    ScienceTrainActor scienceTrain = (ScienceTrainActor) findActor(com.mazalearn.scienceengine.core.model.ComponentType.ScienceTrain.name());
+    ScienceTrainActor scienceTrain = (ScienceTrainActor) findActor(CoreComponentType.ScienceTrain.name());
     scienceTrain.animate();
     for (String actorName: actorsToBeHidden) {
       Actor actor = findActor(actorName);

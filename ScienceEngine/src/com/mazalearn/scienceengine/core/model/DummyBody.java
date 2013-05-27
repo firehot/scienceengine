@@ -31,7 +31,7 @@ public class DummyBody extends Science2DBody {
   }
 
   public DummyBody(float width, float height, float rotation) {
-    super(ComponentType.Dummy, width, height, rotation);
+    super(CoreComponentType.Dummy, width, height, rotation);
   }
 
   @Override

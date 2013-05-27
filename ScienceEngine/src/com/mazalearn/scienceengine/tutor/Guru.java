@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
-import com.mazalearn.scienceengine.core.model.ComponentType;
+import com.mazalearn.scienceengine.core.model.CoreComponentType;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.ViewControls;
@@ -86,7 +86,7 @@ public class Guru extends Group implements ITutor {
   public void beginTutoring() {
     Gdx.app.log(ScienceEngine.LOG, "Start Tutoring: " + getId());
     // Mark start of Tutoring in event log
-    ScienceEngine.getEventLog().logEvent(ComponentType.Global.name(), 
+    ScienceEngine.getEventLog().logEvent(CoreComponentType.Global.name(), 
         Parameter.Tutoring.name());
     // bring Guru to top
     Group root = getStage().getRoot();

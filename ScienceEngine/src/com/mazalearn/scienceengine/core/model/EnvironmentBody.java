@@ -30,7 +30,7 @@ public class EnvironmentBody extends Science2DBody {
   }
 
   public EnvironmentBody(float width, float height, float rotation) {
-    super(ComponentType.Environment, width, height, rotation);
+    super(CoreComponentType.Environment, width, height, rotation);
     parameters = new ArrayList<Float>();
     environmentConfigs = new ArrayList<IModelConfig<?>>();
   }
