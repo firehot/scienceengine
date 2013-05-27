@@ -36,11 +36,11 @@ public class OptionsDialog extends Dialog {
 
     // retrieve the default table actor
     Table table = getContentTable();
-    table.defaults().spaceBottom(ScreenComponent.getScaledY(30));
+    table.defaults().spaceBottom(ScreenComponent.getScaledY(10));
     table.columnDefaults(0).padRight(ScreenComponent.getScaledX(20));
 
     // Create locale selection box if platform supports languages
-    IPlatformAdapter platform = ScienceEngine.getPlatformAdapter();
+    final IPlatformAdapter platform = ScienceEngine.getPlatformAdapter();
     if (platform.supportsLanguage()) {
       final SelectBox languageSelect = 
           new SelectBox(new String[] { "en", "ka", "hi"}, skin);
@@ -117,6 +117,25 @@ public class OptionsDialog extends Dialog {
     table.add(getMsg("ScienceEngine.Music")); //$NON-NLS-1$
     table.add(musicCheckbox).colspan(2).left();
 
+    if (platform.supportsSpeech()) {
+      final CheckBox speechCheckbox = new CheckBox("", skin); //$NON-NLS-1$
+      speechCheckbox.setChecked(ScienceEngine.getPreferencesManager().isSpeechEnabled());
+      speechCheckbox.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+          boolean enabled = speechCheckbox.isChecked();
+          preferencesManager.setSpeechEnabled(enabled);
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+  
+          // if the music is now enabled, start playing the menu music
+          if (enabled)
+            platform.speak("Speech enabled", false);
+        }
+      });
+      table.row();
+      table.add(getMsg("ScienceEngine.Speech")); //$NON-NLS-1$
+      table.add(speechCheckbox).colspan(2).left();
+    }
     // range is [0.0,1.0]; step is 0.1f
     final Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, skin);
     volumeSlider.setValue(ScienceEngine.getPreferencesManager().getVolume());

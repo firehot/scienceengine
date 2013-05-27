@@ -23,6 +23,7 @@ public class PreferencesManager {
   // constants
   private static final String PREF_VOLUME = "volume";
   private static final String PREF_MUSIC_ENABLED = "music.enabled";
+  private static final String PREF_SPEECH_ENABLED = "speech.enabled";
   private static final String PREF_SOUND_ENABLED = "sound.enabled";
   // Active user
   private static final String PREFS_NAME = "scienceengine";
@@ -52,6 +53,16 @@ public class PreferencesManager {
   public void setMusicEnabled(boolean musicEnabled) {
 	  prefs.flush();
     prefs.putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
+    prefs.flush();
+  }
+
+  public boolean isSpeechEnabled() {
+    return prefs.getBoolean(PREF_SPEECH_ENABLED, false);
+  }
+
+  public void setSpeechEnabled(boolean speechEnabled) {
+    prefs.flush();
+    prefs.putBoolean(PREF_SPEECH_ENABLED, speechEnabled);
     prefs.flush();
   }
 

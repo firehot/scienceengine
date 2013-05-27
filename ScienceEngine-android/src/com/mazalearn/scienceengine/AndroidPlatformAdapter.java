@@ -220,7 +220,7 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   
   @Override
   public void speak(String text, boolean append) {
-    if (mTts != null) {
+    if (mTts != null && ScienceEngine.getPreferencesManager().isSpeechEnabled()) {
       mTts.speak(text, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
     }
   }

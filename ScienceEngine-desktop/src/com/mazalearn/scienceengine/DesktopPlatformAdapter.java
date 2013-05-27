@@ -115,5 +115,4 @@ public class DesktopPlatformAdapter extends NonWebPlatformAdapter {
   public boolean supportsLanguage() {
     return true;
   }
-
 }
