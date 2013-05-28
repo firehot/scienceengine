@@ -219,8 +219,14 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   }
   
   @Override
+  public boolean supportsSpeech() {
+    return true;
+  }
+  
+  @Override
   public void speak(String text, boolean append) {
     if (mTts != null && ScienceEngine.getPreferencesManager().isSpeechEnabled()) {
+      Gdx.app.log(ScienceEngine.LOG, "Speaking out: " + text);
       mTts.speak(text, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
     }
   }

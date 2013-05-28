@@ -18,7 +18,7 @@ public class Hinter extends Group {
   public Hinter(Skin skin) {
     hintBox = new TextButton("", skin, "default-small");
     this.addActor(hintBox);
-    hintBox.setSize(ScreenComponent.Hint.getWidth(), ScreenComponent.Hint.getHeight());
+    hintBox.setWidth(ScreenComponent.Hint.getWidth());
     hintBox.setPosition(ScreenComponent.Hint.getX(), ScreenComponent.Hint.getY());
     hintBox.getLabel().setWrap(true);
     this.setVisible(false);
@@ -47,13 +47,17 @@ public class Hinter extends Group {
     this.hint = hint;
     this.setVisible(true);
     lastTimeHintShown = ScienceEngine.getTime();
-    ScienceEngine.getPlatformAdapter().speak(hint, false);
     hintBox.addAction(Actions.sequence(
         Actions.fadeOut(0.5f),
         new Action() {
           @Override
           public boolean act(float delta) {
             hintBox.setText(hint);
+            hintBox.pack();
+            hintBox.setWidth(ScreenComponent.Hint.getWidth());
+            hintBox.validate();
+            hintBox.setPosition(ScreenComponent.Hint.getX(hintBox.getWidth()),
+                ScreenComponent.Hint.getY(hintBox.getHeight()));
             return true;
           }
         },

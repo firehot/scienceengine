@@ -153,8 +153,8 @@ public class ScreenUtils {
     TextButton imageButton = new TextButton("", skin, styleName) {
       @Override
       public void drawBackground(SpriteBatch batch, float parentAlpha) {
-        float xOffset = ScreenComponent.getScaledX(5);
-        float yOffset = ScreenComponent.getScaledY(5);
+        float xOffset = ScreenComponent.getScaledX(2);
+        float yOffset = ScreenComponent.getScaledY(2);
         getBackground().draw(batch, getX()+xOffset, getY()+yOffset, getWidth()-2*xOffset, getHeight()-2*yOffset);
       }
     };

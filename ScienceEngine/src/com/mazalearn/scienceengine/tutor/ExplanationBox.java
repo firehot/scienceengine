@@ -66,10 +66,11 @@ public class ExplanationBox extends ImageMessageBox {
     if (textureRegion != null) {
       TextureRegionDrawable drawable = new TextureRegionDrawable(textureRegion);
       setImageAndResize(drawable);
-      reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight() * 1.1f);
+      reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight());
     } else {
       setTextAndResize(currentText);
-      reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight() * 0.8f);
+      reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight());
+      if (true) ScienceEngine.getPlatformAdapter().speak(currentText, false);
     }
     
     reviseButton.setVisible(hasRevisionRefs);

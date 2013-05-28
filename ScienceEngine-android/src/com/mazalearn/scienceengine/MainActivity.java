@@ -90,6 +90,8 @@ public class MainActivity extends AndroidApplication {
           @Override
           public void onInit(int arg0) {
             mTts.setLanguage(Locale.US);
+            mTts.setSpeechRate(0.8f);
+            mTts.setPitch(0.8f);
             platformAdapter.setTts(mTts);
           }});
        } else {
@@ -113,7 +115,11 @@ public class MainActivity extends AndroidApplication {
   @Override
   public void onDestroy() {
     if (iabHelper != null) iabHelper.dispose();
-    if (mTts != null) mTts.shutdown();
+    if (mTts != null) {
+      mTts.stop();
+      mTts.shutdown();
+      mTts = null;
+    }
     iabHelper = null;
     super.onDestroy();
   }

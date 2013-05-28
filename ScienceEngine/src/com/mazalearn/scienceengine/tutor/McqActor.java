@@ -87,12 +87,12 @@ public class McqActor extends Group {
   private OptionListener createListener(Skin skin, TextButton submitButton) {
     float y = ScreenComponent.McqOption.getY();
     optionButtons = new ButtonGroup();
-    McqActor.OptionListener listener = new OptionListener(submitButton); 
+    McqActor.OptionListener listener = new OptionListener(submitButton);
     for (int i = 0; i < MAX_OPTIONS; i++) {
       TextButton optionButton = ScreenUtils.createImageCheckBox("", 
           ScreenComponent.McqOption.getX(400), 
           y - ScreenComponent.getScaledY(30 * 2 * i), 
-          ScreenComponent.getScaledX(400),
+          400,
           ScreenComponent.getScaledY(30),
           skin.get("mcq", CheckBoxStyle.class));
       // Store index in name for future use

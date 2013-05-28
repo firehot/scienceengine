@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -78,7 +79,6 @@ public class TutorNavigator extends Group {
     goal = new TextButton("Goal", skin);
 
     goal.setWidth(ScreenComponent.Goal.getWidth());
-    goal.setHeight(ScreenComponent.Goal.getHeight());
     goal.getLabel().setWrap(true);
     goal.addListener(clickListener);
     goal.setName(ScreenComponent.Goal.name());
@@ -140,17 +140,26 @@ public class TutorNavigator extends Group {
     }
   }
   
-  public void setActiveTutor(ITutor activeTutor) {
+  public void setActiveTutor(final ITutor activeTutor) {
     this.activeTutor = activeTutor;
-    goal.setText(activeTutor.getGoal());
     goal.setColor(activeTutor.getType().getColor());
+    goal.setVisible(true);
     
     goal.addAction(Actions.sequence(
         Actions.alpha(0),
+        new Action() {
+          @Override
+          public boolean act(float delta) {
+            goal.setText(activeTutor.getGoal());
+            goal.pack();
+            goal.setWidth(ScreenComponent.Goal.getWidth());
+            goal.validate();
+            goal.setPosition(ScreenComponent.Goal.getX(goal.getWidth()),
+                ScreenComponent.Goal.getY(goal.getHeight()));
+            return true;
+          }
+        },
         Actions.alpha(1, 2)));
-    goal.setPosition(ScreenComponent.Goal.getX(goal.getWidth()), 
-        ScreenComponent.Goal.getY(goal.getHeight()));
-    goal.setVisible(true);
   }
 
   public void clearActiveTutor() {
