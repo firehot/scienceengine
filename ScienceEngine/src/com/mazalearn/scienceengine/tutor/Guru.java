@@ -197,6 +197,7 @@ public class Guru extends Group implements ITutor {
   @Override
   public void teach() {
     this.setVisible(true);
+    science2DController.reset();
     // If progress on this level is 0 and not a GOTO tutor, then show initial goal
     if (getStats()[ITutor.PERCENT_PROGRESS] == 0 && gotoTutor == null) {
       goal = rootTutor.getGoal() + "\nTouch Next to get started";

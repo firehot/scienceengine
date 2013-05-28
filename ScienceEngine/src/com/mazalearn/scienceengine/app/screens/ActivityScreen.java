@@ -21,6 +21,7 @@ import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
@@ -46,7 +47,6 @@ public class ActivityScreen extends AbstractScreen {
   @SuppressWarnings("unused")
   private Topic activityLevel;
   private ITutor tutorUnderRevision;
-  private ClickListener helpListener;
   private IScience2DView science2DView;
   private Actor helpActor;
  
@@ -115,35 +115,13 @@ public class ActivityScreen extends AbstractScreen {
 
   private Actor createHelpActor() {
     Image helpImage = new Image(ScienceEngine.getTextureRegion("help"));
-    helpListener = new ClickListener() {
+    helpImage.addListener(new ClickListener() {
       @Override
       public void clicked(InputEvent event, float x1, float y1) {
-        Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR);
-        if (helpTour != null) return;
-        String description = null;
-        if (tutorUnderRevision != null) {
-          description = "Revision for: " + tutorUnderRevision.getGoal();
-        } else {
-          description = science2DController.getTitle() + "\n\n" + 
-            getMsg(science2DController.getTopic() + "." + 
-                science2DController.getLevel() + ".Begin");
-        }
-        List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
-        Group activityGroup = (Group) stage.getRoot().findActor(ScreenComponent.ACTIVITY_GROUP);
-        for (Actor actor: activityGroup.getChildren()) {
-          if ((actor instanceof Science2DActor)) {
-            helpComponents.add((IHelpComponent) actor);
-          }
-        }
-        for (ScreenComponent screenComponent: ScreenComponent.values()) {
-          if (screenComponent.showInHelpTour()) {
-            helpComponents.add(screenComponent);
-          }
-        }
-        new HelpTour(getStage(), getSkin(), description, helpComponents);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        showHelp();
       }
-    };
-    helpImage.addListener(helpListener);
+    });
     ScreenComponent sc = ScreenComponent.Help;
     helpImage.setPosition(sc.getX(), sc.getY());
     helpImage.setSize(sc.getWidth(), sc.getHeight());
@@ -152,7 +130,29 @@ public class ActivityScreen extends AbstractScreen {
   }
   
   private void showHelp() {
-    helpListener.clicked(new InputEvent(), 0, 0);
+    Actor helpTour = science2DView.findActor(ScreenComponent.HELP_TOUR);
+    if (helpTour != null) return;
+    String description = null;
+    if (tutorUnderRevision != null) {
+      description = "Revision for: " + tutorUnderRevision.getGoal();
+    } else {
+      description = science2DController.getTitle() + "\n\n" + 
+        getMsg(science2DController.getTopic() + "." + 
+            science2DController.getLevel() + ".Begin");
+    }
+    List<IHelpComponent> helpComponents = new ArrayList<IHelpComponent>();
+    Group activityGroup = (Group) stage.getRoot().findActor(ScreenComponent.ACTIVITY_GROUP);
+    for (Actor actor: activityGroup.getChildren()) {
+      if ((actor instanceof Science2DActor)) {
+        helpComponents.add((IHelpComponent) actor);
+      }
+    }
+    for (ScreenComponent screenComponent: ScreenComponent.values()) {
+      if (screenComponent.showInHelpTour()) {
+        helpComponents.add(screenComponent);
+      }
+    }
+    new HelpTour(getStage(), getSkin(), description, helpComponents);
   }
     
   @Override 
