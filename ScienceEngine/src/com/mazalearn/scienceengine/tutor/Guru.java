@@ -140,19 +140,21 @@ public class Guru extends Group implements ITutor {
     teach();
   }
 
+  private void prepareTutors(ITutor tutor) {
+    if (tutor.getParentTutor() != null) {
+      prepareTutors(tutor.getParentTutor());
+      tutor.getParentTutor().prepareToTeach(tutor);
+    } else {
+      science2DController.reset();
+    }
+  }
+
   public Skin getSkin() {
     return skin;
   }
 
   public TutorHelper getTutorHelper() {
     return tutorHelper;
-  }
-
-  private void prepareTutors(ITutor tutor) {
-    if (tutor.getParentTutor() != null) {
-      prepareTutors(tutor.getParentTutor());
-      tutor.getParentTutor().prepareToTeach(tutor);
-    }
   }
   
   ////////////////////////////////

@@ -435,7 +435,7 @@ public class ScienceEngine extends Game {
   }
 
   public static void unloadAtlas(String path) {
-    atlasMap.put(path, null);
+    atlasMap.remove(path);
     getAssetManager().unload(path);
   }
 

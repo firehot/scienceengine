@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -182,6 +183,16 @@ public class TutorHelper extends Group {
     return mcqActor;
   }
 
+  private void doAnimation(boolean animation) {
+    if (animation) {
+      // Disable all touch inputs during animation.
+      this.setSize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
+      this.setTouchable(Touchable.disabled);      
+    } else {
+      this.setSize(0, 0);
+      this.setTouchable(Touchable.enabled);    
+    }
+  }
   public void doChallengeAnimation(final ITutor tutor) {
     final Image challenge = new Image(ScienceEngine.getTextureRegion("challenge"));
     challenge.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2,
@@ -189,6 +200,7 @@ public class TutorHelper extends Group {
     challenge.setSize(32, 32);
     soundManager.play(ScienceEngineSound.CHALLENGE);
     this.addActor(challenge);
+    this.doAnimation(true);
     challenge.addAction(
         Actions.sequence(
             Actions.parallel(
@@ -202,6 +214,7 @@ public class TutorHelper extends Group {
               public boolean act(float delta) {
                 removeActor(challenge);
                 tutor.teach();
+                TutorHelper.this.doAnimation(false);
                 return true;
               }
             }));
@@ -219,6 +232,7 @@ public class TutorHelper extends Group {
         ScreenComponent.VIEWPORT_HEIGHT / 2 - start.getHeight() / 2);
     soundManager.play(ScienceEngineSound.RAPID_FIRE);
     this.addActor(start);
+    this.doAnimation(true);
     start.addAction(
         Actions.sequence(
             Actions.alpha(0, 1),
@@ -249,6 +263,7 @@ public class TutorHelper extends Group {
                 public boolean act(float delta) {
                   removeActor(start);
                   tutor.teach();
+                  TutorHelper.this.doAnimation(false);
                   return true;
                 }
               }));
