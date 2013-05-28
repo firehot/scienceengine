@@ -32,27 +32,10 @@ public class MainActivity extends AndroidApplication {
     super.onCreate(savedInstanceState);      
     // Android always in production mode
     ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
-    // TTS
-    Intent checkIntent = new Intent();
-    checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-    startActivityForResult(checkIntent, TTS_CHECK);
-    // TTS
     
     // InApp Billing helper
-    iabHelper = new IabHelper(this, Security.getPublicKey());
-    // enable debug logging (for a production application, set this to false).
-    iabHelper.enableDebugLogging(true);
+    provisionBilling();
     
-    iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-      public void onIabSetupFinished(IabResult result) {
-        if (!result.isSuccess()) {
-          // Oh noes, there was a problem.
-          Gdx.app.log(ScienceEngine.LOG, "Problem setting up In-app Billing: " + result);
-          return;
-        }            
-        Gdx.app.log(ScienceEngine.LOG, "In-app billing Setup successful.");
-      }
-    });
     // Science engine config
     AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
     cfg.useGL20 = true;
@@ -67,8 +50,32 @@ public class MainActivity extends AndroidApplication {
         ? Platform.AndroidEmulator : Platform.Android;
     platformAdapter = new AndroidPlatformAdapter(this, platform, iabHelper);
     
+    // See if TTS engine can be started
+    if (platformAdapter.supportsSpeech()) {
+      Intent checkIntent = new Intent();
+      checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+      startActivityForResult(checkIntent, TTS_CHECK);
+    }
+    
     ScienceEngine.setPlatformAdapter(platformAdapter);
     initialize(scienceEngine, cfg);
+  }
+
+  public void provisionBilling() {
+    iabHelper = new IabHelper(this, Security.getPublicKey());
+    // enable debug logging (for a production application, set this to false).
+    iabHelper.enableDebugLogging(true);
+    
+    iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+      public void onIabSetupFinished(IabResult result) {
+        if (!result.isSuccess()) {
+          // Oh noes, there was a problem.
+          Gdx.app.log(ScienceEngine.LOG, "Problem setting up In-app Billing: " + result);
+          return;
+        }            
+        Gdx.app.log(ScienceEngine.LOG, "In-app billing Setup successful.");
+      }
+    });
   }
    
   String findAndroidId() {
@@ -84,25 +91,38 @@ public class MainActivity extends AndroidApplication {
      }
      mTts = null;
      if (requestCode == TTS_CHECK) {
-       if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-         // success, create the TTS instance
-         mTts = new TextToSpeech(this, new OnInitListener() {
-          @Override
-          public void onInit(int arg0) {
+       provisionTtsEngine(resultCode);
+     }
+  }
+
+  private void provisionTtsEngine(int resultCode) {
+    if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+       // success, create the TTS instance
+       mTts = new TextToSpeech(this, new OnInitListener() {
+        @Override
+        public void onInit(int arg0) {
+          int available = mTts.isLanguageAvailable(Locale.US);
+          if (available != TextToSpeech.LANG_MISSING_DATA && 
+              available != TextToSpeech.LANG_NOT_SUPPORTED) {
             mTts.setLanguage(Locale.US);
             mTts.setSpeechRate(1.0f);
             mTts.setPitch(0.9f);
             platformAdapter.setTts(mTts);
-          }});
-       } else {
-         // missing data, install it
-         Intent installIntent = new Intent();
-         installIntent.setAction(
-             TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-         startActivity(installIntent);
-       }
+            Gdx.app.log(ScienceEngine.LOG, "TTS initialized");
+          } else {
+            Gdx.app.error(ScienceEngine.LOG, "Locale not available for TTS");
+            mTts.stop();
+            mTts.shutdown();
+            mTts = null;
+          }
+        }});
+     } else {
+       // missing data, install it
+       Intent installIntent = new Intent();
+       installIntent.setAction(
+           TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+       startActivity(installIntent);
      }
-     // TTS
   }
   
   @Override

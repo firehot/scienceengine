@@ -103,7 +103,7 @@ tutors:[
            {type: "FieldMagnitudeProber",
             id: "C1.1",
             refs: ["G2.1", "G2.2", "G2.4"],
-            goal: "Touch one of the two ? where the magnetic field is stronger",
+            goal: "Touch one of the two '?' where the magnetic field is stronger",
             hints: ["The field is stronger closer to the poles of the magnet",
                     "The field is stronger if the current strength is larger"],
             explanation: ["The field is stronger closer to the poles of the magnet.\nThe field also becomes stronger if the current strength is larger"],
@@ -112,7 +112,7 @@ tutors:[
             {type:"FieldDirectionProber",
             id: "C1.2",
             refs: ["G2.1", "G2.3", "G2.4"],
-            goal: "Touch the ? and Drag in the direction of the magnetic field",
+            goal: "Touch the '?' and Drag in the direction of the magnetic field",
             explanation: ["The direction of the field arrow at a point is away from the North Pole and towards the South Pole of the magnet.\nThe nearer pole affects it more.",
                           "The right hand grip rule gives the direction of the magnetic field with respect to current direction"],
             components:[{type:"Compass", visible: false},{type:"ElectroMagnet",move:"None"}]

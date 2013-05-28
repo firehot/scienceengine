@@ -365,6 +365,7 @@ public class ScienceEngine extends Game {
     if (status != null) {// TODO: only for level editor - why?
       status.setColor(type.color); 
       status.setText(message);
+      Gdx.app.log(LOG, message);
     }
   }
 

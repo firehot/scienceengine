@@ -120,6 +120,7 @@ public class PurchaseDialog extends Dialog {
 
   private void showItemsForPurchase(Inventory inventory) {
     Table table = getContentTable();
+    waitActor.remove();
     table.clear();
     boolean buyDisabled = inventory == null;
     if (buyDisabled) {

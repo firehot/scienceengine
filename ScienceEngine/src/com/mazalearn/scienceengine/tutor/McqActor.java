@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -51,6 +52,8 @@ public class McqActor extends Group {
       if (tutor.getState() == ITutor.State.Finished) return;
       ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       submitButton.setVisible(true);
+      Actor nextButton = submitButton.getStage().getRoot().findActor(ScreenComponent.NextButton.name());
+      submitButton.setY(nextButton.getY());
     }
   }
 

@@ -281,6 +281,10 @@ public class Guru extends Group implements ITutor {
     int progress = Math.round(rootTutor.getStats()[ITutor.PERCENT_PROGRESS]);
     String progressStr = "Progress = " + progress + "%\n\n\n\n";
     if (success && progress >= 80) {
+      // If we are in revision mode, show a level end message for revision completed.
+      if (tutorHelper.isRevisionMode()) {
+        return progressStr + ScienceEngine.getMsg().getString("Revision.Success");        
+      }
       // Assumption - second last level in any topic is the certification level
       // last level is the Science Train level.
       Topic[] topicLevels = science2DController.getTopic().getChildren();

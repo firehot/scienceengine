@@ -104,6 +104,7 @@ public class TutorNavigator extends Group {
     TextButtonStyle style = new TextButtonStyle(skin.get("body", TextButtonStyle.class));
     style.font = skin.getFont("default-big");
     nextButton = new TextButton("Next", style);
+    nextButton.setName(ScreenComponent.NextButton.name());
     nextButton.addListener(new ClickListener() {
       public void clicked (InputEvent event, float x, float y) {
         nextButton.setVisible(false);
@@ -156,6 +157,7 @@ public class TutorNavigator extends Group {
             goal.validate();
             goal.setPosition(ScreenComponent.Goal.getX(goal.getWidth()),
                 ScreenComponent.Goal.getY(goal.getHeight()));
+            nextButton.setY(goal.getY() - nextButton.getHeight());
             return true;
           }
         },

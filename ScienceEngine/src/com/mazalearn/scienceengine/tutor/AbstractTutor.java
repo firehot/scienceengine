@@ -174,6 +174,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
     Gdx.app.log(ScienceEngine.LOG, "Teach: " + getId());
     if (getChildTutors() == null) { // Leaf tutor
       ScienceEngine.getSoundManager().play(ScienceEngineSound.CHIME);
+      ScienceEngine.getPlatformAdapter().speak(getGoal(), true);
     }
     this.setVisible(true);
     success = false;

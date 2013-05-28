@@ -37,7 +37,7 @@ public class ExplanationBox extends ImageMessageBox {
     addActor(themeImage);
     themeImage.setPosition(0, 0);
     themeImage.setSize(ScreenComponent.getScaledX(30), ScreenComponent.getScaledX(30));
-    reviseButton = new TextButton("Revise This", skin);
+    reviseButton = new TextButton("Revise this Topic", skin, "body");
     addActor(reviseButton);
     reviseButton.setVisible(false);
     reviseButton.addListener(new ClickListener() {

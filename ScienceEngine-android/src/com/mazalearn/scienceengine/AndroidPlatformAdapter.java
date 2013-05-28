@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -220,7 +221,8 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
     if (mTts != null && ScienceEngine.getPreferencesManager().isSpeechEnabled()) {
       Gdx.app.log(ScienceEngine.LOG, "Speaking out: " + text);
       for (String sentence: text.split("\\.")) {
-        mTts.speak(sentence, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
+        String s = sentence.replace("'?'", "question mark");
+        mTts.speak(s, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
         mTts.playSilence(PAUSE_MS, TextToSpeech.QUEUE_ADD, null);
         append = true;
       }

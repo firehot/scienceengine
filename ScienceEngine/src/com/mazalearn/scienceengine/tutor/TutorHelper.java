@@ -322,7 +322,7 @@ public class TutorHelper extends Group {
     // Set up for revision
     activeTutor.abort();
     guru.initialize(tutorList);
-    setActiveTutor(guru);
+    guru.goTo(tutorList.get(0));
     Gdx.app.log(ScienceEngine.LOG, "Revise: " + activeTutor.getId());
     ActivityScreen activityScreen = (ActivityScreen) ScienceEngine.SCIENCE_ENGINE.getScreen();
     activityScreen.enterRevisionMode(revisionFrame.tutorUnderRevision);

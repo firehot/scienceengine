@@ -27,7 +27,7 @@ tutors: [
            hints: ["Does the bar magnet need to touch the coil for current to be induced in it?",
                    "When the magnet is moved slowly, is current induced?",
                    "When the magnet moves faster, is the light brighter?"],
-           explanation: ["When the magnet moves near the coil, current flows in the coil\nThe magnet does not touch the coil so this is an induced current.\nThe strength of current induced depends on speed of movement and location of magnet"],
+           explanation: ["When the magnet moves near the coil, current flows in the coil.\nThe magnet does not touch the coil so this is an induced current.\nThe strength of current induced depends on speed of movement and location of magnet"],
            postcondition: "Count(BarMagnet.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1"
           },
           {type: "KnowledgeUnit",

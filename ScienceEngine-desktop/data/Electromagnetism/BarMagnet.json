@@ -77,7 +77,7 @@ tutors:[
         goal: "Challenge: Magnetic Field around a Magnet",
         childtutors: [
          {type: "FieldMagnitudeProber",
-          goal: "Touch one of the two ? where the magnetic field is stronger",
+          goal: "Touch one of the two '?' where the magnetic field is stronger",
           id: "C1.1",
           refs:["G1.2", "G1.3", "G1.4"],
           hints: ["The field is stronger closer to the poles of the magnet",
@@ -87,7 +87,7 @@ tutors:[
           components:[{type:"Compass", visible: false},{type: "BarMagnet", move:"None"}]
           }, 
           {type:"FieldDirectionProber",
-          goal: "Touch the ? and Drag in the direction of the magnetic field",
+          goal: "Touch the '?' and Drag in the direction of the magnetic field",
           id: "C1.2",
           refs: ["G1.2", "G1.3", "G1.4"],
           hints: ["The direction of the field is the direction in which a free North Pole would move if placed at that point.",
