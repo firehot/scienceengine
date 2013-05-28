@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.tutor;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -55,7 +56,10 @@ public class ExplanationBox extends ImageMessageBox {
     String currentText = explanation[current];
     getNextButton().setVisible(current < explanation.length - 1);
     if (!getNextButton().isVisible()) {
-      currentText += "\n\nTouch Next to continue";
+      Actor goalNextButton = getStage().getRoot().findActor(ScreenComponent.NextButton.name());
+      if (goalNextButton.isVisible()) {
+        currentText += "\n\nTouch Next to continue";
+      }
     }
     getPrevButton().setVisible(current > 0);
     boolean isImage = currentText.startsWith("image:");

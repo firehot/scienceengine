@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
