@@ -92,8 +92,7 @@ public class PurchaseDialog extends Dialog {
         showItemsForPurchase(inventory);
       }
     };
-    ScienceEngine.getPlatformAdapter().queryInventory(topicList, billing);
-    
+    ScienceEngine.getPlatformAdapter().queryInventory(topicList, billing);    
   }
 
   private Table createWaitActor(final Skin skin) {

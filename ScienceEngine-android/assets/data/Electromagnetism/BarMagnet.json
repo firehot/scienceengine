@@ -22,7 +22,7 @@ tutors:[
          hints: ["What happens to the compass when it moves around the magnet?",
                  "Can we move the compass instead of the magnet?"],
          postcondition: "Compass.NumRevolutions >= 1 or Compass.NumRevolutions <= -1",
-                  explanation: ["A Bar Magnet has two poles - North and South.\nA compass is just a weak magnet with 2 poles which can freely rotate.\nThe North pole of the compass is attracted to the Bar Magnet's South pole and vice versa",
+         explanation: ["A Bar Magnet has two poles - North and South.\nA compass is just a weak magnet with 2 poles which can freely rotate.\nThe North pole of the compass is attracted to the Bar Magnet's South pole and vice versa",
                        "The Earth has a magnetic field like a bar magnet and has two magnetic poles - North and South.\nThe North pole of the compass points to the Earth's magnetic South Pole (Earth's geographic North Pole)"],
          components:[{type:"Compass", visible: true}]
          }]

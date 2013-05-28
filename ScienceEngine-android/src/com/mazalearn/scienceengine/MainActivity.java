@@ -90,8 +90,8 @@ public class MainActivity extends AndroidApplication {
           @Override
           public void onInit(int arg0) {
             mTts.setLanguage(Locale.US);
-            mTts.setSpeechRate(0.8f);
-            mTts.setPitch(0.8f);
+            mTts.setSpeechRate(1.0f);
+            mTts.setPitch(0.9f);
             platformAdapter.setTts(mTts);
           }});
        } else {

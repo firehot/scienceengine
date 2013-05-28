@@ -57,7 +57,7 @@ public class PreferencesManager {
   }
 
   public boolean isSpeechEnabled() {
-    return prefs.getBoolean(PREF_SPEECH_ENABLED, false);
+    return prefs.getBoolean(PREF_SPEECH_ENABLED, true);
   }
 
   public void setSpeechEnabled(boolean speechEnabled) {

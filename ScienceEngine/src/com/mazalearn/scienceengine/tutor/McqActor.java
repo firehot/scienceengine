@@ -90,10 +90,10 @@ public class McqActor extends Group {
     McqActor.OptionListener listener = new OptionListener(submitButton);
     for (int i = 0; i < MAX_OPTIONS; i++) {
       TextButton optionButton = ScreenUtils.createImageCheckBox("", 
-          ScreenComponent.McqOption.getX(400), 
+          ScreenComponent.McqOption.getX(ScreenComponent.getScaledX(400)), 
           y - ScreenComponent.getScaledY(30 * 2 * i), 
           400,
-          ScreenComponent.getScaledY(30),
+          30,
           skin.get("mcq", CheckBoxStyle.class));
       // Store index in name for future use
       optionButton.setName(String.valueOf(i));

@@ -28,6 +28,7 @@ import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.billing.Purchase;
 
 public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
+  private static final int PAUSE_MS = 1000;
   private AndroidApplication application;
   private IabHelper iabHelper;
   private TextToSpeech mTts;
@@ -103,38 +104,29 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
       billing.inventoryCallback(null);
       return;
     }
-    List<String> productList = new ArrayList<String>();
+    final List<String> productList = new ArrayList<String>();
     for (Topic topic: topicList) {
       productList.add(topic.toProductId());
     }
     
-    iabHelper.queryInventoryAsync(true, productList,
-        new IabHelper.QueryInventoryFinishedListener() {
-          @Override
-          public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-            if (result.isFailure()) {
-              Gdx.app.error(ScienceEngine.LOG, "Failed to query inventory: " + result);
-              billing.inventoryCallback(null);
-            }
-            Gdx.app.log(ScienceEngine.LOG, "Query inventory was successful.");
-            billing.inventoryCallback(inventory);
-          }
-        });    
+    application.runOnUiThread(new Runnable() {
+      public void run() {
+        iabHelper.queryInventoryAsync(true, productList,
+            new IabHelper.QueryInventoryFinishedListener() {
+              @Override
+              public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                if (result.isFailure()) {
+                  Gdx.app.error(ScienceEngine.LOG, "Failed to query inventory: " + result);
+                  billing.inventoryCallback(null);
+                }
+                Gdx.app.log(ScienceEngine.LOG, "Query inventory was successful.");
+                billing.inventoryCallback(inventory);
+              }
+            });      
+        }
+    });    
   }
   
-  // Listener that's called when we finish querying the items and subscriptions we own
-  IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-      public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-        Gdx.app.log(ScienceEngine.LOG, "Query inventory finished.");
-          if (result.isFailure()) {
-            Gdx.app.log(ScienceEngine.LOG, "Failed to query inventory: " + result);
-            return;
-          }
-
-          Gdx.app.log(ScienceEngine.LOG, "Query inventory was successful.");
-      }
-  };
-
   /** Verifies the developer payload of a purchase. */
   boolean verifyDeveloperPayload(Purchase purchase, Topic topic) {
     if (purchase == null) {
@@ -227,7 +219,11 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   public void speak(String text, boolean append) {
     if (mTts != null && ScienceEngine.getPreferencesManager().isSpeechEnabled()) {
       Gdx.app.log(ScienceEngine.LOG, "Speaking out: " + text);
-      mTts.speak(text, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
+      for (String sentence: text.split("\\.")) {
+        mTts.speak(sentence, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
+        mTts.playSilence(PAUSE_MS, TextToSpeech.QUEUE_ADD, null);
+        append = true;
+      }
     }
   }
   
