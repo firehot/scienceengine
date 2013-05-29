@@ -506,6 +506,7 @@
     <Compile Include="Reachability.cs" />
     <Compile Include="IosPlatformAdapter.cs" />
     <Compile Include="InAppPurchaseManager.cs" />
+    <Compile Include="TextToSpeech.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

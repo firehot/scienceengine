@@ -108,7 +108,8 @@ namespace scienceengineios
 					//Console.WriteLine ("Product l10n price: " + product.LocalizedPrice ()); 
 					// Title and Description intentionally flipped
 					SkuDetails skuDetails = new SkuDetails(product.ProductIdentifier, "inapp", 
-					    product.LocalizedDescription, product.LocalizedTitle, product.Price.ToString ());
+					    product.LocalizedDescription, product.LocalizedTitle,
+					    product.PriceLocale.CurrencySymbol + product.Price.ToString ());
 					inventory.addSkuDetails(skuDetails);
 				}
         NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
