@@ -505,6 +505,7 @@
     <Compile Include="WebViewController.cs" />
     <Compile Include="Reachability.cs" />
     <Compile Include="IosPlatformAdapter.cs" />
+    <Compile Include="InAppPurchaseManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
