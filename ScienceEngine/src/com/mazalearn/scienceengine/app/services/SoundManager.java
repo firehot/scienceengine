@@ -77,7 +77,6 @@ public class SoundManager implements
     }
 
     // play the sound
-    Gdx.app.log(ScienceEngine.LOG, "Playing sound: " + sound.name());
     soundToPlay.play(volume);
   }
 

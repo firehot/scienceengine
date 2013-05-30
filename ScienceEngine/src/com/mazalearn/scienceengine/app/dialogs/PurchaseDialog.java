@@ -21,6 +21,7 @@ import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.LoadingScienceTrain;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.services.InstallProfile;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.billing.IBilling;
@@ -33,16 +34,33 @@ import com.mazalearn.scienceengine.core.view.CommandClickListener;
  */
 public class PurchaseDialog extends Dialog {
   
+  private static final String PURCHASE_FLOW = "$PurchaseFlow";
   private Skin skin;
   private List<Topic> topicList;
   private ButtonGroup purchasableItems;
   private ScienceEngine scienceEngine;
   private Topic topic;
+  private Topic level;
   private IBilling billing;
   private Table waitActor;
   // flag for communication across purchase thread and UI thread
   // null => status unknown, false => failure, true => success
   private Boolean purchaseDone = null;
+  
+  public enum State {
+    Initiated(0), InventoryQuery(1), InventoryFailure(2), InventoryDisplay(3),
+    PurchaseSelection(4), PurchaseRequest(5), PurchaseFailure(6), PurchaseDone(7), PurchaseCanceled(8);
+    
+    public final int index;
+
+    private State(int index) {
+      this.index = index;
+    }
+  }
+  
+  private long timeStart = System.currentTimeMillis();
+  private float[] stats = new float[State.values().length];
+  private Profile profile;
   
   public PurchaseDialog(final Topic topic, Topic level,
       final Stage stage, final Skin skin, final ScienceEngine scienceEngine) {
@@ -51,6 +69,10 @@ public class PurchaseDialog extends Dialog {
     this.skin = skin;
     this.scienceEngine = scienceEngine;
     this.topic = topic;
+    this.level = level;
+    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
+    profile.setCurrentActivity(level);
+    log(State.Initiated); 
 
     // retrieve the default table actor
     Table table = getContentTable();
@@ -70,6 +92,7 @@ public class PurchaseDialog extends Dialog {
       @Override
       public void purchaseCallback(Topic purchasedTopic) {
         if (purchasedTopic != null) {
+          log(State.PurchaseDone); 
           // Allow access after marking in install profile
           installProfile.addAsAvailableTopic(purchasedTopic);
           for (Topic child: purchasedTopic.getChildren()) {
@@ -80,6 +103,7 @@ public class PurchaseDialog extends Dialog {
           ScienceEngine.displayStatusMessage(getStage(), StatusType.INFO, "Purchase completed successfully");
           purchaseDone = true;
         } else {
+          log(State.PurchaseFailure); 
           ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Purchase could not be completed");
           ScienceEngine.getSoundManager().play(ScienceEngineSound.FAILURE);
           purchaseDone = false;
@@ -91,9 +115,14 @@ public class PurchaseDialog extends Dialog {
         showItemsForPurchase(inventory);
       }
     };
-    ScienceEngine.getPlatformAdapter().queryInventory(topicList, billing);    
+    log(State.InventoryQuery);
+    ScienceEngine.getPlatformAdapter().queryInventory(topicList, billing);
   }
 
+  private void log(State state) {
+    stats[state.index] = (float) (System.currentTimeMillis() - timeStart) / 1000.0f;
+  }
+  
   private Table createWaitActor(final Skin skin) {
     Table waitActor = new Table(skin);
     Label wait1 = new Label("Processing...Please wait...", skin, "buy");
@@ -110,10 +139,13 @@ public class PurchaseDialog extends Dialog {
   public void act(float delta) {
     super.act(delta);
     if (purchaseDone == null) return;
+    profile.saveStats(stats, level.getTopicId() + PURCHASE_FLOW);
+    profile.save();
     if (purchaseDone) {
       TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
       scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
     }
+    purchaseDone = null; // So that it will not come back in here.
     hide();    
   }
 
@@ -123,11 +155,13 @@ public class PurchaseDialog extends Dialog {
     table.clear();
     boolean buyDisabled = inventory == null;
     if (buyDisabled) {
+      log(State.InventoryFailure);
       // Not able to query items 
       Label notAvailable = new Label("Sorry, Store is unavailable now.\nIs billing setup properly? Is the network working?", skin, "buy");
       notAvailable.setAlignment(Align.center, Align.center);
       table.add(notAvailable);
     } else {
+      log(State.InventoryDisplay);
       addPurchasableItems(inventory, table);
     }
     table.row();
@@ -146,6 +180,7 @@ public class PurchaseDialog extends Dialog {
       topicCheckbox.addListener(new CommandClickListener() {
         @Override
         public void doCommand() {
+          log(State.PurchaseSelection);
         }
       });
       table.add(topicCheckbox).left().height(ScreenComponent.getScaledY(60));
@@ -171,7 +206,8 @@ public class PurchaseDialog extends Dialog {
     cancelButton.addListener(new CommandClickListener() {
       @Override
       public void doCommand() {
-        hide();
+        log(State.PurchaseCanceled);
+        purchaseDone = false;
       }
     });
     
@@ -197,9 +233,11 @@ public class PurchaseDialog extends Dialog {
           buttonTable.clear();
           buttonTable.add(waitActor);
           show(getStage());
+          log(State.PurchaseRequest);
           ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, billing);
         } else {
-          hide();
+          log(State.PurchaseCanceled);
+          purchaseDone = false;
         }
       } 
     });

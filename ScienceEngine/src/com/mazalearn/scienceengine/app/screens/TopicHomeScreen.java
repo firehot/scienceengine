@@ -124,9 +124,16 @@ public class TopicHomeScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    if (profile.getCurrentActivity() != null) {
-      gotoActivityLevel(profile.getCurrentActivity());
-      return;
+    Topic activity = profile.getCurrentActivity();
+    if (activity != null) {
+      InstallProfile installProfile = ScienceEngine.getPreferencesManager().getInstallProfile();
+      // Was this an attempt to purchase which did not succeed?
+      if (installProfile.isAvailableTopic(activity)) {
+        gotoActivityLevel(activity);
+        return;
+      } else {
+        profile.setCurrentActivity(null);
+      }
     }
     
     Table table = super.getTable();
