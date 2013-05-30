@@ -3,7 +3,7 @@ package com.mazalearn.scienceengine.app.dialogs;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -19,6 +19,7 @@ import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 
 /**
  * A simple options screen.
@@ -31,7 +32,7 @@ public class OptionsDialog extends Dialog {
   }
 
   public OptionsDialog(final Stage stage, final Skin skin) {
-    super(getMsg("ScienceEngine.Options"), skin);
+    super(getMsg("ScienceEngine.Options"), skin, "dialog");
     final PreferencesManager preferencesManager = ScienceEngine.getPreferencesManager();
 
     // retrieve the default table actor
@@ -54,7 +55,7 @@ public class OptionsDialog extends Dialog {
       });
       table.row();
       table.add(getMsg("ScienceEngine.Language")); // $NON-NLS-1$
-      table.add(languageSelect).colspan(2).left();
+      table.add(languageSelect).colspan(1).left().fillX();
     }
     
     if (platform.supportsSync()) {
@@ -70,7 +71,7 @@ public class OptionsDialog extends Dialog {
       });
       table.row();
       table.add(getMsg("ScienceEngine.SyncMode")); // $NON-NLS-1$
-      table.add(syncSelect).left();
+      table.add(syncSelect).left().fillX();
       TextButton syncButton = new TextButton(getMsg("ScienceEngine.ForceSync"), skin, "body");
       syncButton.addListener(new ClickListener() {
         @Override
@@ -82,7 +83,8 @@ public class OptionsDialog extends Dialog {
       table.add(syncButton).left();
     }
     // create the labels widgets
-    final CheckBox soundEffectsCheckbox = new CheckBox("", skin); //$NON-NLS-1$
+    final TextButton soundEffectsCheckbox = ScreenUtils.createCheckBox("", 
+        0, 0, 50, 30, skin.get(CheckBoxStyle.class));
     soundEffectsCheckbox.setChecked(ScienceEngine.getPreferencesManager()
         .isSoundEnabled());
     soundEffectsCheckbox.addListener(new ClickListener() {
@@ -96,9 +98,10 @@ public class OptionsDialog extends Dialog {
     });
     table.row();
     table.add(getMsg("ScienceEngine.SoundEffects")); //$NON-NLS-1$
-    table.add(soundEffectsCheckbox).colspan(2).left();
+    table.add(soundEffectsCheckbox).colspan(1).left().fillX();
 
-    final CheckBox musicCheckbox = new CheckBox("", skin); //$NON-NLS-1$
+    final TextButton musicCheckbox = ScreenUtils.createCheckBox("", 
+        0, 0, 50, 30, skin.get(CheckBoxStyle.class));
     musicCheckbox.setChecked(ScienceEngine.getPreferencesManager().isMusicEnabled());
     musicCheckbox.addListener(new ClickListener() {
       @Override
@@ -115,10 +118,11 @@ public class OptionsDialog extends Dialog {
     });
     table.row();
     table.add(getMsg("ScienceEngine.Music")); //$NON-NLS-1$
-    table.add(musicCheckbox).colspan(2).left();
+    table.add(musicCheckbox).colspan(1).left().fillX();
 
     if (platform.supportsSpeech()) {
-      final CheckBox speechCheckbox = new CheckBox("", skin); //$NON-NLS-1$
+      final TextButton speechCheckbox = ScreenUtils.createCheckBox("", 
+          0, 0, 50, 30, skin.get(CheckBoxStyle.class));
       speechCheckbox.setChecked(ScienceEngine.getPreferencesManager().isSpeechEnabled());
       speechCheckbox.addListener(new ClickListener() {
         @Override
@@ -134,7 +138,7 @@ public class OptionsDialog extends Dialog {
       });
       table.row();
       table.add(getMsg("ScienceEngine.Speech")); //$NON-NLS-1$
-      table.add(speechCheckbox).colspan(2).left();
+      table.add(speechCheckbox).colspan(1).left();
     }
     // range is [0.0,1.0]; step is 0.1f
     final Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, skin);

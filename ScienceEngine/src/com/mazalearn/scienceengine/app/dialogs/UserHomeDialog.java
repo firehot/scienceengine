@@ -39,7 +39,7 @@ public class UserHomeDialog extends Dialog {
   private Image myUserImage;
 
   public UserHomeDialog(final Skin skin, final Image userImage) {
-    super("", skin);
+    super("Home", skin, "dialog");
     this.skin = skin;
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     ScienceEngine.loadAtlas("images/social/pack.atlas"); // Unload after since not used elsewhere?

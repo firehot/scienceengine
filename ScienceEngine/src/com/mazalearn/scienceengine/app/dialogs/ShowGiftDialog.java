@@ -21,7 +21,7 @@ public class ShowGiftDialog extends Dialog {
   private Dialog parentDialog;
 
   public ShowGiftDialog(final Skin skin, final Message gift, final Actor giftItem, boolean allowAccept, Dialog parentDialog) {
-    super("", skin);
+    super("", skin, "dialog");
     this.parentDialog = parentDialog;
     parentDialog.setVisible(false);
     

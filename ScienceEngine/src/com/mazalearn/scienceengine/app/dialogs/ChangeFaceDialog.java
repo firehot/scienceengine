@@ -21,7 +21,7 @@ public class ChangeFaceDialog extends Dialog {
   private UserHomeDialog parentDialog;
 
   public ChangeFaceDialog(final Skin skin, final Image userImage, final UserHomeDialog parentDialog) {
-    super("", skin);
+    super("", skin, "dialog");
     
     this.parentDialog = parentDialog;
     parentDialog.setVisible(false);

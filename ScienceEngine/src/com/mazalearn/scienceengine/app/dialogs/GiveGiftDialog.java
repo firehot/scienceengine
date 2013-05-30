@@ -33,7 +33,7 @@ public class GiveGiftDialog extends Dialog {
   private TextButton makeGift;
   
   public GiveGiftDialog(final Skin skin, final Dialog parentDialog) {
-    super("", skin);
+    super("", skin, "dialog");
     this.parentDialog = parentDialog;
     
     parentDialog.setVisible(false);

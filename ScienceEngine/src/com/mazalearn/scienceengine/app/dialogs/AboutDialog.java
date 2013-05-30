@@ -15,7 +15,7 @@ import com.mazalearn.scienceengine.ScreenComponent;
 public class AboutDialog extends Dialog {
   
   public AboutDialog(Skin skin) {
-    super(ScienceEngine.getMsg().getString("ScienceEngine.About"), skin);
+    super(ScienceEngine.getMsg().getString("ScienceEngine.About"), skin, "dialog");
     
     Label name = new Label(ScienceEngine.getMsg().getString("ScienceEngine.Name"), skin);
     name.setWidth(ScreenComponent.getScaledX(100));
