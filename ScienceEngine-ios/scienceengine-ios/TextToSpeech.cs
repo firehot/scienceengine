@@ -10,7 +10,7 @@ namespace scienceengineios
     
     public class TextToSpeech
     {
-        
+        IntPtr voice;
     // Dllimport function from System.Runtime.InteropServices
     // For this application, you import the DLL through GCC flags and call it via
     //  [Dllimport "__Internal")].  This is because
@@ -23,8 +23,7 @@ namespace scienceengineios
         
     // Any native library must be compiled into a .a extension for the Arm6 processor on the iPhone:
     // HOWEVER!!! NOTE:  When you use the iPhone simluator to debug this, you must use a library that
-    // was compiled for 
-    // the 1386 processor in order for it to work.
+    // was compiled for the 1386 processor in order for it to work.
     // This is where I learned that the iPhone simulator is NOT an iPhone emulator.
         
         
@@ -40,27 +39,38 @@ namespace scienceengineios
         static extern void flite_init ();
         
         public void fliteInitFunc() {
-            flite_init();
+           flite_init();
+           voice = register_cmu_us_kal();
+           flite_set_features(voice, 95f, 11f, 1f);
         }
         //  You must do a new DllImport for each function you link up inside your class to the C
         //  libraries.  This second link creates an IntPtr to the library where the "Computerized
         //  Voice Object" lives.
 
         [DllImport ("__Internal")]
-                
-
         //  Esentially, for each one of these voice libraries you have, you'll have a different
         //  "person's" voice.
         //  This is how you can modularly change the voice sound, clarity, gender, age, etc, of the
         //  voice.
         //  The register_cmu_us_kal function is a function in the c library - any of these voices will
         //  have a register_cmu_country_name function will exist in any properly made voice library
-        //  for flite.
+        //  for flite. This is very fast compared to others - male.
         static extern IntPtr register_cmu_us_kal();
         
-        //  Third Dllimport to link flite_text_to_speech
+		[DllImport ("__Internal")]
+		//  male
+		static extern IntPtr register_cmu_us_kal16();
+
+		[DllImport ("__Internal")]
+		//  female
+		static extern IntPtr register_cmu_us_slt();
+        //  Dllimport for setting features
         [DllImport ("__Internal")]
         
+        // set the pitch, stddev and speed
+        static extern void flite_set_features(IntPtr voice, float pitch, float stddev, float speed);
+
+        [DllImport ("__Internal")]
         //  Actual C Function in libflite.a that you're calling:
         //  float flite_text_to_speech(const char *text, cst_voice *voice, const char *outtype);
         
@@ -76,15 +86,30 @@ namespace scienceengineios
         //  Mono-touch API. 
         //  Or you you can set it to none.  Not sure why you'd need that, but you have the option.
         //  I have only tested this with output to the filesystem
-        static extern void flite_text_to_speech (string text, IntPtr register_cmu_us_kal, string audioFilePath);
+        static extern void flite_text_to_speech (string text, IntPtr voice, string audioFilePath);
         
-        //  The function to call all the functionalties above to output a text string to speech:
-        public void ConvertTextToWav(string text, string audioFilePath) {    
-          //  Call first required init function to allow to call the rest              
-          fliteInitFunc();    
-  
+        [DllImport ("__Internal")]        
+        //  Actual C Function in libflite.a that you're calling:
+        //  float flite_text_to_str(const char *text, char *out);
+        
+        //  The three arguments this function takes are: The string you're outputting to voice, 
+        //   the voice and the output byte array.
+        static extern int flite_text_to_wave_str(string text, IntPtr voice, byte[] str);
+        
+        byte[] fbytes = new byte[1000000];
+        // Only one text can be spoken at a time because of bytes array being a single one.
+        public byte[] ConvertTextToWavStr (String text)
+		{
+			int n = flite_text_to_wave_str(text, voice, fbytes);
+			Console.Out.WriteLine("Wav file bytes = " + n);
+			return fbytes;
+		}
+		
+        //  The function to call all the functionalties above to output a text string to speech wav in file:
+        public void ConvertTextToWav(string text, string audioFilePath) {      
           //  Call Flite Text to Speech function     
-          flite_text_to_speech (text, register_cmu_us_kal(), audioFilePath);                                       
+          flite_text_to_speech (text, voice, audioFilePath);                                       
         }
+        
     }
 }

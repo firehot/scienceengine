@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using MonoTouch.AVFoundation;
 using MonoTouch.Foundation;
 using MonoTouch.StoreKit;
 using MonoTouch.UIKit;
@@ -20,10 +21,14 @@ namespace scienceengineios
     List<string> products;
     bool pricesLoaded = false;
     NSObject priceObserver, requestObserver;
+	TextToSpeech speaker;
+		AVAudioPlayer audioPlayer;
     
     InAppPurchaseManager iap;
 		
 		public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
+		  speaker = new TextToSpeech ();
+			speaker.fliteInitFunc ();
 		}
 		
 		public void setWindowAndWebViewController(UIWindow window, WebViewController webViewController) {
@@ -81,6 +86,21 @@ namespace scienceengineios
       iap.PurchaseProduct (sku.toProductId());
       
     }
+   public override void speak (string str, bool b)
+		{
+			string basedir = Path.Combine (Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..");
+			string tmpdir = Path.Combine (basedir, "tmp");
+			string audioFilePath = Path.Combine (tmpdir, "scienceengine.wav");
+			str = str.Replace ("'?'", "question mark");
+			byte[] bytes = speaker.ConvertTextToWavStr(str);
+			audioPlayer = AVAudioPlayer.FromData (NSData.FromArray(bytes));
+			audioPlayer.PrepareToPlay();
+			audioPlayer.Play();
+		}
+   public override bool supportsSpeech ()
+		{
+			return true;
+		}
 
    public override void queryInventory (java.util.List topicList, IBilling billing)
 		{
@@ -105,7 +125,6 @@ namespace scienceengineios
 					pricesLoaded = true;
 					var product = (SKProduct)info.ObjectForKey (productId);
 					
-					//Console.WriteLine ("Product l10n price: " + product.LocalizedPrice ()); 
 					// Title and Description intentionally flipped
 					SkuDetails skuDetails = new SkuDetails(product.ProductIdentifier, "inapp", 
 					    product.LocalizedDescription, product.LocalizedTitle,

@@ -20,10 +20,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
-    <MtouchDebug>True</MtouchDebug>
-    <MtouchProfiling>True</MtouchProfiling>
     <MtouchLink>None</MtouchLink>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -L${ProjectDir}/tts/i386-darwin12.3.0 -likvm-natives -lgdx -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex -lflite -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a -force_load ${ProjectDir}/tts/i386-darwin12.3.0/libflite_cmu_us_kal.a -force_load ${ProjectDir}/tts/i386-darwin12.3.0/libflite_usenglish.a -force_load ${ProjectDir}/tts/i386-darwin12.3.0/libflite_cmulex.a -force_load ${ProjectDir}/tts/i386-darwin12.3.0/libflite.a"</MtouchExtraArgs>
     <MtouchI18n>west</MtouchI18n>
     <CustomCommands>
       <CustomCommands>
@@ -31,6 +29,8 @@
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
+    <OptimizePNGs>false</OptimizePNGs>
+    <MtouchDebug>true</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -60,7 +60,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchArch>ARMv7</MtouchArch>
     <MtouchI18n>west</MtouchI18n>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -L${ProjectDir}/tts/arm-darwin -likvm-natives -lgdx -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex -lflite -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a -force_load ${ProjectDir}/tts/arm-darwin/libflite_cmu_us_kal.a -force_load ${ProjectDir}/tts/arm-darwin/libflite_usenglish.a -force_load ${ProjectDir}/tts/arm-darwin/libflite_cmulex.a -force_load ${ProjectDir}/tts/arm-darwin/libflite.a"</MtouchExtraArgs>
     <IpaPackageName />
     <CustomCommands>
       <CustomCommands>
@@ -68,6 +68,7 @@
       </CustomCommands>
     </CustomCommands>
     <BuildIpa>True</BuildIpa>
+    <OptimizePNGs>false</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -106,7 +107,7 @@
     <MtouchI18n>west</MtouchI18n>
     <IpaPackageName />
     <MtouchArch>ARMv7</MtouchArch>
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -likvm-natives -lgdx -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -cxx -gcc_flags "-L${ProjectDir}/libs/ios -L${ProjectDir}/libs/ios/ikvm/bin -L${ProjectDir}/tts/arm-darwin -likvm-natives -lgdx -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex -lflite -force_load ${ProjectDir}/libs/ios/libgdx.a -force_load ${ProjectDir}/libs/ios/ikvm/bin/libikvm-natives.a -force_load ${ProjectDir}/tts/arm-darwin/libflite_cmu_us_kal.a -force_load ${ProjectDir}/tts/arm-darwin/libflite_usenglish.a -force_load ${ProjectDir}/tts/arm-darwin/libflite_cmulex.a -force_load ${ProjectDir}/tts/arm-darwin/libflite.a"</MtouchExtraArgs>
     <CodesignProvision>8AEA0A63-0555-4AE7-983C-092A89ADA7EB</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
@@ -436,9 +437,9 @@
     <Content Include="..\..\ScienceEngine-android\assets\images\trivia\hertz.jpg">
       <Link>images\trivia\hertz.jpg</Link>
     </Content>
-    <None Include="..\..\ScienceEngine-android\assets\images\trivia\infrared.gif">
+    <Content Include="..\..\ScienceEngine-android\assets\images\trivia\infrared.gif">
       <Link>images\trivia\infrared.gif</Link>
-    </None>
+    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\images\trivia\kiteexperiment.jpg">
       <Link>images\trivia\kiteexperiment.jpg</Link>
     </Content>
@@ -499,6 +500,24 @@
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismScienceTrain.json">
       <Link>data\Electromagnetism\ElectromagnetismScienceTrain.json</Link>
     </Content>
+    <None Include="tts\arm-darwin\libflite.a" />
+    <None Include="tts\arm-darwin\libflite_cmu_time_awb.a" />
+    <None Include="tts\arm-darwin\libflite_cmu_us_awb.a" />
+    <None Include="tts\arm-darwin\libflite_cmu_us_kal.a" />
+    <None Include="tts\arm-darwin\libflite_cmu_us_kal16.a" />
+    <None Include="tts\arm-darwin\libflite_cmu_us_rms.a" />
+    <None Include="tts\arm-darwin\libflite_cmu_us_slt.a" />
+    <None Include="tts\arm-darwin\libflite_cmulex.a" />
+    <None Include="tts\arm-darwin\libflite_usenglish.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_cmu_time_awb.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_cmu_us_awb.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_cmu_us_kal.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_cmu_us_kal16.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_cmu_us_rms.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_cmu_us_slt.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_cmulex.a" />
+    <None Include="tts\i386-darwin12.3.0\libflite_usenglish.a" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -518,6 +537,7 @@
     <Folder Include="data\Electromagnetism\" />
     <Folder Include="data\StatesOfMatter\" />
     <Folder Include="data\Waves\" />
+    <Folder Include="tts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\ScienceEngine-android\assets\skin\Lohit-Devanagari.ttf">

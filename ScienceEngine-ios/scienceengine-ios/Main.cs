@@ -6,9 +6,11 @@ using System.Security.Cryptography;
 using java.nio;
 using java.util;
 
+using MonoTouch.AVFoundation;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
+using com.badlogic.gdx;
 using com.badlogic.gdx.backends.ios;
 using com.badlogic.gdx.graphics;
 using com.mazalearn.scienceengine;
