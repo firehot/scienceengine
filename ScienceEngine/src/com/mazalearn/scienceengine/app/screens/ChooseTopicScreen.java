@@ -4,24 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
-import com.mazalearn.scienceengine.app.dialogs.PurchaseDialog;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
-import com.mazalearn.scienceengine.billing.IBilling;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.tutor.Guru;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
@@ -88,9 +85,9 @@ public class ChooseTopicScreen extends AbstractScreen {
         ScreenUtils.createProgressPercentageBar(getSkin().get(LabelStyle.class),
             topicThumb, progressPercentage, THUMBNAIL_WIDTH);
       }
-      topicThumb.addListener(new ClickListener() {
+      topicThumb.addListener(new CommandClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void doCommand() {
           if (!lock) {
             gotoTopicHome(topic);
           }

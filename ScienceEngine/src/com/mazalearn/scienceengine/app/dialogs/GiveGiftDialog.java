@@ -22,6 +22,7 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.Trivia;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 public class GiveGiftDialog extends Dialog {
   
@@ -58,11 +59,10 @@ public class GiveGiftDialog extends Dialog {
     makeGift = new TextButton("Pack the Gift", skin);
     contentTable.add(makeGift).right().spaceRight(10);
     makeGift.setDisabled(true);
-    makeGift.addListener(new ClickListener() {
+    makeGift.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         if (makeGift.isDisabled()) return; 
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         gift.giftType = MathUtils.random(1, 3);
         giftImage.setDrawable(new TextureRegionDrawable(ScienceEngine.getTextureRegion("gift" + gift.giftType)));
         int i = MathUtils.random(trivia.getNumTrivia() - 1);
@@ -73,11 +73,10 @@ public class GiveGiftDialog extends Dialog {
     });
     contentTable.add(giftImage).width(100).height(75).left();
     contentTable.row();
-    giftImage.addListener(new ClickListener() {
+    giftImage.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         if (makeGift.isDisabled()) return;
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         new ShowGiftDialog(skin, gift, giftImage, false, GiveGiftDialog.this).show(getStage());
       }
     });
@@ -86,11 +85,10 @@ public class GiveGiftDialog extends Dialog {
     this.getButtonTable().add(cancelButton).width(150).center();
     
     sendButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.SendGift"), skin, "body");
-    sendButton.addListener(new ClickListener() {
+    sendButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         if (sendButton.isDisabled()) return; 
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         profile.sendGift(gift);
       }
     });
@@ -104,10 +102,9 @@ public class GiveGiftDialog extends Dialog {
     final List pointsList = new List(new Integer[] {100, 200, 500, 1000}, skin);
     pointsList.setSelection("500");
     coinsTable.add(pointsList);
-    pointsList.addListener(new ClickListener() {
+    pointsList.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void doCommand() {
         gift.points = Integer.parseInt(pointsList.getSelection());
         if (gift.points > profile.getPoints()) {
           ScienceEngine.displayStatusMessage(parentDialog.getStage(), 
@@ -131,9 +128,9 @@ public class GiveGiftDialog extends Dialog {
   private Actor createFriendChooser(final Skin skin) {    
     final List friendsList = new List(profile.getFriends().toArray(new String[0]), skin);
     TextButton addFriend = new TextButton("Add a Friend", skin);
-    addFriend.addListener(new ClickListener() {
+    addFriend.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         // Onscreen keyboard does not show in IOS - this is a workaround.
         Gdx.input.getTextInput(new TextInputListener() {
           @Override
@@ -163,10 +160,9 @@ public class GiveGiftDialog extends Dialog {
         }, "Enter friend's email address", "");
       }
     });
-    friendsList.addListener(new ClickListener() {
+    friendsList.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void doCommand() {
         gift.email = friendsList.getSelection();
       }
     });

@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -28,6 +27,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 public class TutorNavigator extends Group {
   
@@ -64,8 +64,9 @@ public class TutorNavigator extends Group {
     addActor(tutorsPanel);
     userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     userImage.setSize(ScreenComponent.User.getWidth(), ScreenComponent.User.getHeight());
-    ClickListener clickListener = new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
+    ClickListener clickListener = new CommandClickListener() {
+      @Override
+      public void doCommand() {
         if (tutorsPanel.isVisible()) {
           tutorsPanel.setVisible(false);
           return;
@@ -105,8 +106,9 @@ public class TutorNavigator extends Group {
     style.font = skin.getFont("default-big");
     nextButton = new TextButton("Next", style);
     nextButton.setName(ScreenComponent.NextButton.name());
-    nextButton.addListener(new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
+    nextButton.addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         nextButton.setVisible(false);
         activeTutor.userReadyToFinish();
       }
@@ -177,9 +179,9 @@ public class TutorNavigator extends Group {
     int count = 0;
     for (final ITutor tutor: tutors) {
       TextButton tutorButton = new TextButton(tutor.getGoal(), skin);
-      tutorButton.addListener(new ClickListener() {
+      tutorButton.addListener(new CommandClickListener() {
         @Override
-        public void clicked (InputEvent event, float x, float y) {
+        public void doCommand() {
           tutorsPanel.setVisible(false);
           if (activeTutorButton != null) { // remove user image
             activeTutorButton.removeActor(userImage);

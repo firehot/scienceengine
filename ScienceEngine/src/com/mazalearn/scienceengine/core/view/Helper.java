@@ -34,8 +34,9 @@ public class Helper extends Group {
     helpBox.setColor(Color.YELLOW);
     helpBox.setVisible(false);
     //helpBox.getLabel().setWrap(true);
-    helpBox.addListener(new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
+    helpBox.addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         helpBox.setVisible(false);
       }
     });

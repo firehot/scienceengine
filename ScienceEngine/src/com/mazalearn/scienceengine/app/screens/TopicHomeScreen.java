@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -36,6 +35,7 @@ import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.tutor.Guru;
 import com.mazalearn.scienceengine.tutor.ITutor;
 
@@ -44,7 +44,7 @@ import com.mazalearn.scienceengine.tutor.ITutor;
  */
 public class TopicHomeScreen extends AbstractScreen {
 
-  public static class BrowseUrlListener extends ClickListener {
+  public static class BrowseUrlListener extends CommandClickListener {
     private final String url;
 
     public BrowseUrlListener(String url) {
@@ -52,13 +52,13 @@ public class TopicHomeScreen extends AbstractScreen {
     }
 
     @Override
-    public void clicked(InputEvent event, float x, float y) {
+    public void doCommand() {
       ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       ScienceEngine.getPlatformAdapter().browseURL(url);
     }
   }
 
-  public static class VideoPlayListener extends ClickListener {
+  public static class VideoPlayListener extends CommandClickListener {
     private final String fileName;
     private final String url;
 
@@ -68,7 +68,7 @@ public class TopicHomeScreen extends AbstractScreen {
     }
 
     @Override
-    public void clicked(InputEvent event, float x, float y) {
+    public void doCommand() {
       ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       boolean playedVideo = false;
       if (fileName != null) {
@@ -144,9 +144,9 @@ public class TopicHomeScreen extends AbstractScreen {
     table.row();
     final TextButton contentTypeButton = 
         new TextButton(getMsg("ScienceEngine.ResourcesOnTheInternet"), getSkin(), "body");
-    contentTypeButton.addListener(new ClickListener() {
+    contentTypeButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         if (contentTypeButton.isChecked()) {
           scrollPane.setWidget(resourcesPane);
           contentTypeButton.setText(getMsg("ScienceEngine.Activities"));
@@ -206,9 +206,9 @@ public class TopicHomeScreen extends AbstractScreen {
         lockImage.setPosition(activityThumb.getWidth() / 2 - lockImage.getWidth() / 2, 
             activityThumb.getHeight() / 2 - lockImage.getHeight() / 2);
         activityThumb.addActor(lockImage);
-        activityThumb.addListener(new ClickListener() {
+        activityThumb.addListener(new CommandClickListener() {
           @Override
-          public void clicked(InputEvent event, float x, float y) {
+          public void doCommand() {
             if (isScienceEngineLevel) {
               new MessageDialog(getSkin(), "To unlock this level, you need the " + topic.name() + " Certificate").show(stage);
             } else if (!installProfile.isAvailableTopic(level)) {
@@ -226,9 +226,9 @@ public class TopicHomeScreen extends AbstractScreen {
         activityThumb.addActor(ScreenUtils.createLabel(timeSpent, 2, THUMBNAIL_HEIGHT - 34, 60, 30, blueBackground));
   
         final Topic iLevel = level;
-        activityThumb.addListener(new ClickListener() {
+        activityThumb.addListener(new CommandClickListener() {
           @Override
-          public void clicked(InputEvent event, float x, float y) {
+          public void doCommand() {
             gotoActivityLevel(iLevel);
           }
         });

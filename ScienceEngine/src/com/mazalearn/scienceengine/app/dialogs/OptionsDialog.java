@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine.app.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
@@ -20,6 +18,7 @@ import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 /**
  * A simple options screen.
@@ -73,10 +72,9 @@ public class OptionsDialog extends Dialog {
       table.add(getMsg("ScienceEngine.SyncMode")); // $NON-NLS-1$
       table.add(syncSelect).left().fillX();
       TextButton syncButton = new TextButton(getMsg("ScienceEngine.ForceSync"), skin, "body");
-      syncButton.addListener(new ClickListener() {
+      syncButton.addListener(new CommandClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        public void doCommand() {
           preferencesManager.syncProfiles(true);
         }
       });
@@ -87,13 +85,12 @@ public class OptionsDialog extends Dialog {
         0, 0, 50, 30, skin.get(CheckBoxStyle.class));
     soundEffectsCheckbox.setChecked(ScienceEngine.getPreferencesManager()
         .isSoundEnabled());
-    soundEffectsCheckbox.addListener(new ClickListener() {
+    soundEffectsCheckbox.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         boolean enabled = soundEffectsCheckbox.isChecked();
         preferencesManager.setSoundEnabled(enabled);
         ScienceEngine.getSoundManager().setEnabled(enabled);
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       }
     });
     table.row();
@@ -103,14 +100,13 @@ public class OptionsDialog extends Dialog {
     final TextButton musicCheckbox = ScreenUtils.createCheckBox("", 
         0, 0, 50, 30, skin.get(CheckBoxStyle.class));
     musicCheckbox.setChecked(ScienceEngine.getPreferencesManager().isMusicEnabled());
-    musicCheckbox.addListener(new ClickListener() {
+    musicCheckbox.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         boolean enabled = musicCheckbox.isChecked();
         preferencesManager.setMusicEnabled(enabled);
         ScienceEngine.getMusicManager().setEnabled(enabled);
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
-
+ 
         // if the music is now enabled, start playing the menu music
         if (enabled)
           ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
@@ -124,12 +120,11 @@ public class OptionsDialog extends Dialog {
       final TextButton speechCheckbox = ScreenUtils.createCheckBox("", 
           0, 0, 50, 30, skin.get(CheckBoxStyle.class));
       speechCheckbox.setChecked(ScienceEngine.getPreferencesManager().isSpeechEnabled());
-      speechCheckbox.addListener(new ClickListener() {
+      speechCheckbox.addListener(new CommandClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void doCommand() {
           boolean enabled = speechCheckbox.isChecked();
           preferencesManager.setSpeechEnabled(enabled);
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
   
           // if the music is now enabled, start playing the menu music
           if (enabled)
@@ -168,9 +163,9 @@ public class OptionsDialog extends Dialog {
     table.row();
     TextButton aboutButton = 
         new TextButton(getMsg("ScienceEngine.About"), skin, "body");
-    aboutButton.addListener(new ClickListener() {
+    aboutButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked (InputEvent event, float x, float y) {
+      public void doCommand() {
         new AboutDialog(skin).show(stage);
       }      
     });

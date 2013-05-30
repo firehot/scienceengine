@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
@@ -62,9 +61,9 @@ public class ActivityViewControls extends ViewControls {
     // Add snapshot functionality
     Button snapshotButton = new TextButton(
         getMsg().getString("ScienceEngine.Snapshot"), skin, "body");
-    snapshotButton.addListener(new ClickListener() {
+    snapshotButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x1, float y1) {
+      public void doCommand() {
         setActivated(false);
         takeSnapshot();
       }

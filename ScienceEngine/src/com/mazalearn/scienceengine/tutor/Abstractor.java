@@ -21,9 +21,11 @@ import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 
 public class Abstractor extends AbstractTutor {
@@ -104,6 +106,7 @@ public class Abstractor extends AbstractTutor {
       configTable.add(label).width(30);
       image.addListener(new ClickListener() {
         public void clicked (InputEvent event, float x, float y) {
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
           image.setVisible(false);
           changeOptions.setPosition(event.getStageX(), event.getStageY());
           changeOptions.setImageAndLabel(image, label);
@@ -133,8 +136,9 @@ public class Abstractor extends AbstractTutor {
       super(tutorHelper.getSkin());
       for (TextureRegionDrawable option: options) {
         final Image opt = new Image(); opt.setDrawable(option);
-        opt.addListener(new ClickListener() {
-          public void clicked (InputEvent event, float x, float y) {
+        opt.addListener(new CommandClickListener() {
+          @Override
+          public void doCommand() {
             img.setDrawable(opt.getDrawable());
             img.setVisible(true);
             if (img.getDrawable() == options[2]) {
@@ -173,9 +177,9 @@ public class Abstractor extends AbstractTutor {
   private TextButton createSubmitButton(Skin skin) {
     final TextButton submitButton = new TextButton("Submit", skin);
 
-    submitButton.addListener(new ClickListener() {
+    submitButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked (InputEvent event, float x, float y) {
+      public void doCommand() {
         if (submitButton.isDisabled()) return;
         Map<String, Integer> chosenParameters = new HashMap<String, Integer>();
         for (Actor actor: configTable.getChildren()) {

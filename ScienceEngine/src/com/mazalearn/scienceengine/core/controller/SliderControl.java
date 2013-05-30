@@ -3,12 +3,11 @@ package com.mazalearn.scienceengine.core.controller;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
@@ -47,13 +46,12 @@ public class SliderControl implements IControl {
         property.setValue(slider.getValue());
       }      
     });
-    slider.addListener(new ClickListener() {
+    slider.addListener(new CommandClickListener() {
       @Override
-      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
+      public void doCommand() {
         ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
             property.getValue(),
             (IScience2DView) slider.getStage());
-        return super.touchDown(event, localX, localY, pointer, button);
       }
     });
   }

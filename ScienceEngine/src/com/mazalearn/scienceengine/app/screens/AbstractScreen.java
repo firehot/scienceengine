@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
@@ -29,6 +28,7 @@ import com.mazalearn.scienceengine.app.dialogs.AboutDialog;
 import com.mazalearn.scienceengine.app.dialogs.UserHomeDialog;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.Scoreboard;
 import com.mazalearn.scienceengine.core.view.ViewControls;
 
@@ -147,9 +147,9 @@ public abstract class AbstractScreen implements Screen {
             .height(screenComponent.getHeight());
         user.add(text);
         user.setSize(screenComponent.getWidth() * 3, screenComponent.getHeight());
-        user.addListener(new ClickListener() {
-          public void clicked(InputEvent event, float x, float y) {
-            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        user.addListener(new CommandClickListener() {
+          @Override
+          public void doCommand() {
             new UserHomeDialog(getSkin(), image).show(stage);
           }      
          });
@@ -158,9 +158,9 @@ public abstract class AbstractScreen implements Screen {
       case Logo:
         Image logo = new Image(new Texture("images/logo.png"));
         logo.setSize(screenComponent.getWidth(), screenComponent.getHeight());
-        logo.addListener(new ClickListener() {
-          public void clicked (InputEvent event, float x, float y) {
-            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        logo.addListener(new CommandClickListener() {
+          @Override
+          public void doCommand() {
             new AboutDialog(getSkin()).show(stage);
           }
         });
@@ -183,9 +183,9 @@ public abstract class AbstractScreen implements Screen {
         backButton.setStyle(style);
         backButton.setName(screenComponent.name());
         backButton.setSize(screenComponent.getWidth(), screenComponent.getHeight());
-        backButton.addListener(new ClickListener() {
-          public void clicked(InputEvent event, float x, float y) {
-            ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        backButton.addListener(new CommandClickListener() {
+          @Override
+          public void doCommand() {
             goBack();
           }      
         });

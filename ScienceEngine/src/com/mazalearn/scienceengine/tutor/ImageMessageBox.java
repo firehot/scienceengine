@@ -8,12 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 public class ImageMessageBox extends TextButton {
   
@@ -44,9 +44,9 @@ public class ImageMessageBox extends TextButton {
     
     closeButton = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion("close"), skin, "default");
     ScreenComponent.scaleSize(closeButton, 32 * 0.75f, 32 * 0.75f);
-    closeButton.addListener(new ClickListener() {
-      @Override 
-      public void clicked (InputEvent event, float x, float y) {
+    closeButton.addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         if (parentActor == null) {
           setVisible(false);
         } else {

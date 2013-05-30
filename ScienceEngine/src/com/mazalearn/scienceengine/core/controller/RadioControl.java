@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 //If property has only two values - we should show radio instead of select box
@@ -18,15 +18,16 @@ public class RadioControl implements IControl {
   public RadioControl(final IModelConfig<String> property, Skin skin) {
     this.radioGroup = new ButtonGroup();
     this.checkBox = new CheckBox(property.getName(), skin);
+    radioGroup.add(checkBox);
+    radioGroup.setMinCheckCount(1);
+    radioGroup.setMaxCheckCount(1);
     this.checkBox.setName(property.getName());
     this.property = property;
     syncWithModel();
     // Set value when slider changes
-    checkBox.addListener(new ClickListener() {
+    checkBox.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        
-      }
+      public void doCommand() {}
       
       @Override
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {

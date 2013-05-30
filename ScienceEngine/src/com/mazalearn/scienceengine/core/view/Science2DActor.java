@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.model.Parameter;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.model.Science2DBody.MovementMode;
@@ -114,6 +115,7 @@ public class Science2DActor extends Actor implements IHelpComponent {
       public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         if (pointer != 0) return false;
         super.touchDown(event, localX, localY, pointer, button);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.selectBody(body, (IScience2DView) getStage());
         return false;
       }

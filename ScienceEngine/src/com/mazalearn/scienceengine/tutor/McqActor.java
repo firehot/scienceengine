@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
@@ -16,13 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 public class McqActor extends Group {
   private static final int MAX_OPTIONS = 8;
@@ -34,7 +33,7 @@ public class McqActor extends Group {
   private Image questionImage;
   private TextButton progressInfo;
   
-  private static class OptionListener extends ClickListener {
+  private static class OptionListener extends CommandClickListener {
     
     private ITutor tutor;
     private TextButton submitButton;
@@ -48,7 +47,7 @@ public class McqActor extends Group {
     }
     
     @Override
-    public void clicked (InputEvent event, float x, float y) {
+    public void doCommand() {
       if (tutor.getState() == ITutor.State.Finished) return;
       ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       submitButton.setVisible(true);
@@ -173,8 +172,9 @@ public class McqActor extends Group {
     TextButtonStyle style = new TextButtonStyle(skin.get("body", TextButtonStyle.class));
     style.font = skin.getFont("default-big");
     submitButton = new TextButton("Submit", style);
-    submitButton.addListener(new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
+    submitButton.addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         submitButton.setVisible(false);
         tutor.systemReadyToFinish(false);
       }

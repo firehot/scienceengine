@@ -50,6 +50,8 @@ public class ConfigLoader {
         ((IModelConfig<String>) config).setValue((String) configObj
             .get("value"));
         break;
+      default:
+        break;
       }
     }
   }

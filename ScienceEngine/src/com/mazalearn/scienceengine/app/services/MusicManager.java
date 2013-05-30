@@ -38,6 +38,8 @@ public class MusicManager implements Disposable {
     }
   }
 
+  private static final float ATTENUATION = 0.5f;
+
   /**
    * Holds the music currently being played, if any.
    */
@@ -83,7 +85,7 @@ public class MusicManager implements Disposable {
     FileHandle musicFile = Gdx.files.internal(music.getFileName());
     Music musicResource = Gdx.audio.newMusic(musicFile);
     // Lower volume on music
-    musicResource.setVolume(volume * 0.5f);
+    setVolume(volume);
     musicResource.setLooping(true);
     musicResource.play();
 
@@ -116,11 +118,11 @@ public class MusicManager implements Disposable {
       throw new IllegalArgumentException(
           "The volume must be inside the range: [0,1]");
     }
-    this.volume = volume;
+    this.volume = ATTENUATION * volume;
 
     // if there is a music being played, change its volume
     if (musicBeingPlayed != null) {
-      musicBeingPlayed.getMusicResource().setVolume(volume);
+      musicBeingPlayed.getMusicResource().setVolume(ATTENUATION * volume);
     }
   }
 

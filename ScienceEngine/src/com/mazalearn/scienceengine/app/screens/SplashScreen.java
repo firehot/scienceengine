@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,8 +18,8 @@ import com.mazalearn.scienceengine.app.services.InstallProfile;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 /**
  * Shows a splash image and moves on to the next screen.
@@ -65,9 +64,9 @@ public class SplashScreen extends AbstractScreen {
     // start playing the menu music
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
     
-    ClickListener startListener = new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    ClickListener startListener = new CommandClickListener() {
+      @Override
+      public void doCommand() {
         enterApplication();
       }
     };
@@ -106,9 +105,9 @@ public class SplashScreen extends AbstractScreen {
     stage.addActor(userInfo);
     final PreferencesManager preferencesManager = ScienceEngine.getPreferencesManager();
     final InstallProfile installProfile = preferencesManager.getInstallProfile();
-    userInfo.addListener(new ClickListener() {
-      public void clicked (InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+    userInfo.addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         boolean multipleUsers = installProfile.getUserIds() != null;
         if (multipleUsers) {
           Table userTable = new Table(getSkin());
@@ -126,8 +125,9 @@ public class SplashScreen extends AbstractScreen {
             }
             // precondition: this user has a name and pixmap
             Label userLabel = new Label(name, getSkin());
-            ClickListener listener = new ClickListener() {
-              public void clicked (InputEvent event, float x, float y) {
+            ClickListener listener = new CommandClickListener() {
+              @Override
+              public void doCommand() {
                 // change to selected user as active
                 preferencesManager.setActiveUserProfile(userProfile);
                 enterApplication();

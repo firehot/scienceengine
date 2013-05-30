@@ -2,12 +2,11 @@ package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 /**
@@ -33,19 +32,14 @@ public class ToggleButtonControl implements IControl {
     };
     this.property = property;
     toggleButton.setName(property.getName()); 
-    toggleButton.addListener(new ClickListener() {
+    toggleButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         property.setValue(toggleButton.isChecked());
         syncWithModel();
-      }
-      
-      @Override
-      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
         ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
             property.getValue(),
             (IScience2DView) toggleButton.getStage());
-        return super.touchDown(event, localX, localY, pointer, button);
       }
     });
   }

@@ -14,7 +14,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,7 +35,6 @@ import com.mazalearn.scienceengine.app.services.MusicManager;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -317,7 +315,6 @@ public class ScienceEngine extends Game {
    * @param science2DView
    */
   public static void selectBody(Science2DBody body, IScience2DView science2DView) {
-    getSoundManager().play(ScienceEngineSound.CLICK);
     selectedBody = body;
     if (body == null) return;
     eventLog.logEvent(body.name(), Parameter.Select.name());
@@ -331,7 +328,6 @@ public class ScienceEngine extends Game {
    * @param science2DView
    */
   public static void selectParameter(Science2DBody body, IParameter parameter, float value, IScience2DView science2DView) {
-    getSoundManager().play(ScienceEngineSound.CLICK);
     displayEntityStatus(body, parameter.name(), science2DView);
     if (body == null) return;
     science2DView.checkActiveTutorProgress();

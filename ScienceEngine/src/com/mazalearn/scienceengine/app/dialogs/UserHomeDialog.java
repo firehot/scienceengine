@@ -6,7 +6,6 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,15 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.DrawingActor;
 
 public class UserHomeDialog extends Dialog {
@@ -71,10 +69,9 @@ public class UserHomeDialog extends Dialog {
     contentTable.add(name).fill().pad(ScreenComponent.getScaledY(10));
     myUserImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     contentTable.add(myUserImage).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
-    myUserImage.addListener(new ClickListener() {
+    myUserImage.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void doCommand() {
         new ChangeFaceDialog(skin, userImage, UserHomeDialog.this).show(getStage());
       }
     });
@@ -96,10 +93,9 @@ public class UserHomeDialog extends Dialog {
     TextButton registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin, "body");
     contentTable.add(registerButton).width(150).center();      
     contentTable.row();
-    registerButton.addListener(new ClickListener() {
+    registerButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void doCommand() {
         // Hide this dialog
         UserHomeDialog.this.hide();
         // Bring up registration form
@@ -148,9 +144,9 @@ public class UserHomeDialog extends Dialog {
       final TextButton item = createItem(skin, GIFT_WIDTH, GIFT_HEIGHT, "gift" + gift.giftType);
       if (item == null) continue;
       list.add(item);
-      item.addListener(new ClickListener() {
+      item.addListener(new CommandClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void doCommand() {
           new ShowGiftDialog(skin, gift, item, allowAccept, parentDialog).show(parentDialog.getStage());
         }
 
@@ -162,10 +158,9 @@ public class UserHomeDialog extends Dialog {
   private Actor createGiftingPane() {
     Image image = new Image(ScienceEngine.getTextureRegion("opengift"));
     ScreenComponent.scaleSize(image, image.getWidth(), image.getHeight());
-    image.addListener(new ClickListener() {
+    image.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void doCommand() {
         new GiveGiftDialog(skin, UserHomeDialog.this).show(getStage());      }
     });
     return image;

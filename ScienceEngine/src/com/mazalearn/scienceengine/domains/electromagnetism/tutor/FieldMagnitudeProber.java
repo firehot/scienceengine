@@ -3,15 +3,14 @@ package com.mazalearn.scienceengine.domains.electromagnetism.tutor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.ProbeImage;
 
@@ -20,7 +19,7 @@ import com.mazalearn.scienceengine.tutor.ProbeImage;
 // Is the field stronger at A or B?
 public class FieldMagnitudeProber extends AbstractFieldProber {
   
-  private final class ClickResult extends ClickListener {
+  private final class ClickResult extends CommandClickListener {
     private final boolean success;
  
     private ClickResult(boolean success) {
@@ -28,7 +27,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
     }
 
     @Override
-    public void clicked(InputEvent event, float x, float y) {
+    public void doCommand() {
       ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       fieldMeterActor.setVisible(true);
       fieldMeterActor.addAction(

@@ -17,6 +17,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
@@ -192,6 +193,7 @@ public class ParameterProber extends AbstractScience2DProber {
       changeOptions.addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
+          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
           boolean success = false;
           if (event.getTarget() == increase) {
             success = ParameterProber.this.resultType == ResultType.Direct;

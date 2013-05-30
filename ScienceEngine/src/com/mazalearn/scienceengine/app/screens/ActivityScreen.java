@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
@@ -21,12 +20,12 @@ import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 import com.mazalearn.scienceengine.core.view.Science2DGestureDetector;
@@ -114,10 +113,9 @@ public class ActivityScreen extends AbstractScreen {
 
   private Actor createHelpActor() {
     Image helpImage = new Image(ScienceEngine.getTextureRegion("help"));
-    helpImage.addListener(new ClickListener() {
+    helpImage.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x1, float y1) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void doCommand() {
         showHelp();
       }
     });

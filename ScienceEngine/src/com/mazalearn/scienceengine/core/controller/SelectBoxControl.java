@@ -1,12 +1,11 @@
 package com.mazalearn.scienceengine.core.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 
 public class SelectBoxControl implements IControl {
@@ -25,14 +24,13 @@ public class SelectBoxControl implements IControl {
         property.setValue(selectBox.getSelection());
       }      
     });
-    selectBox.addListener(new ClickListener() {
-      @Override
-      public boolean touchDown(InputEvent event, float localX, float localY, int pointer, int button) {
-        ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
-            property.getValue(),
-            (IScience2DView) selectBox.getStage());
-        return super.touchDown(event, localX, localY, pointer, button);
-      }
+    selectBox.addListener(new CommandClickListener() {
+        @Override
+        public void doCommand() {
+          ScienceEngine.selectParameter(property.getBody(), property.getParameter(),
+              property.getValue(),
+              (IScience2DView) selectBox.getStage());
+        }
     });
   }
 

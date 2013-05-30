@@ -18,14 +18,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
@@ -35,6 +33,7 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.model.IScience2DModel;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.ModelControls;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
 
@@ -168,9 +167,9 @@ public class LevelEditor extends Stage {
     Table menu = new Table(skin);
     menu.setName("Menu");
     TextButton button = new TextButton("Save", skin);
-    button.addListener(new ClickListener() {
+    button.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         try {
           LevelSaver levelSaver = new LevelSaver(science2DController);
           levelSaver.save();
@@ -182,25 +181,25 @@ public class LevelEditor extends Stage {
     });
     menu.add(button).pad(10);
     button = new TextButton("Load", skin);
-    button.addListener(new ClickListener() {
+    button.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         new LevelLoader(science2DController).load();
       }
     });
     menu.add(button).pad(10);
     button = new TextButton("Restore Camera", skin);
-    button.addListener(new ClickListener() {
+    button.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         restoreCamera();
       }
     });
     menu.add(button).pad(10);
     button = new TextButton("Exit Editor", skin);
-    button.addListener(new ClickListener() {
+    button.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         disableEditor();
       }
     });
@@ -237,9 +236,9 @@ public class LevelEditor extends Stage {
       final CheckBox componentCheckbox = new CheckBox(actor.getName(), skin);
       componentsTable.add(componentCheckbox).left();
       componentCheckbox.setChecked(actor.isVisible());
-      componentCheckbox.addListener(new ClickListener() {
+      componentCheckbox.addListener(new CommandClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void doCommand() {
           selectedActor = stage.getRoot().findActor(actor.getName());
           actorPropertyPanel.setActor(selectedActor);
           actor.setVisible(componentCheckbox.isChecked());
@@ -272,9 +271,9 @@ public class LevelEditor extends Stage {
         final CheckBox configCheckbox = new CheckBox(config.getName(), skin);
         configTable.add(configCheckbox).left();
         configCheckbox.setChecked(config.isPermitted());
-        configCheckbox.addListener(new ClickListener() {
+        configCheckbox.addListener(new CommandClickListener() {
           @Override
-          public void clicked(InputEvent event, float x, float y) {
+          public void doCommand() {
             config.setPermitted(configCheckbox.isChecked());
           }
         });

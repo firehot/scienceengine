@@ -3,7 +3,6 @@ package com.mazalearn.scienceengine.app.dialogs;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.StatusType;
@@ -28,6 +26,7 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.billing.IBilling;
 import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.billing.SkuDetails;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 /**
  * A screen to buy topics
@@ -144,10 +143,9 @@ public class PurchaseDialog extends Dialog {
       final TextButton topicCheckbox = ScreenUtils.createCheckBox(skuDetails.getDescription(), 0f, 0f, 300f, 30f, 
           skin.get("mcq-buy", CheckBoxStyle.class)); //$NON-NLS-1$
       topicCheckbox.getLabel().setAlignment(Align.center, Align.center);
-      topicCheckbox.addListener(new ClickListener() {
+      topicCheckbox.addListener(new CommandClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        public void doCommand() {
         }
       });
       table.add(topicCheckbox).left().height(ScreenComponent.getScaledY(60));
@@ -170,10 +168,9 @@ public class PurchaseDialog extends Dialog {
         .height(ScreenComponent.getScaledY(30))
         .left()
         .padRight(ScreenComponent.getScaledX(60));
-    cancelButton.addListener(new ClickListener() {
+    cancelButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+      public void doCommand() {
         hide();
       }
     });
@@ -187,11 +184,10 @@ public class PurchaseDialog extends Dialog {
         .height(ScreenComponent.getScaledY(60))
         .padLeft(ScreenComponent.getScaledX(60))
         .right();
-    purchaseButton.addListener(new ClickListener() {
+    purchaseButton.addListener(new CommandClickListener() {
       @Override
-      public void clicked(InputEvent event, float x, float y) {
+      public void doCommand() {
         if (purchaseButton.isDisabled()) return;
-        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         Button topicButton = purchasableItems.getChecked();
         if (topicButton != null) {
           // android.test.purchased - item already owned not handled

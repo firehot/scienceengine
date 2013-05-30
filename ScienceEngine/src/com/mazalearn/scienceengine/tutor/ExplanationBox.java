@@ -2,14 +2,13 @@ package com.mazalearn.scienceengine.tutor;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 public class ExplanationBox extends ImageMessageBox {
 
@@ -20,16 +19,16 @@ public class ExplanationBox extends ImageMessageBox {
   
   public ExplanationBox(final TutorHelper tutorHelper, Skin skin, String textureName) {
     super(skin, null, null);
-    getNextButton().addListener(new ClickListener() {
-      @Override 
-      public void clicked (InputEvent event, float x, float y) {
+    getNextButton().addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         current++;
         showExplanation();
       }            
     });
-    getPrevButton().addListener(new ClickListener() {
-      @Override 
-      public void clicked (InputEvent event, float x, float y) {
+    getPrevButton().addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         current--;
         showExplanation();
       }            
@@ -41,9 +40,9 @@ public class ExplanationBox extends ImageMessageBox {
     reviseButton = new TextButton("Revise this Topic", skin, "body");
     addActor(reviseButton);
     reviseButton.setVisible(false);
-    reviseButton.addListener(new ClickListener() {
-      @Override 
-      public void clicked (InputEvent event, float x, float y) {
+    reviseButton.addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
         // Add tutors into learning stack and go there
         tutorHelper.pushRevisionMode();
       }

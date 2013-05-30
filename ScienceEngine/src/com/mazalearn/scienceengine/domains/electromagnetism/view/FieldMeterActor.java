@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.model.Science2DBody;
 import com.mazalearn.scienceengine.core.view.IScience2DView;
 import com.mazalearn.scienceengine.core.view.Science2DActor;
@@ -40,6 +41,7 @@ public class FieldMeterActor extends Science2DActor {
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         if (fieldMeter.getSampleMode() == SampleMode.Uniform) return;
         super.touchUp(event, x, y, pointer, button);
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         ScienceEngine.selectBody(fieldMeter, (IScience2DView) getStage());
         // Move field sampler here and convert to model coords
         pos.set(event.getStageX(), event.getStageY()).mul(1f / ScreenComponent.PIXELS_PER_M);

@@ -2,19 +2,17 @@ package com.mazalearn.scienceengine.app.dialogs;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
+import com.mazalearn.scienceengine.core.view.CommandClickListener;
 
 public class ShowGiftDialog extends Dialog {
   
@@ -47,10 +45,9 @@ public class ShowGiftDialog extends Dialog {
     this.button(closeButton);
     if (allowAccept) { // Accept this gift to get points and add sender to friends
       closeButton.setText(ScienceEngine.getMsg().getString("ScienceEngine.AcceptGift"));
-      closeButton.addListener(new ClickListener() {
+      closeButton.addListener(new CommandClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
-          ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
+        public void doCommand() {
           Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
           // add sender to friends
           profile.addFriend(gift.email);
