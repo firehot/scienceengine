@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.ProbeImage;
@@ -61,6 +62,7 @@ public class FieldDirectionProber extends AbstractFieldProber {
       
       @Override
       public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
         bField2.set(bFields[0].x, bFields[0].y); // Ignoring z
         final boolean success = Math.abs(userField.getRotation() - bField2.angle()) < TOLERANCE * 100;
         fieldMeterActor.setVisible(true);

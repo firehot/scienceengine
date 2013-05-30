@@ -8,7 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.Topic;
+import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.tutor.ITutor;
 import com.mazalearn.scienceengine.tutor.ProbeImage;
@@ -27,6 +29,7 @@ public class FieldMagnitudeProber extends AbstractFieldProber {
 
     @Override
     public void clicked(InputEvent event, float x, float y) {
+      ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
       fieldMeterActor.setVisible(true);
       fieldMeterActor.addAction(
           Actions.sequence(

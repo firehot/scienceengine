@@ -82,7 +82,8 @@ public class MusicManager implements Disposable {
     // start streaming the new music
     FileHandle musicFile = Gdx.files.internal(music.getFileName());
     Music musicResource = Gdx.audio.newMusic(musicFile);
-    musicResource.setVolume(volume);
+    // Lower volume on music
+    musicResource.setVolume(volume * 0.5f);
     musicResource.setLooping(true);
     musicResource.play();
 
