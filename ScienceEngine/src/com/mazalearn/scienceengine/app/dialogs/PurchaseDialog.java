@@ -34,22 +34,25 @@ import com.mazalearn.scienceengine.core.view.CommandClickListener;
  */
 public class PurchaseDialog extends Dialog {
   
-  private static final String PURCHASE_FLOW = "$PurchaseFlow";
-  private Skin skin;
-  private List<Topic> topicList;
-  private ButtonGroup purchasableItems;
+  private static final String PURCHASE_FLOW = "PurchaseFlow";
+  private final Skin skin;
+  private final List<Topic> topicList;
+  private final ButtonGroup purchasableItems;
   private ScienceEngine scienceEngine;
-  private Topic topic;
-  private Topic level;
-  private IBilling billing;
-  private Table waitActor;
+  private final Topic topic;
+  private final IBilling billing;
+  private final Table waitActor;
   // flag for communication across purchase thread and UI thread
   // null => status unknown, false => failure, true => success
   private Boolean purchaseDone = null;
+  private final long timeStart = System.currentTimeMillis();
+  private float[] stats = new float[State.values().length];
+  private Profile profile;
+  private final String purchaseFlowId;
   
   public enum State {
     Initiated(0), InventoryQuery(1), InventoryFailure(2), InventoryDisplay(3),
-    PurchaseSelection(4), PurchaseRequest(5), PurchaseFailure(6), PurchaseDone(7), PurchaseCanceled(8);
+    PurchaseRequest(5), PurchaseFailure(6), PurchaseDone(7), PurchaseCanceled(8);
     
     public final int index;
 
@@ -58,9 +61,6 @@ public class PurchaseDialog extends Dialog {
     }
   }
   
-  private long timeStart = System.currentTimeMillis();
-  private float[] stats = new float[State.values().length];
-  private Profile profile;
   
   public PurchaseDialog(final Topic topic, Topic level,
       final Stage stage, final Skin skin, final ScienceEngine scienceEngine) {
@@ -69,9 +69,10 @@ public class PurchaseDialog extends Dialog {
     this.skin = skin;
     this.scienceEngine = scienceEngine;
     this.topic = topic;
-    this.level = level;
+    this.purchaseFlowId = level.getTopicId() + "$" + PURCHASE_FLOW;
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     profile.setCurrentActivity(level);
+    profile.getStats(level, purchaseFlowId, State.values().length);
     log(State.Initiated); 
 
     // retrieve the default table actor
@@ -120,7 +121,7 @@ public class PurchaseDialog extends Dialog {
   }
 
   private void log(State state) {
-    stats[state.index] = (float) (System.currentTimeMillis() - timeStart) / 1000.0f;
+    stats[state.index] += (float) (System.currentTimeMillis() - timeStart) / 1000.0f;
   }
   
   private Table createWaitActor(final Skin skin) {
@@ -139,7 +140,7 @@ public class PurchaseDialog extends Dialog {
   public void act(float delta) {
     super.act(delta);
     if (purchaseDone == null) return;
-    profile.saveStats(stats, level.getTopicId() + PURCHASE_FLOW);
+    profile.saveStats(stats, purchaseFlowId);
     profile.save();
     if (purchaseDone) {
       TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
@@ -180,7 +181,6 @@ public class PurchaseDialog extends Dialog {
       topicCheckbox.addListener(new CommandClickListener() {
         @Override
         public void doCommand() {
-          log(State.PurchaseSelection);
         }
       });
       table.add(topicCheckbox).left().height(ScreenComponent.getScaledY(60));

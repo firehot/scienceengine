@@ -21,7 +21,6 @@ import com.mazalearn.scienceengine.app.services.ProfileData.Social;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.MQ;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
-import com.mazalearn.scienceengine.tutor.ITutor;
 
 /**
  * The learner's profile.
@@ -273,17 +272,18 @@ public class Profile implements Serializable {
     return png == null ? null : ScienceEngine.getPlatformAdapter().bytes2Pixmap(Base64Coder.decode(png));
   }
 
-  public float[] getStats(Topic topic, String tutorId) {
+  public float[] getStats(Topic topic, String tutorId, int len) {
     Map<String, float[]> topicStat = data.topicStats.get(topic.name());
-    if (topicStat == null) return new float[ITutor.NUM_STATS];
+    if (topicStat == null) return new float[len];
     
     float[] s = topicStat.get(tutorId);
     
-    if (s == null) return new float[ITutor.NUM_STATS];
+    if (s == null) return new float[len];
     
-    if (s.length >= ITutor.NUM_STATS) return s;
+    // Defensive Wrt increasing length of a topic stat
+    if (s.length >= len) return s;
     
-    float[] stats = new float[ITutor.NUM_STATS];
+    float[] stats = new float[len];
     for (int i = 0; i < s.length; i++) {
       stats[i] = s[i];
     }

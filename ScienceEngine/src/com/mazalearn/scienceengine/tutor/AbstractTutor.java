@@ -73,7 +73,7 @@ public abstract class AbstractTutor extends Group implements ITutor {
       this.refs[i] = makeGlobalId(topic, refs[i]);
     }
     this.tutorHelper = science2DController.getGuru().getTutorHelper();
-    this.stats = tutorHelper.getProfile().getStats(topic, this.id);
+    this.stats = tutorHelper.getProfile().getStats(topic, this.id, ITutor.NUM_STATS);
     this.setVisible(false);
   }
 

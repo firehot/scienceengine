@@ -111,7 +111,7 @@ public class ChooseTopicScreen extends AbstractScreen {
     float percent = 0;
     int numTopics = 0;
     for (Topic childTopic: topic.getChildren()) {
-      float[] stats = profile.getStats(childTopic, Guru.ID);
+      float[] stats = profile.getStats(childTopic, Guru.ID, ITutor.NUM_STATS);
       percent += stats[ITutor.PERCENT_PROGRESS];
       numTopics++;
     }

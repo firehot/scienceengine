@@ -225,7 +225,7 @@ public class TopicHomeScreen extends AbstractScreen {
         });
       } else {
         // Progress bar
-        float[] stats = profile.getStats(level, Guru.ID);
+        float[] stats = profile.getStats(level, Guru.ID, ITutor.NUM_STATS);
         float percent = stats[ITutor.PERCENT_PROGRESS];
         ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
         // Timespent label
