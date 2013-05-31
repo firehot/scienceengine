@@ -48,7 +48,7 @@ public class MusicManager implements Disposable {
   /**
    * The volume to be set on the music.
    */
-  private float volume = 1f;
+  private float volume = ATTENUATION * 1f;
 
   /**
    * Whether the music is enabled.
@@ -85,7 +85,6 @@ public class MusicManager implements Disposable {
     FileHandle musicFile = Gdx.files.internal(music.getFileName());
     Music musicResource = Gdx.audio.newMusic(musicFile);
     // Lower volume on music
-    setVolume(volume);
     musicResource.setLooping(true);
     musicResource.play();
 
@@ -124,6 +123,13 @@ public class MusicManager implements Disposable {
     if (musicBeingPlayed != null) {
       musicBeingPlayed.getMusicResource().setVolume(ATTENUATION * volume);
     }
+  }
+  
+  /**
+   * @return current volume
+   */
+  public float getVolume() {
+    return volume;
   }
 
   /**
