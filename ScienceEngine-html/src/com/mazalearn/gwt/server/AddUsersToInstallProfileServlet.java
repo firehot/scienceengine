@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PropertyContainer;
 import com.google.appengine.api.datastore.Text;
 import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.InstallData;
@@ -27,7 +28,7 @@ public class AddUsersToInstallProfileServlet extends HttpServlet {
     String[] userIdsToAdd = request.getParameterValues(InstallData.USER_IDS);
     System.out.println("AddUsersToInstallProfile - Received get: " + installId);
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    Entity installEntity = new ProfileUtil().createOrGetInstall(installId, false);
+    PropertyContainer installEntity = new ProfileUtil().createOrGetInstall(installId, false);
     if (installEntity == null) {
       response.getWriter().append("Installation not found: " + installId);
       return;
@@ -56,7 +57,7 @@ public class AddUsersToInstallProfileServlet extends HttpServlet {
       }
       data.userIds = userIds.toArray(new String[0]);
       installEntity.setProperty(InstallData.INSTALL_DATA, new Text(new Gson().toJson(data)));
-      ds.put(installEntity);
+      ds.put((Entity) installEntity);
     }
     response.getWriter().append("Current list of users: " + Arrays.asList(data.userIds));
   }

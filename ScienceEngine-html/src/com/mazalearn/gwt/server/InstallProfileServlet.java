@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PropertyContainer;
 import com.google.appengine.api.datastore.Text;
 import com.google.gson.Gson;
 import com.mazalearn.scienceengine.app.services.InstallData;
@@ -37,13 +38,13 @@ public class InstallProfileServlet extends HttpServlet {
       throw new IllegalArgumentException("Invalid hash: could not decode");
     }
     ProfileUtil profileUtil = new ProfileUtil();
-    Entity installEntity = profileUtil.createOrGetInstall(installId, true);
+    PropertyContainer installEntity = profileUtil.createOrGetInstall(installId, true);
     Text installDataText = (Text) installEntity.getProperty(InstallData.INSTALL_DATA);
     InstallData installData = new Gson().fromJson(installDataText.getValue(), InstallData.class);
     installData.availableTopicNames = newInstallData.availableTopicNames;
     installData.lastUpdated = Math.max(installData.lastUpdated, newInstallData.lastUpdated);
     jsonEntityUtil.setAsJsonTextProperty(installEntity, InstallData.INSTALL_DATA, installData);
-    profileUtil.saveInstallProfile(installEntity);
+    profileUtil.saveEntity(installEntity);
 
     writeProfileResponse(response, installId, newInstallData.lastUpdated);
   }
@@ -64,7 +65,7 @@ public class InstallProfileServlet extends HttpServlet {
   private void writeProfileResponse(HttpServletResponse response, String installId, 
       long lastUpdatedClient)
       throws IOException {
-    Entity installEntity = new ProfileUtil().createOrGetInstall(installId, true);
+    PropertyContainer installEntity = new ProfileUtil().createOrGetInstall(installId, true);
     Text installDataText = (Text) installEntity.getProperty(InstallData.INSTALL_DATA);
     InstallData installData = new Gson().fromJson(installDataText.getValue(), InstallData.class);
 
@@ -85,7 +86,7 @@ public class InstallProfileServlet extends HttpServlet {
     response.getWriter().close();
   }
   
-  public String getInstallProfileAsBase64(String installId, Entity installEntity) 
+  public String getInstallProfileAsBase64(String installId, PropertyContainer installEntity) 
       throws IllegalStateException {
     System.out.println(installEntity);
     Text data = (Text) installEntity.getProperty(InstallData.INSTALL_DATA);

@@ -14,7 +14,7 @@ import com.mazalearn.scienceengine.core.model.Science2DBody;
 
 public class Science2DGestureDetector extends GestureDetector {
 
-
+  // TODO: Use ActorGestureListener instead?
   public Science2DGestureDetector(Stage science2DView) {
     super(new Science2DGestureAdapter(science2DView));
   }

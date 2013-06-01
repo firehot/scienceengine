@@ -2,6 +2,8 @@ package com.mazalearn.gwt.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.Enumeration;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 public class DummyHttpServletRequest implements HttpServletRequest {
   private Map<String, String> parameterMap = new HashMap<String,String>();
+  private String inputStreamString;
 
   @Override
   public Object getAttribute(String arg0) {
@@ -38,18 +41,11 @@ public class DummyHttpServletRequest implements HttpServletRequest {
 
   @Override
   public int getContentLength() {
-    // TODO Auto-generated method stub
-    return 0;
+    return inputStreamString != null ? inputStreamString.length() : -1;
   }
 
   @Override
   public String getContentType() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public ServletInputStream getInputStream() throws IOException {
     // TODO Auto-generated method stub
     return null;
   }
@@ -90,7 +86,7 @@ public class DummyHttpServletRequest implements HttpServletRequest {
   }
   
   public void setParameters(String... parametervalues) {
-    for (int i = 0; i < parametervalues.length - 1; i++) {
+    for (int i = 0; i < parametervalues.length - 1; i += 2) {
       parameterMap.put(parametervalues[i], parametervalues[i+1]);
     }
   }
@@ -346,5 +342,21 @@ public class DummyHttpServletRequest implements HttpServletRequest {
   public boolean isUserInRole(String arg0) {
     // TODO Auto-generated method stub
     return false;
+  }
+
+  public void setInputStream(String str) {
+    this.inputStreamString = str;
+  }
+  
+  @Override
+  public ServletInputStream getInputStream() {
+    return new ServletInputStream() {
+      int count = 0;
+      @Override
+      public int read() throws IOException {
+        return count < inputStreamString.length() ? inputStreamString.charAt(count++) : -1;
+      }
+      
+    };
   }
 }

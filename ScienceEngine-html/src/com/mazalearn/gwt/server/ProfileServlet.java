@@ -17,7 +17,7 @@ public class ProfileServlet extends HttpServlet {
   // The profileId in a user entity forwards to the right profile.
   public static final String NEW_USER_ID = "newuserid"; // email verification is the owner
   public static final String OLD_USER_ID = "olduserid"; // email verification is the owner
-  private ProfileUtil profileUtil;
+  private ProfileUtil profileUtil = new ProfileUtil();
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -30,18 +30,9 @@ public class ProfileServlet extends HttpServlet {
     bis.read(profileBytes);
     bis.close();
     
-    profileUtil = new ProfileUtil();
     ProfileData clientProfile = profileUtil.profileFromBase64(profileBytes);
     String syncProfileBase64 = profileUtil.saveUserProfile(userId, clientProfile);
     writeProfileResponse(response, syncProfileBase64);
-    // Delete old user, if any
-  }
-
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
-    String userId = request.getParameter(ProfileData.USER_ID);
-    System.out.println("Received get: " + userId);
-//    writeProfileResponse(response, userId, null);
   }
 
   private void writeProfileResponse(HttpServletResponse response, String syncProfileBase64)
@@ -52,6 +43,11 @@ public class ProfileServlet extends HttpServlet {
       response.getWriter().append(syncProfileBase64);
     }
     response.getWriter().close();
+  }
+
+  // for testing
+  void setProfileUtil(ProfileUtil profileUtil) {
+    this.profileUtil = profileUtil;
   }
 
 }

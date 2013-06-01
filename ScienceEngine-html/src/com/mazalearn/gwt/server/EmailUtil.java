@@ -26,7 +26,7 @@ import com.mazalearn.scienceengine.app.utils.Crypter;
 
 public class EmailUtil {
 
-  static void sendUserInvite(String fromEmail, String toEmail) {
+  void sendUserInvite(String fromEmail, String toEmail) {
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);
   
@@ -53,7 +53,7 @@ public class EmailUtil {
     }
   }
 
-  static void sendCertificateEmail(String userEmail, String userName, String userId, String dateStr, OutputStream outputStream, ServletContext servletContext) {
+  void sendCertificateEmail(String userEmail, String userName, String userId, String dateStr, OutputStream outputStream, ServletContext servletContext) {
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);
   
@@ -99,7 +99,7 @@ public class EmailUtil {
     }    
   }
 
-  static void sendConfirmationEmail(String userEmail, String userName, String installId) 
+  void sendConfirmationEmail(String userEmail, String userName, String installId) 
       throws UnsupportedEncodingException {
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);

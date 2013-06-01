@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.EmbeddedEntity;
-import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PropertyContainer;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 
 @SuppressWarnings("serial")
@@ -23,7 +23,7 @@ public class EmailCertificateServlet extends HttpServlet {
     System.out.println("EmailCertificate - User: " + userId);
 
     ProfileUtil profileUtil = new ProfileUtil();
-    Entity user = profileUtil.retrieveUser(userId);
+    PropertyContainer user = profileUtil.retrieveUser(userId);
     if (user == null) { 
       response.getWriter().append("Could not find user");
       return;
@@ -46,7 +46,7 @@ public class EmailCertificateServlet extends HttpServlet {
     String dateStr = dateFormat.format(date);
 
     //response.getWriter().append("Certificate sent to: " + userEmail);
-    EmailUtil.sendCertificateEmail(userEmail, userName, userId, dateStr, response.getOutputStream(), getServletContext());
+    new EmailUtil().sendCertificateEmail(userEmail, userName, userId, dateStr, response.getOutputStream(), getServletContext());
   }
 }
 

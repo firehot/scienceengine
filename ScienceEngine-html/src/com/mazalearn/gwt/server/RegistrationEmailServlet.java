@@ -9,12 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.EmbeddedEntity;
-import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PropertyContainer;
 import com.mazalearn.scienceengine.app.services.InstallData;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
+/**
+ * Invoked when the user clicks on received registration email to confirm.
+ * The email has an expiry time and a salted verification code
+ * to discourage replay and substitution attacks.
+ * @author sridhar
+ *
+ */
 @SuppressWarnings("serial")
 public class RegistrationEmailServlet extends HttpServlet {
 
@@ -27,7 +34,7 @@ public class RegistrationEmailServlet extends HttpServlet {
       throws IOException, ServletException {
     System.out.println("Register - Received get: " + request.getContentLength());
     String userEmail = request.getParameter("e").toLowerCase();
-    String installId = request.getParameter("i").toLowerCase();
+    String installId = request.getParameter("i");
     String userName = request.getParameter("n");
     long timeEmailSent = Long.parseLong(request.getParameter("t"));
     String hash = request.getParameter("h");
@@ -51,15 +58,10 @@ public class RegistrationEmailServlet extends HttpServlet {
     
     String installRegistrationResponse = registerInstallation(installId, userEmail);
 
-    // User must exist and have profile but should not be registered
-    Entity user = profileUtil.createOrGetUser(userEmail, true);
+    PropertyContainer user = RegistrationServlet.validateRegistrationInfo(profileUtil, response, installId,
+        userEmail);
+    if (user == null) return;
     EmbeddedEntity newUserProfile = ProfileUtil.createOrGetUserProfile(user, true);
-    ServerProps serverProps = jsonEntityUtil.getFromJsonTextProperty(newUserProfile, ProfileData.SERVER_PROPS, ServerProps.class);
-    if (serverProps != null && serverProps.isRegistered) {
-      response.getWriter().append("Already registered to: " + userEmail + "<br>");
-      System.out.println("Already registered to: " + userEmail);
-      return;
-    }
     
     profileUtil.confirmRegistrationInfo(userEmail, installId, userName, 
         newUserProfile, user);
@@ -72,14 +74,17 @@ public class RegistrationEmailServlet extends HttpServlet {
   }
 
   private String registerInstallation(String installId, String userEmail) {
-    Entity installProfile = profileUtil.createOrGetInstall(installId, false);
+    PropertyContainer installProfile = profileUtil.createOrGetInstall(installId, false);
     InstallData installData = jsonEntityUtil.getFromJsonTextProperty(installProfile, InstallData.INSTALL_DATA, InstallData.class);
+    if (installData == null) {
+      throw new UnsupportedOperationException("Installation not found - sync not done?");
+    }
     if (installData.registeredUserId != null) {
       return "This installation is registered to: " + installData.registeredUserId + "<br>";
     } else if (userEmail != null) {
       installData.registeredUserId = userEmail;
       jsonEntityUtil.setAsJsonTextProperty(installProfile, InstallData.INSTALL_DATA, installData);
-      profileUtil.saveInstallProfile(installProfile);
+      profileUtil.saveEntity(installProfile);
       return "Installation not yet registered - registering to user: " + userEmail + "<br>";
     } else {
       throw new UnsupportedOperationException("Installation not found - sync not done?");

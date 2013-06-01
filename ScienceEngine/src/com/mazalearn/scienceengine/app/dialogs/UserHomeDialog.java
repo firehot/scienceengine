@@ -100,7 +100,7 @@ public class UserHomeDialog extends Dialog {
         UserHomeDialog.this.hide();
         // Bring up registration form
         ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + "/registration.jsp?" + 
-            ProfileData.INSTALL_ID + "=" + profile.getInstallationId().toLowerCase() + "&" +
+            ProfileData.INSTALL_ID + "=" + profile.getInstallationId() + "&" +
             ProfileData.USER_EMAIL + "=" + profile.getUserEmail());
       }
     });

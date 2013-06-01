@@ -13,6 +13,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyContainer;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.users.User;
@@ -35,11 +36,13 @@ public class ProfileUtil {
   private DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
   private JsonEntityUtil jsonEntityUtil = new JsonEntityUtil();
   
-  public static EmbeddedEntity createOrGetUserProfile(Entity user, boolean create) {
+  public static EmbeddedEntity createOrGetUserProfile(PropertyContainer user, boolean create) {
     if (user == null) return null;
     EmbeddedEntity profileEntity = (EmbeddedEntity) user.getProperty(ProfileServlet.PROFILE);
     if (create && profileEntity == null) {
-      System.out.println("Creating profile for user:" + user.getKey().getName());
+      if (user instanceof Entity) {
+        System.out.println("Creating profile for user:" + ((Entity) user).getKey().getName());
+      }
       profileEntity = new EmbeddedEntity();
       profileEntity.setProperty(ProfileData.LAST_UPDATED, new EmbeddedEntity());
       profileEntity.setProperty(ProfileData.TOPIC_STATS, new EmbeddedEntity());
@@ -48,7 +51,7 @@ public class ProfileUtil {
     return profileEntity;
   }
 
-  public Entity createOrGetUser(String userId, boolean create) {
+  public PropertyContainer createOrGetUser(String userId, boolean create) {
     if (userId == null || userId.length() == 0) return null;
     Key key = KeyFactory.createKey(User.class.getSimpleName(), userId.toLowerCase());
     Entity user = null, user1 = null;
@@ -126,28 +129,23 @@ public class ProfileUtil {
   }
 
   public EmbeddedEntity retrieveUserProfile(String userId) {
-    Entity user = createOrGetUser(userId, false);
+    PropertyContainer user = createOrGetUser(userId, false);
     return createOrGetUserProfile(user, false);
   }
 
-  public Entity retrieveUser(String userId) {
+  public PropertyContainer retrieveUser(String userId) {
     return createOrGetUser(userId, false);
   }
 
   String saveUserProfile(String userId, ProfileData clientProfile) 
       throws IllegalStateException {
-    Entity user = createOrGetUser(userId, true);
-    
+    PropertyContainer user = createOrGetUser(userId, true);
     EmbeddedEntity serverProfile = createOrGetUserProfile(user, true);
-    if (serverProfile == null) {
-      System.out.println("No user profile: " + userId);
-      return "";
-    }
     
     String syncProfileStr = getUserSyncProfile(userId, serverProfile, clientProfile);
     
     // If retrieved user is for requested userid and not forwarded
-    if (userId.equals(user.getKey().getName())) {
+    if ((user instanceof Entity) && userId.equals(((Entity)user).getKey().getName())) {
       String oldUserId = (String) user.getProperty(ProfileServlet.OLD_USER_ID);
       if (oldUserId != null) {
         Key key = KeyFactory.createKey(User.class.getSimpleName(), oldUserId.toLowerCase());
@@ -156,7 +154,7 @@ public class ProfileUtil {
         user.removeProperty(ProfileServlet.OLD_USER_ID);
       }
     }
-    ds.put(user);
+    saveEntity(user);
     System.out.println(syncProfileStr);
     return Base64.encode(syncProfileStr);
   }
@@ -185,7 +183,7 @@ public class ProfileUtil {
 
       Transaction txn = ds.beginTransaction();
       try {
-        Entity toUser = createOrGetUser(toEmail, true);
+        PropertyContainer toUser = createOrGetUser(toEmail, true);
         EmbeddedEntity toUserProfile = createOrGetUserProfile(toUser, true);
         installId = (String) toUserProfile.getProperty(ProfileData.INSTALL_ID);
         // If toUserProfile already exists and is bound to an installation, add gift to inbox.
@@ -201,8 +199,7 @@ public class ProfileUtil {
           EmbeddedEntity lastUpdated = (EmbeddedEntity) toUserProfile.getProperty(ProfileData.LAST_UPDATED);
           lastUpdated.setProperty(ProfileData.SOCIAL, System.currentTimeMillis());
           
-          // save user and commit transaction
-          ds.put(toUser);
+          saveEntity(toUser);
           txn.commit();
         }
       } finally {
@@ -213,7 +210,7 @@ public class ProfileUtil {
       
       // If toUser has no installation, send an email invite
       if (installId == null) {
-        EmailUtil.sendUserInvite(fromEmail, toEmail);
+        new EmailUtil().sendUserInvite(fromEmail, toEmail);
       }
     }
     serverSocial.outbox.headId = newHeadId;
@@ -233,9 +230,9 @@ public class ProfileUtil {
   }
 
   public void confirmRegistrationInfo(String userEmail, String installId,
-      String userName, EmbeddedEntity newUserProfile, Entity newUser) {
+      String userName, EmbeddedEntity newUserProfile, PropertyContainer newUser) {
     
-    Entity oldUser = retrieveUser(installId);
+    PropertyContainer oldUser = retrieveUser(installId);
     EmbeddedEntity oldUserProfile = createOrGetUserProfile(oldUser, true);
     EmbeddedEntity userProfile = newUserProfile;
     if (oldUserProfile != null && oldUser.getProperty(ProfileServlet.NEW_USER_ID) == null) {
@@ -253,17 +250,17 @@ public class ProfileUtil {
     EmbeddedEntity lastUpdated = (EmbeddedEntity) userProfile.getProperty(ProfileData.LAST_UPDATED);
     lastUpdated.setProperty(ProfileData.SERVER_PROPS, System.currentTimeMillis());
     
-    if (userProfile == oldUserProfile) {
+    if ((oldUser instanceof Entity) && userProfile == oldUserProfile) {
       oldUserProfile.setProperty(ProfileServlet.PROFILE, newUserProfile);      
       newUser.setPropertiesFrom(oldUser);
       newUser.setProperty(ProfileServlet.OLD_USER_ID, installId);
       oldUser.setProperty(ProfileServlet.NEW_USER_ID, userEmail);
-      ds.put(oldUser);
+      saveEntity(oldUser);
     }
-    ds.put(newUser);
+    saveEntity(newUser);
   }
 
-  public void saveOptionalRegistrationInfo(Entity user, EmbeddedEntity profile,
+  public void saveOptionalRegistrationInfo(PropertyContainer user, EmbeddedEntity profile,
       String sex, String grade, String school,
       String city, String comments) {
     ServerProps serverProps = jsonEntityUtil.getFromJsonTextProperty(profile, ProfileData.SERVER_PROPS, ServerProps.class);
@@ -280,39 +277,48 @@ public class ProfileUtil {
     EmbeddedEntity lastUpdated = (EmbeddedEntity) profile.getProperty(ProfileData.LAST_UPDATED);
     lastUpdated.setProperty(ProfileData.SERVER_PROPS, System.currentTimeMillis());
     
-    ds.put(user);
+    saveEntity(user);
+  }
+
+  public void saveEntity(PropertyContainer user) {
+    ds.put((Entity)user);
   }
 
   public void resetUserProfile(String userEmail) throws IllegalStateException {
-    Entity user = retrieveUser(userEmail);
+    PropertyContainer user = retrieveUser(userEmail);
     EmbeddedEntity userProfile = retrieveUserProfile(userEmail);
     if (userProfile != null) {
       userProfile.setProperty(ProfileData.TOPIC_STATS, new EmbeddedEntity());
       EmbeddedEntity lastUpdated = (EmbeddedEntity) userProfile.getProperty(ProfileData.LAST_UPDATED);
-      ds.put(user);      
+      saveEntity(user);      
     }
   }
 
-  public Entity createOrGetInstall(String installId, boolean create) {
+  public PropertyContainer createOrGetInstall(String installId, boolean create) {
     if (installId == null || installId.length() == 0) return null;
-    Key key = KeyFactory.createKey(InstallProfileServlet.INSTALL_PROFILE, installId.toLowerCase());
+    Key key = KeyFactory.createKey(InstallProfileServlet.INSTALL_PROFILE, installId);
     Entity install = null;
     try {
       install = ds.get(key);
     } catch (EntityNotFoundException e) {
       if (create && install == null) {
-        install = new Entity(InstallProfileServlet.INSTALL_PROFILE, installId.toLowerCase());
+        install = new Entity(InstallProfileServlet.INSTALL_PROFILE, installId);
         InstallData data = new InstallData();
         data.lastUpdated = System.currentTimeMillis();
-        data.installId = installId.toLowerCase();
+        data.installId = installId;
         install.setProperty(InstallData.INSTALL_DATA, new Text(new Gson().toJson(data)));
         ds.put(install);
       }
     }
     return install;
   }
-
-  public void saveInstallProfile(Entity installProfile) {
-    ds.put(installProfile);
+  
+  public InstallData retrieveInstallProfile(String installId) {
+    if (installId == null || installId.length() == 0) return null;
+    PropertyContainer install = createOrGetInstall(installId, false);
+    if (install != null) {
+      return jsonEntityUtil.getFromJsonTextProperty(install, InstallData.INSTALL_DATA, InstallData.class);
+    }
+    return null;
   }
 }

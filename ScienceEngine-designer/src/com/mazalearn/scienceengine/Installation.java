@@ -23,6 +23,7 @@ public class Installation {
         Random r = new Random();
         UUID uuid = new UUID(r.nextLong(), r.nextLong());
         String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + uuid.toString();
+        id = id.toLowerCase();
         Gdx.app.log(ScienceEngine.LOG, "Installation id: " + id);
         installation.writeBytes(id.getBytes(), false);
       }
