@@ -77,8 +77,7 @@ public class AbstractScience2DView extends Stage implements IScience2DView {
       // TODO: lack of symmetry here - cleanup required
       isTutoringInProgress = false;      
     }
-    Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
-    profile.save();
+    ScienceEngine.getPreferencesManager().saveUserProfile();
     Dialog dialog = new TutoringEndDialog(this, skin, science2DController.getGuru().getLevelEndMessage(success), Color.WHITE);
     dialog.show(this);      
   }

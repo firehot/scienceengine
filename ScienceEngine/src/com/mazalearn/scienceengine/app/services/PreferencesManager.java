@@ -147,6 +147,19 @@ public class PreferencesManager {
   private void saveProfile(Profile profile) {
     // convert the given userProfile to text
     String userId = getProfileUserId();
+    if (mergeServerProfileIfAvailable(profile, userId)) {
+      markProfileDirty(userId);
+      Gdx.app.log(ScienceEngine.LOG, "Saved Profile - " + userId);
+    }
+  }
+
+  /**
+   * Merge profile of active user from the server, if it is available, into user's profile.
+   * @param profile
+   * @param userId
+   * @return true iff server profile merge resulted in changes
+   */
+  public boolean mergeServerProfileIfAvailable(Profile profile, String userId) {
     String serverProfileBase64 = prefs.getString(SERVER_PROFILE_PREFIX + userId);
     if (serverProfileBase64 != null) {
       profile.mergeProfile(serverProfileBase64);
@@ -156,11 +169,10 @@ public class PreferencesManager {
 
     String savedProfile = prefs.getString(userId);
     // No need to save if already up to date
-    if (localProfileBase64.equals(savedProfile)) return;
+    if (localProfileBase64.equals(savedProfile)) return false;
     
     prefs.putString(userId, localProfileBase64);
-    markProfileDirty(userId);
-    Gdx.app.log(ScienceEngine.LOG, "Saved Profile - " + userId);
+    return true;
   }
 
   private void markProfileDirty(String userId) {

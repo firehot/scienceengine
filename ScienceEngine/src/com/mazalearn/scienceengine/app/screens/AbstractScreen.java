@@ -26,6 +26,7 @@ import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.dialogs.AboutDialog;
 import com.mazalearn.scienceengine.app.dialogs.UserHomeDialog;
+import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 import com.mazalearn.scienceengine.core.view.CommandClickListener;
@@ -41,8 +42,11 @@ public abstract class AbstractScreen implements Screen {
 
   private Table table;
   private Color backgroundColor = ScienceEngine.getSkin().getColor("background");
+  private Profile profile;
+
   public AbstractScreen(ScienceEngine scienceEngine, Stage stage) {
     this.scienceEngine = scienceEngine;
+    this.profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
   }
   
   public String getMsg(String msg) {
@@ -52,6 +56,7 @@ public abstract class AbstractScreen implements Screen {
   public AbstractScreen(ScienceEngine game) {
     this.scienceEngine = game;
     this.stage = new Stage(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT, false);
+    this.profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     stage.addListener(new InputListener() {
       @Override
       public boolean keyDown(InputEvent event, int keycode) {
@@ -297,4 +302,7 @@ public abstract class AbstractScreen implements Screen {
     ScienceEngine.getAssetManager().finishLoading();
   }
 
+  protected Profile getProfile() {
+    return profile;
+  }
 }

@@ -29,7 +29,6 @@ import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.dialogs.MessageDialog;
 import com.mazalearn.scienceengine.app.dialogs.PurchaseDialog;
 import com.mazalearn.scienceengine.app.services.InstallProfile;
-import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.Format;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
@@ -100,15 +99,13 @@ public class TopicHomeScreen extends AbstractScreen {
   private static final int RESOURCE_INFO_HEIGHT = 210;
   private TextButton[] activityThumbs;
   private Array<?> resources;
-  private Profile profile;
   private Topic topic;
   
   public TopicHomeScreen(ScienceEngine scienceEngine, Topic topic) {
     super(scienceEngine);
     this.topic = topic;
     readTopicResourcesInfo();
-    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
-    profile.setCurrentTopic(topic);
+    getProfile().setCurrentTopic(topic);
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -116,7 +113,7 @@ public class TopicHomeScreen extends AbstractScreen {
   }
 
   protected void goBack() {
-    profile.setCurrentTopic(null);
+    getProfile().setCurrentTopic(null);
     ScienceEngine.unloadAtlas("images/" + topic.name() + "/pack.atlas");
     scienceEngine.setScreen(new ChooseTopicScreen(scienceEngine));
   }
@@ -124,7 +121,7 @@ public class TopicHomeScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    Topic activity = profile.getCurrentActivity();
+    Topic activity = getProfile().getCurrentActivity();
     if (activity != null) {
       InstallProfile installProfile = ScienceEngine.getPreferencesManager().getInstallProfile();
       // Was this an attempt to purchase which did not succeed?
@@ -132,7 +129,7 @@ public class TopicHomeScreen extends AbstractScreen {
         gotoActivityLevel(activity);
         return;
       } else {
-        profile.setCurrentActivity(null);
+        getProfile().setCurrentActivity(null);
       }
     }
     
@@ -189,7 +186,7 @@ public class TopicHomeScreen extends AbstractScreen {
       final boolean isScienceEngineLevel = numTopics == topic.getChildren().length;
       boolean isUnlocked = level.isFree() ||
           installProfile.isAvailableTopic(level) || 
-          (isScienceEngineLevel && profile.getCertificates().contains(topic.name()));
+          (isScienceEngineLevel && getProfile().getCertificates().contains(topic.name()));
       String activityName = getMsg(topic + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(topic, level, ".png");
       FileHandle file = Gdx.files.internal(filename);
@@ -225,7 +222,7 @@ public class TopicHomeScreen extends AbstractScreen {
         });
       } else {
         // Progress bar
-        float[] stats = profile.getStats(level, Guru.ID, ITutor.NUM_STATS);
+        float[] stats = getProfile().getStats(level, Guru.ID, ITutor.NUM_STATS);
         float percent = stats[ITutor.PERCENT_PROGRESS];
         ScreenUtils.createProgressPercentageBar(blueBackground, activityThumb, percent, THUMBNAIL_WIDTH);
         // Timespent label
@@ -255,7 +252,7 @@ public class TopicHomeScreen extends AbstractScreen {
   }
 
   private void setLastActiveLevel(ScrollPane activitiesPane) {
-    Topic lastActiveLevel = profile.getLastActivity();
+    Topic lastActiveLevel = getProfile().getLastActivity();
     if (lastActiveLevel != null) {
       Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
       ScreenComponent.scalePosition(userImage, 2, THUMBNAIL_HEIGHT / 2);

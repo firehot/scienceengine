@@ -19,7 +19,6 @@ import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.screens.HelpTour.IHelpComponent;
-import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.loaders.AsyncLevelLoader;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
@@ -41,7 +40,6 @@ import com.mazalearn.scienceengine.tutor.TimeTracker;
 public class ActivityScreen extends AbstractScreen {
 
   private IScience2DController science2DController;
-  private Profile profile;
   private Topic topic;
   @SuppressWarnings("unused")
   private Topic activityLevel;
@@ -60,8 +58,7 @@ public class ActivityScreen extends AbstractScreen {
     this.science2DController = 
         createTopicController(topic, level, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     science2DView = science2DController.getView();
-    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
-    profile.setCurrentActivity(level);
+    getProfile().setCurrentActivity(level);
     if ((ScienceEngine.DEV_MODE & DevMode.DESIGN) != 0) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
@@ -177,7 +174,7 @@ public class ActivityScreen extends AbstractScreen {
     }
     TopicHomeScreen topicHomeScreen = 
         new TopicHomeScreen(scienceEngine, topic);
-    profile.setCurrentActivity(null);
+    getProfile().setCurrentActivity(null);
     scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
   }
   

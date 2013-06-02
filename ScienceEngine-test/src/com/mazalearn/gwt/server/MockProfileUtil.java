@@ -1,15 +1,10 @@
 package com.mazalearn.gwt.server;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.PropertyContainer;
-import com.mazalearn.scienceengine.app.services.ProfileData;
-import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 
 public class MockProfileUtil extends ProfileUtil {
   

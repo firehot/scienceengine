@@ -72,11 +72,10 @@ public class SplashScreen extends AbstractScreen {
     };
     
     Table userInfo = new Table(getSkin());
-    Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     final Image userImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
     userImage.setSize(ScreenComponent.User.getWidth() * 2, ScreenComponent.User.getHeight() * 2);
     userInfo.add(userImage).width(userImage.getWidth()).height(userImage.getHeight());
-    Label userName = new Label(profile.getUserName(), getSkin(), "default-big");
+    Label userName = new Label(getProfile().getUserName(), getSkin(), "default-big");
     userInfo.add(userName).right();
     userInfo.setPosition(ScreenComponent.getScaledX(100), ScreenComponent.getScaledY(100));
 

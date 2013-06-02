@@ -13,7 +13,6 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
-import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.LevelUtil;
@@ -26,11 +25,8 @@ public class ChooseTopicScreen extends AbstractScreen {
   private static final int THUMBNAIL_WIDTH = 242;
   private static final int THUMBNAIL_HEIGHT = 182;
 
-  private Profile profile;
-
   public ChooseTopicScreen(ScienceEngine scienceEngine) {
     super(scienceEngine);
-    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {
       Gdx.graphics.setContinuousRendering(false);
       Gdx.graphics.requestRendering();
@@ -40,8 +36,8 @@ public class ChooseTopicScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-    if (profile.getCurrentTopic() != null) {
-      gotoTopicHome(profile.getCurrentTopic());
+    if (getProfile().getCurrentTopic() != null) {
+      gotoTopicHome(getProfile().getCurrentTopic());
       return;
     }
     
@@ -107,11 +103,10 @@ public class ChooseTopicScreen extends AbstractScreen {
   }
   
   private int findTopicProgressPercentage(Topic topic) {
-    profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     float percent = 0;
     int numTopics = 0;
     for (Topic childTopic: topic.getChildren()) {
-      float[] stats = profile.getStats(childTopic, Guru.ID, ITutor.NUM_STATS);
+      float[] stats = getProfile().getStats(childTopic, Guru.ID, ITutor.NUM_STATS);
       percent += stats[ITutor.PERCENT_PROGRESS];
       numTopics++;
     }

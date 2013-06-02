@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.PropertyContainer;
 import com.mazalearn.scienceengine.app.services.InstallData;
-import com.mazalearn.scienceengine.app.services.ProfileData;
-import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
 /**
