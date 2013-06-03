@@ -8,7 +8,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
@@ -88,9 +87,9 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   
   @Override
   public void launchPurchaseFlow(final Topic sku, final IBilling billing) {
-    if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) != 0) {
+    if (ScienceEngine.DEV_MODE.isDebug()) {
       // Simulate an asynchronous purchase flow
-      new Thread(new Runnable() {
+      executeAsync(new Runnable() {
         @Override
         public void run() {
           try {
@@ -100,7 +99,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
           }
           billing.purchaseCallback(sku);
         }
-      }).start();
+      });
       return;
     }
     throw new UnsupportedOperationException("Purchase flow not implemented");
@@ -108,7 +107,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
 
   @Override
   public void queryInventory(List<Topic> topicList, final IBilling billing) {
-    if ((ScienceEngine.DEV_MODE & DevMode.BILLING_DUMMY) == 0) {
+    if (ScienceEngine.DEV_MODE.isDummyBilling()) {
       throw new UnsupportedOperationException("Query Inventory not implemented");
     }
     final Inventory inventory = new Inventory();
@@ -124,7 +123,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
       inventory.addSkuDetails(skuDetails);
     }
     // Simulate an asynchronous inventory query
-    new Thread(new Runnable() {
+    executeAsync(new Runnable() {
       @Override
       public void run() {
         try {
@@ -134,7 +133,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
         }
         billing.inventoryCallback(inventory);
       }
-    }).start();
+    });
   }
   
   @Override

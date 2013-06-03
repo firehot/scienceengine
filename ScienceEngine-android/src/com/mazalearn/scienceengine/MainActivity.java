@@ -14,7 +14,6 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.billing.IabHelper;
 import com.mazalearn.scienceengine.billing.IabResult;
@@ -31,7 +30,7 @@ public class MainActivity extends AndroidApplication {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);      
     // Android always in production mode
-    ScienceEngine.DEV_MODE = DevMode.PRODUCTION;
+    ScienceEngine.DEV_MODE.setDebug(false);
     
     // InApp Billing helper
     provisionBilling();
@@ -64,7 +63,9 @@ public class MainActivity extends AndroidApplication {
   public void provisionBilling() {
     iabHelper = new IabHelper(this, Security.getPublicKey());
     // enable debug logging (for a production application, set this to false).
-    iabHelper.enableDebugLogging(true);
+    if (ScienceEngine.DEV_MODE.isDebug()) {
+      iabHelper.enableDebugLogging(true);
+    }
     
     iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
       public void onIabSetupFinished(IabResult result) {

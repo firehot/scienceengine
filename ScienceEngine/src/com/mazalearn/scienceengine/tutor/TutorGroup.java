@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
 import com.mazalearn.scienceengine.core.lang.Expr;
@@ -151,7 +150,7 @@ public class TutorGroup extends AbstractTutor {
       try {
         this.successActions = parser.parseString(successActionsString);
       } catch (SyntaxException e) {
-        if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
+        if (ScienceEngine.DEV_MODE.isDebug()) e.printStackTrace();
         throw new RuntimeException(e);
       }
       this.variables = parser.getVariables();

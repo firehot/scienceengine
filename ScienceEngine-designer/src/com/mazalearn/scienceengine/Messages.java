@@ -4,7 +4,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 
 public class Messages extends BasicMessages {
@@ -24,7 +23,7 @@ public class Messages extends BasicMessages {
       String val = resourceBundle.getString(key);
       return platform == Platform.Android ? val : new String(val.getBytes("ISO-8859-1"), "UTF-8");
     } catch (Exception e) {
-      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
+      if (ScienceEngine.DEV_MODE.isDebug()) e.printStackTrace();
       return '!' + key + '!';
     }
   }

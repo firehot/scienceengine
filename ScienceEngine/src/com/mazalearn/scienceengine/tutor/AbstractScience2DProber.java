@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.core.controller.IScience2DController;
@@ -61,7 +60,7 @@ public abstract class AbstractScience2DProber extends AbstractTutor {
           return true;
         }
       }
-      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0)
+      if (ScienceEngine.DEV_MODE.isDebug())
         System.out.println(actor.getClass().getName() + " " + actor.getName() + 
             " Stagepoint: " + stagePoint + " localpoint: " + localPoint);
     }

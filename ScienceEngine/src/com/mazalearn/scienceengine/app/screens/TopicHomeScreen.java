@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.esotericsoftware.tablelayout.Cell;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.dialogs.MessageDialog;
@@ -325,7 +324,7 @@ public class TopicHomeScreen extends AbstractScreen {
       ScrollPane scrollPane = new ScrollPane(attributionLabel, getSkin());
       scrollPane.setScrollingDisabled(true,  false);
       scrollPane.setFlickScroll(false);
-      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+      if (ScienceEngine.DEV_MODE.isDebug()) {
         resource.debug();
       }
       ScreenComponent.scaleSize(scrollPane, RESOURCE_WIDTH, RESOURCE_INFO_HEIGHT);

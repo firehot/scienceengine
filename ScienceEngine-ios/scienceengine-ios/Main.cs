@@ -56,7 +56,7 @@ namespace scienceengineios {
 				return result;
 			}
 			internal static ScienceEngine getScienceEngine () {
-				ScienceEngine.DEV_MODE = ScienceEngine.DevMode.PRODUCTION | ScienceEngine.DevMode.BILLING_DUMMY;
+				ScienceEngine.DEV_MODE.setDebug(false);
 				scienceEngine = new ScienceEngine ("", Device.IPad);
 				iosAdapter = new IosPlatformAdapter();
 				ScienceEngine.setPlatformAdapter(iosAdapter);

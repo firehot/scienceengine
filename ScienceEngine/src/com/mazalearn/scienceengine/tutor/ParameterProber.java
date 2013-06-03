@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
 import com.mazalearn.scienceengine.core.controller.IModelConfig;
@@ -218,7 +217,7 @@ public class ParameterProber extends AbstractScience2DProber {
     try {
       this.resultExpr = parser.parseString(resultExprString);
     } catch (SyntaxException e) {
-      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) e.printStackTrace();
+      if (ScienceEngine.DEV_MODE.isDebug()) e.printStackTrace();
       throw new RuntimeException(e);
     }
     this.resultExprVariables = parser.getVariables();   

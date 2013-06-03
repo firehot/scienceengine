@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.model.ICurrent;
@@ -214,7 +213,7 @@ public class PickupCoil extends Science2DBody implements ICurrent.Source {
       setCurrent(current);
     }
     
-    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+    if (ScienceEngine.DEV_MODE.isDebug()) {
       calibrateEmf();
     }
   }

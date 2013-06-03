@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
@@ -103,7 +102,7 @@ public class LoadingScienceTrain extends AbstractScreen {
   }
 
   private void delayIfDebug() {
-    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) == 0) return;
+    if (ScienceEngine.DEV_MODE.isDebug()) return;
     try {
       Thread.sleep(500);
     } catch (InterruptedException e) {

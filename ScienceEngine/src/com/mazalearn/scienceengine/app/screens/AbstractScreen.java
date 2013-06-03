@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.dialogs.AboutDialog;
 import com.mazalearn.scienceengine.app.dialogs.UserHomeDialog;
@@ -61,8 +60,8 @@ public abstract class AbstractScreen implements Screen {
       @Override
       public boolean keyDown(InputEvent event, int keycode) {
         if (keycode == Keys.ALT_LEFT) {
-          if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
-            ScienceEngine.DEV_MODE ^= DevMode.DESIGN;
+          if (ScienceEngine.DEV_MODE.isDesign()) {
+            ScienceEngine.DEV_MODE.setDesign(false);
           } 
         } else if (keycode == Keys.BACK) {
           goBack();
@@ -218,7 +217,7 @@ public abstract class AbstractScreen implements Screen {
     if (table == null) {
       table = new Table(getSkin());
       table.setFillParent(true);
-      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+      if (ScienceEngine.DEV_MODE.isDebug()) {
         table.debug();
       }
       stage.addActor(table);
@@ -252,7 +251,7 @@ public abstract class AbstractScreen implements Screen {
     Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     stage.draw();
-    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+    if (ScienceEngine.DEV_MODE.isDebug()) {
       Table.drawDebug(stage);
     }
   }

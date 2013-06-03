@@ -52,7 +52,7 @@ public class PurchaseDialog extends Dialog {
   
   public enum State {
     Initiated(0), InventoryQuery(1), InventoryFailure(2), InventoryDisplay(3),
-    PurchaseRequest(5), PurchaseFailure(6), PurchaseDone(7), PurchaseCanceled(8);
+    PurchaseRequest(4), PurchaseFailure(5), PurchaseDone(6), PurchaseCanceled(7);
     
     public final int index;
 

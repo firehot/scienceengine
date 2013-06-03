@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 import com.badlogic.gdx.Gdx;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 
 public class Crypter {
   private static final String SALT = "imazalearne";
@@ -24,12 +23,12 @@ public class Crypter {
           digest.update(toHash, 0, toHash.length);
           return digest.digest();
         } catch (NoSuchAlgorithmException e) {
-          if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+          if (ScienceEngine.DEV_MODE.isDebug()) {
             e.printStackTrace();
           }
           Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());
         } catch (UnsupportedOperationException e) {
-          if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+          if (ScienceEngine.DEV_MODE.isDebug()) {
             e.printStackTrace();
           }
           Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());      
@@ -51,7 +50,7 @@ public class Crypter {
     try {
       bytes = toHash.getBytes("UTF-8");
     } catch (UnsupportedEncodingException e) {
-      if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+      if (ScienceEngine.DEV_MODE.isDebug()) {
         e.printStackTrace();
       }
       Gdx.app.error(ScienceEngine.LOG, "Could not compute hash: " + e.getMessage());

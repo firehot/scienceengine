@@ -16,10 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.mazalearn.scienceengine.Device;
 import com.mazalearn.scienceengine.DesktopPlatformAdapter;
+import com.mazalearn.scienceengine.Device;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.Topic;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
@@ -55,7 +54,7 @@ public class AbstractScience2DProberTest {
     scienceEngine = new ScienceEngine("", Device.Desktop);
     IPlatformAdapter platformAdapter = new DesktopPlatformAdapter(Platform.Desktop);
     ScienceEngine.setPlatformAdapter(platformAdapter);
-    ScienceEngine.DEV_MODE = DevMode.DEBUG;
+    ScienceEngine.DEV_MODE.setDebug(true);
     app = new LwjglApplication(scienceEngine, cfg);
     app.postRunnable(new Runnable() {
       @Override

@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.app.services.IMessage;
 import com.mazalearn.scienceengine.core.controller.AbstractModelConfig;
 import com.mazalearn.scienceengine.core.controller.CommandButtonControl;
@@ -73,7 +72,7 @@ public class ActivityViewControls extends ViewControls {
     viewControlPanel.row();
     viewControlPanel.add(suspendControl.getActor());
     viewControlPanel.row();
-    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+    if (ScienceEngine.DEV_MODE.isDebug()) {
       viewControlPanel.add(snapshotButton);
       viewControlPanel.row();
     }

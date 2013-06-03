@@ -1,4 +1,4 @@
-{name:"Electromagnetism",description:"Magnetic Field of 2 Current carrying Infinite Wire",
+{name:"Electromagnetism",description:"Magnetic Field due to Current carrying Infinite Wire",
 components:[
 {type:"FieldMeter",x:281.0,y:130.0,originX:8.5,originY:4.25,width:17.0,height:8.5,visible:true,rotation:0.0,move:"None"},
 {type:"CurrentSource",x:118,y:187.07202,originX:32.0,originY:64.0,width:64.0,height:128.0,visible:true,rotation:0.0,move:"None"},

@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.services.Profile;
 
@@ -17,7 +16,7 @@ public class Scoreboard extends Table {
 
   public Scoreboard(Skin skin) {
     super(skin);
-    if ((ScienceEngine.DEV_MODE & DevMode.DEBUG) != 0) {
+    if (ScienceEngine.DEV_MODE.isDebug()) {
       debug();
     }
     this.setName(ScreenComponent.Scoreboard.name());

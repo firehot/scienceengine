@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.ScienceEngine.DevMode;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.Topic;
@@ -59,7 +58,7 @@ public class ActivityScreen extends AbstractScreen {
         createTopicController(topic, level, ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     science2DView = science2DController.getView();
     getProfile().setCurrentActivity(level);
-    if ((ScienceEngine.DEV_MODE & DevMode.DESIGN) != 0) {
+    if (ScienceEngine.DEV_MODE.isDesign()) {
       Stage levelEditor = 
           ScienceEngine.getPlatformAdapter().createLevelEditor(science2DController, this);
       this.setStage(levelEditor);
