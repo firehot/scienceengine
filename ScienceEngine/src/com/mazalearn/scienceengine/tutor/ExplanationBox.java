@@ -71,7 +71,7 @@ public class ExplanationBox extends ImageMessageBox {
       setImageAndResize(drawable);
       reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight());
     } else {
-      setTextAndResize(currentText);
+      setTextAndResize(currentText, true);
       reviseButton.setPosition(getWidth() / 2 - reviseButton.getWidth() / 2, getHeight());
       if (true) ScienceEngine.getPlatformAdapter().speak(currentText, false);
     }

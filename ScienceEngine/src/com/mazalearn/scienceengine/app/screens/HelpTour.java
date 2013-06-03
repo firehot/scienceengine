@@ -59,7 +59,7 @@ public class HelpTour extends Group {
     }
 
     private void setContent(String text, float arrowX, float arrowY, float angle) {
-      contentBox.setTextAndResize(text);
+      contentBox.setTextAndResize(text, false);
       // Put contentbutton on screen touching arrow based on quadrant
       int sx = (int) Math.signum(MathUtils.cosDeg(angle));
       int sy = (int) Math.signum(MathUtils.sinDeg(angle));

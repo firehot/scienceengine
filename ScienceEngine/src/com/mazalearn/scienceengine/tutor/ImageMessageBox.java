@@ -20,15 +20,15 @@ public class ImageMessageBox extends TextButton {
   private TextButton nextButton, prevButton;
   private int scale = Math.round(3f * ScreenComponent.getFontSize());
   private Button closeButton;
-  private TextureRegionDrawable background;
   private TextButtonStyle textButtonStyle;
+  private TextureRegionDrawable backgroundImg;
   private float padding[] = new float[] {0.15f, 0.12f, 0.1f, 0.1f};
 
   public ImageMessageBox(Skin skin, String textureName, final Actor parentActor) {
     super("", skin);
     if (textureName != null) {
-      background = new TextureRegionDrawable(ScienceEngine.getTextureRegion(textureName));
-      setBackground(background);
+      backgroundImg = new TextureRegionDrawable(ScienceEngine.getTextureRegion(textureName));
+      setBackground(backgroundImg);
       textButtonStyle = new TextButtonStyle(skin.get("clear", TextButtonStyle.class));
     } else {
       textButtonStyle = new TextButtonStyle(skin.get(TextButtonStyle.class));      
@@ -101,7 +101,7 @@ public class ImageMessageBox extends TextButton {
 
   @Override
   public void drawBackground(SpriteBatch batch, float parentAlpha) {
-    if (background == null) return;
+    if (getBackground() == null) return;
     getBackground().draw(batch, getX()+5, getY()+5, getWidth()-10, getHeight()-10);
   }
 
@@ -113,10 +113,8 @@ public class ImageMessageBox extends TextButton {
     return prevButton;
   }
 
-  public void setTextAndResize(String text) {
-    if (background != null) {
-      setBackground(background);
-    }
+  public void setTextAndResize(String text, boolean textOnly) {
+    setBackground( textOnly ? (TextureRegionDrawable) null : backgroundImg);
     // Set size in a 3:1 aspect ratio
     float semiPerimeter = (float) Math.sqrt(text.length());
     float h = semiPerimeter * scale / 4 + 30; // To hold Buttons

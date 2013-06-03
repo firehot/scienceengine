@@ -59,8 +59,8 @@ public interface ITutor {
   /**
    * Prepare tutor before a session. 
    * Reset components and configs to state at beginning
-   * If childTutor is null, continue with current child if proper else 
-   * go to first child. Otherwise use childTutor.
+   * If childTutor is not null, use childTutor
+   * Otherwise, continue with current child if proper else go to first child.
    */
   public void prepareToTeach(ITutor childTutor);
 
@@ -161,4 +161,6 @@ public interface ITutor {
   public void setParentTutor(ITutor tutor);
 
   public String getProgressText();
+
+  public void prepareStage();
 }

@@ -190,22 +190,30 @@ public abstract class AbstractTutor extends Group implements ITutor {
   @Override
   public void prepareToTeach(ITutor childTutor) {
     Gdx.app.log(ScienceEngine.LOG, "Prepare to Teach: " + getId());
-    new ComponentLoader(science2DController).loadComponents(components, false);
-    ConfigLoader.loadConfigs(configs, science2DController.getModel());
-    if (getChildTutors() == null) {
-      science2DController.getModelControls().refresh();
-    }
     state = State.PreparedToTeach;
     
     this.setVisible(false);
     tutorHelper.setActiveTutor(this);
-    tutorHelper.showNextAndExplanation(false, false);
     // Zero out points
     stats[ITutor.POINTS] = 0;
     recordStats();
     // Mark start of tutor in event log
     ScienceEngine.getEventLog().logEvent(CoreComponentType.Global.name(), 
         Parameter.Tutor.name());
+    if (getChildTutors() == null) {
+      parent.prepareStage();
+      this.prepareStage();
+    }
+  }
+
+  public void prepareStage() {
+    Gdx.app.log(ScienceEngine.LOG, "Prepare Stage: " + getId());
+    new ComponentLoader(science2DController).loadComponents(components, false);
+    ConfigLoader.loadConfigs(configs, science2DController.getModel());
+    if (getChildTutors() == null) {
+      science2DController.getModelControls().refresh();
+    }
+    tutorHelper.showNextAndExplanation(false, false);
   }
 
   @Override

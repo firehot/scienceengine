@@ -96,7 +96,9 @@ public class TutorGroup extends AbstractTutor {
   @Override
   public void prepareToTeach(ITutor childTutor) {
      
-    if (getType() == TutorType.RapidFire || getType() == TutorType.Reviewer) {
+    if (childTutor != null) {
+      tutorIndex = childTutors.indexOf(childTutor);
+    } else if (getType() == TutorType.RapidFire || getType() == TutorType.Reviewer) {
       randomizeChildTutors();
       tutorIndex = 0;
       currentTutor = childTutors.get(tutorIndex);
@@ -104,9 +106,6 @@ public class TutorGroup extends AbstractTutor {
       return;
     } 
     
-    if (childTutor != null) {
-      tutorIndex = childTutors.indexOf(childTutor);
-    }
     if (tutorIndex < 0 || tutorIndex >= numChildren) {
       // Find out where we last left off.
       for (tutorIndex = 0; tutorIndex < numChildren; tutorIndex++) {

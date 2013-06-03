@@ -144,8 +144,6 @@ public class Guru extends Group implements ITutor {
     if (tutor.getParentTutor() != null) {
       prepareTutors(tutor.getParentTutor());
       tutor.getParentTutor().prepareToTeach(tutor);
-    } else {
-      science2DController.reset();
     }
   }
 
@@ -190,7 +188,6 @@ public class Guru extends Group implements ITutor {
   
   @Override
   public float[] getStats() {
-    // All stats are from rootTutor
     return rootTutor.getStats();
   }
   
@@ -209,9 +206,14 @@ public class Guru extends Group implements ITutor {
     }
   }
   
-  // TODO: prepareToTeach should be same as goto at this level
+  // TODO: prepareToTeach should be same as goto at this level?
   @Override
   public void prepareToTeach(ITutor childTutor) {
+    science2DController.reset();
+  }
+  
+  @Override
+  public void prepareStage() {
   }
 
   @Override
