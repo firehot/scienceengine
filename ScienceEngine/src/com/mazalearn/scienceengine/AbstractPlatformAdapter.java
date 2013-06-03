@@ -107,7 +107,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
 
   @Override
   public void queryInventory(List<Topic> topicList, final IBilling billing) {
-    if (ScienceEngine.DEV_MODE.isDummyBilling()) {
+    if (!ScienceEngine.DEV_MODE.isDummyBilling()) {
       throw new UnsupportedOperationException("Query Inventory not implemented");
     }
     final Inventory inventory = new Inventory();

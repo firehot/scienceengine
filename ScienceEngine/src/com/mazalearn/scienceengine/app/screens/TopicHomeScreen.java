@@ -182,10 +182,10 @@ public class TopicHomeScreen extends AbstractScreen {
     for (final Topic level: topic.getChildren()) {
       numTopics++;
       // Assumption: Last level is the Science train level - unlocked only on certification
-      final boolean isScienceEngineLevel = numTopics == topic.getChildren().length;
+      final boolean isScienceTrainLevel = numTopics == topic.getChildren().length;
       boolean isUnlocked = level.isFree() ||
-          installProfile.isAvailableTopic(level) || 
-          (isScienceEngineLevel && getProfile().getCertificates().contains(topic.name()));
+          (!isScienceTrainLevel && installProfile.isAvailableTopic(level)) || 
+          (isScienceTrainLevel && getProfile().getCertificates().contains(topic.name()));
       String activityName = getMsg(topic + "." + level + ".Name");
       String filename = LevelUtil.getLevelFilename(topic, level, ".png");
       FileHandle file = Gdx.files.internal(filename);
@@ -212,8 +212,8 @@ public class TopicHomeScreen extends AbstractScreen {
         activityThumb.addListener(new CommandClickListener() {
           @Override
           public void doCommand() {
-            if (isScienceEngineLevel) {
-              new MessageDialog(getSkin(), "To unlock this level, you need the " + topic.name() + " Certificate").show(stage);
+            if (isScienceTrainLevel) {
+              new MessageDialog(getSkin(), "To unlock this level, you have to earn the " + topic.name() + " Certificate").show(stage);
             } else if (!installProfile.isAvailableTopic(level)) {
               new PurchaseDialog(topic, level, getStage(), getSkin(), scienceEngine).show(getStage());
             }

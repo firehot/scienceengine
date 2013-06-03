@@ -23,7 +23,7 @@ public class DynamoActor extends Science2DActor {
     super(body, textureRegion);
     this.dynamo = (Dynamo) body;
     rotationFrames = new TextureRegion[NUM_FRAMES];
-    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/electromagnetism/currentcoil/pack.atlas"));
+    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/Electromagnetism/currentcoil/pack.atlas"));
     for (int i = 0; i < NUM_FRAMES; i++) {
       String num = String.valueOf(i);
       rotationFrames[i] = atlas.findRegion("000".substring(0, 3 - num.length()) + num + '0');
