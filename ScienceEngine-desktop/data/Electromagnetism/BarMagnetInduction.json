@@ -57,7 +57,7 @@ tutors: [
                    "When coil is moved slowly, is current induced?",
                    "When coil moves faster, is the light brighter?"],
            explanation: ["When the coil moves near the magnet, current is induced in the coil",
-           "Current induction happens due to relative motion of coil and magnet"],
+                         "Current induction happens due to relative motion of coil and magnet"],
            postcondition: "Count(PickupCoil.Move) > 1 and Max(PickupCoil.Current) > 1 and Min(PickupCoil.Current) < -1"
           },
           {type: "KnowledgeUnit",
