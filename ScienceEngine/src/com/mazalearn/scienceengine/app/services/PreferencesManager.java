@@ -206,6 +206,10 @@ public class PreferencesManager {
       }
     }
     
+    private void setInstallProfile(InstallProfile installProfile) {
+      this.installProfile = installProfile;
+    }
+    
     private void syncInstallProfile(String installId) {
       try {
         // Get back updated server installProfile, if any
@@ -232,8 +236,9 @@ public class PreferencesManager {
            Gdx.app.error(ScienceEngine.LOG, "Invalid or unchanged install profile");
         } else {
           prefs.putString(INSTALL_PROFILE, installProfileBase64);
-          // will get loaded on next call to getInstallProfile in PreferencesManager
           prefs.flush();
+          // Load installProfile in PreferencesManager
+          setInstallProfile(newInstallProfile);
         }
         Gdx.app.log(ScienceEngine.LOG, "Got Install Profile from MazaLearn: " + installId);
       } catch(GdxRuntimeException e) {
