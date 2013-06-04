@@ -87,7 +87,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   
   @Override
   public void launchPurchaseFlow(final Topic sku, final IBilling billing) {
-    if (ScienceEngine.DEV_MODE.isDebug()) {
+    if (ScienceEngine.DEV_MODE.isDummyBilling()) {
       // Simulate an asynchronous purchase flow
       executeAsync(new Runnable() {
         @Override

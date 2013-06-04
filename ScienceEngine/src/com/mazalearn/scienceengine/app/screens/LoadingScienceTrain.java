@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Interpolation;
@@ -26,6 +27,7 @@ public class LoadingScienceTrain extends AbstractScreen {
   private float startY;
   private float endY;
   private Image railTracks;
+  private Label loading;
 
   public LoadingScienceTrain(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
     super(scienceEngine);
@@ -45,7 +47,7 @@ public class LoadingScienceTrain extends AbstractScreen {
   public void show() {
     super.show();
 
-    Label loading = new Label("Loading...Please Wait...", getSkin(), "default-big");
+    loading = new Label("Loading...Please Wait...", getSkin(), "default-big");
     loading.setColor(Color.ORANGE);
     loading.setPosition(ScreenComponent.VIEWPORT_WIDTH / 2 - loading.getWidth() / 2,
         ScreenComponent.VIEWPORT_HEIGHT - 30);
@@ -83,26 +85,29 @@ public class LoadingScienceTrain extends AbstractScreen {
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     // Load some, will return true if done loading
-    if (ScienceEngine.getAssetManager().update()) {
+    AssetManager assetManager = ScienceEngine.getAssetManager();
+    
+    if (assetManager.update()) {
       scienceEngine.setScreen(nextScreen);
     }
-
     // Interpolate the percentage to make it smoother
     percent = Interpolation.linear.apply(percent,
-        ScienceEngine.getAssetManager().getProgress(), 0.1f);
+        assetManager.getProgress(), 0.1f);
+
+    loading.setText("Loading...Please Wait..." + Math.round(percent*100) + "%");
 
     // Update positions (and size) to match the percentage
     train.setX(startX + endX * percent);
     train.setY(startY + (endY - startY) * percent);
-
     delayIfDebug();
+
     // Show the loading screen
     stage.act();
     stage.draw();
   }
 
   private void delayIfDebug() {
-    if (ScienceEngine.DEV_MODE.isDebug()) return;
+    if (!ScienceEngine.DEV_MODE.isDebug()) return;
     try {
       Thread.sleep(500);
     } catch (InterruptedException e) {

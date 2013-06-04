@@ -61,8 +61,9 @@ public class SplashScreen extends AbstractScreen {
   public void show() {
     super.show();
 
-    // start playing the menu music
-    ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+    // start playing the hum music
+    ScienceEngine.getMusicManager().stop();
+    ScienceEngine.getMusicManager().play(ScienceEngineMusic.HUM);
     
     ClickListener startListener = new CommandClickListener() {
       @Override

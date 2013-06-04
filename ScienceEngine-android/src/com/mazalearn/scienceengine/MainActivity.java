@@ -34,6 +34,7 @@ public class MainActivity extends AndroidApplication {
     super.onCreate(savedInstanceState);      
     // Android always in production mode
     ScienceEngine.DEV_MODE.setDebug(false);
+    ScienceEngine.DEV_MODE.setDummyBilling(false);
     
     // Science engine config
     AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
@@ -46,13 +47,17 @@ public class MainActivity extends AndroidApplication {
         new ScienceEngine(data != null ? data.toString() : "", Device.Android);
     
     // InApp Billing helper
-    provisionBilling();
+    if (!ScienceEngine.DEV_MODE.isDummyBilling()) {
+      provisionBilling();
+    }
     
     Platform platform = android.os.Build.FINGERPRINT.contains("generic") 
         ? Platform.AndroidEmulator : Platform.Android;
     platformAdapter = new AndroidPlatformAdapter(this, platform, iabHelper);
     
-    provisionSpeech(platformAdapter);
+    if (platformAdapter.supportsSpeech()) {
+      provisionSpeech(platformAdapter);
+    }
     
     ScienceEngine.setPlatformAdapter(platformAdapter);
     initialize(scienceEngine, cfg);
@@ -60,11 +65,9 @@ public class MainActivity extends AndroidApplication {
 
   public void provisionSpeech(IPlatformAdapter platformAdapter) {
     // See if TTS engine can be started
-    if (platformAdapter.supportsSpeech()) {
-      Intent checkIntent = new Intent();
-      checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-      startActivityForResult(checkIntent, TTS_CHECK);
-    }
+    Intent checkIntent = new Intent();
+    checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+    startActivityForResult(checkIntent, TTS_CHECK);
   }
 
   public void provisionBilling() {
@@ -96,13 +99,17 @@ public class MainActivity extends AndroidApplication {
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     log(ScienceEngine.LOG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
   
-     if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
-       super.onActivityResult(requestCode, resultCode, data);  
-     }
-     mTts = null;
-     if (requestCode == TTS_CHECK) {
-       provisionTtsEngine(resultCode);
-     }
+    if (requestCode == TTS_CHECK) {
+      mTts = null;
+      provisionTtsEngine(resultCode);
+      return;
+    }
+    
+    if (!ScienceEngine.DEV_MODE.isDummyBilling() && 
+        iabHelper.handleActivityResult(requestCode, resultCode, data)) {
+      return;  
+    }
+    super.onActivityResult(requestCode, resultCode, data);
   }
 
   private void provisionTtsEngine(int resultCode) {

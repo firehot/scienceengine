@@ -21,12 +21,13 @@ namespace scienceengineios
     List<string> products;
     bool pricesLoaded = false;
     NSObject priceObserver, requestObserver;
-	TextToSpeech speaker;
+	  TextToSpeech speaker;
 		AVAudioPlayer audioPlayer;
     
     InAppPurchaseManager iap;
 		
 		public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
+		  if (!supportsSpeech()) return;
 		  speaker = new TextToSpeech ();
 			speaker.fliteInitFunc ();
 		}
@@ -65,7 +66,7 @@ namespace scienceengineios
 		}
 		
     public override void launchPurchaseFlow(Topic sku, IBilling billing) {
-      if ((ScienceEngine.DEV_MODE & ScienceEngine.DevMode.BILLING_DUMMY) == 1) {
+      if (ScienceEngine.DEV_MODE.isDummyBilling()) {
         base.launchPurchaseFlow (sku, billing);
         return;
       }
@@ -88,6 +89,7 @@ namespace scienceengineios
     }
    public override void speak (string str, bool b)
 		{
+      if (speaker == null || !ScienceEngine.getPreferencesManager().isSpeechEnabled()) return;
 			string basedir = Path.Combine (Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..");
 			string tmpdir = Path.Combine (basedir, "tmp");
 			string audioFilePath = Path.Combine (tmpdir, "scienceengine.wav");

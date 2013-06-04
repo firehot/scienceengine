@@ -71,6 +71,11 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
 
   @Override
   public void launchPurchaseFlow(final Topic topic, final IBilling billing) {
+    Gdx.app.log(ScienceEngine.LOG, "Launching purchase flow.");
+    if (ScienceEngine.DEV_MODE.isDummyBilling()) {
+      super.launchPurchaseFlow(topic, billing);
+      return;
+    }
     iabHelper.launchPurchaseFlow(application, topic.toProductId(), IabHelper.ITEM_TYPE_INAPP, 
         IBilling.REQUEST_CODE,
         new OnIabPurchaseFinishedListener() {
