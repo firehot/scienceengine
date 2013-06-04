@@ -12,7 +12,7 @@ public class LevelUtil {
 
   public static Texture getLevelThumbnail(Topic topicArea, Topic topic, int level) {
     FileHandle screenFile = 
-        LevelUtil.getLevelFile(topicArea, topic, ".png");      
+        LevelUtil.getLevelFile(topicArea, topic, ".jpg");      
     Pixmap pixmap;
     try {
       pixmap = new Pixmap(screenFile);

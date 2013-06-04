@@ -50,7 +50,7 @@ import com.mazalearn.scienceengine.core.view.Science2DActor;
  */
 public class LevelEditor extends Stage {
   private final AbstractScreen screen;
-  private static final float THUMBNAIL_SCALE = 2.5f;
+  private static final float THUMBNAIL_SCALE = 1.5f;
 
   private final OrthographicCamera orthographicCamera;
   enum Mode {

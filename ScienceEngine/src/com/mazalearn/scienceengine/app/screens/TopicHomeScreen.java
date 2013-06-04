@@ -93,8 +93,8 @@ public class TopicHomeScreen extends AbstractScreen {
   }
 
   private static final int RESOURCE_WIDTH = 254;
-  private static final int THUMBNAIL_WIDTH = 369; // 242;
-  private static final int THUMBNAIL_HEIGHT = 279; // 182;
+  public static final int THUMBNAIL_WIDTH = 369;
+  public static final int THUMBNAIL_HEIGHT = 279;
   private static final int RESOURCE_INFO_HEIGHT = 210;
   private TextButton[] activityThumbs;
   private Array<?> resources;
@@ -187,7 +187,7 @@ public class TopicHomeScreen extends AbstractScreen {
           (!isScienceTrainLevel && installProfile.isAvailableTopic(level)) || 
           (isScienceTrainLevel && getProfile().getCertificates().contains(topic.name()));
       String activityName = getMsg(topic + "." + level + ".Name");
-      String filename = LevelUtil.getLevelFilename(topic, level, ".png");
+      String filename = LevelUtil.getLevelFilename(topic, level, ".jpg");
       FileHandle file = Gdx.files.internal(filename);
       Texture texture;
       if (file.exists()) {

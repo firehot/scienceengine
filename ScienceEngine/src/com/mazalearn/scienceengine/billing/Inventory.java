@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a block of information about in-app items.
@@ -63,8 +64,8 @@ public class Inventory {
     }
 
     /** Returns a list of all owned product IDs. */
-    List<String> getAllOwnedSkus() {
-        return new ArrayList<String>(mPurchaseMap.keySet());
+    public Set<String> getAllOwnedSkus() {
+        return mPurchaseMap.keySet();
     }
     
     /** Returns a list of all owned product IDs of a given type */

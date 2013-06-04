@@ -49,6 +49,7 @@ public class PurchaseDialog extends Dialog {
   private float[] stats = new float[State.values().length];
   private Profile profile;
   private final String purchaseFlowId;
+  private final Stage stage; // We store this - not available through getStage() on android
   
   public enum State {
     Initiated(0), InventoryQuery(1), InventoryFailure(2), InventoryDisplay(3),
@@ -69,6 +70,7 @@ public class PurchaseDialog extends Dialog {
     this.skin = skin;
     this.scienceEngine = scienceEngine;
     this.topic = topic;
+    this.stage = stage;
     this.purchaseFlowId = level.getTopicId() + "$" + PURCHASE_FLOW;
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     profile.setCurrentActivity(level);
@@ -101,11 +103,11 @@ public class PurchaseDialog extends Dialog {
           }
           installProfile.save();
           ScienceEngine.getSoundManager().play(ScienceEngineSound.SUCCESS);
-          ScienceEngine.displayStatusMessage(getStage(), StatusType.INFO, "Purchase completed successfully");
+          ScienceEngine.displayStatusMessage(stage, StatusType.INFO, "Purchase completed successfully");
           purchaseDone = true;
         } else {
           log(State.PurchaseFailure); 
-          ScienceEngine.displayStatusMessage(getStage(), StatusType.ERROR, "Purchase could not be completed");
+          ScienceEngine.displayStatusMessage(stage, StatusType.ERROR, "Purchase could not be completed");
           ScienceEngine.getSoundManager().play(ScienceEngineSound.FAILURE);
           purchaseDone = false;
         }
@@ -169,7 +171,7 @@ public class PurchaseDialog extends Dialog {
     Table buttonTable = createButtons(buyDisabled);
     table.add(buttonTable).colspan(2);
 
-    this.show(getStage());
+    this.show(stage);
   }
 
   public void addPurchasableItems(Inventory inventory, Table table) {
@@ -232,7 +234,7 @@ public class PurchaseDialog extends Dialog {
           Topic purchaseTopic = Topic.valueOf(topicButton.getName());
           buttonTable.clear();
           buttonTable.add(waitActor);
-          show(getStage());
+          show(stage);
           log(State.PurchaseRequest);
           ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, billing);
         } else {

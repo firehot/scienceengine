@@ -11,12 +11,15 @@ import android.provider.Settings.Secure;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.mazalearn.scienceengine.app.services.InstallProfile;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.billing.IabHelper;
+import com.mazalearn.scienceengine.billing.IabHelper.QueryInventoryFinishedListener;
 import com.mazalearn.scienceengine.billing.IabResult;
+import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.billing.Security;
 
 public class MainActivity extends AndroidApplication {
@@ -32,9 +35,6 @@ public class MainActivity extends AndroidApplication {
     // Android always in production mode
     ScienceEngine.DEV_MODE.setDebug(false);
     
-    // InApp Billing helper
-    provisionBilling();
-    
     // Science engine config
     AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
     cfg.useGL20 = true;
@@ -45,19 +45,26 @@ public class MainActivity extends AndroidApplication {
     ScienceEngine scienceEngine = 
         new ScienceEngine(data != null ? data.toString() : "", Device.Android);
     
+    // InApp Billing helper
+    provisionBilling();
+    
     Platform platform = android.os.Build.FINGERPRINT.contains("generic") 
         ? Platform.AndroidEmulator : Platform.Android;
     platformAdapter = new AndroidPlatformAdapter(this, platform, iabHelper);
     
+    provisionSpeech(platformAdapter);
+    
+    ScienceEngine.setPlatformAdapter(platformAdapter);
+    initialize(scienceEngine, cfg);
+  }
+
+  public void provisionSpeech(IPlatformAdapter platformAdapter) {
     // See if TTS engine can be started
     if (platformAdapter.supportsSpeech()) {
       Intent checkIntent = new Intent();
       checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
       startActivityForResult(checkIntent, TTS_CHECK);
     }
-    
-    ScienceEngine.setPlatformAdapter(platformAdapter);
-    initialize(scienceEngine, cfg);
   }
 
   public void provisionBilling() {
@@ -71,10 +78,12 @@ public class MainActivity extends AndroidApplication {
       public void onIabSetupFinished(IabResult result) {
         if (!result.isSuccess()) {
           // Oh noes, there was a problem.
-          Gdx.app.log(ScienceEngine.LOG, "Problem setting up In-app Billing: " + result);
+          log(ScienceEngine.LOG, "Problem setting up In-app Billing: " + result);
           return;
         }            
-        Gdx.app.log(ScienceEngine.LOG, "In-app billing Setup successful.");
+        log(ScienceEngine.LOG, "In-app billing Setup successful.");
+        log(ScienceEngine.LOG, "Querying inventory for owned items.");
+        syncPurchaseItems();
       }
     });
   }
@@ -109,9 +118,9 @@ public class MainActivity extends AndroidApplication {
             mTts.setSpeechRate(1.0f);
             mTts.setPitch(0.9f);
             platformAdapter.setTts(mTts);
-            Gdx.app.log(ScienceEngine.LOG, "TTS initialized");
+            log(ScienceEngine.LOG, "TTS initialized");
           } else {
-            Gdx.app.error(ScienceEngine.LOG, "Locale not available for TTS");
+            log(ScienceEngine.LOG, "Locale not available for TTS");
             mTts.stop();
             mTts.shutdown();
             mTts = null;
@@ -143,5 +152,28 @@ public class MainActivity extends AndroidApplication {
     }
     iabHelper = null;
     super.onDestroy();
+  }
+
+  public void syncPurchaseItems() {
+    iabHelper.queryInventoryAsync(false, new QueryInventoryFinishedListener() {
+      @Override
+      public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+        if (result.isFailure()) {
+          log(ScienceEngine.LOG, "Failed to query inventory: " + result);
+          return;
+        }
+        InstallProfile installProfile = ScienceEngine.getPreferencesManager().getInstallProfile();
+        for (String productId: inventory.getAllOwnedSkus()) {
+          Topic topic = Topic.fromProductId(productId);
+          if (topic == null) {
+            log(ScienceEngine.LOG, "Unknown product: " + productId);
+            continue;
+          }
+          if (!installProfile.isAvailableTopic(topic)) {
+            installProfile.addAsAvailableTopic(topic);
+          }
+        }
+      }
+    });
   }
 }

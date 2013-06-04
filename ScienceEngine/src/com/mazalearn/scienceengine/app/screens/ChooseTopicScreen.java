@@ -68,6 +68,7 @@ public class ChooseTopicScreen extends AbstractScreen {
       if (topic.getChildren().length == 0) continue;
       final boolean lock = !topic.equals(Topic.Electromagnetism);
       Texture levelThumbnail = LevelUtil.getLevelThumbnail(topic, topic.getCanonicalChild(), 1);
+      Gdx.app.error(ScienceEngine.LOG, "loaded thumbnail for: " + topic.name());
       TextButton topicThumb = 
           ScreenUtils.createImageButton(new TextureRegion(levelThumbnail), getSkin(), "default");
       ScreenComponent.scaleSize(topicThumb, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);

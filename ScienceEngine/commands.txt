@@ -1,5 +1,6 @@
-cd C:\Users\sridhar\git\scienceengine\ScienceEngine-desktop\data\Electromagnetism
+set x=Electromagnetism
+cd C:\Users\sridhar\git\scienceengine\ScienceEngine-desktop\data\%x%
 java -cp c:\Users\sridhar\gdx-tools.jar;c:\Users\sridhar\git\scienceengine\ScienceEngine\libs\gdx.jar com.badlogic.gdx.tools.imagepacker.TexturePacker2 images
-cp images-packed\*.* ..\..\..\ScienceEngine-android\assets\images\Electromagnetism
+cp images-packed\*.* ..\..\..\ScienceEngine-android\assets\images\%x%
 
-gdx-setup-ui.jar - doubleclick
+gdx-setup-ui.jar - just doubleclick
