@@ -76,11 +76,11 @@ public class BarMagnet extends AbstractMagnet {
   //strength of the magnet, in Gauss
   private static final float GRID_MAGNET_STRENGTH = 1;
   //spacing between points in the internal grid, same in both dimensions
-  private static final double INTERNAL_GRID_SPACING = 5;
+  private static final float INTERNAL_GRID_SPACING = 5;
   //spacing between points in the external-near grid, same in both dimensions
-  private static final double EXTERNAL_NEAR_GRID_SPACING = 5;
+  private static final float EXTERNAL_NEAR_GRID_SPACING = 5;
   //spacing between points in the external-far grid, same in both dimensions
-  private static final double EXTERNAL_FAR_GRID_SPACING = 20;
+  private static final float EXTERNAL_FAR_GRID_SPACING = 20;
   // number of points in the internal grid
   private static final Dimension INTERNAL_GRID_SIZE = new Dimension(26, 6);
   // number of points in the external-near grid
@@ -229,7 +229,7 @@ public class BarMagnet extends AbstractMagnet {
    * f00-----------f10 | | | xy | | | f01-----------f11
    */
   private double interpolate(final double x, final double y, double maxX,
-      double maxY, double[][] componentValues, double gridSpacing) {
+      double maxY, float[][] componentValues, double gridSpacing) {
     if (!(x >= 0 && y >= 0)) {
       // ...because our grid is only for that quadrant
       throw new IllegalArgumentException("x and y must be positive"); 
@@ -284,27 +284,27 @@ public class BarMagnet extends AbstractMagnet {
 
     private static final String TOKEN_DELIMITER = ","; // CSV format
 
-    private final double[][] bxArray, byArray; // double[columns][rows]
+    private final float[][] bxArray, byArray; // double[columns][rows]
     private final Dimension size;
-    private final double spacing;
+    private final float spacing;
 
     public Grid(String bxResourceName, String byResourceName, Dimension size,
-        double spacing) {
+        float spacing) {
       this.size = new Dimension(size.width, size.height);
       this.spacing = spacing;
       bxArray = readComponent(bxResourceName, size);
       byArray = readComponent(byResourceName, size);
     }
 
-    public double getSpacing() {
+    public float getSpacing() {
       return spacing;
     }
 
-    public double[][] getBxArray() {
+    public float[][] getBxArray() {
       return bxArray;
     }
 
-    public double[][] getByArray() {
+    public float[][] getByArray() {
       return byArray;
     }
 
@@ -351,8 +351,8 @@ public class BarMagnet extends AbstractMagnet {
      * displays a localized error message, but the specific cause of the error
      * is not localized.
      */
-    private double[][] readComponent(String resourceName, Dimension size) {
-      double array[][] = new double[size.width][size.height];
+    private float[][] readComponent(String resourceName, Dimension size) {
+      float array[][] = new float[size.width][size.height];
       int count = 0;
       String errorString = null;
       try {
@@ -366,7 +366,7 @@ public class BarMagnet extends AbstractMagnet {
               TOKEN_DELIMITER);
           while (stringTokenizer.hasMoreTokens()) {
             String token = stringTokenizer.nextToken();
-            array[column][row] = Double.parseDouble(token); // column-major
+            array[column][row] = Float.parseFloat(token); // column-major
                                                             // order
             count++;
             row++;
