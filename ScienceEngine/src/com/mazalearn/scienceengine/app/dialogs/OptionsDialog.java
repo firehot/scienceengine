@@ -126,9 +126,10 @@ public class OptionsDialog extends Dialog {
           boolean enabled = speechCheckbox.isChecked();
           preferencesManager.setSpeechEnabled(enabled);
   
-          // if the music is now enabled, start playing the menu music
-          if (enabled)
-            platform.speak("Speech enabled", false);
+          // if the speech is now enabled, acknowledge
+          if (enabled) {
+            platform.provisionSpeech();
+          }
         }
       });
       table.row();

@@ -30,7 +30,7 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   private static final int PAUSE_MS = 1000;
   private AndroidApplication application;
   private IabHelper iabHelper;
-  private TextToSpeech mTts;
+  private TextToSpeech textToSpeech;
   
   public AndroidPlatformAdapter(AndroidApplication application, Platform platform, IabHelper iabHelper) {
     super(platform);
@@ -221,12 +221,12 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   
   @Override
   public void speak(String text, boolean append) {
-    if (mTts != null && ScienceEngine.getPreferencesManager().isSpeechEnabled()) {
+    if (textToSpeech != null && ScienceEngine.getPreferencesManager().isSpeechEnabled()) {
       Gdx.app.log(ScienceEngine.LOG, "Speaking out: " + text);
       for (String sentence: text.split("\\.")) {
         String s = sentence.replace("'?'", "question mark");
-        mTts.speak(s, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
-        mTts.playSilence(PAUSE_MS, TextToSpeech.QUEUE_ADD, null);
+        textToSpeech.speak(s, append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH, null);
+        textToSpeech.playSilence(PAUSE_MS, TextToSpeech.QUEUE_ADD, null);
         append = true;
       }
     }
@@ -241,7 +241,17 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
     return "";
   }
 
+  @Override
+  public void provisionSpeech() {
+    if (!supportsSpeech() || textToSpeech != null) return;
+    // See if TTS engine can be started
+    // If so, response goes to MainActivity which will then set textToSpeech back here.
+    Intent checkIntent = new Intent();
+    checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+    application.startActivityForResult(checkIntent, MainActivity.TTS_CHECK);
+  }
+  
   public void setTts(TextToSpeech mTts) {
-    this.mTts = mTts;
+    this.textToSpeech = mTts;
   }
 }

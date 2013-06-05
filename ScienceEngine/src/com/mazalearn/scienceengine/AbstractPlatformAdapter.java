@@ -142,6 +142,11 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   }
   
   @Override
+  public void provisionSpeech() {
+    throw new UnsupportedOperationException("Speech not supported");
+  }
+  
+  @Override
   public void speak(String text, boolean append) {
     // Ignore - throwing exception is not useful.
   }

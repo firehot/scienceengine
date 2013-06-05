@@ -95,7 +95,7 @@ public class ScienceEngine extends Game {
   public static PreferencesManager getPreferencesManager() {
     // TODO: cleanup - below initialization added for testing
     if (preferencesManager == null) {
-      preferencesManager = new PreferencesManager();
+      preferencesManager = new PreferencesManager(getPlatformAdapter());
     }
     return preferencesManager;
   }
@@ -136,7 +136,7 @@ public class ScienceEngine extends Game {
     Gdx.app.log(ScienceEngine.LOG, "With params " + uri);
 
     // create the preferences Manager
-    preferencesManager = new PreferencesManager();
+    preferencesManager = new PreferencesManager(getPlatformAdapter());
 
     try {
       // create the music Manager

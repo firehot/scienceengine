@@ -78,5 +78,7 @@ public interface IPlatformAdapter {
   public boolean supportsSpeech();
   
   public void speak(String text, boolean append);
+
+  public void provisionSpeech();
 }
 

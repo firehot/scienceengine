@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
+import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 
 /**
  * Handles the scienceEngine preferences.
@@ -24,17 +25,23 @@ public class PreferencesManager {
   private static final String PREF_MUSIC_ENABLED = "music.enabled";
   private static final String PREF_SPEECH_ENABLED = "speech.enabled";
   private static final String PREF_SOUND_ENABLED = "sound.enabled";
-  // Active user
   private static final String PREFS_NAME = "scienceengine";
   private static final String PREFS_SYNC_MODE = "syncmode";
-  private Profile userProfile;
-  private Preferences prefs;
+  private final Preferences prefs;
+  private final InstallProfile defaultInstallProfile;
+  private final IPlatformAdapter platformAdapter;
   private InstallProfile installProfile;
-  private InstallProfile defaultInstallProfile = new InstallProfile();
+  // Active user
+  private Profile userProfile;
 
-  public PreferencesManager() {
+  public PreferencesManager(IPlatformAdapter platformAdapter) {
+    this.platformAdapter = platformAdapter;
     prefs = Gdx.app.getPreferences(PREFS_NAME);
     retrieveUserProfile();
+    if (platformAdapter.supportsSpeech() && isSpeechEnabled()) {
+      platformAdapter.provisionSpeech();
+    }
+    defaultInstallProfile = new InstallProfile();
   }
 
   public boolean isSoundEnabled() {
@@ -84,7 +91,7 @@ public class PreferencesManager {
   private Profile retrieveUserProfile() {
     String userId = getProfileUserId();
     userProfile = getUserProfile(userId);
-    userProfile.setPlatform(ScienceEngine.getPlatformAdapter().getPlatform());
+    userProfile.setPlatform(platformAdapter.getPlatform());
     if (userProfile.getUserEmail().length() > 0) {
       prefs.putString(ProfileData.USER_ID, userProfile.getUserEmail());
       prefs.flush();
@@ -106,7 +113,7 @@ public class PreferencesManager {
   private String getProfileUserId() {
     String userId = prefs.getString(ProfileData.USER_ID);
     if (userId == null || userId.length() == 0) {
-      userId = ScienceEngine.getPlatformAdapter().getInstallationId();
+      userId = platformAdapter.getInstallationId();
     }
     return userId;
   }
@@ -188,18 +195,21 @@ public class PreferencesManager {
     private String syncProfilesString;
     private Preferences prefs;
     private InstallProfile installProfile;
+    private IPlatformAdapter platformAdapter;
     
-    public SyncProfilesTask(String syncProfilesString, Preferences prefs, InstallProfile installProfile) {
+    public SyncProfilesTask(String syncProfilesString, Preferences prefs, IPlatformAdapter platformAdapter,
+        InstallProfile installProfile) {
       this.prefs = prefs;
       this.syncProfilesString = syncProfilesString;
       this.installProfile = installProfile;
+      this.platformAdapter = platformAdapter;
     }
     @Override
     public void run() {
       Map<String, String> postParams = new HashMap<String, String>();
       String[] syncProfilesArray = syncProfilesString.split("\n");
       HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
-      syncInstallProfile(ScienceEngine.getPlatformAdapter().getInstallationId());
+      syncInstallProfile(platformAdapter.getInstallationId());
       for (String userId: syncProfiles) {
         syncUserProfile(postParams, userId);
       }
@@ -221,12 +231,12 @@ public class PreferencesManager {
           Map<String, String> postParams = new HashMap<String, String>();
           postParams.put(ProfileData.INSTALL_ID, installId);
           installProfileBase64 = installProfile.toBase64();
-          installProfileBase64 = ScienceEngine.getPlatformAdapter().httpPost("/installprofile",
+          installProfileBase64 = platformAdapter.httpPost("/installprofile",
               "application/octet-stream", postParams, installProfileBase64.getBytes());
           Gdx.app.log(ScienceEngine.LOG, "Sync Install Profile to MazaLearn - " + installId);
           installProfile.markChanged(false);
        } else {
-          installProfileBase64 = ScienceEngine.getPlatformAdapter().httpGet("/installprofile?" + 
+          installProfileBase64 = platformAdapter.httpGet("/installprofile?" + 
               ProfileData.INSTALL_ID + "=" + installId + "&" + 
               ProfileData.LAST_UPDATED + "=" + String.valueOf(lastUpdated));
         }
@@ -255,7 +265,7 @@ public class PreferencesManager {
       try {
         // Post userProfile to server and get back updated server userProfile
         String serverProfileBase64 =
-            ScienceEngine.getPlatformAdapter().httpPost("/profile", "application/octet-stream", 
+            platformAdapter.httpPost("/profile", "application/octet-stream", 
                 postParams, syncProfileBase64.getBytes());
         prefs.putString(SERVER_PROFILE_PREFIX + userId, serverProfileBase64);
         Gdx.app.log(ScienceEngine.LOG, "Sync Profile to MazaLearn - " + userId);
@@ -278,8 +288,9 @@ public class PreferencesManager {
     Gdx.app.log(ScienceEngine.LOG, "Sync Profile: " + syncProfilesString);
     if (syncProfilesString.length() == 0) return;
     this.installProfile = null; // so that it will get refreshed
-    SyncProfilesTask syncProfilesTask = new SyncProfilesTask(syncProfilesString, prefs, getInstallProfile());
-    ScienceEngine.getPlatformAdapter().executeAsync(syncProfilesTask);
+    SyncProfilesTask syncProfilesTask = 
+        new SyncProfilesTask(syncProfilesString, prefs, platformAdapter, getInstallProfile());
+    platformAdapter.executeAsync(syncProfilesTask);
     setSyncProfilesString("");
   }
 

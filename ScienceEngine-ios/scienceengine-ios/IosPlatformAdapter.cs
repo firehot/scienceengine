@@ -12,24 +12,20 @@ using com.mazalearn.scienceengine.billing;
 using com.mazalearn.scienceengine.designer;
 using com.mazalearn.scienceengine.app.utils;
 
-namespace scienceengineios
-{
-	public class IosPlatformAdapter : NonWebPlatformAdapter
-	{
+namespace scienceengineios {
+
+	public class IosPlatformAdapter : NonWebPlatformAdapter {
 		UIWindow window;
 		WebViewController webViewController;
     List<string> products;
     bool pricesLoaded = false;
     NSObject priceObserver, requestObserver;
-	  TextToSpeech speaker;
+	  TextToSpeech textToSpeech;
 		AVAudioPlayer audioPlayer;
     
     InAppPurchaseManager iap;
 		
 		public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
-		  if (!supportsSpeech()) return;
-		  speaker = new TextToSpeech ();
-			speaker.fliteInitFunc ();
 		}
 		
 		public void setWindowAndWebViewController(UIWindow window, WebViewController webViewController) {
@@ -84,28 +80,32 @@ namespace scienceengineios
         NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
       });
       
-      iap.PurchaseProduct (sku.toProductId());
-      
+      iap.PurchaseProduct (sku.toProductId()); 
     }
-   public override void speak (string str, bool b)
-		{
-      if (speaker == null || !ScienceEngine.getPreferencesManager().isSpeechEnabled()) return;
+    
+    public override void provisionSpeech() {
+      if (!supportsSpeech() || textToSpeech != null) return;
+      textToSpeech = new TextToSpeech ();
+      textToSpeech.fliteInitFunc ();
+    }
+    
+    public override void speak (string str, bool b) {
+      if (textToSpeech == null || !ScienceEngine.getPreferencesManager().isSpeechEnabled()) return;
 			string basedir = Path.Combine (Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..");
 			string tmpdir = Path.Combine (basedir, "tmp");
 			string audioFilePath = Path.Combine (tmpdir, "scienceengine.wav");
 			str = str.Replace ("'?'", "question mark");
-			byte[] bytes = speaker.ConvertTextToWavStr(str);
+			byte[] bytes = textToSpeech.ConvertTextToWavStr(str);
 			audioPlayer = AVAudioPlayer.FromData (NSData.FromArray(bytes));
 			audioPlayer.PrepareToPlay();
 			audioPlayer.Play();
 		}
-   public override bool supportsSpeech ()
-		{
-			return true;
-		}
-
-   public override void queryInventory (java.util.List topicList, IBilling billing)
-		{
+  		
+    public override bool supportsSpeech () {
+  	  return true;
+  	}
+  
+    public override void queryInventory (java.util.List topicList, IBilling billing) {
 			if ((ScienceEngine.DEV_MODE & ScienceEngine.DevMode.BILLING_DUMMY) == 1) {
 				base.queryInventory (topicList, billing);
 				return;

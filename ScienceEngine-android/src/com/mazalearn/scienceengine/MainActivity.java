@@ -14,7 +14,6 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.mazalearn.scienceengine.app.services.InstallProfile;
-import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;
 import com.mazalearn.scienceengine.billing.IabHelper;
 import com.mazalearn.scienceengine.billing.IabHelper.QueryInventoryFinishedListener;
@@ -24,7 +23,7 @@ import com.mazalearn.scienceengine.billing.Security;
 
 public class MainActivity extends AndroidApplication {
 
-  private static final int TTS_CHECK = 2000;
+  static final int TTS_CHECK = 2000;
   private IabHelper iabHelper;
   private AndroidPlatformAdapter platformAdapter;
   private TextToSpeech mTts;
@@ -55,19 +54,8 @@ public class MainActivity extends AndroidApplication {
         ? Platform.AndroidEmulator : Platform.Android;
     platformAdapter = new AndroidPlatformAdapter(this, platform, iabHelper);
     
-    if (platformAdapter.supportsSpeech()) {
-      provisionSpeech(platformAdapter);
-    }
-    
     ScienceEngine.setPlatformAdapter(platformAdapter);
     initialize(scienceEngine, cfg);
-  }
-
-  public void provisionSpeech(IPlatformAdapter platformAdapter) {
-    // See if TTS engine can be started
-    Intent checkIntent = new Intent();
-    checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-    startActivityForResult(checkIntent, TTS_CHECK);
   }
 
   public void provisionBilling() {
@@ -151,15 +139,17 @@ public class MainActivity extends AndroidApplication {
   
   @Override
   public void onDestroy() {
-    if (!ScienceEngine.DEV_MODE.isDummyBilling() && iabHelper != null) {
-      iabHelper.dispose();
+    if (iabHelper != null) {
+      try {
+        iabHelper.dispose();
+      } catch (IllegalArgumentException ignored) {} // Illegal if provisioning was unsuccessful
+      iabHelper = null;
     }
     if (mTts != null) {
       mTts.stop();
       mTts.shutdown();
       mTts = null;
     }
-    iabHelper = null;
     super.onDestroy();
   }
 
