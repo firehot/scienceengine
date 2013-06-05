@@ -151,7 +151,9 @@ public class MainActivity extends AndroidApplication {
   
   @Override
   public void onDestroy() {
-    if (iabHelper != null) iabHelper.dispose();
+    if (!ScienceEngine.DEV_MODE.isDummyBilling() && iabHelper != null) {
+      iabHelper.dispose();
+    }
     if (mTts != null) {
       mTts.stop();
       mTts.shutdown();

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,6 +18,7 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
  */
 public class LoadingScienceTrain extends AbstractScreen {
 
+  private static final float INCREMENT = 0.1f;
   private float startX, endX;
   private float percent;
 
@@ -28,6 +28,7 @@ public class LoadingScienceTrain extends AbstractScreen {
   private float endY;
   private Image railTracks;
   private Label loading;
+  private float alpha;
 
   public LoadingScienceTrain(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
     super(scienceEngine);
@@ -90,11 +91,20 @@ public class LoadingScienceTrain extends AbstractScreen {
     if (assetManager.update()) {
       scienceEngine.setScreen(nextScreen);
     }
-    // Interpolate the percentage to make it smoother
-    percent = Interpolation.linear.apply(percent,
-        assetManager.getProgress(), 0.1f);
 
-    loading.setText("Loading...Please Wait..." + Math.round(percent*100) + "%");
+    float loaded = assetManager.getLoadedAssets();
+    float waiting = assetManager.getQueuedAssets();
+    
+    float newPercent = loaded * 0.9f / (loaded + waiting);
+    if (percent < newPercent - INCREMENT) {
+      alpha += INCREMENT;
+      percent += (newPercent - percent) * alpha;
+    } else {
+      percent = newPercent;
+      alpha = 0;
+    }
+    
+    loading.setText("Loading...Please Wait..." + Math.round(percent*95) + "%");
 
     // Update positions (and size) to match the percentage
     train.setX(startX + endX * percent);
