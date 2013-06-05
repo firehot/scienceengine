@@ -274,7 +274,7 @@ public class TopicHomeScreen extends AbstractScreen {
     ScrollPane resourcePane = new ScrollPane(resourcesTable, getSkin());
     LabelStyle blackBackground = new LabelStyle(getSkin().get(LabelStyle.class));
     blackBackground.background = 
-        new TextureRegionDrawable(ScreenUtils.createTextureRegion(20, 20, Color.BLACK));
+        new TextureRegionDrawable(ScreenUtils.createTextureRegion(20, 20, getSkin().getColor("background")));
     
     for (int i = 0; i < resources.size; i++) {
       Table resource = new Table(getSkin());
