@@ -15,7 +15,6 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.app.dialogs.UserHomeDialog;
 import com.mazalearn.scienceengine.app.services.InstallProfile;
-import com.mazalearn.scienceengine.app.services.MusicManager.ScienceEngineMusic;
 import com.mazalearn.scienceengine.app.services.PreferencesManager;
 import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
@@ -66,7 +65,7 @@ public class SplashScreen extends AbstractScreen {
     
     // start playing the hum music
     ScienceEngine.getMusicManager().stop();
-    ScienceEngine.getMusicManager().play(ScienceEngineMusic.HUM);
+    //ScienceEngine.getMusicManager().play(ScienceEngineMusic.HUM);
     
     ClickListener startListener = new CommandClickListener() {
       @Override

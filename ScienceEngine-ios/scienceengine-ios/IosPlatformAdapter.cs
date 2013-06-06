@@ -71,12 +71,14 @@ namespace scienceengineios {
       (notification) => {
         billing.purchaseCallback(sku);
         NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
+        NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
       });
 
       requestObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerRequestFailedNotification, 
                                                                        (notification) => {
         Console.WriteLine ("Request Failed");
         billing.purchaseCallback(null);
+        NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
         NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
       });
       
@@ -134,17 +136,27 @@ namespace scienceengineios {
 					inventory.addSkuDetails(skuDetails);
 				}
         NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
+        NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
 				billing.inventoryCallback(inventory);
 			});
+
+      requestObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerRequestFailedNotification, 
+                                                                       (notification) => {
+        Console.WriteLine ("Request Failed");
+        billing.inventoryCallback(null);
+        NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
+        NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
+      });
+      
 			// only if we can make payments, request the prices
 			if (iap.CanMakePayments ()) {
 				// now go get prices, if we don't have them already
 				if (!pricesLoaded)
 					iap.RequestProductData (products); // async request via StoreKit -> App Store
-			  } else {
-				  // can't make payments (purchases turned off in Settings?)
-				  billing.inventoryCallback(null);
 			  }
+			} else {
+				// can't make payments (purchases turned off in Settings?)
+				billing.inventoryCallback(null);
 		  }
     }
 }

@@ -172,6 +172,7 @@ public class MainActivity extends AndroidApplication {
             installProfile.addAsAvailableTopic(topic);
           }
         }
+        installProfile.save();
       }
     });
   }
