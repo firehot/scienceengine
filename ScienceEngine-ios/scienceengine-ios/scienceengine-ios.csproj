@@ -281,9 +281,6 @@
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism.json">
       <Link>data\Electromagnetism.json</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\IResourceBuilder.jav">
-      <Link>data\IResourceBuilder.jav</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Messages.properties">
       <Link>data\Messages.properties</Link>
     </Content>
@@ -292,9 +289,6 @@
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Messages_ka.properties">
       <Link>data\Messages_ka.properties</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\ResourceBundleResourceBuilder.jav">
-      <Link>data\ResourceBundleResourceBuilder.jav</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter.json">
       <Link>data\StatesOfMatter.json</Link>
@@ -347,62 +341,32 @@
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnet.json">
       <Link>data\Electromagnetism\BarMagnet.json</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnet.png">
-      <Link>data\Electromagnetism\BarMagnet.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnetInduction.json">
       <Link>data\Electromagnetism\BarMagnetInduction.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnetInduction.png">
-      <Link>data\Electromagnetism\BarMagnetInduction.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\DCMotor.json">
       <Link>data\Electromagnetism\DCMotor.json</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\DCMotor.png">
-      <Link>data\Electromagnetism\DCMotor.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismReview.json">
       <Link>data\Electromagnetism\ElectromagnetismReview.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismReview.png">
-      <Link>data\Electromagnetism\ElectromagnetismReview.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnet.json">
       <Link>data\Electromagnetism\ElectroMagnet.json</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnet.png">
-      <Link>data\Electromagnetism\ElectroMagnet.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnetInduction.json">
       <Link>data\Electromagnetism\ElectroMagnetInduction.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnetInduction.png">
-      <Link>data\Electromagnetism\ElectroMagnetInduction.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Field.json">
       <Link>data\Electromagnetism\Field.json</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Field.png">
-      <Link>data\Electromagnetism\Field.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\TwoWires.json">
       <Link>data\Electromagnetism\TwoWires.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\TwoWires.png">
-      <Link>data\Electromagnetism\TwoWires.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\SOM.json">
       <Link>data\StatesOfMatter\SOM.json</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\SOM.png">
-      <Link>data\StatesOfMatter\SOM.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Waves\W.json">
       <Link>data\Waves\W.json</Link>
-    </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Waves\W.png">
-      <Link>data\Waves\W.png</Link>
     </Content>
     <Content Include="..\..\ScienceEngine-android\assets\sound\chime.mp3">
       <Link>sound\chime.mp3</Link>
@@ -494,9 +458,6 @@
     <Content Include="..\..\ScienceEngine-android\assets\music\vivaldi-spring-2.mp3">
       <Link>music\vivaldi-spring-2.mp3</Link>
     </Content>
-    <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismScienceTrain.png">
-      <Link>data\Electromagnetism\ElectromagnetismScienceTrain.png</Link>
-    </Content>
     <Content Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismScienceTrain.json">
       <Link>data\Electromagnetism\ElectromagnetismScienceTrain.json</Link>
     </Content>
@@ -582,5 +543,44 @@
     <BundleResource Include="Default%402x.png" />
     <BundleResource Include="Default-Portrait.png" />
     <BundleResource Include="Default-Landscape.png" />
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnet.jpg">
+      <Link>data\Electromagnetism\BarMagnet.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\BarMagnetInduction.jpg">
+      <Link>data\Electromagnetism\BarMagnetInduction.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\DCMotor.jpg">
+      <Link>data\Electromagnetism\DCMotor.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnet.jpg">
+      <Link>data\Electromagnetism\ElectroMagnet.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectroMagnetInduction.jpg">
+      <Link>data\Electromagnetism\ElectroMagnetInduction.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismReview.jpg">
+      <Link>data\Electromagnetism\ElectromagnetismReview.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\ElectromagnetismScienceTrain.jpg">
+      <Link>data\Electromagnetism\ElectromagnetismScienceTrain.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\Field.jpg">
+      <Link>data\Electromagnetism\Field.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Electromagnetism\TwoWires.jpg">
+      <Link>data\Electromagnetism\TwoWires.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\SOM.jpg">
+      <Link>data\StatesOfMatter\SOM.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\StatesOfMatter\StatesOfMatterReview.jpg">
+      <Link>data\StatesOfMatter\StatesOfMatterReview.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Waves\W.jpg">
+      <Link>data\Waves\W.jpg</Link>
+    </BundleResource>
+    <BundleResource Include="..\..\ScienceEngine-android\assets\data\Waves\WavesReview.jpg">
+      <Link>data\Waves\WavesReview.jpg</Link>
+    </BundleResource>
   </ItemGroup>
 </Project>

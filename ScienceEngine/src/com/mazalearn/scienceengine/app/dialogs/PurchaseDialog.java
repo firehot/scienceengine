@@ -3,6 +3,7 @@ package com.mazalearn.scienceengine.app.dialogs;
 import java.util.Arrays;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -124,6 +125,7 @@ public class PurchaseDialog extends Dialog {
 
   private void log(State state) {
     stats[state.index] += (float) (System.currentTimeMillis() - timeStart) / 1000.0f;
+    Gdx.app.log(ScienceEngine.LOG, "PurchaseDialog: In state: " + state.name());
   }
   
   private Table createWaitActor(final Skin skin) {
