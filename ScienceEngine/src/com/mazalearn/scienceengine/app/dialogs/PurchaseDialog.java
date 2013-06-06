@@ -18,7 +18,7 @@ import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.ScreenComponent;
 import com.mazalearn.scienceengine.StatusType;
 import com.mazalearn.scienceengine.Topic;
-import com.mazalearn.scienceengine.app.screens.LoadingScienceTrain;
+import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.services.InstallProfile;
 import com.mazalearn.scienceengine.app.services.Profile;
@@ -146,7 +146,7 @@ public class PurchaseDialog extends Dialog {
     profile.save();
     if (purchaseDone) {
       TopicHomeScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
-      scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
+      scienceEngine.setScreen(new LoadingScreen(scienceEngine, topicHomeScreen));
     }
     purchaseDone = null; // So that it will not come back in here.
     hide();    

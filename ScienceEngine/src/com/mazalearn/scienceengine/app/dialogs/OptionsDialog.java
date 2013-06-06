@@ -125,11 +125,6 @@ public class OptionsDialog extends Dialog {
         public void doCommand() {
           boolean enabled = speechCheckbox.isChecked();
           preferencesManager.setSpeechEnabled(enabled);
-  
-          // if the speech is now enabled, acknowledge
-          if (enabled) {
-            platform.provisionSpeech();
-          }
         }
       });
       table.row();

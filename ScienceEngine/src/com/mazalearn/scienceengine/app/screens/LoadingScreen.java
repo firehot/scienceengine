@@ -16,7 +16,7 @@ import com.mazalearn.scienceengine.app.utils.ScreenUtils;
 /**
  * @author Mats Svensson
  */
-public class LoadingScienceTrain extends AbstractScreen {
+public class LoadingScreen extends AbstractScreen {
 
   private static final float INCREMENT = 0.1f;
   private float startX, endX;
@@ -30,7 +30,7 @@ public class LoadingScienceTrain extends AbstractScreen {
   private Label loading;
   private float alpha;
 
-  public LoadingScienceTrain(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
+  public LoadingScreen(ScienceEngine scienceEngine, AbstractScreen nextScreen) {
     super(scienceEngine);
     this.nextScreen = nextScreen;
     if (ScienceEngine.getPlatformAdapter().getPlatform() != IPlatformAdapter.Platform.GWT) {

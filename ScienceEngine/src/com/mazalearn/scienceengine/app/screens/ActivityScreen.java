@@ -174,7 +174,7 @@ public class ActivityScreen extends AbstractScreen {
     TopicHomeScreen topicHomeScreen = 
         new TopicHomeScreen(scienceEngine, topic);
     getProfile().setCurrentActivity(null);
-    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, topicHomeScreen));
   }
   
   public IScience2DController createTopicController(

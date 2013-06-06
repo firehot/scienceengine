@@ -34,7 +34,7 @@ public class UserHomeDialog extends Dialog {
 
   private Profile profile;
   private Skin skin;
-  private Image myUserImage;
+  private TextButton myUserImage;
 
   public UserHomeDialog(final Skin skin, final Image userImage) {
     super("Home", skin, "dialog");
@@ -67,7 +67,7 @@ public class UserHomeDialog extends Dialog {
     Label name = new Label(profile.getUserName(), skin);
     name.setAlignment(Align.center, Align.center);
     contentTable.add(name).fill().pad(ScreenComponent.getScaledY(10));
-    myUserImage = new Image(ScienceEngine.getTextureRegion(ScienceEngine.USER));
+    myUserImage = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion(ScienceEngine.USER), skin, "body");
     contentTable.add(myUserImage).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
     myUserImage.addListener(new CommandClickListener() {
       @Override
@@ -79,7 +79,7 @@ public class UserHomeDialog extends Dialog {
   }
 
   public void setUserImage(Drawable drawable) {
-    myUserImage.setDrawable(drawable);
+    myUserImage.setBackground(drawable);
   }
   
   private void addRegistrationRequest(Table contentTable) {

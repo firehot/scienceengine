@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
-import com.mazalearn.scienceengine.app.screens.LoadingScienceTrain;
+import com.mazalearn.scienceengine.app.screens.LoadingScreen;
 import com.mazalearn.scienceengine.app.screens.SplashScreen;
 import com.mazalearn.scienceengine.app.screens.TopicHomeScreen;
 import com.mazalearn.scienceengine.app.services.EventLog;
@@ -182,7 +182,7 @@ public class ScienceEngine extends Game {
     // show the starting screen when the scienceEngine is resized for the first timeLimit;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(new LoadingScienceTrain(this, createScreen(uri)));
+      setScreen(new LoadingScreen(this, createScreen(uri)));
     }
   }
 
@@ -222,9 +222,9 @@ public class ScienceEngine extends Game {
           }
         }
         if (iLevel != null && iLevel >= 0 && iLevel < topic.getChildren().length) {
-          return new ActivityScreen(this, topic, topic.getChildren()[iLevel]);
+          return new LoadingScreen(this, new ActivityScreen(this, topic, topic.getChildren()[iLevel]));
         }
-        return new TopicHomeScreen(this, topic);
+        return new LoadingScreen(this, new TopicHomeScreen(this, topic));
       }
     }
     return new SplashScreen(this);

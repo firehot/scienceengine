@@ -349,7 +349,7 @@ public class TopicHomeScreen extends AbstractScreen {
     AbstractScreen activityLevelScreen = 
         new ActivityScreen(scienceEngine, topic, level);
     // Set loading screen
-    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, activityLevelScreen));
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, activityLevelScreen));
   }
   
   @SuppressWarnings("unchecked")

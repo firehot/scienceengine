@@ -122,6 +122,6 @@ public class ChooseTopicScreen extends AbstractScreen {
     Gdx.app.log(ScienceEngine.LOG, "Starting " + topic); //$NON-NLS-1$
     ScienceEngine.getSoundManager().play(ScienceEngineSound.CLICK);
     AbstractScreen topicHomeScreen = new TopicHomeScreen(scienceEngine, topic);
-    scienceEngine.setScreen(new LoadingScienceTrain(scienceEngine, topicHomeScreen));
+    scienceEngine.setScreen(new LoadingScreen(scienceEngine, topicHomeScreen));
   }
 }

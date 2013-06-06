@@ -69,6 +69,11 @@ public class PreferencesManager {
   public void setSpeechEnabled(boolean speechEnabled) {
     prefs.flush();
     prefs.putBoolean(PREF_SPEECH_ENABLED, speechEnabled);
+    
+    // if the speech is now enabled, provision it.
+    if (speechEnabled) {
+      platformAdapter.provisionSpeech();
+    }
     prefs.flush();
   }
 
