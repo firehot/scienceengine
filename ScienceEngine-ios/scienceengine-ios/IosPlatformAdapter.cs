@@ -18,7 +18,6 @@ namespace scienceengineios {
     UIWindow window;
     WebViewController webViewController;
     List<string> products;
-    bool pricesLoaded = false;
     NSObject priceObserver, requestObserver, failedObserver;
     TextToSpeech textToSpeech;
     AVAudioPlayer audioPlayer;
@@ -126,15 +125,13 @@ namespace scienceengineios {
      
       // only if we can make payments, request the prices
       if (iap.CanMakePayments ()) {
-        // now go get prices, if we don't have them already
-        if (!pricesLoaded) {
-          products = new List<string> ();
-          for (int i = 0; i < topicList.size (); i++) {
-            products.Add (((Topic) topicList.get (i)).toProductId());
-          }
-          setupObserversForInventory(topicList, billing);
-          iap.RequestProductData (products); // async request via StoreKit -> App Store
+        // now go get prices
+        products = new List<string> ();
+        for (int i = 0; i < topicList.size (); i++) {
+          products.Add (((Topic) topicList.get (i)).toProductId());
         }
+        setupObserversForInventory(topicList, billing);
+        iap.RequestProductData (products); // async request via StoreKit -> App Store
       } else {
         // can't make payments (purchases turned off in Settings?)
         billing.inventoryCallback(null);
@@ -150,7 +147,6 @@ namespace scienceengineios {
         for (int i = 0; i < topicList.size (); i++) {
           NSString productId = new NSString(((Topic) topicList.get (i)).toProductId());
           if (!info.ContainsKey(productId)) continue;
-          pricesLoaded = true;
           var product = (SKProduct)info.ObjectForKey (productId);
           
           // Title and Description intentionally flipped
