@@ -90,7 +90,7 @@ namespace scienceengineios {
       Console.WriteLine("RestoreTransaction " + transaction.TransactionIdentifier + "; OriginalTransaction " + transaction.OriginalTransaction.TransactionIdentifier);
       var productId = transaction.OriginalTransaction.Payment.ProductIdentifier;
       // Register the purchase, so it is remembered for next time
-      PhotoFilterManager.Purchase(productId); // it's as though it was purchased again
+      // PhotoFilterManager.Purchase(productId); // it's as though it was purchased again
       FinishTransaction(transaction, true);
     }
     
