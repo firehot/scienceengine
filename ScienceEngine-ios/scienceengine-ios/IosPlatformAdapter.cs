@@ -26,6 +26,7 @@ namespace scienceengineios {
     InAppPurchaseManager iap;
     
     public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
+       iap = new InAppPurchaseManager ();
     }
     
     public void setWindowAndWebViewController(UIWindow window, WebViewController webViewController) {
@@ -60,11 +61,36 @@ namespace scienceengineios {
       }
     }
     
+    public override void provisionSpeech() {
+      if (!supportsSpeech() || textToSpeech != null) return;
+      textToSpeech = new TextToSpeech ();
+      textToSpeech.fliteInitFunc ();
+    }
+    
+    public override void speak (string str, bool b) {
+      if (textToSpeech == null || !ScienceEngine.getPreferencesManager().isSpeechEnabled()) return;
+      str = str.Replace ("'?'", "question mark");
+      byte[] bytes = textToSpeech.ConvertTextToWavStr(str);
+      audioPlayer = AVAudioPlayer.FromData (NSData.FromArray(bytes));
+      audioPlayer.PrepareToPlay();
+      audioPlayer.Play();
+    }
+      
+    public override bool supportsSpeech () {
+      return true;
+    }
+  
     public override void launchPurchaseFlow(Topic sku, IBilling billing) {
       if (ScienceEngine.DEV_MODE.isDummyBilling()) {
         base.launchPurchaseFlow (sku, billing);
         return;
       }
+      
+      setupObserversForPurchase(sku, billing);
+      iap.PurchaseProduct (sku.toProductId()); 
+    }
+    
+    private void setupObserversForPurchase(Topic sku, IBilling billing) {
       // iap should not be null here since we first query inventory
       priceObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerTransactionSucceededNotification, 
       (notification) => {
@@ -90,40 +116,32 @@ namespace scienceengineios {
         NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
         NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
       });
-      
-      iap.PurchaseProduct (sku.toProductId()); 
-    }
-    
-    public override void provisionSpeech() {
-      if (!supportsSpeech() || textToSpeech != null) return;
-      textToSpeech = new TextToSpeech ();
-      textToSpeech.fliteInitFunc ();
-    }
-    
-    public override void speak (string str, bool b) {
-      if (textToSpeech == null || !ScienceEngine.getPreferencesManager().isSpeechEnabled()) return;
-      str = str.Replace ("'?'", "question mark");
-      byte[] bytes = textToSpeech.ConvertTextToWavStr(str);
-      audioPlayer = AVAudioPlayer.FromData (NSData.FromArray(bytes));
-      audioPlayer.PrepareToPlay();
-      audioPlayer.Play();
     }
       
-    public override bool supportsSpeech () {
-      return true;
-    }
-  
     public override void queryInventory (java.util.List topicList, IBilling billing) {
       if (ScienceEngine.DEV_MODE.isDummyBilling()) {
         base.queryInventory (topicList, billing);
         return;
       }
-      products = new List<string> ();
-      for (int i = 0; i < topicList.size (); i++) {
-        products.Add (((Topic) topicList.get (i)).toProductId());
-      }
-      iap = new InAppPurchaseManager ();
      
+      // only if we can make payments, request the prices
+      if (iap.CanMakePayments ()) {
+        // now go get prices, if we don't have them already
+        if (!pricesLoaded) {
+          products = new List<string> ();
+          for (int i = 0; i < topicList.size (); i++) {
+            products.Add (((Topic) topicList.get (i)).toProductId());
+          }
+          setupObserversForInventory(topicList, billing);
+          iap.RequestProductData (products); // async request via StoreKit -> App Store
+        }
+      } else {
+        // can't make payments (purchases turned off in Settings?)
+        billing.inventoryCallback(null);
+      }
+    }
+    
+    private void setupObserversForInventory(java.util.List topicList, IBilling billing) {
       // setup the observer to wait for prices to come back from StoreKit <- AppStore
       priceObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerProductsFetchedNotification, 
      (notification) => {
@@ -153,17 +171,6 @@ namespace scienceengineios {
         NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
         NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
       });
-      
-      // only if we can make payments, request the prices
-      if (iap.CanMakePayments ()) {
-        // now go get prices, if we don't have them already
-        if (!pricesLoaded) {
-          iap.RequestProductData (products); // async request via StoreKit -> App Store
-        }
-      } else {
-        // can't make payments (purchases turned off in Settings?)
-        billing.inventoryCallback(null);
-      }
-    }
+    }      
   }  // IosPlatformAdapter
 }  // namespace
