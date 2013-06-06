@@ -18,10 +18,10 @@ public class AppRater {
 
   private final static String APP_TITLE = "Science Engine";
   private final static String APP_PNAME = "com.mazalearn.scienceengine";
-  private final static int DAYS_UNTIL_PROMPT = 0;
-  private final static int LAUNCHES_UNTIL_PROMPT = 2;
+  private final static int DAYS_UNTIL_PROMPT = 3;
+  private final static int LAUNCHES_UNTIL_PROMPT = 7;
 
-  public static void showRaterDialog(Stage stage, Skin skin, final Profile profile) {
+  public static void showRaterDialog(Stage stage, Skin skin, final Profile profile, boolean allowDismissForever) {
     final Dialog dialog = new Dialog("", skin, "buydialog");
     
     // retrieve the default table actor
@@ -64,21 +64,26 @@ public class AppRater {
     Button b2 = new TextButton("Remind me later", skin, "mcq");
     b2.addListener(new CommandClickListener() {
       public void doCommand() {
+        profile.setDontShowAgain(false);
         dialog.hide();
       }
     });
     table.add(b2);
     table.row();
 
-    Button b3 = new TextButton("No, thanks", skin, "mcq");
-    b3.addListener(new CommandClickListener() {
-      public void doCommand() {
-        profile.setDontShowAgain(true);
-        dialog.hide();
-      }
-    });
-    table.add(b3).padBottom(ScreenComponent.getScaledY(30));
-    table.row();
+    if (allowDismissForever) {
+      Button b3 = new TextButton("No, thanks", skin, "mcq");
+      b3.addListener(new CommandClickListener() {
+        public void doCommand() {
+          profile.setDontShowAgain(true);
+          dialog.hide();
+        }
+      });
+      table.add(b3).padBottom(ScreenComponent.getScaledY(30));
+      table.row();
+    } else {
+      table.add("").padBottom(ScreenComponent.getScaledY(30));
+    }
     dialog.show(stage);
   }
 
@@ -98,7 +103,7 @@ public class AppRater {
     if (launchCount >= LAUNCHES_UNTIL_PROMPT) {
       if (System.currentTimeMillis() >= dateFirstLaunch
           + (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
-        showRaterDialog(stage, skin, profile);
+        showRaterDialog(stage, skin, profile, true);
       }
     }
   }

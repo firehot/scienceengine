@@ -64,7 +64,7 @@ public class UserHomeDialog extends Dialog {
     rateButton.addListener(new CommandClickListener() {
       @Override
       public void doCommand() {
-        AppRater.showRaterDialog(getStage(), skin, profile);
+        AppRater.showRaterDialog(getStage(), skin, profile, false);
       }
     });
     this.getButtonTable().add(rateButton).width(ScreenComponent.getScaledX(150)).center().padRight(ScreenComponent.getScaledX(150));
