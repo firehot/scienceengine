@@ -386,4 +386,33 @@ public class Profile implements Serializable {
       markForSync(ProfileData.CLIENT_PROPS);
     }
   }
+
+  public void setDontShowAgain(boolean dontShowAgain) {
+    markForSync(ProfileData.CLIENT_PROPS);
+    data.client.dontShowAgain = dontShowAgain;
+    save();
+  }
+
+  public boolean getDontShowAgain() {
+    return data.client.dontShowAgain;
+  }
+
+  public int getLaunchCount() {
+    return data.client.launchCount;
+  }
+  
+  public int incrementLaunchCount() {
+    markForSync(ProfileData.CLIENT_PROPS);
+    ++data.client.launchCount;
+    save();
+    return data.client.launchCount;
+  }
+
+  public long getDateFirstLaunch() {
+    if (data.client.dateFirstLaunch == 0) {
+      data.client.dateFirstLaunch = System.currentTimeMillis();
+      markForSync(ProfileData.CLIENT_PROPS);
+    }
+    return data.client.dateFirstLaunch;
+  }
 }

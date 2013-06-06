@@ -64,7 +64,7 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   private final int canonicalHeight;
   private float x, y, width, height;
   private final int zIndex;
-  // TODO: Set up 3 layers for activity screen as below.
+
   public static final String CORE_GROUP = "CoreGroup";
   public static final String TUTOR_GROUP = "TutorGroup";
   public static final String ACTIVITY_GROUP = "ActivityGroup";

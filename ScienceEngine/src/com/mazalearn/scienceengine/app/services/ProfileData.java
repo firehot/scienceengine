@@ -72,6 +72,10 @@ public class ProfileData {
     public ArrayList<String> certificates = new ArrayList<String>();
     // Points earned through challenges and rapidfire
     public int points;
+    // Rating related information
+    public boolean dontShowAgain;
+    public int launchCount;
+    public long dateFirstLaunch;
   }
   public static class ServerProps {
     public String userName;

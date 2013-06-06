@@ -60,6 +60,14 @@ public class UserHomeDialog extends Dialog {
     contentTable.debug();
 
     TextButton closeButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Close"), skin, "body");
+    TextButton rateButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.RateThisApp"), skin, "body");
+    rateButton.addListener(new CommandClickListener() {
+      @Override
+      public void doCommand() {
+        AppRater.showRaterDialog(getStage(), skin, profile);
+      }
+    });
+    this.getButtonTable().add(rateButton).width(ScreenComponent.getScaledX(150)).center().padRight(ScreenComponent.getScaledX(150));
     this.getButtonTable().add(closeButton).width(ScreenComponent.getScaledX(150)).center();
   }
 
@@ -107,7 +115,6 @@ public class UserHomeDialog extends Dialog {
   }
 
   private void addCertificatesPane(Table contentTable) {
-    // TODO: Once certificate granted, show image here.
     List<TextButton> list = new ArrayList<TextButton>();
     for (String itemName: profile.getCertificates()) {
       TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);

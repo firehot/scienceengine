@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.mazalearn.scienceengine.app.dialogs.AppRater;
 import com.mazalearn.scienceengine.app.screens.AbstractScreen;
 import com.mazalearn.scienceengine.app.screens.ActivityScreen;
 import com.mazalearn.scienceengine.app.screens.LoadingScreen;
@@ -169,6 +170,7 @@ public class ScienceEngine extends Game {
       DisplayMode displayMode = Gdx.graphics.getDesktopDisplayMode();
       ScreenComponent.setSize(displayMode.width, displayMode.height);
     }
+    
     resize(ScreenComponent.VIEWPORT_WIDTH, ScreenComponent.VIEWPORT_HEIGHT);
     SCIENCE_ENGINE = this;
   }
@@ -182,7 +184,10 @@ public class ScienceEngine extends Game {
     // show the starting screen when the scienceEngine is resized for the first timeLimit;
     // this approach avoids calling the screen's resize method repeatedly
     if (getScreen() == null) {
-      setScreen(new LoadingScreen(this, createScreen(uri)));
+      setScreen(createScreen(uri));
+      Stage stage = ((AbstractScreen) getScreen()).getStage();
+      //AppRater.appLaunched(getSkin());
+      AppRater.appLaunched(stage, getSkin());
     }
   }
 

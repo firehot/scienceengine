@@ -60,7 +60,10 @@ public class SplashScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
-
+    
+    // Load sounds
+    addAssets();
+    
     // start playing the hum music
     ScienceEngine.getMusicManager().stop();
     ScienceEngine.getMusicManager().play(ScienceEngineMusic.HUM);

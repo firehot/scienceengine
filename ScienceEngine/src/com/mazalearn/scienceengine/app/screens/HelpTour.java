@@ -67,8 +67,6 @@ public class HelpTour extends Group {
       float h = contentBox.getHeight();
       if (arrowX == CENTER_POS.x && arrowY == CENTER_POS.y) {
         pos.set(CENTER_POS.x - w / 2, CENTER_POS.y - h / 2);
-        //TODO: Help button
-        //contentBox.getNextButton().setText(getMsg("HelpTour.Help"));
       } else if (sx >= 0 && sy >= 0) {
         pos.set(arrowX - w, arrowY - h);
       } else if (sx <= 0 && sy >= 0) {

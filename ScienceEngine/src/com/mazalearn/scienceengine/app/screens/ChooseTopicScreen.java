@@ -36,14 +36,14 @@ public class ChooseTopicScreen extends AbstractScreen {
   @Override
   public void show() {
     super.show();
+    // start playing the menu music
+    ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
+
     if (getProfile().getCurrentTopic() != null) {
       gotoTopicHome(getProfile().getCurrentTopic());
       return;
     }
     
-    // start playing the menu music
-    ScienceEngine.getMusicManager().play(ScienceEngineMusic.MENU);
-
     String title = getMsg("ScienceEngine.ChooseTopic");
     setTitle(title);
 
