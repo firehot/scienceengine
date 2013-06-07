@@ -18,7 +18,7 @@ public class Installation {
       if (!installation.exists()) {
       	Gdx.app.log(ScienceEngine.LOG, "Creating installation file");
       	// Following does not work on IOS - mono. Hence the weaker workaround.
-        // String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + UUID.randomUUID().toString();
+        // String id = platform + "-" + UUID.randomUUID().toString();
       	
         Random r = new Random();
         UUID uuid = new UUID(r.nextLong(), r.nextLong());
@@ -30,8 +30,8 @@ public class Installation {
   	  Gdx.app.log(ScienceEngine.LOG, "Reading installation file");     
       String id = installation.readString();
       // Validate that installation file belongs to this device - if not, delete
-      String storedDeviceId = id.substring(platform.length() + 2 + 36);
-      if (!deviceId.equals(storedDeviceId)) {
+      int len = platform.length() + 2 + 36;
+      if (id.length() <= len || !deviceId.toLowerCase().equals(id.substring(len))) {
         installation.delete();
         throw new IllegalStateException("Invalid installation: Deleting");
       }
