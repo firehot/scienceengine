@@ -37,7 +37,7 @@ public class PurchaseDialog extends Dialog {
   
   private static final String PURCHASE_FLOW = "PurchaseFlow";
   private final Skin skin;
-  private final List<Topic> topicList;
+  private final List<String> productList;
   private final ButtonGroup purchasableItems;
   private ScienceEngine scienceEngine;
   private final Topic topic;
@@ -90,19 +90,15 @@ public class PurchaseDialog extends Dialog {
     purchasableItems.setMaxCheckCount(1);
 
     // Do an inventory query to get prices and description
-    topicList = Arrays.asList(new Topic[] { topic, level});
+    productList = Arrays.asList(new String[] { topic.toProductId(), level.toProductId()});
     final InstallProfile installProfile = ScienceEngine.getPreferencesManager().getInstallProfile();
     billing = new IBilling() {
       @Override
-      public void purchaseCallback(Topic purchasedTopic) {
-        if (purchasedTopic != null) {
+      public void purchaseCallback(String productId) {
+        if (productId != null) {
           log(State.PurchaseDone); 
-          // Allow access after marking in install profile
-          installProfile.addAsAvailableTopic(purchasedTopic);
-          for (Topic child: purchasedTopic.getChildren()) {
-            installProfile.addAsAvailableTopic(child);
-          }
-          installProfile.save();
+          // Allow access after provisioning in install profile
+          installProfile.provisionProduct(productId);
           ScienceEngine.getSoundManager().play(ScienceEngineSound.SUCCESS);
           ScienceEngine.displayStatusMessage(stage, StatusType.INFO, "Purchase completed successfully");
           purchaseDone = true;
@@ -120,7 +116,7 @@ public class PurchaseDialog extends Dialog {
       }
     };
     log(State.InventoryQuery);
-    ScienceEngine.getPlatformAdapter().queryInventory(topicList, billing);
+    ScienceEngine.getPlatformAdapter().queryInventory(productList, billing);
   }
 
   private void log(State state) {
@@ -177,8 +173,8 @@ public class PurchaseDialog extends Dialog {
   }
 
   public void addPurchasableItems(Inventory inventory, Table table) {
-    for (Topic item: topicList) {
-      SkuDetails skuDetails = inventory.getSkuDetails(item.toProductId());
+    for (String productId: productList) {
+      SkuDetails skuDetails = inventory.getSkuDetails(productId);
       final TextButton topicCheckbox = ScreenUtils.createCheckBox(skuDetails.getDescription(), 0f, 0f, 300f, 30f, 
           skin.get("mcq-buy", CheckBoxStyle.class)); //$NON-NLS-1$
       topicCheckbox.getLabel().setAlignment(Align.center, Align.center);
@@ -191,7 +187,7 @@ public class PurchaseDialog extends Dialog {
       Label price = new Label(skuDetails.getPrice(), skin, "buy");
       table.add(price)
           .padRight(ScreenComponent.getScaledX(10));
-      topicCheckbox.setName(item.name());
+      topicCheckbox.setName(productId);
       purchasableItems.add(topicCheckbox);
       table.row();
     }
@@ -233,12 +229,12 @@ public class PurchaseDialog extends Dialog {
           // android.test.purchased - item already owned not handled
           // android.test.canceled - BUG: either purchasedata or datasignature is null
           // android.test.item_unavailable - shows item unavailable
-          Topic purchaseTopic = Topic.valueOf(topicButton.getName());
+          String productId = topicButton.getName();
           buttonTable.clear();
           buttonTable.add(waitActor);
           show(stage);
           log(State.PurchaseRequest);
-          ScienceEngine.getPlatformAdapter().launchPurchaseFlow(purchaseTopic, billing);
+          ScienceEngine.getPlatformAdapter().launchPurchaseFlow(productId, billing);
         } else {
           log(State.PurchaseCanceled);
           purchaseDone = false;

@@ -4,6 +4,8 @@ using MonoTouch.StoreKit;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
+using com.mazalearn.scienceengine;
+
 namespace scienceengineios {
   public class InAppPurchaseManager : SKProductsRequestDelegate {
     public static NSString InAppPurchaseManagerProductsFetchedNotification = new NSString("InAppPurchaseManagerProductsFetchedNotification");
@@ -69,14 +71,13 @@ namespace scienceengineios {
     public void CompleteTransaction (SKPaymentTransaction transaction) {
       Console.WriteLine ("CompleteTransaction " + transaction.TransactionIdentifier);
       var productId = transaction.Payment.ProductIdentifier;
-      // Register the purchase, so it is remembered for next time
-      // PhotoFilterManager.Purchase(productId);
+      // Registering the purchase, so it is remembered for next time is in GUI
       FinishTransaction (transaction, true);
 /*
       if (ReceiptValidation.VerificationController.SharedInstance.VerifyPurchase (transaction)) {
         Console.WriteLine ("Verified!");
         // Register the purchase, so it is remembered for next time
-        // PhotoFilterManager.Purchase(productId);
+        PhotoFilterManager.Purchase(productId);
         FinishTransaction (transaction, true);
       } else {
         Console.WriteLine ("NOT Verified :(");
@@ -89,8 +90,8 @@ namespace scienceengineios {
       // Restored Transactions always have an 'original transaction' attached
       Console.WriteLine("RestoreTransaction " + transaction.TransactionIdentifier + "; OriginalTransaction " + transaction.OriginalTransaction.TransactionIdentifier);
       var productId = transaction.OriginalTransaction.Payment.ProductIdentifier;
-      // Register the purchase, so it is remembered for next time
-      // PhotoFilterManager.Purchase(productId); // it's as though it was purchased again
+      // Register the purchase, it's as though it was purchased again - but without GUI
+      ScienceEngine.getPreferencesManager().getInstallProfile().provisionProduct(productId); 
       FinishTransaction(transaction, true);
     }
     

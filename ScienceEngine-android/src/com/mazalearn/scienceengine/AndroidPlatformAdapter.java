@@ -1,7 +1,6 @@
 package com.mazalearn.scienceengine;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.accounts.Account;
@@ -70,47 +69,43 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   }
 
   @Override
-  public void launchPurchaseFlow(final Topic topic, final IBilling billing) {
+  public void launchPurchaseFlow(final String productId, final IBilling billing) {
     Gdx.app.log(ScienceEngine.LOG, "Launching purchase flow.");
     if (ScienceEngine.DEV_MODE.isDummyBilling()) {
-      super.launchPurchaseFlow(topic, billing);
+      super.launchPurchaseFlow(productId, billing);
       return;
     }
-    iabHelper.launchPurchaseFlow(application, topic.toProductId(), IabHelper.ITEM_TYPE_INAPP, 
+    iabHelper.launchPurchaseFlow(application, productId, IabHelper.ITEM_TYPE_INAPP, 
         IBilling.REQUEST_CODE,
         new OnIabPurchaseFinishedListener() {
           @Override
           public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (result.getResponse() == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
               // In this case, the purchase info is missing - we allow this
-              billing.purchaseCallback(topic);
+              billing.purchaseCallback(productId);
             }
 
-            if (!verifyDeveloperPayload(purchase, topic)) {
+            if (!verifyDeveloperPayload(purchase, productId)) {
               Gdx.app.error(ScienceEngine.LOG, "Error purchasing. Authenticity verification failed.");
               return;
             }
             if (result.isSuccess()) {
-              billing.purchaseCallback(topic);
+              billing.purchaseCallback(productId);
             }
           } 
         }, getInstallationId());
   }
   
   @Override
-  public void queryInventory(List<Topic> topicList, final IBilling billing) {
+  public void queryInventory(final List<String> productList, final IBilling billing) {
     Gdx.app.log(ScienceEngine.LOG, "Querying inventory.");
     if (ScienceEngine.DEV_MODE.isDummyBilling()) {
-      super.queryInventory(topicList, billing);
+      super.queryInventory(productList, billing);
       return;
     }
     if (!iabHelper.inappItemsSupported()) {
       billing.inventoryCallback(null);
       return;
-    }
-    final List<String> productList = new ArrayList<String>();
-    for (Topic topic: topicList) {
-      productList.add(topic.toProductId());
     }
     
     application.runOnUiThread(new Runnable() {
@@ -132,16 +127,16 @@ public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   }
   
   /** Verifies the developer payload of a purchase. */
-  boolean verifyDeveloperPayload(Purchase purchase, Topic topic) {
+  boolean verifyDeveloperPayload(Purchase purchase, String productId) {
     if (purchase == null) {
       Gdx.app.error(ScienceEngine.LOG, "Error developer payload - purchase missing");
       return false;
     }
     String payload = purchase.getDeveloperPayload();
     
-    if (topic != Topic.fromProductId(purchase.getProductId())) {
-      Gdx.app.error(ScienceEngine.LOG, "Error developer payload - topic product mismatch: " + 
-          topic + " <> " + purchase.getProductId());
+    if (productId != purchase.getProductId()) {
+      Gdx.app.error(ScienceEngine.LOG, "Error developer payload - product mismatch: " + 
+          productId + " <> " + purchase.getProductId());
       return false;
     }
     

@@ -71,9 +71,9 @@ public interface IPlatformAdapter {
   // Does platform support sync to server of install and user profiles?
   public boolean supportsSync();
 
-  public void launchPurchaseFlow(Topic sku, IBilling billing);
+  public void launchPurchaseFlow(String productId, IBilling billing);
 
-  public void queryInventory(List<Topic> itemList, IBilling billing);
+  public void queryInventory(List<String> productList, IBilling billing);
 
   public boolean supportsSpeech();
   

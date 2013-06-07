@@ -163,16 +163,8 @@ public class MainActivity extends AndroidApplication {
         }
         InstallProfile installProfile = ScienceEngine.getPreferencesManager().getInstallProfile();
         for (String productId: inventory.getAllOwnedSkus()) {
-          Topic topic = Topic.fromProductId(productId);
-          if (topic == null) {
-            log(ScienceEngine.LOG, "Unknown product: " + productId);
-            continue;
-          }
-          if (!installProfile.isAvailableTopic(topic)) {
-            installProfile.addAsAvailableTopic(topic);
-          }
+          installProfile.provisionProduct(productId);
         }
-        installProfile.save();
       }
     });
   }

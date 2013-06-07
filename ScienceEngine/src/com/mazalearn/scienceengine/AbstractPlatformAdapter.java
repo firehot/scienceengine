@@ -86,7 +86,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   }
   
   @Override
-  public void launchPurchaseFlow(final Topic sku, final IBilling billing) {
+  public void launchPurchaseFlow(final String productId, final IBilling billing) {
     if (ScienceEngine.DEV_MODE.isDummyBilling()) {
       // Simulate an asynchronous purchase flow
       executeAsync(new Runnable() {
@@ -97,7 +97,7 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
-          billing.purchaseCallback(sku);
+          billing.purchaseCallback(productId);
         }
       });
       return;
@@ -106,15 +106,16 @@ public abstract class AbstractPlatformAdapter implements IPlatformAdapter {
   }
 
   @Override
-  public void queryInventory(List<Topic> topicList, final IBilling billing) {
+  public void queryInventory(List<String> productList, final IBilling billing) {
     if (!ScienceEngine.DEV_MODE.isDummyBilling()) {
       throw new UnsupportedOperationException("Query Inventory not implemented");
     }
     final Inventory inventory = new Inventory();
-    for (Topic topic: topicList) {
+    for (String productId: productList) {
+      Topic topic = Topic.fromProductId(productId);
       StringBuffer json = new StringBuffer();
       json.append("{");
-      json.append("productId:\"" + topic.toProductId() + "\"");
+      json.append("productId:\"" + productId + "\"");
       json.append(",title:\"" + topic.name() + "\"");
       json.append(",description:\"" + topic.getDescription() + "\"");
       json.append(",price:" + (topic.getChildren().length > 0 ? "\"$4.99\"" : "\"$0.99\""));

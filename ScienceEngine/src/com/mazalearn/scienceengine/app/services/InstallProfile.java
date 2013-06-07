@@ -57,6 +57,8 @@ public class InstallProfile implements Serializable {
   }
 
   public void save() {
+    if (!data.isChanged) return;
+    
     data.lastUpdated = System.currentTimeMillis();
     ScienceEngine.getPreferencesManager().saveInstallProfile();
   }
@@ -90,9 +92,24 @@ public class InstallProfile implements Serializable {
    * Only method which modifies installation profile data on client side.
    * @param topic
    */
-  public void addAsAvailableTopic(Topic topic) {
-    data.availableTopicNames.add(topic.name());
-    data.isChanged = true;
+  private void addAsAvailableTopic(Topic topic) {
+    if (!isAvailableTopic(topic)) {
+      data.availableTopicNames.add(topic.name());
+      data.isChanged = true;
+    }
+  }
+  
+  public void provisionProduct(String productId) {
+    Topic topic = Topic.fromProductId(productId);
+    if (topic == null) {
+      Gdx.app.error(ScienceEngine.LOG, "Cannot provision productid: " + productId);
+      return;
+    }
+    addAsAvailableTopic(topic);
+    for (Topic child: topic.getChildren()) {
+      addAsAvailableTopic(child);
+    }
+    save();
   }
   
   public static InstallProfile fromBase64(String profileBase64AndHash) {

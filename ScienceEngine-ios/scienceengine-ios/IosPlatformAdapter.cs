@@ -79,21 +79,21 @@ namespace scienceengineios {
       return true;
     }
   
-    public override void launchPurchaseFlow(Topic sku, IBilling billing) {
+    public override void launchPurchaseFlow(String productId, IBilling billing) {
       if (ScienceEngine.DEV_MODE.isDummyBilling()) {
-        base.launchPurchaseFlow (sku, billing);
+        base.launchPurchaseFlow (productId, billing);
         return;
       }
       
-      setupObserversForPurchase(sku, billing);
-      iap.PurchaseProduct (sku.toProductId()); 
+      setupObserversForPurchase(productId, billing);
+      iap.PurchaseProduct (productId); 
     }
     
-    private void setupObserversForPurchase(Topic sku, IBilling billing) {
+    private void setupObserversForPurchase(String productId, IBilling billing) {
       // iap should not be null here since we first query inventory
       priceObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerTransactionSucceededNotification, 
       (notification) => {
-        billing.purchaseCallback(sku);
+        billing.purchaseCallback(productId);
         NSNotificationCenter.DefaultCenter.RemoveObserver (priceObserver);
         NSNotificationCenter.DefaultCenter.RemoveObserver (failedObserver);
         NSNotificationCenter.DefaultCenter.RemoveObserver (requestObserver);
@@ -117,9 +117,9 @@ namespace scienceengineios {
       });
     }
       
-    public override void queryInventory (java.util.List topicList, IBilling billing) {
+    public override void queryInventory (java.util.List productList, IBilling billing) {
       if (ScienceEngine.DEV_MODE.isDummyBilling()) {
-        base.queryInventory (topicList, billing);
+        base.queryInventory (productList, billing);
         return;
       }
      
@@ -127,10 +127,10 @@ namespace scienceengineios {
       if (iap.CanMakePayments ()) {
         // now go get prices
         products = new List<string> ();
-        for (int i = 0; i < topicList.size (); i++) {
-          products.Add (((Topic) topicList.get (i)).toProductId());
+        for (int i = 0; i < productList.size (); i++) {
+          products.Add (productList.get (i));
         }
-        setupObserversForInventory(topicList, billing);
+        setupObserversForInventory(productList, billing);
         iap.RequestProductData (products); // async request via StoreKit -> App Store
       } else {
         // can't make payments (purchases turned off in Settings?)
@@ -138,14 +138,14 @@ namespace scienceengineios {
       }
     }
     
-    private void setupObserversForInventory(java.util.List topicList, IBilling billing) {
+    private void setupObserversForInventory(java.util.List productList, IBilling billing) {
       // setup the observer to wait for prices to come back from StoreKit <- AppStore
       priceObserver = NSNotificationCenter.DefaultCenter.AddObserver (InAppPurchaseManager.InAppPurchaseManagerProductsFetchedNotification, 
      (notification) => {
         var info = notification.UserInfo;
         Inventory inventory = new Inventory();
-        for (int i = 0; i < topicList.size (); i++) {
-          NSString productId = new NSString(((Topic) topicList.get (i)).toProductId());
+        for (int i = 0; i < productList.size (); i++) {
+          NSString productId = new NSString(productList.get (i));
           if (!info.ContainsKey(productId)) continue;
           var product = (SKProduct)info.ObjectForKey (productId);
           
