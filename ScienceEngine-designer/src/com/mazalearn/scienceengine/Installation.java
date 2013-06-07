@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.mazalearn.scienceengine.app.utils.Crypter;
 
 public class Installation {
   private static String sID = null;
@@ -22,20 +23,23 @@ public class Installation {
       	
         Random r = new Random();
         UUID uuid = new UUID(r.nextLong(), r.nextLong());
-        String id = platform + "-" + uuid.toString() + "-" + deviceId;
-        id = id.toLowerCase();
+        String sId = platform + "-" + uuid.toString();
+        sId = sId.toLowerCase();
+        String hash = Crypter.saltedSha1Hash(sId, deviceId);
+        String id = sId + "-" + hash;
         Gdx.app.log(ScienceEngine.LOG, "Installation id: " + id);
         installation.writeBytes(id.getBytes(), false);
       }
   	  Gdx.app.log(ScienceEngine.LOG, "Reading installation file");     
       String id = installation.readString();
       // Validate that installation file belongs to this device - if not, delete
+      sID = id.substring(0, platform.length() + 1 + 36);
+      String hash = Crypter.saltedSha1Hash(sID, deviceId);
       int len = platform.length() + 2 + 36;
-      if (id.length() <= len || !deviceId.toLowerCase().equals(id.substring(len))) {
+      if (id.length() <= len || !hash.equals(id.substring(len))) {
         installation.delete();
         throw new IllegalStateException("Invalid installation: Deleting");
       }
-      sID = id.substring(0, platform.length() + 1 + 36);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
