@@ -80,5 +80,8 @@ public interface IPlatformAdapter {
   public void speak(String text, boolean append);
 
   public void provisionSpeech();
+
+  // Only for internal use
+  public String getDeviceId();
 }
 

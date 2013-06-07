@@ -9,7 +9,7 @@ import com.badlogic.gdx.files.FileHandle;
 public class Installation {
   private static String sID = null;
   private static final String INSTALLATION = "data/INSTALLATION";
-  public synchronized static String id() {
+  public synchronized static String id(String platform, String deviceId) {
     if (sID != null) return sID;
     
     FileHandle installation = Gdx.files.external(INSTALLATION);
@@ -22,13 +22,20 @@ public class Installation {
       	
         Random r = new Random();
         UUID uuid = new UUID(r.nextLong(), r.nextLong());
-        String id = ScienceEngine.getPlatformAdapter().getPlatform() + "-" + uuid.toString();
+        String id = platform + "-" + uuid.toString() + "-" + deviceId;
         id = id.toLowerCase();
         Gdx.app.log(ScienceEngine.LOG, "Installation id: " + id);
         installation.writeBytes(id.getBytes(), false);
       }
   	  Gdx.app.log(ScienceEngine.LOG, "Reading installation file");     
-      sID = installation.readString();
+      String id = installation.readString();
+      // Validate that installation file belongs to this device - if not, delete
+      String storedDeviceId = id.substring(platform.length() + 2 + 36);
+      if (!deviceId.equals(storedDeviceId)) {
+        installation.delete();
+        throw new IllegalStateException("Invalid installation: Deleting");
+      }
+      sID = id.substring(0, platform.length() + 1 + 36);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

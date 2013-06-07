@@ -21,11 +21,13 @@ namespace scienceengineios {
     NSObject priceObserver, requestObserver, failedObserver;
     TextToSpeech textToSpeech;
     AVAudioPlayer audioPlayer;
+    MonoTouch.Foundation.NSUuid deviceId;
     
     InAppPurchaseManager iap;
     
     public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
        iap = new InAppPurchaseManager ();
+       deviceId = MonoTouch.UIKit.UIDevice.IdentifierForVendor;
     }
     
     public void setWindowAndWebViewController(UIWindow window, WebViewController webViewController) {

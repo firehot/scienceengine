@@ -24,17 +24,25 @@ import com.mazalearn.scienceengine.billing.IabHelper.OnIabPurchaseFinishedListen
 import com.mazalearn.scienceengine.billing.IabResult;
 import com.mazalearn.scienceengine.billing.Inventory;
 import com.mazalearn.scienceengine.billing.Purchase;
+import android.provider.Settings.Secure;
 
 public class AndroidPlatformAdapter extends NonWebPlatformAdapter {
   private static final int PAUSE_MS = 1000;
   private AndroidApplication application;
   private IabHelper iabHelper;
   private TextToSpeech textToSpeech;
+  private String deviceId;
   
   public AndroidPlatformAdapter(AndroidApplication application, Platform platform, IabHelper iabHelper) {
     super(platform);
     this.application = application;
     this.iabHelper = iabHelper;
+    deviceId = Secure.getString(application.getContentResolver(), Secure.ANDROID_ID);
+  }
+
+  @Override
+  public String getDeviceId() {
+    return deviceId;
   }
 
   public IMessage getMsg() {

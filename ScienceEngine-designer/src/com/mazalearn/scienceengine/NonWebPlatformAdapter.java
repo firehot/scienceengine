@@ -177,7 +177,12 @@ public class NonWebPlatformAdapter extends AbstractPlatformAdapter {
 
   @Override
   public String getInstallationId() {
-    return Installation.id();
+    return Installation.id(getPlatform().name(), getDeviceId());
+  }
+
+  @Override
+  public String getDeviceId() {
+    return "desktop";
   }
 
   @Override

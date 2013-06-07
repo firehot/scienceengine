@@ -164,4 +164,9 @@ class GwtPlatformAdapter extends AbstractPlatformAdapter {
   public boolean supportsSync() {
     return false;
   }
+
+  @Override
+  public String getDeviceId() {
+    return "Gwt";
+  }
 }
