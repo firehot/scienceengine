@@ -21,13 +21,13 @@ namespace scienceengineios {
     NSObject priceObserver, requestObserver, failedObserver;
     TextToSpeech textToSpeech;
     AVAudioPlayer audioPlayer;
-    MonoTouch.Foundation.NSUuid deviceId;
+    string deviceId;
     
     InAppPurchaseManager iap;
     
     public IosPlatformAdapter (): base(IPlatformAdapter.Platform.IOS) {
        iap = new InAppPurchaseManager ();
-       deviceId = MonoTouch.UIKit.UIDevice.IdentifierForVendor;
+       deviceId = MonoTouch.UIKit.UIDevice.CurrentDevice.IdentifierForVendor.AsString();
     }
     
     public void setWindowAndWebViewController(UIWindow window, WebViewController webViewController) {
@@ -35,6 +35,10 @@ namespace scienceengineios {
       this.webViewController = webViewController;
     }
     
+    public override string getDeviceId() {
+      return deviceId;
+    }
+
     public override void browseURL (string url) {
       webViewController.load (new NSUrlRequest(new NSUrl(url)));
       window.MakeKeyAndVisible ();
@@ -130,7 +134,7 @@ namespace scienceengineios {
         // now go get prices
         products = new List<string> ();
         for (int i = 0; i < productList.size (); i++) {
-          products.Add (productList.get (i));
+          products.Add ( (string) productList.get (i));
         }
         setupObserversForInventory(productList, billing);
         iap.RequestProductData (products); // async request via StoreKit -> App Store
@@ -147,7 +151,7 @@ namespace scienceengineios {
         var info = notification.UserInfo;
         Inventory inventory = new Inventory();
         for (int i = 0; i < productList.size (); i++) {
-          NSString productId = new NSString(productList.get (i));
+          NSString productId = new NSString((string) productList.get (i));
           if (!info.ContainsKey(productId)) continue;
           var product = (SKProduct)info.ObjectForKey (productId);
           
