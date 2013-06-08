@@ -53,7 +53,7 @@ public class EmailUtil {
     }
   }
 
-  void sendCertificateEmail(String userEmail, String userName, String userId, String dateStr, OutputStream outputStream, ServletContext servletContext) {
+  void sendCertificateEmail(String topic, String userEmail, String userName, String userId, String dateStr, OutputStream outputStream, ServletContext servletContext) {
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);
   
@@ -61,7 +61,7 @@ public class EmailUtil {
         "Your ceriticate for Electromagnetism is attached" + 
         "\n\n-MazaLearn";
     ByteArrayOutputStream op = new ByteArrayOutputStream();
-    PdfCertificateMaker.makeCertificate(servletContext, userName, dateStr, op);
+    PdfCertificateMaker.makeCertificate(servletContext, topic, userName, dateStr, op);
     byte[] pdfBytes = op.toByteArray();
     try {
         outputStream.write(pdfBytes);

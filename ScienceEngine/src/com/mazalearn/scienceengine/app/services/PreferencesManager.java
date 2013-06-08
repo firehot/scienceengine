@@ -10,6 +10,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
+import com.mazalearn.scienceengine.app.utils.ServerConstants;
 
 /**
  * Handles the scienceEngine preferences.
@@ -97,6 +98,7 @@ public class PreferencesManager {
     String userId = getProfileUserId();
     userProfile = getUserProfile(userId);
     userProfile.setPlatform(platformAdapter.getPlatform());
+    userProfile.setInstallationId(platformAdapter.getInstallationId());
     if (userProfile.getUserEmail().length() > 0) {
       prefs.putString(ProfileData.USER_ID, userProfile.getUserEmail());
       prefs.flush();
@@ -115,7 +117,8 @@ public class PreferencesManager {
     return profile;
   }
 
-  private String getProfileUserId() {
+  // The userid for currently active profile - useremail if available, else installid
+  public String getProfileUserId() {
     String userId = prefs.getString(ProfileData.USER_ID);
     if (userId == null || userId.length() == 0) {
       userId = platformAdapter.getInstallationId();
@@ -236,12 +239,12 @@ public class PreferencesManager {
           Map<String, String> postParams = new HashMap<String, String>();
           postParams.put(ProfileData.INSTALL_ID, installId);
           installProfileBase64 = installProfile.toBase64();
-          installProfileBase64 = platformAdapter.httpPost("/installprofile",
+          installProfileBase64 = platformAdapter.httpPost(ServerConstants.INSTALL_PROFILE_SERVLET,
               "application/octet-stream", postParams, installProfileBase64.getBytes());
           Gdx.app.log(ScienceEngine.LOG, "Sync Install Profile to MazaLearn - " + installId);
           installProfile.markChanged(false);
        } else {
-          installProfileBase64 = platformAdapter.httpGet("/installprofile?" + 
+          installProfileBase64 = platformAdapter.httpGet(ServerConstants.INSTALL_PROFILE_SERVLET + "?" + 
               ProfileData.INSTALL_ID + "=" + installId + "&" + 
               ProfileData.LAST_UPDATED + "=" + String.valueOf(lastUpdated));
         }
@@ -270,7 +273,7 @@ public class PreferencesManager {
       try {
         // Post userProfile to server and get back updated server userProfile
         String serverProfileBase64 =
-            platformAdapter.httpPost("/profile", "application/octet-stream", 
+            platformAdapter.httpPost(ServerConstants.USER_PROFILE_SERVLET, "application/octet-stream", 
                 postParams, syncProfileBase64.getBytes());
         prefs.putString(SERVER_PROFILE_PREFIX + userId, serverProfileBase64);
         Gdx.app.log(ScienceEngine.LOG, "Sync Profile to MazaLearn - " + userId);

@@ -155,6 +155,28 @@ public class Guru extends Group implements ITutor {
     return tutorHelper;
   }
   
+  public String getLevelEndMessage(boolean success) {
+    int progress = Math.round(rootTutor.getStats()[ITutor.PERCENT_PROGRESS]);
+    String progressStr = "Progress = " + progress + "%\n\n\n\n";
+    if (success && progress >= 80) {
+      // If we are in revision mode, show a level end message for revision completed.
+      if (tutorHelper.isRevisionMode() && rootTutor.getChildTutors().get(0).getType() != TutorType.Reviewer) {
+        return progressStr + ScienceEngine.getMsg().getString("Revision.Success");        
+      }
+      // Assumption - second last level in any topic is the certification level
+      // last level is the Science Train level.
+      Topic[] topicLevels = science2DController.getTopic().getChildren();
+      if (science2DController.getLevel() == topicLevels[topicLevels.length - 2]) {
+        Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
+        profile.addCertificate(science2DController.getTopic().name());
+      }
+      return progressStr + ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
+          science2DController.getLevel() + ".Success");
+    }
+    // TODO: Each level should have own failure message. 
+    return progressStr + ScienceEngine.getMsg().getString("Level.Failure");
+  }
+
   ////////////////////////////////
   /// ITutor Implementation     //
   ////////////////////////////////
@@ -277,28 +299,6 @@ public class Guru extends Group implements ITutor {
   @Override
   public String[] getRefs() {
     return rootTutor.getRefs();
-  }
-
-  public String getLevelEndMessage(boolean success) {
-    int progress = Math.round(rootTutor.getStats()[ITutor.PERCENT_PROGRESS]);
-    String progressStr = "Progress = " + progress + "%\n\n\n\n";
-    if (success && progress >= 80) {
-      // If we are in revision mode, show a level end message for revision completed.
-      if (tutorHelper.isRevisionMode()) {
-        return progressStr + ScienceEngine.getMsg().getString("Revision.Success");        
-      }
-      // Assumption - second last level in any topic is the certification level
-      // last level is the Science Train level.
-      Topic[] topicLevels = science2DController.getTopic().getChildren();
-      if (science2DController.getLevel() == topicLevels[topicLevels.length - 2]) {
-        Profile profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
-        profile.addCertificate(science2DController.getTopic().name());
-      }
-      return progressStr + ScienceEngine.getMsg().getString(science2DController.getTopic() + "." + 
-          science2DController.getLevel() + ".Success");
-    }
-    // TODO: Each level should have own failure message. 
-    return progressStr + ScienceEngine.getMsg().getString("Level.Failure");
   }
 
   @Override

@@ -21,6 +21,7 @@ import com.mazalearn.scienceengine.app.services.Profile;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.services.ProfileData.Social.Message;
 import com.mazalearn.scienceengine.app.utils.ScreenUtils;
+import com.mazalearn.scienceengine.app.utils.ServerConstants;
 import com.mazalearn.scienceengine.core.view.CommandClickListener;
 import com.mazalearn.scienceengine.core.view.DrawingActor;
 
@@ -107,7 +108,8 @@ public class UserHomeDialog extends Dialog {
         // Hide this dialog
         UserHomeDialog.this.hide();
         // Bring up registration form
-        ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + "/registration.jsp?" + 
+        ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + 
+            ServerConstants.REGISTRATION_SERVLET + "?" + 
             ProfileData.INSTALL_ID + "=" + profile.getInstallationId() + "&" +
             ProfileData.USER_EMAIL + "=" + profile.getUserEmail());
       }
@@ -116,8 +118,18 @@ public class UserHomeDialog extends Dialog {
 
   private void addCertificatesPane(Table contentTable) {
     List<TextButton> list = new ArrayList<TextButton>();
-    for (String itemName: profile.getCertificates()) {
+    for (final String itemName: profile.getCertificates()) {
       TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, itemName);
+      item.addListener(new CommandClickListener() {
+        @Override
+        public void doCommand() {
+          String userId = (profile.getUserEmail().length() > 0) ? profile.getUserEmail() : profile.getInstallationId();
+          ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + 
+              ServerConstants.CERTIFICATE_SERVLET + "?" +  
+              ProfileData.USER_ID + "=" + userId + "&" +
+              ServerConstants.TOPIC + "=" + itemName);
+        }        
+      });
       list.add(item);
     }    
     String[] dummyCertificates = {"certificate", "award", "award", "achievement", "certificate"};

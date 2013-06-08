@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.PropertyContainer;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 
 @SuppressWarnings("serial")
 public class EmailCertificateServlet extends HttpServlet {
@@ -20,7 +21,8 @@ public class EmailCertificateServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String userId = request.getParameter(ProfileData.USER_ID).toLowerCase();
-    System.out.println("EmailCertificate - User: " + userId);
+    String topic = request.getParameter("topic");
+    System.out.println("EmailCertificate - User: " + userId + " ," + topic);
 
     ProfileUtil profileUtil = new ProfileUtil();
     PropertyContainer user = profileUtil.retrieveUser(userId);
@@ -29,6 +31,11 @@ public class EmailCertificateServlet extends HttpServlet {
       return;
     }
 
+    if (topic == null) { 
+      response.getWriter().append("Could not find topic");
+      return;
+    }
+    
     EmbeddedEntity profile = ProfileUtil.createOrGetUserProfile(user, true);
     
     String userEmail = userId;
@@ -36,7 +43,9 @@ public class EmailCertificateServlet extends HttpServlet {
       response.getWriter().append("Improper email address. Cannot send certificate");
       return;
     }
-    String userName = (String) profile.getProperty(ProfileData.USER_NAME);
+    
+    ServerProps serverProps = new JsonEntityUtil().getFromJsonTextProperty(profile, ProfileData.SERVER_PROPS, ServerProps.class);
+    String userName = serverProps.userName;
     if (userName == null || userName.length() < 2) {
       response.getWriter().append("Cannot create certificate - Improper Name" + userName);
       return;
@@ -46,7 +55,7 @@ public class EmailCertificateServlet extends HttpServlet {
     String dateStr = dateFormat.format(date);
 
     //response.getWriter().append("Certificate sent to: " + userEmail);
-    new EmailUtil().sendCertificateEmail(userEmail, userName, userId, dateStr, response.getOutputStream(), getServletContext());
+    new EmailUtil().sendCertificateEmail(topic, userEmail, userName, userId, dateStr, response.getOutputStream(), getServletContext());
   }
 }
 

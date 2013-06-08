@@ -107,8 +107,9 @@ public class CurrentCoil extends Science2DBody implements ICurrent.Sink {
       return (angle > MathUtils.PI * 0.5 && angle <= MathUtils.PI * 1.5) ? -current : current;
     case Connector:
       return current;
+    default:
+      return 0;
     }
-    return 0;
   }
 
   @Override

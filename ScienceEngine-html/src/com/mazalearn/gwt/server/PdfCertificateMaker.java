@@ -18,10 +18,10 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 
 public class PdfCertificateMaker {
 
-  public static void makeCertificate(ServletContext servletContext, String userName, String dateStr, OutputStream outputStream) {
+  public static void makeCertificate(ServletContext servletContext, String topic, String userName, String dateStr, OutputStream outputStream) {
     PDDocument document = null;
     try {
-      InputStream inp = servletContext.getResourceAsStream("/assets/data/Electromagnetism/EMReview.pdf");
+      InputStream inp = servletContext.getResourceAsStream("/assets/data/" + topic + "/" + topic + "Certificate.pdf");
         document = PDDocument.load( inp );
         // Get the first page
         PDPage page = (PDPage)document.getDocumentCatalog().getAllPages().get( 0 );

@@ -2,11 +2,9 @@ package com.mazalearn.gwt.server;
 
 import java.lang.reflect.Constructor;
 
-import com.badlogic.gdx.Gdx;
 import com.google.appengine.api.datastore.PropertyContainer;
 import com.google.appengine.api.datastore.Text;
 import com.google.gson.Gson;
-import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.services.InstallData;
 import com.mazalearn.scienceengine.app.services.ProfileData;
 import com.mazalearn.scienceengine.app.utils.Crypter;

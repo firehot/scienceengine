@@ -312,6 +312,11 @@ public class Profile implements Serializable {
     return data.client.installId;
   }
 
+
+  public void setInstallationId(String installationId) {
+    data.client.installId = installationId;
+  }
+  
   public static Profile fromBase64(String profileBase64) {
     Profile profile = null;
     if (profileBase64 != null && profileBase64.length() > 0) {
