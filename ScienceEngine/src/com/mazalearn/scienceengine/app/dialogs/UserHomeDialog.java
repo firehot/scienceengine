@@ -48,9 +48,9 @@ public class UserHomeDialog extends Dialog {
     // Name and face
     addUserInfo(userImage, contentTable);
     
+    addCertificatesPane(contentTable);
     // Registration information
     if (profile.isRegistered()) {
-      addCertificatesPane(contentTable);
       addSocialPane(contentTable);
     } else {
       addRegistrationRequest(contentTable);
@@ -70,6 +70,7 @@ public class UserHomeDialog extends Dialog {
     });
     this.getButtonTable().add(rateButton).width(ScreenComponent.getScaledX(150)).center().padRight(ScreenComponent.getScaledX(150));
     this.getButtonTable().add(closeButton).width(ScreenComponent.getScaledX(150)).center();
+//    Gdx.graphics.requestRendering();
   }
 
   private void addUserInfo(final Image userImage, Table contentTable) {
@@ -123,11 +124,14 @@ public class UserHomeDialog extends Dialog {
       item.addListener(new CommandClickListener() {
         @Override
         public void doCommand() {
-          String userId = (profile.getUserEmail().length() > 0) ? profile.getUserEmail() : profile.getInstallationId();
-          ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + 
-              ServerConstants.CERTIFICATE_SERVLET + "?" +  
-              ProfileData.USER_ID + "=" + userId + "&" +
-              ServerConstants.TOPIC + "=" + itemName);
+          if (profile.getUserEmail().length() > 0) {
+            ScienceEngine.getPlatformAdapter().browseURL("http://" + ScienceEngine.getHostPort() + 
+                ServerConstants.CERTIFICATE_SERVLET + "?" +  
+                ProfileData.USER_ID + "=" + profile.getUserEmail() + "&" +
+                ServerConstants.TOPIC + "=" + itemName);
+          } else {
+            new MessageDialog(skin, "To view your ceritificate, you must be registered.").show(getStage());
+          }
         }        
       });
       list.add(item);

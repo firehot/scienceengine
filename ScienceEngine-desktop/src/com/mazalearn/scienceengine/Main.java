@@ -1,6 +1,5 @@
 package com.mazalearn.scienceengine;
 
-
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter.Platform;

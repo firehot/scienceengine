@@ -54,8 +54,10 @@ public class EmailCertificateServlet extends HttpServlet {
     DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
     String dateStr = dateFormat.format(date);
 
-    //response.getWriter().append("Certificate sent to: " + userEmail);
-    new EmailUtil().sendCertificateEmail(topic, userEmail, userName, userId, dateStr, response.getOutputStream(), getServletContext());
+    byte[] pdfBytes = PdfCertificateMaker.makeCertificate(getServletContext(), topic, userName, dateStr);
+    response.getOutputStream().write(pdfBytes);
+    // Email sending of certificate seems unnecessary
+    // new EmailUtil().sendCertificateEmail(topic, userEmail, userName, userId, dateStr, pdfBytes);
   }
 }
 

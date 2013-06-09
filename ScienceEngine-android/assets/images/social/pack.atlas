@@ -5,55 +5,50 @@ filter: Nearest,Nearest
 repeat: none
 gift3
   rotate: false
-  xy: 1, 520
+  xy: 1, 424
   size: 395, 490
   orig: 395, 490
   offset: 0, 0
   index: -1
 opengift
   rotate: false
-  xy: 398, 665
+  xy: 398, 569
   size: 512, 345
   orig: 512, 345
   offset: 0, 0
   index: -1
-achievement
+gift2
   rotate: false
-  xy: 1, 251
-  size: 400, 267
-  orig: 400, 267
-  offset: 0, 0
-  index: -1
-award
-  rotate: false
-  xy: 403, 396
-  size: 400, 267
-  orig: 400, 267
-  offset: 0, 0
-  index: -1
-certificate
-  rotate: false
-  xy: 403, 127
-  size: 400, 267
-  orig: 400, 267
+  xy: 1, 137
+  size: 365, 285
+  orig: 365, 285
   offset: 0, 0
   index: -1
 gift1
   rotate: false
-  xy: 1, 1
+  xy: 398, 319
   size: 204, 248
   orig: 204, 248
   offset: 0, 0
   index: -1
-
-pack2.png
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-gift2
+achievement
   rotate: false
   xy: 1, 1
-  size: 365, 285
-  orig: 365, 285
+  size: 200, 134
+  orig: 200, 134
+  offset: 0, 0
+  index: -1
+award
+  rotate: false
+  xy: 604, 433
+  size: 200, 134
+  orig: 200, 134
+  offset: 0, 0
+  index: -1
+certificate
+  rotate: false
+  xy: 604, 297
+  size: 200, 134
+  orig: 200, 134
   offset: 0, 0
   index: -1

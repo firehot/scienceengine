@@ -1,7 +1,7 @@
 package com.mazalearn.gwt.server;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -18,8 +18,9 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 
 public class PdfCertificateMaker {
 
-  public static void makeCertificate(ServletContext servletContext, String topic, String userName, String dateStr, OutputStream outputStream) {
+  public static byte[] makeCertificate(ServletContext servletContext, String topic, String userName, String dateStr) {
     PDDocument document = null;
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     try {
       InputStream inp = servletContext.getResourceAsStream("/assets/data/" + topic + "/" + topic + "Certificate.pdf");
         document = PDDocument.load( inp );
@@ -108,5 +109,6 @@ public class PdfCertificateMaker {
             }
         }
     }
+    return outputStream.toByteArray();
   }
 }

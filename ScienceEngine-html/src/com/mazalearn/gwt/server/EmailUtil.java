@@ -1,8 +1,5 @@
 package com.mazalearn.gwt.server;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Properties;
@@ -20,7 +17,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import javax.servlet.ServletContext;
 
 import com.mazalearn.scienceengine.app.utils.Crypter;
 
@@ -53,23 +49,19 @@ public class EmailUtil {
     }
   }
 
-  void sendCertificateEmail(String topic, String userEmail, String userName, String userId, String dateStr, OutputStream outputStream, ServletContext servletContext) {
+  void sendCertificateEmail(String topic, String userEmail, String userName, String userId, String dateStr, byte[] pdfBytes) {
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);
   
     String msgBody = "Congratulations! \n\n" +
-        "Your ceriticate for Electromagnetism is attached" + 
+        "Your ceriticate for " + topic + " is attached" + 
         "\n\n-MazaLearn";
-    ByteArrayOutputStream op = new ByteArrayOutputStream();
-    PdfCertificateMaker.makeCertificate(servletContext, topic, userName, dateStr, op);
-    byte[] pdfBytes = op.toByteArray();
     try {
-        outputStream.write(pdfBytes);
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress("admin@mazalearn.com", "Mazalearn Admin"));
         msg.addRecipient(Message.RecipientType.TO,
                          new InternetAddress(userEmail, "User"));
-        msg.setSubject("Science Engine - Electromagnetism Certificate");
+        msg.setSubject("Science Engine - " + topic + " Certificate");
         msg.setText(msgBody);
         
         Multipart mp = new MimeMultipart();
@@ -80,7 +72,7 @@ public class EmailUtil {
         mp.addBodyPart(body);
         
         MimeBodyPart attachment = new MimeBodyPart();
-        attachment.setFileName("Certificate.pdf");
+        attachment.setFileName(topic + "Certificate.pdf");
         DataSource src = new ByteArrayDataSource(pdfBytes, "application/pdf");
         attachment.setDataHandler(new DataHandler(src)); 
         mp.addBodyPart(attachment);
@@ -94,9 +86,7 @@ public class EmailUtil {
        e.printStackTrace();
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }    
+    }
   }
 
   void sendConfirmationEmail(String userEmail, String userName, String installId) 
