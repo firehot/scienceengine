@@ -3,17 +3,12 @@ package com.mazalearn.scienceengine.app.services;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Disposable;
 import com.mazalearn.scienceengine.ScienceEngine;
-import com.mazalearn.scienceengine.app.services.SoundManager.ScienceEngineSound;
-import com.mazalearn.scienceengine.app.utils.LRUCache;
-import com.mazalearn.scienceengine.app.utils.LRUCache.CacheEntryRemovedListener;
 
 /**
  * A service that manages the sound effects.
  */
-public class SoundManager implements
-    CacheEntryRemovedListener<ScienceEngineSound, Sound>, Disposable {
+public class SoundManager {
   /**
    * The available sound files.
    */
@@ -48,16 +43,9 @@ public class SoundManager implements
   private boolean enabled = true;
 
   /**
-   * The sound cache.
-   */
-  private final LRUCache<ScienceEngineSound, Sound> soundCache;
-
-  /**
    * Creates the sound assetManager.
    */
   public SoundManager() {
-    soundCache = new LRUCache<SoundManager.ScienceEngineSound, Sound>(10);
-    soundCache.setEntryRemovedListener(this);
   }
 
   /**
@@ -69,11 +57,10 @@ public class SoundManager implements
       return;
 
     // try and get the sound from the cache
-    Sound soundToPlay = soundCache.get(sound);
+    Sound soundToPlay = ScienceEngine.getAssetManager().get(sound.getFileName(), Sound.class);
     if (soundToPlay == null) {
       FileHandle soundFile = Gdx.files.internal(sound.getFileName());
       soundToPlay = Gdx.audio.newSound(soundFile);
-      soundCache.add(sound, ScienceEngine.getAssetManager().get(sound.getFileName(), Sound.class));
     }
 
     // play the sound
@@ -101,22 +88,10 @@ public class SoundManager implements
     this.enabled = enabled;
   }
 
-  // EntryRemovedListener implementation
-
-  @Override
-  public void notifyEntryRemoved(ScienceEngineSound key, Sound value) {
-    Gdx.app.log(ScienceEngine.LOG, "Disposing sound: " + key.name());
-    value.dispose();
-  }
-
   /**
    * Disposes the sound assetManager.
    */
   public void dispose() {
     Gdx.app.log(ScienceEngine.LOG, "Disposing sound assetManager");
-    for (Sound sound : soundCache.retrieveAll()) {
-      sound.stop();
-      sound.dispose();
-    }
   }
 }
