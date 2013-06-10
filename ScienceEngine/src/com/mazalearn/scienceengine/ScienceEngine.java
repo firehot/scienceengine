@@ -115,7 +115,7 @@ public class ScienceEngine extends Game {
       skin = new Skin(skinFile, new TextureAtlas(Gdx.files.internal(SKIN_BASE + ".atlas")));
       skin.add("en", skin.getFont(ScreenComponent.getFont(1)));
       skin.add("en-small", skin.getFont(ScreenComponent.getFont(0.80f)));
-      skin.add("en-big", skin.getFont(ScreenComponent.getFont(2f)));
+      skin.add("en-big", skin.getFont(ScreenComponent.getFont(1.5f)));
       getMsg().setFont(skin);
       skin.add("en", skin.getFont("default-font"));
       getMsg().setLanguage(skin, "en");

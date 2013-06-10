@@ -77,10 +77,10 @@ public enum ScreenComponent implements IComponentType, IHelpComponent {
   private final static int CANONICAL_VIEWPORT_WIDTH = 800;
   public static int VIEWPORT_HEIGHT = CANONICAL_VIEWPORT_HEIGHT;
   public static int VIEWPORT_WIDTH = CANONICAL_VIEWPORT_WIDTH;
-  private final static int CANONICAL_FONT_SIZE = 16;
+  private final static int CANONICAL_FONT_SIZE = 14;
   private static int FontSize = CANONICAL_FONT_SIZE;
   // Initial entry is a flag
-  private static int[] AVAILABLE_FONT_SIZES = {0, 8, 9, 10, 12, 15, 16, 20, 26};
+  private static int[] AVAILABLE_FONT_SIZES = {0, 8, 9, 10, 12, 14, 16, 20, 26};
 
   /**
    * Constructor 

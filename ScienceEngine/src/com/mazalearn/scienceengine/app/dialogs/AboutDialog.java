@@ -126,7 +126,7 @@ public class AboutDialog extends Dialog {
     return table;
   }
 
-    static class Copyright {
+    public static class Copyright {
       String name;
       String year;
       String home;
