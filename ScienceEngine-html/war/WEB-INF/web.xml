@@ -79,7 +79,7 @@
 
   <servlet>
     <servlet-name>EmailCertificateServlet</servlet-name>
-    <servlet-class>com.mazalearn.gwt.server.EmailCertificateServlet</servlet-class>
+    <servlet-class>com.mazalearn.gwt.server.CertificateServlet</servlet-class>
   </servlet>
 
   <servlet>

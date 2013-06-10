@@ -13,16 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.PropertyContainer;
 import com.mazalearn.scienceengine.app.services.ProfileData;
+import com.mazalearn.scienceengine.app.services.ProfileData.ClientProps;
 import com.mazalearn.scienceengine.app.services.ProfileData.ServerProps;
 
 @SuppressWarnings("serial")
-public class EmailCertificateServlet extends HttpServlet {
+public class CertificateServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String userId = request.getParameter(ProfileData.USER_ID).toLowerCase();
     String topic = request.getParameter("topic");
-    System.out.println("EmailCertificate - User: " + userId + " ," + topic);
+    System.out.println("Certificate - User: " + userId + " ," + topic);
 
     ProfileUtil profileUtil = new ProfileUtil();
     PropertyContainer user = profileUtil.retrieveUser(userId);
@@ -40,7 +41,13 @@ public class EmailCertificateServlet extends HttpServlet {
     
     String userEmail = userId;
     if (userEmail == null || !userEmail.contains("@")) {
-      response.getWriter().append("Improper email address. Cannot send certificate");
+      response.getWriter().append("Improper userid. Is User registered?");
+      return;
+    }
+    ClientProps clientProps = new JsonEntityUtil().getFromJsonTextProperty(profile, ProfileData.CLIENT_PROPS, ClientProps.class);
+    int pos = clientProps.certificates.indexOf(topic);
+    if (pos == -1) {
+      response.getWriter().append("Sorry! Certificate not found.");
       return;
     }
     
@@ -50,7 +57,7 @@ public class EmailCertificateServlet extends HttpServlet {
       response.getWriter().append("Cannot create certificate - Improper Name" + userName);
       return;
     }
-    Date date = new Date();
+    Date date = new Date(clientProps.certificateTimes.get(pos));
     DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
     String dateStr = dateFormat.format(date);
 

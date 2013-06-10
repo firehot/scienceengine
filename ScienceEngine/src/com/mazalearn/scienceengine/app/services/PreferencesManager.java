@@ -49,17 +49,19 @@ public class PreferencesManager {
     return prefs.getBoolean(PREF_SOUND_ENABLED, true);
   }
 
-  public void setSoundEnabled(boolean soundEffectsEnabled) {
-    prefs.putBoolean(PREF_SOUND_ENABLED, soundEffectsEnabled);
+  public void setSoundEnabled(boolean soundEnabled) {
+    prefs.putBoolean(PREF_SOUND_ENABLED, soundEnabled);
+    userProfile.setSoundEnabled(soundEnabled);
+    prefs.flush();
   }
 
   public boolean isMusicEnabled() {
-    return prefs.getBoolean(PREF_MUSIC_ENABLED, false);
+    return prefs.getBoolean(PREF_MUSIC_ENABLED, true);
   }
 
   public void setMusicEnabled(boolean musicEnabled) {
-	  prefs.flush();
     prefs.putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
+    userProfile.setMusicEnabled(musicEnabled);
     prefs.flush();
   }
 
@@ -70,6 +72,7 @@ public class PreferencesManager {
   public void setSpeechEnabled(boolean speechEnabled) {
     prefs.flush();
     prefs.putBoolean(PREF_SPEECH_ENABLED, speechEnabled);
+    userProfile.setSpeechEnabled(speechEnabled);
     
     // if the speech is now enabled, provision it.
     if (speechEnabled) {

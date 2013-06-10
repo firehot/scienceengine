@@ -1,6 +1,7 @@
 package com.mazalearn.scienceengine.app.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -381,13 +382,14 @@ public class Profile implements Serializable {
     return data.server.isRegistered;
   }
 
-  public List<String> getCertificates() {
+  public Collection<String> getCertificates() {
     return data.client.certificates;
   }
   
   public void addCertificate(String certificate) {
     if (!data.client.certificates.contains(certificate)) {
       data.client.certificates.add(certificate);
+      data.client.certificateTimes.add(System.currentTimeMillis());
       markForSync(ProfileData.CLIENT_PROPS);
     }
   }
@@ -419,5 +421,17 @@ public class Profile implements Serializable {
       markForSync(ProfileData.CLIENT_PROPS);
     }
     return data.client.dateFirstLaunch;
+  }
+
+  public void setSoundEnabled(boolean soundEnabled) {
+    data.client.soundEnabled = soundEnabled;
+  }
+
+  public void setMusicEnabled(boolean musicEnabled) {
+    data.client.musicEnabled = musicEnabled;
+  }
+
+  public void setSpeechEnabled(boolean speechEnabled) {
+    data.client.speechEnabled = speechEnabled;
   }
 }

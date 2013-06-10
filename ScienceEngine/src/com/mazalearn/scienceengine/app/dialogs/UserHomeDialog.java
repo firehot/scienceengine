@@ -42,7 +42,7 @@ public class UserHomeDialog extends Dialog {
     this.skin = skin;
     profile = ScienceEngine.getPreferencesManager().getActiveUserProfile();
     ScienceEngine.loadAtlas("images/social/pack.atlas"); // Unload after since not used elsewhere?
-
+    
     Table contentTable = getContentTable();
     setTitle("Home");
     // Name and face
@@ -68,15 +68,24 @@ public class UserHomeDialog extends Dialog {
         AppRater.showRaterDialog(getStage(), skin, profile, false);
       }
     });
-    this.getButtonTable().add(rateButton).width(ScreenComponent.getScaledX(150)).center().padRight(ScreenComponent.getScaledX(150));
-    this.getButtonTable().add(closeButton).width(ScreenComponent.getScaledX(150)).center();
+    this.getButtonTable()
+        .add(rateButton)
+        .width(ScreenComponent.getScaledX(150))
+        .height(ScreenComponent.getScaledY(30))
+        .left()
+        .padRight(ScreenComponent.getScaledX(150));
+    this.getButtonTable()
+        .add(closeButton)
+        .width(ScreenComponent.getScaledX(150))
+        .height(ScreenComponent.getScaledY(30))
+        .right();
 //    Gdx.graphics.requestRendering();
   }
 
   private void addUserInfo(final Image userImage, Table contentTable) {
     Label name = new Label(profile.getUserName(), skin);
     name.setAlignment(Align.center, Align.center);
-    contentTable.add(name).fill().pad(ScreenComponent.getScaledY(10));
+    contentTable.add(name).fill().height(DrawingActor.FACE_HEIGHT).pad(ScreenComponent.getScaledY(10));
     myUserImage = ScreenUtils.createImageButton(ScienceEngine.getTextureRegion(ScienceEngine.USER), skin, "body");
     contentTable.add(myUserImage).height(DrawingActor.FACE_HEIGHT).width(DrawingActor.FACE_WIDTH).fill();
     myUserImage.addListener(new CommandClickListener() {
@@ -94,14 +103,13 @@ public class UserHomeDialog extends Dialog {
   
   private void addRegistrationRequest(Table contentTable) {
     Label registration = new Label("", skin);
-    //registration.setWidth(800);
     registration.setWrap(true);
     registration.setText(ScienceEngine.getMsg().getString("ScienceEngine.RegistrationInfo"));
     contentTable.add(registration)
-        .width(ScreenComponent.getScaledX(400))
+        .width(ScreenComponent.getScaledX(300))
         .pad(ScreenComponent.getScaledY(10));
     TextButton registerButton = new TextButton(ScienceEngine.getMsg().getString("ScienceEngine.Register"), skin, "body");
-    contentTable.add(registerButton).width(150).center();      
+    contentTable.add(registerButton).width(ScreenComponent.getScaledX(150)).center();
     contentTable.row();
     registerButton.addListener(new CommandClickListener() {
       @Override
@@ -141,7 +149,7 @@ public class UserHomeDialog extends Dialog {
       TextButton item = createItem(skin, CERTIFICATE_WIDTH, CERTIFICATE_HEIGHT, dummyCertificates[i]);
       list.add(item);
     }
-    contentTable.add(createImagesPane(skin, list)).colspan(2);
+    contentTable.add(createImagesPane(skin, list)).colspan(2).height(ScreenComponent.getScaledY(CERTIFICATE_HEIGHT));
     contentTable.row();
   }
 

@@ -70,12 +70,16 @@ public class ProfileData {
     public String activity;
     // These are the set of certificates held by user
     public ArrayList<String> certificates = new ArrayList<String>();
+    public ArrayList<Long> certificateTimes = new ArrayList<Long>();
     // Points earned through challenges and rapidfire
     public int points;
     // Rating related information
     public boolean dontShowAgain;
     public int launchCount;
     public long dateFirstLaunch;
+    public boolean soundEnabled = true;
+    public boolean musicEnabled = true;
+    public boolean speechEnabled = true;
   }
   public static class ServerProps {
     public String userName;
