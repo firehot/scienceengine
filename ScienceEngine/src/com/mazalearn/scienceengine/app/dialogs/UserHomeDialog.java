@@ -121,6 +121,8 @@ public class UserHomeDialog extends Dialog {
             ServerConstants.REGISTRATION_SERVLET + "?" + 
             ProfileData.INSTALL_ID + "=" + profile.getInstallationId() + "&" +
             ProfileData.USER_EMAIL + "=" + profile.getUserEmail());
+        // Indicate that sync is required after 120s
+        ScienceEngine.getPreferencesManager().setSyncAfterSeconds(120);
       }
     });
   }
@@ -228,5 +230,4 @@ public class UserHomeDialog extends Dialog {
     ScreenComponent.scaleSize(item, itemWidth, itemHeight);
     return item;
   }
-  
 }

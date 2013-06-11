@@ -1,16 +1,10 @@
 package com.mazalearn.scienceengine.app.services;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mazalearn.scienceengine.ScienceEngine;
 import com.mazalearn.scienceengine.app.utils.IPlatformAdapter;
-import com.mazalearn.scienceengine.app.utils.ServerConstants;
 
 /**
  * Handles the scienceEngine preferences.
@@ -146,6 +140,11 @@ public class PreferencesManager {
     return installProfile;
   }
 
+  void setInstallProfile(InstallProfile installProfile) {
+    this.installProfile = installProfile;
+    saveInstallProfile();
+  }
+  
   private String getSyncProfilesString() {
     String s = prefs.getString(SYNC_PROFILES);
     return s == null ? "" : s;
@@ -170,6 +169,10 @@ public class PreferencesManager {
     }
   }
 
+  void setServerProfile(String userId, String serverProfileBase64) {
+    prefs.putString(PreferencesManager.SERVER_PROFILE_PREFIX + userId, serverProfileBase64);
+  }
+  
   /**
    * Merge profile of active user from the server, if it is available, into user's profile.
    * @param profile
@@ -201,93 +204,6 @@ public class PreferencesManager {
     prefs.flush();
   }
   
-  private static class SyncProfilesTask implements Runnable {
-
-    private String syncProfilesString;
-    private Preferences prefs;
-    private InstallProfile installProfile;
-    private IPlatformAdapter platformAdapter;
-    
-    public SyncProfilesTask(String syncProfilesString, Preferences prefs, IPlatformAdapter platformAdapter,
-        InstallProfile installProfile) {
-      this.prefs = prefs;
-      this.syncProfilesString = syncProfilesString;
-      this.installProfile = installProfile;
-      this.platformAdapter = platformAdapter;
-    }
-    @Override
-    public void run() {
-      Map<String, String> postParams = new HashMap<String, String>();
-      String[] syncProfilesArray = syncProfilesString.split("\n");
-      HashSet<String> syncProfiles = new HashSet<String>(Arrays.asList(syncProfilesArray));
-      syncInstallProfile(platformAdapter.getInstallationId());
-      for (String userId: syncProfiles) {
-        syncUserProfile(postParams, userId);
-      }
-    }
-    
-    private void setInstallProfile(InstallProfile installProfile) {
-      this.installProfile = installProfile;
-    }
-    
-    private void syncInstallProfile(String installId) {
-      try {
-        // Get back updated server installProfile, if any
-        long lastUpdated = -1;
-        if (installProfile != null) {
-          lastUpdated = installProfile.getLastUpdated();
-        }
-        String installProfileBase64;
-        if (installProfile.isChanged()) {
-          Map<String, String> postParams = new HashMap<String, String>();
-          postParams.put(ProfileData.INSTALL_ID, installId);
-          installProfileBase64 = installProfile.toBase64();
-          installProfileBase64 = platformAdapter.httpPost(ServerConstants.INSTALL_PROFILE_SERVLET,
-              "application/octet-stream", postParams, installProfileBase64.getBytes());
-          Gdx.app.log(ScienceEngine.LOG, "Sync Install Profile to MazaLearn - " + installId);
-          installProfile.markChanged(false);
-       } else {
-          installProfileBase64 = platformAdapter.httpGet(ServerConstants.INSTALL_PROFILE_SERVLET + "?" + 
-              ProfileData.INSTALL_ID + "=" + installId + "&" + 
-              ProfileData.LAST_UPDATED + "=" + String.valueOf(lastUpdated));
-        }
-        InstallProfile newInstallProfile = InstallProfile.fromBase64((String) installProfileBase64);
-        if (newInstallProfile == null) {
-           Gdx.app.error(ScienceEngine.LOG, "Invalid or unchanged install profile");
-        } else {
-          prefs.putString(INSTALL_PROFILE, installProfileBase64);
-          prefs.flush();
-          // Load installProfile in PreferencesManager
-          setInstallProfile(newInstallProfile);
-        }
-        Gdx.app.log(ScienceEngine.LOG, "Got Install Profile from MazaLearn: " + installId);
-      } catch(GdxRuntimeException e) {
-        if (ScienceEngine.DEV_MODE.isDebug()) e.printStackTrace();
-        Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to get - " + installId);
-      }
-    }
-
-    private void syncUserProfile(Map<String, String> postParams, String userId) {
-      String localProfileBase64 = prefs.getString(userId);
-      // Resurrect profile and find data to send
-      Profile profile = Profile.fromBase64(localProfileBase64);
-      String syncProfileBase64 = profile.getSyncStr();
-      postParams.put(ProfileData.USER_ID, userId);
-      try {
-        // Post userProfile to server and get back updated server userProfile
-        String serverProfileBase64 =
-            platformAdapter.httpPost(ServerConstants.USER_PROFILE_SERVLET, "application/octet-stream", 
-                postParams, syncProfileBase64.getBytes());
-        prefs.putString(SERVER_PROFILE_PREFIX + userId, serverProfileBase64);
-        Gdx.app.log(ScienceEngine.LOG, "Sync Profile to MazaLearn - " + userId);
-      } catch(GdxRuntimeException e) {
-        if (ScienceEngine.DEV_MODE.isDebug()) e.printStackTrace();
-        Gdx.app.log(ScienceEngine.LOG, "Network Problem: Failed to sync - " + userId);
-      }
-    }
-    
-  }
-
   public void syncProfiles(boolean forceSync) {
     if (!forceSync && "Manual".equals(prefs.getString(PREFS_SYNC_MODE))) return;
     
@@ -297,20 +213,25 @@ public class PreferencesManager {
     }
     String syncProfilesString = prefs.getString(SYNC_PROFILES);
     Gdx.app.log(ScienceEngine.LOG, "Sync Profile: " + syncProfilesString);
-    if (syncProfilesString.length() == 0) return;
-    this.installProfile = null; // so that it will get refreshed
+    
+    if (syncProfilesString.length() == 0 || !SyncProfilesTask.isTimeToSync(getInstallProfile())) return;
+
     SyncProfilesTask syncProfilesTask = 
-        new SyncProfilesTask(syncProfilesString, prefs, platformAdapter, getInstallProfile());
+        new SyncProfilesTask(syncProfilesString, this, platformAdapter, getInstallProfile());
     platformAdapter.executeAsync(syncProfilesTask);
     setSyncProfilesString("");
   }
 
-  public void saveInstallProfile() {
+  void saveInstallProfile() {
     prefs.putString(INSTALL_PROFILE, getInstallProfile().toBase64());
     prefs.flush();
   }
 
   public void setSync(String syncMode) {
     prefs.putString(PREFS_SYNC_MODE, syncMode);
+  }
+
+  public void setSyncAfterSeconds(int seconds) {
+    SyncProfilesTask.setSyncAfterSeconds(seconds);
   }
 }

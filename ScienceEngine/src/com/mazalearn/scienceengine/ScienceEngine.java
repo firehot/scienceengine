@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -163,6 +164,8 @@ public class ScienceEngine extends Game {
       // create the helper objects
       fpsLogger = new FPSLogger();
     //}
+      
+    Dialog.fadeDuration = 0; // Set preference for dialogs not to fade in/out
     
     if (ScienceEngine.DEV_MODE.isDebug()) {
       ScreenComponent.setSize(device.width, device.height);

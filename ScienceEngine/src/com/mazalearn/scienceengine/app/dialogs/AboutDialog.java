@@ -154,5 +154,4 @@ public class AboutDialog extends Dialog {
     }
     return new Json().fromJson(Copyright[].class, file);
   }
-  
 }
