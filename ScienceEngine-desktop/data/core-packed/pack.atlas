@@ -80,23 +80,30 @@ back
   orig: 128, 64
   offset: 0, 0
   index: -1
-browser
+backdown
   rotate: false
   xy: 131, 127
-  size: 64, 64
-  orig: 64, 64
+  size: 128, 64
+  orig: 128, 64
   offset: 0, 0
   index: -1
-wheel
+browser
   rotate: false
   xy: 261, 257
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+wheel
+  rotate: false
+  xy: 389, 403
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 goldcoins
   rotate: false
-  xy: 389, 418
+  xy: 519, 548
   size: 60, 49
   orig: 60, 49
   offset: 0, 0
@@ -110,21 +117,21 @@ helparrow
   index: -1
 close
   rotate: false
-  xy: 519, 565
+  xy: 874, 730
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 nextarrow
   rotate: false
-  xy: 874, 730
+  xy: 131, 93
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 prevarrow
   rotate: false
-  xy: 131, 93
+  xy: 261, 223
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

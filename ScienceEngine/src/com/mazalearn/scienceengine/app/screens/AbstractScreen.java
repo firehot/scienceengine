@@ -181,8 +181,9 @@ public abstract class AbstractScreen implements Screen {
       case Back: {
         TextButton backButton = 
             new TextButton(ScienceEngine.getMsg().getString("ViewControls.Back"), getSkin()); //$NON-NLS-1$
-        Drawable image = new TextureRegionDrawable(ScienceEngine.getTextureRegion("back"));
-        TextButton.TextButtonStyle style = new TextButtonStyle(image, image, image);
+        Drawable imageUp = new TextureRegionDrawable(ScienceEngine.getTextureRegion("back"));
+        Drawable imageDown = new TextureRegionDrawable(ScienceEngine.getTextureRegion("backdown"));
+        TextButton.TextButtonStyle style = new TextButtonStyle(imageUp, imageDown, imageDown);
         style.font = skin.getFont("default-font");
         backButton.setStyle(style);
         backButton.setName(screenComponent.name());
