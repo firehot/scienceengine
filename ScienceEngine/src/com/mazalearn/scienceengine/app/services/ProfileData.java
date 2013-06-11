@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mazalearn.scienceengine.JsonSerializable;
+
 /**
  * The data component of Profile and methods shared between client and server
  * @author sridhar
  *
  */
-public class ProfileData {
+public class ProfileData implements JsonSerializable {
   public static final String USER_EMAIL = "useremail";
   public static final String INSTALL_ID = "installid";
   public static final String USER_NAME = "username";
@@ -51,7 +53,7 @@ public class ProfileData {
   // Server timestamps received at client - not used at server
   public transient Map<String, Long> serverTimestamps;
   
-  public static class ClientProps {
+  public static class ClientProps implements JsonSerializable {
     // email id of user - not available until registration
     public String userEmail;
     // platform of current device of user
@@ -81,7 +83,7 @@ public class ProfileData {
     public boolean musicEnabled = true;
     public boolean speechEnabled = true;
   }
-  public static class ServerProps {
+  public static class ServerProps implements JsonSerializable  {
     public String userName;
     public String userId;
     public String sex;
@@ -93,8 +95,8 @@ public class ProfileData {
     public boolean isRegistered;
   }
   
-  public static class Social {
-    public static class Message {
+  public static class Social implements JsonSerializable  {
+    public static class Message implements JsonSerializable  {
       // Following params should all be set only once
       public int messageId;
       public String email;
@@ -117,7 +119,7 @@ public class ProfileData {
     // Producer writes to tail of mq and consumer reads from head of mq
     // tailId belongs to producer and headId belongs to consumer
     // only producer is allowed to remove messages
-    public static class MQ {
+    public static class MQ implements JsonSerializable  {
       public ArrayList<Message> mq = new ArrayList<Message>();
       public int tailId;
       public int headId;

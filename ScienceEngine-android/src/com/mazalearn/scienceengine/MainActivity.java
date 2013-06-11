@@ -3,9 +3,12 @@ package com.mazalearn.scienceengine;
 
 import java.util.Locale;
 
+
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.speech.tts.TextToSpeech;
@@ -31,6 +34,9 @@ public class MainActivity extends AndroidApplication {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);      
+    Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(
+        Environment.getExternalStorageDirectory().getAbsolutePath() + "/data",
+        null)); // "http://<desired_url>/upload.php"
     // Android always in production mode
     ScienceEngine.DEV_MODE.setDebug(false);
     ScienceEngine.DEV_MODE.setDummyBilling(false);
@@ -105,7 +111,11 @@ public class MainActivity extends AndroidApplication {
        // success, create the TTS instance
        mTts = new TextToSpeech(this, new OnInitListener() {
         @Override
-        public void onInit(int arg0) {
+        public void onInit(int status) {
+          if (status != TextToSpeech.SUCCESS) {
+            mTts = null;
+            return;
+          }
           int available = mTts.isLanguageAvailable(Locale.US);
           if (available != TextToSpeech.LANG_MISSING_DATA && 
               available != TextToSpeech.LANG_NOT_SUPPORTED) {

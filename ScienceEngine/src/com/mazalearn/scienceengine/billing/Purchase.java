@@ -16,11 +16,12 @@
 package com.mazalearn.scienceengine.billing;
 
 import com.badlogic.gdx.utils.Json;
+import com.mazalearn.scienceengine.JsonSerializable;
 
 /**
  * Represents an in-app billing purchase.
  */
-public class Purchase {
+public class Purchase implements JsonSerializable {
     String itemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
     String orderId;
     String packageName;

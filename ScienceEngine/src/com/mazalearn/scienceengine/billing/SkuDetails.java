@@ -16,11 +16,12 @@
 package com.mazalearn.scienceengine.billing;
 
 import com.badlogic.gdx.utils.Json;
+import com.mazalearn.scienceengine.JsonSerializable;
 
 /**
  * Represents an in-app product's listing details.
  */
-public class SkuDetails {
+public class SkuDetails implements JsonSerializable {
     String itemType;
     String productId;
     String type;
